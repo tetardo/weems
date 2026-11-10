@@ -20,9 +20,7 @@ Liste tenue à jour au fil du projet. Cocher une ligne quand c'est réglé, et n
 - [ ] **Fondateurs de compagnies virtuelles** (ajouté le 10/11/2026)
   Peut-il présenter 5 à 10 fondateurs de compagnies virtuelles, pour valider le prix de l'offre compagnie avant le lot 2 ?
 
-- [ ] **Fastify ou NestJS pour l'API** (ajouté le 10/11/2026)
-  Connaît-il NestJS, et compte-t-il contribuer au code de l'API ? Si oui aux deux, NestJS ; sinon Fastify (recommandation actuelle).
-
 ## Réglé
 
-_Rien pour l'instant._
+- [x] **Fastify ou NestJS pour l'API** (10/11/2026)
+  Houssine ne connaît pas NestJS. Question transmise à Thibault (voir [à voir avec Thibault](a-voir-avec-thibault.md)).
