@@ -20,6 +20,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 ## Documents clés
 
 - [Parc applicatif et positionnement](docs/cadrage/01-parc-et-positionnement.md)
+- [Architecture et flux](docs/cadrage/02-architecture-et-flux.md) : API, données, flux, hébergement, décisions ouvertes
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4
 - [Spécification T0 du tracker](docs/cahiers-des-charges/tracker/spec-T0.md) : données reçues et règles des phases
 - [À voir avec Houssine](docs/suivi/a-voir-avec-houssine.md) : questions en attente pour la communauté
