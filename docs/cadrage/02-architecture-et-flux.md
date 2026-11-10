@@ -151,8 +151,8 @@ Sept choix restent ouverts. Aucun ne bloque le lot T0 du tracker ; les quatre pr
 | Framework de l'API | Fastify, NestJS, Hono | Fastify : simple, rapide, bien documenté, sans structure imposée [Confiance moyenne] | Avant T2 |
 | Connexion des comptes | Service payant (Auth0, Clerk) ou bibliothèque libre dans l'API | Décidé le 10/11/2026 : bibliothèque libre dans l'API (pas de coût par utilisateur, données chez nous) | Avant T2 |
 | Framework du site web | Next.js, SvelteKit, React avec Vite | Décidé le 10/11/2026 : Next.js (le plus répandu, pages de profil publiques bien référencées, React partagé avec l'iPad) | Avant T2 |
-| Carte | Leaflet ou MapLibre (libres), Mapbox (payant à l'usage) | Décidé le 10/11/2026 : Leaflet. La carte reste isolée dans un seul composant du site pour pouvoir passer à MapLibre si le nombre d'avions affichés le rend lent | Avant T3 |
-| Paiement | Stripe, Paddle, Lemon Squeezy | Stripe si Weems gère la TVA ; Paddle s'il faut un vendeur qui la gère pour toi [Confiance moyenne] | Avant l'ouverture des abonnements |
+| Carte | MapLibre (libre) ou Mapbox (payant à l'usage) | Décidé le 11/11/2026 : MapLibre, avec un fournisseur de fonds de carte à offre gratuite | Avant T3 |
+| Paiement | Stripe, Paddle, Lemon Squeezy | Reporté le 11/11/2026, à trancher avant le lot qui ouvre les abonnements. Penchant : Paddle (gère la TVA de tous les pays à ta place) [Confiance moyenne] | Avant l'ouverture des abonnements |
 | App iPad | Native (Swift) ou React Native | React Native : reste en TypeScript, réutilise `packages/contrats` [Confiance moyenne] | Après le lot 1 |
 
 Une fiche de décision sera rédigée dans `docs/decisions/` pour chacune au moment où elle est prise.
