@@ -22,6 +22,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 - [Parc applicatif et positionnement](docs/cadrage/01-parc-et-positionnement.md)
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4
 - [Spécification T0 du tracker](docs/cahiers-des-charges/tracker/spec-T0.md) : données reçues et règles des phases
+- [À voir avec Houssine](docs/suivi/a-voir-avec-houssine.md) : questions en attente pour la communauté
 - [Référence MSFS du tracker](apps/tracker/CLAUDE.md) : quelles données lire et comment
 
 ## Travailler sur le projet
