@@ -6,16 +6,18 @@ Réponses de Greg du 11/11/2026, avec les conséquences pour la feuille de route
 
 | Point | Réponse | Conséquence |
 | --- | --- | --- |
-| Temps | Greg y consacre tout son temps | Capacité d'un développeur à plein temps assisté par Claude |
+| Temps | Greg y consacre tout son temps, sans contrainte de date | Feuille de route en étapes et critères de sortie, sans calendrier |
 | Équipe | Greg seul sur le code ; Houssine et Thibault en appui ponctuel | Un lot à la fois, pas de travail en parallèle |
 | Budget mensuel | À préciser | Hébergement estimé à 30-60 €/mois (étape 2) |
 | PC Windows avec MSFS | Prévu, date inconnue | **Chemin critique** : aucun vol réel enregistré ni tracker validé sans lui |
 
 ## 2. Objectif du premier lancement
 
-Janvier 2027 : une API en ligne, un tracker et une application web simple qui affiche les premières informations de vol.
+Contenu : une API en ligne, un tracker et une application web simple qui affiche les premières informations de vol.
 
-Lecture réaliste (Claude, [Confiance moyenne]) : en janvier 2027, il s'agit d'une **alpha fermée** (5 pilotes testeurs, tracker installé à la main, pas encore sur le Microsoft Store). La version publique sur le Store suit après la bêta (lots T3 et T4). Condition : le PC Windows disponible au plus tard début décembre 2026.
+**Pas de date imposée** (Greg, 11/11/2026) : le projet avance à son rythme. Janvier 2027 reste un horizon indicatif, pas une échéance. La feuille de route s'exprime donc en étapes ordonnées, chacune avec un critère de sortie vérifiable, et non en dates.
+
+Lecture réaliste (Claude, [Confiance moyenne]) : ce premier jalon il s'agit d'une **alpha fermée** (5 pilotes testeurs, tracker installé à la main, pas encore sur le Microsoft Store). La version publique sur le Store suit après la bêta (lots T3 et T4).
 
 ## 3. Gratuit et payant
 
