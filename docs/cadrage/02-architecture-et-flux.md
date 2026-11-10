@@ -106,6 +106,14 @@ Une seule API, en TypeScript, découpée en modules internes, pas en microservic
 
 Au démarrage, trois services gérés suffisent, hébergés en Europe pour le RGPD. Aucun serveur à administrer soi-même.
 
+**Hébergement par étape** (fondamentaux du 11/11/2026) :
+
+| Étape | Où | Coût |
+| --- | --- | --- |
+| Jalons J0 à J2 (développement, simulations, premier vrai vol) | Mac de Greg, avec Docker ; le PC Windows envoie ses vols par le réseau local | 0 € |
+| J3, alpha fermée (5 pilotes) | Machine virtuelle dédiée sur le serveur Proxmox de Greg chez Hetzner (UE), sauvegardes hors serveur | Quelques euros (sauvegardes) |
+| J4 et au-delà, bêta et production | Services gérés ci-dessous, chez Scaleway | 30 à 60 €/mois |
+
 | Besoin | Choix | Ordre de grandeur |
 | --- | --- | --- |
 | Base de données | PostgreSQL géré : comptes, vols, résumés, règles, référentiels | 15 à 30 €/mois [Confiance faible] |
@@ -147,7 +155,7 @@ Sept choix restent ouverts. Aucun ne bloque le lot T0 du tracker ; les quatre pr
 
 | Décision | Options | Recommandation | Quand |
 | --- | --- | --- | --- |
-| Hébergeur | Scaleway, OVHcloud, région Europe d'un hébergeur géré (Render, Fly.io) | Scaleway : français, base PostgreSQL et stockage S3 gérés au même endroit [Confiance moyenne] | Avant T2 |
+| Hébergeur | Scaleway, OVHcloud, région Europe d'un hébergeur géré (Render, Fly.io) | Décidé le 10/11/2026 : Scaleway pour la production publique (à partir de la bêta, J4). L'API et le site tournent dans un conteneur Docker, la base reste un service géré | Avant T2 |
 | Framework de l'API | Fastify, NestJS, Hono | Fastify : simple, rapide, bien documenté, sans structure imposée [Confiance moyenne] | Avant T2 |
 | Connexion des comptes | Service payant (Auth0, Clerk) ou bibliothèque libre dans l'API | Décidé le 10/11/2026 : bibliothèque libre dans l'API (pas de coût par utilisateur, données chez nous) | Avant T2 |
 | Framework du site web | Next.js, SvelteKit, React avec Vite | Décidé le 10/11/2026 : Next.js (le plus répandu, pages de profil publiques bien référencées) | Avant T2 |
