@@ -1,0 +1,161 @@
+# Variables et événements MSFS utilisés par le tracker Weems.
+#
+# Une entrée par variable. Les familles (1 à 28) sont celles du cahier des charges :
+#   Cahier des charges/Tracker/CDC-Tracker.md, sections « Catalogue des données ».
+#
+# Champs :
+#   name      : nom exact de la SimVar (":n" = indexée, par moteur ou par station)
+#   unit      : unité à demander dans SimConnect_AddToDataDefinition
+#   family    : numéro de famille de données
+#   tier      : socle (parité avec la concurrence) | differenciation
+#   verified  : true = nom et unité trouvés dans les pages SDK MSFS 2024 téléchargées (docs/reference/msfs/pages/, 2026-11-10)
+#               false = introuvable dans ces pages, à confirmer avant usage
+#   doc_unit  : unité native indiquée par le SDK quand on demande une autre unité compatible
+#               (SimConnect convertit entre unités compatibles : radians -> degrees, ft/s -> knots)
+#   reliability : tous_avions | depend_avion | msfs2024 | a_tester
+#   notes     : pièges, usage
+#
+# Règle : verified = présent dans la doc. Ce n'est pas une garantie de comportement : tester dans le simulateur
+# et noter tout écart dans docs/reference/pieges.md (champ reliability).
+
+simvars:
+  # --- 1. Position et altitude ---
+  - { name: PLANE LATITUDE, unit: radians, family: 1, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE LONGITUDE, unit: radians, family: 1, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE ALTITUDE, unit: feet, family: 1, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE ALT ABOVE GROUND, unit: feet, family: 1, tier: socle, verified: true, reliability: tous_avions }
+  - { name: INDICATED ALTITUDE, unit: feet, family: 1, tier: socle, verified: true, reliability: tous_avions }
+
+  # --- 2. Vitesses ---
+  - { name: AIRSPEED INDICATED, unit: knots, family: 2, tier: socle, verified: true, reliability: tous_avions }
+  - { name: AIRSPEED TRUE, unit: knots, family: 2, tier: socle, verified: true, reliability: tous_avions }
+  - { name: AIRSPEED MACH, unit: mach, family: 2, tier: socle, verified: true, reliability: tous_avions }
+  - { name: GROUND VELOCITY, unit: knots, family: 2, tier: socle, verified: true, reliability: tous_avions }
+  - { name: VERTICAL SPEED, unit: feet per second, family: 2, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Convertir en ft/min pour l'affichage (x60)." }
+
+  # --- 3. Attitude et cap ---
+  - { name: PLANE PITCH DEGREES, unit: degrees, doc_unit: radians, family: 3, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Vérifier le signe (cabré positif ou négatif) au premier test." }
+  - { name: PLANE BANK DEGREES, unit: degrees, doc_unit: radians, family: 3, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE HEADING DEGREES TRUE, unit: degrees, doc_unit: radians, family: 3, tier: socle, verified: true, reliability: tous_avions }
+
+  # --- 4. État au sol ---
+  - { name: SIM ON GROUND, unit: bool, family: 4, tier: socle, verified: true, reliability: tous_avions }
+  - { name: BRAKE PARKING POSITION, unit: bool, family: 4, tier: socle, verified: true, reliability: depend_avion }
+  - { name: ON ANY RUNWAY, unit: bool, family: 4, tier: socle, verified: true, reliability: a_tester }
+
+  # --- 5. Configuration ---
+  - { name: GEAR HANDLE POSITION, unit: percent_over_100, family: 5, tier: socle, verified: true, reliability: tous_avions }
+  - { name: FLAPS HANDLE INDEX, unit: number, family: 5, tier: socle, verified: true, reliability: depend_avion }
+  - { name: SPOILERS HANDLE POSITION, unit: percent_over_100, family: 5, tier: socle, verified: true, reliability: depend_avion }
+
+  # --- 6. Moteurs ---
+  - { name: NUMBER OF ENGINES, unit: number, family: 6, tier: socle, verified: true, reliability: tous_avions }
+  - { name: "GENERAL ENG COMBUSTION:n", unit: bool, family: 6, tier: socle, verified: true, reliability: tous_avions }
+  - { name: "TURB ENG N1:n", unit: percent, family: 6, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Réacteurs seulement ; pour les pistons, utiliser le régime (GENERAL ENG RPM:n)." }
+
+  # --- 7. Carburant ---
+  - { name: FUEL TOTAL QUANTITY WEIGHT, unit: pounds, family: 7, tier: socle, verified: true, reliability: depend_avion,
+      notes: "Certains avions complexes gèrent le carburant en interne : comparer avec leur affichage." }
+
+  # --- 8. Masse ---
+  - { name: TOTAL WEIGHT, unit: pounds, family: 8, tier: socle, verified: true, reliability: depend_avion }
+  - { name: EMPTY WEIGHT, unit: pounds, family: 8, tier: socle, verified: true, reliability: tous_avions }
+
+  # --- 9. Atterrissage ---
+  - { name: PLANE TOUCHDOWN NORMAL VELOCITY, unit: feet per second, family: 9, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Valeur du dernier toucher. Recouper avec nos propres échantillons (rebonds, valeurs aberrantes)." }
+  - { name: PLANE TOUCHDOWN PITCH DEGREES, unit: degrees, family: 9, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE TOUCHDOWN BANK DEGREES, unit: degrees, family: 9, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE TOUCHDOWN HEADING DEGREES TRUE, unit: degrees, family: 9, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE TOUCHDOWN LATITUDE, unit: radians, family: 9, tier: socle, verified: true, reliability: tous_avions }
+  - { name: PLANE TOUCHDOWN LONGITUDE, unit: radians, family: 9, tier: socle, verified: true, reliability: tous_avions }
+  - { name: G FORCE, unit: gforce, family: 9, tier: socle, verified: true, reliability: tous_avions }
+
+  # --- 10. Identité de l'avion ---
+  - { name: TITLE, unit: string, family: 10, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Chaîne : à lire avec SIMCONNECT_PERIOD_ONCE (pas en périodique), relire régulièrement pour détecter un changement d'avion." }
+  - { name: ATC MODEL, unit: string, family: 10, tier: socle, verified: true, reliability: depend_avion }
+  - { name: ATC ID, unit: string, family: 10, tier: socle, verified: true, reliability: depend_avion }
+
+  # --- 11. Temps ---
+  - { name: ZULU TIME, unit: seconds, family: 11, tier: socle, verified: false, reliability: tous_avions,
+      notes: "Absente des pages SimVars téléchargées : probablement une variable d'environnement (E:), documentée ailleurs. Page à trouver et à ajouter à sources.txt." }
+  - { name: SIMULATION RATE, unit: number, family: 11, tier: socle, verified: false, reliability: tous_avions,
+      notes: "Différent de 1 = accélération ou ralentissement du temps. Absente des pages SimVars téléchargées : probablement une variable d'environnement (E:), page à trouver." }
+
+  # --- 12. Intégrité du vol ---
+  - { name: IS SLEW ACTIVE, unit: bool, family: 12, tier: socle, verified: true, reliability: tous_avions }
+
+  # --- 13. Accélérations cabine (différenciation) ---
+  - { name: ACCELERATION BODY X, unit: feet per second squared, family: 13, tier: differenciation, verified: true, reliability: tous_avions }
+  - { name: ACCELERATION BODY Y, unit: feet per second squared, family: 13, tier: differenciation, verified: true, reliability: tous_avions }
+  - { name: ACCELERATION BODY Z, unit: feet per second squared, family: 13, tier: differenciation, verified: true, reliability: tous_avions }
+
+  # --- 14. Pressurisation ---
+  - { name: PRESSURIZATION CABIN ALTITUDE, unit: feet, family: 14, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: PRESSURIZATION CABIN ALTITUDE RATE, unit: feet per second, family: 14, tier: differenciation, verified: true, reliability: depend_avion }
+
+  # --- 15. Consignes cabine ---
+  - { name: CABIN SEATBELTS ALERT SWITCH, unit: bool, family: 15, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: CABIN NO SMOKING ALERT SWITCH, unit: bool, family: 15, tier: differenciation, verified: true, reliability: depend_avion }
+
+  # --- 16. Charge ---
+  - { name: "PAYLOAD STATION WEIGHT:n", unit: pounds, family: 16, tier: differenciation, verified: true, reliability: depend_avion }
+
+  # --- 17. Portes ---
+  - { name: "EXIT OPEN:n", unit: percent_over_100, family: 17, tier: differenciation, verified: true, reliability: depend_avion }
+
+  # --- 18. Feux ---
+  - { name: LIGHT BEACON, unit: bool, family: 18, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: LIGHT LANDING, unit: bool, family: 18, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: LIGHT STROBE, unit: bool, family: 18, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: LIGHT NAV, unit: bool, family: 18, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: LIGHT TAXI, unit: bool, family: 18, tier: differenciation, verified: true, reliability: depend_avion }
+
+  # --- 19. Alarmes et limites ---
+  - { name: OVERSPEED WARNING, unit: bool, family: 19, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: STALL WARNING, unit: bool, family: 19, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: DESIGN SPEED VC, unit: knots, doc_unit: feet per second, family: 19, tier: differenciation, verified: true, reliability: a_tester,
+      notes: "Peut servir de limite par défaut si l'avion n'est pas dans notre table de limites." }
+  - { name: DESIGN SPEED VS0, unit: knots, doc_unit: kias, family: 19, tier: differenciation, verified: true, reliability: a_tester }
+
+  # --- 20. Pilote automatique ---
+  - { name: AUTOPILOT MASTER, unit: bool, family: 20, tier: differenciation, verified: true, reliability: depend_avion }
+
+  # --- 21. Moteurs et APU détaillés ---
+  - { name: APU PCT RPM, unit: percent_over_100, family: 21, tier: differenciation, verified: true, reliability: depend_avion }
+  - { name: PUSHBACK STATE, unit: enum, family: 21, tier: differenciation, verified: true, reliability: a_tester }
+
+  # --- 22. Piste et surface ---
+  - { name: SURFACE TYPE, unit: enum, family: 22, tier: differenciation, verified: true, reliability: tous_avions,
+      notes: "0 = béton, 4 = asphalte (voir la page SDK pour la liste complète)." }
+  - { name: SURFACE CONDITION, unit: enum, family: 22, tier: differenciation, verified: true, reliability: tous_avions,
+      notes: "0 normal, 1 mouillé, 2 gelé, 3 neige. Valable seulement si SURFACE INFO VALID est vrai." }
+  - { name: SURFACE INFO VALID, unit: bool, family: 22, tier: differenciation, verified: true, reliability: tous_avions }
+
+  # --- 23. Météo vue par l'avion ---
+  - { name: AMBIENT WIND VELOCITY, unit: knots, family: 23, tier: differenciation, verified: true, reliability: tous_avions }
+  - { name: AMBIENT WIND DIRECTION, unit: degrees, family: 23, tier: differenciation, verified: true, reliability: tous_avions }
+  - { name: AMBIENT TEMPERATURE, unit: celsius, family: 23, tier: differenciation, verified: true, reliability: tous_avions }
+  - { name: AMBIENT VISIBILITY, unit: meters, family: 23, tier: differenciation, verified: true, reliability: tous_avions }
+
+  # --- 28. Usure (MSFS 2024 seulement) ---
+  - { name: WEAR AND TEAR IS FAILED, unit: bool, family: 28, tier: differenciation, verified: true, reliability: msfs2024 }
+
+# Événements système (SimConnect_SubscribeToSystemEvent). Tous listés dans la doc SDK (vérifié le 2026-11-10).
+system_events:
+  - { name: SimStart, use: "Le simulateur tourne (peut arriver plusieurs fois, voir pieges.md)" }
+  - { name: SimStop, use: "Le simulateur s'arrête (MSFS 2024 ne l'envoie pas toujours en revenant au menu)" }
+  - { name: FlightLoaded, use: "Un vol est chargé, renvoie le nom du fichier" }
+  - { name: AircraftLoaded, use: "Changement d'avion (fichier .AIR)" }
+  - { name: Pause_EX1, use: "Changements de pause détaillés (bits : pause complète, active, sim seule)" }
+  - { name: Crashed, use: "L'avion du joueur s'est écrasé" }
+  - { name: CrashReset, use: "Fin de la séquence de crash" }
+  - { name: PositionChanged, use: "Repositionnement par le joueur = téléportation" }
+  - { name: FlightPlanActivated, use: "Plan de vol activé dans le simulateur" }
+
+# Familles sans SimVar (sources externes) : 24 météo réelle (aviationweather.gov), 25 plan SimBrief,
+# 26 VATSIM/IVAO, 27 horaires Weems. Voir le cahier des charges.

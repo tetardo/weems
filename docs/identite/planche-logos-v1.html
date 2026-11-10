@@ -1,0 +1,211 @@
+<title>Weems, pistes de logo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Saira:wght@600&family=Archivo:wght@800&family=Manrope:wght@800&family=Barlow+Condensed:wght@700&display=swap">
+<style>
+/* Layout : planche de studio, une bande par piste ; specimens sur fonds fixes (clair/sombre) car ce sont des épreuves de logo */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --fg:#121821; --muted:#5A6575; --line:#D6DCE5;
+  --warn-bg:#FFF4D6; --warn-fg:#5C4300; --warn-line:#E8C766; --accent:#2F6FDB;
+  --f-body:"IBM Plex Sans",system-ui,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E131A; --surface:#161D27; --fg:#E7ECF2; --muted:#93A0B2; --line:#283241;
+  --warn-bg:#2E2610; --warn-fg:#F2D98A; --warn-line:#6B5821; --accent:#6C9CEB; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E131A; --surface:#161D27; --fg:#E7ECF2; --muted:#93A0B2; --line:#283241;
+  --warn-bg:#2E2610; --warn-fg:#F2D98A; --warn-line:#6B5821; --accent:#6C9CEB; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:40px}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;line-height:1.15;margin:0;font-weight:600;text-wrap:balance}
+h2{font-size:24px;margin:0;font-weight:600;text-wrap:balance}
+h3{font-size:13px;margin:0;font-family:var(--f-mono);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+p{margin:0;max-width:68ch}
+.warn{background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.warn strong{font-weight:600}
+.piste{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:20px}
+.piste-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px}
+.letter{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.reco{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--accent);color:var(--surface);padding:3px 8px;border-radius:3px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border-radius:6px;min-height:170px;display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden}
+.t-light{background:#FFFFFF;border:1px solid #DDE2E9}
+.t-dark{background:#0B1018}
+.t-paper{background:#F4F4F2;border:1px solid #DDE2E9}
+.t-black{background:#111111}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cell{display:flex;flex-direction:column;gap:8px;min-width:0}
+.cell .tile{min-height:120px;padding:16px}
+.cap{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.sizes{display:flex;align-items:flex-end;gap:14px}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.notes ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.lock{display:flex;align-items:center;gap:.32em;font-size:52px;line-height:1}
+.lock svg{height:1.05em;width:auto;flex:none}
+.icon{display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.icon svg{width:100%;height:100%}
+.fam{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.fam .cell{align-items:center;text-align:center}
+.final{display:flex;flex-direction:column;gap:12px}
+.final ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+@media (max-width:720px){
+  .duo,.notes{grid-template-columns:1fr}
+  .row,.fam{grid-template-columns:1fr 1fr}
+  .lock{font-size:38px}
+  h1{font-size:27px}
+  .piste{padding:16px}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Weems · identité · planche v1 · 10 nov. 2026</div>
+    <h1>Quatre pistes de logo</h1>
+    <p>Chaque piste part d'un objet que tout simmeur reconnaît en cockpit ou sur l'aéroport. Aucune ne reprend les codes de Volanta, Navigraph ou FlightLinq. Pour chacune : version couleur sur fond clair et sombre, icône d'app, monochromes, test en petite taille. Ce sont des maquettes de direction, pas des fichiers finaux.</p>
+  </header>
+
+  <div class="warn" role="note">
+    <strong>À vérifier avant d'investir dans le logo : le nom « Weems » est déjà une marque aéronautique.</strong>
+    <p>Weems &amp; Plath (Annapolis, États-Unis) vend depuis des décennies des instruments de navigation aérienne et marine (rapporteurs, calculateurs de vol type E6B) sous le nom Weems. Existence de la société : confiance élevée. Étendue de leurs dépôts en classes 9 et 42 en Europe : confiance faible. Une recherche d'antériorité EUIPO, INPI et USPTO s'impose avant de payer un graphiste ou de déposer quoi que ce soit.</p>
+  </div>
+
+  <div id="pistes" style="display:flex;flex-direction:column;gap:28px"></div>
+
+  <section class="final">
+    <h2>Recommandation</h2>
+    <p><strong>Piste A, Waterline.</strong> C'est la seule où la lettre W et l'objet aviation se confondent sans forcer : le symbole maquette de l'horizon artificiel a réellement la forme d'un W. Elle tient à 16 px, se décline par app sans perdre l'unité, et parle immédiatement à la cible. La piste B (PAPI) mérite d'être gardée comme élément graphique secondaire : quatre feux blancs et rouges sont un affichage naturel pour le score d'approche stabilisée du tracker.</p>
+    <ol>
+      <li>Recherche d'antériorité sur le nom avant toute autre dépense.</li>
+      <li>Choisir une piste (ou un mix A + B) et faire affiner par un graphiste : vectorisation propre, lettrage vectorisé, charte couleurs.</li>
+      <li>Vérifier la disponibilité des domaines et des comptes sur les réseaux.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+let uid = 0;
+const NAVY = "#0E1B2C", SKY = "#2F6FDB", GROUND = "#7A4A22", SYM = "#FFC20E";
+
+// Piste A : horizon artificiel + symbole maquette en W
+function markA(v, bank = -8){
+  const id = "ca" + (++uid);
+  const mono = v.startsWith("mono");
+  const ink = (v === "mono-white" || v === "dark") ? "#FFFFFF" : NAVY;
+  const bg = v === "mono-white" ? "#111111" : "#FFFFFF";
+  const W = "12,50 30,50 40,64 50,50 60,64 70,50 88,50";
+  if (!mono) return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="47"/></clipPath></defs>
+    <g clip-path="url(#${id})"><rect width="100" height="100" fill="${SKY}"/>
+    <g transform="rotate(${bank} 50 50)"><rect x="-60" y="53" width="220" height="120" fill="${GROUND}"/><line x1="-60" y1="53" x2="160" y2="53" stroke="#FFFFFF" stroke-width="2"/></g></g>
+    <polyline points="${W}" fill="none" stroke="${NAVY}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="${W}" fill="none" stroke="${SYM}" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="44"/></clipPath></defs>
+    <g clip-path="url(#${id})"><g transform="rotate(${bank} 50 50)"><rect x="-60" y="53" width="220" height="120" fill="${ink}"/></g></g>
+    <circle cx="50" cy="50" r="44" fill="none" stroke="${ink}" stroke-width="5"/>
+    <polyline points="${W}" fill="none" stroke="${bg}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="${W}" fill="none" stroke="${ink}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+// Piste B : PAPI, 2 blancs 2 rouges = sur le plan
+function markB(v){
+  const mono = v.startsWith("mono");
+  const ink = v === "mono-white" ? "#FFFFFF" : "#111111";
+  const xs = [14, 38, 62, 86];
+  if (!mono) return `<svg viewBox="0 0 100 28" aria-hidden="true"><rect width="100" height="28" rx="14" fill="#1B1D22"/>
+    ${xs.map((x,i)=>`<circle cx="${x}" cy="14" r="8" fill="${i<2?"#F5F5EE":"#E5322D"}"/>`).join("")}</svg>`;
+  return `<svg viewBox="0 0 100 28" aria-hidden="true">${xs.map((x,i)=> i<2
+    ? `<circle cx="${x}" cy="14" r="8.5" fill="none" stroke="${ink}" stroke-width="3.5"/>`
+    : `<circle cx="${x}" cy="14" r="10" fill="${ink}"/>`).join("")}</svg>`;
+}
+
+// Piste C : W tracé comme une route FMS, dernière branche active en magenta
+function markC(v){
+  const mono = v.startsWith("mono");
+  const dark = v === "dark" || v === "mono-white";
+  const fg = dark ? "#FFFFFF" : "#14162B";
+  const mag = mono ? fg : (dark ? "#FF4FC3" : "#C81C8A");
+  const bg = dark ? (v === "mono-white" ? "#111111" : "#0B1018") : "#FFFFFF";
+  const P = [[10,24],[30,78],[50,42],[70,78],[90,24]];
+  const legs = `<polyline points="${P.slice(0,4).map(p=>p.join(",")).join(" ")}" fill="none" stroke="${fg}" stroke-width="7" stroke-linejoin="round"/>
+    <line x1="70" y1="78" x2="90" y2="24" stroke="${mag}" stroke-width="7" ${mono ? 'stroke-dasharray="7 5"' : ""}/>`;
+  const wpt = P.slice(0,4).map(([x,y])=>`<rect x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})" fill="${bg}" stroke="${fg}" stroke-width="3.5"/>`).join("");
+  const to = `<circle cx="90" cy="24" r="8" fill="${mag}"/>`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">${legs}${wpt}${to}</svg>`;
+}
+
+// Piste D : panneau de position aéroport (fond noir, lettre et cadre jaunes)
+function markD(v){
+  const mono = v.startsWith("mono");
+  const ink = v === "mono-white" ? "#FFFFFF" : "#111111";
+  if (!mono) return `<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="10" fill="#111111"/>
+    <rect x="10" y="10" width="80" height="80" rx="3" fill="none" stroke="#F7C600" stroke-width="5"/>
+    <text x="50" y="74" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="700" font-size="66" fill="#F7C600">W</text></svg>`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><rect x="6" y="6" width="88" height="88" rx="6" fill="none" stroke="${ink}" stroke-width="6"/>
+    <text x="50" y="74" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="700" font-size="66" fill="${ink}">W</text></svg>`;
+}
+
+const inkOf = v => (v === "dark" || v === "mono-white") ? "#FFFFFF" : "#111111";
+
+const PISTES = [
+  { key:"A", name:"Waterline", reco:true,
+    pitch:"Sur un horizon artificiel ou un HUD, le symbole de la maquette avion est un W. La marque devient littéralement l'instrument de référence du pilote : l'assiette, donc la conduite du vol, ce que le tracker juge.",
+    lock: v => `<div class="lock" style="color:${v==="light"||v==="mono-black"?NAVY:"#FFFFFF"};font-family:Saira,sans-serif;font-weight:600;letter-spacing:.01em">${markA(v)}<span>weems</span></div>`,
+    icon: s => `<div class="icon" style="width:${s}px;height:${s}px;border-radius:${s*.225}px;background:${NAVY}"><svg viewBox="-8 -8 116 116">${markA("light").replace(/^<svg[^>]*>|<\/svg>$/g,"")}</svg></div>`,
+    pros:["Double lecture W / instrument, unique et mémorisable.","Lisible à 16 px : un rond bicolore et un trait jaune.","Déclinable par app (couleur de fond, angle d'inclinaison) sans casser l'unité."],
+    cons:["Couleurs ciel/terre proches de l'imagerie aviation générique : la charte doit rester sobre autour.","Le rendu monochrome perd le ciel ; il tient mais devient plus abstrait."] },
+  { key:"B", name:"PAPI", reco:false,
+    pitch:"Quatre feux d'approche, deux blancs et deux rouges : l'avion est sur le plan. Message direct sur l'approche stabilisée, le cœur de la différenciation du tracker.",
+    lock: v => `<div class="lock" style="color:${inkOf(v)};font-family:Archivo,sans-serif;font-weight:800;letter-spacing:.03em;gap:.4em"><span>WEEMS</span>${markB(v).replace('<svg','<svg style="height:.55em"')}</div>`,
+    icon: s => `<div class="icon" style="width:${s}px;height:${s}px;border-radius:${s*.225}px;background:#1B1D22"><svg viewBox="0 0 100 100">${[22,41,59,78].map((x,i)=>`<circle cx="${x}" cy="50" r="8" fill="${i<2?"#F5F5EE":"#E5322D"}"/>`).join("")}</svg></div>`,
+    pros:["Sens très fort pour la cible, nul pour le grand public (c'est voulu).","Réutilisable dans l'app : affichage du score d'approche en 4 feux.","Le monochrome garde le sens (2 pleins, 2 creux)."],
+    cons:["Le signe ne contient pas le W : le nom repose seul sur le lettrage.","Quatre points en ligne : forme banale, faible à 16 px (bouillie de points)."] },
+  { key:"C", name:"Trace", reco:false,
+    pitch:"Le W dessiné comme une route sur l'écran de navigation : points tournants en losange, branche active en magenta comme sur un ND. Parle de suivi de vol et de carte.",
+    lock: v => `<div class="lock" style="color:${inkOf(v)==="#111111"?"#14162B":"#FFFFFF"};font-family:Manrope,sans-serif;font-weight:800;letter-spacing:-.01em">${markC(v)}<span>weems</span></div>`,
+    icon: s => `<div class="icon" style="width:${s}px;height:${s}px;border-radius:${s*.225}px;background:#14162B"><svg viewBox="-12 -12 124 124">${markC("dark").replace(/^<svg[^>]*>|<\/svg>$/g,"").replaceAll("#0B1018","#14162B")}</svg></div>`,
+    pros:["Lien direct avec le tracker et la carte live.","Le magenta est un code aviation précis, peu exploité en marque."],
+    cons:["Zigzag en W : registre proche des logos de logistique et de télécoms.","Les losanges disparaissent sous 32 px ; à 16 px il ne reste qu'un W."] },
+  { key:"D", name:"Panneau de position", reco:false,
+    pitch:"Le logo est un panneau de position d'aéroport : fond noir, cadre et lettrage jaunes, le panneau qui dit au pilote où il se trouve au roulage.",
+    lock: v => { const mono = v.startsWith("mono"); const ink = v==="mono-white"?"#FFFFFF":"#111111";
+      return `<div class="lock" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.04em"><span style="display:inline-block;padding:.12em .38em .08em;border-radius:.08em;background:${mono?"transparent":"#111111"};color:${mono?ink:"#F7C600"};box-shadow:${mono?`inset 0 0 0 .06em ${ink}`:`inset 0 0 0 .07em #111111, inset 0 0 0 .13em #F7C600`};${!mono&&v==="dark"?"outline:1px solid #333;":""}">WEEMS</span></div>`; },
+    icon: s => `<div class="icon" style="width:${s}px;height:${s}px;border-radius:${s*.225}px">${markD("light")}</div>`,
+    pros:["Contraste maximal, lisible partout, y compris à 16 px.","Code réel et précis, reconnu par tout simmeur qui roule."],
+    cons:["Imitation d'une signalétique publique : peu protégeable, facile à copier.","Noir/jaune évoque aussi chantier et sécurité ; dur à porter sur une interface entière."] },
+];
+
+const VARIANTS = [
+  ["light","t-light"],["dark","t-dark"]
+];
+const html = PISTES.map(p => `
+<section class="piste" aria-labelledby="h-${p.key}">
+  <div class="piste-head"><span class="letter">Piste ${p.key}</span><h2 id="h-${p.key}">${p.name}</h2>${p.reco?'<span class="reco">Recommandée</span>':""}</div>
+  <p>${p.pitch}</p>
+  <div class="duo">
+    <div class="cell"><div class="tile t-light">${p.lock("light")}</div><span class="cap">Couleur, fond clair</span></div>
+    <div class="cell"><div class="tile t-dark">${p.lock("dark")}</div><span class="cap">Couleur, fond sombre</span></div>
+  </div>
+  <div class="row">
+    <div class="cell"><div class="tile t-paper">${p.icon(84)}</div><span class="cap">Icône d'app</span></div>
+    <div class="cell"><div class="tile t-paper"><div style="font-size:.55em;width:100%;display:flex;justify-content:center">${p.lock("mono-black").replace('class="lock"','class="lock" style="font-size:28px;"')}</div></div><span class="cap">Monochrome noir</span></div>
+    <div class="cell"><div class="tile t-black">${p.lock("mono-white").replace('class="lock"','class="lock" style="font-size:28px;"')}</div><span class="cap">Monochrome blanc</span></div>
+    <div class="cell"><div class="tile t-paper"><div class="sizes">${p.icon(64)}${p.icon(32)}${p.icon(16)}</div></div><span class="cap">64 / 32 / 16 px</span></div>
+  </div>
+  <div class="notes">
+    <div><h3>Pour</h3><ul>${p.pros.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <div><h3>Contre</h3><ul>${p.cons.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+  </div>
+  ${p.key==="A" ? `
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <h3>Déclinaison par app</h3>
+    <div class="fam">
+      ${[["Tracker",NAVY,-8],["Carte live","#0F4C4A",0],["EFB iPad","#2B2F36",8],["Compagnie virtuelle","#4A1E2C",-15]].map(([n,c,b])=>`
+        <div class="cell"><div class="icon" style="width:72px;height:72px;border-radius:16px;background:${c}"><svg viewBox="-8 -8 116 116">${markA("light",b).replace(/^<svg[^>]*>|<\/svg>$/g,"")}</svg></div><span class="cap">${n}</span></div>`).join("")}
+    </div>
+  </div>` : ""}
+</section>`).join("");
+
+// Le mono des locks hérite d'un style inline : on fusionne proprement les deux attributs style
+document.getElementById("pistes").innerHTML = html.replace(/class="lock" style="font-size:28px;" style="/g,'class="lock" style="font-size:28px;');
+</script>

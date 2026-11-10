@@ -1,0 +1,31 @@
+# Pages du SDK MSFS 2024 à garder en local.
+# Format : nom_du_fichier_local | URL (version Markdown, se termine par index.md) | statut
+# statut : verifie = URL vérifiée le 2026-11-10 ; a_verifier = URL déduite, le script signalera si elle n'existe pas.
+# Pour ajouter une page : ajouter une ligne, puis lancer scripts/update-msfs-docs.sh
+
+# --- SimConnect : lecture des données ---
+simconnect-requestdataonsimobject.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/events-and-data/simconnect_requestdataonsimobject/index.md | verifie
+simconnect-addtodatadefinition.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/events-and-data/simconnect_addtodatadefinition/index.md | verifie
+simconnect-period.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/structures-and-enumerations/simconnect_period/index.md | verifie
+simconnect-recv-simobject-data.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/structures-and-enumerations/simconnect_recv_simobject_data/index.md | verifie
+simconnect-datatype.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/structures-and-enumerations/simconnect_datatype/index.md | verifie
+
+# --- SimConnect : événements système (pause, crash, chargement) ---
+simconnect-subscribetosystemevent.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/general/simconnect_subscribetosystemevent/index.md | verifie
+simconnect-flow-event.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/structures-and-enumerations/simconnect_flow_event/index.md | verifie
+simconnect-open.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simconnect/api-reference/general/simconnect_open/index.md | verifie
+
+# --- Variables de simulation (SimVars) ---
+simvars-index-a-z.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/simulation-variables/index.md | verifie
+simvars-units.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/simulation-variable-units/index.md | verifie
+simvars-aircraft-misc.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-miscellaneous-variables/index.md | verifie
+simvars-aircraft-system.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-system-variables/index.md | verifie
+simvars-aircraft-flight-model.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-flight-model-variables/index.md | verifie
+simvars-aircraft-engine.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-engine-variables/index.md | verifie
+simvars-aircraft-fuel.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-fuel-variables/index.md | verifie
+simvars-aircraft-autopilot.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-autopilot-and-assistant-variables/index.md | verifie
+simvars-aircraft-radio-nav.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-radio-navigation-variables/index.md | verifie
+simvars-aircraft-brakes-gear.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-brake-and-landing-gear-variables/index.md | verifie
+simvars-aircraft-control.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-control-variables/index.md | verifie
+simvars-aircraft-electrics.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/aircraft-simvars/aircraft-electrics-variables/index.md | verifie
+simvars-miscellaneous.md | https://docs.flightsimulator.com/msfs2024/retail/programming-apis/simvars/miscellaneous-variables/index.md | verifie
