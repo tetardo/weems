@@ -22,7 +22,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 - [Parc applicatif et positionnement](docs/cadrage/01-parc-et-positionnement.md)
 - [Architecture et flux](docs/cadrage/02-architecture-et-flux.md) : API, données, flux, hébergement, décisions ouvertes
 - [Fondamentaux](docs/cadrage/03-fondamentaux.md) : moyens, objectif, gratuit et payant, statut juridique, environnements
-- [Lots et feuille de route](docs/cadrage/04-lots-et-feuille-de-route.md) : lots 1 à 4, jalons J0 à J4 du lot 1
+- [Lots et feuille de route](docs/cadrage/04-lots-et-feuille-de-route.md) : lots 1 à 4, jalons J0 à J5 du lot 1
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4
 - [Spécification T0 du tracker](docs/cahiers-des-charges/tracker/spec-T0.md) : données reçues et règles des phases
 - [À voir avec Houssine](docs/suivi/a-voir-avec-houssine.md) : questions en attente pour la communauté
@@ -42,9 +42,10 @@ Détail dans [Lots et feuille de route](docs/cadrage/04-lots-et-feuille-de-route
 | Jalon du lot 1 | Objectif | Où |
 | --- | --- | --- |
 | J0 | Fondations : tracker T0, squelette de l'API | Mac |
-| J1 | Premier vrai vol affiché sur le site | Mac + PC Windows |
-| J2 | Alpha fermée, 5 pilotes | Serveur de Greg |
-| J3 | Bêta, environ 50 pilotes, Store limité | Production |
-| J4 | Version 1.0 publique sur le Store | Production |
+| J1 | 10 pilotes simulés suivis sur la carte en direct | Mac |
+| J2 | Premier vrai vol affiché sur le site | Mac + PC Windows |
+| J3 | Alpha fermée, 5 pilotes | Serveur de Greg |
+| J4 | Bêta, environ 50 pilotes, Store limité | Production |
+| J5 | Version 1.0 publique sur le Store | Production |
 
 Ensuite : lot 2 abonnement pilote, lot 3 gestion de compagnie, lot 4 app iPad (ordre des lots 2 et 3 à confirmer).

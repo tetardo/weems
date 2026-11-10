@@ -5,9 +5,9 @@
 ## Synthèse
 
 - Pas de dates : une suite d'étapes ordonnées. On ne passe à l'étape suivante que lorsque son critère de sortie est atteint.
-- **Lot 1 — Carnet de vol connecté** (gratuit) : tracker MSFS + API + site web. Il avance en 5 jalons, J0 à J4, qui alignent les trois applications. Les lots internes du tracker (T0 à T4) s'y rangent un pour un.
+- **Lot 1 — Carnet de vol connecté** (gratuit) : tracker MSFS + API + site web. Il avance en 6 jalons, J0 à J5, qui alignent les trois applications. Les lots internes du tracker (T0 à T4) s'y rangent, J1 étant un démonstrateur ajouté par Greg.
 - Ensuite, un lot par source de valeur : abonnement pilote, gestion de compagnie virtuelle, app iPad. X-Plane vient plus tard.
-- Tout se développe et se teste sur le Mac de Greg jusqu'à l'arrivée des pilotes testeurs (J2).
+- Tout se développe et se teste sur le Mac de Greg jusqu'à l'arrivée des pilotes testeurs (J3).
 
 ## Vue d'ensemble
 
@@ -21,29 +21,33 @@
 
 L'ordre des lots 2 et 3 est une décision ouverte (voir plus bas).
 
-## Lot 1 en 5 jalons
+## Lot 1 en 6 jalons
 
 Chaque jalon est utilisable et vérifiable seul. Les colonnes Tracker, API et Web disent ce que chaque application doit apporter au jalon.
 
 | Jalon | Tracker | API | Web | Où ça tourne | Critère de sortie |
 | --- | --- | --- | --- | --- | --- |
 | **J0 — Fondations** | T0 : modèle de télémétrie, 12 phases, enregistreur, vols synthétiques, règles v0 | Squelette Fastify, base PostgreSQL, réception d'un vol, contrat OpenAPI | — | Mac (Docker) | Les 20 scénarios synthétiques passent ; un vol synthétique envoyé est stocké par l'API |
-| **J1 — Premier vrai vol** | T1 : connecteur MSFS, 10 vols de référence, mesure de l'impact sur les images par seconde | Réception des vols réels | Carnet de vol et page de vol avec trace sur carte, sans compte | Mac + PC Windows en réseau local | Les 10 vols de référence s'affichent sur le site avec leurs phases correctes |
-| **J2 — Alpha fermée** | T2 : connexion au compte, envoi, file d'attente hors ligne, rapport de vol | Comptes (OAuth avec PKCE), vols, recalcul de la note | Connexion, carnet personnel, page de vol | Machine virtuelle sur le serveur Hetzner de Greg | 5 pilotes, 50 vols, zéro vol perdu, phases correctes sur au moins 95 % des vols vérifiés |
-| **J3 — Bêta** | T3 : capacités différenciantes, débriefing, Store en diffusion limitée | Position en direct, environnement de test séparé | Carte en direct, débriefing, profil public | Production publique (Scaleway) | Environ 50 pilotes, 500 vols, moins de 1 % de vols en erreur, seuils de notation calés |
-| **J4 — Version 1.0** | T4 : Store public, français et anglais | Supervision, procédure de correctif d'urgence | Pages publiques référencées, CGU, confidentialité | Production publique | Exigences du lot 1 validées ; correctif d'urgence testé de bout en bout |
+| **J1 — 10 pilotes simulés** (ajouté par Greg le 11/11/2026) | Connecteur de rejeu : le cœur du tracker lit des vols enregistrés ou synthétiques au lieu de MSFS ; 10 instances en parallèle | Réception des positions en direct, diffusion aux navigateurs (SSE) | Carte en direct (MapLibre) : les 10 avions bougent, clic sur un avion pour voir sa phase | Mac (Docker), sans PC Windows | 10 vols simulés suivis de bout en bout sur la carte, phases affichées correctes, aucun avion perdu ou figé |
+| **J2 — Premier vrai vol** | T1 : connecteur MSFS, 10 vols de référence, mesure de l'impact sur les images par seconde | Réception des vols réels | Carnet de vol et page de vol avec trace sur carte, sans compte | Mac + PC Windows en réseau local | Les 10 vols de référence s'affichent sur le site avec leurs phases correctes |
+| **J3 — Alpha fermée** | T2 : connexion au compte, envoi, file d'attente hors ligne, rapport de vol | Comptes (OAuth avec PKCE), vols, recalcul de la note | Connexion, carnet personnel, page de vol | Machine virtuelle sur le serveur Hetzner de Greg | 5 pilotes, 50 vols, zéro vol perdu, phases correctes sur au moins 95 % des vols vérifiés |
+| **J4 — Bêta** | T3 : capacités différenciantes, débriefing, Store en diffusion limitée | Environnement de test séparé, montée en charge du direct | Débriefing, profil public | Production publique (Scaleway) | Environ 50 pilotes, 500 vols, moins de 1 % de vols en erreur, seuils de notation calés |
+| **J5 — Version 1.0** | T4 : Store public, français et anglais | Supervision, procédure de correctif d'urgence | Pages publiques référencées, CGU, confidentialité | Production publique | Exigences du lot 1 validées ; correctif d'urgence testé de bout en bout |
 
-Le « premier jalon » voulu par Greg (une API, un tracker et un site simple qui affiche les premières infos) correspond à **J1**, sur le Mac.
+Le « premier jalon » voulu par Greg (une API, un tracker et un site simple qui affiche les premières infos) correspond à **J2**, sur le Mac. Le jalon J1 en est une répétition entièrement simulée : il valide toute la chaîne, carte en direct comprise, avant d'avoir le PC Windows.
+
+**Pourquoi J1 vaut le coup** [Confiance moyenne] : le connecteur de rejeu sert ensuite à tous les tests automatiques du tracker, et la carte en direct est éprouvée avec plusieurs avions bien avant la bêta. Risque : passer trop de temps sur la carte au détriment des vrais vols. Parade : carte minimale, sans habillage, jusqu'à J4.
 
 ### Ce qu'il faut avoir défini avant chaque jalon
 
 | Avant | À définir | Besoin d'un pilote |
 | --- | --- | --- |
 | Fin de J0 | Format de vol enregistré et 20 scénarios de test (point 3 de la spec T0) ; critères de notation et sources officielles (point 4) | Oui |
-| J1 | Cahier des charges du site web, version minimale (carnet, page de vol) | Non |
-| J2 | Organisation du code de l'API (Fastify, réponse de Thibault) ; liste des 5 pilotes testeurs (Houssine) | Non |
-| J3 | Contenu du débriefing ; CGU et confidentialité ; vérification de la marque « Weems » ; micro-entreprise créée et compte Store ouvert à son nom | Débriefing : oui |
-| J4 | Procédure de support et de correctif d'urgence | Non |
+| J1 | Format des positions en direct ; carte minimale ; jeux de vols à rejouer (vols A32NX ou Sky Dolly si disponibles, sinon synthétiques) | Non |
+| J2 | Cahier des charges du site web, version minimale (carnet, page de vol) | Non |
+| J3 | Organisation du code de l'API (Fastify, réponse de Thibault) ; liste des 5 pilotes testeurs (Houssine) | Non |
+| J4 | Contenu du débriefing ; CGU et confidentialité ; vérification de la marque « Weems » ; micro-entreprise créée et compte Store ouvert à son nom | Débriefing : oui |
+| J5 | Procédure de support et de correctif d'urgence | Non |
 
 ## Lots suivants
 
