@@ -25,6 +25,7 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 | Besoin | Fichier |
 | --- | --- |
 | Pourquoi on fait ça, fonctionnalités, concurrence, données à exploiter | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` |
+| Données reçues par le cœur, règles des 12 phases, seuils (lot T0) | `../../docs/cahiers-des-charges/tracker/spec-T0.md` |
 | Quelle SimVar lire, son unité, sa fiabilité | `docs/reference/simvars.yaml` |
 | Comment demander des données à SimConnect (fréquences, options) | `docs/reference/msfs/fiches/01-lire-les-donnees.md` |
 | Pause, crash, chargement, téléportation, slew | `docs/reference/msfs/fiches/02-evenements-systeme.md` |
