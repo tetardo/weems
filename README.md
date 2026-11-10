@@ -48,4 +48,4 @@ Détail dans [Lots et feuille de route](docs/cadrage/04-lots-et-feuille-de-route
 | J4 | Bêta, environ 50 pilotes, Store limité | Production |
 | J5 | Version 1.0 publique sur le Store | Production |
 
-Ensuite : lot 2 abonnement pilote, lot 3 gestion de compagnie, lot 4 app iPad (ordre des lots 2 et 3 à confirmer).
+Ensuite : lot 2 abonnement pilote, lot 3 gestion de compagnie, lot 4 app iPad.

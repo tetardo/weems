@@ -19,7 +19,7 @@
 | **4 — App iPad (EFB)** | Cartes, check-lists, performances, suivi en direct (Swift) | Pilotes sur iPad | À définir |
 | **Plus tard** | Connecteur X-Plane | Pilotes X-Plane | — |
 
-L'ordre des lots 2 et 3 est une décision ouverte (voir plus bas).
+Ordre des lots 2 et 3 décidé le 11/11/2026 : abonnement pilote d'abord (voir plus bas).
 
 ## Lot 1 en 6 jalons
 
@@ -57,9 +57,9 @@ Le « premier jalon » voulu par Greg (une API, un tracker et un site simple qui
 | **3 — Gestion de compagnie** | Lot 1 ; paiement en place | Prix validé auprès de 5 à 10 fondateurs de compagnies | Cahier des charges VACommunity, tarif par taille de compagnie |
 | **4 — App iPad** | Lot 1 ; développeur Swift ou relecture assurée | — | Cahier des charges EFB, sources de cartes (licences) |
 
-## Décision ouverte
+## Décision prise
 
-**Ordre des lots 2 et 3.** Recommandation : abonnement pilote d'abord [Confiance moyenne]. Il est petit, il apporte un premier revenu plus tôt, et il met en place le paiement et la micro-entreprise dont la gestion de compagnie aura aussi besoin. La validation du prix auprès des fondateurs de compagnies peut se faire pendant ce temps. Contre-argument : l'étape 1 jugeait le revenu des compagnies plus sûr (un seul acheteur, beaucoup d'utilisateurs).
+**Ordre des lots 2 et 3** (décidé par Greg le 11/11/2026) : abonnement pilote d'abord. Il est plus petit, il apporte un premier revenu plus tôt, et il met en place le paiement et la micro-entreprise dont la gestion de compagnie aura aussi besoin. La validation du prix auprès de 5 à 10 fondateurs de compagnies se fait pendant le lot 2.
 
 ## Risques de la feuille de route
 
