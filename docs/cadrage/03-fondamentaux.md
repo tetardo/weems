@@ -8,8 +8,8 @@ Réponses de Greg du 11/11/2026, avec les conséquences pour la feuille de route
 | --- | --- | --- |
 | Temps | Greg y consacre tout son temps, sans contrainte de date | Feuille de route en étapes et critères de sortie, sans calendrier |
 | Équipe | Greg seul sur le code ; Houssine et Thibault en appui ponctuel | Un lot à la fois, pas de travail en parallèle |
-| Budget mensuel | À préciser | Hébergement estimé à 30-60 €/mois (étape 2) |
-| PC Windows avec MSFS | Prévu, date inconnue | **Chemin critique** : aucun vol réel enregistré ni tracker validé sans lui |
+| Budget mensuel | Pas de plafond fixé ; hypothèse de travail : moins de 100 €/mois jusqu'aux premiers revenus | Hébergement estimé à 30-60 €/mois (étape 2) ; tout service payant au-delà est signalé avant d'être retenu |
+| PC Windows avec MSFS | Disponible sous quelques jours (annoncé le 11/11/2026) | Débloque le lot T1 (prototype de connexion au simulateur) et l'enregistrement de vrais vols |
 
 ## 2. Objectif du premier lancement
 
