@@ -54,10 +54,11 @@ src/
   profile/             profil public
     routes-geojson.ts     arcs de grand cercle et aéroports de la carte des vols
     chart-geometry.ts     barres, moyenne glissante, classes de toucher (fonctions pures)
-    profile-charts.tsx, stat-tiles.tsx, profile-header.tsx, routes-map.tsx
+    profile-charts.tsx, stat-tiles.tsx, profile-header.tsx, routes-map.tsx, routes-legend.tsx
+    experience-panel.tsx, experience-rows.tsx   bloc « Expérience par catégorie »
     share-map.ts, share-image.tsx   image de partage (générateur d'images de Next.js)
     page-metadata.ts      titre, description, adresse canonique et variantes de langue
-  aircraft/            catégorie d'avion : pastille (category-badge.tsx), couleurs (category-tone.ts, variables --wm-cat-* de global.css)
+  aircraft/            catégorie d'avion : pastille (category-badge.tsx), carré de couleur (category-dot.tsx), couleurs (category-tone.ts pour les classes, category-colors.ts pour les cartes, variables --wm-cat-* de global.css)
   flights/             liste des vols : filtres (list-query.ts), tableau, pastilles, état
   flight/              page de vol
     phase-colors.ts       une couleur par phase (carte, profil, frise)
