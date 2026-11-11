@@ -1,0 +1,21 @@
+flowchart LR
+  MSFS["MSFS 2020 / 2024<br/>(PC Windows)"]
+  subgraph msfs["apps/tracker/src/connectors/msfs"]
+    LINK["simconnect-link<br/>seul à parler à SimConnect"]
+    VARS["sim-vars<br/>variables vérifiées<br/>(test contre simvars.yaml)"]
+    CONV["to-sample<br/>unités, signes,<br/>aberrant → null"]
+    EVT["system-events<br/>pause, crash,<br/>doublons filtrés"]
+    CONN["msfs-connector<br/>attente, reconnexion,<br/>avion relu / 30 s"]
+  end
+  CORE["Cœur du tracker<br/>phases, journal,<br/>cadence EF-09"]
+  REC["recordings/*.jsonl<br/>rejeu du vol"]
+  FAKE["Faux simulateur<br/>(tests sur Mac)"]
+  MSFS <--> LINK
+  VARS -.-> LINK
+  LINK -- "valeurs brutes" --> CONN
+  FAKE -. "mêmes valeurs brutes" .-> CONN
+  CONN --> CONV
+  CONN --> EVT
+  CONN -- "Sample, AircraftInfo, SimEvent" --> CORE
+  CONN --> REC
+  CORE -- "setReadRate" --> CONN

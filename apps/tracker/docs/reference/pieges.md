@@ -22,6 +22,16 @@ Format : **titre court** — ce qui se passe — ce qu'on fait — source.
 - **Faux booléens** — `GEAR HANDLE POSITION`, `EXIT OPEN:n`, `APU PCT RPM` sont des pourcentages (0 à 1), pas des booléens. — Utiliser `percent_over_100` et un seuil. — doc SDK, vérifié le 2026-11-10
 - **Heure et vitesse de simulation introuvables dans les SimVars** — `ZULU TIME` et `SIMULATION RATE` ne sont pas dans les pages SimVars téléchargées ; probablement des variables d'environnement documentées ailleurs. — Trouver la page et l'ajouter à `sources.txt`. — constat du 2026-11-10
 
+## À confirmer au premier vol réel (J2, 11/11/2026)
+
+Choix faits dans le connecteur sans avoir pu tester ; chaque ligne devient un piège daté ou est retirée après les vols de référence.
+
+- **Signe de l'assiette et de l'inclinaison** — Le connecteur inverse `PLANE PITCH DEGREES` et `PLANE BANK DEGREES` (constantes `PITCH_SIGN`, `BANK_SIGN` de `to-sample.ts`). Vérifier : cabré au décollage = assiette positive ; virage à droite = inclinaison positive.
+- **Codes de `PUSHBACK STATE`** — Supposés 0, 1, 2 = repoussage en cours, 3 = aucun. Si faux, le vol s'ouvrirait au chargement ou jamais par le repoussage.
+- **MSFS 2020 ou 2024** — Déduit de la version renvoyée à la connexion (11 = 2020, 12 = 2024).
+- **N1 des moteurs à pistons** — 0 lu → « non mesuré ». À vérifier sur un Cessna 172.
+- **Pause (`Pause_EX1`)** — Toute valeur non nulle = en pause. Croiser avec les pièges de pause ci-dessus.
+
 ## À compléter pendant les tests
 
 - Comportement des avions complexes (Fenix A320, PMDG 737/777, FlyByWire A32NX, iniBuilds) pour les familles 15, 17, 18, 20 : quelles SimVars standard sont à jour, lesquelles non.

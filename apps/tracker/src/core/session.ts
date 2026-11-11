@@ -3,6 +3,7 @@ import type {
   CloseFlightRequest,
   CloseReason,
   FlightEvent,
+  FlightPhase,
   OpenFlightRequest,
   PositionReport,
   Sample,
@@ -14,6 +15,7 @@ import type { PhaseParams } from "./phases/params.ts";
 import { PhaseMachine, type PhaseOutput } from "./phases/phase-machine.ts";
 import type { SavedFlight } from "./recovery.ts";
 import { positionIntervalMs } from "./position-cadence.ts";
+import { readRateFor } from "./read-rate.ts";
 import { SimStateWatcher } from "./sim-state-watcher.ts";
 
 /** Where a session sends what it produces: the recorder, then the sender. */
@@ -70,6 +72,15 @@ export class FlightSession {
 
   get state(): SessionState {
     return this.stateValue;
+  }
+
+  get phase(): FlightPhase | null {
+    return this.machine.phase;
+  }
+
+  /** How often the connector should read the simulator now (EF-09). */
+  get readRate(): "high" | "normal" {
+    return this.lastSample ? readRateFor(this.lastSample, this.phase) : "normal";
   }
 
   /** UTC time of a sample of the current flight (null before opening). */
