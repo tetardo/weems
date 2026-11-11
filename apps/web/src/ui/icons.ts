@@ -18,6 +18,7 @@ export {
   type LucideIcon as IconComponent,
   Moon as ThemeDarkIcon,
   Radar as LiveIcon,
+  Route as RoutesIcon,
   Sun as ThemeLightIcon,
   Trash2 as DeleteIcon,
 } from "lucide-react";

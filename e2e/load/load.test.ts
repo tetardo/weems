@@ -32,6 +32,7 @@ describe("pnpm load (spec J4, montée en charge du direct)", () => {
       speed: 120,
       minutes: 0.5,
       workDir,
+      clearFlights: false,
     });
     const criteria = judge(measures);
     expect(criteria.filter((c) => c.passed === false)).toEqual([]);

@@ -36,7 +36,16 @@
       "phase": "Phase",
       "altitude": "Altitude",
       "groundSpeed": "Ground speed"
-    }
+    },
+    "route": {
+      "progress": "Flight progress",
+      "percent": "{percent}%",
+      "remaining": "{distance} NM to go",
+      "timeLeft": "≈ {time}",
+      "noFlightPlan": "Departure or arrival not set in the tracker: no progress.",
+      "unknownAirport": "Airport unknown to Weems: no progress."
+    },
+    "showRoutes": "Routes"
   },
   "Phases": {
     "BOARDING": "Boarding",
