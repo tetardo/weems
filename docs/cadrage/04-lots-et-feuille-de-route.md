@@ -43,7 +43,7 @@ Le « premier jalon » voulu par Greg (une API, un tracker et un site simple qui
 | Avant | À définir | Besoin d'un pilote |
 | --- | --- | --- |
 | Fin de J0 | Format de vol enregistré et 20 scénarios de test (point 3 de la spec T0) ; critères de notation et sources officielles (point 4) | Oui |
-| J1 | Format des positions en direct ; carte minimale ; jeux de vols à rejouer (vols A32NX ou Sky Dolly si disponibles, sinon synthétiques) | Non |
+| J1 | Rédigé le 11/11/2026 : [spécification J1](../cahiers-des-charges/spec-J1-pilotes-simules.md) | Non |
 | J2 | Cahier des charges du site web, version minimale (carnet, page de vol) | Non |
 | J3 | Organisation du code de l'API (Fastify, réponse de Thibault) ; liste des 5 pilotes testeurs (Houssine) | Non |
 | J4 | Contenu du débriefing ; CGU et confidentialité ; vérification de la marque « Weems » ; micro-entreprise créée et compte Store ouvert à son nom | Débriefing : oui |
