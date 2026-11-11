@@ -11,6 +11,8 @@ export function CardBox({
   className?: string;
 }) {
   return (
-    <div className={`rounded-2xl bg-white ${flush ? "" : "p-6"} ${className}`}>{children}</div>
+    <div className={`rounded-2xl bg-white shadow-soft ${flush ? "" : "p-6"} ${className}`}>
+      {children}
+    </div>
   );
 }

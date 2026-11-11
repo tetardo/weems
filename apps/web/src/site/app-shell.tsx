@@ -14,8 +14,8 @@ export function AppShell({ topBar, children }: { topBar: ReactNode; children: Re
   const t = useTranslations("Site");
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 pt-14 xl:pl-60">
-      <nav className="fixed inset-x-0 top-0 z-30 flex h-14 items-stretch bg-gray-50 xl:pl-60">
+    <div className="flex min-h-screen flex-col bg-[#f8f9fa] pt-20 xl:pl-68">
+      <nav className="fixed inset-x-4 top-3 z-30 flex h-14 items-stretch rounded-2xl bg-white/80 text-sm text-[#344767] shadow-soft backdrop-blur xl:left-72">
         <button
           type="button"
           className="flex items-center px-3 xl:hidden"

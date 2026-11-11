@@ -31,7 +31,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale);
   return (
     <html lang={locale}>
-      <body className="min-h-full bg-gray-50 text-gray-800">
+      <body className="min-h-full bg-[#f8f9fa] text-[#67748e]">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

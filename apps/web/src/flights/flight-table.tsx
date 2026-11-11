@@ -16,7 +16,10 @@ export function FlightTable({ flights }: { flights: readonly FlightSummary[] }) 
         <thead>
           <tr>
             {COLUMNS.map((column) => (
-              <th key={column} className="p-3 font-semibold">
+              <th
+                key={column}
+                className="px-6 py-3 text-[0.65rem] font-bold tracking-wide text-[#8392ab] uppercase opacity-70"
+              >
                 {t(column)}
               </th>
             ))}
@@ -36,22 +39,25 @@ function FlightRow({ flight }: { flight: FlightSummary }) {
   const site = useTranslations("Site");
   const format = useFormatter();
   return (
-    <tr className="odd:bg-gray-100/50 hover:bg-gray-100">
-      <td className="p-3 whitespace-nowrap">
-        <Link href={`/flights/${flight.flightId}`} className="text-blue-600 hover:underline">
+    <tr className="border-t border-[#e9ecef] text-sm hover:bg-[#f8f9fa]">
+      <td className="px-6 py-3 whitespace-nowrap">
+        <Link
+          href={`/flights/${flight.flightId}`}
+          className="font-semibold text-[#344767] hover:text-[#cb0c9f]"
+        >
           {format.dateTime(new Date(flight.openedAt), { dateStyle: "short", timeStyle: "short" })}
         </Link>
       </td>
-      <td className="p-3 whitespace-nowrap">{flight.callsign}</td>
-      <td className="p-3 whitespace-nowrap">
+      <td className="px-6 py-3 whitespace-nowrap">{flight.callsign}</td>
+      <td className="px-6 py-3 whitespace-nowrap">
         {formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}
       </td>
-      <td className="p-3">{flight.aircraftModel ?? flight.aircraftTitle}</td>
-      <td className="p-3">{formatDuration(flight.times.airborneS) ?? site("notMeasured")}</td>
-      <td className="p-3">
+      <td className="px-6 py-3">{flight.aircraftModel ?? flight.aircraftTitle}</td>
+      <td className="px-6 py-3">{formatDuration(flight.times.airborneS) ?? site("notMeasured")}</td>
+      <td className="px-6 py-3">
         <FlightStatus closeReason={flight.closeReason} />
       </td>
-      <td className="p-3">
+      <td className="px-6 py-3">
         <AlertBadges alerts={flight.alerts} />
       </td>
     </tr>

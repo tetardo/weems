@@ -23,15 +23,15 @@ export function SectionTitle({
           <Icon
             path={icon}
             size={24}
-            className="mr-3 h-12 w-12 rounded-full bg-white text-slate-700"
+            className="mr-3 h-12 w-12 rounded-xl bg-gradient-fuchsia text-white shadow-soft-sm"
           />
         ) : (
           <Icon path={icon} size={20} className="mr-2" />
         )}
         {main ? (
-          <h1 className="text-3xl leading-tight">{title}</h1>
+          <h1 className="text-2xl leading-tight font-bold text-[#344767]">{title}</h1>
         ) : (
-          <h2 className="text-2xl leading-tight">{title}</h2>
+          <h2 className="text-lg leading-tight font-bold text-[#344767]">{title}</h2>
         )}
       </div>
       {children}

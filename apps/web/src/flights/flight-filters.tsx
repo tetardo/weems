@@ -6,7 +6,7 @@ import type { ListFilters } from "./list-query.ts";
 
 const FIELD = "flex flex-col gap-1 text-sm font-semibold";
 const INPUT =
-  "h-10 rounded-sm border border-gray-700 bg-white px-3 font-normal focus:border-blue-600 focus:ring-3 focus:ring-blue-600 focus:outline-hidden";
+  "h-10 rounded-lg border border-[#d2d6da] bg-white px-3 text-sm font-normal focus:border-[#e293d3] focus:shadow-[0_0_0_2px_#e9aede] focus:outline-hidden";
 
 /** Period, aircraft, airport: a plain form, the filters live in the page address. */
 export function FlightFilters({ filters }: { filters: ListFilters }) {

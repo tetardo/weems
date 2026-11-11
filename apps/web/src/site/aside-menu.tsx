@@ -19,9 +19,9 @@ export function AsideMenu({ open, onClose }: { open: boolean; onClose: () => voi
   const pathname = usePathname();
   return (
     <aside
-      className={`fixed top-0 z-40 flex h-screen w-60 flex-col bg-gray-800 transition-[left] xl:left-0 ${open ? "left-0" : "-left-60"}`}
+      className={`fixed top-0 z-40 flex h-screen w-64 flex-col bg-[#f8f9fa] p-4 transition-[left] xl:left-0 ${open ? "left-0" : "-left-72"}`}
     >
-      <div className="flex h-14 items-center justify-between bg-gray-900 px-6 text-white">
+      <div className="mb-4 flex h-14 items-center justify-between border-b border-[#e9ecef] px-4 text-[#344767]">
         <Link href="/flights" className="font-black" onClick={onClose}>
           {t("name")}
         </Link>
@@ -37,9 +37,13 @@ export function AsideMenu({ open, onClose }: { open: boolean; onClose: () => voi
               <Link
                 href={item.href}
                 onClick={onClose}
-                className={`flex py-3 ${active ? "font-bold text-white" : "text-gray-300 hover:text-white"}`}
+                className={`mb-1 flex items-center rounded-lg px-3 py-2.5 text-sm ${active ? "bg-white font-semibold text-[#344767] shadow-soft" : "text-[#67748e] hover:text-[#344767]"}`}
               >
-                <Icon path={item.icon} className="w-16 flex-none" />
+                <Icon
+                  path={item.icon}
+                  size={16}
+                  className={`mr-3 h-8 w-8 flex-none rounded-lg shadow-soft-sm ${active ? "bg-gradient-fuchsia text-white" : "bg-white text-[#344767]"}`}
+                />
                 <span className="grow">{t(item.label)}</span>
               </Link>
             </li>
