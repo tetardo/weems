@@ -16,7 +16,7 @@ export const FlightSettingsSchema = z.object({
   arrivalIcao: ICAO,
 });
 
-/** What may be on disk: airports still empty on a first launch or a file from before 004. */
+/** What may be on disk: airports still empty on a first launch or a file from before decision 007. */
 const StoredSettingsSchema = FlightSettingsSchema.extend({
   departureIcao: z.union([z.literal(""), ICAO]),
   arrivalIcao: z.union([z.literal(""), ICAO]),
