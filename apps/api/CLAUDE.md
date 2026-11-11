@@ -79,6 +79,7 @@ docker-compose.yml
 - Tracker : OAuth 2.1, code d'autorisation avec PKCE, retour sur `http://127.0.0.1:{port}/callback`. Jetons d'accès JWT (audience `WEEMS_API_URL`, 1 h), jetons de rafraîchissement tournants (90 jours). `GET /v1/tracker/login` donne tout au tracker.
 - Les tables de Better Auth sont dans `src/db/auth-schema.ts`, écrites à la main (noms de champs de la bibliothèque) : à comparer après chaque mise à jour de la bibliothèque.
 - Hors production, le jeton de développement `Authorization: Bearer dev-token` reste accepté (`pnpm simulate`, `pnpm fly`) ; ses vols appartiennent au pilote de développement, qui peut se connecter au site avec `pilote@weems.local` / `weems-dev-password`.
+- Hors production seulement, `GET /v1/dev/metrics` donne le retard de la boucle d'événements, la mémoire, le nombre de spectateurs et de vols en direct (`modules/live/dev-routes.ts`, lu par `pnpm load`, spec J4 montée en charge).
 - Hors production seulement, `DELETE /v1/flights` supprime tous les vols du pilote connecté, avec événements, trajectoire et vérification (`modules/flights/dev-routes.ts`, bouton du site en `pnpm dev`). En production la route n'existe pas : un vol réel n'est jamais effacé (EF-14).
 
 En-tête obligatoire du tracker : `Weems-Client: tracker/0.1.0`.

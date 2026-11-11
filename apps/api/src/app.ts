@@ -17,6 +17,7 @@ import { registerFlightRoutes } from "./modules/flights/routes.ts";
 import { FlightsService } from "./modules/flights/service.ts";
 import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
+import { registerDevLiveRoutes } from "./modules/live/dev-routes.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
 import { LiveService } from "./modules/live/service.ts";
 import { ReviewsRepository } from "./modules/reviews/repository.ts";
@@ -73,6 +74,7 @@ export async function buildApp({
   );
   const airports = new AirportsService(readAirportsFile());
   registerLiveRoutes(app, stream, new LiveService(board, airports));
+  if (config.env !== "production") registerDevLiveRoutes(app, board, stream);
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());
 

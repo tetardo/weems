@@ -5,7 +5,7 @@ import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
 import { FlightSession } from "../../src/core/session.ts";
 import { generateFlight } from "./generator.ts";
 import { expectedTrace } from "./expected-phases.ts";
-import { FLEET } from "./fleet.ts";
+import { FLEET, fleetOf } from "./fleet.ts";
 import { type Disturbance, LFPG_LFBO, type Scenario } from "./scenario.ts";
 
 /** Plays a generated flight through the real core; returns phases and notable events. */
@@ -69,5 +69,13 @@ describe("generated flights through the core", () => {
     expect(await track(scenario, scenario.disturbances)).toBe(
       `${expectedTrace(scenario.disturbances)} closed:normal`,
     );
+  });
+
+  it.each(
+    fleetOf(16)
+      .slice(10)
+      .map((s) => [`${s.callsign} ${s.name}`, s] as const),
+  )("large fleet route %s", async (_name, scenario) => {
+    expect(await track(scenario, [])).toBe(`${expectedTrace([])} closed:normal`);
   });
 });

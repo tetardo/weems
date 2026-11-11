@@ -30,6 +30,15 @@ export function serializeReplay(replay: Replay): string {
   return [replay.header, ...replay.records].map((line) => JSON.stringify(line)).join("\n") + "\n";
 }
 
+/**
+ * The first `durationMs` of a replay. A load run that stops after 10 minutes
+ * keeps 10 minutes of each flight in memory, not the whole flight (spec J4).
+ */
+export function replayUntil(replay: Replay, durationMs: number): Replay {
+  const start = replay.records[0]?.t ?? 0;
+  return { ...replay, records: replay.records.filter((r) => r.t - start <= durationMs) };
+}
+
 /** Parses and validates a replay file; the error names the faulty line. */
 export function parseReplay(text: string): Replay {
   const lines = text.split("\n").filter((line) => line.trim() !== "");

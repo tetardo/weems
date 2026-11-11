@@ -2,7 +2,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { httpApiClient } from "../../src/sender/api-client.ts";
-import { FLEET } from "../generate-flights/fleet.ts";
+import { fleetOf } from "../generate-flights/fleet.ts";
 import { runSimulation } from "./simulation.ts";
 
 /**
@@ -20,7 +20,7 @@ const { values } = parseArgs({
 });
 
 const trackerVersion = "0.1.0";
-const scenarios = FLEET.slice(0, Number(values.count));
+const scenarios = fleetOf(Number(values.count));
 process.stdout.write(`${scenarios.length} pilots, ×${values.speed}, API ${values.api}\n`);
 
 const results = await runSimulation({
