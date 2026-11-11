@@ -103,7 +103,9 @@ describe("desktop tracker window", () => {
 
     await page.fill("[name=callsign]", "wms42");
     await page.click("#settings [type=submit]");
-    await expect.poll(() => page.textContent("#notice")).toBe("");
+    await expect
+      .poll(() => page.textContent("#notice"))
+      .toBe("Enregistré pour le prochain vol : WMS42, LFPG → LFBO");
     await expect.poll(() => page.textContent("#flight-status")).toMatch(/^Aucun vol/);
     const saved = JSON.parse(readFileSync(join(dataDir, "settings.json"), "utf8")) as unknown;
     expect(saved).toEqual({ callsign: "WMS42", departureIcao: "LFPG", arrivalIcao: "LFBO" });

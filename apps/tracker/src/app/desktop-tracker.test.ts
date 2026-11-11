@@ -101,7 +101,7 @@ describe("desktop tracker (without Electron)", () => {
     expect(desktop.state()).toMatchObject({ notice: "invalidSettings", flightPlanMissing: true });
 
     await desktop.saveSettings(PLAN);
-    expect(desktop.state()).toMatchObject({ notice: null, flightPlanMissing: false });
+    expect(desktop.state()).toMatchObject({ notice: "settingsSaved", flightPlanMissing: false });
     expect(fly()).toBe(true);
   });
 
@@ -116,7 +116,10 @@ describe("desktop tracker (without Electron)", () => {
 
   it("keeps the flight settings, but not while a flight is recorded", async () => {
     await desktop.saveSettings(PLAN);
-    expect(desktop.state()).toMatchObject({ settings: { callsign: "AFR123" }, notice: null });
+    expect(desktop.state()).toMatchObject({
+      settings: { callsign: "AFR123" },
+      notice: "settingsSaved",
+    });
 
     await desktop.saveSettings({ ...PLAN, callsign: "bad callsign!" });
     expect(desktop.state().notice).toBe("invalidSettings");

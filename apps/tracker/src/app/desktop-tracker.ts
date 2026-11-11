@@ -96,9 +96,9 @@ export class DesktopTracker {
       this.notice = parsed.success ? "flightInProgress" : "invalidSettings";
       return;
     }
-    this.notice = null;
     saveSettings(this.settingsPath, parsed.data);
     this.settings = parsed.data;
+    this.notice = "settingsSaved"; // shown before the restart: the pilot sees the click worked
     await this.tracker.stop();
     this.tracker = this.startTracker();
   }

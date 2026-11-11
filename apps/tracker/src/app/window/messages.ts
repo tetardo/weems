@@ -37,6 +37,7 @@ export const MESSAGES = {
     departure: "Départ (OACI)",
     arrival: "Arrivée (OACI)",
     save: "Enregistrer",
+    settingsSaved: "Enregistré pour le prochain vol :",
     loginFailed: "La connexion n'a pas abouti. Réessayez.",
     flightInProgress: "Impossible pendant un vol : ces réglages servent au prochain vol.",
     invalidSettings:
@@ -77,6 +78,7 @@ export const MESSAGES = {
     departure: "Departure (ICAO)",
     arrival: "Arrival (ICAO)",
     save: "Save",
+    settingsSaved: "Saved for the next flight:",
     loginFailed: "The login did not go through. Try again.",
     flightInProgress: "Not during a flight: these settings are for the next flight.",
     invalidSettings:
