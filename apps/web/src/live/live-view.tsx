@@ -1,20 +1,20 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { FlightPanel } from "./flight-panel.tsx";
 import { LiveMap } from "./live-map.tsx";
 import { useLiveFlights } from "./use-live-flights.ts";
 
-const CONNECTION_FR = { connecting: "Connexion…", open: "En direct", retrying: "Reconnexion…" };
-
 /** The /live page: map, flight counter, panel of the selected flight. */
 export function LiveView({ apiUrl }: { apiUrl: string }) {
+  const t = useTranslations("Live");
   const { flights, connection } = useLiveFlights(apiUrl);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = selectedId ? flights.get(selectedId) : undefined;
 
   return (
-    <main style={{ position: "fixed", inset: 0 }}>
+    <main className="relative flex-1">
       <LiveMap flights={flights} selectedId={selectedId} onSelect={setSelectedId} />
       <div
         style={{
@@ -27,8 +27,7 @@ export function LiveView({ apiUrl }: { apiUrl: string }) {
           boxShadow: "0 2px 8px rgba(0,0,0,.2)",
         }}
       >
-        <strong>{flights.size}</strong> {flights.size > 1 ? "vols en cours" : "vol en cours"} ·{" "}
-        {CONNECTION_FR[connection]}
+        {t("count", { count: flights.size })} · {t(`connection.${connection}`)}
       </div>
       {selected && <FlightPanel flight={selected} onClose={() => setSelectedId(null)} />}
     </main>

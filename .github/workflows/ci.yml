@@ -45,3 +45,7 @@ jobs:
         run: pnpm test
       - name: J1 (10 pilotes simulés à ×10, environ 6 min)
         run: pnpm test:j1
+      - name: Navigateur du test J2
+        run: pnpm --filter @weems/e2e exec playwright install --with-deps chromium
+      - name: J2 (page d'un vol de 2 h en moins de 2 s, français et anglais)
+        run: pnpm test:j2

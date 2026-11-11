@@ -1,67 +1,35 @@
 import type { LiveFlight } from "@weems/contrats";
-
-const PHASES_FR: Record<LiveFlight["position"]["phase"], string> = {
-  BOARDING: "Embarquement",
-  PUSHBACK: "Repoussage",
-  TAXI_OUT: "Roulage départ",
-  TAKEOFF: "Décollage",
-  CLIMB: "Montée",
-  CRUISE: "Croisière",
-  DESCENT: "Descente",
-  APPROACH: "Approche",
-  FINAL: "Finale",
-  LANDING: "Atterrissage",
-  TAXI_IN: "Roulage arrivée",
-  ARRIVED: "Arrivé",
-};
-
-const number = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 });
+import { useFormatter, useTranslations } from "next-intl";
 
 /** Details of the selected flight (spec J1, part 4). */
 export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: () => void }) {
+  const t = useTranslations("Live");
+  const phases = useTranslations("Phases");
+  const format = useFormatter();
+  const number = (value: number) => format.number(value, { maximumFractionDigits: 0 });
   const { position } = flight;
   const rows: [string, string][] = [
-    ["Avion", flight.aircraftTitle],
-    ["Départ", flight.departureIcao ?? "—"],
-    ["Arrivée", flight.plannedArrivalIcao ?? "—"],
-    ["Phase", PHASES_FR[position.phase]],
-    ["Altitude", `${number.format(position.altMsl)} ft`],
-    ["Vitesse sol", `${number.format(position.gs)} kt`],
+    [t("fields.aircraft"), flight.aircraftTitle],
+    [t("fields.departure"), flight.departureIcao ?? "—"],
+    [t("fields.arrival"), flight.plannedArrivalIcao ?? "—"],
+    [t("fields.phase"), phases(position.phase)],
+    [t("fields.altitude"), `${number(position.altMsl)} ft`],
+    [t("fields.groundSpeed"), `${number(position.gs)} kt`],
   ];
   return (
-    <aside
-      style={{
-        position: "absolute",
-        top: 12,
-        right: 12,
-        width: 240,
-        padding: 12,
-        background: "#fff",
-        borderRadius: 8,
-        boxShadow: "0 2px 8px rgba(0,0,0,.2)",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-        <strong style={{ fontSize: 18 }}>{flight.callsign}</strong>
-        <button type="button" onClick={onClose} aria-label="Fermer">
+    <aside className="absolute top-3 right-3 w-60 rounded-lg bg-white p-3 shadow-md">
+      <div className="flex items-baseline justify-between">
+        <strong className="text-lg">{flight.callsign}</strong>
+        <button type="button" onClick={onClose} aria-label={t("close")}>
           ×
         </button>
       </div>
-      {flight.signal === "lost" && (
-        <p style={{ color: "#8a5a00", margin: "4px 0" }}>Signal perdu</p>
-      )}
-      <dl
-        style={{
-          display: "grid",
-          gridTemplateColumns: "auto 1fr",
-          gap: "4px 12px",
-          margin: "8px 0 0",
-        }}
-      >
+      {flight.signal === "lost" && <p className="my-1 text-amber-800">{t("signalLost")}</p>}
+      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
         {rows.map(([label, value]) => (
-          <div key={label} style={{ display: "contents" }}>
-            <dt style={{ color: "#5b6b7b" }}>{label}</dt>
-            <dd style={{ margin: 0 }}>{value}</dd>
+          <div key={label} className="contents">
+            <dt className="text-muted">{label}</dt>
+            <dd className="m-0">{value}</dd>
           </div>
         ))}
       </dl>

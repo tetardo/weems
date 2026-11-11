@@ -9,5 +9,8 @@
   },
   "dependencies": {
     "@weems/contrats": "workspace:*"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
   }
 }

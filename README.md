@@ -6,9 +6,9 @@
 
 | Dossier | Contenu | État |
 | --- | --- | --- |
-| `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Cœur (phases, enregistrement, envoi), connecteur de rejeu, pilotes simulés ; connexion à MSFS au lot T1 |
+| `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Cœur (phases, enregistrement, envoi), connecteur de rejeu, pilotes simulés ; connecteur MSFS et commande `pnpm fly` (J2) |
 | `apps/api` | API centrale | Vols (J0), carte en direct par SSE (J1) |
-| `apps/web` | Suivi des vols sur le web | Carte en direct `/live` (J1) |
+| `apps/web` | Suivi des vols sur le web | Carte en direct `/live` (J1) ; liste et page de vol, français et anglais (J2) |
 | `packages/contrats` | Formats échangés entre le tracker, l'API et le site | En place |
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À créer au lot T0 |
 | `docs/cadrage` | Parc applicatif, positionnement | Étape 1 livrée |
@@ -53,6 +53,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 | `pnpm format` | Remet le code en forme automatiquement |
 | `pnpm structure` | Frontières entre modules, code dupliqué, code inutilisé |
 | `pnpm test` | Tests de toutes les applications et de tous les paquets, et le test de bout en bout `e2e/` (tracker → API → base) ; base `weems_test` nécessaire |
+| `pnpm test:j2` | Test de sortie du site J2 : construit le site, puis vérifie dans un navigateur sans écran qu'un vol de 2 h s'affiche en moins de 2 s, en français et en anglais ; base `weems_test` nécessaire |
 | `pnpm test:j1` | Test de sortie de J1 : 10 pilotes simulés à ×10 sur la vraie API et son flux en direct (environ 6 minutes) ; base `weems_test` nécessaire |
 | `docker compose -f apps/api/docker-compose.yml up` | API complète sur http://localhost:3000, documentation sur http://localhost:3000/docs |
 | `pnpm --filter @weems/web dev` | Site sur http://localhost:3001, carte en direct sur http://localhost:3001/live |
