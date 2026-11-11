@@ -13,7 +13,7 @@
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À créer au lot T0 |
 | `docs/cadrage` | Parc applicatif, positionnement | Étape 1 livrée |
 | `docs/cahiers-des-charges` | Cahiers des charges par application | Tracker complet |
-| `docs/identite` | Identité visuelle | Planche logos v1 |
+| `docs/identite` | Identité visuelle et marque | Planche logos v1, vérification du nom « Weems » |
 
 Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`), qui ne doit exister qu'en un exemplaire.
 
