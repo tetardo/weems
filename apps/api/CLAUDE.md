@@ -2,7 +2,7 @@
 
 API REST unique de Weems : seule à écrire dans la base. Tous les autres programmes (tracker, site web, app iPad, gestion de compagnie) sont ses clients.
 
-Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point). J3 : module `accounts` (comptes pilotes avec Better Auth, inscription sur invitation, connexion du tracker en OAuth 2.1 avec PKCE), module `reviews` (le pilote dit si les phases d'un vol sont justes), module `alpha` (rapport du critère de sortie de l'alpha).
+Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point). J3 : module `accounts` (comptes pilotes avec Better Auth, inscription sur invitation, connexion du tracker en OAuth 2.1 avec PKCE), module `reviews` (le pilote dit si les phases d'un vol sont justes), module `alpha` (rapport du critère de sortie de l'alpha). J4 : module `profiles` (profil public du pilote, désactivé par défaut : réglages du pilote dans `service.ts` et `routes.ts`, pages publiques sans compte dans `public-service.ts` et `public-routes.ts`, statistiques, heures de jour et de nuit, distance, série de semaines, données des graphiques dont les heures de décollage en heure locale (fuseau trouvé hors ligne, fiche 004), carte des trajets, photo réduite par `sharp`).
 
 ## Où trouver quoi
 
@@ -14,6 +14,7 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Positions en direct et flux SSE (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
 | Liste des vols, trajectoires (J2) | `../../docs/cahiers-des-charges/spec-J2-premier-vrai-vol.md` |
 | Comptes, connexion du site et du tracker (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
+| Profil public du pilote (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
 | Ce que le tracker envoie | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` (section « Contrat avec l'API ») |
 | Formats des messages | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 | Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici) |
@@ -56,6 +57,7 @@ docker-compose.yml
 - Toute modification de la base passe par une migration versionnée, jamais à la main.
 - Aucune donnée personnelle dans les journaux.
 - Vérifier les droits sur chaque requête : un pilote ne lit que ses propres vols privés.
+- Routes publiques (`/v1/pilots/*`, sans compte) : formats publics de `packages/contrats` (`Public…`), limite de débit par adresse IP (`config.rateLimit`), aucune mise en cache, même 404 pour un profil inconnu ou désactivé.
 
 ## Commandes
 

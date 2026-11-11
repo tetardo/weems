@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { newPilot, trackerLogin } from "../../testing/pilots.ts";
+import { newTrackerPilot } from "../../testing/pilots.ts";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
 import { startTestApp } from "../../testing/test-app.ts";
 
@@ -14,12 +14,7 @@ afterAll(() => stop());
 
 /** A new pilot with one flight opened, with events and a review. */
 async function pilotWithFlight(): Promise<{ cookie: string; flightId: string }> {
-  const cookie = await newPilot(app);
-  const tokens = await trackerLogin(app, cookie);
-  const headers = {
-    authorization: `Bearer ${tokens.json().access_token}`,
-    "weems-client": "tracker/0.1.0",
-  };
+  const { cookie, tracker: headers } = await newTrackerPilot(app);
   const flight = syntheticFlight();
   const { flightId } = flight.open;
   await app.inject({ method: "POST", url: "/v1/flights", headers, payload: flight.open });
