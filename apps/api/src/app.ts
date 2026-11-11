@@ -11,6 +11,9 @@ import { PilotIdentifier } from "./modules/accounts/pilot-identifier.ts";
 import { AdminAccountsRepository } from "./modules/accounts/repository-admin.ts";
 import { AccountsRepository } from "./modules/accounts/repository.ts";
 import { registerAccountRoutes } from "./modules/accounts/routes.ts";
+import { readAirportsFile } from "./modules/airports/airports-file.ts";
+import { registerAirportRoutes } from "./modules/airports/routes.ts";
+import { AirportsService } from "./modules/airports/service.ts";
 import { AccountsService } from "./modules/accounts/service.ts";
 import { ensureTrackerClient } from "./modules/accounts/tracker-client.ts";
 import { registerDevFlightRoutes } from "./modules/flights/dev-routes.ts";
@@ -21,6 +24,7 @@ import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
 import { registerDevLiveRoutes } from "./modules/live/dev-routes.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
+import { LiveService } from "./modules/live/service.ts";
 import { ProfilesRepository } from "./modules/profiles/repository.ts";
 import { PublicProfilesService } from "./modules/profiles/public-service.ts";
 import { registerPublicProfileRoutes } from "./modules/profiles/public-routes.ts";
@@ -44,12 +48,8 @@ export interface AppDependencies {
   logger?: boolean;
 }
 
-/** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
-export async function buildApp({
-  config,
-  database,
-  logger = true,
-}: AppDependencies): Promise<FastifyInstance> {
+/** Fastify with its plugins: validation, errors, documentation, rate limits. */
+async function createServer(config: Config, logger: boolean): Promise<FastifyInstance> {
   const app = Fastify({
     logger: logger && { redact: ["req.headers.authorization"] },
     // request.ip is the visitor's, not the site server's (rate limits of the public routes).
@@ -61,7 +61,16 @@ export async function buildApp({
   await registerDocs(app);
   // Only on the routes that ask for it (public pages): the tracker and the site are not limited.
   await app.register(rateLimit, { global: false });
+  return app;
+}
 
+/** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
+export async function buildApp({
+  config,
+  database,
+  logger = true,
+}: AppDependencies): Promise<FastifyInstance> {
+  const app = await createServer(config, logger);
   registerHealthRoutes(app, database.ping);
   const board = new LiveBoard();
   const stream = new LiveStream(board);
@@ -91,7 +100,9 @@ export async function buildApp({
   const profiles = new ProfilesRepository(database.db);
   registerProfileRoutes(app, new ProfilesService(profiles, flights, accounts), guards);
   registerPublicProfileRoutes(app, new PublicProfilesService(profiles, flights, tracks, accounts));
-  registerLiveRoutes(app, stream);
+  const airports = new AirportsService(readAirportsFile());
+  registerAirportRoutes(app, airports);
+  registerLiveRoutes(app, stream, new LiveService(board, airports));
   if (config.env !== "production") registerDevLiveRoutes(app, board, stream);
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());

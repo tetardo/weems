@@ -42,6 +42,14 @@ describe("tracks", () => {
     expect(tracks.features(10, null).features).toHaveLength(1);
   });
 
+  it("tells where one aircraft is drawn", () => {
+    const tracks = new Tracks();
+    tracks.update(fromSnapshot({ flights: [at(45, 5)] }), 0);
+    tracks.update(fromSnapshot({ flights: [at(46, 7)] }), 1_000);
+    expect(tracks.positionOf("a", 2_000)).toMatchObject({ lat: 45.5, lon: 6 });
+    expect(tracks.positionOf("b", 2_000)).toBeUndefined();
+  });
+
   it("draws each aircraft with the silhouette and size of its category", () => {
     const tracks = new Tracks();
     const wideBody = { category: "wideBody", estimated: false } as const;

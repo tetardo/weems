@@ -211,12 +211,16 @@ export class FlightsRepository {
       ? and(eq(flights.pilotId, pilotId), eq(flights.simulator, simulator))
       : eq(flights.pilotId, pilotId);
     return this.db.transaction(async (tx) => {
-      const owned = tx.select({ id: flights.id }).from(flights).where(mine);
+      // The list is fixed first: a flight the pilot opens meanwhile (a test running alongside)
+      // is left alone, instead of failing the delete on its trajectory's foreign key.
+      const rows = await tx.select({ id: flights.id }).from(flights).where(mine);
+      const owned = rows.map((row) => row.id);
+      if (owned.length === 0) return [];
       await tx.delete(flightEvents).where(inArray(flightEvents.flightId, owned));
       await tx.delete(flightTracks).where(inArray(flightTracks.flightId, owned));
       await tx.delete(flightReviews).where(inArray(flightReviews.flightId, owned));
-      const deleted = await tx.delete(flights).where(mine).returning({ id: flights.id });
-      return deleted.map((row) => row.id);
+      await tx.delete(flights).where(inArray(flights.id, owned));
+      return owned;
     });
   }
 

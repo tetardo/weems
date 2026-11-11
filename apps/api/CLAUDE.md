@@ -2,7 +2,7 @@
 
 API REST unique de Weems : seule à écrire dans la base. Tous les autres programmes (tracker, site web, app iPad, gestion de compagnie) sont ses clients.
 
-Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point). J3 : module `accounts` (comptes pilotes avec Better Auth, inscription sur invitation, connexion du tracker en OAuth 2.1 avec PKCE), module `reviews` (le pilote dit si les phases d'un vol sont justes), module `alpha` (rapport du critère de sortie de l'alpha). J4 : module `profiles` (profil public du pilote, désactivé par défaut : réglages du pilote dans `service.ts` et `routes.ts`, pages publiques sans compte dans `public-service.ts` et `public-routes.ts`, statistiques, heures de jour et de nuit, distance, série de semaines, données des graphiques dont les heures de décollage en heure locale (fuseau trouvé hors ligne, fiche 004), carte des trajets, photo réduite par `sharp`). J4 : module `aircraft` (catalogue des types OACI et catégorie d'avion de chaque vol, spec `../../docs/cahiers-des-charges/spec-J4-categories-avion.md`).
+Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point). J3 : module `accounts` (comptes pilotes avec Better Auth, inscription sur invitation, connexion du tracker en OAuth 2.1 avec PKCE), module `reviews` (le pilote dit si les phases d'un vol sont justes), module `alpha` (rapport du critère de sortie de l'alpha). J4 : module `profiles` (profil public du pilote, désactivé par défaut : réglages du pilote dans `service.ts` et `routes.ts`, pages publiques sans compte dans `public-service.ts` et `public-routes.ts`, statistiques, heures de jour et de nuit, distance, série de semaines, données des graphiques dont les heures de décollage en heure locale (fuseau trouvé hors ligne, fiche 004), carte des trajets, photo réduite par `sharp`). J4 : module `aircraft` (catalogue des types OACI et catégorie d'avion de chaque vol, spec `../../docs/cahiers-des-charges/spec-J4-categories-avion.md`) ; module `airports` (liste OurAirports chargée au démarrage, fiche 005, route publique `GET /v1/airports?codes=…`) et route `GET /v1/live/flights/{id}/route` (aéroports et trace en mémoire du vol sélectionné sur la carte en direct).
 
 ## Où trouver quoi
 
@@ -13,6 +13,7 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Conventions, modèle de données, routes de J0 | `../../docs/cahiers-des-charges/api/spec-J0-api.md` |
 | Positions en direct et flux SSE (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
 | Liste des vols, trajectoires (J2) | `../../docs/cahiers-des-charges/spec-J2-premier-vrai-vol.md` |
+| Trajectoire et progression sur la carte en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md` |
 | Comptes, connexion du site et du tracker (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public du pilote (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
 | Comptes vus par la console d'administration (rôles, désactivation, invitations) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, fiche `../../docs/decisions/009-console-admin-locale.md` |
@@ -39,6 +40,7 @@ src/
   app.ts              assemblage
   server.ts           démarrage
 migrations/
+data/airports.csv   liste des aéroports (OurAirports), régénérée par `pnpm airports:update`
 docker-compose.yml
 ```
 
@@ -71,6 +73,7 @@ docker-compose.yml
 | `pnpm db:migrate` | Applique les migrations (fait aussi au démarrage de l'API) |
 | `pnpm check` (racine) | Tout : types, style, structure, tests ; les tests exigent la base `weems_test` |
 | `pnpm alpha-report --since <AAAA-MM-JJ>` | Rapport de l'alpha : vols, vols suspects, phases justes, critère de sortie (dans Docker : `docker compose exec api node apps/api/src/modules/alpha/report-cli.ts --since <date>`) |
+| `pnpm airports:update` | Retélécharge la liste OurAirports et réécrit `data/airports.csv` (à relire et à committer) |
 | `pnpm make-admin <e-mail>` | Donne le rôle Administrateur à un compte existant (premier administrateur de la console) |
 | `pnpm reclassify` | Recalcule la catégorie d'avion de tous les vols, après une modification de `modules/aircraft/catalogue.ts` (dans Docker : `docker compose exec api node apps/api/src/modules/flights/reclassify-cli.ts`) |
 | `pnpm invite <e-mail>` | Crée un code d'invitation pour l'alpha et affiche l'adresse d'inscription (dans Docker : `docker compose exec api node apps/api/src/modules/accounts/invite-cli.ts <e-mail>`) |
