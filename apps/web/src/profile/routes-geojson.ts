@@ -50,13 +50,13 @@ export function greatCircle(from: End, to: End, steps = ARC_STEPS): [number, num
 /** Line width of a route: thicker when flown often, without a 50-flight route hiding the rest. */
 export const routeWidth = (flights: number) => 1.5 + Math.log2(flights) * 1.5;
 
-/** One arc per route, with its number of flights. */
+/** One arc per route, with its width and the category most flown on it ("" when unknown). */
 export function routeLines(routes: readonly Route[]): FeatureCollection<LineString> {
   return {
     type: "FeatureCollection",
-    features: routes.map(({ from, to, flights }): Feature<LineString> => ({
+    features: routes.map(({ from, to, flights, category }): Feature<LineString> => ({
       type: "Feature",
-      properties: { width: routeWidth(flights) },
+      properties: { width: routeWidth(flights), category: category ?? "" },
       geometry: { type: "LineString", coordinates: greatCircle(from, to) },
     })),
   };
