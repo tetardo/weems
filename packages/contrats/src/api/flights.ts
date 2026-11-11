@@ -81,3 +81,9 @@ export const FlightView = OpenFlightRequest.omit({ trackerVersion: true }).exten
   events: z.array(FlightEvent),
 });
 export type FlightView = z.infer<typeof FlightView>;
+
+/** Answer to a tracker message: new, or an identical re-send that changed nothing. */
+export const Receipt = z.object({
+  result: z.enum(["created", "alreadyReceived"]),
+});
+export type Receipt = z.infer<typeof Receipt>;

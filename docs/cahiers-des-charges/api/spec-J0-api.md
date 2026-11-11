@@ -104,6 +104,19 @@ packages/contrats/      formats des messages, partagés avec le tracker et le si
 | Données invalides (latitude 200°, unité manquante) | Réponse 400 avec un message clair |
 | Tracker trop ancien | Réponse 426 |
 
+## Choix faits pendant le développement (11/11/2026)
+
+| Sujet | Choix | Pourquoi |
+| --- | --- | --- |
+| Réponse aux messages du tracker | `{"result": "created"}` (201) ou `{"result": "alreadyReceived"}` (200) | Le tracker n'a besoin que du code ; le corps aide au diagnostic |
+| Heures | Exactement 3 décimales exigées (`…30.250Z`) | Garantit que la relecture est identique à l'envoi (critère 2) |
+| Dernière phase | Calculée à la lecture depuis le dernier événement `phaseChanged`, pas de colonne | Une seule source de vérité ; la colonne viendra si la liste des vols en a besoin |
+| Lot d'événements en conflit | 409 et rien n'est enregistré du lot | Le tracker met le lot de côté sans état partiel en base |
+| Position ancienne ou après clôture | Ignorée, réponse 200 | Seule la plus récente compte pour la carte |
+| Vol d'un autre pilote | 404, pas 403 | Ne révèle pas l'existence du vol |
+| Ordre des contrôles | Connexion (401) et version (426) avant le format (400) | Un client inconnu n'apprend rien du format attendu |
+| Base des tests | `weems_test`, distincte de la base de développement | Les tests ne touchent jamais les données de travail |
+
 ## Questions ouvertes
 
 | Question | Qui | Bloquant |
