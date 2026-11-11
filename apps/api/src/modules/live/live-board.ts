@@ -1,5 +1,6 @@
 import type { LiveFlight, LiveSnapshot, LiveUpdate, PositionReport } from "@weems/contrats";
 import type { LiveFeed, LiveFlightInfo } from "../flights/live-feed.ts";
+import { LiveTrails } from "./live-trails.ts";
 
 /** Spec J1, part 3: "signal perdu" after 60 s, off the map after 10 min without news. */
 const LOST_AFTER_MS = 60_000;
@@ -21,6 +22,8 @@ export class LiveBoard implements LiveFeed {
   private changed = new Set<string>();
   private removed = new Set<string>();
   private readonly now: () => number;
+  /** Where each flight has been, for the route of the selected flight. */
+  readonly trails = new LiveTrails();
 
   constructor(now: () => number = Date.now) {
     this.now = now;
@@ -30,6 +33,12 @@ export class LiveBoard implements LiveFeed {
     return this.entries.get(flightId)?.position;
   }
 
+  /** The flight as shown on the map, or undefined when it is not on it. */
+  flight(flightId: string): LiveFlight | undefined {
+    const entry = this.entries.get(flightId);
+    return entry && toLiveFlight(entry);
+  }
+
   position(info: LiveFlightInfo, report: PositionReport): void {
     this.entries.set(info.flightId, {
       info,
@@ -37,6 +46,7 @@ export class LiveBoard implements LiveFeed {
       receivedAtMs: this.now(),
       signal: "ok",
     });
+    this.trails.add(info.flightId, report);
     this.changed.add(info.flightId);
     this.removed.delete(info.flightId);
   }
@@ -78,6 +88,7 @@ export class LiveBoard implements LiveFeed {
   }
 
   private markRemoved(flightId: string): void {
+    this.trails.forget(flightId);
     this.changed.delete(flightId);
     this.removed.add(flightId);
   }

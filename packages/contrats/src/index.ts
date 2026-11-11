@@ -30,6 +30,6 @@ export {
   FlightTimes,
 } from "./api/flight-list.ts";
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
-export { LiveFlight, LiveSnapshot, LiveUpdate } from "./api/live.ts";
+export { Airport, LiveFlight, LiveRoute, LiveSnapshot, LiveUpdate } from "./api/live.ts";
 export { TrackerLogin } from "./api/tracker-login.ts";
 export { FlightReview, FlightReviewView } from "./api/flight-review.ts";

@@ -1,5 +1,6 @@
 "use client";
 
+import type { LiveRoute } from "@weems/contrats";
 import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
@@ -7,6 +8,7 @@ import { createBaseMap } from "../map/base-map.ts";
 import { currentMapTheme, type MapTheme } from "../map/map-theme.ts";
 import { addAircraftIcons, ICON_LOST, ICON_OK } from "./aircraft-icons.ts";
 import type { LiveFlights } from "./flights-store.ts";
+import { addRouteLayers, followAircraft, showRoute } from "./route-layers.ts";
 import { Tracks } from "./tracks.ts";
 
 const SOURCE = "flights";
@@ -14,6 +16,8 @@ const SOURCE = "flights";
 interface Props {
   flights: LiveFlights;
   selectedId: string | null;
+  /** Route of the selected flight, drawn under the aircraft. */
+  route: LiveRoute | null;
   onSelect: (flightId: string | null) => void;
 }
 
@@ -39,8 +43,8 @@ function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
   });
 }
 
-/** MapLibre map with one aircraft per open flight, gliding between updates. */
-export function LiveMap({ flights, selectedId, onSelect }: Props) {
+/** MapLibre map with one aircraft per open flight, gliding between updates, and the selected route. */
+export function LiveMap({ flights, selectedId, route, onSelect }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const tracks = useRef(new Tracks());
@@ -48,6 +52,8 @@ export function LiveMap({ flights, selectedId, onSelect }: Props) {
   selected.current = selectedId;
   const select = useRef(onSelect);
   select.current = onSelect;
+  const shownRoute = useRef(route);
+  shownRoute.current = route;
 
   useEffect(() => {
     if (!container.current) return;
@@ -56,12 +62,19 @@ export function LiveMap({ flights, selectedId, onSelect }: Props) {
     map.current = instance;
     let frame = 0;
     const draw = () => {
+      const now = performance.now();
       const source = instance.getSource<GeoJSONSource>(SOURCE);
-      source?.setData(tracks.current.features(performance.now(), selected.current));
+      source?.setData(tracks.current.features(now, selected.current));
+      if (shownRoute.current && selected.current) {
+        const aircraft = tracks.current.positionOf(selected.current, now);
+        followAircraft(instance, shownRoute.current, aircraft);
+      }
       frame = requestAnimationFrame(draw);
     };
     instance.on("load", () => {
       addFlightsLayer(instance, theme);
+      addRouteLayers(instance, theme, SOURCE);
+      showRoute(instance, shownRoute.current);
       draw();
     });
     instance.on("click", (event: MapMouseEvent) => {
@@ -76,6 +89,11 @@ export function LiveMap({ flights, selectedId, onSelect }: Props) {
   }, []);
 
   useEffect(() => tracks.current.update(flights, performance.now()), [flights]);
+
+  useEffect(() => {
+    const instance = map.current;
+    if (instance?.getSource(SOURCE)) showRoute(instance, route);
+  }, [route]);
 
   return <div ref={container} style={{ position: "absolute", inset: 0 }} />;
 }

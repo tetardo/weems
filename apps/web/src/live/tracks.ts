@@ -54,6 +54,12 @@ export class Tracks {
     };
   }
 
+  /** Where the aircraft of `flightId` is drawn at `nowMs`; undefined when it is not on the map. */
+  positionOf(flightId: string, nowMs: number): DrawnPosition | undefined {
+    const track = this.tracks.get(flightId);
+    return track && this.drawnAt(track, nowMs);
+  }
+
   private drawnAt(track: Track, nowMs: number): DrawnPosition {
     return interpolate(track.from, track.to, (nowMs - track.startMs) / GLIDE_MS);
   }

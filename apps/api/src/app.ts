@@ -7,6 +7,8 @@ import { ensureDevPilot } from "./modules/accounts/dev-pilot.ts";
 import { PilotIdentifier } from "./modules/accounts/pilot-identifier.ts";
 import { AccountsRepository } from "./modules/accounts/repository.ts";
 import { registerAccountRoutes } from "./modules/accounts/routes.ts";
+import { readAirportsFile } from "./modules/airports/airports-file.ts";
+import { AirportsService } from "./modules/airports/service.ts";
 import { AccountsService } from "./modules/accounts/service.ts";
 import { ensureTrackerClient } from "./modules/accounts/tracker-client.ts";
 import { registerDevFlightRoutes } from "./modules/flights/dev-routes.ts";
@@ -16,6 +18,7 @@ import { FlightsService } from "./modules/flights/service.ts";
 import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
+import { LiveService } from "./modules/live/service.ts";
 import { ReviewsRepository } from "./modules/reviews/repository.ts";
 import { registerReviewRoutes } from "./modules/reviews/routes.ts";
 import { ReviewsService } from "./modules/reviews/service.ts";
@@ -68,7 +71,8 @@ export async function buildApp({
     new ReviewsService(new ReviewsRepository(database.db), flights),
     guards,
   );
-  registerLiveRoutes(app, stream);
+  const airports = new AirportsService(readAirportsFile());
+  registerLiveRoutes(app, stream, new LiveService(board, airports));
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());
 
