@@ -3,6 +3,7 @@ import { MsfsConnector } from "../connectors/msfs/msfs-connector.ts";
 import type { SimLink } from "../connectors/msfs/sim-link.ts";
 import { ReplayWriter } from "../connectors/replay/replay-writer.ts";
 import { AIRLINER_PARAMS } from "../core/phases/params.ts";
+import type { FlightPlan } from "../core/session.ts";
 import { createTracker } from "./create-tracker.ts";
 import type { ApiClient } from "../sender/api-client.ts";
 
@@ -12,7 +13,8 @@ export interface MsfsTrackerOptions {
   /** Kept between runs: a flight cut by a crash resumes there (ENF-02). */
   databasePath: string;
   callsign: string;
-  flightPlan?: { departureIcao: string; arrivalIcao: string };
+  /** null: MSFS is read, but no flight opens until the pilot enters departure and arrival. */
+  flightPlan: FlightPlan | null;
   trackerVersion: string;
   /** Receives the replay file line by line; absent = not recorded. */
   record?: (line: string) => void;
@@ -41,7 +43,7 @@ export function startMsfsTracker(options: MsfsTrackerOptions) {
     api: options.api,
     session: {
       callsign: options.callsign,
-      ...(options.flightPlan && { flightPlan: options.flightPlan }),
+      flightPlan: options.flightPlan,
       trackerVersion: options.trackerVersion,
       clock: { nowUtcMs: options.utcNow },
       newFlightId: uuidV7,
