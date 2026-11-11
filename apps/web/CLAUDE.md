@@ -19,7 +19,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 
 - Next.js (App Router), React, TypeScript strict.
 - Traductions : `next-intl`, textes dans `messages/fr.json` et `messages/en.json`, jamais écrits en dur ; un test vérifie que les deux fichiers ont les mêmes clés.
-- Mise en forme : Tailwind CSS 4 (`src/app/global.css`). **Branche de maquette `mock/gamelab`** : look du projet GameLab IA de Greg (thème sombre par défaut, clair selon le système, jetons de couleur dans `global.css`, polices Inter et Space Grotesk servies par `next/font`, une seule barre du haut à la place du menu latéral). Composants dans `src/ui/` et `src/site/`. Icônes : `@mdi/js`.
+- Mise en forme : Tailwind CSS 4 (`src/app/global.css`). **Branche de maquette `mock/gamelab-side`** : look du projet GameLab IA de Greg (thème sombre par défaut, clair selon le système, jetons de couleur dans `global.css`, polices Inter et Space Grotesk servies par `next/font`, menu latéral de 240 px, en tiroir sous 1024 px ; variante sans menu latéral : branche `mock/gamelab`). Composants dans `src/ui/` et `src/site/`. Icônes : `@mdi/js`.
 - Ne pas ajouter de bibliothèque de gestion d'état (Redux…) : les données viennent du serveur, les filtres sont dans l'adresse, le reste reste dans le composant.
 - Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé).
 - Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.
@@ -33,13 +33,13 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 messages/              textes en français et en anglais
 src/
   app/[locale]/        routes Next.js (pages et mise en page), sans logique
-    (app)/               pages du pilote connecté, sous la barre du haut (nom, pages, langue, pilote)
+    (app)/               pages du pilote connecté : menu latéral + barre du haut
     (auth)/              connexion et inscription, panneau centré
   proxy.ts             relais /api/auth vers l'API, connexion obligatoire, langue dans l'adresse (/ → /fr)
   i18n/                langues, chargement des textes, liens qui gardent la langue
   api/weems-api.ts     appels à l'API depuis le serveur du site (liste, vol, trajectoire), en tant que pilote connecté
   auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion
-  site/                cadre des pages (app-shell, marque, menu de la barre du haut), choix de la langue, adresse de l'API, API injoignable
+  site/                cadre des pages (app-shell, marque, menu latéral, barre du haut), choix de la langue, adresse de l'API, API injoignable
   ui/                  composants visuels : icône, panneau, bouton, champ, titre de section
   map/base-map.ts      carte MapLibre commune (fond OpenFreeMap, fond de secours sans réseau)
   format/              durées h:mm, trajet, heure UTC
