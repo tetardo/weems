@@ -23,19 +23,37 @@ interface Criterion {
   id: number;
   label: string;
   value: string;
-  passed: boolean;
+  /** null: not measurable on this run (see memoryDrift). */
+  passed: boolean | null;
 }
 
 const ms = (value: number) => `${Math.round(value)} ms`;
 
-/** Spec J4 criterion 6: memory between the first third of the run (10 min if longer) and the end. */
-function memoryDrift(readings: readonly MetricsReading[], minutes: number): number {
+/** Below this, the API is still warming up at the reference point: drift means nothing. */
+const MEMORY_MIN_MINUTES = 20;
+
+/** Spec J4 criterion 6: memory between the 10th minute and the end; null on a shorter run. */
+function memoryDrift(readings: readonly MetricsReading[], minutes: number): number | null {
+  if (minutes < MEMORY_MIN_MINUTES) return null;
   const first = readings[0];
   const last = readings[readings.length - 1];
   if (!first || !last) return Number.POSITIVE_INFINITY;
-  const referenceAtMs = first.atMs + Math.min(10, minutes / 3) * 60_000;
-  const reference = readings.find((r) => r.atMs >= referenceAtMs) ?? first;
+  const reference = readings.find((r) => r.atMs >= first.atMs + 10 * 60_000) ?? first;
   return Math.abs(last.memoryMb.rss - reference.memoryMb.rss) / reference.memoryMb.rss;
+}
+
+function memoryCriterion(readings: readonly MetricsReading[], minutes: number): Criterion {
+  const drift = memoryDrift(readings, minutes);
+  const end = `fin ${readings.at(-1)?.memoryMb.rss ?? "?"} Mo`;
+  return {
+    id: 6,
+    label: "Mémoire de l'API stable (écart < 20 %)",
+    value:
+      drift === null
+        ? `non mesurée (mesure de moins de ${MEMORY_MIN_MINUTES} min), ${end}`
+        : `écart ${Math.round(drift * 100)} %, ${end}`,
+    passed: drift === null ? null : drift < 0.2,
+  };
 }
 
 function eventLoopShare(readings: readonly MetricsReading[]): number {
@@ -47,7 +65,6 @@ function eventLoopShare(readings: readonly MetricsReading[]): number {
 export function judge(m: LoadMeasures): Criterion[] {
   const delay = m.deliveryDelayMs;
   const share = eventLoopShare(m.apiReadings);
-  const drift = memoryDrift(m.apiReadings, m.minutes);
   const worstLoop = Math.max(0, ...m.apiReadings.map((r) => r.eventLoopDelayMs.p99));
   return [
     {
@@ -80,12 +97,7 @@ export function judge(m: LoadMeasures): Criterion[] {
       value: `${Math.round(share * 100)} % des ${m.apiReadings.length} relevés, pire p99 ${ms(worstLoop)}`,
       passed: m.apiReadings.length > 0 && share >= 0.99,
     },
-    {
-      id: 6,
-      label: "Mémoire de l'API stable (écart < 20 %)",
-      value: `écart ${Math.round(drift * 100)} %, fin ${m.apiReadings.at(-1)?.memoryMb.rss ?? "?"} Mo`,
-      passed: drift < 0.2,
-    },
+    memoryCriterion(m.apiReadings, m.minutes),
     {
       id: 7,
       label: "Mesure valide (boucle du générateur p99 < 200 ms)",
@@ -95,12 +107,21 @@ export function judge(m: LoadMeasures): Criterion[] {
   ];
 }
 
+const STATUS = new Map([
+  [true, "OK    "],
+  [false, "ÉCHEC "],
+  [null, "—     "],
+]);
+
+/** A run succeeds when no criterion failed; a criterion not measurable on it does not count. */
+export function isSuccess(criteria: readonly Criterion[]): boolean {
+  return criteria.every((c) => c.passed !== false);
+}
+
 /** The report as Greg reads it in the terminal (French, one criterion per line). */
 export function formatReport(m: LoadMeasures, criteria: readonly Criterion[]): string {
   const header = `${m.pilots} pilotes, ${m.viewers} spectateurs, ×${m.speed}, ${m.minutes} min`;
-  const lines = criteria.map(
-    (c) => `${c.passed ? "OK    " : "ÉCHEC "} ${c.id}. ${c.label} : ${c.value}`,
-  );
-  const verdict = criteria.every((c) => c.passed) ? "Palier réussi" : "Palier échoué";
+  const lines = criteria.map((c) => `${STATUS.get(c.passed)} ${c.id}. ${c.label} : ${c.value}`);
+  const verdict = isSuccess(criteria) ? "Palier réussi" : "Palier échoué";
   return [header, ...lines, verdict].join("\n");
 }

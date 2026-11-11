@@ -13,7 +13,7 @@ Savoir, chiffres à l'appui, si la carte en direct tient la bêta (environ 50 pi
 3. Temps de réponse de l'API aux positions : 95 % sous 200 ms.
 4. Aucun avion en vol figé plus de 20 s chez aucun spectateur (comme en J1).
 5. Boucle d'événements de l'API : retard sous 100 ms pour 99 % des relevés.
-6. Mémoire de l'API stable : moins de 20 % d'écart entre la 10ᵉ minute et la fin.
+6. Mémoire de l'API stable : moins de 20 % d'écart entre la 10ᵉ minute et la fin. Jugée seulement sur une mesure de 20 min ou plus (paliers 1 et 2) : avant, l'API chauffe encore et l'écart ne veut rien dire ; le rapport l'indique « non mesurée ».
 7. La mesure est valide : la boucle du générateur de charge elle-même reste sous 200 ms de retard. Sinon, c'est le générateur qui sature, pas l'API, et le rapport le dit.
 
 ## Pourquoi ces paliers

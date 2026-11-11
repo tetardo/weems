@@ -23,7 +23,7 @@ afterAll(async () => {
 });
 
 describe("pnpm load (spec J4, montée en charge du direct)", () => {
-  it("measures a small run end to end and passes every criterion", async () => {
+  it("measures a small run end to end and passes every measurable criterion", async () => {
     const measures = await runLoad({
       baseUrl,
       token: "dev-token",
@@ -33,8 +33,10 @@ describe("pnpm load (spec J4, montée en charge du direct)", () => {
       minutes: 0.5,
       workDir,
     });
-    const failed = judge(measures).filter((c) => !c.passed);
-    expect(failed).toEqual([]);
+    const criteria = judge(measures);
+    expect(criteria.filter((c) => c.passed === false)).toEqual([]);
+    // Memory drift is judged from 20 min on: a 30 s run is still warming up.
+    expect(criteria.filter((c) => c.passed === null).map((c) => c.id)).toEqual([6]);
     expect(measures.positionsSent).toBeGreaterThan(20);
     expect(measures.deliveryDelayMs.count).toBeGreaterThan(measures.positionsSent);
   }, 120_000);

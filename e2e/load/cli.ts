@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { runLoad } from "./load-run.ts";
-import { formatReport, judge } from "./report.ts";
+import { formatReport, isSuccess, judge } from "./report.ts";
 
 /**
  * pnpm load [--pilots 50] [--viewers 100] [--minutes 30] [--speed 1]
@@ -50,7 +50,7 @@ const summary = {
 };
 writeFileSync(out, JSON.stringify(summary, null, 2));
 process.stdout.write(`Détail : ${out}\n`);
-process.exitCode = criteria.every((c) => c.passed) ? 0 : 1;
+process.exitCode = isSuccess(criteria) ? 0 : 1;
 
 function summarize(h: (typeof measures)["deliveryDelayMs"]) {
   return { count: h.count, p50: h.percentile(50), p95: h.percentile(95), max: Math.round(h.max) };

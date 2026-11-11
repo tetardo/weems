@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { MetricsReading } from "./api-metrics.ts";
 import { Histogram } from "./histogram.ts";
-import { judge, type LoadMeasures } from "./report.ts";
+import { formatReport, isSuccess, judge, type LoadMeasures } from "./report.ts";
 
 const histogramOf = (...values: number[]) => {
   const h = new Histogram();
@@ -33,7 +33,7 @@ const healthy: LoadMeasures = {
 
 const failedIds = (m: LoadMeasures) =>
   judge(m)
-    .filter((c) => !c.passed)
+    .filter((c) => c.passed === false)
     .map((c) => c.id);
 
 describe("judge (spec J4 criteria)", () => {
@@ -56,5 +56,22 @@ describe("judge (spec J4 criteria)", () => {
       failedIds({ ...healthy, apiReadings: [reading(0, 100), reading(10, 120), reading(30, 200)] }),
     ).toEqual([6]);
     expect(failedIds({ ...healthy, generatorLagP99Ms: 500 })).toEqual([7]);
+  });
+
+  it("does not judge memory on a run shorter than 20 min, whatever the drift", () => {
+    const short = {
+      ...healthy,
+      minutes: 6,
+      apiReadings: [reading(0, 100), reading(3, 150), reading(6, 300)],
+    };
+    const memory = judge(short).find((c) => c.id === 6);
+    expect(memory?.passed).toBeNull();
+    expect(memory?.value).toContain("non mesurée");
+    expect(isSuccess(judge(short))).toBe(true);
+    expect(formatReport(short, judge(short))).toContain("Palier réussi");
+  });
+
+  it("fails the run as soon as one criterion fails", () => {
+    expect(isSuccess(judge({ ...healthy, positionsNeverShown: 1 }))).toBe(false);
   });
 });
