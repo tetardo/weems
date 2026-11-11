@@ -14,12 +14,12 @@ Un pilote qui le souhaite obtient une page publique, partageable par un simple l
 | --- | --- |
 | Activation du profil par le pilote (désactivé par défaut), choix de l'adresse | Compagnies du pilote (nom, rang, vols pour la compagnie) : lot 3, VACommunity ; la maquette montre leur place |
 | Photo, pays, aéroport de base, niveau déclaré, identifiants VATSIM, IVAO et SimBrief, carte des vols, activité par mois, heures de jour et de nuit, image de partage (ajouts de Greg du 11/11/2026) | Heures par catégorie d'avion (léger, turbopropulseur, ligne, hélicoptère) : attend le catalogue des avions |
-| Page publique : pseudo, statistiques, liste des vols | Badges (récompenses automatiques) : après la notation, dont dépendent les plus intéressants |
+| Page publique : pseudo, statistiques, liste des vols | Médailles de pilote (récompenses automatiques illustrées) : après la notation, dont dépendent les plus intéressantes ; maquette dans la liste des idées |
 | Page de vol publique : trajet, carte, profil vertical, phases, atterrissage | Note et débriefing : les critères ne sont pas définis |
 | Masquer un vol précis de son profil | Biographie, abonnés, commentaires, « j'aime », classements |
 | Référencement : rendu serveur, métadonnées, plan du site, `robots.txt` | « En vol maintenant » sur le profil (dépend du direct, autre chantier) ; export et suppression du compte (RGPD, avant J5, chantier à part) |
 
-**Maquette** (11/11/2026, données fictives ; les blocs « Compagnies », « Expérience par catégorie » et « Badges » y montrent la suite, hors de ce chantier ; la carte y est dessinée sans fond, le site utilisera le fond OpenFreeMap) :
+**Maquette** (11/11/2026, données fictives ; les blocs « Compagnies », « Expérience par catégorie » et « Médailles » y montrent la suite, hors de ce chantier ; la carte y est dessinée sans fond, le site utilisera le fond OpenFreeMap) :
 
 ![Maquette du profil public, bureau, thème sombre](img/j4-maquette-profil.png)
 

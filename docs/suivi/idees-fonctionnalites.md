@@ -8,9 +8,11 @@ Liste tenue à jour au fil du projet : idées validées sur le principe par Greg
   Heures de vol par catégorie d'avion (léger, turbopropulseur, ligne, hélicoptère), calculées à partir des vols, affichées sur le profil à côté du niveau déclaré par le pilote. Plus crédible que le niveau déclaré, car mesuré.
   Prérequis : le catalogue des avions (type, catégorie) prévu au cadrage (`docs/cadrage/02-architecture-et-flux.md`), pas encore construit.
 
-- **Badges** (ajouté le 11/11/2026, profil public)
-  Récompenses attribuées automatiquement d'après les vols : premier vol, 10 et 100 vols, transatlantique, atterrissage très doux, nombre de pays… Les badges non obtenus apparaissent grisés avec la progression. Voir la maquette de la spec du profil public.
-  Prérequis : la notation (point 4 de la spec T0) pour les badges de pilotage (approche stabilisée, etc.).
+- **Médailles de pilote** (ajouté le 11/11/2026, profil public ; remplacent les « badges », choix de Greg)
+  Médailles illustrées (ruban et médaille en bronze, argent ou or selon la difficulté), attribuées automatiquement d'après les vols : premier vol, 10, 100 et 1 000 vols, plume (toucher très doux), transatlantique, globe-trotter, oiseau de nuit (heures de nuit), long-courrier, sécurité d'abord (remise des gaz suivie d'un atterrissage), approche stabilisée… Les médailles non obtenues apparaissent grisées avec la progression. Sur le profil : les plus récentes et un lien vers la page de toutes les médailles.
+  Prérequis : la notation (point 4 de la spec T0) pour les médailles de pilotage (approche stabilisée, etc.).
+
+  ![Maquette des médailles](img/medailles-maquette.png)
 
 - **Signaler une photo de profil** (ajouté le 11/11/2026, profil public)
   Bouton « signaler » sur le profil public et retrait par Weems. À faire avant l'inscription libre.
