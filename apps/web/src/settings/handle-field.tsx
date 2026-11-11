@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { getPathname } from "../i18n/navigation.ts";
 import { HANDLE_CHECK_URL } from "../site/api-relay.ts";
+import { Button } from "../ui/button.tsx";
 import { WarningIcon } from "../ui/icons.ts";
 import { AddressActions } from "./address-actions.tsx";
 
@@ -66,7 +67,7 @@ function AddressInput({
   const status = useHandleCheck(handle);
   return (
     <span
-      className={`flex min-h-11 min-w-0 flex-1 items-center rounded-[10px] border bg-bg pl-3 ${changing ? "border-accent-2" : "border-line"}`}
+      className={`flex min-h-11 min-w-0 flex-1 items-center max-sm:basis-full rounded-[10px] border bg-bg pl-3 ${changing ? "border-accent-2" : "border-line"}`}
     >
       <span className="whitespace-nowrap text-muted">{siteHost}/pilots/</span>
       <input
@@ -108,10 +109,13 @@ export function HandleField({
   initial,
   siteHost,
   saved,
+  switchChanged,
 }: {
   initial: string;
   siteHost: string;
   saved: Saved;
+  /** The publication switch differs from what is saved. */
+  switchChanged: boolean;
 }) {
   const t = useTranslations("Settings.handle");
   const locale = useLocale();
@@ -125,13 +129,17 @@ export function HandleField({
       <label htmlFor="handle" className="font-semibold">
         {t("label")}
       </label>
-      <div className="flex items-stretch gap-2">
+      <div className="flex flex-wrap items-stretch justify-end gap-2">
         <AddressInput
           handle={handle}
           onChange={setHandle}
           siteHost={siteHost}
           changing={changing}
         />
+        {/* Saves the whole form, like « Save » at the bottom: right next to what was changed. */}
+        <Button type="submit" disabled={!switchChanged && handle === saved.handle}>
+          {t("validate")}
+        </Button>
         <AddressActions path={path} offReason={t(changing ? "saveFirst" : "offline")} />
       </div>
       <HandleHint changingFrom={changing ? online : null} />

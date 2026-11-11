@@ -251,7 +251,8 @@
       "open": "Ouvrir dans un nouvel onglet",
       "saveFirst": "Enregistrez d'abord la nouvelle adresse",
       "offline": "Publiez votre page et enregistrez pour la partager",
-      "changing": "L'ancienne adresse <b>{handle}</b> cessera de fonctionner à l'enregistrement."
+      "changing": "L'ancienne adresse <b>{handle}</b> cessera de fonctionner à l'enregistrement.",
+      "validate": "Valider"
     },
     "handleChange": {
       "title": "Changer l'adresse de votre page ?",

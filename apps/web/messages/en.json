@@ -251,7 +251,8 @@
       "open": "Open in a new tab",
       "saveFirst": "Save the new address first",
       "offline": "Publish your page and save to share it",
-      "changing": "The old address <b>{handle}</b> will stop working when you save."
+      "changing": "The old address <b>{handle}</b> will stop working when you save.",
+      "validate": "Save"
     },
     "handleChange": {
       "title": "Change the address of your page?",

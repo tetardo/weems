@@ -60,6 +60,7 @@ export function PublicationFields({ profile, siteHost }: { profile: MyProfile; s
         initial={profile.handle ?? profile.suggestedHandle}
         siteHost={siteHost}
         saved={profile}
+        switchChanged={isPublic !== profile.isPublic}
       />
       {isPublic && (
         <label className="mt-4 flex items-start gap-2.5 rounded-xl bg-accent/12 px-3.5 py-3 text-sm">
