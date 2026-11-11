@@ -22,6 +22,8 @@ export interface SimulationOptions {
   pumpEveryMs?: number;
   /** Real ms to keep sending after the last replay ends, for queued messages. */
   drainTimeoutMs?: number;
+  /** Real ms after which every replay stops, flights left open (load test, spec J4). */
+  stopAfterMs?: number;
 }
 
 export interface SimulatedFlight {
@@ -33,9 +35,10 @@ export interface SimulatedFlight {
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function startOne(scenario: Scenario, index: number, options: SimulationOptions) {
+function startOne(scenario: Scenario, index: number, options: SimulationOptions, stopAtMs: number) {
+  const connector = new ReplayConnector(generateFlight(scenario), options.speed);
   const tracker = createTracker({
-    connector: new ReplayConnector(generateFlight(scenario), options.speed),
+    connector,
     databasePath: join(options.workDir, `${scenario.callsign}.db`),
     api: options.api,
     session: {
@@ -48,8 +51,11 @@ function startOne(scenario: Scenario, index: number, options: SimulationOptions)
     },
   });
   const delayMs = (index * options.staggerS * 1000) / options.speed;
-  const done = wait(delayMs).then(() => tracker.runtime.start());
-  return { scenario, tracker, done };
+  // A pilot whose departure comes after the stop never takes off.
+  const done = wait(Math.min(delayMs, stopAtMs - Date.now())).then(() =>
+    Date.now() < stopAtMs ? tracker.runtime.start() : undefined,
+  );
+  return { scenario, tracker, connector, done };
 }
 
 /**
@@ -58,7 +64,14 @@ function startOne(scenario: Scenario, index: number, options: SimulationOptions)
  */
 export async function runSimulation(options: SimulationOptions): Promise<SimulatedFlight[]> {
   mkdirSync(options.workDir, { recursive: true });
-  const runs = options.scenarios.map((scenario, index) => startOne(scenario, index, options));
+  const stopAtMs = Date.now() + (options.stopAfterMs ?? Number.POSITIVE_INFINITY);
+  const runs = options.scenarios.map((scenario, index) =>
+    startOne(scenario, index, options, stopAtMs),
+  );
+  if (options.stopAfterMs !== undefined) {
+    const stopAll = () => Promise.all(runs.map((r) => r.connector.stop()));
+    setTimeout(() => void stopAll(), options.stopAfterMs).unref();
+  }
   let replaying = true;
   const pumping = (async () => {
     const deadline = () => Date.now() > drainEnd;
