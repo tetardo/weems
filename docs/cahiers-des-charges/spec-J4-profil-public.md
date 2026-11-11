@@ -101,8 +101,8 @@ Textes en français et en anglais, comme le reste du site.
 
 ## 5. Référencement
 
-- Pages rendues côté serveur (déjà le cas), titre et description par page (« Greg-FR — 42 vols sur Weems »), image de partage (Open Graph) générique Weems en J4.
-- **Image de partage** (aperçu dans Discord, Facebook, forums) : générée par le site pour chaque profil, avec photo, pseudo, trois statistiques et la carte simplifiée des trajets (générateur d'images de Next.js, sans service externe).
+- Pages rendues côté serveur (déjà le cas), titre et description par page (« Greg-FR — 42 vols sur Weems »), image de partage propre à chaque profil (ci-dessous).
+- **Image de partage** (aperçu dans Discord, Facebook, forums) : générée par le site pour chaque profil, avec photo, pseudo, trois statistiques, la carte simplifiée des trajets et les cinq dernières médailles obtenues avec leur nombre total (bloc présent quand les médailles existeront, absent en J4) (générateur d'images de Next.js, sans service externe).
 
   ![Maquette de l'image de partage](img/j4-maquette-partage.png)
 
