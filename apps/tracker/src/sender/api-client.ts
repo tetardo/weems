@@ -6,7 +6,11 @@ export interface ApiClient {
 
 export interface HttpApiClientOptions {
   baseUrl: string;
-  token: string;
+  /**
+   * Fixed token (development: `dev-token`), or the pilot's access token, read before each request.
+   * Null: nobody is logged in, answered as a 401 without calling the API.
+   */
+  token: string | (() => Promise<string | null>);
   trackerVersion: string;
   /** ms before a request is abandoned. */
   timeoutMs?: number;
@@ -15,11 +19,13 @@ export interface HttpApiClientOptions {
 export function httpApiClient(options: HttpApiClientOptions): ApiClient {
   return {
     async post(path, body) {
+      const token = typeof options.token === "string" ? options.token : await options.token();
+      if (token === null) return { status: 401 };
       const response = await fetch(new URL(path, options.baseUrl), {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          authorization: `Bearer ${options.token}`,
+          authorization: `Bearer ${token}`,
           "weems-client": `tracker/${options.trackerVersion}`,
         },
         body: JSON.stringify(body),

@@ -42,7 +42,7 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 - Une donnée indisponible sur un avion ne doit jamais pénaliser le pilote : le tracker l'indique « non mesurée ».
 - Les tests passent par le connecteur de test (rejeu de vols enregistrés et scénarios), pas par le simulateur.
 
-## Code (J0 à J2)
+## Code (J0 à J3)
 
 ```
 src/core/                 cœur sans dépendance : session de vol, journal des événements, phases
@@ -59,6 +59,10 @@ src/storage/              enregistreur SQLite (WAL) : sessions, échantillons, �
 src/sender/               envoi de l'outbox dans l'ordre, relances 2 s → 5 min, 409 mis de côté, 426 bloque ;
                           positions en mémoire, envoyées dans l'ordre après l'ouverture (position-queue.ts)
 src/runtime/              assemblage connecteur → cœur → enregistreur → envoi
+src/account/              J3 : compte du pilote. Connexion par le navigateur (OAuth 2.1, PKCE, retour sur
+                          127.0.0.1, loopback-server.ts), jetons gardés chiffrés (token-store.ts, chiffrement
+                          fourni par Electron), renouvellement avant expiration (account.ts). Le tracker ne voit
+                          jamais le mot de passe ; sans jeton valide, l'envoi s'arrête (401) jusqu'à la reconnexion
 tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes
 tools/simulate/           J1 : N trackers sans interface dans un seul processus
 tools/fly/                J2 : tracker sans interface sur le PC Windows, branché sur MSFS
