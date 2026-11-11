@@ -38,7 +38,8 @@ docker-compose.yml
 - `routes.ts` : déclare la route et son schéma, appelle le service. Aucune logique métier.
 - `service.ts` : la logique métier. Ne connaît ni Fastify ni SQL.
 - `repository.ts` : le seul endroit qui parle à la base.
-- Un module n'importe jamais le `repository` d'un autre module : il passe par son `service`.
+- Un module n'importe jamais le `repository` d'un autre module : il passe par son `service`. Vérifié par dependency-cruiser.
+- Règles de taille et de duplication : voir la section « Structure du code » des règles de développement.
 
 ## Règles pour un agent
 

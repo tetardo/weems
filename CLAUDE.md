@@ -6,4 +6,5 @@ Lire d'abord `README.md` (organisation), puis `docs/developpement/regles-de-deve
 - Stack : TypeScript partout (Node.js), Python seulement pour l'analyse de données, Swift seulement pour l'app iPad (après le lot 1).
 - Le code partagé entre applications va dans `packages/`, jamais copié dans une application.
 - Les décisions et cahiers des charges sont dans `docs/` : les consulter avant de proposer une fonctionnalité.
+- Code organisé, jamais de morceaux collés bout à bout : chaque fichier à sa place prévue, une responsabilité par fichier, pas de duplication (voir « Structure du code » dans les règles de développement).
 - Développeur principal sur Mac : tout ce qui ne parle pas directement au simulateur doit tourner et être testé sur Mac.
