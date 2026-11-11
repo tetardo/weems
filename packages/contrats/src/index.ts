@@ -37,6 +37,7 @@ export { TrackerLogin } from "./api/tracker-login.ts";
 export { FlightReview, FlightReviewView } from "./api/flight-review.ts";
 export { landingSummary, type LandingSummary } from "./flight/landing-summary.ts";
 export {
+  CategoryExperience,
   CountryCode,
   DURATION_BUCKETS_H,
   FlightVisibility,

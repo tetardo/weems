@@ -25,6 +25,8 @@ import type { FlightRecord, FlightsRepository, ListFilters } from "./repository.
 export interface SummaryWithEvents {
   summary: FlightSummary;
   events: FlightEvent[];
+  /** Engines of the aircraft: single- or multi-engine time of the profile. */
+  engineCount: number;
 }
 
 /** One page of flights, and the cursor of the next one (null on the last page). */
@@ -200,7 +202,7 @@ export class FlightsService {
     const events = await this.repository.eventsOf(found.map((f) => f.flightId));
     return found.map((f) => {
       const own = events.get(f.flightId) ?? [];
-      return { summary: summarize(f, own), events: own };
+      return { summary: summarize(f, own), events: own, engineCount: f.aircraft.engineCount };
     });
   }
 

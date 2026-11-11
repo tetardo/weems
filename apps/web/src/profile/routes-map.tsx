@@ -1,12 +1,18 @@
 "use client";
 
 import type { PilotRoutes } from "@weems/contrats";
-import type { Map as MapLibreMap } from "maplibre-gl";
+import type { ExpressionSpecification, Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
+import { categoryColors } from "../aircraft/category-colors.ts";
 import { createBaseMap } from "../map/base-map.ts";
 import { currentMapTheme, type MapTheme } from "../map/map-theme.ts";
 import { airportPoints, routeLines, routesBounds } from "./routes-geojson.ts";
+
+/** Colour of an arc: the one of its category, the plain arc colour when it has none. */
+function categoryColor(theme: MapTheme): ExpressionSpecification {
+  return ["coalesce", ["get", ["get", "category"], ["literal", categoryColors()]], theme.aircraft];
+}
 
 function addRouteLayers(map: MapLibreMap, routes: PilotRoutes["routes"], theme: MapTheme): void {
   map.addSource("routes", { type: "geojson", data: routeLines(routes) });
@@ -15,7 +21,11 @@ function addRouteLayers(map: MapLibreMap, routes: PilotRoutes["routes"], theme: 
     type: "line",
     source: "routes",
     layout: { "line-cap": "round" },
-    paint: { "line-color": theme.aircraft, "line-width": ["get", "width"], "line-opacity": 0.85 },
+    paint: {
+      "line-color": categoryColor(theme),
+      "line-width": ["get", "width"],
+      "line-opacity": 0.85,
+    },
   });
   map.addSource("airports", { type: "geojson", data: airportPoints(routes) });
   map.addLayer({
@@ -43,7 +53,10 @@ function addRouteLayers(map: MapLibreMap, routes: PilotRoutes["routes"], theme: 
   });
 }
 
-/** Map of a public profile (spec J4): one arc per route, thicker when flown often. */
+/**
+ * Map of a public profile (spec J4): one arc per route, thicker when flown often, in the colour
+ * of the aircraft category most flown on it.
+ */
 export function RoutesMap({ routes }: { routes: PilotRoutes["routes"] }) {
   const container = useRef<HTMLDivElement>(null);
   useEffect(() => {

@@ -23,17 +23,18 @@ Demande de Greg du 11/11/2026, maquettes validées le même jour (`/mnt/project-
 2. L'API cherche le type dans le catalogue Weems. S'il est absent, elle estime : hélicoptère, pistons → léger, turbopropulseur, planeur → autres ; réacteur selon la masse maximale (moins de 30 t affaires, de 60 t régional, de 150 t moyen-courrier, au-delà long-courrier). Sans information, pas de catégorie.
 3. La catégorie est stockée avec le vol (`aircraft_category`, `aircraft_category_estimated`) et renvoyée dans la liste et le détail (`aircraftClass`). `pnpm reclassify` la recalcule après une modification du catalogue.
 
-## Livraison en trois demandes de fusion
+## Livraison en deux demandes de fusion
+
+Le profil public (PR #35) a été fusionné avant la fin du travail : son bloc a rejoint la première demande.
 
 | PR | Contenu | Retour arrière |
 | --- | --- | --- |
-| 1 | Catalogue, données du tracker, API (stockage, filtre `category`), pastille dans « Mes vols » et sur la page de vol, filtre Catégorie | — |
+| #41 | Catalogue, données du tracker, API (stockage, filtre `category`), pastille dans « Mes vols » et sur la page de vol, filtre Catégorie ; profil public : bloc « Expérience par catégorie » (heures en vol, vols, toucher moyen par catégorie), monomoteur / multimoteur (colonnes SE / ME du carnet EASA), meilleur atterrissage par catégorie, trajets de la carte colorés par catégorie | — |
 | 2 | Carte du direct : silhouette par famille d'avion et couleur de la catégorie | Greg n'est pas sûr d'aimer : la PR ne contient que ça, on l'annule sans toucher au reste |
-| 3 | Profil public : bloc « Expérience par catégorie » (heures en vol, vols, toucher moyen par catégorie), monomoteur / multimoteur (colonnes SE / ME du carnet EASA), meilleur atterrissage par catégorie, trajets de la carte colorés par catégorie | Attend la fusion du profil public (PR #35) |
 
 ![« Mes vols » : pastille et filtre](img/j4-categories-mes-vols.png)
 
-![Profil : expérience par catégorie (PR 3)](img/j4-categories-profil.png)
+![Profil : expérience par catégorie](img/j4-categories-profil.png)
 
 ![Direct : icônes par catégorie (PR 2)](img/j4-categories-direct.png)
 
@@ -42,6 +43,10 @@ Demande de Greg du 11/11/2026, maquettes validées le même jour (`/mnt/project-
 - Pastille teintée de la couleur de la catégorie ; en pointillé avec « estimée » quand le type est absent du catalogue (bulle d'explication au survol). Rien quand la catégorie est inconnue.
 - Couleurs : variables `--wm-cat-*` de `global.css`, en sombre et en clair.
 - Heures comptées : heures en vol (roues en l'air), comme la tuile « Heures de vol » du profil.
+- Bloc du profil (API : `stats.experience`, calcul dans `apps/api/src/modules/profiles/experience.ts`) : une ligne par catégorie volée, la plus volée en premier, avec ses trois types les plus volés, son toucher moyen et sa part des heures ; les catégories pas encore volées en pastilles grisées. Le bloc n'apparaît pas tant qu'aucun vol n'a de catégorie (vols des trackers plus anciens que le catalogue).
+- Monomoteur : un moteur ; multimoteur : deux ou plus ; un planeur (zéro moteur) n'entre dans aucune des deux colonnes.
+- Tuile « Toucher moyen » : moyenne de tous les avions, puis une ligne par catégorie. Tuile « Meilleur atterrissage par catégorie » : le toucher le plus doux de chaque catégorie, avec l'aéroport et la date ; le record global n'est plus affiché.
+- Carte des vols du profil : chaque trajet prend la couleur de la catégorie la plus volée sur ce trajet (à égalité, la première rencontrée ; couleur habituelle des trajets sans catégorie) ; la légende ne montre que les catégories présentes.
 
 ## Hors champ
 

@@ -1,13 +1,11 @@
 import { distanceNm, type PilotStats, type TrackPoint } from "@weems/contrats";
 import type { SummaryWithEvents } from "../flights/service.ts";
 import { dayAndNight } from "./day-night.ts";
-import { finalLandings, measured } from "./landings.ts";
+import { aircraftKey } from "./aircraft-usage.ts";
+import { experienceOf } from "./experience.ts";
+import { landingStats } from "./landings.ts";
 import { weeklyStreak } from "./streak.ts";
-
-type Landing = NonNullable<PilotStats["bestLanding"]>;
-
-const aircraftKey = ({ summary }: SummaryWithEvents) =>
-  summary.aircraftModel ?? summary.aircraftTitle;
+import { sum } from "./sum.ts";
 
 function mostFrequent(flights: readonly SummaryWithEvents[]): string | null {
   const counts = new Map<string, { count: number; title: string }>();
@@ -33,8 +31,6 @@ function longestOf(flights: readonly SummaryWithEvents[]): PilotStats["longestFl
   return { blockS: times.blockS ?? 0, departureIcao, arrivalIcao: plannedArrivalIcao };
 }
 
-const sum = (values: readonly number[]) => values.reduce((total, value) => total + value, 0);
-
 /** Length of a trajectory, nautical miles, point to point. */
 function lengthNm(points: readonly TrackPoint[]): number {
   let total = 0;
@@ -43,23 +39,6 @@ function lengthNm(points: readonly TrackPoint[]): number {
     if (a && b) total += distanceNm(a.lat, a.lon, b.lat, b.lon);
   }
   return total;
-}
-
-/** Touchdown statistics: mean, softest, share of clean final landings. */
-function landingStats(flights: readonly SummaryWithEvents[]) {
-  const landings = finalLandings(flights);
-  const withVs = measured(landings);
-  return {
-    averageTouchdownVs:
-      withVs.length === 0 ? null : sum(withVs.map((l) => l.touchdownVs)) / withVs.length,
-    // Softest: the vertical speed closest to zero (they are negative).
-    bestLanding: withVs.reduce<Landing | null>(
-      (best, { touchdownVs, airportIcao, at }) =>
-        !best || touchdownVs > best.touchdownVs ? { touchdownVs, airportIcao, at } : best,
-      null,
-    ),
-    cleanLandings: { clean: landings.filter((l) => l.clean).length, landings: landings.length },
-  };
 }
 
 /**
@@ -91,5 +70,6 @@ export function pilotStats(
       flights.map(({ summary }) => new Date(summary.openedAt)),
       now,
     ),
+    experience: experienceOf(flights),
   };
 }

@@ -11,3 +11,15 @@ export const CATEGORY_TONE: Readonly<Record<AircraftCategory, string>> = {
   helicopter: "bg-cat-helicopter/14 text-cat-helicopter border-cat-helicopter",
   other: "bg-cat-other/14 text-cat-other border-cat-other",
 };
+
+/** Solid fill of each category: dots, bars and legends. */
+export const CATEGORY_FILL: Readonly<Record<AircraftCategory, string>> = {
+  light: "bg-cat-light",
+  turboprop: "bg-cat-turboprop",
+  businessJet: "bg-cat-business-jet",
+  regionalJet: "bg-cat-regional-jet",
+  narrowBody: "bg-cat-narrow-body",
+  wideBody: "bg-cat-wide-body",
+  helicopter: "bg-cat-helicopter",
+  other: "bg-cat-other",
+};
