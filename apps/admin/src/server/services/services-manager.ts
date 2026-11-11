@@ -1,6 +1,7 @@
 import type { ConsoleConfig } from "../console-config.ts";
 import { ManagedProcess } from "../managed-process.ts";
 import { type ContainerState, DockerCompose, type DockerState } from "./docker.ts";
+import { assertPortFree } from "./port-guard.ts";
 import { type Probe, probeHttp, probePort } from "./probes.ts";
 import { stateOf } from "./service-state.ts";
 import type { ApiMode, ServiceId, ServicesView, ServiceView } from "./service-view.ts";
@@ -74,6 +75,7 @@ export class ServicesManager {
     if (current?.state === "running" || current?.state === "starting") return;
     if (id === "db") return this.docker.up("db");
     if (id === "api" && this.apiMode === "docker") return this.docker.up("api");
+    await assertPortFree(PORTS[id]);
     this.processes[id].start("pnpm", DEV_COMMANDS[id], this.config.repoRoot);
   }
 

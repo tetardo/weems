@@ -46,6 +46,20 @@ export function parseComposePs(output: string): DockerState["containers"] {
   return containers;
 }
 
+/** Name of the running container that publishes this port, any project; null if none or no Docker. */
+export async function containerPublishing(port: number): Promise<string | null> {
+  try {
+    const { stdout } = await run(
+      "docker",
+      ["ps", "--filter", `publish=${port}`, "--format", "{{.Names}}"],
+      { timeout: 5_000 },
+    );
+    return stdout.trim().split("\n")[0] || null;
+  } catch {
+    return null;
+  }
+}
+
 export class DockerCompose {
   private readonly file: string;
   private readonly cwd: string;
