@@ -33,6 +33,8 @@ Une API qui tourne sur le Mac avec Docker et qui reçoit et stocke un vol envoy�
 
 Seules les tables marquées J0 sont créées à J0. Les autres sont listées pour vérifier que le modèle tiendra.
 
+![Modèle de données du lot 1](../../schemas/img/api-modele-donnees.png)
+
 | Table | Contenu | Jalon |
 | --- | --- | --- |
 | `flights` | Identifiant, pilote, indicatif, simulateur, avion (titre et type), départ, arrivée prévue, heures d'ouverture et de clôture, motif de clôture, dernière phase, version du tracker | J0 |
@@ -83,6 +85,8 @@ apps/api/
   docker-compose.yml    API, PostgreSQL, MinIO
 packages/contrats/      formats des messages, partagés avec le tracker et le site
 ```
+
+![Organisation d'un module de l'API](../../schemas/img/api-organisation.png)
 
 | Choix | Recommandation | Pourquoi |
 | --- | --- | --- |

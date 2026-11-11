@@ -30,6 +30,8 @@ apps/tracker/
     import/               conversion des vols A32NX (.fdr) et Sky Dolly vers le format de rejeu
 ```
 
+![Modules du tracker : le cœur au centre, tout le reste branché](../../schemas/img/tracker-modules.png)
+
 | Règle | Pourquoi |
 | --- | --- |
 | `core/` n'importe rien de `connectors/`, `storage/`, `sender/` ni `app/` | Le cœur reste testable seul ; vérifié automatiquement par une règle ESLint |
@@ -59,6 +61,8 @@ interface SimConnector {
 ## 2. Session de vol (cœur)
 
 Une session suit un vol du chargement de l'avion à la clôture.
+
+![États d'une session de vol et reprise après incident](../../schemas/img/tracker-session.png)
 
 | État | Entrée | Sortie |
 | --- | --- | --- |
@@ -94,6 +98,8 @@ Tout message passe par la table `outbox`, écrit **dans la même transaction** q
 | --- | --- | --- |
 | Ouverture, événements, clôture, rapport | Oui, jusqu'à l'accusé de réception (EF-21, EF-22) | Nouvel essai après 2 s, puis 5 s, 15 s… jusqu'à 5 minutes maximum entre deux essais, avec un léger décalage aléatoire |
 | Position en direct | Non : seule la plus récente compte | Abandonnée si elle a plus de 30 secondes ; la suivante la remplace |
+
+![Envoi et file d'attente hors ligne](../../schemas/img/tracker-envoi.png)
 
 **Réponses de l'API :**
 

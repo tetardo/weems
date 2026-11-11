@@ -1,0 +1,22 @@
+flowchart LR
+  subgraph S1["J0 à J2 : tout en local (0 €)"]
+    direction TB
+    PC["PC Windows<br/>MSFS + tracker"] -- "réseau local" --> MAC
+    subgraph MAC["Mac de Greg (Docker)"]
+      API1["API"] --- DB1[("PostgreSQL")]
+      API1 --- S31[("MinIO<br/>fichiers")]
+      WEB1["Site web"] --> API1
+    end
+  end
+  subgraph S2["J3 : alpha fermée"]
+    direction TB
+    T5["5 pilotes testeurs"] -- "Internet" --> VM["VM dédiée Weems<br/>serveur Proxmox Hetzner (UE)"]
+    VM -. "sauvegardes" .-> BK[("Storage Box<br/>hors serveur")]
+  end
+  subgraph S3["J4 et après : production"]
+    direction TB
+    P["Pilotes"] -- "Internet" --> SC["Conteneur API + site<br/>Scaleway"]
+    SC --- PG[("PostgreSQL géré")]
+    SC --- OB[("Stockage S3 géré")]
+  end
+  S1 ==> S2 ==> S3

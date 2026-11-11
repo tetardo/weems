@@ -1,0 +1,13 @@
+flowchart LR
+  D["Donnée du vol<br/>(événement, clôture, rapport)"] --> TX
+  subgraph TX["Une seule transaction SQLite"]
+    direction TB
+    W["écrit la donnée"] --- O["ajoute le message<br/>à la file d'envoi"]
+  end
+  TX --> S{"Envoi à l'API"}
+  S -- "200 / 201" --> OK["retiré de la file"]
+  S -- "pas de réseau, 5xx" --> RE["nouvel essai : 2 s, 5 s, 15 s…<br/>jusqu'à 5 min"] --> S
+  S -- "401" --> TK["renouvelle le jeton"] --> S
+  S -- "409, autre 4xx" --> MIS["mis de côté + alerte"]
+  S -- "426" --> MAJ["envois suspendus,<br/>mise à jour demandée"]
+  P["Position en direct"] -- "jamais en file :<br/>abandonnée après 30 s" --> S

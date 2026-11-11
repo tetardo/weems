@@ -1,0 +1,8 @@
+flowchart LR
+  A(["En attente"]) -- "avion chargé au sol" --> B(["Armé"])
+  B -- "démarrage moteur<br/>ou repoussage" --> C(["En vol<br/>12 phases"])
+  C -- "frein de parking + moteurs coupés,<br/>clôture manuelle, crash" --> D(["Clôture"])
+  D -- "rapport accusé<br/>par l'API" --> E(["Terminé"])
+  C -. "crash du simulateur,<br/>du tracker ou du PC" .-> R{"Au redémarrage :<br/>même avion,<br/>position proche ?"}
+  R -- "oui : le vol reprend" --> C
+  R -- "non : motif « interrompu »" --> D

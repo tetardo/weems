@@ -1,0 +1,17 @@
+flowchart TB
+  subgraph L1["Lot 1 : carnet de vol connecté (gratuit)"]
+    direction LR
+    J0["J0<br/>Fondations"] --> J1["J1<br/>10 pilotes simulés<br/>carte en direct"] --> J2["J2<br/>Premier vrai vol"] --> J3["J3<br/>Alpha fermée<br/>5 pilotes"] --> J4["J4<br/>Bêta ~50 pilotes<br/>Store limité"] --> J5["J5<br/>Version 1.0"]
+  end
+  subgraph SUITE["Lots suivants"]
+    direction LR
+    L2["Lot 2<br/>Abonnement pilote"] --> L3["Lot 3<br/>Gestion de compagnie"] --> L4["Lot 4<br/>App iPad (Swift)"] -.-> XP["Plus tard<br/>X-Plane"]
+  end
+  L1 ==> SUITE
+  subgraph PRE["Prérequis"]
+    direction LR
+    PIL{{"Pilote : points 3 et 4<br/>spec T0 → fin de J0"}} ~~~ WIN{{"PC Windows MSFS<br/>→ J2"}} ~~~ ME{{"Micro-entreprise +<br/>compte Store → J4"}} ~~~ PAY{{"Service de paiement<br/>→ lot 2"}} ~~~ PRIX{{"Prix validé avec 5 à 10<br/>fondateurs → lot 3"}}
+  end
+  SUITE ~~~ PRE
+  classDef pre fill:#FFF4E0,stroke:#C98A1B,color:#3A2A08
+  class PIL,WIN,ME,PAY,PRIX pre

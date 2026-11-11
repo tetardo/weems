@@ -112,6 +112,8 @@ Les points 3 et 4 doivent être traités avant la fin de T0 : sans eux, pas de s
 | 11 | Roulage arrivée | `TAXI_IN` |
 | 12 | Arrivée | `ARRIVED` (état final, avec un motif de clôture) |
 
+![Les 12 phases et leurs transitions principales](../../schemas/img/tracker-phases.png)
+
 ### Transitions
 
 | De | Vers | Condition | Confirmation | Événement |

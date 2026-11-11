@@ -1,0 +1,15 @@
+flowchart LR
+  subgraph SITE["Site web Next.js"]
+    direction TB
+    LIVE["/live<br/>carte en direct (J1)"]
+    LIST["/flights<br/>liste des vols (J2)"]
+    PAGE["/flights/{id}<br/>page de vol (J2)"]
+    LOG["Connexion (J3)"]
+    LIST --> PAGE
+    LIVE --> PAGE
+  end
+  LIVE -- "SSE /v1/live/stream" --> API["API"]
+  LIST -- "GET /v1/flights" --> API
+  PAGE -- "GET /v1/flights/{id}<br/>GET …/track (simplifiée)" --> API
+  LOG -- "session, OAuth PKCE" --> API
+  TR["Tracker"] -. "autorisation par le navigateur (J3)" .-> LOG

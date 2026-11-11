@@ -1,0 +1,18 @@
+sequenceDiagram
+  autonumber
+  participant T as Tracker (cœur)
+  participant A as API
+  participant N as Navigateur (/live)
+  N->>A: GET /v1/live/stream
+  A-->>N: état de tous les vols ouverts
+  T->>A: POST /v1/flights (flightId créé par le tracker)
+  A-->>T: 201
+  loop toutes les 5 à 15 s selon la phase
+    T->>A: POST positions (seq n)
+    A-->>T: 201 (200 si déjà reçue)
+  end
+  T->>A: POST events (changement de phase…)
+  A-->>N: lot de positions toutes les 2 s
+  Note over A,N: sans position depuis 60 s : « signal perdu »
+  T->>A: POST close (motif : arrivée)
+  A-->>N: vol retiré de la carte

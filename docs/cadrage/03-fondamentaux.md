@@ -12,6 +12,8 @@ Réponses de Greg du 11/11/2026, avec les conséquences pour la feuille de route
 | Budget mensuel | Pas de plafond fixé ; hypothèse de travail : moins de 100 €/mois jusqu'aux premiers revenus | Hébergement estimé à 30-60 €/mois (étape 2) ; tout service payant au-delà est signalé avant d'être retenu |
 | PC Windows avec MSFS | Disponible sous quelques jours (annoncé le 11/11/2026) | Débloque le lot T1 (prototype de connexion au simulateur) et l'enregistrement de vrais vols |
 
+![Environnements par étape : Mac, serveur Hetzner, Scaleway](../schemas/img/03-environnements.png)
+
 ## 2. Objectif du premier lancement
 
 Contenu : une API en ligne, un tracker et une application web simple qui affiche les premières informations de vol.

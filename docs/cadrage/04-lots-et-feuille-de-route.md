@@ -21,6 +21,8 @@
 
 Ordre des lots 2 et 3 décidé le 11/11/2026 : abonnement pilote d'abord (voir plus bas).
 
+![Feuille de route : jalons du lot 1, lots suivants et prérequis](../schemas/img/04-feuille-de-route.png)
+
 ## Lot 1 en 6 jalons
 
 Chaque jalon est utilisable et vérifiable seul. Les colonnes Tracker, API et Web disent ce que chaque application doit apporter au jalon.

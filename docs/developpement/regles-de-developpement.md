@@ -25,6 +25,8 @@ Une modification n'est terminée que si **tous** ces points sont vrais :
   Exemple : `feat(api): réception des événements de vol sans doublon`.
 - Protection de `main` sur GitHub : fusion seulement si l'intégration continue est verte.
 
+![Flux de travail : de l'exigence à la fusion](../schemas/img/regles-flux-de-travail.png)
+
 ## 3. Outils communs
 
 | Sujet | Choix | Pourquoi |

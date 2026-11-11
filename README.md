@@ -25,6 +25,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 - [Lots et feuille de route](docs/cadrage/04-lots-et-feuille-de-route.md) : lots 1 à 4, jalons J0 à J5 du lot 1
 - [Règles de développement](docs/developpement/regles-de-developpement.md) : définition de « terminé », tests, branches, garde-fous Claude Code
 - [Spécification J0 de l'API](docs/cahiers-des-charges/api/spec-J0-api.md) : conventions, modèle de données, routes
+- [Site web minimal](docs/cahiers-des-charges/web/spec-J2-site-minimal.md) : liste des vols, page de vol, connexion (J2 et J3)
 - [Spécification J1](docs/cahiers-des-charges/spec-J1-pilotes-simules.md) : 10 pilotes simulés sur la carte en direct
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4
 - [Architecture interne du tracker](docs/cahiers-des-charges/tracker/architecture-interne.md) : cœur indépendant, connecteurs, enregistreur, envoi hors ligne
@@ -38,6 +39,8 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 1. Cloner le dépôt : `git clone https://github.com/tetardo/weems`
 2. L'ouvrir dans VS Code avec Claude Code : les fichiers `CLAUDE.md` donnent le contexte à l'agent.
 3. Documentation SDK MSFS (copie locale, non versionnée) : `cd apps/tracker && bash scripts/update-msfs-docs.sh`
+
+**Schémas** : sources Mermaid dans `docs/schemas/`, images régénérées par `bash scripts/render-schemas.sh`.
 
 ## Feuille de route
 

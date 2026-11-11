@@ -1,0 +1,13 @@
+flowchart LR
+  subgraph SIM["Commande simulate (un seul processus)"]
+    direction TB
+    F["10 fichiers de vol<br/>(rejeu JSONL)"] --> R["10 connecteurs de rejeu"]
+    R --> C["10 cœurs du tracker<br/>phases, enregistreur, envoi"]
+  end
+  C -- "HTTP<br/>ouverture, positions,<br/>événements, clôture" --> API
+  subgraph API["API (Docker sur le Mac)"]
+    direction TB
+    M["Dernière position<br/>en mémoire"]
+    DB[("PostgreSQL<br/>vols, événements")]
+  end
+  API -- "SSE toutes les 2 s" --> MAP["Site web /live<br/>carte MapLibre"]

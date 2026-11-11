@@ -1,0 +1,25 @@
+flowchart TB
+  BOARDING --> |repoussage| PUSHBACK
+  BOARDING --> |"moteur + roulage"| TAXI_OUT
+  PUSHBACK --> |roulage| TAXI_OUT
+  TAXI_OUT --> |"gs > 40 kt"| TAKEOFF
+  TAKEOFF -. "décollage interrompu" .-> TAXI_OUT
+  TAKEOFF --> |"en l'air > 50 ft"| CLIMB
+  CLIMB --> |"palier 60 s"| CRUISE
+  CRUISE -.-> |"nouveau niveau"| CLIMB
+  CRUISE --> |"vs < -500"| DESCENT
+  CLIMB -.-> |"vs < -500"| DESCENT
+  DESCENT -.-> |"palier 60 s"| CRUISE
+  DESCENT --> |"< 3 000 ft sol"| APPROACH
+  APPROACH --> |"< 1 000 ft, train sorti"| FINAL
+  FINAL --> |toucher| LANDING["LANDING<br/>rebonds comptés"]
+  APPROACH -. "remise des gaz" .-> GA(("Remise<br/>des gaz"))
+  FINAL -. "remise des gaz" .-> GA
+  GA -.-> CLIMB
+  LANDING -. "touch-and-go" .-> CLIMB
+  LANDING --> |"gs < 40 kt"| TAXI_IN
+  TAXI_IN --> |"frein de parking,<br/>moteurs coupés"| ARRIVED
+  classDef end1 fill:#1F5F99,color:#FFFFFF,stroke:#14273A
+  classDef ga fill:#FFF4E0,stroke:#C98A1B,color:#3A2A08
+  class ARRIVED end1
+  class GA ga

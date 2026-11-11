@@ -1,0 +1,11 @@
+flowchart TB
+  CL["Tracker, site web, app iPad"] -- "HTTP /v1" --> RT
+  subgraph MOD["Un module de l'API (ex. flights)"]
+    direction TB
+    RT["routes.ts<br/>déclare la route, valide l'entrée"] --> SV["service.ts<br/>logique métier"]
+    SV --> RP["repository.ts<br/>seul accès à la base"]
+  end
+  CT["packages/contrats<br/>schémas Zod"] -. "valide" .-> RT
+  NT["packages/notation<br/>calcul de la note"] -. "utilisé par" .-> SV
+  RP --> DB[("PostgreSQL")]
+  SV -. "autre module : passe par son service,<br/>jamais par son repository" .-> SV2["service d'un autre module"]

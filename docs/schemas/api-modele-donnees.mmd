@@ -1,0 +1,56 @@
+erDiagram
+  pilots ||--o{ flights : "possède"
+  flights ||--o{ flight_events : "contient"
+  flights ||--o| flight_tracks : "trajectoire"
+  flights ||--o{ flight_scores : "notée par"
+  rule_sets ||--o{ flight_scores : "version de règles"
+  aircraft_types ||--o{ flights : "type"
+  airports ||--o{ runways : "possède"
+  airports ||--o{ flights : "départ / arrivée"
+  flights {
+    uuid id PK "J0, créé par le tracker"
+    uuid pilot_id FK
+    text callsign
+    text aircraft_title
+    text departure_icao
+    text arrival_icao
+    timestamptz opened_at
+    timestamptz closed_at
+    text close_reason
+    text last_phase
+  }
+  flight_events {
+    uuid flight_id FK "J0"
+    int seq "unique avec flight_id"
+    timestamptz at
+    text type
+    jsonb context
+  }
+  pilots {
+    uuid id PK "J3"
+    text nickname
+    text email
+  }
+  flight_tracks {
+    uuid flight_id FK "J2"
+    text object_key "fichier S3"
+    int sample_count
+  }
+  flight_scores {
+    uuid flight_id FK "J2"
+    text rule_set_version
+    numeric score
+  }
+  aircraft_types {
+    text icao PK "J2"
+    text category
+  }
+  airports {
+    text icao PK "J2, OurAirports"
+  }
+  runways {
+    text id PK "J2"
+  }
+  rule_sets {
+    text version PK "J2"
+  }

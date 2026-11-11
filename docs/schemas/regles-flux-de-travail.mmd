@@ -1,0 +1,12 @@
+flowchart TB
+  E["Exigence écrite<br/>(spec, CDC)"] --> B["Branche courte<br/>feat/…"]
+  B --> C["Code + tests<br/>(Claude Code)"]
+  C --> H{"pnpm check<br/>types, style, structure, tests"}
+  H -- "échec" --> C
+  H -- "vert" --> PR["Demande de fusion"]
+  PR --> CI{"Intégration continue<br/>GitHub Actions"}
+  CI -- "rouge" --> C
+  CI -- "vert" --> RV{"/code-review<br/>/simplify"}
+  RV -- "à corriger" --> C
+  RV -- "ok" --> M["Fusion squash<br/>sur main"]
+  M --> FJ["Fin de jalon :<br/>revue de structure complète"]

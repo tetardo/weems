@@ -29,15 +29,7 @@ Faire voler 10 pilotes simulés en même temps et suivre leur progression sur un
 
 ## La chaîne
 
-```
-Fichiers de vol ──▶ Connecteur de rejeu ──▶ Cœur du tracker (phases, enregistreur, envoi)
-                                                   │  HTTP, réseau local
-                                                   ▼
-                                       API (vols ouverts, dernière position)
-                                                   │  SSE
-                                                   ▼
-                                       Site web : carte en direct
-```
+![Chaîne de J1 : 10 vols rejoués, API, carte en direct](../schemas/img/j1-chaine.png)
 
 Le cœur du tracker est **exactement le même code** que celui qui tournera avec MSFS. Seul le connecteur change. C'est ce qui rend J1 utile au-delà de la démonstration.
 
@@ -61,6 +53,8 @@ Les formats sont écrits une seule fois dans `packages/contrats` et partagés pa
 | Position | `POST /v1/flights/{flightId}/positions` | `seq`, heure UTC, `lat`, `lon`, `altMsl`, `gs`, `heading`, `vs`, `phase`, `onGround` | Selon la phase, voir ci-dessous |
 | Événement | `POST /v1/flights/{flightId}/events` | `seq`, heure, type (changement de phase, pause, toucher…), contexte | Quand il se produit |
 | Clôture | `POST /v1/flights/{flightId}/close` | Heure, motif (arrivée, abandon, crash) | Fin du vol |
+
+![Échanges entre le tracker, l'API et la carte pendant un vol](../schemas/img/j1-sequence.png)
 
 **Fréquence des positions** : 5 s au décollage, en approche, en finale et à l'atterrissage ; 10 s au roulage, en montée et en descente ; 15 s en croisière ; aucune à l'arrêt (embarquement, arrivée).
 
