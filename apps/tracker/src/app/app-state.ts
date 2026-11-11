@@ -2,7 +2,7 @@ import type { FlightPhase } from "@weems/contrats";
 import type { ConnectorStatus } from "../core/connector.ts";
 import type { Delivery, LastFlight } from "../core/last-flight.ts";
 
-/** What the pilot sets before flying (the flight plan is optional). */
+/** What the pilot sets before flying; departure and arrival are required to fly (decision 007). */
 export interface FlightSettings {
   callsign: string;
   departureIcao: string;
@@ -28,6 +28,8 @@ export interface AppState {
   /** Why sending stopped: login needed, or tracker too old. */
   blocked: "unauthorized" | "upgradeRequired" | null;
   settings: FlightSettings;
+  /** Departure or arrival not entered yet: no flight can open. */
+  flightPlanMissing: boolean;
   /** Short report of the last closed flight; the full one is on the site once sent. */
   lastFlight: (LastFlight & { delivery: Delivery }) | null;
   /** Last problem to show (login failed, settings refused…), null when none. */
