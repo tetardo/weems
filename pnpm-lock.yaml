@@ -84,6 +84,9 @@ importers:
       better-sqlite3:
         specifier: 12.11.1
         version: 12.11.1
+      node-simconnect:
+        specifier: 4.2.1
+        version: 4.2.1
       zod:
         specifier: 4.6.7
         version: 4.6.7
@@ -1910,6 +1913,10 @@ packages:
   ini@1.3.8:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
 
+  ini@2.0.0:
+    resolution: {integrity: sha512-7PnF4oN3CvZF23ADhA5wRaYEQpJ8qygSkbtTXWBeXWXmEVRXK+1ITciHWwHhsjv1TmW0MgacIv6hEi5pX5NQdA==}
+    engines: {node: '>=10'}
+
   ini@4.1.1:
     resolution: {integrity: sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -2193,6 +2200,10 @@ packages:
   node-abi@3.101.0:
     resolution: {integrity: sha512-bkb/RkuWCE64eWu1PCh3Fu2pGc9mKRs+kOE+FU2bGHRYlQa86/D321DSATV54AsCQMKz3/xSt9sRgraZTpqdhQ==}
     engines: {node: '>=10'}
+
+  node-simconnect@4.2.1:
+    resolution: {integrity: sha512-AXv6AIQM1ahwmKbkZZoLHV6tNFaTLi7RKFPhNVX8hNP7a38/OnQvcesIo0m/QXuh1475Kkovj8dsHlkJK2Piag==}
+    engines: {node: '>=20.17.0', npm: '>=10.0.0'}
 
   obug@3.0.0:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
@@ -4184,6 +4195,8 @@ snapshots:
 
   ini@1.3.8: {}
 
+  ini@2.0.0: {}
+
   ini@4.1.1: {}
 
   interpret@3.1.1: {}
@@ -4439,6 +4452,13 @@ snapshots:
   node-abi@3.101.0:
     dependencies:
       semver: 7.8.6
+
+  node-simconnect@4.2.1:
+    dependencies:
+      debug: 4.4.3
+      ini: 2.0.0
+    transitivePeerDependencies:
+      - supports-color
 
   obug@3.0.0: {}
 

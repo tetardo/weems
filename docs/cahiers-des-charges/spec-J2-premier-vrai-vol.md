@@ -43,15 +43,20 @@ Le cœur du tracker est le même qu'en J0 et J1. Seuls le connecteur et l'envoi 
 - **Variables lues** : uniquement celles de `apps/tracker/docs/reference/simvars.yaml` marquées `verified: true`. Une variable absente sur un avion devient « non mesurée » (`null`), jamais 0.
 - **Événements système** : pause, crash, chargement de vol, changement d'avion, slew, accélération du temps (fiche `02-evenements-systeme.md`).
 - **Cadence** : une fois par seconde en temps normal, à chaque image près du sol (EF-09). C'est le cœur qui décide.
-- **Code organisé en trois couches**, pour tester sans simulateur :
-  1. `simconnect-session` : connexion, reconnexion, abonnement aux données (seule partie qui parle à MSFS) ;
-  2. `data-definitions` : la liste des variables et leurs unités, construite depuis `simvars.yaml` ;
-  3. `to-sample` : traduction des valeurs brutes en `Sample` (radians → degrés, valeurs absentes → `null`), testée sur le Mac avec des valeurs enregistrées.
+- **Code organisé en couches**, pour tester sans simulateur (`apps/tracker/src/connectors/msfs/`) :
+  1. `simconnect-link` : connexion, déclaration des variables, abonnements (seul fichier qui parle à MSFS, derrière l'interface `SimLink`) ;
+  2. `sim-vars` : la liste des variables et leurs unités ; un test vérifie que chacune est `verified: true` dans `simvars.yaml`, avec la même unité ;
+  3. `to-sample` : traduction des valeurs brutes en `Sample` (radians → degrés, ft/s → ft/min, livres → kg, valeurs aberrantes → `null`) ;
+  4. `system-events` : événements système traduits, doublons de MSFS 2024 filtrés, état de pause ;
+  5. `msfs-connector` : attente du simulateur, reconnexion, avion relu toutes les 30 s, testé avec un faux simulateur.
+
+![Couches du connecteur MSFS : seul simconnect-link parle au simulateur ; un faux simulateur envoie les mêmes valeurs brutes dans les tests](../schemas/img/j2-connecteur-msfs.png)
 
 ### Commande `pnpm fly`
 
 - Lance le tracker sans interface sur le PC : `pnpm fly --api http://<adresse-du-mac>:3000`.
 - Affiche dans la console l'état de la connexion, l'avion, la phase en cours et le nombre de messages en attente.
+- `--from LFPG --to LFBO` renseigne départ et arrivée ; `--callsign` l'indicatif ; « fin » + Entrée clôt le vol à la main ; Ctrl+C quitte (un vol ouvert reprend au lancement suivant).
 - Chaque vol est aussi écrit en fichier de rejeu dans `recordings/` (critère 2), à copier sur le Mac pour les tests.
 
 ### Trajectoire
@@ -140,6 +145,12 @@ Voir la [spécification du site minimal](web/spec-J2-site-minimal.md) : liste `/
 | Phase de chaque point | Calculée à la lecture depuis les événements, pas stockée | Une seule source de vérité, comme la dernière phase en J0 |
 | Temps de vol | Bloc : ouverture → clôture ; vol : fin du décollage (TAKEOFF → CLIMB) → dernier toucher ; pauses retirées des deux et affichées à part | EF-15 ; un vol commencé en l'air compte depuis son ouverture |
 | Pastilles de la liste | pause, accélération du temps, slew, téléportation, crash | Les événements qui rendent un vol douteux |
+| Liste des variables du connecteur | Écrite en TypeScript, contrôlée par un test contre `simvars.yaml` (au lieu de lire le YAML au lancement) | Pas d'analyseur YAML dans l'application ; une variable non vérifiée fait échouer `pnpm check` |
+| Heure et vitesse de simulation (`ZULU TIME`, `SIMULATION RATE`) | Non lues : envoyées « non mesurées » | Non vérifiées dans la doc SDK. Conséquence : une accélération du temps n'est pas encore détectée. À vérifier sur le PC (`update-msfs-docs.sh`), puis à ajouter |
+| N1 d'un moteur à pistons | `null` quand le simulateur donne 0 | `ENGINE TYPE` n'est pas dans la référence vérifiée ; un réacteur qui tourne n'a jamais un N1 nul |
+| Cadence de lecture (EF-09) | Chaque image pendant le décollage, l'atterrissage et sous 1 000 ft en vol ; une fois par seconde ailleurs, roulage compris | Le roulage dure longtemps et n'a pas besoin de chaque image ; garde la base locale légère |
+| Base locale de `pnpm fly` | `~/.weems-tracker/tracker.db`, gardée d'un lancement à l'autre | Un vol coupé (Ctrl+C, plantage) reprend au lancement suivant (ENF-02) |
+| À confirmer au premier vol réel | Signe de l'assiette et de l'inclinaison, codes de `PUSHBACK STATE`, numéro de version MSFS 2020/2024 | Choisis d'après la doc ; listés dans `pieges.md`, vérifiés par les vols de référence |
 
 ## Questions ouvertes
 

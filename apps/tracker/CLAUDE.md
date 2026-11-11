@@ -42,7 +42,7 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 - Une donnée indisponible sur un avion ne doit jamais pénaliser le pilote : le tracker l'indique « non mesurée ».
 - Les tests passent par le connecteur de test (rejeu de vols enregistrés et scénarios), pas par le simulateur.
 
-## Code (J0)
+## Code (J0 à J2)
 
 ```
 src/core/                 cœur sans dépendance : session de vol, journal des événements, phases
@@ -50,19 +50,25 @@ src/core/                 cœur sans dépendance : session de vol, journal des �
   connector.ts            interface SimConnector ; clock.ts : horloge injectée
   position-cadence.ts     fréquence des positions selon la phase (spec J1)
   recovery.ts             reprise après crash (ENF-02) : même avion, < 5 NM, < 30 min
-src/connectors/replay/    format de rejeu JSONL et connecteur de rejeu
+src/connectors/replay/    format de rejeu JSONL, connecteur de rejeu, écriture d'un rejeu (replay-writer.ts)
+src/connectors/msfs/      J2 : connecteur MSFS. simconnect-link.ts (seul fichier qui importe node-simconnect),
+                          sim-vars.ts (variables lues, vérifiées contre simvars.yaml par test), to-sample.ts,
+                          system-events.ts, msfs-connector.ts ; fake-sim-link.ts et raw-sample-fixture.ts : tests
+src/core/read-rate.ts     cadence de lecture EF-09 décidée par le cœur
 src/storage/              enregistreur SQLite (WAL) : sessions, échantillons, événements, outbox
 src/sender/               envoi de l'outbox dans l'ordre, relances 2 s → 5 min, 409 mis de côté, 426 bloque ;
                           positions en mémoire, envoyées dans l'ordre après l'ouverture (position-queue.ts)
 src/runtime/              assemblage connecteur → cœur → enregistreur → envoi
 tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes
 tools/simulate/           J1 : N trackers sans interface dans un seul processus
+tools/fly/                J2 : tracker sans interface sur le PC Windows, branché sur MSFS
 ```
 
 | Commande (depuis `apps/tracker/`) | Effet |
 | --- | --- |
 | `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
 | `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
+| `pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO` | J2, sur le PC Windows avec MSFS lancé : enregistre le vol, l'envoie à l'API, écrit le rejeu dans `recordings/` (ignoré par git). « fin » + Entrée clôt le vol, Ctrl+C quitte |
 | `pnpm check` (racine) | Types, style, structure, tests |
 
 - Un seuil se change dans `params.ts`, jamais dans une règle.

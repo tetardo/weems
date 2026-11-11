@@ -7,11 +7,13 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
     "generate-flight": "node tools/generate-flights/cli.ts",
-    "simulate": "node tools/simulate/cli.ts"
+    "simulate": "node tools/simulate/cli.ts",
+    "fly": "node tools/fly/cli.ts"
   },
   "dependencies": {
     "@weems/contrats": "workspace:*",
     "better-sqlite3": "12.11.1",
+    "node-simconnect": "4.2.1",
     "zod": "4.6.7"
   },
   "devDependencies": {

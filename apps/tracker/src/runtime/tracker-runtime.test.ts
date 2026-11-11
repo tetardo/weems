@@ -23,20 +23,22 @@ const api: ApiClient = {
   },
 };
 
+const sessionAt = (utcMs: number) => ({
+  callsign: "WMS1",
+  trackerVersion: "0.1.0",
+  clock: { nowUtcMs: () => utcMs },
+  newFlightId: () => `0197a000-0000-7000-8000-00000000000${++ids}`,
+  params: AIRLINER_PARAMS,
+});
+
 /** One tracker run on the same local database file, with the clock at `utcMs`. */
-function runtime(replay: Replay, utcMs: number) {
+function runtime(replay: Replay, utcMs: number, connector = new ReplayConnector(replay)) {
   return createTracker({
-    connector: new ReplayConnector(replay),
+    connector,
     databasePath: join(dir, "tracker.db"),
     api,
     random: () => 0,
-    session: {
-      callsign: "WMS1",
-      trackerVersion: "0.1.0",
-      clock: { nowUtcMs: () => utcMs },
-      newFlightId: () => `0197a000-0000-7000-8000-00000000000${++ids}`,
-      params: AIRLINER_PARAMS,
-    },
+    session: sessionAt(utcMs),
   });
 }
 
@@ -76,6 +78,19 @@ describe("tracker runtime", () => {
       "/v1/flights/<id>/track",
     ]);
     expect(sentEvents().map((e) => e.seq)).toEqual(sentEvents().map((_e, i) => i + 1));
+  });
+
+  it("reads every frame around takeoff and landing, once per second elsewhere (EF-09)", async () => {
+    const rates: string[] = [];
+    class RateSpy extends ReplayConnector {
+      override setReadRate(rate: "high" | "normal"): void {
+        if (rates.at(-1) !== rate) rates.push(rate);
+      }
+    }
+    const { runtime: tracker, recorder } = runtime(flight, START_UTC, new RateSpy(flight));
+    await tracker.start();
+    recorder.close();
+    expect(rates).toEqual(["normal", "high", "normal", "high", "normal"]);
   });
 
   it("resumes the same flight after a crash (ENF-02), numbering without gap", async () => {

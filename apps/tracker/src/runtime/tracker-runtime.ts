@@ -2,6 +2,7 @@ import type {
   AircraftInfo,
   CloseFlightRequest,
   FlightEvent,
+  FlightPhase,
   OpenFlightRequest,
   PositionReport,
   Sample,
@@ -51,6 +52,11 @@ export class TrackerRuntime {
     await connector.start();
   }
 
+  /** Phase of the flight being recorded (null before the first one). */
+  get currentPhase(): FlightPhase | null {
+    return this.session.phase;
+  }
+
   closeManually(): void {
     this.session.closeManually();
   }
@@ -76,6 +82,7 @@ export class TrackerRuntime {
     if (this.saved && this.aircraft) this.recover(this.saved, this.aircraft, sample);
     else this.session.handleSample(sample);
     if (!wasFlying && this.session.state === "flying") this.recordSample(sample); // opened or resumed
+    this.parts.connector.setReadRate(this.session.readRate);
   }
 
   private recordSample(sample: Sample): void {
