@@ -37,7 +37,7 @@ export interface FlightPlan {
 export interface SessionOptions {
   callsign: string;
   /**
-   * Required to open a flight (decision 004): null = the session never opens a new flight,
+   * Required to open a flight (decision 007): null = the session never opens a new flight,
    * because the live map needs the arrival. A flight resumed after a crash already has its own.
    */
   flightPlan: FlightPlan | null;

@@ -8,7 +8,7 @@ const ICAO = z.string().regex(/^[A-Z]{4}$/);
 
 /**
  * What the pilot may save: callsign as in a flight plan (EF-04), departure and arrival
- * required (decision 004). The same airport twice is allowed: circuits, local flights.
+ * required (decision 007). The same airport twice is allowed: circuits, local flights.
  */
 export const FlightSettingsSchema = z.object({
   callsign: z.string().regex(/^[A-Z0-9]{2,8}$/),

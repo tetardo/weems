@@ -2,7 +2,7 @@ import type { FlightPhase } from "@weems/contrats";
 import type { ConnectorStatus } from "../core/connector.ts";
 import type { Delivery, LastFlight } from "../core/last-flight.ts";
 
-/** What the pilot sets before flying; departure and arrival are required to fly (decision 004). */
+/** What the pilot sets before flying; departure and arrival are required to fly (decision 007). */
 export interface FlightSettings {
   callsign: string;
   departureIcao: string;

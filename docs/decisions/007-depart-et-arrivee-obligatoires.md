@@ -1,4 +1,4 @@
-# 004 — Départ et arrivée obligatoires dans le tracker
+# 007 — Départ et arrivée obligatoires dans le tracker
 
 Date : 11/11/2026. Décidé par Greg (« oui tu as raison », sur la recommandation du chantier des trajets de la carte en direct). Remplace l'exigence EF-05 du [cahier des charges du tracker](../cahiers-des-charges/tracker/CDC-Tracker.md) (vol libre sans plan, aéroports déduits).
 

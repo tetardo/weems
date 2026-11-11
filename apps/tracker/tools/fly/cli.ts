@@ -24,7 +24,7 @@ const { values } = parseArgs({
   },
 });
 
-// Departure and arrival are required (decision 004): the live map needs the arrival.
+// Departure and arrival are required (decision 007): the live map needs the arrival.
 const icao = (code: string | undefined) => code?.trim().toUpperCase() ?? "";
 const flightPlan = { departureIcao: icao(values.from), arrivalIcao: icao(values.to) };
 if (![flightPlan.departureIcao, flightPlan.arrivalIcao].every((code) => /^[A-Z]{4}$/.test(code))) {

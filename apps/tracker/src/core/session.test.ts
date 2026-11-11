@@ -77,7 +77,7 @@ describe("opening (EF-07)", () => {
     ]);
   });
 
-  it("never opens a flight without departure and arrival (decision 004)", () => {
+  it("never opens a flight without departure and arrival (decision 007)", () => {
     const withoutPlan = new FlightSession(
       {
         callsign: "WMS123",

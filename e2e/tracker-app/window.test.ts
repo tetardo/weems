@@ -76,7 +76,7 @@ describe("desktop tracker window", () => {
     expect(await page.isVisible("#close-flight")).toBe(false);
   });
 
-  it("asks for departure and arrival before any flight (decision 004)", async () => {
+  it("asks for departure and arrival before any flight (decision 007)", async () => {
     await expect.poll(() => page.textContent("#flight-status")).toMatch(/^Saisissez le départ/);
     await page.fill("[name=callsign]", "wms42");
     await page.click("#settings [type=submit]");

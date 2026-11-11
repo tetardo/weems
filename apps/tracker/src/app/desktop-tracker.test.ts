@@ -92,7 +92,7 @@ async function flyUntilOpened(): Promise<void> {
 }
 
 describe("desktop tracker (without Electron)", () => {
-  it("opens no flight until departure and arrival are entered (decision 004)", async () => {
+  it("opens no flight until departure and arrival are entered (decision 007)", async () => {
     expect(desktop.state()).toMatchObject({ flightPlanMissing: true });
     expect(fly()).toBe(false);
     expect(desktop.state()).toMatchObject({ simulator: "connected", flight: null });
