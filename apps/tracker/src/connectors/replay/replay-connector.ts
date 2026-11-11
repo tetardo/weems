@@ -16,6 +16,8 @@ export class ReplayConnector extends ConnectorListeners implements SimConnector 
   private readonly speed: ReplaySpeed;
   private stopped = false;
   private timer: ReturnType<typeof setTimeout> | null = null;
+  /** Ends the current wait at once, so that a stopped replay really ends `start()`. */
+  private wakeUp: (() => void) | null = null;
 
   constructor(replay: Replay, speed: ReplaySpeed = "instant") {
     super();
@@ -39,6 +41,7 @@ export class ReplayConnector extends ConnectorListeners implements SimConnector 
   async stop(): Promise<void> {
     this.stopped = true;
     if (this.timer) clearTimeout(this.timer);
+    this.wakeUp?.();
   }
 
   /** A replay has a fixed rate: the requested rate is ignored. */
@@ -49,8 +52,10 @@ export class ReplayConnector extends ConnectorListeners implements SimConnector 
     for (const record of this.replay.records) {
       if (this.stopped) return;
       await new Promise<void>((resolve) => {
+        this.wakeUp = resolve;
         this.timer = setTimeout(resolve, (record.t - previousT) / factor);
       });
+      if (this.stopped) return;
       previousT = record.t;
       this.dispatch(record);
     }

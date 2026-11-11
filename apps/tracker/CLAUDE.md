@@ -69,7 +69,7 @@ src/app/                  J3 : application de bureau. desktop-tracker.ts (assemb
                           aucun accès à Node, affiche l'état et transmet les clics)
 src/storage/sqlite.ts     seul fichier qui ouvre SQLite (`node:sqlite`, intégré à Node et à Electron)
 scripts/build-app.ts      regroupe l'application dans dist/app/ (esbuild) ; electron-builder.yml : installateur
-tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes
+tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes, fleetOf(N) pour la charge (J4)
 tools/simulate/           J1 : N trackers sans interface dans un seul processus
 tools/fly/                J2 : tracker sans interface sur le PC Windows (même assemblage que l'app : src/runtime/msfs-tracker.ts)
 ```
@@ -77,7 +77,7 @@ tools/fly/                J2 : tracker sans interface sur le PC Windows (même a
 | Commande (depuis `apps/tracker/`) | Effet |
 | --- | --- |
 | `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
-| `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
+| `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts` ; au-delà de 10, routes tirées par `fleetOf`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
 | `pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO` | J2, sur le PC Windows avec MSFS lancé : enregistre le vol, l'envoie à l'API, écrit le rejeu dans `recordings/` (ignoré par git). « fin » + Entrée clôt le vol, Ctrl+C quitte |
 | `pnpm app` | J3 : lance l'application de bureau (API : http://localhost:3000, ou `WEEMS_API_URL`) |
 | `pnpm app:package` | Construit l'installateur dans `dist/installer/`. Windows : par GitHub Actions (`tracker-installer.yml`), « Run workflow » sur main = version brouillon à publier à la main |
