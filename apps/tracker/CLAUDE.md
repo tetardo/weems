@@ -26,6 +26,7 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 | --- | --- |
 | Règles communes (terminé, tests, branches, sécurité) | `../../docs/developpement/regles-de-developpement.md` |
 | Pourquoi on fait ça, fonctionnalités, concurrence, données à exploiter | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` |
+| Découpage interne : cœur, connecteurs, SQLite, file d'envoi, format de rejeu | `../../docs/cahiers-des-charges/tracker/architecture-interne.md` |
 | Données reçues par le cœur, règles des 12 phases, seuils (lot T0) | `../../docs/cahiers-des-charges/tracker/spec-T0.md` |
 | Quelle SimVar lire, son unité, sa fiabilité | `docs/reference/simvars.yaml` |
 | Comment demander des données à SimConnect (fréquences, options) | `docs/reference/msfs/fiches/01-lire-les-donnees.md` |
