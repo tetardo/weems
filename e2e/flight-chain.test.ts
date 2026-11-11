@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { type FlightEvent, type OpenFlightRequest, uuidV7 } from "@weems/contrats";
+import { type FlightEvent, type OpenFlightRequest, type TrackView, uuidV7 } from "@weems/contrats";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startTestApp } from "../apps/api/src/testing/test-app.ts";
 import { ReplayConnector } from "../apps/tracker/src/connectors/replay/replay-connector.ts";
@@ -16,6 +16,7 @@ import { LFPG_LFBO } from "../apps/tracker/tools/generate-flights/scenario.ts";
  * J0 exit criterion 2: a synthetic flight goes through the real tracker
  * (replay connector, core, SQLite recorder, outbox, HTTP) to the real API and database,
  * and reading it back gives exactly what the tracker recorded.
+ * J2 criterion 6: its trajectory follows the same path and reads back simplified.
  */
 let api: Awaited<ReturnType<typeof startTestApp>>;
 let baseUrl: string;
@@ -37,7 +38,7 @@ async function flyThroughTheChain() {
     connector: new ReplayConnector(
       generateFlight({ ...LFPG_LFBO, disturbances: ["goAround", "bounce"] }),
     ),
-    databasePath: join(dir, "tracker.db"),
+    databasePath: join(dir, `tracker-${uuidV7()}.db`), // one tracker install per flight
     api: httpApiClient({ baseUrl, token: "dev-token", trackerVersion: "0.1.0" }),
     session: {
       callsign: "WMS123",
@@ -83,5 +84,20 @@ describe("tracker to API", () => {
     expect(view.events.map((e) => e.type)).toEqual(
       expect.arrayContaining(["goAround", "touchdown", "bounce"]),
     );
+  });
+
+  it("delivers the trajectory, read back simplified with the tracker's phases (J2 criterion 6)", async () => {
+    const { recorder, flightId } = await flyThroughTheChain();
+    recorder.close();
+    const response = await fetch(`${baseUrl}/v1/flights/${flightId}/track`, {
+      headers: { authorization: "Bearer dev-token" },
+    });
+    expect(response.status).toBe(200);
+    const track = (await response.json()) as TrackView;
+    expect(track.recordedPoints).toBeGreaterThan(1_000);
+    expect(track.points.length).toBeLessThanOrEqual(500);
+    const phases = track.points.map((p) => p.phase).filter((p, i, all) => p !== all[i - 1]);
+    expect(phases).toEqual(expect.arrayContaining(["TAKEOFF", "CRUISE", "FINAL", "ARRIVED"]));
+    expect(track.points.at(-1)?.phase).toBe("ARRIVED");
   });
 });

@@ -72,6 +72,11 @@ export class FlightSession {
     return this.stateValue;
   }
 
+  /** UTC time of a sample of the current flight (null before opening). */
+  utcAt(t: number): string | null {
+    return this.log?.at(t) ?? null;
+  }
+
   setAircraft(aircraft: AircraftInfo): void {
     if (
       this.stateValue === "flying" &&

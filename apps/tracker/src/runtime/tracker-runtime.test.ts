@@ -73,6 +73,7 @@ describe("tracker runtime", () => {
       "/v1/flights",
       "/v1/flights/<id>/events",
       "/v1/flights/<id>/close",
+      "/v1/flights/<id>/track",
     ]);
     expect(sentEvents().map((e) => e.seq)).toEqual(sentEvents().map((_e, i) => i + 1));
   });
@@ -95,7 +96,13 @@ describe("tracker runtime", () => {
     const events = sentEvents();
     expect(events.map((e) => e.seq)).toEqual(events.map((_e, i) => i + 1));
     expect(events.map((e) => e.type)).toContain("resumed");
-    expect(queued().at(-1)?.body).toMatchObject({ reason: "normal" });
+    const [close, track] = queued().slice(-2);
+    expect(close?.body).toMatchObject({ reason: "normal" });
+    // The trajectory covers both parts of the flight, in time order.
+    const times = (track?.body as { points: { at: string }[] }).points.map((p) => Date.parse(p.at));
+    expect(times[0]).toBe(START_UTC);
+    expect(times.every((t, i) => i === 0 || t > (times[i - 1] ?? 0))).toBe(true);
+    expect(times.some((t) => t > START_UTC + cut)).toBe(true);
   });
 
   it("closes the old flight as interrupted when the restart is too late", async () => {

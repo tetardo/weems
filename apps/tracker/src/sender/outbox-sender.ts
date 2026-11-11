@@ -6,7 +6,7 @@ import { actionFor, retryDelayMs } from "./retry.ts";
 interface OutboxRow {
   id: number;
   flight_id: string;
-  kind: "open" | "events" | "close";
+  kind: "open" | "events" | "close" | "track";
   payload: string;
   attempts: number;
 }

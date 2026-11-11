@@ -44,6 +44,23 @@ const MIGRATIONS: readonly string[] = [
   );
   CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
   `,
+  // J2: UTC time of each sample (for the trajectory) and the "track" message.
+  `
+  ALTER TABLE samples ADD COLUMN at TEXT;
+  CREATE TABLE outbox_v2 (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    flight_id TEXT NOT NULL,
+    kind TEXT NOT NULL CHECK (kind IN ('open', 'events', 'close', 'track')),
+    payload TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'parked')),
+    attempts INTEGER NOT NULL DEFAULT 0,
+    next_attempt_at INTEGER NOT NULL DEFAULT 0,
+    last_error TEXT
+  );
+  INSERT INTO outbox_v2 SELECT * FROM outbox;
+  DROP TABLE outbox;
+  ALTER TABLE outbox_v2 RENAME TO outbox;
+  `,
 ];
 
 export function migrate(db: Database.Database): void {
