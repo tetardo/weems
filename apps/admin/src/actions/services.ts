@@ -30,6 +30,13 @@ export async function controlAll(action: "start" | "stop") {
   });
 }
 
+export async function freePortAndStart(id: "api" | "site") {
+  return attempt(async () => {
+    await services().freePortAndStart(id);
+    return null;
+  });
+}
+
 export async function chooseApiMode(mode: ApiMode) {
   return attempt(async () => {
     await services().setApiMode(mode);

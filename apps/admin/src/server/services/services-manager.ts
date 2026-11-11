@@ -1,7 +1,7 @@
 import type { ConsoleConfig } from "../console-config.ts";
 import { ManagedProcess } from "../managed-process.ts";
 import { type ContainerState, DockerCompose, type DockerState } from "./docker.ts";
-import { assertPortFree } from "./port-guard.ts";
+import { portHolder, releasePort } from "./port-guard.ts";
 import { type Probe, probeHttp, probePort } from "./probes.ts";
 import { stateOf } from "./service-state.ts";
 import type { ApiMode, ServiceId, ServicesView, ServiceView } from "./service-view.ts";
@@ -30,6 +30,7 @@ function viewOf(
     pid: process ? process.pid : null,
     since: process && process.running ? process.startedAt : null,
     container: container ? container.status : null,
+    holder: null,
   };
 }
 
@@ -57,17 +58,24 @@ export class ServicesManager {
     ]);
     if (docker.containers.api?.running) this.apiMode = "docker";
     const probes: Record<ServiceId, Probe> = { db, api, site };
+    const views = (["db", "api", "site"] as const).map((id) => this.viewOf(id, probes[id], docker));
     return {
-      services: (["db", "api", "site"] as const).map((id) => this.viewOf(id, probes[id], docker)),
+      services: await Promise.all(views),
       apiMode: this.apiMode,
       dockerAvailable: docker.available,
     };
   }
 
-  private viewOf(id: ServiceId, probe: Probe, docker: DockerState): ServiceView {
+  private async viewOf(id: ServiceId, probe: Probe, docker: DockerState): Promise<ServiceView> {
     const managed = id === "db" ? null : this.processes[id];
     const container = id === "site" ? undefined : docker.containers[id];
-    return viewOf(id, probe, managed, container);
+    const view = viewOf(id, probe, managed, container);
+    // Only a service down whose port is open has a holder: lsof runs in that case only.
+    if (id === "db" || view.state === "running" || view.state === "starting") return view;
+    const holder = await portHolder(PORTS[id], this.config.repoRoot);
+    // A Weems launch that does not answer yet (pnpm dev compiles its first page): starting.
+    if (holder?.freeable) return { ...view, state: "starting", runner: "outside", holder };
+    return { ...view, holder };
   }
 
   async start(id: ServiceId): Promise<void> {
@@ -75,8 +83,15 @@ export class ServicesManager {
     if (current?.state === "running" || current?.state === "starting") return;
     if (id === "db") return this.docker.up("db");
     if (id === "api" && this.apiMode === "docker") return this.docker.up("api");
-    await assertPortFree(PORTS[id]);
+    const holder = await portHolder(PORTS[id], this.config.repoRoot);
+    if (holder) throw new Error(holder.message);
     this.processes[id].start("pnpm", DEV_COMMANDS[id], this.config.repoRoot);
+  }
+
+  /** « Libérer le port »: stops the old Weems launch holding it, then starts the service. */
+  async freePortAndStart(id: "api" | "site"): Promise<void> {
+    await releasePort(PORTS[id], this.config.repoRoot);
+    await this.start(id);
   }
 
   async stop(id: ServiceId): Promise<void> {

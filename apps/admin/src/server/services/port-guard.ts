@@ -1,19 +1,59 @@
-import { containerPublishing } from "./docker.ts";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { type PortOwner, portOwner } from "./port-owner.ts";
 import { probePort } from "./probes.ts";
+import type { PortHolder } from "./service-view.ts";
 
-/** What the page says when a port the console needs is already taken by another program. */
-export function busyPortMessage(port: number, container: string | null): string {
-  if (container) {
-    return `Port ${port} déjà pris par le conteneur Docker « ${container} » : arrêtez-le (docker stop ${container}) puis redémarrez.`;
+const run = promisify(execFile);
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+/** Command lines can be long (node … next dev …): shown shortened on the card. */
+const MAX_NAME = 80;
+
+const shorten = (text: string) => (text.length > MAX_NAME ? `${text.slice(0, MAX_NAME)}…` : text);
+
+/** What the card says about the program holding the port (choice of Greg, 11/11/2026). */
+export function holderOf(port: number, owner: PortOwner | null): PortHolder {
+  if (!owner) {
+    return {
+      message: `Port ${port} déjà pris par un programme que la console ne voit pas (lsof -i :${port} pour le trouver).`,
+      owner: null,
+      freeable: false,
+    };
   }
-  return `Port ${port} déjà pris par un autre programme (lsof -i :${port} pour le trouver) : arrêtez-le puis redémarrez.`;
+  const what =
+    owner.kind === "docker"
+      ? `le conteneur Docker « ${owner.name} »`
+      : `le processus ${owner.pid} (${shorten(owner.name)})`;
+  return owner.weems
+    ? {
+        message: `Port ${port} tenu par un lancement de Weems qui ne répond pas encore : ${what}. S'il reste bloqué, libérez le port.`,
+        owner: what,
+        freeable: true,
+      }
+    : {
+        message: `Port ${port} déjà pris par ${what}, qui n'est pas à Weems : la console n'y touche pas.`,
+        owner: what,
+        freeable: false,
+      };
 }
 
-/**
- * Called before starting a pnpm dev: the service did not answer its health check, so a port
- * that is open belongs to someone else (often an old Docker container, invisible to lsof).
- */
-export async function assertPortFree(port: number): Promise<void> {
-  if (!(await probePort(port)).ok) return;
-  throw new Error(busyPortMessage(port, await containerPublishing(port)));
+/** The holder of a port the service needs while it does not answer; null if the port is free. */
+export async function portHolder(port: number, repoRoot: string): Promise<PortHolder | null> {
+  if (!(await probePort(port)).ok) return null;
+  return holderOf(port, await portOwner(port, repoRoot));
+}
+
+/** Stops an old Weems program holding the port: docker stop, or SIGTERM then SIGKILL after 5 s. */
+export async function releasePort(port: number, repoRoot: string): Promise<void> {
+  const owner = await portOwner(port, repoRoot);
+  if (!owner) return;
+  if (!owner.weems) throw new Error(holderOf(port, owner).message);
+  if (owner.kind === "docker") {
+    await run("docker", ["stop", owner.name], { timeout: 60_000 });
+    return;
+  }
+  if (owner.pid === null) return;
+  process.kill(owner.pid, "SIGTERM");
+  for (let i = 0; i < 10 && (await probePort(port)).ok; i++) await wait(500);
+  if ((await probePort(port)).ok) process.kill(owner.pid, "SIGKILL");
 }
