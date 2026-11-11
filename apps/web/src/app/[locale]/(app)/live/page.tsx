@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { LiveView } from "../../../live/live-view.tsx";
-import { publicApiUrl } from "../../../site/api-url.ts";
+import { LiveView } from "../../../../live/live-view.tsx";
+import { publicApiUrl } from "../../../../site/api-url.ts";
 
 interface Props {
   params: Promise<{ locale: string }>;
