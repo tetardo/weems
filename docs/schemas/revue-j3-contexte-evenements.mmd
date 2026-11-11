@@ -1,0 +1,18 @@
+flowchart LR
+  subgraph AVANT["Avant la revue"]
+    direction TB
+    T1["tracker<br/>écrit { from, to, airStart }"]
+    R1["API service, API trajectoire,<br/>site, enregistreur du tracker"]
+    T1 -. "clés lues à la main<br/>context['to'] as FlightPhase" .-> R1
+  end
+  subgraph APRES["Après la revue"]
+    direction TB
+    C["packages/contrats<br/>PhaseChange, TouchdownContext<br/>phaseChangeOf, touchdownVsOf"]
+    T2["tracker (écrit)"] --> C
+    C --> A2["API"]
+    C --> W2["site"]
+    C --> S2["enregistreur du tracker"]
+  end
+  AVANT ~~~ APRES
+  classDef shared fill:#1F5F99,color:#FFFFFF,stroke:#14273A
+  class C shared
