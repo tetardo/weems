@@ -12,14 +12,14 @@ Un pilote qui le souhaite obtient une page publique, partageable par un simple l
 
 | Dans ce chantier | Hors chantier |
 | --- | --- |
-| Activation du profil par le pilote (désactivé par défaut), choix de l'adresse | Photo (stockage de fichiers, modération) : avatar à initiales en attendant |
-| Pays, niveau déclaré, identifiants VATSIM, IVAO et SimBrief (ajouts de Greg du 11/11/2026) | Heures par catégorie d'avion (léger, turbopropulseur, ligne, hélicoptère) : attend le catalogue des avions |
+| Activation du profil par le pilote (désactivé par défaut), choix de l'adresse | Compagnies du pilote (nom, rang, vols pour la compagnie) : lot 3, VACommunity ; la maquette montre leur place |
+| Photo, pays, niveau déclaré, identifiants VATSIM, IVAO et SimBrief, carte des vols (ajouts de Greg du 11/11/2026) | Heures par catégorie d'avion (léger, turbopropulseur, ligne, hélicoptère) : attend le catalogue des avions |
 | Page publique : pseudo, statistiques, liste des vols | Badges (récompenses automatiques) : après la notation, dont dépendent les plus intéressants |
 | Page de vol publique : trajet, carte, profil vertical, phases, atterrissage | Note et débriefing : les critères ne sont pas définis |
 | Masquer un vol précis de son profil | Biographie, abonnés, commentaires, « j'aime », classements |
 | Référencement : rendu serveur, métadonnées, plan du site, `robots.txt` | « En vol maintenant » sur le profil (dépend du direct, autre chantier) ; export et suppression du compte (RGPD, avant J5, chantier à part) |
 
-**Maquette** (11/11/2026, données fictives ; les blocs « Expérience par catégorie » et « Badges » y montrent la suite, hors de ce chantier) :
+**Maquette** (11/11/2026, données fictives ; les blocs « Compagnies », « Expérience par catégorie » et « Badges » y montrent la suite, hors de ce chantier ; la carte y est dessinée sans fond, le site utilisera le fond OpenFreeMap) :
 
 ![Maquette du profil public, bureau, thème sombre](img/j4-maquette-profil.png)
 
@@ -38,7 +38,7 @@ Un pilote qui le souhaite obtient une page publique, partageable par un simple l
 | Public quand le profil est activé | Jamais public |
 | --- | --- |
 | Pseudo affiché, pseudo d'adresse, date d'activation du profil | E-mail, identifiant interne du compte, sessions, jetons |
-| Pays, niveau déclaré, identifiants VATSIM et IVAO (s'ils sont remplis) | Identifiant SimBrief (sert au tracker, EF-04 ; SimBrief n'a pas de page de profil publique [Confiance moyenne]) |
+| Photo, pays, niveau déclaré, identifiants VATSIM et IVAO (s'ils sont remplis) | Identifiant SimBrief (sert au tracker, EF-04 ; SimBrief n'a pas de page de profil publique [Confiance moyenne]) |
 | Vols **clos** non masqués : indicatif, avion, départ, arrivée, heures UTC, temps bloc et en vol, phases, atterrissage, événements, trajectoire simplifiée | Vols en cours (pas de suivi d'une personne en temps réel par son profil) |
 | Statistiques calculées sur ces vols | Vols masqués par le pilote, et leurs effets sur les statistiques |
 | | Version du tracker, trajectoire complète (seule la simplifiée est montrée), avis du pilote sur les phases (alpha) |
@@ -62,14 +62,14 @@ Règles :
 
 **Profil** (`/pilots/{handle}`)
 
-- En-tête : avatar à initiales, pseudo, drapeau et nom du pays, niveau déclaré, « sur Weems depuis » (date d'activation), avion le plus volé, liens vers les pages VATSIM et IVAO du pilote, bouton « Partager ».
+- En-tête : photo (initiales à défaut), pseudo, drapeau et nom du pays, niveau déclaré, « sur Weems depuis » (date d'activation), avion le plus volé, liens vers les pages VATSIM et IVAO du pilote, bouton « Partager ».
 - Statistiques : nombre de vols, heures de vol (temps en vol) et heures bloc, aéroports différents visités, nombre d'avions différents, taux de chute moyen au toucher et meilleur atterrissage (le plus doux), plus long vol, nombre de remises des gaz.
 - Liste des vols, du plus récent au plus ancien, 20 par page : date, indicatif, trajet, avion, temps bloc, pastilles (remise des gaz, rebond…). Même tableau que « Mes vols », sans filtres.
-- Pas de carte de tous les trajets en J4 : il faudrait les coordonnées des aéroports (import OurAirports pas encore fait).
+- **Carte des vols** : un arc par trajet entre départ et arrivée, plus épais quand le trajet est volé souvent, un point par aéroport. Les coordonnées viennent du premier et du dernier point de la trajectoire de chaque vol (pas besoin de l'import OurAirports) ; un vol sans trajectoire n'est pas dessiné. Une route API dédiée renvoie les trajets agrégés (`GET /v1/pilots/{handle}/routes`), pas les trajectoires complètes : la page reste légère quel que soit le nombre de vols.
 
 **Vol public** (`/pilots/{handle}/flights/{id}`) : la page de vol existante (carte colorée par phase, profil vertical, phases, atterrissage, journal), en lecture seule, avec un lien vers le profil. Le vol doit appartenir au pilote de l'adresse, sinon 404.
 
-**Réglages** (`/settings/profile`, connecté) : interrupteur, pseudo d'adresse, pays, niveau, identifiants VATSIM, IVAO et SimBrief, lien « Voir mon profil public », rappel de ce qui est public. Ces champs sont gardés même profil désactivé (ils ne sont alors montrés à personne). Nouvelle entrée « Profil public » dans le menu.
+**Réglages** (`/settings/profile`, connecté) : interrupteur, pseudo d'adresse, photo (envoyer, remplacer, retirer), pays, niveau, identifiants VATSIM, IVAO et SimBrief, lien « Voir mon profil public », rappel de ce qui est public. Ces champs sont gardés même profil désactivé (ils ne sont alors montrés à personne). Nouvelle entrée « Profil public » dans le menu.
 
 **Champs saisis par le pilote** (tous facultatifs) :
 
@@ -82,6 +82,14 @@ Règles :
 | SimBrief | Nom d'utilisateur ou identifiant de pilote, 1 à 32 caractères `A-Z a-z 0-9 _ . -` | Jamais public (import du plan de vol par le tracker, plus tard) |
 
 Les adresses VATSIM et IVAO sont construites par le site à partir de l'identifiant, jamais saisies : aucun lien arbitraire sur une page publique.
+
+**Photo** :
+
+- Envoi par le pilote depuis ses réglages : JPEG, PNG ou WebP, 5 Mo au plus. L'API vérifie le vrai format du fichier (pas son nom), le recadre en carré, le réduit à 256 × 256 et le réencode en WebP : les métadonnées (position GPS de l'appareil photo, etc.) disparaissent au passage.
+- Stockée dans PostgreSQL (une vingtaine de Ko par pilote), comme les trajectoires ; pas de stockage de fichiers à installer pour l'instant. À déplacer vers un stockage compatible S3 si le volume le demande [Confiance moyenne].
+- Servie par l'API (`GET /v1/pilots/{handle}/photo`), seulement si le profil est public ; le pilote voit toujours la sienne.
+- Bibliothèque de traitement d'image : `sharp` (licence Apache 2.0), la référence sous Node.js.
+- **Modération** : pas de vérification automatique en J4. Les conditions d'utilisation (à rédiger, jalon J4) interdiront une image choquante ou le visage d'un tiers sans accord ; un bouton « signaler » et le retrait par Weems viendront avec la mise en ligne publique [Confiance moyenne : suffisant pour des testeurs connus, pas pour une inscription libre].
 
 Textes en français et en anglais, comme le reste du site.
 
@@ -105,6 +113,9 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | `GET /v1/pilots/{handle}` | Public | Profil et statistiques |
 | `GET /v1/pilots/{handle}/flights` | Public | Vols publics, par pages (même curseur que `/v1/flights`) |
 | `GET /v1/pilots/{handle}/flights/{id}` et `…/track` | Public | Vol public et trajectoire simplifiée |
+| `GET /v1/pilots/{handle}/routes` | Public | Trajets agrégés pour la carte (départ, arrivée, coordonnées, nombre de vols) |
+| `PUT` et `DELETE /v1/me/profile/photo` | Pilote connecté | Envoyer ou retirer sa photo |
+| `GET /v1/pilots/{handle}/photo` | Public | Photo en WebP 256 × 256 |
 | `GET /v1/pilots` | Public | Profils activés et date de mise à jour, pour le plan du site |
 
 - Base : nouvelle table `pilot_profiles` (compte, pseudo d'adresse unique, activé oui ou non, pays, niveau, identifiants VATSIM, IVAO et SimBrief, dates d'activation, de désactivation et de mise à jour), et une colonne `hidden_on_profile` sur `flights` (faux par défaut). On ne touche pas aux tables de Better Auth.
@@ -130,6 +141,8 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | Aucune donnée privée | La réponse publique ne contient ni e-mail, ni identifiant de compte, ni version du tracker (test sur le contenu brut) |
 | Pseudo d'adresse | Invalide ou réservé : 422 ; déjà pris : 409 ; deux demandes simultanées : une seule gagne |
 | Champs saisis | Pays, niveau, VATSIM, IVAO ou SimBrief hors format : 422 ; SimBrief absent de la réponse publique |
+| Photo | Fichier qui n'est pas une image ou trop lourd : 422 ; image rendue en WebP 256 × 256 sans métadonnées ; 404 si le profil est désactivé |
+| Carte | Les trajets regroupent les vols dans les deux sens séparément ; vols masqués et sans trajectoire exclus |
 | Droits | Masquer le vol d'un autre pilote : 404 |
 | Site | Test navigateur : activer, ouvrir le profil sans session, désactiver, 404 |
 | Référencement | Le plan du site liste les profils activés seulement ; les pages connectées portent `noindex` |
@@ -148,6 +161,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | Granularité | Un interrupteur pour le profil, plus « masquer ce vol » | Tout ou rien : un vol raté pousserait à tout fermer ; vol par vol à activer : trop de clics, profils vides |
 | Vols en cours | Jamais sur le profil | Les montrer : suivi d'une personne en temps réel, et dépend du chantier du direct |
 | Référencement | Profil activé = référencé, sans réglage séparé | Case « ne pas référencer » : une option de plus pour un gain faible ; ajoutable plus tard |
-| Photo | Avatar à initiales en v1, photo plus tard | Photo tout de suite : stockage de fichiers, redimensionnement, modération (visage d'un tiers, image choquante) |
+| Photo | Dans la v1 (choix de Greg), stockée dans PostgreSQL, réduite et nettoyée par l'API | Stockage de fichiers S3 dès maintenant : un service de plus à faire tourner pour une vingtaine de Ko par pilote |
+| Carte des vols | Arcs départ → arrivée à partir des trajectoires | Toutes les trajectoires sur la carte : des milliers de points par vol, page lourde |
 | Niveau | Déclaré par le pilote en v1 ; heures par catégorie quand le catalogue des avions existera | Heures par catégorie tout de suite : demande de classer chaque avion de MSFS |
 | Statistiques | Calculées à la demande | Stockées à la clôture : plus rapide, mais une migration et un recalcul en plus, inutiles à ce volume |
