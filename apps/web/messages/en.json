@@ -221,7 +221,24 @@
     "title": "My public profile",
     "intro": "A page anyone can see and search engines can find. Off until you turn it on.",
     "view": "View my public page",
-    "information": "Information",
+    "sections": {
+      "publication": {
+        "title": "Publication",
+        "about": "What makes your page visible to everyone."
+      },
+      "identity": {
+        "title": "Identity",
+        "about": "What visitors see at the top of your page."
+      },
+      "networks": {
+        "title": "Networks",
+        "about": "Links shown on your page, to your profiles elsewhere."
+      },
+      "private": {
+        "title": "Private",
+        "about": "Never shown on your page, used by Weems only."
+      }
+    },
     "save": {
       "button": "Save",
       "saved": "Saved.",
@@ -239,14 +256,15 @@
         "simbriefId": "Invalid SimBrief id.",
         "instagram": "Instagram account: the account name or the link to your profile.",
         "facebook": "Facebook account: the account name or the link to your profile."
-      }
+      },
+      "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}"
     },
     "publication": {
-      "title": "Publication",
       "switch": "Make my page public",
       "since": "Published on {date}",
       "off": "Off: nobody can see your page.",
-      "consent": "I agree that my handle, photo, country, statistics and flights not hidden are visible to everyone and indexed by search engines. I can turn my page off at any time: it disappears at once."
+      "consent": "I agree that my handle, photo, country, statistics and flights not hidden are visible to everyone and indexed by search engines. I can turn my page off at any time: it disappears at once.",
+      "page": "Public page"
     },
     "handle": {
       "label": "Address of my page",
@@ -261,7 +279,7 @@
       "saveFirst": "Save the new address first",
       "offline": "Publish your page and save to share it",
       "changing": "The old address <b>{handle}</b> will stop working when you save.",
-      "validate": "Save"
+      "validate": "Save the address"
     },
     "handleChange": {
       "title": "Change the address of your page?",
@@ -285,7 +303,7 @@
       "country": "Country",
       "none": "Not specified",
       "homeIcao": "Home airport",
-      "homeIcaoHelp": "ICAO code, 4 letters",
+      "homeIcaoHelp": "4-letter ICAO code, for example EGLL.",
       "level": "Level",
       "levelHelp": "Declared by you, not checked.",
       "vatsimId": "VATSIM id",
@@ -297,7 +315,10 @@
       "facebook": "Facebook account",
       "facebookHelp": "Public, with a link to your account. Name or profile link",
       "simbriefId": "SimBrief id",
-      "simbriefHelp": "Never shown: will later be used to read your flight plans"
+      "simbriefHelp": "Never shown. Will later be used to read your flight plans.",
+      "countryHelp": "Shown with your flag.",
+      "noCountry": "No country found",
+      "private": "Private"
     },
     "visible": {
       "title": "What is visible",

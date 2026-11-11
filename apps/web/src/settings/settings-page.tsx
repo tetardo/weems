@@ -11,7 +11,7 @@ import { PhotoField } from "./photo-field.tsx";
 import { ProfileForm } from "./profile-form.tsx";
 import { VisiblePanel } from "./visible-panel.tsx";
 
-/** The /settings/profile page (spec J4): publication and information, then what is visible. */
+/** The /settings/profile page (spec J4): the form in its cards, what is visible and hidden on the right. */
 export function SettingsPage({
   profile,
   hidden,
