@@ -5,7 +5,9 @@ export function ApiDown({ url }: { url: string }) {
   const t = useTranslations("Flights");
   return (
     <main className="p-4">
-      <p className="rounded bg-amber-50 p-3 text-amber-900">{t("apiDown", { url })}</p>
+      <p className="rounded-md border-l-4 border-accent-2 bg-accent-2/14 px-3 py-2">
+        {t("apiDown", { url })}
+      </p>
     </main>
   );
 }

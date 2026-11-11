@@ -7,9 +7,7 @@
       "flights": "Mes vols"
     },
     "language": "English",
-    "notMeasured": "non mesuré",
-    "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu"
+    "notMeasured": "non mesuré"
   },
   "Live": {
     "title": "Carte en direct",

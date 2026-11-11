@@ -17,14 +17,14 @@ export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: 
     [t("fields.groundSpeed"), `${number(position.gs)} kt`],
   ];
   return (
-    <aside className="absolute top-3 right-3 w-60 rounded-lg bg-white p-3 shadow-md">
+    <aside className="absolute top-3 right-3 w-60 rounded-2xl border border-line bg-surface p-3 shadow-[0_8px_24px_rgb(0_0_0/.18)]">
       <div className="flex items-baseline justify-between">
         <strong className="text-lg">{flight.callsign}</strong>
         <button type="button" onClick={onClose} aria-label={t("close")}>
           ×
         </button>
       </div>
-      {flight.signal === "lost" && <p className="my-1 text-amber-800">{t("signalLost")}</p>}
+      {flight.signal === "lost" && <p className="my-1 text-accent-2">{t("signalLost")}</p>}
       <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
         {rows.map(([label, value]) => (
           <div key={label} className="contents">

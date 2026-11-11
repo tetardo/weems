@@ -7,9 +7,7 @@
       "flights": "My flights"
     },
     "language": "Français",
-    "notMeasured": "not measured",
-    "openMenu": "Open the menu",
-    "closeMenu": "Close the menu"
+    "notMeasured": "not measured"
   },
   "Live": {
     "title": "Live map",

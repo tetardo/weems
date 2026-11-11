@@ -1,6 +1,4 @@
-import { mdiAccountCircle } from "@mdi/js";
 import { getTranslations } from "next-intl/server";
-import { Icon } from "../ui/icon.tsx";
 import { currentPilot } from "./server-session.ts";
 import { SignOutButton } from "./sign-out-button.tsx";
 
@@ -11,9 +9,14 @@ export async function PilotMenu() {
   const t = await getTranslations("Auth");
   return (
     <>
-      <span className="flex items-center gap-2 px-3" title={pilot.name}>
-        <Icon path={mdiAccountCircle} size={22} />
-        <span className="hidden sm:inline">{pilot.name}</span>
+      <span className="flex max-w-56 items-center gap-2 px-2" title={pilot.name}>
+        <span
+          aria-hidden="true"
+          className="grid size-7 flex-none place-items-center rounded-full bg-accent-2 text-xs font-bold text-on-accent"
+        >
+          {pilot.name.slice(0, 1).toUpperCase()}
+        </span>
+        <span className="truncate max-sm:hidden">{pilot.name}</span>
       </span>
       <SignOutButton label={t("signOut")} />
     </>

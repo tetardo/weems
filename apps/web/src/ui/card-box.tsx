@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-/** White rounded block of the Admin One template. `flush`: no inner padding (tables). */
+/** Panel of the GameLab pages (.gl-panel): surface, thin border, 16 px corners. `flush`: no padding (tables). */
 export function CardBox({
   children,
   flush = false,
@@ -11,6 +11,10 @@ export function CardBox({
   className?: string;
 }) {
   return (
-    <div className={`rounded-2xl bg-white ${flush ? "" : "p-6"} ${className}`}>{children}</div>
+    <div
+      className={`rounded-2xl border border-line bg-surface ${flush ? "overflow-hidden" : "px-6 py-5"} ${className}`}
+    >
+      {children}
+    </div>
   );
 }
