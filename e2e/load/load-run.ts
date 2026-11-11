@@ -26,9 +26,12 @@ const TRACKER_VERSION = "0.1.0";
 const FROZEN_AFTER_MS = 20_000;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** Empties the development pilot's flights, live map included, so runs do not add up. */
+/**
+ * Empties the development pilot's simulated flights, live map included, so runs do not add up.
+ * Real flights of `pnpm fly` (same pilot) are kept.
+ */
 async function clearFlights({ baseUrl, token }: LoadOptions): Promise<void> {
-  const response = await fetch(new URL("/v1/flights", baseUrl), {
+  const response = await fetch(new URL("/v1/flights?simulator=replay", baseUrl), {
     method: "DELETE",
     headers: { authorization: `Bearer ${token}`, "weems-client": `tracker/${TRACKER_VERSION}` },
   });

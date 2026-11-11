@@ -148,7 +148,16 @@ export class FlightSession {
 
   /** Manual close by the pilot (EF-12). */
   closeManually(): void {
-    if (this.stateValue === "flying" && this.lastSample) this.close(this.lastSample.t, "manual");
+    this.closeAtLastSample("manual");
+  }
+
+  /** Stopped from outside before its end (simulation stopped from the admin console). */
+  interrupt(): void {
+    this.closeAtLastSample("interrupted");
+  }
+
+  private closeAtLastSample(reason: "manual" | "interrupted"): void {
+    if (this.stateValue === "flying" && this.lastSample) this.close(this.lastSample.t, reason);
   }
 
   private open(sample: Sample): void {
