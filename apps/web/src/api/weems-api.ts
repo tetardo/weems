@@ -6,7 +6,7 @@ import {
   TrackView,
 } from "@weems/contrats";
 import { redirect } from "next/navigation";
-import type { z } from "zod";
+import { z } from "zod";
 import { forwardedCookies } from "../auth/server-session.ts";
 import { serverApiUrl } from "../site/api-url.ts";
 
@@ -19,6 +19,16 @@ export class ApiUnavailable extends Error {
   }
 }
 
+type Write = { method: "PUT" | "DELETE"; body?: unknown };
+
+/** Fetch options of a request: GET by default, JSON body when there is one. */
+async function requestInit(write?: Write): Promise<RequestInit> {
+  const headers: Record<string, string> = { cookie: await forwardedCookies() };
+  const body = write?.body === undefined ? null : JSON.stringify(write.body);
+  if (body !== null) headers["content-type"] = "application/json";
+  return { method: write?.method ?? "GET", headers, body, cache: "no-store" };
+}
+
 /**
  * A request to the API from the site's server, as the logged-in pilot (session cookie forwarded).
  * Null when the resource does not exist or is another pilot's (404); expired session → login page.
@@ -26,26 +36,20 @@ export class ApiUnavailable extends Error {
 async function request<T extends z.ZodType>(
   path: string,
   schema: T,
-  write?: { method: "PUT"; body: unknown },
+  write?: Write,
 ): Promise<z.infer<T> | null> {
   const url = serverApiUrl();
-  const headers: Record<string, string> = { cookie: await forwardedCookies() };
-  if (write) headers["content-type"] = "application/json";
   let response: Response;
   try {
-    response = await fetch(`${url}${path}`, {
-      method: write?.method ?? "GET",
-      headers,
-      body: write ? JSON.stringify(write.body) : null,
-      cache: "no-store",
-    });
+    response = await fetch(`${url}${path}`, await requestInit(write));
   } catch (error) {
     throw new ApiUnavailable(url, error);
   }
   if (response.status === 401) redirect("/login");
   if (response.status === 404) return null;
   if (!response.ok) throw new ApiUnavailable(url, new Error(`HTTP ${response.status}`));
-  return schema.parse(await response.json());
+  // 204 No Content (a deletion): nothing to read.
+  return schema.parse(response.status === 204 ? null : await response.json());
 }
 
 const get = <T extends z.ZodType>(path: string, schema: T) => request(path, schema);
@@ -77,4 +81,9 @@ export function saveReview(
     method: "PUT",
     body: review,
   });
+}
+
+/** Development only: deletes all the pilot's flights (the API refuses it in production). */
+export async function deleteAllFlights(): Promise<void> {
+  await request("/v1/flights", z.null(), { method: "DELETE" });
 }

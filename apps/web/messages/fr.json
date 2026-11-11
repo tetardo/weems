@@ -101,7 +101,10 @@
     },
     "next": "Vols plus anciens",
     "first": "Retour aux plus récents",
-    "apiDown": "L'API ne répond pas ({url}). Est-elle lancée sur le Mac ?"
+    "apiDown": "L'API ne répond pas ({url}). Est-elle lancée sur le Mac ?",
+    "deleteAll": "Supprimer tous mes vols",
+    "deleteAllConfirm": "Supprimer définitivement tous vos vols ? (outil de développement)",
+    "deleteAllHint": "Développement seulement : vide la liste des vols de test."
   },
   "Flight": {
     "back": "Mes vols",

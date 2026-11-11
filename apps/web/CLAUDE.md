@@ -25,7 +25,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 - Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.
 - Les pages de vol sont rendues côté serveur : le serveur du site appelle l'API (`WEEMS_API_URL`) en lui transmettant le cookie de session du pilote ; seule la carte en direct appelle l'API depuis le navigateur.
 - Connexion (J3) : `src/proxy.ts` relaie `/api/auth/*` vers l'API (Better Auth), pour que le cookie de session soit celui du site. Sans ce cookie, toute page renvoie vers `/login?next=…`. L'API vérifie le cookie à chaque appel : le proxy ne fait que regarder s'il est présent.
-- En développement : `pilote@weems.local` / `weems-dev-password` (propriétaire des vols de `pnpm simulate`).
+- En développement : `pilote@weems.local` / `weems-dev-password` (propriétaire des vols de `pnpm simulate`). Sous `pnpm dev` seulement, « Mes vols » montre un bouton « Supprimer tous mes vols » (`flights/delete-all-button.tsx`) pour vider les vols de test ; il n'existe pas dans la version construite.
 
 ## Organisation
 

@@ -9,5 +9,6 @@ export {
   type LucideIcon as IconComponent,
   Menu as MenuIcon,
   Radar as LiveIcon,
+  Trash2 as DeleteIcon,
   X as CloseIcon,
 } from "lucide-react";
