@@ -10,7 +10,8 @@
     "typecheck": "tsc -p tsconfig.json",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node src/db/migrate-cli.ts",
-    "invite": "node --env-file-if-exists=.env src/modules/accounts/invite-cli.ts"
+    "invite": "node --env-file-if-exists=.env src/modules/accounts/invite-cli.ts",
+    "alpha-report": "node --env-file-if-exists=.env src/modules/alpha/report-cli.ts"
   },
   "dependencies": {
     "@better-auth/oauth-provider": "1.7.20",

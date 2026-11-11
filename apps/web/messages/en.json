@@ -154,6 +154,17 @@
     "score": {
       "title": "Score",
       "later": "The score comes with flight scoring."
+    },
+    "review": {
+      "title": "Phase check",
+      "question": "Are the phases detected by the tracker right for this flight?",
+      "correct": "Yes, all right",
+      "wrong": "No, at least one is wrong",
+      "note": "If not, which one and why (optional)",
+      "send": "Send",
+      "saved": "Thanks, answer saved.",
+      "error": "Answer not saved, please try again.",
+      "already": "You already answered: you can change it."
     }
   },
   "Auth": {
