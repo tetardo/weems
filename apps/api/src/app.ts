@@ -16,6 +16,7 @@ import { registerFlightRoutes } from "./modules/flights/routes.ts";
 import { FlightsService } from "./modules/flights/service.ts";
 import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
+import { registerDevLiveRoutes } from "./modules/live/dev-routes.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
 import { ProfilesRepository } from "./modules/profiles/repository.ts";
 import { PublicProfilesService } from "./modules/profiles/public-service.ts";
@@ -82,6 +83,7 @@ export async function buildApp({
   registerProfileRoutes(app, new ProfilesService(profiles, flights, accounts), guards);
   registerPublicProfileRoutes(app, new PublicProfilesService(profiles, flights, tracks, accounts));
   registerLiveRoutes(app, stream);
+  if (config.env !== "production") registerDevLiveRoutes(app, board, stream);
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());
 

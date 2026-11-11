@@ -62,3 +62,4 @@ export {
   TOUCHDOWN_BUCKETS_FPM,
   VatsimId,
 } from "./api/profiles.ts";
+export { DevMetrics } from "./api/dev-metrics.ts";
