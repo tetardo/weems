@@ -69,4 +69,15 @@ export const flightTracks = pgTable("flight_tracks", {
   simplified: jsonb("simplified").$type<unknown[]>().notNull(),
   receivedAt: utc("received_at").notNull(),
 });
+/** The pilot's check of the phases of a flight (J3 alpha): one per flight, the latest wins. */
+export const flightReviews = pgTable("flight_reviews", {
+  flightId: uuid("flight_id")
+    .primaryKey()
+    .references(() => flights.id),
+  /** "correct" or "wrong". */
+  phases: text("phases").notNull(),
+  note: text("note").notNull(),
+  reviewedAt: utc("reviewed_at").notNull(),
+});
+
 export * from "./auth-schema.ts";

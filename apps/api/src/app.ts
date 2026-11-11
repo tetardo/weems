@@ -15,6 +15,9 @@ import { FlightsService } from "./modules/flights/service.ts";
 import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
+import { ReviewsRepository } from "./modules/reviews/repository.ts";
+import { registerReviewRoutes } from "./modules/reviews/routes.ts";
+import { ReviewsService } from "./modules/reviews/service.ts";
 import { PostgresTrackStore } from "./modules/tracks/repository.ts";
 import { registerTrackRoutes } from "./modules/tracks/routes.ts";
 import { TracksService } from "./modules/tracks/service.ts";
@@ -58,6 +61,11 @@ export async function buildApp({
   registerFlightRoutes(app, flights, guards);
   const tracks = new TracksService(new PostgresTrackStore(database.db), flights);
   registerTrackRoutes(app, tracks, guards);
+  registerReviewRoutes(
+    app,
+    new ReviewsService(new ReviewsRepository(database.db), flights),
+    guards,
+  );
   registerLiveRoutes(app, stream);
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());
