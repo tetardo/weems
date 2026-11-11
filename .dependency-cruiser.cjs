@@ -81,7 +81,7 @@ module.exports = {
   ],
   options: {
     doNotFollow: { path: "node_modules" },
-    exclude: { path: "(node_modules|dist|coverage)/" },
+    exclude: { path: "(node_modules|dist|coverage|\\.next|apps/web/public)/" },
     tsPreCompilationDeps: true,
     tsConfig: { fileName: "tsconfig.base.json" },
     enhancedResolveOptions: {
