@@ -3,7 +3,7 @@
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
 J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
-J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans l'en-tête ; la page de connexion sert aussi au tracker (OAuth).
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look Admin One ; la page de connexion sert aussi au tracker (OAuth).
 
 ## Où trouver quoi
 
@@ -19,7 +19,8 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 
 - Next.js (App Router), React, TypeScript strict.
 - Traductions : `next-intl`, textes dans `messages/fr.json` et `messages/en.json`, jamais écrits en dur ; un test vérifie que les deux fichiers ont les mêmes clés.
-- Mise en forme : Tailwind CSS 4 (`src/app/global.css`), sobre jusqu'à J4.
+- Mise en forme : Tailwind CSS 4 (`src/app/global.css`), look du modèle Admin One React (choix de Greg, J3) : seuls les composants utiles sont recopiés dans `src/ui/` et `src/site/`, sans Redux ni pages de démonstration. Mention de licence : `NOTICE.md`. Icônes : `@mdi/js`.
+- Ne pas ajouter de bibliothèque de gestion d'état (Redux…) : les données viennent du serveur, les filtres sont dans l'adresse, le reste reste dans le composant.
 - Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé).
 - Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.
 - Les pages de vol sont rendues côté serveur : le serveur du site appelle l'API (`WEEMS_API_URL`) en lui transmettant le cookie de session du pilote ; seule la carte en direct appelle l'API depuis le navigateur.
@@ -32,11 +33,14 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 messages/              textes en français et en anglais
 src/
   app/[locale]/        routes Next.js (pages et mise en page), sans logique
+    (app)/               pages du pilote connecté, dans le cadre menu latéral + barre du haut
+    (auth)/              connexion et inscription, carte sur fond dégradé
   proxy.ts             relais /api/auth vers l'API, connexion obligatoire, langue dans l'adresse (/ → /fr)
   i18n/                langues, chargement des textes, liens qui gardent la langue
   api/weems-api.ts     appels à l'API depuis le serveur du site (liste, vol, trajectoire), en tant que pilote connecté
   auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion
-  site/                en-tête, choix de la langue, adresse de l'API, API injoignable
+  site/                cadre des pages (app-shell, menu latéral, barre du haut), choix de la langue, adresse de l'API, API injoignable
+  ui/                  composants visuels repris d'Admin One : icône, carte, bouton, champ, titre de section
   map/base-map.ts      carte MapLibre commune (fond OpenFreeMap, fond de secours sans réseau)
   format/              durées h:mm, trajet, heure UTC
   flights/             liste des vols : filtres (list-query.ts), tableau, pastilles, état

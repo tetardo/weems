@@ -9,7 +9,11 @@ export function LanguageSwitch({ other, label }: { other: Locale; label: string 
   const pathname = usePathname();
   const query = Object.fromEntries(useSearchParams());
   return (
-    <Link href={{ pathname, query }} locale={other} className="ml-auto text-muted">
+    <Link
+      href={{ pathname, query }}
+      locale={other}
+      className="flex items-center px-3 hover:text-blue-500"
+    >
       {label}
     </Link>
   );

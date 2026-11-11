@@ -13,6 +13,7 @@
     "typecheck": "next typegen && tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@mdi/js": "7.4.47",
     "@weems/contrats": "workspace:*",
     "maplibre-gl": "6.17.0",
     "next": "16.4.6",

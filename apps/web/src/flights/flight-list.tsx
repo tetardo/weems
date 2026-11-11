@@ -1,6 +1,10 @@
 import type { FlightList as FlightListData } from "@weems/contrats";
 import { useTranslations } from "next-intl";
+import { mdiBookOpenPageVariant } from "@mdi/js";
 import { Link } from "../i18n/navigation.ts";
+import { CardBox } from "../ui/card-box.tsx";
+import { SectionMain } from "../ui/section-main.tsx";
+import { SectionTitle } from "../ui/section-title.tsx";
 import { FlightFilters } from "./flight-filters.tsx";
 import { FlightTable } from "./flight-table.tsx";
 import { type ListFilters, withoutCursor } from "./list-query.ts";
@@ -11,29 +15,36 @@ export function FlightList({ list, filters }: { list: FlightListData; filters: L
   const kept = withoutCursor(filters);
   const filtered = Object.keys(kept).length > 0;
   return (
-    <main className="mx-auto w-full max-w-6xl p-4">
-      <h1 className="mb-3 text-xl font-semibold">{t("title")}</h1>
+    <SectionMain>
+      <SectionTitle icon={mdiBookOpenPageVariant} title={t("title")} main />
       <FlightFilters filters={filters} />
       {list.flights.length === 0 ? (
-        <p className="text-muted">{filtered ? t("emptyFiltered") : t("empty")}</p>
+        <CardBox>
+          <p className="text-gray-500">{filtered ? t("emptyFiltered") : t("empty")}</p>
+        </CardBox>
       ) : (
-        <FlightTable flights={list.flights} />
+        <CardBox flush>
+          <FlightTable flights={list.flights} />
+        </CardBox>
       )}
       <nav className="mt-4 flex gap-4 text-sm">
         {filters.cursor && (
-          <Link href={{ pathname: "/flights", query: { ...kept } }} className="underline">
+          <Link
+            href={{ pathname: "/flights", query: { ...kept } }}
+            className="text-blue-600 hover:underline"
+          >
             {t("first")}
           </Link>
         )}
         {list.nextCursor && (
           <Link
             href={{ pathname: "/flights", query: { ...kept, cursor: list.nextCursor } }}
-            className="underline"
+            className="text-blue-600 hover:underline"
           >
             {t("next")}
           </Link>
         )}
       </nav>
-    </main>
+    </SectionMain>
   );
 }

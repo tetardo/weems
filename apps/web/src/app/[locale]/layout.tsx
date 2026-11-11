@@ -4,7 +4,6 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 import { routing } from "../../i18n/routing.ts";
-import { SiteHeader } from "../../site/site-header.tsx";
 import "../global.css";
 
 interface Props {
@@ -32,11 +31,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale);
   return (
     <html lang={locale}>
-      <body className="flex min-h-full flex-col">
-        <NextIntlClientProvider>
-          <SiteHeader />
-          {children}
-        </NextIntlClientProvider>
+      <body className="min-h-full bg-gray-50 text-gray-800">
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

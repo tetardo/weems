@@ -20,6 +20,7 @@ const FALLBACK_STYLE: StyleSpecification = {
 /**
  * A MapLibre map on the Weems basemap; used by the live map and the flight page.
  * If the basemap does not load (no network, service down), it falls back to a plain background.
+ * Follows the size of its container, not only of the window (side menu, cards).
  */
 export function createBaseMap(
   container: HTMLElement,
@@ -30,5 +31,8 @@ export function createBaseMap(
   map.once("error", () => {
     if (!map.isStyleLoaded()) map.setStyle(FALLBACK_STYLE);
   });
+  const resize = new ResizeObserver(() => map.resize());
+  resize.observe(container);
+  map.once("remove", () => resize.disconnect());
   return map;
 }
