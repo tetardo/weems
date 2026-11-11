@@ -71,7 +71,7 @@ scripts/build-app.ts      regroupe l'application dans dist/app/ (esbuild) ; elec
 tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes, fleetOf(N) pour la charge (J4)
   airports/               aéroports de la flotte avec pistes et altitude (airports.json figé, extrait d'OurAirports)
   navigation/             navigateur par segments, virages, plan de route (pistes, arrivée, circuit), profil vertical
-                          (fiche docs/decisions/006) ; flight-script.ts avance l'avion selon son cap et sa vitesse
+                          (fiche docs/decisions/010) ; flight-script.ts avance l'avion selon son cap et sa vitesse
 tools/simulate/           J1 : N trackers sans interface dans un seul processus
 tools/fly/                J2 : tracker sans interface sur le PC Windows (même assemblage que l'app : src/runtime/msfs-tracker.ts)
 ```

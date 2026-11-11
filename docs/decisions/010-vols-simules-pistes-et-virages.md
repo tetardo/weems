@@ -1,4 +1,4 @@
-# 006 — Vols simulés : pistes réelles, virages et pente de 3°
+# 010 — Vols simulés : pistes réelles, virages et pente de 3°
 
 Date : 11/11/2026. Choisi par Greg (options 1 + 2 de la proposition « Rendre les vols simulés plus réalistes »).
 
@@ -35,7 +35,7 @@ L'avion avance selon son cap et sa vitesse sol. Un navigateur lui donne le cap �
 - **altitudes** : altitude au-dessus de la mer = terrain + hauteur, le terrain passant de l'altitude du seuil de départ à celle du seuil d'arrivée, sur laquelle la pente de 3° est calée ;
 - **toucher** : taux de chute tiré par la graine (−60 à −700 ft/min, la plupart sous −300), enregistré sur l'échantillon du toucher, puis zéro au sol.
 
-![Avant / après sur la flotte J1](img/006-vols-simules-avant-apres.png)
+![Avant / après sur la flotte J1](img/010-vols-simules-avant-apres.png)
 
 ## Conséquences
 

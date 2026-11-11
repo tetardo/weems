@@ -138,7 +138,7 @@ Un fichier JSON Lines (une ligne JSON par objet). Format provisoire : le point 3
 - **Sortie** : un fichier de rejeu.
 - **Déterministe** : même scénario et même graine donnent exactement le même fichier, donc des tests reproductibles.
 - **Cinématique simple**, pas une simulation de vol : profils de vitesse et d'altitude plausibles, avec un léger bruit. Suffisant pour tester les phases et la chaîne ; les seuils fins se caleront sur les vrais vols (T1, puis bêta).
-- **Tracé plausible** (fiche [006](../../decisions/006-vols-simules-pistes-et-virages.md)) : pistes réelles d'OurAirports, roulage et décollage dans l'axe, virages au taux standard, orthodromie, arrivée simplifiée et finale alignée, descente sur une pente de 3°, circuit après une remise des gaz.
+- **Tracé plausible** (fiche [010](../../decisions/010-vols-simules-pistes-et-virages.md)) : pistes réelles d'OurAirports, roulage et décollage dans l'axe, virages au taux standard, orthodromie, arrivée simplifiée et finale alignée, descente sur une pente de 3°, circuit après une remise des gaz.
 - La liste des 20 scénarios de référence reste le point 3 de la spec T0, à faire avec un pilote ; le générateur doit savoir produire toutes les perturbations ci-dessus.
 
 ## 7. Application Electron
