@@ -90,6 +90,24 @@ describe("own profile settings (spec J4)", () => {
     ).toBe(400);
   });
 
+  it("answers the same to an identical re-send, and keeps the first publication date", async () => {
+    const { pilot, handle } = await publicPilot();
+    const first = await saveProfile(pilot, { isPublic: true, handle });
+    const again = await saveProfile(pilot, { isPublic: true, handle });
+    expect(again.statusCode).toBe(200);
+    expect(again.json()).toEqual(first.json());
+    const flightId = await fly(pilot);
+    const hide = () =>
+      app.inject({
+        method: "PUT",
+        url: `/v1/flights/${flightId}/visibility`,
+        headers: { cookie: pilot.cookie },
+        payload: { hiddenOnProfile: true },
+      });
+    expect((await hide()).statusCode).toBe(200);
+    expect((await hide()).json()).toEqual({ hiddenOnProfile: true });
+  });
+
   it("keeps the consent dates: published, then taken down", async () => {
     const { pilot, handle } = await publicPilot();
     const down = await saveProfile(pilot, { handle, isPublic: false });
