@@ -28,6 +28,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-## Material Design Icons (`@mdi/js`), licence Apache 2.0
+## Lucide (`lucide-react`), licence ISC
 
-Icônes du menu et de la barre du haut, via le paquet npm `@mdi/js` (licence incluse dans le paquet).
+Icônes du site, via le paquet npm `lucide-react` (licence incluse dans le paquet), importées seulement dans `src/ui/icons.ts`.

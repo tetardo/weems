@@ -5,6 +5,7 @@ import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { createBaseMap } from "../map/base-map.ts";
+import { currentMapTheme, type MapTheme } from "../map/map-theme.ts";
 import { nearestIndex } from "./profile-geometry.ts";
 import { bounds, endpoints, phaseLines } from "./track-geojson.ts";
 
@@ -20,7 +21,7 @@ const LINES = "track";
 const ENDS = "track-ends";
 const CURSOR = "track-cursor";
 
-function addTrackLayers(map: MapLibreMap, points: readonly TrackPoint[]): void {
+function addTrackLayers(map: MapLibreMap, points: readonly TrackPoint[], theme: MapTheme): void {
   map.addSource(LINES, { type: "geojson", data: phaseLines(points) });
   map.addLayer({
     id: LINES,
@@ -37,7 +38,7 @@ function addTrackLayers(map: MapLibreMap, points: readonly TrackPoint[]): void {
     paint: {
       "circle-radius": 6,
       "circle-color": ["match", ["get", "kind"], "departure", "#2f855a", "#9b2c2c"],
-      "circle-stroke-color": "#ffffff",
+      "circle-stroke-color": theme.halo,
       "circle-stroke-width": 2,
     },
   });
@@ -48,8 +49,8 @@ function addTrackLayers(map: MapLibreMap, points: readonly TrackPoint[]): void {
     source: CURSOR,
     paint: {
       "circle-radius": 7,
-      "circle-color": "#14273a",
-      "circle-stroke-color": "#ffffff",
+      "circle-color": theme.ink,
+      "circle-stroke-color": theme.halo,
       "circle-stroke-width": 2,
     },
   });
@@ -82,12 +83,14 @@ export function TrackMap({ points, selected, onSelect }: Props) {
   useEffect(() => {
     const frame = bounds(points);
     if (!container.current || !frame) return;
-    const instance = createBaseMap(container.current, {
-      bounds: frame,
-      fitBoundsOptions: { padding: 40 },
-    });
+    const theme = currentMapTheme();
+    const instance = createBaseMap(
+      container.current,
+      { bounds: frame, fitBoundsOptions: { padding: 40 } },
+      theme,
+    );
     map.current = instance;
-    instance.on("load", () => addTrackLayers(instance, points));
+    instance.on("load", () => addTrackLayers(instance, points, theme));
     instance.on("mousemove", (event) => select.current(pointUnder(instance, points, event)));
     instance.on("mouseout", () => select.current(null));
     return () => instance.remove();

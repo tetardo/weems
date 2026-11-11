@@ -1,11 +1,11 @@
-import { mdiBookOpenPageVariantOutline, mdiRadar } from "@mdi/js";
+import { FlightsIcon, type IconComponent, LiveIcon } from "../ui/icons.ts";
 
 /** One entry of the side menu: a page of the site. */
 export interface MenuItem {
   readonly href: string;
   /** Key of the label in Site.nav. */
   readonly label: string;
-  readonly icon: string;
+  readonly icon: IconComponent;
 }
 
 /**
@@ -13,6 +13,6 @@ export interface MenuItem {
  * « Ma compagnie » from lot 3, « Compte »), is on the mock-up branch mock/gamelab-menus.
  */
 export const MENU: readonly MenuItem[] = [
-  { href: "/flights", label: "flights", icon: mdiBookOpenPageVariantOutline },
-  { href: "/live", label: "live", icon: mdiRadar },
+  { href: "/flights", label: "flights", icon: FlightsIcon },
+  { href: "/live", label: "live", icon: LiveIcon },
 ];

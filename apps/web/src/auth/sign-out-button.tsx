@@ -1,9 +1,8 @@
 "use client";
 
-import { mdiLogout } from "@mdi/js";
 import { useLocale } from "next-intl";
 import { buttonClass } from "../ui/button.tsx";
-import { Icon } from "../ui/icon.tsx";
+import { SignOutIcon } from "../ui/icons.ts";
 
 /** Ends the session on the API, then back to the login page. */
 export function SignOutButton({ label }: { label: string }) {
@@ -18,7 +17,7 @@ export function SignOutButton({ label }: { label: string }) {
   }
   return (
     <button type="button" onClick={signOut} className={buttonClass("ghost")} title={label}>
-      <Icon path={mdiLogout} size={20} />
+      <SignOutIcon size={20} aria-hidden="true" />
       <span className="hidden lg:inline">{label}</span>
     </button>
   );

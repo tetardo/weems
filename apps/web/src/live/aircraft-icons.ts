@@ -1,16 +1,17 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
+import type { MapTheme } from "../map/map-theme.ts";
 
 const SIZE = 32;
 
-/** Simple aircraft silhouette pointing north, drawn once per color. */
-function drawAircraft(color: string): ImageData {
+/** Simple aircraft silhouette pointing north, drawn once per color, outlined with `halo`. */
+function drawAircraft(color: string, halo: string): ImageData {
   const canvas = document.createElement("canvas");
   canvas.width = SIZE;
   canvas.height = SIZE;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas 2D unavailable");
   ctx.fillStyle = color;
-  ctx.strokeStyle = "#ffffff";
+  ctx.strokeStyle = halo;
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   // Fuselage, wings and tail, centred on (16, 16).
@@ -44,7 +45,7 @@ function drawAircraft(color: string): ImageData {
 export const ICON_OK = "aircraft-ok";
 export const ICON_LOST = "aircraft-lost";
 
-export function addAircraftIcons(map: MapLibreMap): void {
-  map.addImage(ICON_OK, drawAircraft("#1f5f99"), { pixelRatio: 1.4 });
-  map.addImage(ICON_LOST, drawAircraft("#9aa5b1"), { pixelRatio: 1.4 });
+export function addAircraftIcons(map: MapLibreMap, theme: MapTheme): void {
+  map.addImage(ICON_OK, drawAircraft(theme.aircraft, theme.halo), { pixelRatio: 1.4 });
+  map.addImage(ICON_LOST, drawAircraft(theme.aircraftLost, theme.halo), { pixelRatio: 1.4 });
 }

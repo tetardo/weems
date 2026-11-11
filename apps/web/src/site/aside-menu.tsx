@@ -1,10 +1,9 @@
 "use client";
 
-import { mdiClose } from "@mdi/js";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "../i18n/navigation.ts";
 import { buttonClass } from "../ui/button.tsx";
-import { Icon } from "../ui/icon.tsx";
+import { CloseIcon } from "../ui/icons.ts";
 import { Brand } from "./brand.tsx";
 import { MENU, type MenuItem } from "./menu-items.ts";
 
@@ -26,7 +25,7 @@ export function AsideMenu({ open, onClose }: { open: boolean; onClose: () => voi
           onClick={onClose}
           aria-label={t("closeMenu")}
         >
-          <Icon path={mdiClose} size={20} />
+          <CloseIcon size={20} aria-hidden="true" />
         </button>
       </div>
       <nav className="flex-1 overflow-y-auto p-3">
@@ -58,7 +57,7 @@ function MenuEntry({ item, onClose }: { item: MenuItem; onClose: () => void }) {
           : "text-muted hover:bg-accent/14 hover:text-ink"
       }`}
     >
-      <Icon path={item.icon} size={20} />
+      <item.icon size={20} aria-hidden="true" />
       {t(`nav.${item.label}`)}
     </Link>
   );

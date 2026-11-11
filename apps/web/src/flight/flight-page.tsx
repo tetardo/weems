@@ -1,9 +1,8 @@
-import { mdiArrowLeft } from "@mdi/js";
 import type { FlightReviewView, FlightView, TrackView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { Link } from "../i18n/navigation.ts";
 import { buttonClass } from "../ui/button.tsx";
-import { Icon } from "../ui/icon.tsx";
+import { BackIcon } from "../ui/icons.ts";
 import { SectionMain } from "../ui/section-main.tsx";
 import { EventLogTable } from "./event-log-table.tsx";
 import { FlightHeader } from "./flight-header.tsx";
@@ -30,7 +29,7 @@ export function FlightPage({
   return (
     <SectionMain>
       <Link href="/flights" className={`${buttonClass("ghost")} -ml-3 text-link`}>
-        <Icon path={mdiArrowLeft} size={20} />
+        <BackIcon size={20} aria-hidden="true" />
         {t("back")}
       </Link>
       <FlightHeader flight={flight} />

@@ -1,8 +1,8 @@
 import type { FlightList as FlightListData } from "@weems/contrats";
 import { useTranslations } from "next-intl";
-import { mdiBookOpenPageVariantOutline } from "@mdi/js";
 import { Link } from "../i18n/navigation.ts";
 import { CardBox } from "../ui/card-box.tsx";
+import { FlightsIcon } from "../ui/icons.ts";
 import { SectionMain } from "../ui/section-main.tsx";
 import { SectionTitle } from "../ui/section-title.tsx";
 import { FlightFilters } from "./flight-filters.tsx";
@@ -16,7 +16,7 @@ export function FlightList({ list, filters }: { list: FlightListData; filters: L
   const filtered = Object.keys(kept).length > 0;
   return (
     <SectionMain>
-      <SectionTitle icon={mdiBookOpenPageVariantOutline} title={t("title")} main />
+      <SectionTitle icon={FlightsIcon} title={t("title")} main />
       <FlightFilters filters={filters} />
       {list.flights.length === 0 ? (
         <CardBox>
