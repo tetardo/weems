@@ -19,9 +19,9 @@ Onglet Terminal 1 (Mac) :
 
 ```bash
 cd ~/Projets/weems-code
-git fetch origin
-git checkout feat/j2-msfs-connector
+git checkout main
 git pull
+pnpm install
 cd apps/api
 docker compose up --build -d
 ```
@@ -111,7 +111,6 @@ PowerShell (PC) :
 cd $HOME
 git clone https://github.com/tetardo/weems.git weems-code
 cd weems-code
-git checkout feat/j2-msfs-connector
 pnpm install
 ```
 
@@ -162,7 +161,16 @@ Mac, Terminal :
 curl -s "http://localhost:3000/v1/flights?limit=5" -H "Authorization: Bearer dev-token"
 ```
 
-Le vol apparaît en premier, avec son temps bloc. La page du site qui affiche la trajectoire arrive avec la suite de J2.
+Le vol apparaît en premier, avec son temps bloc.
+
+Pour le voir sur le site, onglet Terminal 2 (Mac) :
+
+```bash
+cd ~/Projets/weems-code
+pnpm --filter @weems/web dev
+```
+
+Puis ouvrir http://localhost:3001/fr/flights dans le navigateur et cliquer sur le vol : carte de la trajectoire, profil vertical, phases, atterrissage et journal.
 
 ## E. Les 10 vols de référence
 
