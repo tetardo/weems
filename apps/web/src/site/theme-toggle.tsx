@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { ThemeDarkIcon, ThemeLightIcon } from "../ui/icons.ts";
 import { type Theme, THEME_STORAGE_KEY } from "./theme.ts";
 

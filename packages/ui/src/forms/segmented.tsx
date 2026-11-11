@@ -1,17 +1,23 @@
 /**
  * A choice among a few options, all in sight (fiche 008): radio buttons drawn as one bar.
  * Plain inputs, so the form reads it like any field and the arrow keys move the choice.
+ * Either left to the form (`defaultValue`, site) or held by the page (`value` and `onChange`,
+ * admin console).
  */
 export function Segmented({
   name,
   label,
   options,
   defaultValue,
+  value,
+  onChange,
 }: {
   name: string;
   label: string;
   options: readonly { value: string; label: string }[];
-  defaultValue: string;
+  defaultValue?: string;
+  value?: string;
+  onChange?: (value: string) => void;
 }) {
   return (
     <div
@@ -28,7 +34,9 @@ export function Segmented({
             type="radio"
             name={name}
             value={option.value}
-            defaultChecked={option.value === defaultValue}
+            {...(value === undefined
+              ? { defaultChecked: option.value === defaultValue }
+              : { checked: option.value === value, onChange: () => onChange?.(option.value) })}
             className="sr-only"
           />
           {option.label}

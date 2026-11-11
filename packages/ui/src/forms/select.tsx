@@ -1,5 +1,5 @@
 import type { SelectHTMLAttributes } from "react";
-import { ChevronIcon } from "./icons.ts";
+import { ChevronIcon } from "../icons.ts";
 import { INPUT_CLASS } from "./input-class.ts";
 
 /**

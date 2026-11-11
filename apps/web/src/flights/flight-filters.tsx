@@ -1,10 +1,8 @@
 import { AircraftCategory } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { Link } from "../i18n/navigation.ts";
-import { Button, buttonClass } from "../ui/button.tsx";
+import { Button, buttonClass, INPUT_CLASS as INPUT, Select } from "@weems/ui";
 import { CardBox } from "../ui/card-box.tsx";
-import { INPUT_CLASS as INPUT } from "../ui/input-class.ts";
-import { Select } from "../ui/select.tsx";
 import type { ListFilters } from "./list-query.ts";
 
 const FIELD = "flex flex-col gap-1.5 font-semibold";

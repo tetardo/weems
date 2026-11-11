@@ -1,5 +1,6 @@
 "use client";
 
+import { FormField } from "@weems/ui";
 import { useState } from "react";
 import { logIn } from "../../actions/accounts.ts";
 import { ErrorBox } from "../../ui/error-box.tsx";
@@ -31,26 +32,20 @@ export function LoginForm({ reason, onDone }: { reason: string | null; onDone: (
         Compte administrateur de l&apos;API locale. Le premier se nomme avec{" "}
         <span className="mono">pnpm --filter @weems/api make-admin &lt;e-mail&gt;</span>.
       </p>
-      <label className="field">
-        E-mail
-        <input
-          type="email"
-          autoComplete="username"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </label>
-      <label className="field">
-        Mot de passe
-        <input
-          type="password"
-          autoComplete="current-password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
+      <FormField
+        label="E-mail"
+        type="email"
+        autoComplete="username"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <FormField
+        label="Mot de passe"
+        type="password"
+        autoComplete="current-password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
       <ErrorBox message={error} />
       <button className="btn" type="submit" disabled={busy}>
         Se connecter

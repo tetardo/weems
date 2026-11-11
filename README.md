@@ -11,6 +11,7 @@
 | `apps/web` | Site (Next.js), français et anglais | Carte en direct `/live` (silhouette et couleur par catégorie, trajets, progression), liste et page de vol, connexion, profil public `/pilots/<nom>` et ses réglages, formulaires en cartes (fiche 008) ; cartes claires ou sombres selon le thème |
 | `apps/admin` | Console d'administration locale (Next.js, jamais déployée) | Services (base, API, site), trafic simulé, comptes et invitations |
 | `packages/contrats` | Formats échangés entre le tracker, l'API et le site (Zod) | En place |
+| `packages/ui` | Composants React communs au site et à la console d'administration (formulaires, modèle C, fiche 008) | En place |
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À écrire avec un pilote |
 | `docs/` | Cadrage, cahiers des charges, décisions (`docs/decisions/`), revues, schémas | Voir « Documents clés » |
 

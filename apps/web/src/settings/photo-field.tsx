@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { OWN_PHOTO_URL } from "../site/api-relay.ts";
-import { Button } from "../ui/button.tsx";
+import { Button } from "@weems/ui";
 import { removePhotoAction } from "./profile-actions.ts";
 
 const ACCEPTED = PHOTO_TYPES.join(",");

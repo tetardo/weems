@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { IconComponent } from "./icons.ts";
+import type { IconComponent } from "../icons.ts";
 
 /** Small pill after a label, such as « Private » (fiche 008). */
 export function FieldBadge({ icon: Icon, children }: { icon: IconComponent; children: ReactNode }) {

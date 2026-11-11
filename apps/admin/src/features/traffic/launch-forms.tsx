@@ -1,5 +1,6 @@
 "use client";
 
+import { Field, Segmented } from "@weems/ui";
 import { useState } from "react";
 import type { Launch } from "../../server/traffic/launch.ts";
 import { LoadIcon, SimulateIcon, StartIcon } from "../../ui/icons.ts";
@@ -32,22 +33,19 @@ function ModeHeader({
   );
 }
 
+const SPEED_OPTIONS = SPEEDS.map((value) => ({ value: String(value), label: `×${value}` }));
+
 function SpeedChoice({ speed, onSpeed }: { speed: number; onSpeed: (speed: number) => void }) {
   return (
-    <div className="f">
-      <label>Vitesse</label>
-      <div className="segs">
-        {SPEEDS.map((value) => (
-          <button
-            key={value}
-            className={speed === value ? "on" : ""}
-            onClick={() => onSpeed(value)}
-          >
-            ×{value}
-          </button>
-        ))}
-      </div>
-    </div>
+    <Field label="Vitesse">
+      <Segmented
+        name="speed"
+        label="Vitesse"
+        options={SPEED_OPTIONS}
+        value={String(speed)}
+        onChange={(value) => onSpeed(Number(value))}
+      />
+    </Field>
   );
 }
 

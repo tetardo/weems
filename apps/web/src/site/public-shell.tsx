@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Link } from "../i18n/navigation.ts";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { FloatingBar } from "./floating-bar.tsx";
 import { OtherLanguage } from "./top-bar.tsx";
 
