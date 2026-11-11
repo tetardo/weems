@@ -2,7 +2,7 @@
 
 API REST unique de Weems : seule à écrire dans la base. Tous les autres programmes (tracker, site web, app iPad, gestion de compagnie) sont ses clients.
 
-Aucun code n'existe encore : ce fichier fixe les règles avant le jalon J0.
+Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI.
 
 ## Où trouver quoi
 
@@ -19,7 +19,7 @@ Aucun code n'existe encore : ce fichier fixe les règles avant le jalon J0.
 ## Stack
 
 - Node.js LTS, TypeScript strict, Fastify (en attente de confirmation de Thibault ; NestJS seulement s'il code l'API).
-- PostgreSQL avec Drizzle ; fichiers dans un stockage compatible S3 (MinIO en local).
+- PostgreSQL avec Drizzle ; fichiers dans un stockage compatible S3 à partir de J2 (outil local à choisir).
 - Validation et documentation OpenAPI à partir des schémas Zod de `packages/contrats`.
 - Tests : Vitest contre une vraie base PostgreSQL dans Docker.
 
@@ -28,7 +28,10 @@ Aucun code n'existe encore : ce fichier fixe les règles avant le jalon J0.
 ```
 src/
   modules/<module>/   routes.ts, service.ts, repository.ts, *.test.ts
-  plugins/            base, authentification, erreurs, documentation
+  plugins/            authentification, version du tracker, erreurs, documentation
+  db/                 schéma Drizzle et connexion
+  testing/            outils des tests (base de test, vol synthétique)
+  config.ts           variables d'environnement
   app.ts              assemblage
   server.ts           démarrage
 migrations/
@@ -53,4 +56,13 @@ docker-compose.yml
 
 ## Commandes
 
-À compléter en J0 (`pnpm dev`, `pnpm test`, `docker compose up`).
+| Commande (depuis `apps/api/`) | Effet |
+| --- | --- |
+| `docker compose up` | API sur http://localhost:3000 et PostgreSQL ; documentation sur http://localhost:3000/docs |
+| `docker compose up -d db` | Base seule, suffisante pour `pnpm dev` et pour les tests |
+| `pnpm dev` | API hors Docker, relancée à chaque modification (variables : `.env.example`) |
+| `pnpm db:generate` | Crée la migration après une modification de `src/db/schema.ts` |
+| `pnpm db:migrate` | Applique les migrations (fait aussi au démarrage de l'API) |
+| `pnpm check` (racine) | Tout : types, style, structure, tests ; les tests exigent la base `weems_test` |
+
+Jeton de développement : `Authorization: Bearer dev-token`. En-tête obligatoire du tracker : `Weems-Client: tracker/0.1.0`.
