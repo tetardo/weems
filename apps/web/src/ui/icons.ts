@@ -11,6 +11,7 @@ export {
   EyeOff as HideIcon,
   Eye as ShowIcon,
   Map as MapIcon,
+  Plane as AircraftIcon,
   ChartLine as StatsIcon,
   Share2 as ShareIcon,
   CircleUserRound as ProfileIcon,

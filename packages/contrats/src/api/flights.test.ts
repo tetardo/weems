@@ -41,6 +41,26 @@ describe("OpenFlightRequest", () => {
     expect(OpenFlightRequest.safeParse(openFlight()).success).toBe(true);
   });
 
+  it("reads the engines, airframe and weight of a tracker that sends them", () => {
+    const aircraft = {
+      ...openFlight().aircraft,
+      engineType: "jet",
+      airframe: "airplane",
+      maxGrossWeightKg: 79000,
+    };
+    const parsed = OpenFlightRequest.parse({ ...openFlight(), aircraft });
+    expect(parsed.aircraft).toMatchObject({ engineType: "jet", maxGrossWeightKg: 79000 });
+  });
+
+  it("keeps accepting older trackers: what they do not send is unknown (null)", () => {
+    const parsed = OpenFlightRequest.parse(openFlight());
+    expect(parsed.aircraft).toMatchObject({
+      engineType: null,
+      airframe: null,
+      maxGrossWeightKg: null,
+    });
+  });
+
   it("requires a UUID v7 flight id", () => {
     const request = { ...openFlight(), flightId: FLIGHT_ID_V4 };
     expect(OpenFlightRequest.safeParse(request).success).toBe(false);
@@ -110,6 +130,7 @@ describe("CloseFlightRequest and FlightView", () => {
       closedAt: null,
       closeReason: null,
       lastPhase: null,
+      aircraftClass: { category: "narrowBody", estimated: false },
       times: { blockS: null, airborneS: null, pausedS: 0 },
       events: [],
     };

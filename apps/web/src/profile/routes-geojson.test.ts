@@ -33,10 +33,13 @@ describe("map of the routes", () => {
     expect(routeWidth(1)).toBe(1.5);
     expect(routeWidth(8)).toBeGreaterThan(routeWidth(2));
     const routes = [
-      { from: LFPG, to: KJFK, flights: 4 },
-      { from: KJFK, to: LFPG, flights: 1 },
+      { from: LFPG, to: KJFK, flights: 4, category: "wideBody" as const },
+      { from: KJFK, to: LFPG, flights: 1, category: null },
     ];
-    expect(routeLines(routes).features).toHaveLength(2);
+    expect(routeLines(routes).features.map((f) => f.properties?.["category"])).toEqual([
+      "wideBody",
+      "",
+    ]);
     expect(airportPoints(routes).features.map((f) => f.properties?.["label"])).toEqual([
       "LFPG",
       "KJFK",

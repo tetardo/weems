@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AircraftCategory } from "./aircraft-class.ts";
 import { FlightView } from "./flights.ts";
 import { FlightSummary } from "./flight-list.ts";
 import { IcaoCode, UtcTimestamp } from "./common.ts";
@@ -70,6 +71,23 @@ const NotableLanding = z.object({
   at: UtcTimestamp,
 });
 
+/** Airborne time and number of flights of a group of flights. */
+const Experience = z.object({
+  airborneS: z.number().nonnegative(),
+  flights: z.number().int().nonnegative(),
+});
+
+/** One flown category of the block "Expérience par catégorie" (spec J4, aircraft categories). */
+export const CategoryExperience = Experience.extend({
+  category: AircraftCategory,
+  /** The most flown ICAO types (else titles) of the category, at most 3. */
+  types: z.array(z.string()).max(3),
+  /** As averageTouchdownVs and bestLanding below, within the category. */
+  averageTouchdownVs: z.number().nullable(),
+  bestLanding: NotableLanding.nullable(),
+});
+export type CategoryExperience = z.infer<typeof CategoryExperience>;
+
 /** Statistics of the public flights (closed and not hidden). */
 export const PilotStats = z.object({
   flights: z.number().int().nonnegative(),
@@ -112,6 +130,15 @@ export const PilotStats = z.object({
   cleanLandings: z.object({
     clean: z.number().int().nonnegative(),
     landings: z.number().int().nonnegative(),
+  }),
+  /**
+   * Experience by aircraft category, most flown first (flights without a category left out), and
+   * single- and multi-engine time as in the EASA logbook (SE / ME; engineless aircraft in neither).
+   */
+  experience: z.object({
+    categories: z.array(CategoryExperience),
+    singleEngine: Experience,
+    multiEngine: Experience,
   }),
 });
 export type PilotStats = z.infer<typeof PilotStats>;
@@ -174,6 +201,7 @@ export const PublicFlightSummary = FlightSummary.pick({
   callsign: true,
   aircraftTitle: true,
   aircraftModel: true,
+  aircraftClass: true,
   departureIcao: true,
   plannedArrivalIcao: true,
   openedAt: true,
@@ -201,6 +229,7 @@ export const PublicFlightView = FlightView.pick({
   closedAt: true,
   closeReason: true,
   lastPhase: true,
+  aircraftClass: true,
   times: true,
   events: true,
 });
@@ -225,6 +254,8 @@ export const PilotRoutes = z.object({
       from: RouteEnd,
       to: RouteEnd,
       flights: z.number().int().positive(),
+      /** The category most flown on the route: colour of the arc. */
+      category: AircraftCategory.nullable(),
     }),
   ),
 });

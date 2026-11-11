@@ -1,5 +1,5 @@
 {
-  "id": "cb17f676-06aa-4b9b-afa8-dd9d8e47a4bb",
+  "id": "f7136177-a375-4828-bbc8-a52f434ab008",
   "prevId": "4c314bc8-b537-448b-8cf8-9f6083223e50",
   "version": "7",
   "dialect": "postgresql",
@@ -226,6 +226,37 @@
           "primaryKey": false,
           "notNull": false
         },
+        "aircraft_engine_type": {
+          "name": "aircraft_engine_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aircraft_airframe": {
+          "name": "aircraft_airframe",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aircraft_max_gross_weight_kg": {
+          "name": "aircraft_max_gross_weight_kg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aircraft_category": {
+          "name": "aircraft_category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aircraft_category_estimated": {
+          "name": "aircraft_category_estimated",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
         "departure_icao": {
           "name": "departure_icao",
           "type": "text",
@@ -275,6 +306,27 @@
             },
             {
               "expression": "opened_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "flights_pilot_category_idx": {
+          "name": "flights_pilot_category_idx",
+          "columns": [
+            {
+              "expression": "pilot_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "aircraft_category",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -440,18 +492,6 @@
         },
         "ivao_id": {
           "name": "ivao_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "instagram": {
-          "name": "instagram",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "facebook": {
-          "name": "facebook",
           "type": "text",
           "primaryKey": false,
           "notNull": false

@@ -30,6 +30,12 @@ export const flights = pgTable(
     aircraftRegistration: text("aircraft_registration"),
     aircraftEngineCount: smallint("aircraft_engine_count").notNull(),
     aircraftEmptyWeightKg: doublePrecision("aircraft_empty_weight_kg"),
+    aircraftEngineType: text("aircraft_engine_type"),
+    aircraftAirframe: text("aircraft_airframe"),
+    aircraftMaxGrossWeightKg: doublePrecision("aircraft_max_gross_weight_kg"),
+    /** Category from the catalogue or estimated (modules/aircraft), stored for the filters. */
+    aircraftCategory: text("aircraft_category"),
+    aircraftCategoryEstimated: boolean("aircraft_category_estimated").notNull().default(false),
     departureIcao: text("departure_icao"),
     plannedArrivalIcao: text("planned_arrival_icao"),
     openedAt: utc("opened_at").notNull(),
@@ -37,7 +43,10 @@ export const flights = pgTable(
     closeReason: text("close_reason"),
     trackerVersion: text("tracker_version").notNull(),
   },
-  (table) => [index("flights_pilot_opened_idx").on(table.pilotId, table.openedAt)],
+  (table) => [
+    index("flights_pilot_opened_idx").on(table.pilotId, table.openedAt),
+    index("flights_pilot_category_idx").on(table.pilotId, table.aircraftCategory),
+  ],
 );
 
 /** Flight events. The primary key (flight, seq) is what makes re-sends harmless. */
