@@ -2,7 +2,7 @@
 
 API REST unique de Weems : seule à écrire dans la base. Tous les autres programmes (tracker, site web, app iPad, gestion de compagnie) sont ses clients.
 
-Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI.
+Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`).
 
 ## Où trouver quoi
 
@@ -42,6 +42,7 @@ docker-compose.yml
 - `service.ts` : la logique métier. Ne connaît ni Fastify ni SQL.
 - `repository.ts` : le seul endroit qui parle à la base.
 - Un module n'importe jamais le `repository` d'un autre module : il passe par son `service`. Vérifié par dependency-cruiser.
+- Quand un module doit prévenir un autre, il définit une interface (exemple : `flights/live-feed.ts`, implémentée par `live/live-board.ts`).
 - Règles de taille et de duplication : voir la section « Structure du code » des règles de développement.
 
 ## Règles pour un agent
