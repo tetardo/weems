@@ -20,6 +20,8 @@ export const LiveFlight = z.object({
   receivedAt: UtcTimestamp,
   /** "lost": no position for 60 s; shown greyed. */
   signal: z.enum(["ok", "lost"]),
+  /** Flown by a fictitious account of the simulated activity: the map shows a badge. */
+  fictitious: z.boolean(),
 });
 export type LiveFlight = z.infer<typeof LiveFlight>;
 

@@ -7,6 +7,9 @@ import { registerAdminAccountRoutes } from "./modules/accounts/admin-routes.ts";
 import { AdminAccountsService } from "./modules/accounts/admin-service.ts";
 import { createAuth } from "./modules/accounts/auth.ts";
 import { ensureDevPilot } from "./modules/accounts/dev-pilot.ts";
+import { registerFictitiousPilotRoutes } from "./modules/accounts/fictitious-routes.ts";
+import { FictitiousPilotsService } from "./modules/accounts/fictitious-service.ts";
+import { FictitiousAccountsRepository } from "./modules/accounts/repository-fictitious.ts";
 import { PilotIdentifier } from "./modules/accounts/pilot-identifier.ts";
 import { AdminAccountsRepository } from "./modules/accounts/repository-admin.ts";
 import { AccountsRepository } from "./modules/accounts/repository.ts";
@@ -83,11 +86,26 @@ export async function buildApp({
   registerAccountRoutes(app, auth, config);
   const identifier = new PilotIdentifier(auth, config.apiUrl, (id) => accounts.statusOf(id));
   const guards = registerAuth(app, config, identifier);
+  const profiles = new ProfilesRepository(database.db);
+  const profileSettings = new ProfilesService(profiles, flights, accounts);
   registerAdminAccountRoutes(
     app,
-    new AdminAccountsService(new AdminAccountsRepository(database.db), accounts, flights),
+    new AdminAccountsService(
+      new AdminAccountsRepository(database.db),
+      accounts,
+      flights,
+      profileSettings,
+    ),
     guards,
   );
+  if (config.env !== "production") {
+    const fictitious = new FictitiousAccountsRepository(database.db);
+    registerFictitiousPilotRoutes(
+      app,
+      new FictitiousPilotsService(fictitious, flights, profileSettings),
+      guards,
+    );
+  }
   registerFlightRoutes(app, flights, guards);
   if (config.env !== "production") registerDevFlightRoutes(app, flights, guards);
   const tracks = new TracksService(new PostgresTrackStore(database.db), flights);
@@ -97,8 +115,7 @@ export async function buildApp({
     new ReviewsService(new ReviewsRepository(database.db), flights),
     guards,
   );
-  const profiles = new ProfilesRepository(database.db);
-  registerProfileRoutes(app, new ProfilesService(profiles, flights, accounts), guards);
+  registerProfileRoutes(app, profileSettings, guards);
   registerPublicProfileRoutes(app, new PublicProfilesService(profiles, flights, tracks, accounts));
   const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);

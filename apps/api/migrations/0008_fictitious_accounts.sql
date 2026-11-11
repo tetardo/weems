@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "fictitious" boolean DEFAULT false NOT NULL;

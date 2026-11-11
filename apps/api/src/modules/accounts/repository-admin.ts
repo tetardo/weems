@@ -10,6 +10,7 @@ export interface AccountRecord {
   disabledAt: Date | null;
   createdAt: Date;
   lastLoginAt: Date | null;
+  fictitious: boolean;
 }
 
 /** What the admin console reads and changes on accounts (spec admin, page Comptes). */
@@ -36,6 +37,7 @@ export class AdminAccountsRepository {
         disabledAt: users.disabledAt,
         createdAt: users.createdAt,
         lastLoginAt: lastLogins.at,
+        fictitious: users.fictitious,
       })
       .from(users)
       .leftJoin(lastLogins, eq(lastLogins.userId, users.id))

@@ -86,6 +86,15 @@ export class ProfilesRepository {
     }
   }
 
+  /** Address of every public profile, by pilot (admin console). */
+  async publicHandles(): Promise<Map<string, string>> {
+    const rows = await this.db
+      .select({ pilotId: pilotProfiles.pilotId, handle: pilotProfiles.handle })
+      .from(pilotProfiles)
+      .where(eq(pilotProfiles.isPublic, true));
+    return new Map(rows.flatMap((row) => (row.handle ? [[row.pilotId, row.handle]] : [])));
+  }
+
   /** Public profiles, for the site map. */
   async listPublic(): Promise<{ handle: string; updatedAt: Date }[]> {
     const rows = await this.db

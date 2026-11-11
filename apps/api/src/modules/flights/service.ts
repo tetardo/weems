@@ -56,8 +56,9 @@ export function lastPhaseOf(events: FlightEvent[]): FlightPhase | null {
   return events.map(phaseChangeOf).findLast((change) => change !== null)?.to ?? null;
 }
 
-function liveInfo(flight: FlightRecord): LiveFlightInfo {
+function liveInfo(flight: FlightRecord, caller: Caller): LiveFlightInfo {
   return {
+    fictitious: caller.fictitious === true,
     flightId: flight.flightId,
     callsign: flight.callsign,
     aircraftTitle: flight.aircraft.title,
@@ -128,7 +129,7 @@ export class FlightsService {
     }
     // Late (older) positions and positions after closing are ignored: only the newest counts.
     if ((last && position.seq < last.seq) || flight.closedAt !== null) return ALREADY_RECEIVED;
-    this.live.position(liveInfo(flight), position);
+    this.live.position(liveInfo(flight, caller), position);
     return CREATED;
   }
 

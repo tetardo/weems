@@ -63,6 +63,7 @@ export class PublicProfilesService {
       facebook: profile.facebook,
       memberSince: identity.createdAt.toISOString(),
       hasPhoto: await this.repository.hasPhoto(profile.pilotId),
+      fictitious: identity.fictitious,
       stats: pilotStats(flights, tracks, now),
       charts: pilotCharts(flights, tracks, now),
     };
