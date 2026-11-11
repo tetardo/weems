@@ -31,9 +31,9 @@ async function closedFlight() {
   });
   return id;
 }
-const put = (id: string, points: unknown) =>
+const upload = (id: string, points: unknown) =>
   app.inject({
-    method: "PUT",
+    method: "POST",
     url: `/v1/flights/${id}/track`,
     payload: { points },
     headers: TRACKER_HEADERS,
@@ -45,7 +45,7 @@ describe("trajectory (spec J2)", () => {
   it("stores a 2-hour trajectory and reads it back simplified, with phases", async () => {
     const id = await closedFlight();
     const track = syntheticTrack(7_200);
-    expect((await put(id, track)).statusCode).toBe(201);
+    expect((await upload(id, track)).statusCode).toBe(201);
 
     const view = (await get(id)).json();
     expect(view.recordedPoints).toBe(7_200);
@@ -58,13 +58,15 @@ describe("trajectory (spec J2)", () => {
   it("answers 200 to an identical re-send and 409 to a different one", async () => {
     const id = await closedFlight();
     const track = syntheticTrack(600);
-    await put(id, track);
-    expect((await put(id, track)).json()).toEqual({ result: "alreadyReceived" });
-    expect((await put(id, track.slice(1))).statusCode).toBe(409);
+    await upload(id, track);
+    expect((await upload(id, track)).json()).toEqual({ result: "alreadyReceived" });
+    expect((await upload(id, track.slice(1))).statusCode).toBe(409);
   });
 
   it("answers 404 for a flight without trajectory, or an unknown flight", async () => {
     expect((await get(await closedFlight())).statusCode).toBe(404);
-    expect((await put(syntheticFlight().open.flightId, syntheticTrack(10))).statusCode).toBe(404);
+    expect((await upload(syntheticFlight().open.flightId, syntheticTrack(10))).statusCode).toBe(
+      404,
+    );
   });
 });

@@ -66,7 +66,7 @@ Le cœur du tracker est le même qu'en J0 et J1. Seuls le connecteur et l'envoi 
 
 | Route | Rôle |
 | --- | --- |
-| `PUT /v1/flights/{flightId}/track` | Reçoit la trajectoire complète, une seule fois par vol. Renvoi identique : 200 ; trajectoire différente : 409 |
+| `POST /v1/flights/{flightId}/track` | Reçoit la trajectoire complète, une seule fois par vol. Renvoi identique : 200 ; trajectoire différente : 409 |
 | `GET /v1/flights` | Liste des vols du plus récent au plus ancien, 50 par page, pagination par curseur, filtres période, avion, aéroport |
 | `GET /v1/flights/{flightId}` | Déjà en place : en-tête, événements ; ajoute les durées (bloc, vol, pause) |
 | `GET /v1/flights/{flightId}/track` | Trajectoire **simplifiée** : environ 500 points pour la carte et le profil, chacun avec sa phase |
@@ -134,7 +134,7 @@ Voir la [spécification du site minimal](web/spec-J2-site-minimal.md) : liste `/
 
 | Sujet | Choix | Pourquoi |
 | --- | --- | --- |
-| Envoi de la trajectoire | `PUT`, JSON non compressé, 16 Mo au plus ; l'API compresse pour le stockage | Simple côté tracker ; sur le réseau local, 1,5 Mo passe en moins d'une seconde. La compression à l'envoi viendra avec l'alpha sur Internet si besoin |
+| Envoi de la trajectoire | `POST` comme les autres messages du tracker (même file d'envoi, mêmes règles de renvoi), JSON non compressé, 16 Mo au plus ; l'API compresse pour le stockage | Simple côté tracker ; sur le réseau local, 1,5 Mo passe en moins d'une seconde. La compression à l'envoi viendra avec l'alpha sur Internet si besoin |
 | Renvoi de la trajectoire | Empreinte SHA-256 gardée avec les points : même empreinte 200, sinon 409 | Reconnaît un renvoi sans décompresser |
 | Simplification | Douglas-Peucker en 3 dimensions, 1 000 ft d'écart comptent comme 1 NM ; décollages, atterrissages et changements de phase toujours gardés ; 500 points au plus | Le profil vertical reste fidèle à 200 ft près (vérifié par un test) |
 | Phase de chaque point | Calculée à la lecture depuis les événements, pas stockée | Une seule source de vérité, comme la dernière phase en J0 |

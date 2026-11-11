@@ -19,7 +19,7 @@ export function registerTrackRoutes(
 ): void {
   const app = parent.withTypeProvider<ZodTypeProvider>();
 
-  app.put(
+  app.post(
     "/v1/flights/:flightId/track",
     {
       onRequest: guards.tracker,
