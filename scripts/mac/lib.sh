@@ -34,10 +34,16 @@ compose() { docker compose -f "$WEEMS_COMPOSE" "$@"; }
 console_answers() { curl -fs -o /dev/null --max-time 2 "$WEEMS_CONSOLE_URL/services"; }
 
 # POST to the console (route apps/admin/src/app/api/lifecycle). Long: stopping waits for the simulation.
+# On failure, prints the console's message (e.g. a port held by another program).
 console_action() {
-  curl -fsS --max-time 120 -X POST "$WEEMS_CONSOLE_URL/api/lifecycle" \
+  local answer status
+  answer="$(curl -sS --max-time 120 -w '\n%{http_code}' -X POST "$WEEMS_CONSOLE_URL/api/lifecycle" \
     -H 'content-type: application/json' -H 'x-weems-local-script: 1' \
-    -d "{\"action\":\"$1\"}" >/dev/null
+    -d "{\"action\":\"$1\"}")" || return 1
+  status="${answer##*$'\n'}"
+  [[ "$status" == 200 ]] && return 0
+  warn "Console : $(printf '%s' "${answer%$'\n'*}" | sed -n 's/.*"error":"\([^"]*\)".*/\1/p')"
+  return 1
 }
 
 # Pid listening on a TCP port, empty if none.

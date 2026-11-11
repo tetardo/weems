@@ -87,7 +87,7 @@ console_answers || warn "La console ne répond pas encore : l'API et le site ne 
 # 7. L'API et le site, lancés par la console (elle peut ensuite les arrêter), puis le navigateur.
 if console_answers; then
   say "La console démarre l'API (3000) et le site (3001)"
-  console_action start-all || warn "Démarrage incomplet : voir la page Services."
+  console_action start-all || warn "Démarrage incomplet : voir la page Services (bouton « Libérer le port » si c'est un vieux Weems)."
   open "$WEEMS_CONSOLE_URL/services"
 fi
 
