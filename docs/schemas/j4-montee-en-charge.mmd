@@ -1,0 +1,18 @@
+flowchart TB
+  subgraph GEN["pnpm load : un seul processus qui charge et mesure"]
+    direction LR
+    P["N pilotes simulés<br/>vrai cœur du tracker"]
+    V["M spectateurs<br/>flux SSE"]
+  end
+  API["API Weems<br/>positions en mémoire<br/>diffusion toutes les 2 s"]
+  DB[("PostgreSQL")]
+  MET["/v1/dev/metrics<br/>boucle, mémoire, clients<br/>(hors production)"]
+  R["Rapport<br/>latences, pertes, avions figés,<br/>mémoire, verdict par critère"]
+  P -- "positions" --> API
+  API -- "lecture du vol" --> DB
+  API -- "mises à jour" --> V
+  API --> MET
+  MET -- "relevé toutes les 5 s" --> R
+  GEN --> R
+  classDef api fill:#1F5F99,color:#FFFFFF,stroke:#14273A
+  class API api
