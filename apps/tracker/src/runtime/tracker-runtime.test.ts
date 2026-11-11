@@ -8,9 +8,7 @@ import { ReplayConnector } from "../connectors/replay/replay-connector.ts";
 import type { Replay } from "../connectors/replay/replay-format.ts";
 import { AIRLINER_PARAMS } from "../core/phases/params.ts";
 import type { ApiClient } from "../sender/api-client.ts";
-import { OutboxSender } from "../sender/outbox-sender.ts";
-import { Recorder } from "../storage/recorder.ts";
-import { TrackerRuntime } from "./tracker-runtime.ts";
+import { createTracker } from "./create-tracker.ts";
 
 const START_UTC = Date.UTC(2026, 10, 11, 8, 0, 0);
 const flight = generateFlight(LFPG_LFBO);
@@ -27,21 +25,19 @@ const api: ApiClient = {
 
 /** One tracker run on the same local database file, with the clock at `utcMs`. */
 function runtime(replay: Replay, utcMs: number) {
-  const recorder = new Recorder(join(dir, "tracker.db"));
-  const runtime = new TrackerRuntime({
+  return createTracker({
     connector: new ReplayConnector(replay),
-    recorder,
-    sender: new OutboxSender(recorder.db, api, () => 0),
+    databasePath: join(dir, "tracker.db"),
+    api,
+    random: () => 0,
     session: {
       callsign: "WMS1",
       trackerVersion: "0.1.0",
       clock: { nowUtcMs: () => utcMs },
       newFlightId: () => `0197a000-0000-7000-8000-00000000000${++ids}`,
       params: AIRLINER_PARAMS,
-      positionIntervalMs: 10_000,
     },
   });
-  return { runtime, recorder };
 }
 
 /** Splits the generated flight at sample time `t`; the second part starts with the aircraft. */

@@ -1,5 +1,5 @@
 import type Database from "better-sqlite3";
-import type { FlightEvent, PositionReport } from "@weems/contrats";
+import type { FlightEvent } from "@weems/contrats";
 import type { ApiClient } from "./api-client.ts";
 import { actionFor, retryDelayMs } from "./retry.ts";
 
@@ -24,7 +24,6 @@ interface Message {
 export type SenderBlock = "unauthorized" | "upgradeRequired" | null;
 
 const MAX_EVENTS_PER_REQUEST = 500;
-const POSITION_MAX_AGE_MS = 30_000;
 
 function pathOf(row: OutboxRow): string {
   if (row.kind === "open") return "/v1/flights";
@@ -112,15 +111,12 @@ export class OutboxSender {
     return accepted;
   }
 
-  /** Live position: best effort, never queued; dropped when older than 30 s. */
-  async sendPosition(flightId: string, report: PositionReport, nowMs: number): Promise<boolean> {
-    if (this.blocked || nowMs - Date.parse(report.at) > POSITION_MAX_AGE_MS) return false;
-    try {
-      const { status } = await this.api.post(`/v1/flights/${flightId}/positions`, report);
-      return actionFor(status) === "done";
-    } catch {
-      return false;
-    }
+  /** True once the API accepted the opening of this flight (nothing of it left to open). */
+  isOpened(flightId: string): boolean {
+    const row = this.db
+      .prepare("SELECT 1 FROM outbox WHERE flight_id = ? AND kind = 'open'")
+      .get(flightId);
+    return row === undefined;
   }
 
   private isDue(message: Message, nowMs: number): boolean {

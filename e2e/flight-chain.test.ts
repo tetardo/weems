@@ -7,10 +7,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startTestApp } from "../apps/api/src/testing/test-app.ts";
 import { ReplayConnector } from "../apps/tracker/src/connectors/replay/replay-connector.ts";
 import { AIRLINER_PARAMS } from "../apps/tracker/src/core/phases/params.ts";
-import { TrackerRuntime } from "../apps/tracker/src/runtime/tracker-runtime.ts";
+import { createTracker } from "../apps/tracker/src/runtime/create-tracker.ts";
 import { httpApiClient } from "../apps/tracker/src/sender/api-client.ts";
-import { OutboxSender } from "../apps/tracker/src/sender/outbox-sender.ts";
-import { Recorder } from "../apps/tracker/src/storage/recorder.ts";
 import { generateFlight } from "../apps/tracker/tools/generate-flights/generator.ts";
 import { LFPG_LFBO } from "../apps/tracker/tools/generate-flights/scenario.ts";
 
@@ -35,27 +33,23 @@ afterAll(async () => {
 });
 
 async function flyThroughTheChain() {
-  const recorder = new Recorder(join(dir, "tracker.db"));
-  const client = httpApiClient({ baseUrl, token: "dev-token", trackerVersion: "0.1.0" });
-  const sender = new OutboxSender(recorder.db, client);
-  const tracker = new TrackerRuntime({
+  const { runtime, recorder, sender } = createTracker({
     connector: new ReplayConnector(
       generateFlight({ ...LFPG_LFBO, disturbances: ["goAround", "bounce"] }),
     ),
-    recorder,
-    sender,
+    databasePath: join(dir, "tracker.db"),
+    api: httpApiClient({ baseUrl, token: "dev-token", trackerVersion: "0.1.0" }),
     session: {
       callsign: "WMS123",
       trackerVersion: "0.1.0",
       clock: { nowUtcMs: () => Date.UTC(2026, 10, 11, 8, 0, 0) },
       newFlightId: uuidV7,
       params: AIRLINER_PARAMS,
-      positionIntervalMs: 10_000,
     },
   });
-  await tracker.start();
-  await tracker.pump(Date.now());
-  return { recorder, sender, flightId: tracker.currentFlightId };
+  await runtime.start();
+  await runtime.pump(Date.now());
+  return { recorder, sender, flightId: runtime.currentFlightId };
 }
 
 describe("tracker to API", () => {

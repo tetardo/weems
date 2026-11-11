@@ -4,11 +4,13 @@ import { parseReplay, serializeReplay } from "../../src/connectors/replay/replay
 import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
 import { FlightSession } from "../../src/core/session.ts";
 import { generateFlight } from "./generator.ts";
-import { type Disturbance, LFPG_LFBO } from "./scenario.ts";
+import { expectedTrace } from "./expected-phases.ts";
+import { FLEET } from "./fleet.ts";
+import { type Disturbance, LFPG_LFBO, type Scenario } from "./scenario.ts";
 
 /** Plays a generated flight through the real core; returns phases and notable events. */
-async function track(disturbances: Disturbance[]): Promise<string> {
-  const connector = new ReplayConnector(generateFlight({ ...LFPG_LFBO, disturbances }));
+async function track(scenario: Scenario, disturbances: readonly Disturbance[]): Promise<string> {
+  const connector = new ReplayConnector(generateFlight({ ...scenario, disturbances }));
   const seen: string[] = [];
   const session = new FlightSession(
     {
@@ -17,7 +19,6 @@ async function track(disturbances: Disturbance[]): Promise<string> {
       clock: { nowUtcMs: () => 0 },
       newFlightId: () => "id",
       params: AIRLINER_PARAMS,
-      positionIntervalMs: 10_000,
     },
     {
       open: () => {},
@@ -33,10 +34,6 @@ async function track(disturbances: Disturbance[]): Promise<string> {
   return seen.join(" ");
 }
 
-const DEPARTURE = "BOARDING PUSHBACK TAXI_OUT TAKEOFF CLIMB CRUISE";
-const ARRIVAL = "DESCENT APPROACH FINAL *touchdown LANDING";
-const END = "TAXI_IN ARRIVED closed:normal";
-
 describe("generator", () => {
   it("is deterministic: same scenario and seed, same file", () => {
     const a = serializeReplay(generateFlight(LFPG_LFBO));
@@ -51,31 +48,26 @@ describe("generator", () => {
 });
 
 describe("generated flights through the core", () => {
-  it.each<[string, Disturbance[], string]>([
-    ["normal flight", [], `${DEPARTURE} ${ARRIVAL} ${END}`],
-    [
-      "go-around",
-      ["goAround"],
-      `${DEPARTURE} DESCENT APPROACH FINAL *goAround CLIMB CRUISE ${ARRIVAL} ${END}`,
-    ],
-    ["bounce", ["bounce"], `${DEPARTURE} ${ARRIVAL} *bounce ${END}`],
-    [
-      "touch-and-go",
-      ["touchAndGo"],
-      `${DEPARTURE} ${ARRIVAL} *touchAndGo CLIMB CRUISE ${ARRIVAL} ${END}`,
-    ],
-    [
-      "rejected take-off",
-      ["rejectedTakeoff"],
-      `BOARDING PUSHBACK TAXI_OUT TAKEOFF *rejectedTakeoff TAXI_OUT TAKEOFF CLIMB CRUISE ${ARRIVAL} ${END}`,
-    ],
-    [
-      "pause, time acceleration, slew, teleport",
-      ["pause", "timeAcceleration", "slew", "teleport"],
-      `${DEPARTURE} *paused *unpaused *simRateChanged *simRateChanged *slew *slew *positionChanged ${ARRIVAL} ${END}`,
-    ],
-    ["crash", ["crash"], `${DEPARTURE} *crashed ARRIVED closed:crash`],
-  ])("%s", async (_name, disturbances, expected) => {
-    expect(await track(disturbances)).toBe(expected);
+  it.each<[string, Disturbance[]]>([
+    ["normal flight", []],
+    ["go-around", ["goAround"]],
+    ["bounce", ["bounce"]],
+    ["touch-and-go", ["touchAndGo"]],
+    ["rejected take-off", ["rejectedTakeoff"]],
+    ["pause, time acceleration, slew, teleport", ["pause", "timeAcceleration", "slew", "teleport"]],
+  ])("%s", async (_name, disturbances) => {
+    expect(await track(LFPG_LFBO, disturbances)).toBe(
+      `${expectedTrace(disturbances)} closed:normal`,
+    );
+  });
+
+  it("crash", async () => {
+    expect(await track(LFPG_LFBO, ["crash"])).toBe(`${expectedTrace(["crash"])} closed:crash`);
+  });
+
+  it.each(FLEET.map((s) => [s.name, s] as const))("fleet route %s", async (_name, scenario) => {
+    expect(await track(scenario, scenario.disturbances)).toBe(
+      `${expectedTrace(scenario.disturbances)} closed:normal`,
+    );
   });
 });
