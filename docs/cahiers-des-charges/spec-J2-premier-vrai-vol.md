@@ -93,7 +93,7 @@ Voir la [spécification du site minimal](web/spec-J2-site-minimal.md) : liste `/
 
 | Étape | Qui |
 | --- | --- |
-| Installer Git, Node.js 24 et pnpm, cloner le dépôt | Greg, avec un guide pas à pas |
+| Installer Git, Node.js 24 et pnpm, cloner le dépôt | Greg, avec le [guide PC Windows](../developpement/guide-pc-windows-j2.md) |
 | Ouvrir le port 3000 du Mac au réseau local (pare-feu macOS) | Greg, avec le guide |
 | Lancer MSFS, puis `pnpm fly --api http://<adresse-du-mac>:3000` | Greg |
 | Faire les 10 vols de référence (liste ci-dessous) | Greg |
