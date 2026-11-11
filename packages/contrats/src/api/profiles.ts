@@ -1,0 +1,146 @@
+import { z } from "zod";
+import { FlightView } from "./flights.ts";
+import { FlightSummary } from "./flight-list.ts";
+import { IcaoCode, UtcTimestamp } from "./common.ts";
+
+/**
+ * Public profile of a pilot (spec J4 profil public). Public formats list their fields one by one:
+ * a field added later to a private format never becomes public by accident.
+ */
+
+/** Address of a public profile: /pilots/{handle}. 3 to 30 of a-z 0-9 -, no dash at either end. */
+export const PilotHandle = z
+  .string()
+  .regex(/^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$/, "3 to 30 of a-z, 0-9 and -, no dash at either end.");
+
+/** ISO 3166-1 alpha-2 country code (FR). */
+export const CountryCode = z.string().regex(/^[A-Z]{2}$/);
+
+/** Experience declared by the pilot; nothing checks it. */
+export const PilotLevel = z.enum(["beginner", "intermediate", "advanced", "realPilot"]);
+export type PilotLevel = z.infer<typeof PilotLevel>;
+
+/** VATSIM member id (CID). */
+export const VatsimId = z.string().regex(/^\d{6,8}$/);
+/** IVAO member id (VID). */
+export const IvaoId = z.string().regex(/^\d{5,7}$/);
+/** SimBrief user name or pilot id. Never public: used by the tracker to import flight plans. */
+export const SimbriefId = z.string().regex(/^[A-Za-z0-9_.-]{1,32}$/);
+
+/** Fields the pilot fills in, all optional. */
+const ProfileFields = z.object({
+  country: CountryCode.nullable(),
+  level: PilotLevel.nullable(),
+  vatsimId: VatsimId.nullable(),
+  ivaoId: IvaoId.nullable(),
+  simbriefId: SimbriefId.nullable(),
+});
+
+/** PUT /v1/me/profile: the whole profile. Publishing needs a handle. */
+export const ProfileUpdate = ProfileFields.extend({
+  isPublic: z.boolean(),
+  handle: PilotHandle.nullable(),
+});
+export type ProfileUpdate = z.infer<typeof ProfileUpdate>;
+
+/** GET /v1/me/profile: the pilot's own profile, public or not. */
+export const MyProfile = ProfileUpdate.extend({
+  /** Handle proposed from the pilot's name when none is chosen yet. */
+  suggestedHandle: PilotHandle,
+  /** When the profile was last made public; null if never. */
+  publishedAt: UtcTimestamp.nullable(),
+});
+export type MyProfile = z.infer<typeof MyProfile>;
+
+/** A landing worth showing: where and how soft. */
+const NotableLanding = z.object({
+  touchdownVs: z.number(),
+  airportIcao: IcaoCode.nullable(),
+  at: UtcTimestamp,
+});
+
+/** Statistics of the public flights (closed and not hidden). */
+export const PilotStats = z.object({
+  flights: z.number().int().nonnegative(),
+  airborneS: z.number().nonnegative(),
+  blockS: z.number().nonnegative(),
+  /** Distinct departure and arrival airports. */
+  airports: z.number().int().nonnegative(),
+  /** Distinct aircraft (by ICAO type, else title). */
+  aircraft: z.number().int().nonnegative(),
+  favoriteAircraft: z.string().nullable(),
+  /** Mean vertical speed at the touchdown of the final landing, ft/min (negative). */
+  averageTouchdownVs: z.number().nullable(),
+  /** Softest final touchdown. */
+  bestLanding: NotableLanding.nullable(),
+  longestFlight: z
+    .object({
+      blockS: z.number().nonnegative(),
+      departureIcao: IcaoCode.nullable(),
+      arrivalIcao: IcaoCode.nullable(),
+    })
+    .nullable(),
+  goArounds: z.number().int().nonnegative(),
+});
+export type PilotStats = z.infer<typeof PilotStats>;
+
+/** GET /v1/pilots/{handle} */
+export const PublicPilot = z.object({
+  handle: PilotHandle,
+  name: z.string(),
+  country: CountryCode.nullable(),
+  level: PilotLevel.nullable(),
+  vatsimId: VatsimId.nullable(),
+  ivaoId: IvaoId.nullable(),
+  memberSince: UtcTimestamp,
+  stats: PilotStats,
+});
+export type PublicPilot = z.infer<typeof PublicPilot>;
+
+/** One line of a public flight list. */
+export const PublicFlightSummary = FlightSummary.pick({
+  flightId: true,
+  callsign: true,
+  aircraftTitle: true,
+  aircraftModel: true,
+  departureIcao: true,
+  plannedArrivalIcao: true,
+  openedAt: true,
+  closedAt: true,
+  times: true,
+  alerts: true,
+}).extend({ touchdownVs: z.number().nullable() });
+export type PublicFlightSummary = z.infer<typeof PublicFlightSummary>;
+
+/** GET /v1/pilots/{handle}/flights */
+export const PublicFlightList = z.object({
+  flights: z.array(PublicFlightSummary),
+  nextCursor: z.string().nullable(),
+});
+export type PublicFlightList = z.infer<typeof PublicFlightList>;
+
+/** GET /v1/pilots/{handle}/flights/{flightId} */
+export const PublicFlightView = FlightView.pick({
+  flightId: true,
+  callsign: true,
+  aircraft: true,
+  departureIcao: true,
+  plannedArrivalIcao: true,
+  openedAt: true,
+  closedAt: true,
+  closeReason: true,
+  lastPhase: true,
+  times: true,
+  events: true,
+});
+export type PublicFlightView = z.infer<typeof PublicFlightView>;
+
+/** GET /v1/pilots: public profiles, for the site map. */
+export const PublicPilotIndex = z.object({
+  pilots: z.array(z.object({ handle: PilotHandle, updatedAt: UtcTimestamp })),
+});
+export type PublicPilotIndex = z.infer<typeof PublicPilotIndex>;
+
+/** PUT and GET /v1/flights/{flightId}/visibility: hide a flight from the public profile. */
+export const FlightVisibility = z.object({ hiddenOnProfile: z.boolean() });
+export type FlightVisibility = z.infer<typeof FlightVisibility>;
