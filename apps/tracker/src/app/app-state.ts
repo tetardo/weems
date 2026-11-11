@@ -1,5 +1,6 @@
 import type { FlightPhase } from "@weems/contrats";
 import type { ConnectorStatus } from "../core/connector.ts";
+import type { Delivery, LastFlight } from "../core/last-flight.ts";
 
 /** What the pilot sets before flying (the flight plan is optional). */
 export interface FlightSettings {
@@ -27,6 +28,8 @@ export interface AppState {
   /** Why sending stopped: login needed, or tracker too old. */
   blocked: "unauthorized" | "upgradeRequired" | null;
   settings: FlightSettings;
+  /** Short report of the last closed flight; the full one is on the site once sent. */
+  lastFlight: (LastFlight & { delivery: Delivery }) | null;
   /** Last problem to show (login failed, settings refused…), null when none. */
   notice: string | null;
 }
@@ -37,6 +40,8 @@ export interface AppCommands {
   logOut(): Promise<void>;
   saveSettings(settings: FlightSettings): Promise<void>;
   closeFlight(): Promise<void>;
+  /** Opens the report of the last flight on the site, in the pilot's browser. */
+  openReport(): Promise<void>;
   onState(listener: (state: AppState) => void): void;
 }
 
@@ -47,4 +52,5 @@ export const CHANNELS = {
   logOut: "weems:log-out",
   saveSettings: "weems:save-settings",
   closeFlight: "weems:close-flight",
+  openReport: "weems:open-report",
 } as const;

@@ -1,4 +1,5 @@
 import type { AppCommands, AppState } from "../app-state.ts";
+import { flightTimes, landingLine } from "./last-flight-view.ts";
 import { MESSAGES, type MessageKey, PHASES } from "./messages.ts";
 
 /** The window only displays the state and forwards clicks (architecture interne, part 7). */
@@ -46,6 +47,17 @@ function renderFlight(state: AppState): void {
   else show("sending", `${state.pending} ${text("pending")}`, state.loggedIn ? "wait" : "ko");
 }
 
+function renderLastFlight({ lastFlight }: AppState): void {
+  byId("last-flight").hidden = !lastFlight;
+  if (!lastFlight) return;
+  byId("last-flight-summary").textContent =
+    `${lastFlight.aircraftTitle} · ${flightTimes(lastFlight, lang)}`;
+  byId("last-flight-landing").textContent = landingLine(lastFlight, text);
+  const tone = { sent: "ok", waiting: "wait", refused: "ko" } as const;
+  show("last-flight-delivery", text(lastFlight.delivery), tone[lastFlight.delivery]);
+  byId("open-report").hidden = lastFlight.delivery !== "sent";
+}
+
 let settingsShown = false;
 
 /** Fills the form once: later states must not overwrite what the pilot is typing. */
@@ -63,6 +75,7 @@ function render(state: AppState): void {
   renderAccount(state);
   renderSimulator(state);
   renderFlight(state);
+  renderLastFlight(state);
   renderSettings(state);
   byId("notice").textContent = state.notice ? text(state.notice as MessageKey) : "";
 }
@@ -70,6 +83,7 @@ function render(state: AppState): void {
 byId("log-in").addEventListener("click", () => void window.weems.logIn());
 byId("log-out").addEventListener("click", () => void window.weems.logOut());
 byId("close-flight").addEventListener("click", () => void window.weems.closeFlight());
+byId("open-report").addEventListener("click", () => void window.weems.openReport());
 byId<HTMLFormElement>("settings").addEventListener("submit", (event) => {
   event.preventDefault();
   const fields = new FormData(event.currentTarget as HTMLFormElement);

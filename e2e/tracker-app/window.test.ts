@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { _electron, type ElectronApplication, type Page } from "playwright";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { Recorder } from "../../apps/tracker/src/storage/recorder.ts";
 
 /**
  * The real desktop tracker (J3), without the simulator nor the API. TRACKER_EXECUTABLE: the packaged
@@ -24,12 +25,40 @@ function launchOptions(dataDir: string) {
   return { executablePath: electron, args: [join(tracker, "dist", "app"), ...args], env };
 }
 
+/** A flight closed earlier on this PC, never sent (the pilot was not logged in). */
+function seedLastFlight(dir: string): void {
+  const recorder = new Recorder(join(dir, "tracker.db"));
+  const flightId = "0197a000-0000-7000-8000-000000000001";
+  recorder.open({
+    flightId,
+    callsign: "WMS1",
+    aircraft: {
+      simulator: "msfs2024",
+      title: "Airbus A320neo",
+      model: null,
+      registration: null,
+      engineCount: 2,
+      emptyWeightKg: null,
+    },
+    departureIcao: "LFPG",
+    plannedArrivalIcao: "LFBO",
+    openedAt: "2026-11-11T08:00:00.000Z",
+    trackerVersion: version,
+  });
+  const at = "2026-11-11T09:10:00.000Z";
+  recorder.event(flightId, { seq: 1, at, type: "goAround", context: {} });
+  recorder.event(flightId, { seq: 2, at, type: "touchdown", context: { vs: -142.6 } });
+  recorder.closeFlight(flightId, { closedAt: "2026-11-11T09:25:00.000Z", reason: "normal" });
+  recorder.close();
+}
+
 let dataDir: string;
 let app: ElectronApplication;
 let page: Page;
 
 beforeAll(async () => {
   dataDir = mkdtempSync(join(tmpdir(), "weems-tracker-app-"));
+  seedLastFlight(dataDir);
   app = await _electron.launch(launchOptions(dataDir));
   page = await app.firstWindow();
 });
@@ -45,6 +74,16 @@ describe("desktop tracker window", () => {
     await expect.poll(() => page.textContent("#simulator-status")).toMatch(/^MSFS non détecté/);
     expect(await page.isVisible("#log-in")).toBe(true);
     expect(await page.isVisible("#close-flight")).toBe(false);
+  });
+
+  it("shows the last flight, kept on the PC until it is sent", async () => {
+    await expect.poll(() => page.textContent("#last-flight-summary")).toMatch(/^Airbus A320neo · /);
+    expect(await page.textContent("#last-flight-summary")).toMatch(/\(1 h 25\)$/);
+    expect(await page.textContent("#last-flight-landing")).toBe(
+      "Toucher -143 ft/min · 1 remise(s) des gaz",
+    );
+    expect(await page.textContent("#last-flight-delivery")).toBe("En attente d'envoi.");
+    expect(await page.isVisible("#open-report")).toBe(false);
   });
 
   it("refuses a malformed callsign and keeps a valid next flight on the PC", async () => {

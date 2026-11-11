@@ -44,6 +44,7 @@ function listen(tracker: DesktopTracker): void {
     tracker.saveSettings(settings),
   );
   ipcMain.handle(CHANNELS.closeFlight, () => tracker.closeFlight());
+  ipcMain.handle(CHANNELS.openReport, () => tracker.openReport());
   setInterval(() => {
     const state: AppState = tracker.state();
     window?.webContents.send(CHANNELS.state, state);

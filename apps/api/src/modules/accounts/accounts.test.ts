@@ -111,6 +111,10 @@ describe("tracker login (OAuth 2.1, PKCE, loopback redirect)", () => {
 
   it("tells the tracker how to log in", async () => {
     const response = await app.inject({ method: "GET", url: "/v1/tracker/login" });
-    expect(response.json()).toMatchObject({ clientId: "weems-tracker", redirectPath: "/callback" });
+    expect(response.json()).toMatchObject({
+      clientId: "weems-tracker",
+      redirectPath: "/callback",
+      siteUrl: expect.stringMatching(/^http/),
+    });
   });
 });

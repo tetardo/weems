@@ -17,5 +17,7 @@ export const TrackerLogin = z.object({
   resource: z.url(),
   /** Path of the loopback redirect, after http://127.0.0.1:{port}. */
   redirectPath: z.string().startsWith("/"),
+  /** The website: the report of a flight is at {siteUrl}/flights/{flightId} (J3). */
+  siteUrl: z.url(),
 });
 export type TrackerLogin = z.infer<typeof TrackerLogin>;

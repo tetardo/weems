@@ -1,9 +1,11 @@
 import { join } from "node:path";
 import { Account } from "../account/account.ts";
+import { fetchLoginSettings } from "../account/browser-login.ts";
 import { type Cipher, encryptedFileStore } from "../account/token-store.ts";
 import type { SimLink } from "../connectors/msfs/sim-link.ts";
 import { startMsfsTracker } from "../runtime/msfs-tracker.ts";
 import { httpApiClient } from "../sender/api-client.ts";
+import { lastClosedFlight } from "../storage/last-flight.ts";
 import type { AppState, FlightSettings } from "./app-state.ts";
 import { FlightSettingsSchema, loadSettings, saveSettings } from "./settings-file.ts";
 
@@ -49,7 +51,8 @@ export class DesktopTracker {
   }
 
   state(): AppState {
-    const { runtime, sender } = this.tracker.tracker;
+    const { runtime, sender, recorder } = this.tracker.tracker;
+    const last = lastClosedFlight(recorder.db);
     const flightId = runtime.currentFlightId;
     return {
       version: this.options.version,
@@ -62,6 +65,7 @@ export class DesktopTracker {
       pending: sender.pendingCount(),
       blocked: sender.block,
       settings: this.settings,
+      lastFlight: last && { ...last, delivery: sender.deliveryOf(last.flightId) },
       notice: this.notice,
     };
   }
@@ -100,6 +104,19 @@ export class DesktopTracker {
 
   closeFlight(): void {
     this.tracker.closeFlight();
+  }
+
+  /** The site's address comes from the API, like the login settings: nothing is hard-coded. */
+  async openReport(): Promise<void> {
+    const last = lastClosedFlight(this.tracker.tracker.recorder.db);
+    if (!last) return;
+    this.notice = null;
+    try {
+      const { siteUrl } = await fetchLoginSettings(this.options.apiUrl);
+      await this.options.openBrowser(new URL(`/flights/${last.flightId}`, siteUrl).toString());
+    } catch {
+      this.notice = "reportUnavailable";
+    }
   }
 
   /** Returns the number of messages left for the next launch. */

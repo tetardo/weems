@@ -1,5 +1,6 @@
 import { type Database, inTransaction } from "../storage/sqlite.ts";
 import type { FlightEvent } from "@weems/contrats";
+import type { Delivery } from "../core/last-flight.ts";
 import type { ApiClient } from "./api-client.ts";
 import { actionFor, retryDelayMs } from "./retry.ts";
 
@@ -114,6 +115,14 @@ export class OutboxSender {
       } else accepted += 1;
     }
     return accepted;
+  }
+
+  deliveryOf(flightId: string): Delivery {
+    const rows = this.db
+      .prepare("SELECT status FROM outbox WHERE flight_id = ?")
+      .all(flightId) as unknown as { status: "pending" | "parked" }[];
+    if (rows.some((row) => row.status === "parked")) return "refused";
+    return rows.length > 0 ? "waiting" : "sent";
   }
 
   /** True once the API accepted the opening of this flight (nothing of it left to open). */

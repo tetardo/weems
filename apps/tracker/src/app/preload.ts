@@ -7,6 +7,7 @@ const commands: AppCommands = {
   logOut: () => ipcRenderer.invoke(CHANNELS.logOut),
   saveSettings: (settings) => ipcRenderer.invoke(CHANNELS.saveSettings, settings),
   closeFlight: () => ipcRenderer.invoke(CHANNELS.closeFlight),
+  openReport: () => ipcRenderer.invoke(CHANNELS.openReport),
   onState: (listener) => {
     ipcRenderer.on(CHANNELS.state, (_event, state: AppState) => listener(state));
   },
