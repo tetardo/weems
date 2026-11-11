@@ -62,7 +62,7 @@ Règles :
 
 **Profil** (`/pilots/{handle}`)
 
-Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols ; statistiques (en tête de section, Activités et Heures de décollage sur une ligne, puis Atterrissages, Répartition des touchers et Durée des vols sur la suivante ; ensuite les tuiles) ; compagnies (lot 3) ; expérience par catégorie et médailles côte à côte (toutes deux plus tard) ; liste des vols.
+Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols ; statistiques (en tête de section, Activités et Heures de décollage sur une ligne, puis Atterrissages (demi-largeur), Répartition des touchers et Durée des vols (quart de largeur chacun) sur la suivante ; ensuite les tuiles) ; compagnies (lot 3) ; expérience par catégorie et médailles côte à côte (toutes deux plus tard) ; liste des vols.
 
 - En-tête : photo (initiales à défaut), pseudo, drapeau et nom du pays, niveau déclaré, « sur Weems depuis » (création du compte), avion le plus volé, liens vers les pages VATSIM et IVAO du pilote, bouton « Partager ».
 - Statistiques : nombre de vols, heures de vol (temps en vol) et heures bloc, aéroports différents visités, nombre d'avions différents, taux de chute moyen au toucher et meilleur atterrissage (le plus doux), plus long vol, nombre de remises des gaz, heures de jour et de nuit.
