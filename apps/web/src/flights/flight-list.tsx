@@ -5,9 +5,13 @@ import { CardBox } from "../ui/card-box.tsx";
 import { FlightsIcon } from "../ui/icons.ts";
 import { SectionMain } from "../ui/section-main.tsx";
 import { SectionTitle } from "../ui/section-title.tsx";
+import { DeleteAllButton } from "./delete-all-button.tsx";
 import { FlightFilters } from "./flight-filters.tsx";
 import { FlightTable } from "./flight-table.tsx";
 import { type ListFilters, withoutCursor } from "./list-query.ts";
+
+/** Development tools (delete all flights): `pnpm dev` only, never in a production build. */
+const DEV_TOOLS = process.env.NODE_ENV === "development";
 
 /** The /flights page: filters, table, link to older flights. */
 export function FlightList({ list, filters }: { list: FlightListData; filters: ListFilters }) {
@@ -16,7 +20,9 @@ export function FlightList({ list, filters }: { list: FlightListData; filters: L
   const filtered = Object.keys(kept).length > 0;
   return (
     <SectionMain>
-      <SectionTitle icon={FlightsIcon} title={t("title")} main />
+      <SectionTitle icon={FlightsIcon} title={t("title")} main>
+        {DEV_TOOLS && list.flights.length > 0 && <DeleteAllButton />}
+      </SectionTitle>
       <FlightFilters filters={filters} />
       {list.flights.length === 0 ? (
         <CardBox>

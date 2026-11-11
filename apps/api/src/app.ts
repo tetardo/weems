@@ -9,6 +9,7 @@ import { AccountsRepository } from "./modules/accounts/repository.ts";
 import { registerAccountRoutes } from "./modules/accounts/routes.ts";
 import { AccountsService } from "./modules/accounts/service.ts";
 import { ensureTrackerClient } from "./modules/accounts/tracker-client.ts";
+import { registerDevFlightRoutes } from "./modules/flights/dev-routes.ts";
 import { FlightsRepository } from "./modules/flights/repository.ts";
 import { registerFlightRoutes } from "./modules/flights/routes.ts";
 import { FlightsService } from "./modules/flights/service.ts";
@@ -59,6 +60,7 @@ export async function buildApp({
   registerAccountRoutes(app, auth, config);
   const guards = registerAuth(app, config, new PilotIdentifier(auth, config.apiUrl));
   registerFlightRoutes(app, flights, guards);
+  if (config.env !== "production") registerDevFlightRoutes(app, flights, guards);
   const tracks = new TracksService(new PostgresTrackStore(database.db), flights);
   registerTrackRoutes(app, tracks, guards);
   registerReviewRoutes(

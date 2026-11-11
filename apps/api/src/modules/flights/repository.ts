@@ -8,7 +8,7 @@ import {
   Simulator,
 } from "@weems/contrats";
 import type { Database } from "../../db/client.ts";
-import { flightEvents, flights } from "../../db/schema.ts";
+import { flightEvents, flightReviews, flights, flightTracks } from "../../db/schema.ts";
 import type { ListPosition } from "./list-cursor.ts";
 
 /** A stored flight, in the shared formats. */
@@ -115,6 +115,24 @@ export class FlightsRepository {
       .onConflictDoNothing()
       .returning({ id: flights.id });
     return inserted.length > 0;
+  }
+
+  /**
+   * Development only (see dev-routes.ts): deletes every flight of the pilot with its events,
+   * trajectory and review. Returns the deleted ids.
+   */
+  async deleteAllOf(pilotId: string): Promise<string[]> {
+    return this.db.transaction(async (tx) => {
+      const owned = tx.select({ id: flights.id }).from(flights).where(eq(flights.pilotId, pilotId));
+      await tx.delete(flightEvents).where(inArray(flightEvents.flightId, owned));
+      await tx.delete(flightTracks).where(inArray(flightTracks.flightId, owned));
+      await tx.delete(flightReviews).where(inArray(flightReviews.flightId, owned));
+      const deleted = await tx
+        .delete(flights)
+        .where(eq(flights.pilotId, pilotId))
+        .returning({ id: flights.id });
+      return deleted.map((row) => row.id);
+    });
   }
 
   /** Closes the flight if still open. Returns false when it was already closed. */

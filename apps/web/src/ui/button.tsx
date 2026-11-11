@@ -6,6 +6,7 @@ const VARIANTS = {
     "bg-accent text-on-accent hover:bg-[color-mix(in_srgb,var(--color-accent)_85%,var(--color-ink))]",
   outline: "border border-line hover:bg-ink/9",
   ghost: "hover:bg-ink/9",
+  danger: "border border-danger/50 text-danger hover:bg-danger/12",
 } as const;
 
 type Variant = keyof typeof VARIANTS;

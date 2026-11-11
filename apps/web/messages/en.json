@@ -101,7 +101,10 @@
     },
     "next": "Older flights",
     "first": "Back to the latest",
-    "apiDown": "The API does not answer ({url}). Is it running on the Mac?"
+    "apiDown": "The API does not answer ({url}). Is it running on the Mac?",
+    "deleteAll": "Delete all my flights",
+    "deleteAllConfirm": "Permanently delete all your flights? (development tool)",
+    "deleteAllHint": "Development only: clears the test flights."
   },
   "Flight": {
     "back": "My flights",

@@ -150,6 +150,12 @@ export class FlightsService {
     };
   }
 
+  /** Development only: empties the caller's flight list (and takes them off the live map). */
+  async deleteAll(caller: Caller): Promise<void> {
+    const deleted = await this.repository.deleteAllOf(caller.pilotId);
+    for (const flightId of deleted) this.live.closed(flightId);
+  }
+
   /** A pilot only sees their own flights: someone else's flight is "not found". */
   private async ownFlight(caller: Caller, flightId: string): Promise<FlightRecord> {
     const flight = await this.repository.findFlight(flightId);
