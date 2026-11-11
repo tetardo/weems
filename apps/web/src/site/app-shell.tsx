@@ -1,10 +1,9 @@
 "use client";
 
-import { mdiMenu } from "@mdi/js";
 import { useTranslations } from "next-intl";
 import { type ReactNode, useState } from "react";
 import { buttonClass } from "../ui/button.tsx";
-import { Icon } from "../ui/icon.tsx";
+import { MenuIcon } from "../ui/icons.ts";
 import { AsideMenu } from "./aside-menu.tsx";
 
 /**
@@ -23,7 +22,7 @@ export function AppShell({ topBar, children }: { topBar: ReactNode; children: Re
           onClick={() => setMenuOpen(true)}
           aria-label={t("openMenu")}
         >
-          <Icon path={mdiMenu} size={22} />
+          <MenuIcon size={22} aria-hidden="true" />
         </button>
         <div className="ml-auto flex items-center gap-1">{topBar}</div>
       </nav>

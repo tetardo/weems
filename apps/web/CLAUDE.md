@@ -19,9 +19,9 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 
 - Next.js (App Router), React, TypeScript strict.
 - Traductions : `next-intl`, textes dans `messages/fr.json` et `messages/en.json`, jamais écrits en dur ; un test vérifie que les deux fichiers ont les mêmes clés.
-- Mise en forme : Tailwind CSS 4 (`src/app/global.css`), look du projet GameLab IA de Greg (choix du 11/11/2026, fiche `docs/decisions/001-look-du-site-gamelab.md`) : thème sombre par défaut, clair selon le réglage du système, couleurs en variables dans `global.css` (jamais de couleur Tailwind en dur comme `bg-white` ou `text-blue-600`), polices Inter et Space Grotesk servies par `next/font`, menu latéral de 240 px (en tiroir sous 1024 px), boutons et champs de 44 px. Composants dans `src/ui/` et `src/site/`, pages du menu dans `src/site/menu-items.ts`. Icônes : `@mdi/js`.
+- Mise en forme : Tailwind CSS 4 (`src/app/global.css`), look du projet GameLab IA de Greg (choix du 11/11/2026, fiche `docs/decisions/001-look-du-site-gamelab.md`) : thème sombre par défaut, clair selon le réglage du système, couleurs en variables dans `global.css` (jamais de couleur Tailwind en dur comme `bg-white` ou `text-blue-600`), polices Inter et Space Grotesk servies par `next/font`, menu latéral de 240 px (en tiroir sous 1024 px), boutons et champs de 44 px. Composants dans `src/ui/` et `src/site/`, pages du menu dans `src/site/menu-items.ts`. Icônes : Lucide (`lucide-react`), importé seulement dans `src/ui/icons.ts`, qui les renomme selon leur sens (fiche `docs/decisions/002-icones-lucide-et-carte-sombre.md`).
 - Ne pas ajouter de bibliothèque de gestion d'état (Redux…) : les données viennent du serveur, les filtres sont dans l'adresse, le reste reste dans le composant.
-- Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé).
+- Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé) : « dark » en thème sombre, « positron » en clair ; couleurs des calques de la carte dans `src/map/map-theme.ts`.
 - Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.
 - Les pages de vol sont rendues côté serveur : le serveur du site appelle l'API (`WEEMS_API_URL`) en lui transmettant le cookie de session du pilote ; seule la carte en direct appelle l'API depuis le navigateur.
 - Connexion (J3) : `src/proxy.ts` relaie `/api/auth/*` vers l'API (Better Auth), pour que le cookie de session soit celui du site. Sans ce cookie, toute page renvoie vers `/login?next=…`. L'API vérifie le cookie à chaque appel : le proxy ne fait que regarder s'il est présent.
@@ -40,8 +40,8 @@ src/
   api/weems-api.ts     appels à l'API depuis le serveur du site (liste, vol, trajectoire), en tant que pilote connecté
   auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion
   site/                cadre des pages (app-shell, marque, menu latéral, barre du haut), choix de la langue, adresse de l'API, API injoignable
-  ui/                  composants visuels : icône, panneau, bouton, champ, titre de section
-  map/base-map.ts      carte MapLibre commune (fond OpenFreeMap, fond de secours sans réseau)
+  ui/                  composants visuels : icônes, panneau, bouton, champ, titre de section
+  map/                 carte MapLibre commune (base-map.ts : fond OpenFreeMap, fond de secours sans réseau ; map-theme.ts : fond et couleurs selon le thème)
   format/              durées h:mm, trajet, heure UTC
   flights/             liste des vols : filtres (list-query.ts), tableau, pastilles, état
   flight/              page de vol
