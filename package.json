@@ -18,7 +18,8 @@
     "structure:unused": "knip",
     "test": "vitest run --passWithNoTests",
     "test:j1": "vitest run --config e2e/vitest.j1.config.ts",
-    "test:j2": "pnpm --filter @weems/web build && vitest run --config e2e/vitest.j2.config.ts"
+    "test:j2": "pnpm --filter @weems/web build && vitest run --config e2e/vitest.j2.config.ts",
+    "test:j3": "pnpm --filter @weems/web build && vitest run --config e2e/vitest.j3.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

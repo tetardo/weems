@@ -1,9 +1,10 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Suspense } from "react";
+import { PilotMenu } from "../auth/pilot-menu.tsx";
 import { Link } from "../i18n/navigation.ts";
 import { LanguageSwitch } from "./language-switch.tsx";
 
-/** Top bar of every page: site name, sections, language. No branding before J4. */
+/** Top bar of every page: site name, sections, language, pilot. No branding before J4. */
 export function SiteHeader() {
   const t = useTranslations("Site");
   const locale = useLocale();
@@ -19,6 +20,7 @@ export function SiteHeader() {
       <Suspense>
         <LanguageSwitch other={locale === "fr" ? "en" : "fr"} label={t("language")} />
       </Suspense>
+      <PilotMenu />
     </header>
   );
 }

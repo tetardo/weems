@@ -1,8 +1,9 @@
 import type { AddressInfo } from "node:net";
-import { type Browser, chromium } from "playwright";
+import { type Browser, type BrowserContext, chromium } from "playwright";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startTestApp } from "../../apps/api/src/testing/test-app.ts";
-import { startSite } from "./site-server.ts";
+import { loggedInContext } from "../site/log-in.ts";
+import { siteAddress, startSite } from "../site/site-server.ts";
 import { sendTwoHourFlight, TWO_HOUR_PHASES } from "./two-hour-flight.ts";
 
 /**
@@ -14,18 +15,21 @@ const MAX_LOAD_MS = 2_000;
 let api: Awaited<ReturnType<typeof startTestApp>>;
 let site: Awaited<ReturnType<typeof startSite>>;
 let browser: Browser;
+let pilot: BrowserContext;
 let flightId: string;
 let apiUrl: string;
 
 beforeAll(async () => {
-  api = await startTestApp();
+  const sitePort = 3_100 + Math.floor(Math.random() * 800);
+  api = await startTestApp({ WEEMS_SITE_URL: siteAddress(sitePort) }); // login forms come from the site
   await api.app.listen({ port: 0, host: "127.0.0.1" });
   apiUrl = `http://127.0.0.1:${(api.app.server.address() as AddressInfo).port}`;
   flightId = await sendTwoHourFlight(apiUrl);
-  site = await startSite(3_100 + Math.floor(Math.random() * 800), apiUrl);
+  site = await startSite(sitePort, apiUrl);
   // CHROMIUM_PATH: a browser already installed (Claude Code sandbox); otherwise Playwright's own.
   const executablePath = process.env["CHROMIUM_PATH"];
   browser = await chromium.launch(executablePath ? { executablePath } : {});
+  pilot = await loggedInContext(browser, site.url); // the flight belongs to the development pilot
 });
 afterAll(async () => {
   await browser?.close();
@@ -35,7 +39,7 @@ afterAll(async () => {
 
 /** Opens the flight page and waits until the map and the profile are drawn. */
 async function openFlight(locale: "fr" | "en") {
-  const page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });
+  const page = await pilot.newPage();
   const started = performance.now();
   await page.goto(`${site.url}/${locale}/flights/${flightId}`);
   await page.waitForSelector("svg[role=img] path");
