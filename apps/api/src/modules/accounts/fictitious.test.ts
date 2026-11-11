@@ -128,6 +128,7 @@ describe("fictitious accounts (development only)", () => {
       accounts: 0,
       publicProfiles: 0,
       flights: 0,
+      pilotIds: [],
     });
     expect(await fly(as(pilot?.pilotId ?? ""))).toBe(401);
     const counts = await app.inject({ method: "GET", url: "/v1/dev/flight-counts", headers: DEV });

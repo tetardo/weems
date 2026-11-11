@@ -136,7 +136,7 @@ function toScenario(leg: Leg, index: number): Scenario {
 export const FLEET: readonly Scenario[] = LEGS.map(toScenario);
 
 /** Performance of each type for the extra legs of a large fleet (no disturbance). */
-const TYPES = [
+export const TYPES = [
   { aircraft: A320, cruiseAltFt: 33000, cruiseGs: 450, approachGs: 140 },
   { aircraft: A319, cruiseAltFt: 31000, cruiseGs: 440, approachGs: 135 },
   { aircraft: B738, cruiseAltFt: 34000, cruiseGs: 455, approachGs: 145 },

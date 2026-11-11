@@ -46,5 +46,7 @@ export const FictitiousPopulation = z.object({
   accounts: z.number().int().nonnegative(),
   publicProfiles: z.number().int().nonnegative(),
   flights: z.number().int().nonnegative(),
+  /** The fictitious accounts, for the live activity to fly as them. */
+  pilotIds: z.array(z.uuid()),
 });
 export type FictitiousPopulation = z.infer<typeof FictitiousPopulation>;

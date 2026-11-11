@@ -88,39 +88,29 @@ export async function buildApp({
   const guards = registerAuth(app, config, identifier);
   const profiles = new ProfilesRepository(database.db);
   const profileSettings = new ProfilesService(profiles, flights, accounts);
-  registerAdminAccountRoutes(
-    app,
-    new AdminAccountsService(
-      new AdminAccountsRepository(database.db),
-      accounts,
-      flights,
-      profileSettings,
-    ),
-    guards,
-  );
-  if (config.env !== "production") {
-    const fictitious = new FictitiousAccountsRepository(database.db);
-    registerFictitiousPilotRoutes(
-      app,
-      new FictitiousPilotsService(fictitious, flights, profileSettings),
-      guards,
-    );
-  }
+  const adminRepository = new AdminAccountsRepository(database.db);
+  const admin = new AdminAccountsService(adminRepository, accounts, flights, profileSettings);
+  registerAdminAccountRoutes(app, admin, guards);
   registerFlightRoutes(app, flights, guards);
-  if (config.env !== "production") registerDevFlightRoutes(app, flights, guards);
   const tracks = new TracksService(new PostgresTrackStore(database.db), flights);
   registerTrackRoutes(app, tracks, guards);
-  registerReviewRoutes(
-    app,
-    new ReviewsService(new ReviewsRepository(database.db), flights),
-    guards,
-  );
+  const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
+  registerReviewRoutes(app, reviews, guards);
   registerProfileRoutes(app, profileSettings, guards);
   registerPublicProfileRoutes(app, new PublicProfilesService(profiles, flights, tracks, accounts));
   const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
-  if (config.env !== "production") registerDevLiveRoutes(app, board, stream);
+  if (config.env !== "production") {
+    registerDevFlightRoutes(app, flights, guards);
+    registerDevLiveRoutes(app, board, stream);
+    const fictitious = new FictitiousPilotsService(
+      new FictitiousAccountsRepository(database.db),
+      flights,
+      profileSettings,
+    );
+    registerFictitiousPilotRoutes(app, fictitious, guards);
+  }
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());
 

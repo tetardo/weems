@@ -90,6 +90,14 @@ export {
 } from "./api/fictitious.ts";
 export { PilotProgress, SimulationLine, SimulationProgress } from "./tools/simulation-progress.ts";
 export {
+  LiveActivityLine,
+  LiveActivityProgress,
+  PopulationLine,
+  PopulationProgress,
+  PopulationResult,
+  PopulationStep,
+} from "./tools/activity-progress.ts";
+export {
   AccountRole,
   AccountUpdate,
   AdminAccount,

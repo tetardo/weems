@@ -76,14 +76,14 @@ export class FictitiousPilotsService {
       accounts: ids.length,
       publicProfiles: ids.filter((id) => handles.has(id)).length,
       flights: sumOf(ids, flights),
+      pilotIds: ids,
     };
   }
 
   /** Flights first (they do not cascade), then the accounts. Returns what was deleted. */
   async deleteAll(): Promise<FictitiousPopulation> {
     const before = await this.population();
-    const ids = await this.repository.ids();
-    for (const pilotId of ids) await this.flights.deleteAll({ pilotId });
+    for (const pilotId of before.pilotIds) await this.flights.deleteAll({ pilotId });
     await this.repository.deleteAll();
     return before;
   }
