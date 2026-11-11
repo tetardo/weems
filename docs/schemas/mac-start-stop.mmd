@@ -1,0 +1,24 @@
+flowchart TB
+  subgraph bureau["Bureau du Mac"]
+    start["Weems Start.command"]
+    stop["Weems Stop.command"]
+  end
+  subgraph depot["Dépôt : scripts/mac/"]
+    s1["start.sh<br/>1. Docker Desktop<br/>2. arrêt de weems-api-1<br/>3. base (compose up -d db)<br/>4. apps/api/.env sur /weems<br/>5. ports 3000-3002 libres<br/>6. pnpm admin"]
+    s2["stop.sh<br/>signale la fenêtre Start<br/>sinon arrête lui-même"]
+  end
+  console["Console :3002<br/>POST /api/lifecycle"]
+  api["API :3000"]
+  site["Site :3001"]
+  sim["Simulation en cours"]
+  db["Base PostgreSQL<br/>(docker compose stop,<br/>jamais down -v)"]
+
+  start --> s1
+  stop --> s2
+  s1 -->|"start-all"| console
+  s1 -->|"ouvre le navigateur"| console
+  s2 -->|"stop-all"| console
+  console --> api
+  console --> site
+  console -->|"arrêt d'abord"| sim
+  console --> db

@@ -71,7 +71,9 @@ flowchart LR
 
 ### Démarrer en local
 
-Docker Desktop doit être lancé. Un onglet de Terminal par programme, depuis la racine du dépôt.
+**Le plus simple : deux icônes sur le bureau du Mac**, Weems Start et Weems Stop (installation une fois : `bash scripts/mac/install-desktop-icons.sh`). Start lance Docker Desktop, la base, la console, l'API et le site, puis ouvre la console ; Stop arrête tout, base comprise, sans effacer de données. Détails : [docs/developpement/demarrage-mac.md](docs/developpement/demarrage-mac.md).
+
+À la main : Docker Desktop doit être lancé. Un onglet de Terminal par programme, depuis la racine du dépôt.
 
 ```mermaid
 flowchart LR
