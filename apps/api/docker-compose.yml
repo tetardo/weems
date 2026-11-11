@@ -1,4 +1,4 @@
-# Everything the API needs on the Mac: `docker compose up` from apps/api/ (spec J0, criterion 1).
+# Everything the API needs on the Mac (file storage arrives at J2 with flight tracks): `docker compose up` from apps/api/ (spec J0, criterion 1).
 # Tests only need the database: `docker compose up -d db`.
 name: weems
 
@@ -31,17 +31,5 @@ services:
       interval: 2s
       retries: 15
 
-  # Flight track files from J2 (S3-compatible, like Scaleway Object Storage in production).
-  storage:
-    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: weems
-      MINIO_ROOT_PASSWORD: weems-dev-only
-    ports: ["9000:9000", "9001:9001"]
-    volumes:
-      - storage-data:/data
-
 volumes:
   db-data:
-  storage-data:
