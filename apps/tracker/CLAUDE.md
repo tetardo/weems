@@ -50,7 +50,6 @@ src/core/                 cœur sans dépendance : session de vol, journal des �
   connector.ts            interface SimConnector ; clock.ts : horloge injectée
   position-cadence.ts     fréquence des positions selon la phase (spec J1)
   recovery.ts             reprise après crash (ENF-02) : même avion, < 5 NM, < 30 min
-  geo.ts                  distance orthodromique en milles nautiques (reprise, générateur de vols)
 src/connectors/replay/    format de rejeu JSONL, connecteur de rejeu, écriture d'un rejeu (replay-writer.ts)
 src/connectors/msfs/      J2 : connecteur MSFS. simconnect-link.ts (seul fichier qui importe node-simconnect),
                           sim-vars.ts (variables lues, vérifiées contre simvars.yaml par test), to-sample.ts,
@@ -70,6 +69,9 @@ src/app/                  J3 : application de bureau. desktop-tracker.ts (assemb
 src/storage/sqlite.ts     seul fichier qui ouvre SQLite (`node:sqlite`, intégré à Node et à Electron)
 scripts/build-app.ts      regroupe l'application dans dist/app/ (esbuild) ; electron-builder.yml : installateur
 tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes, fleetOf(N) pour la charge (J4)
+  airports/               aéroports de la flotte avec pistes et altitude (airports.json figé, extrait d'OurAirports)
+  navigation/             navigateur par segments, virages, plan de route (pistes, arrivée, circuit), profil vertical
+                          (fiche docs/decisions/010) ; flight-script.ts avance l'avion selon son cap et sa vitesse
 tools/simulate/           J1 : N trackers sans interface dans un seul processus
 tools/fly/                J2 : tracker sans interface sur le PC Windows (même assemblage que l'app : src/runtime/msfs-tracker.ts)
 ```
@@ -77,6 +79,7 @@ tools/fly/                J2 : tracker sans interface sur le PC Windows (même a
 | Commande (depuis `apps/tracker/`) | Effet |
 | --- | --- |
 | `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
+| `pnpm airports:simulated --add LFML` | Réécrit `tools/generate-flights/airports/airports.json` depuis OurAirports (ajoute des aéroports à la flotte possible) |
 | `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts` ; au-delà de 10, routes tirées par `fleetOf`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
 | `pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO` | J2, sur le PC Windows avec MSFS lancé : enregistre le vol, l'envoie à l'API, écrit le rejeu dans `recordings/` (ignoré par git). « fin » + Entrée clôt le vol, Ctrl+C quitte |
 | `pnpm app` | J3 : lance l'application de bureau (API : http://localhost:3000, ou `WEEMS_API_URL`) |
