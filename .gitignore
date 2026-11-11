@@ -4,3 +4,7 @@ out/
 .DS_Store
 *.log
 .env
+coverage/
+*.tsbuildinfo
+.env.*
+!.env.example
