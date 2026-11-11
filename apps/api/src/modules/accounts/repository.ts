@@ -26,6 +26,12 @@ export interface FirstPartyClient {
   resource: string;
 }
 
+/** What other pilots may know of an account: its public name and when it was created. */
+export interface PilotIdentity {
+  name: string;
+  createdAt: Date;
+}
+
 export interface DevPilot {
   id: string;
   name: string;
@@ -131,5 +137,13 @@ export class AccountsRepository {
         updatedAt: now,
       });
     });
+  }
+
+  async findPilot(pilotId: string): Promise<PilotIdentity | null> {
+    const [row] = await this.db
+      .select({ name: users.name, createdAt: users.createdAt })
+      .from(users)
+      .where(eq(users.id, pilotId));
+    return row ?? null;
   }
 }

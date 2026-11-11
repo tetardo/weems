@@ -1,4 +1,4 @@
-import type { FlightView } from "@weems/contrats";
+import type { PublicFlightView } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { formatDuration, formatRoute } from "../format/flight-format.ts";
 import { CategoryBadge } from "../aircraft/category-badge.tsx";
@@ -6,7 +6,7 @@ import { FlightStatus } from "../flights/flight-status.tsx";
 import { CardBox } from "../ui/card-box.tsx";
 
 /** Callsign, aircraft, route, date, block and flight times, pauses apart (EF-15). */
-export function FlightHeader({ flight }: { flight: FlightView }) {
+export function FlightHeader({ flight }: { flight: PublicFlightView }) {
   const t = useTranslations("Flight.header");
   const site = useTranslations("Site");
   const format = useFormatter();

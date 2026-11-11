@@ -5,7 +5,9 @@ import type { Caller } from "../../plugins/auth.ts";
 import { conflict, notFound } from "../../plugins/problem.ts";
 import type { FlightsService } from "../flights/service.ts";
 import { phaseChangeIndices, phasesAt, phaseStarts } from "./phase-timeline.ts";
-import type { TrackStore } from "./repository.ts";
+import type { TrackEndpoints, TrackStore } from "./repository.ts";
+
+export type { TrackEndpoints };
 import { simplifyTrack } from "./simplify.ts";
 
 /** About 500 points draw a 2-hour flight well and keep its page under 2 s (spec J2). */
@@ -51,6 +53,18 @@ export class TracksService {
       recordedPoints: track.recordedPoints,
       points: track.simplified.map((point, i) => ({ ...point, phase: phases[i] ?? null })),
     };
+  }
+
+  /*
+   * The two readings below serve public profiles (map, day and night hours). No access check:
+   * the caller (profiles service) passes only flights it may show.
+   */
+  async simplifiedOf(flightIds: readonly string[]): Promise<Map<string, TrackPoint[]>> {
+    return this.store.simplifiedOf(flightIds);
+  }
+
+  async endpoints(flightIds: readonly string[]): Promise<Map<string, TrackEndpoints>> {
+    return this.store.endpoints(flightIds);
   }
 
   private resend(existing: { sha256: string } | null, sha256: string, flightId: string): Receipt {

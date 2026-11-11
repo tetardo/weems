@@ -1,5 +1,5 @@
 {
-  "id": "4ead54e2-af86-4318-b899-2cd9f46b9706",
+  "id": "4c314bc8-b537-448b-8cf8-9f6083223e50",
   "prevId": "8d7488df-da3a-443c-85cc-aeea68a870e2",
   "version": "7",
   "dialect": "postgresql",
@@ -226,37 +226,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "aircraft_engine_type": {
-          "name": "aircraft_engine_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "aircraft_airframe": {
-          "name": "aircraft_airframe",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "aircraft_max_gross_weight_kg": {
-          "name": "aircraft_max_gross_weight_kg",
-          "type": "double precision",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "aircraft_category": {
-          "name": "aircraft_category",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "aircraft_category_estimated": {
-          "name": "aircraft_category_estimated",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
         "departure_icao": {
           "name": "departure_icao",
           "type": "text",
@@ -315,18 +284,44 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.profile_hidden_flights": {
+      "name": "profile_hidden_flights",
+      "schema": "",
+      "columns": {
+        "flight_id": {
+          "name": "flight_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
         },
-        "flights_pilot_category_idx": {
-          "name": "flights_pilot_category_idx",
+        "pilot_id": {
+          "name": "pilot_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden_at": {
+          "name": "hidden_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "profile_hidden_flights_pilot_idx": {
+          "name": "profile_hidden_flights_pilot_idx",
           "columns": [
             {
               "expression": "pilot_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "aircraft_category",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -338,9 +333,178 @@
           "with": {}
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "profile_hidden_flights_flight_id_flights_id_fk": {
+          "name": "profile_hidden_flights_flight_id_flights_id_fk",
+          "tableFrom": "profile_hidden_flights",
+          "tableTo": "flights",
+          "columnsFrom": ["flight_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pilot_photos": {
+      "name": "pilot_photos",
+      "schema": "",
+      "columns": {
+        "pilot_id": {
+          "name": "pilot_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "webp": {
+          "name": "webp",
+          "type": "bytea",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pilot_photos_pilot_id_users_id_fk": {
+          "name": "pilot_photos_pilot_id_users_id_fk",
+          "tableFrom": "pilot_photos",
+          "tableTo": "users",
+          "columnsFrom": ["pilot_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pilot_profiles": {
+      "name": "pilot_profiles",
+      "schema": "",
+      "columns": {
+        "pilot_id": {
+          "name": "pilot_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "handle": {
+          "name": "handle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "home_icao": {
+          "name": "home_icao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "level": {
+          "name": "level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vatsim_id": {
+          "name": "vatsim_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ivao_id": {
+          "name": "ivao_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "simbrief_id": {
+          "name": "simbrief_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unpublished_at": {
+          "name": "unpublished_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "pilot_profiles_public_idx": {
+          "name": "pilot_profiles_public_idx",
+          "columns": [
+            {
+              "expression": "is_public",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pilot_profiles_pilot_id_users_id_fk": {
+          "name": "pilot_profiles_pilot_id_users_id_fk",
+          "tableFrom": "pilot_profiles",
+          "tableTo": "users",
+          "columnsFrom": ["pilot_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "pilot_profiles_handle_unique": {
+          "name": "pilot_profiles_handle_unique",
+          "nullsNotDistinct": false,
+          "columns": ["handle"]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

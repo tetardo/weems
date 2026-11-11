@@ -4,13 +4,20 @@
     "description": "Flight tracking for simulator pilots",
     "nav": {
       "flights": "My flights",
-      "live": "Live"
+      "live": "Live",
+      "profile": "My public profile"
     },
     "language": "Français",
     "notMeasured": "not measured",
     "mainNav": "Main navigation",
     "accountMenu": "{name}'s menu",
-    "toggleTheme": "Switch between light and dark theme"
+    "toggleTheme": "Switch between light and dark theme",
+    "public": {
+      "logbook": "My logbook",
+      "login": "Log in",
+      "signup": "Create my logbook"
+    },
+    "busy": "Too many visits right now. Please try again in a minute."
   },
   "Live": {
     "title": "Live map",
@@ -90,7 +97,8 @@
       "aircraft": "Aircraft",
       "airborne": "Flight time",
       "status": "Status",
-      "alerts": "Alerts"
+      "alerts": "Alerts",
+      "touchdown": "Touchdown (ft/min)"
     },
     "filters": {
       "from": "From",
@@ -171,6 +179,11 @@
       "saved": "Thanks, answer saved.",
       "error": "Answer not saved, please try again.",
       "already": "You already answered: you can change it."
+    },
+    "publicProfile": {
+      "hidden": "Hidden from your public profile",
+      "hide": "Hide from my profile",
+      "show": "Show on my profile again"
     }
   },
   "Auth": {
@@ -193,6 +206,222 @@
       "exists": "An account already exists with this address.",
       "password": "The password must be at least 10 characters long.",
       "unknown": "Logging in did not work. Try again in a moment."
+    }
+  },
+  "Settings": {
+    "title": "My public profile",
+    "intro": "A page anyone can see and search engines can find. Off until you turn it on.",
+    "view": "View my public page",
+    "information": "Information",
+    "save": {
+      "button": "Save",
+      "saved": "Saved.",
+      "taken": "This address is already taken by another pilot.",
+      "reserved": "This address is a reserved word.",
+      "error": "Saving failed. Please try again.",
+      "invalid": {
+        "handle": "Invalid address: 3 to 30 characters, lowercase letters, digits and hyphens.",
+        "consent": "Tick the consent box to publish your page.",
+        "country": "Unknown country.",
+        "homeIcao": "Home airport: 4-letter ICAO code.",
+        "level": "Unknown level.",
+        "vatsimId": "VATSIM id: digits only.",
+        "ivaoId": "IVAO id: digits only.",
+        "simbriefId": "Invalid SimBrief id."
+      }
+    },
+    "publication": {
+      "title": "Publication",
+      "switch": "Make my page public",
+      "since": "Published on {date}",
+      "off": "Off: nobody can see your page.",
+      "consent": "I agree that my handle, photo, country, statistics and flights not hidden are visible to everyone and indexed by search engines. I can turn my page off at any time: it disappears at once."
+    },
+    "handle": {
+      "label": "Address of my page",
+      "help": "3 to 30 characters: lowercase letters, digits and hyphens. Suggested from your name.",
+      "available": "✓ available",
+      "taken": "✗ taken",
+      "reserved": "✗ reserved word",
+      "invalid": "✗ invalid"
+    },
+    "photo": {
+      "label": "Photo",
+      "help": "JPEG, PNG or WebP, 5 MB at most. Cropped to a square and reduced to 256 pixels.",
+      "add": "Add a photo",
+      "change": "Change",
+      "remove": "Remove",
+      "tooBig": "Photo too large: 5 MB at most.",
+      "wrongType": "This file is not a readable JPEG, PNG or WebP image.",
+      "failed": "Upload failed. Please try again."
+    },
+    "fields": {
+      "country": "Country",
+      "none": "Not specified",
+      "homeIcao": "Home airport",
+      "homeIcaoHelp": "ICAO code, 4 letters",
+      "level": "Level",
+      "levelHelp": "Declared by you, not checked.",
+      "vatsimId": "VATSIM id",
+      "vatsimHelp": "Public, with a link to your VATSIM page",
+      "ivaoId": "IVAO id",
+      "ivaoHelp": "Public, with a link to your IVAO page",
+      "simbriefId": "SimBrief id",
+      "simbriefHelp": "Never shown: will later be used to read your flight plans"
+    },
+    "visible": {
+      "title": "What is visible",
+      "shown": {
+        "identity": "Handle, photo, country, level, home airport",
+        "networks": "VATSIM and IVAO ids",
+        "stats": "Statistics, charts and map of your finished flights",
+        "flights": "Each finished flight not hidden"
+      },
+      "never": {
+        "email": "E-mail address, real name",
+        "simbrief": "SimBrief id",
+        "private": "Flights in progress, hidden flights",
+        "reviews": "Your reviews of the phases"
+      }
+    },
+    "hidden": {
+      "title": "Hidden flights",
+      "count": "{count, plural, =0 {none} one {# flight} other {# flights}}",
+      "help": "Hide a flight from its page (“Hide from my profile”). It stays in your logbook.",
+      "show": "Show again"
+    }
+  },
+  "Profile": {
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "realPilot": "Real pilot"
+    },
+    "meta": {
+      "title": "{name} — {flights, plural, =0 {no flights} one {# flight} other {# flights}} on Weems",
+      "description": "{name}'s logbook on Weems: {flights, plural, =0 {no flights} one {# flight} other {# flights}}, {airports, plural, =0 {no airports} one {# airport} other {# airports}}, statistics and route map.",
+      "flight": "Flight {callsign} {route} by {handle} on Weems: track, phases and landing."
+    },
+    "header": {
+      "level": "Level: {level}",
+      "since": "On Weems since {date}",
+      "favorite": "Favourite aircraft: {name}",
+      "base": "Home: {icao}",
+      "distance": "{nm} nm",
+      "laps": "flown · {laps} × around the Earth",
+      "share": "Share",
+      "copied": "Address copied",
+      "shareTitle": "{name} on Weems"
+    },
+    "help": {
+      "label": "Explanation",
+      "level": "Level declared by the pilot. Weems does not check it.",
+      "distance": "Sum of the distances along the recorded tracks, shown flights only. Around the Earth at the equator: 21,600 nm.",
+      "map": "One arc per route, thicker when flown often. Airports are placed at the first and last recorded point of each flight.",
+      "activity": "Flight hours by month of departure (UTC). An empty month is still shown.",
+      "takeoffs": "Takeoffs by day of the week and hour, in the local time of the departure airport. The darker the cell, the more takeoffs.",
+      "flights": "Finished flights the pilot chose to show. Flights in progress and hidden flights do not count.",
+      "hours": "Flight time: from takeoff to the last touchdown, pauses excluded. Block time: from engine start or pushback to stopping at the gate.",
+      "dayNight": "Night as defined by the regulations (EASA): sun more than 6° below the horizon. Computed at the aircraft's position, at every moment of the flight.",
+      "longest": "The flight with the longest block time.",
+      "streak": "Weeks in a row (Monday to Sunday, UTC) with at least one finished and shown flight.",
+      "airports": "Different departure and arrival airports, over all shown flights.",
+      "aircraft": "Different aircraft by ICAO type (A20N, B738…), or by their simulator name when the type is unknown.",
+      "clean": "Final landings with a single touchdown, no bounce and no go-around.",
+      "average": "Vertical speed at the first contact of the final landing (after any go-around), averaged over the flights where it was measured.",
+      "best": "The softest final landing: the touchdown vertical speed closest to zero."
+    },
+    "map": {
+      "title": "Flight map",
+      "note": "{airports, plural, =0 {no airports} one {# airport} other {# airports}} · {flights, plural, =0 {no flights} one {# flight} other {# flights}}",
+      "empty": "No route to show yet."
+    },
+    "stats": {
+      "title": "Statistics",
+      "note": "Finished and shown flights",
+      "flights": {
+        "label": "Flights"
+      },
+      "hours": {
+        "label": "Flight hours",
+        "block": "{block} block"
+      },
+      "dayNight": {
+        "label": "Day / night",
+        "sub": "{night} at night"
+      },
+      "longest": {
+        "label": "Longest flight"
+      },
+      "streak": {
+        "label": "Current streak",
+        "value": "{weeks, plural, one {# week} other {# weeks}}",
+        "sub": "record: {weeks, plural, one {# week} other {# weeks}}"
+      },
+      "airports": {
+        "label": "Airports visited"
+      },
+      "aircraft": {
+        "label": "Different aircraft",
+        "sub": "{name} flown most"
+      },
+      "clean": {
+        "label": "Clean landings",
+        "sub": "{clean} of {landings}"
+      },
+      "average": {
+        "label": "Average touchdown",
+        "sub": "ft/min · {goArounds, plural, =0 {no go-arounds} one {# go-around} other {# go-arounds}}"
+      },
+      "best": {
+        "label": "Best landing",
+        "sub": "ft/min · {airport}, {date}"
+      }
+    },
+    "charts": {
+      "activity": {
+        "title": "Activity",
+        "sub": "Flight hours, last 12 months"
+      },
+      "takeoffs": {
+        "title": "Takeoff hours",
+        "sub": "By day, local time of the departure airport"
+      },
+      "durations": {
+        "title": "Flight durations",
+        "sub": "Number of flights by block time"
+      },
+      "touchdowns": {
+        "title": "Touchdown spread",
+        "sub": "Soft < {soft}, normal {soft}–{normal}, firm {normal}–{firm}, hard > {firm} ft/min",
+        "soft": "Soft",
+        "normal": "Normal",
+        "firm": "Firm",
+        "hard": "Hard"
+      },
+      "landings": {
+        "title": "Landings",
+        "sub": "Touchdown vertical speed, {count, plural, one {last flight} other {last # flights}} (ft/min)",
+        "oldest": "oldest",
+        "newest": "newest",
+        "average": "average"
+      }
+    },
+    "flights": {
+      "title": "Flights",
+      "note": "{count, plural, =0 {no flights} one {# flight} other {# flights}}",
+      "empty": "No flight shown yet.",
+      "next": "Older flights",
+      "first": "Back to the newest"
+    },
+    "back": "Back to the profile",
+    "footer": "Data recorded in simulation by the Weems tracker. Nothing here concerns real flights.",
+    "share": {
+      "base": "home {icao}",
+      "flights": "{count, plural, one {flight} other {flights}}",
+      "hours": "flight hours",
+      "airports": "{count, plural, one {airport} other {airports}}"
     }
   },
   "Aircraft": {

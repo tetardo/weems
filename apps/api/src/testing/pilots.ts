@@ -90,3 +90,14 @@ export function exchange(app: FastifyInstance, form: Record<string, string>) {
     payload: new URLSearchParams(form).toString(),
   });
 }
+
+/** A new pilot logged in on the site (cookie) and in the tracker (headers with an access token). */
+export async function newTrackerPilot(app: FastifyInstance) {
+  const cookie = await newPilot(app);
+  const tokens = await trackerLogin(app, cookie);
+  const tracker = {
+    authorization: `Bearer ${tokens.json().access_token}`,
+    "weems-client": "tracker/0.1.0",
+  };
+  return { cookie, tracker };
+}
