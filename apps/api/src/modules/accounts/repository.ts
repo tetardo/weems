@@ -1,5 +1,5 @@
 import { uuidV7 } from "@weems/contrats";
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import type { Database } from "../../db/client.ts";
 import {
   accounts,
@@ -13,6 +13,9 @@ import {
 export interface InvitationRecord {
   code: string;
   email: string;
+  role: string;
+  createdAt: Date;
+  expiresAt: Date;
   usedAt: Date | null;
 }
 
@@ -27,6 +30,11 @@ export interface FirstPartyClient {
 }
 
 /** What other pilots may know of an account: its public name and when it was created. */
+export interface AccountStatus {
+  role: string;
+  disabledAt: Date | null;
+}
+
 export interface PilotIdentity {
   name: string;
   createdAt: Date;
@@ -47,8 +55,38 @@ export class AccountsRepository {
     this.db = db;
   }
 
-  async insertInvitation(code: string, email: string): Promise<void> {
-    await this.db.insert(invitations).values({ code, email });
+  async insertInvitation(
+    invitation: Pick<InvitationRecord, "code" | "email" | "role" | "expiresAt">,
+  ): Promise<InvitationRecord> {
+    const [row] = await this.db.insert(invitations).values(invitation).returning();
+    if (!row) throw new Error("Invitation not inserted.");
+    return row;
+  }
+
+  /** Invitations not used yet, expired ones included, newest first. */
+  async openInvitations(): Promise<InvitationRecord[]> {
+    return this.db
+      .select()
+      .from(invitations)
+      .where(isNull(invitations.usedAt))
+      .orderBy(desc(invitations.createdAt));
+  }
+
+  /** Deletes an invitation not used yet. Returns it, or null when there is none. */
+  async deleteOpenInvitation(code: string): Promise<InvitationRecord | null> {
+    const [row] = await this.db
+      .delete(invitations)
+      .where(and(eq(invitations.code, code), isNull(invitations.usedAt)))
+      .returning();
+    return row ?? null;
+  }
+
+  async userIdByEmail(email: string): Promise<string | null> {
+    const [row] = await this.db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(sql`lower(${users.email})`, email.toLowerCase()));
+    return row?.id ?? null;
   }
 
   async findInvitation(code: string): Promise<InvitationRecord | null> {
@@ -56,14 +94,23 @@ export class AccountsRepository {
     return row ?? null;
   }
 
-  /** Marks as used the open invitation of this e-mail (called once the account exists). */
+  /**
+   * Marks as used the open invitations of this e-mail (called once the account exists)
+   * and gives the account the role of the invitation.
+   */
   async markInvitationUsed(email: string): Promise<void> {
-    await this.db
-      .update(invitations)
-      .set({ usedAt: new Date() })
-      .where(
-        and(eq(sql`lower(${invitations.email})`, email.toLowerCase()), isNull(invitations.usedAt)),
-      );
+    const sameEmail = (column: typeof invitations.email | typeof users.email) =>
+      eq(sql`lower(${column})`, email.toLowerCase());
+    await this.db.transaction(async (tx) => {
+      const used = await tx
+        .update(invitations)
+        .set({ usedAt: new Date() })
+        .where(and(sameEmail(invitations.email), isNull(invitations.usedAt)))
+        .returning({ role: invitations.role });
+      if (used.some((invitation) => invitation.role === "admin")) {
+        await tx.update(users).set({ role: "admin" }).where(sameEmail(users.email));
+      }
+    });
   }
 
   /** Creates the client and its link to the API resource if missing; never modifies an existing one. */
@@ -137,6 +184,14 @@ export class AccountsRepository {
         updatedAt: now,
       });
     });
+  }
+
+  async statusOf(userId: string): Promise<AccountStatus | null> {
+    const [row] = await this.db
+      .select({ role: users.role, disabledAt: users.disabledAt })
+      .from(users)
+      .where(eq(users.id, userId));
+    return row ?? null;
   }
 
   async findPilot(pilotId: string): Promise<PilotIdentity | null> {

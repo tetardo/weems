@@ -11,6 +11,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node src/db/migrate-cli.ts",
     "invite": "node --env-file-if-exists=.env src/modules/accounts/invite-cli.ts",
+    "make-admin": "node --env-file-if-exists=.env src/modules/accounts/make-admin-cli.ts",
     "alpha-report": "node --env-file-if-exists=.env src/modules/alpha/report-cli.ts"
   },
   "dependencies": {

@@ -3,9 +3,12 @@ import Fastify, { type FastifyInstance } from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import type { Config } from "./config.ts";
 import type { DatabaseHandle } from "./db/client.ts";
+import { registerAdminAccountRoutes } from "./modules/accounts/admin-routes.ts";
+import { AdminAccountsService } from "./modules/accounts/admin-service.ts";
 import { createAuth } from "./modules/accounts/auth.ts";
 import { ensureDevPilot } from "./modules/accounts/dev-pilot.ts";
 import { PilotIdentifier } from "./modules/accounts/pilot-identifier.ts";
+import { AdminAccountsRepository } from "./modules/accounts/repository-admin.ts";
 import { AccountsRepository } from "./modules/accounts/repository.ts";
 import { registerAccountRoutes } from "./modules/accounts/routes.ts";
 import { AccountsService } from "./modules/accounts/service.ts";
@@ -69,7 +72,13 @@ export async function buildApp({
   await ensureTrackerClient(accountsRepository, config);
   if (config.env !== "production") await ensureDevPilot(accountsRepository);
   registerAccountRoutes(app, auth, config);
-  const guards = registerAuth(app, config, new PilotIdentifier(auth, config.apiUrl));
+  const identifier = new PilotIdentifier(auth, config.apiUrl, (id) => accounts.statusOf(id));
+  const guards = registerAuth(app, config, identifier);
+  registerAdminAccountRoutes(
+    app,
+    new AdminAccountsService(new AdminAccountsRepository(database.db), accounts, flights),
+    guards,
+  );
   registerFlightRoutes(app, flights, guards);
   if (config.env !== "production") registerDevFlightRoutes(app, flights, guards);
   const tracks = new TracksService(new PostgresTrackStore(database.db), flights);

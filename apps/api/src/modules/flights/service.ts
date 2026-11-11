@@ -1,6 +1,7 @@
 import { isDeepStrictEqual } from "node:util";
 import {
   type CloseFlightRequest,
+  type DevFlightCounts,
   type FlightEvent,
   type FlightList,
   type FlightListQuery,
@@ -11,6 +12,7 @@ import {
   phaseChangeOf,
   type PositionReport,
   type Receipt,
+  type Simulator,
 } from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
 import { ApiProblem, conflict, notFound } from "../../plugins/problem.ts";
@@ -196,10 +198,30 @@ export class FlightsService {
     });
   }
 
-  /** Development only: empties the caller's flight list (and takes them off the live map). */
-  async deleteAll(caller: Caller): Promise<void> {
-    const deleted = await this.repository.deleteAllOf(caller.pilotId);
+  /**
+   * Development only: empties the caller's flight list, or only the flights of one simulator
+   * ("replay": simulated flights, never the real ones of pnpm fly), and takes them off the live map.
+   */
+  async deleteAll(caller: Caller, simulator?: Simulator): Promise<void> {
+    const deleted = await this.repository.deleteAllOf(caller.pilotId, simulator);
     for (const flightId of deleted) this.live.closed(flightId);
+  }
+
+  /** Development only: the caller's simulated and real flights (admin console). */
+  async devCounts(caller: Caller): Promise<DevFlightCounts> {
+    const bySimulator = await this.repository.countBySimulator(caller.pilotId);
+    let simulated = 0;
+    let real = 0;
+    for (const [simulator, n] of bySimulator) {
+      if (simulator === "replay") simulated += n;
+      else real += n;
+    }
+    return { simulated, real };
+  }
+
+  /** Number of flights of each pilot (admin console, FlightCounter of the accounts module). */
+  countByPilot(): Promise<Map<string, number>> {
+    return this.repository.countByPilot();
   }
 
   /** A pilot only sees their own flights: someone else's flight is "not found". */

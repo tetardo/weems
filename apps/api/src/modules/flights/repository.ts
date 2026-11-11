@@ -1,6 +1,7 @@
 import {
   and,
   asc,
+  count,
   desc,
   eq,
   gte,
@@ -147,20 +148,39 @@ export class FlightsRepository {
     return inserted.length > 0;
   }
 
+  /** Number of flights of each pilot (admin console). */
+  async countByPilot(): Promise<Map<string, number>> {
+    const rows = await this.db
+      .select({ pilotId: flights.pilotId, n: count() })
+      .from(flights)
+      .groupBy(flights.pilotId);
+    return new Map(rows.map((row) => [row.pilotId, row.n]));
+  }
+
+  /** Development only: the pilot's flights by simulator. */
+  async countBySimulator(pilotId: string): Promise<Map<string, number>> {
+    const rows = await this.db
+      .select({ simulator: flights.simulator, n: count() })
+      .from(flights)
+      .where(eq(flights.pilotId, pilotId))
+      .groupBy(flights.simulator);
+    return new Map(rows.map((row) => [row.simulator, row.n]));
+  }
+
   /**
-   * Development only (see dev-routes.ts): deletes every flight of the pilot with its events,
-   * trajectory and review. Returns the deleted ids.
+   * Development only (see dev-routes.ts): deletes the pilot's flights (only those of one
+   * simulator when given) with their events, trajectory and review. Returns the deleted ids.
    */
-  async deleteAllOf(pilotId: string): Promise<string[]> {
+  async deleteAllOf(pilotId: string, simulator?: Simulator): Promise<string[]> {
+    const mine = simulator
+      ? and(eq(flights.pilotId, pilotId), eq(flights.simulator, simulator))
+      : eq(flights.pilotId, pilotId);
     return this.db.transaction(async (tx) => {
-      const owned = tx.select({ id: flights.id }).from(flights).where(eq(flights.pilotId, pilotId));
+      const owned = tx.select({ id: flights.id }).from(flights).where(mine);
       await tx.delete(flightEvents).where(inArray(flightEvents.flightId, owned));
       await tx.delete(flightTracks).where(inArray(flightTracks.flightId, owned));
       await tx.delete(flightReviews).where(inArray(flightReviews.flightId, owned));
-      const deleted = await tx
-        .delete(flights)
-        .where(eq(flights.pilotId, pilotId))
-        .returning({ id: flights.id });
+      const deleted = await tx.delete(flights).where(mine).returning({ id: flights.id });
       return deleted.map((row) => row.id);
     });
   }

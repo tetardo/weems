@@ -1,5 +1,9 @@
 import { createLocalJWKSet, type JSONWebKeySet, jwtVerify } from "jose";
 import type { Auth } from "./auth.ts";
+import type { AccountStatus } from "./repository.ts";
+
+/** Role and state of an account (repository-admin.ts). */
+export type StatusOf = (userId: string) => Promise<AccountStatus | null>;
 
 /** Signing keys are read again at most this often (and at once when a token names an unknown key). */
 const KEYS_TTL_MS = 10 * 60 * 1000;
@@ -19,19 +23,32 @@ export class PilotIdentifier {
 
   private readonly auth: Auth;
   private readonly apiUrl: string;
+  private readonly statusOf: StatusOf;
   private readonly now: () => number;
 
-  constructor(auth: Auth, apiUrl: string, now: () => number = Date.now) {
+  constructor(auth: Auth, apiUrl: string, statusOf: StatusOf, now: () => number = Date.now) {
     this.auth = auth;
     this.apiUrl = apiUrl;
+    this.statusOf = statusOf;
     this.now = now;
+  }
+
+  /** A disabled account is unknown, whatever token it still holds (spec admin). */
+  private async active(userId: string | null): Promise<string | null> {
+    if (!userId) return null;
+    const status = await this.statusOf(userId);
+    return status && !status.disabledAt ? userId : null;
+  }
+
+  async isAdmin(userId: string): Promise<boolean> {
+    return (await this.statusOf(userId))?.role === "admin";
   }
 
   async fromAccessToken(token: string): Promise<string | null> {
     try {
       const { issuer, keySet } = await this.verificationKeys(token);
       const { payload } = await jwtVerify(token, keySet, { issuer, audience: this.apiUrl });
-      return typeof payload.sub === "string" ? payload.sub : null;
+      return await this.active(typeof payload.sub === "string" ? payload.sub : null);
     } catch {
       return null;
     }
@@ -39,7 +56,7 @@ export class PilotIdentifier {
 
   async fromSession(headers: Headers): Promise<string | null> {
     const session = await this.auth.api.getSession({ headers });
-    return session?.user.id ?? null;
+    return this.active(session?.user.id ?? null);
   }
 
   private async verificationKeys(token: string) {

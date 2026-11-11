@@ -8,6 +8,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 /**
  * Tables of Better Auth (accounts, sessions) and of its jwt and oauth-provider plugins, version 1.7.
@@ -28,6 +29,10 @@ export const users = pgTable("users", {
   image: text("image"),
   createdAt: utc("created_at").notNull().defaultNow(),
   updatedAt: utc("updated_at").notNull().defaultNow(),
+  /** "pilot" or "admin" (admin console, spec admin). */
+  role: text("role").notNull().default("pilot"),
+  /** Set when an administrator disables the account: no login, no token accepted. */
+  disabledAt: utc("disabled_at"),
 });
 
 export const sessions = pgTable(
@@ -255,6 +260,12 @@ export const invitations = pgTable("invitations", {
   email: text("email").notNull(),
   createdAt: utc("created_at").notNull().defaultNow(),
   usedAt: utc("used_at"),
+  /** Role given to the account created with this invitation. */
+  role: text("role").notNull().default("pilot"),
+  /** 14 days after creation (spec admin); existing invitations get 14 days from the migration. */
+  expiresAt: utc("expires_at")
+    .notNull()
+    .default(sql`now() + interval '14 days'`),
 });
 
 /** The library's model names → our tables (Better Auth Drizzle adapter). */
