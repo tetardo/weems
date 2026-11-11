@@ -3,10 +3,15 @@ import type { LiveBoard } from "./live-board.ts";
 
 const BATCH_EVERY_MS = 2_000;
 const HEARTBEAT_EVERY_MS = 15_000;
+/**
+ * A spectator this far behind (a sleeping tab, a weak mobile link) is cut off:
+ * otherwise the API keeps every batch it could not send (spec J4, H2).
+ * The browser reconnects by itself and gets a fresh snapshot.
+ */
+export const MAX_BUFFERED_BYTES = 1024 * 1024;
 
-function write(client: ServerResponse, event: string, data: unknown): void {
-  client.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
-}
+const sseMessage = (event: string, data: unknown) =>
+  `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
 
 /**
  * Server-sent events to browsers (spec J1, part 3): a snapshot on connection,
@@ -33,7 +38,7 @@ export class LiveStream {
       // Public stream at J1: the map page is served by the web app from another port.
       "access-control-allow-origin": "*",
     });
-    write(client, "snapshot", this.board.snapshot());
+    client.write(sseMessage("snapshot", this.board.snapshot()));
     this.clients.add(client);
     client.on("close", () => this.clients.delete(client));
   }
@@ -51,10 +56,20 @@ export class LiveStream {
 
   broadcastUpdate(): void {
     const update = this.board.takeUpdate();
-    if (update) this.clients.forEach((client) => write(client, "update", update));
+    // Serialised once for every spectator, not once per spectator (spec J4, H1).
+    if (update) this.send(sseMessage("update", update));
   }
 
   private heartbeat(): void {
-    this.clients.forEach((client) => client.write(": heartbeat\n\n"));
+    this.send(": heartbeat\n\n");
+  }
+
+  private send(message: string): void {
+    for (const client of this.clients) {
+      if (client.writableLength > MAX_BUFFERED_BYTES) {
+        this.clients.delete(client);
+        client.destroy();
+      } else client.write(message);
+    }
   }
 }
