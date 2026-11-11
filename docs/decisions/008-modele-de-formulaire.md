@@ -39,11 +39,11 @@ La liste avec recherche est le seul contrôle qu'on ne peut pas faire correcteme
 - `<datalist>` natif : ne se met pas en forme et se comporte différemment selon les navigateurs ;
 - composant fait maison : à éviter, l'accessibilité d'une liste avec recherche est difficile.
 
-Seul `src/ui/search-select.tsx` l'importe. Version fixée (1.22.1).
+Seul `packages/ui/src/forms/search-select.tsx` l'importe. Version fixée (1.22.1).
 
 ## Conséquences
 
-- Les composants sont dans `apps/web/src/ui/` : `form-section.tsx` (`FormSection`, `FieldGrid`), `field.tsx` (`Field`, `FieldBadge`), `text-input.tsx`, `select.tsx`, `segmented.tsx`, `search-select.tsx`, `save-bar.tsx`, et `use-form-changes.ts` (compteur de modifications, logique testée dans `form-changes.ts`). Les classes communes sont dans `input-class.ts`.
+- Les composants sont dans `packages/ui/src/forms/` (paquet `@weems/ui`, déplacés depuis `apps/web/src/ui/` le 11/11/2026 pour servir aussi à la console d'administration) : `button.tsx`, `form-field.tsx`, `form-section.tsx` (`FormSection`, `FieldGrid`), `field.tsx` (`Field`, `FieldBadge`), `text-input.tsx`, `select.tsx`, `segmented.tsx`, `search-select.tsx`, `save-bar.tsx`, et `use-form-changes.ts` (compteur de modifications, logique testée dans `form-changes.ts`). Les classes communes sont dans `input-class.ts`. Une application les importe depuis `@weems/ui` et ajoute `@source "…/packages/ui/src"` à son CSS pour que Tailwind génère leurs classes ; la console, qui garde ses propres styles, n'importe de Tailwind que le thème et les utilitaires (sans remise à zéro), et relie les couleurs du paquet à ses variables.
 - Un nouveau formulaire (administration comprise) part de ces composants : on n'écrit plus un `<select>` ou un champ à la main.
 - Les réglages du profil passent en quatre cartes (Publication, Identité, Réseaux, Privé). « Ce qui est visible » et « Vols masqués » restent dans la colonne de droite (demande de Greg) : la colonne du formulaire est trop étroite pour mettre les titres à gauche, ils passent donc au-dessus des champs, qui restent deux par ligne.
 - Les formulaires de connexion et d'inscription et le filtre de catégorie de « Mes vols » utilisent déjà `Field` et `Select`.

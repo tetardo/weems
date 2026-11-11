@@ -6,7 +6,6 @@ export {
   ArrowLeft as BackIcon,
   BookOpen as FlightsIcon,
   Check as DoneIcon,
-  ChevronDown as ChevronIcon,
   Copy as CopyIcon,
   ExternalLink as ExternalIcon,
   EyeOff as HideIcon,

@@ -1,6 +1,7 @@
 "use client";
 
 import type { AdminAccount } from "@weems/contrats";
+import { TextInput } from "@weems/ui";
 import { useState } from "react";
 import { type AccountsPage, logOut, readAccounts } from "../../actions/accounts.ts";
 import { ConfirmDialog } from "../../ui/confirm-dialog.tsx";
@@ -63,14 +64,16 @@ function Toolbar(props: {
   return (
     <div className="toolbar">
       <Filters page={props.page} filter={props.filter} onFilter={props.onFilter} />
-      <label className="search">
-        <SearchIcon size={16} />
-        <input
+      <span className="search">
+        <TextInput
+          icon={SearchIcon}
+          type="search"
+          aria-label="Rechercher un compte"
           placeholder="Nom, e-mail…"
           value={props.search}
           onChange={(e) => props.onSearch(e.target.value)}
         />
-      </label>
+      </span>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
-import type { IconComponent } from "./icons.ts";
+import type { IconComponent } from "../icons.ts";
 import { BARE_INPUT_CLASS, CONTROL_CLASS } from "./input-class.ts";
 
 /**

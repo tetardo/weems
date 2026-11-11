@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Link, usePathname } from "../i18n/navigation.ts";
 import type { Locale } from "../i18n/routing.ts";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { LanguageIcon } from "../ui/icons.ts";
 
 /** Same page, same filters, in the other language. */

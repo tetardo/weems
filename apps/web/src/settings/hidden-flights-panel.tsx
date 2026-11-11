@@ -2,7 +2,7 @@ import type { HiddenFlights } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { formatRoute } from "../format/flight-format.ts";
 import { Link } from "../i18n/navigation.ts";
-import { Button } from "../ui/button.tsx";
+import { Button } from "@weems/ui";
 import { CardBox } from "../ui/card-box.tsx";
 import { setFlightHiddenAction } from "./profile-actions.ts";
 

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { IconComponent } from "./icons.ts";
+import type { IconComponent } from "../icons.ts";
 
 /**
  * One subject of a form, in its own card (model C, fiche 008): title and explanation on the left

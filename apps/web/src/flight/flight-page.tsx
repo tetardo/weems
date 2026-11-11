@@ -1,7 +1,7 @@
 import type { FlightReviewView, FlightView, TrackView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { Link } from "../i18n/navigation.ts";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { BackIcon } from "../ui/icons.ts";
 import { SectionMain } from "../ui/section-main.tsx";
 import { FlightDetails } from "./flight-details.tsx";

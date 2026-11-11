@@ -4,12 +4,8 @@ import { type MyProfile, PilotLevel } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import type { InputHTMLAttributes } from "react";
 import { CountryFlag } from "../ui/country-flag.tsx";
-import { Field, FieldBadge } from "../ui/field.tsx";
-import { FieldGrid } from "../ui/form-section.tsx";
+import { Field, FieldBadge, FieldGrid, SearchSelect, Segmented, TextInput } from "@weems/ui";
 import { AircraftIcon, type IconComponent, NetworkIcon, PrivateIcon } from "../ui/icons.ts";
-import { SearchSelect } from "../ui/search-select.tsx";
-import { Segmented } from "../ui/segmented.tsx";
-import { TextInput } from "../ui/text-input.tsx";
 
 type TextName = "homeIcao" | "vatsimId" | "ivaoId" | "instagram" | "facebook" | "simbriefId";
 

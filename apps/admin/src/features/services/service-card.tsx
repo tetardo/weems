@@ -13,6 +13,7 @@ import {
   StopIcon,
 } from "../../ui/icons.ts";
 import { StatusBadge, type Tone } from "../../ui/status-badge.tsx";
+import { PortHolderNote } from "./port-holder-note.tsx";
 
 export type ServiceAction = "start" | "stop" | "restart";
 
@@ -124,6 +125,7 @@ export function ServiceCard(props: {
   onAction: (action: ServiceAction) => void;
   onMode: (mode: ApiMode) => void;
   onLogs: () => void;
+  onFree: () => void;
 }) {
   const { service } = props;
   const card = CARDS[service.id];
@@ -149,7 +151,10 @@ export function ServiceCard(props: {
       )}
       <Details service={service} />
       {service.error && <div className="errbox">{service.error}</div>}
-      {service.runner === "outside" && (
+      {service.holder && (
+        <PortHolderNote holder={service.holder} busy={props.busy} onFree={props.onFree} />
+      )}
+      {service.runner === "outside" && !service.holder && (
         <div className="note">
           <InfoIcon size={14} /> Lancé hors de la console : arrêtez-le dans son terminal.
         </div>

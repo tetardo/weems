@@ -5,10 +5,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { getPathname } from "../i18n/navigation.ts";
 import { HANDLE_CHECK_URL } from "../site/api-relay.ts";
-import { Button } from "../ui/button.tsx";
-import { Field } from "../ui/field.tsx";
+import { Button, Field, TextInput } from "@weems/ui";
 import { SaveIcon, WarningIcon } from "../ui/icons.ts";
-import { TextInput } from "../ui/text-input.tsx";
 import { AddressActions } from "./address-actions.tsx";
 
 type Status = HandleCheck["status"] | "checking" | null;

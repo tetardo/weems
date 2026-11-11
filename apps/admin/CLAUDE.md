@@ -22,7 +22,7 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 - Services et Trafic sans connexion, Comptes avec connexion : ne pas changer sans relire la fiche 009.
 - Écoute sur `127.0.0.1` seulement (`--hostname` du script `dev`) ; `src/proxy.ts` refuse toute autre adresse (test `server/allowed-hosts.test.ts`).
 - Français seulement (exception à la règle des deux langues, spec admin question 2) : textes écrits dans les composants.
-- Formulaires : modèle C choisi par Greg pour tous les formulaires (champs de 44 px, choix segmenté dans un cadre). Quand les composants communs existeront dans `packages/`, les utiliser ici.
+- Formulaires : modèle C (fiche 008), composants du paquet `@weems/ui` (`Field`, `FormField`, `TextInput`, `Segmented`…), jamais de champ écrit à la main. Tailwind ne sert qu'à eux : `src/app/global.css` importe son thème et ses utilitaires sans remise à zéro, génère seulement les classes de `packages/ui` et relie leurs couleurs aux variables de la console.
 - Icônes : Lucide, importé seulement dans `src/ui/icons.ts`.
 - Les processus lancés (pnpm dev, simulate, load) sont gardés dans `globalThis` (`server/singleton.ts`) : un rechargement de Next.js ne les perd pas. Ils reçoivent l'environnement de la console sans `PORT` ni `NODE_ENV` (`childEnv`), sinon l'API prendrait le port 3002.
 - Fichiers locaux (historique des lancements, rapports de `pnpm load`) dans `apps/admin/.data/`, jamais versionnés.

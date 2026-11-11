@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Shared form components (packages/ui): their classes are generated here too. */
+@source "../../../../packages/ui/src";
 
 /*
  * Mock-up: look of Greg's GameLab IA project (its tokens --gl-*, packages/shell/src/theme.ts):

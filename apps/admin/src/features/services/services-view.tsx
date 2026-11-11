@@ -1,8 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { chooseApiMode, controlAll, controlService, readServices } from "../../actions/services.ts";
-import type { ServiceId, ServicesView as Services } from "../../server/services/service-view.ts";
+import {
+  chooseApiMode,
+  controlAll,
+  controlService,
+  freePortAndStart,
+  readServices,
+} from "../../actions/services.ts";
+import type {
+  ServiceId,
+  ServicesView as Services,
+  ServiceView,
+} from "../../server/services/service-view.ts";
 import { ConfirmDialog } from "../../ui/confirm-dialog.tsx";
 import { ErrorBox } from "../../ui/error-box.tsx";
 import { ServicesIcon, StartIcon, StopIcon } from "../../ui/icons.ts";
@@ -78,12 +88,69 @@ function StopDialog(props: {
   );
 }
 
+function FreeDialog(props: {
+  service: ServiceView;
+  busy: boolean;
+  onCancel: () => void;
+  onConfirm: (id: "api" | "site") => void;
+}) {
+  const id = props.service.id === "api" ? "api" : "site";
+  return (
+    <ConfirmDialog
+      title={`Libérer le port ${props.service.port} ?`}
+      confirmLabel="Arrêter et démarrer"
+      busy={props.busy}
+      onCancel={props.onCancel}
+      onConfirm={() => props.onConfirm(id)}
+    >
+      <p className="muted">
+        La console arrête {props.service.holder?.owner ?? "le programme"}, un ancien lancement de
+        Weems, puis démarre le service à sa place.
+      </p>
+    </ConfirmDialog>
+  );
+}
+
+type Run = ReturnType<typeof useActionRunner>["run"];
+
+function Cards(props: {
+  value: Services;
+  busy: boolean;
+  run: Run;
+  onStopDb: () => void;
+  onLogs: (id: ServiceId) => void;
+  onFree: (service: ServiceView) => void;
+}) {
+  const { value, busy, run } = props;
+  return (
+    <div className="grid3">
+      {value.services.map((service) => (
+        <ServiceCard
+          key={service.id}
+          service={service}
+          apiMode={value.apiMode}
+          busy={busy}
+          onAction={(action) =>
+            service.id === "db" && action === "stop"
+              ? props.onStopDb()
+              : void run(() => controlService(service.id, action))
+          }
+          onMode={(mode) => void run(() => chooseApiMode(mode))}
+          onLogs={() => props.onLogs(service.id)}
+          onFree={() => props.onFree(service)}
+        />
+      ))}
+    </div>
+  );
+}
+
 /** Page Services (spec admin): three cards, the logs, start and stop everything. */
 export function ServicesView() {
   const { value, error, refresh } = usePolling(readServices, 5_000);
   const { busy, error: actionError, run } = useActionRunner(refresh);
   const [confirm, setConfirm] = useState<Confirm>(null);
   const [logsTab, setLogsTab] = useState<ServiceId>("api");
+  const [freeing, setFreeing] = useState<ServiceView | null>(null);
   const stop = (what: "all" | "db") =>
     void run(() => (what === "all" ? controlAll("stop") : controlService("db", "stop"))).then(() =>
       setConfirm(null),
@@ -98,24 +165,25 @@ export function ServicesView() {
       />
       {value && !value.dockerAvailable && <DockerBanner />}
       <ErrorBox message={actionError ?? error} />
-      <div className="grid3">
-        {value?.services.map((service) => (
-          <ServiceCard
-            key={service.id}
-            service={service}
-            apiMode={value.apiMode}
-            busy={busy}
-            onAction={(action) =>
-              service.id === "db" && action === "stop"
-                ? setConfirm("db")
-                : void run(() => controlService(service.id, action))
-            }
-            onMode={(mode) => void run(() => chooseApiMode(mode))}
-            onLogs={() => setLogsTab(service.id)}
-          />
-        ))}
-      </div>
+      {value && (
+        <Cards
+          value={value}
+          busy={busy}
+          run={run}
+          onStopDb={() => setConfirm("db")}
+          onLogs={setLogsTab}
+          onFree={setFreeing}
+        />
+      )}
       <LogsPanel key={logsTab} tab={logsTab} onTab={setLogsTab} />
+      {freeing && (
+        <FreeDialog
+          service={freeing}
+          busy={busy}
+          onCancel={() => setFreeing(null)}
+          onConfirm={(id) => void run(() => freePortAndStart(id)).then(() => setFreeing(null))}
+        />
+      )}
       {confirm && (
         <StopDialog
           what={confirm}
