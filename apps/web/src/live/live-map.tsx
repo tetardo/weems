@@ -4,9 +4,10 @@ import type { LiveRoute } from "@weems/contrats";
 import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
+import { categoryColors } from "../aircraft/category-colors.ts";
 import { createBaseMap } from "../map/base-map.ts";
 import type { MapTheme } from "../map/map-theme.ts";
-import { addAircraftIcons, ICON_LOST, ICON_OK } from "./aircraft-icons.ts";
+import { addAircraftIcons } from "./aircraft-icons.ts";
 import { addAllRoutesLayers, type AllRoutes, showAllRoutes } from "./all-routes-layers.ts";
 import type { LiveFlights } from "./flights-store.ts";
 import { addRouteLayers, followAircraft, showRoute } from "./route-layers.ts";
@@ -25,18 +26,18 @@ interface Props {
 }
 
 function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
-  addAircraftIcons(map, theme);
+  addAircraftIcons(map, theme, categoryColors());
   map.addSource(SOURCE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
   map.addLayer({
     id: SOURCE,
     type: "symbol",
     source: SOURCE,
     layout: {
-      "icon-image": ["case", ["get", "lost"], ICON_LOST, ICON_OK],
+      "icon-image": ["get", "icon"],
       "icon-rotate": ["get", "heading"],
       "icon-rotation-alignment": "map",
       "icon-allow-overlap": true,
-      "icon-size": ["case", ["get", "selected"], 1.4, 1],
+      "icon-size": ["*", ["get", "scale"], ["case", ["get", "selected"], 1.4, 1]],
       "text-field": ["get", "callsign"],
       "text-size": 11,
       "text-offset": [0, 1.6],

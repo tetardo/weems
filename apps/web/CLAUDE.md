@@ -86,7 +86,8 @@ src/
     all-routes.ts         trajets de tous les vols (fait / reste) en GeoJSON
     all-routes-layers.ts  calques pâles des trajets de tous les vols
     use-show-routes.ts    bouton « Trajets », choix gardé dans le navigateur
-    aircraft-icons.ts     silhouettes d'avion dessinées
+    aircraft-shapes.ts    silhouette et taille par catégorie d'avion, nom des images (testé)
+    aircraft-icons.ts     dessin des silhouettes, couleur de la catégorie (lue dans global.css), grise si signal perdu
     live-map.tsx          carte MapLibre
     flight-panel.tsx      panneau du vol choisi
     live-view.tsx         assemblage de la page
