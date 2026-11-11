@@ -26,7 +26,7 @@ Par défaut (demande de Greg, 11/11/2026, 21 h 32), **tous les avions** montrent
 
 ## 3. Aéroport inconnu
 
-L'arrivée n'est connue que si le pilote la saisit dans le tracker (champ facultatif). Sans départ ou sans arrivée, ou si le code n'est pas dans la liste d'aéroports de Weems, le panneau le dit et n'affiche pas de progression ; la trace parcourue reste dessinée.
+L'arrivée n'est connue que si le pilote la saisit dans le tracker (obligatoire depuis la [fiche 007](../../decisions/007-depart-et-arrivee-obligatoires.md) ; null reste possible pour les vols plus anciens). Sans départ ou sans arrivée, ou si le code n'est pas dans la liste d'aéroports de Weems, le panneau le dit et n'affiche pas de progression ; la trace parcourue reste dessinée.
 
 ## 4. API
 
