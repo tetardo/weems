@@ -1,4 +1,4 @@
-import type { FlightEvent, TrackPoint } from "@weems/contrats";
+import type { AircraftCategory, FlightEvent, TrackPoint } from "@weems/contrats";
 import type { SummaryWithEvents } from "../modules/flights/service.ts";
 
 let counter = 0;
@@ -18,6 +18,9 @@ export interface PublicFlightOptions {
   /** Other events, before the touchdown. */
   extra?: FlightEvent["type"][];
   takeoff?: boolean;
+  /** Aircraft category (not estimated); null: not classified. */
+  category?: AircraftCategory | null;
+  engines?: number;
 }
 
 const DEFAULTS = {
@@ -30,6 +33,8 @@ const DEFAULTS = {
   extra: [],
   takeoff: false,
   landed: true,
+  category: null,
+  engines: 2,
 };
 
 /** Events of the flight: takeoff, the extra ones, the final touchdown. */
@@ -55,7 +60,7 @@ function eventsOf({
 /** A closed flight with its events, as the flights service gives it to the profile. */
 export function publicFlight(options: PublicFlightOptions = {}): SummaryWithEvents {
   const all: Required<PublicFlightOptions> = { ...DEFAULTS, ...options };
-  const { model, dep, arr, blockS, at } = all;
+  const { model, dep, arr, blockS, at, category } = all;
   const flightId = `01970000-0000-7000-8000-${String(++counter).padStart(12, "0")}`;
   return {
     summary: {
@@ -63,6 +68,7 @@ export function publicFlight(options: PublicFlightOptions = {}): SummaryWithEven
       callsign: "WMS1",
       aircraftTitle: `Title ${model}`,
       aircraftModel: model,
+      aircraftClass: category === null ? null : { category, estimated: false },
       departureIcao: dep,
       plannedArrivalIcao: arr,
       openedAt: at,
@@ -72,6 +78,7 @@ export function publicFlight(options: PublicFlightOptions = {}): SummaryWithEven
       alerts: [],
     },
     events: eventsOf(all),
+    engineCount: all.engines,
   };
 }
 

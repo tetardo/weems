@@ -11,7 +11,8 @@ export {
   RAD,
 } from "./telemetry/geo.ts";
 export { Sample } from "./telemetry/sample.ts";
-export { AircraftInfo, Simulator } from "./telemetry/aircraft.ts";
+export { AircraftInfo, Airframe, EngineType, Simulator } from "./telemetry/aircraft.ts";
+export { AircraftCategory, AircraftClass } from "./api/aircraft-class.ts";
 export { Touchdown } from "./telemetry/touchdown.ts";
 export { SimEvent, SimEventType } from "./telemetry/sim-event.ts";
 export { CloseReason, FLIGHT_PHASES, FlightPhase } from "./flight/phase.ts";
@@ -46,6 +47,7 @@ export { TrackerLogin } from "./api/tracker-login.ts";
 export { FlightReview, FlightReviewView } from "./api/flight-review.ts";
 export { landingSummary, type LandingSummary } from "./flight/landing-summary.ts";
 export {
+  CategoryExperience,
   CountryCode,
   DURATION_BUCKETS_H,
   FlightVisibility,

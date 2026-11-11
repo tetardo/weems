@@ -1,4 +1,5 @@
 import type { AircraftInfo, Sample } from "@weems/contrats";
+import { ENGINE_TYPES } from "./aircraft-identity.ts";
 import { ENGINE_SLOTS, type RawAircraft, type RawSample } from "./sim-vars.ts";
 
 const RAD = Math.PI / 180;
@@ -70,8 +71,13 @@ export function rawCruise(overrides: Partial<RawSample["values"]> = {}): RawSamp
 
 export function rawA320(title = "Airbus A320neo Weems"): RawAircraft {
   return {
-    strings: { title, model: "A320", registration: "" },
-    numbers: { engineCount: 2, emptyWeightLb: 93_000 },
+    strings: {
+      title,
+      model: "TT:ATCCOM.AC_MODEL_A320.0.text",
+      registration: "",
+      airframe: "Airplane",
+    },
+    numbers: { engineCount: 2, emptyWeightLb: 93_000, engineType: 1, maxGrossWeightLb: 174_165 },
   };
 }
 
@@ -166,6 +172,12 @@ export function rawFromSample(sample: Sample): RawSample {
   };
 }
 
+/** ENGINE TYPE code of the SDK; 4 (unsupported) for an unknown engine. */
+function engineTypeCode(engineType: AircraftInfo["engineType"]): number {
+  const code = Object.entries(ENGINE_TYPES).find(([, type]) => type === engineType)?.[0];
+  return code === undefined ? 4 : Number(code);
+}
+
 /** The aircraft identity SimConnect would send for a core aircraft. Tests only. */
 export function rawFromAircraft(aircraft: AircraftInfo): RawAircraft {
   return {
@@ -173,10 +185,13 @@ export function rawFromAircraft(aircraft: AircraftInfo): RawAircraft {
       title: aircraft.title,
       model: aircraft.model ?? "",
       registration: aircraft.registration ?? "",
+      airframe: aircraft.airframe === "helicopter" ? "Helicopter" : "Airplane",
     },
     numbers: {
       engineCount: aircraft.engineCount,
       emptyWeightLb: (aircraft.emptyWeightKg ?? 0) * LB_PER_KG,
+      engineType: engineTypeCode(aircraft.engineType),
+      maxGrossWeightLb: (aircraft.maxGrossWeightKg ?? 0) * LB_PER_KG,
     },
   };
 }

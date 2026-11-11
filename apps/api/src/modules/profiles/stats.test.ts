@@ -79,12 +79,31 @@ describe("map of a public profile", () => {
         from: { icao: "LFPG", lat: 49, lon: 2.5 },
         to: { icao: "LFBO", lat: 43.6, lon: 1.4 },
         flights: 2,
+        category: null,
       },
       {
         from: { icao: "LFBO", lat: 43.6, lon: 1.4 },
         to: { icao: "LFPG", lat: 49, lon: 2.5 },
         flights: 1,
+        category: null,
       },
     ]);
+  });
+
+  it("colours a route with its most flown category", () => {
+    const ends = { first: trackPoint(), last: trackPoint({ lat: 43.6 }) };
+    const flights = [
+      flight({ category: "light" }),
+      flight({ category: "narrowBody" }),
+      flight({ category: "narrowBody" }),
+      flight(),
+      flight(),
+      flight(),
+    ];
+    const routes = routesOf(
+      flights.map((f) => f.summary),
+      new Map(flights.map((f) => [f.summary.flightId, ends])),
+    );
+    expect(routes).toMatchObject([{ flights: 6, category: "narrowBody" }]);
   });
 });

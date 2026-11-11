@@ -1,6 +1,7 @@
 import type { FlightSummary, PublicFlightSummary } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
+import { CategoryBadge } from "../aircraft/category-badge.tsx";
 import { Link } from "../i18n/navigation.ts";
 import { formatDuration, formatRoute } from "../format/flight-format.ts";
 import { AlertBadges } from "./alert-badges.tsx";
@@ -97,7 +98,12 @@ function FlightRow({
         {formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}
       </span>
     ),
-    aircraft: () => flight.aircraftModel ?? flight.aircraftTitle,
+    aircraft: () => (
+      <span className="inline-flex flex-wrap items-center gap-2 max-sm:justify-end">
+        {flight.aircraftModel ?? flight.aircraftTitle}
+        <CategoryBadge aircraftClass={flight.aircraftClass} />
+      </span>
+    ),
     airborne: () => formatDuration(flight.times.airborneS) ?? site("notMeasured"),
     status: () =>
       flight.closeReason === undefined ? null : <FlightStatus closeReason={flight.closeReason} />,

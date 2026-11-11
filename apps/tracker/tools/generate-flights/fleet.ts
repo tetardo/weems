@@ -15,6 +15,9 @@ const aircraft = (
   registration,
   engineCount: 2,
   emptyWeightKg,
+  engineType: "jet",
+  airframe: "airplane",
+  maxGrossWeightKg: null,
 });
 
 /** Airports of the fleet, in this order for the routes drawn by fleetOf. */
@@ -44,7 +47,10 @@ type Icao = (typeof ICAOS)[number];
 
 const B738 = aircraft("Boeing 737-800", "B738", "F-WEMB", 41400);
 const E190 = aircraft("Embraer E190", "E190", "F-WEME", 28000);
-const AT76 = aircraft("ATR 72-600", "AT76", "F-WEMA", 13500);
+const AT76: AircraftInfo = {
+  ...aircraft("ATR 72-600", "AT76", "F-WEMA", 13500),
+  engineType: "turboprop",
+};
 const A319 = aircraft("Airbus A319", "A319", "F-WEMC", 40800);
 const CRJ9 = aircraft("Bombardier CRJ900", "CRJ9", "F-WEMJ", 21400);
 

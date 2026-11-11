@@ -37,6 +37,9 @@ export const A320: AircraftInfo = {
   registration: "F-WEMS",
   engineCount: 2,
   emptyWeightKg: 44300,
+  engineType: "jet",
+  airframe: "airplane",
+  maxGrossWeightKg: 79000,
 };
 
 /** Paris-Charles-de-Gaulle to Toulouse-Blagnac, short airliner flight. */

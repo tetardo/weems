@@ -19,6 +19,14 @@
   --color-accent-2: var(--wm-accent-2);
   --color-danger: var(--wm-danger);
   --color-success: var(--wm-success);
+  --color-cat-light: var(--wm-cat-light);
+  --color-cat-turboprop: var(--wm-cat-turboprop);
+  --color-cat-business-jet: var(--wm-cat-business-jet);
+  --color-cat-regional-jet: var(--wm-cat-regional-jet);
+  --color-cat-narrow-body: var(--wm-cat-narrow-body);
+  --color-cat-wide-body: var(--wm-cat-wide-body);
+  --color-cat-helicopter: var(--wm-cat-helicopter);
+  --color-cat-other: var(--wm-cat-other);
   --shadow-raised: 0 1px 0 var(--wm-line), 0 4px 14px var(--wm-shadow);
   --shadow-floating: 0 10px 30px var(--wm-shadow);
   --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -43,6 +51,15 @@
   --wm-shadow: rgb(0 0 0 / 0.35);
   --wm-avatar: linear-gradient(135deg, #2b6cb0, #4fd1e8);
   --wm-avatar-ink: #0e1320;
+  /* Aircraft categories (src/aircraft/category-tone.ts), readable on both themes. */
+  --wm-cat-light: #69db7c;
+  --wm-cat-turboprop: #ffa94d;
+  --wm-cat-business-jet: #da77f2;
+  --wm-cat-regional-jet: #74c0fc;
+  --wm-cat-narrow-body: #4fd1e8;
+  --wm-cat-wide-body: #91a7ff;
+  --wm-cat-helicopter: #f783ac;
+  --wm-cat-other: #adb5bd;
 }
 
 /* Light theme: set on <html> by the head script (src/site/theme.ts). */
@@ -62,6 +79,14 @@
   --wm-glass: rgb(255 255 255 / 0.75);
   --wm-glow: rgb(14 143 166 / 0.12);
   --wm-shadow: rgb(30 40 70 / 0.12);
+  --wm-cat-light: #2b8a3e;
+  --wm-cat-turboprop: #d9480f;
+  --wm-cat-business-jet: #9c36b5;
+  --wm-cat-regional-jet: #1971c2;
+  --wm-cat-narrow-body: #0b7285;
+  --wm-cat-wide-body: #3b5bdb;
+  --wm-cat-helicopter: #c2255c;
+  --wm-cat-other: #6c757d;
 }
 
 html,

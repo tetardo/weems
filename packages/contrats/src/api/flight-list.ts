@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CloseReason } from "../flight/phase.ts";
+import { AircraftCategory, AircraftClass } from "./aircraft-class.ts";
 import { FlightId, IcaoCode, UtcTimestamp } from "./common.ts";
 
 /** Times of a flight, in seconds; null when not measurable (spec site minimal, header). */
@@ -29,6 +30,8 @@ export const FlightSummary = z.object({
   callsign: z.string(),
   aircraftTitle: z.string(),
   aircraftModel: z.string().nullable(),
+  /** null when nothing is known about the aircraft (flights recorded before the categories). */
+  aircraftClass: AircraftClass.nullable(),
   departureIcao: IcaoCode.nullable(),
   plannedArrivalIcao: IcaoCode.nullable(),
   openedAt: UtcTimestamp,
@@ -49,6 +52,8 @@ export const FlightListQuery = z.object({
   to: UtcTimestamp.optional(),
   /** Part of the aircraft title or ICAO type, any case. */
   aircraft: z.string().min(1).max(64).optional(),
+  /** Category of the aircraft, from the catalogue or estimated. */
+  category: AircraftCategory.optional(),
   /** Departure or planned arrival. */
   airport: IcaoCode.optional(),
 });

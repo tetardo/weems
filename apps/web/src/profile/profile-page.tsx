@@ -5,9 +5,11 @@ import { FlightsIcon, MapIcon, StatsIcon } from "../ui/icons.ts";
 import { InfoTip } from "../ui/info-tip.tsx";
 import { SectionMain } from "../ui/section-main.tsx";
 import { SectionTitle } from "../ui/section-title.tsx";
+import { ExperiencePanel } from "./experience-panel.tsx";
 import { ProfileCharts } from "./profile-charts.tsx";
 import { ProfileHeader } from "./profile-header.tsx";
 import { PublicFlights } from "./public-flights.tsx";
+import { RoutesLegend } from "./routes-legend.tsx";
 import { RoutesMap } from "./routes-map.tsx";
 import { StatTiles } from "./stat-tiles.tsx";
 
@@ -17,8 +19,8 @@ const Note = ({ children }: { children: string }) => (
 
 /**
  * A public pilot profile (spec J4), in the order validated on the mock-up: header, map of the
- * flights, statistics (charts then tiles), flights. Companies (lot 3), experience by category
- * and medals come later: no empty block until then.
+ * flights, statistics (charts then tiles), experience by aircraft category, flights. Companies
+ * (lot 3) and medals (beside the experience) come later: no empty block until then.
  */
 export function ProfilePage({
   pilot,
@@ -44,6 +46,7 @@ export function ProfilePage({
       {routes.routes.length > 0 ? (
         <div className="relative">
           <RoutesMap routes={routes.routes} />
+          <RoutesLegend routes={routes.routes} />
           <InfoTip text={help("map")} label={help("label")} />
         </div>
       ) : (
@@ -56,6 +59,7 @@ export function ProfilePage({
       </SectionTitle>
       <ProfileCharts charts={pilot.charts} />
       <StatTiles stats={pilot.stats} />
+      <ExperiencePanel experience={pilot.stats.experience} />
       <SectionTitle icon={FlightsIcon} title={t("flights.title")}>
         <Note>{t("flights.note", { count: pilot.stats.flights })}</Note>
       </SectionTitle>

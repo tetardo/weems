@@ -17,6 +17,9 @@ const A320 = {
   registration: null,
   engineCount: 2,
   emptyWeightKg: null,
+  engineType: null,
+  airframe: null,
+  maxGrossWeightKg: null,
 };
 const START_UTC = Date.UTC(2026, 10, 11, 8, 0, 0);
 
