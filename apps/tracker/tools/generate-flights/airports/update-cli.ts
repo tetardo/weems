@@ -12,7 +12,8 @@ const SOURCE = "https://raw.githubusercontent.com/davidmegginson/ourairports-dat
 const FILE = new URL("./airports.json", import.meta.url);
 
 const { values } = parseArgs({ options: { add: { type: "string", default: "" } } });
-const icaos = [...SIMULATED_AIRPORTS.map((a) => a.icao), ...values.add.split(",").filter(Boolean)];
+const added = values.add.split(",").map((icao) => icao.trim().toUpperCase());
+const icaos = [...SIMULATED_AIRPORTS.map((a) => a.icao), ...added.filter(Boolean)];
 
 const download = async (name: string) => {
   const response = await fetch(`${SOURCE}/${name}`);

@@ -1,4 +1,4 @@
-import { angleDiffDeg, distanceNm, type LatLon } from "../../src/core/geo.ts";
+import { angleDiffDeg, distanceBetweenNm as away, type LatLon } from "../../src/core/geo.ts";
 import type { RunwayEnd } from "./airports/airport-data.ts";
 import type { FlightScript } from "./flight-script.ts";
 import { runwayAxisLeg } from "./navigation/route-plan.ts";
@@ -10,8 +10,6 @@ const has = (scenario: Scenario, d: Scenario["disturbances"][number]) =>
 /** Close enough to a taxi target (about 50 m). */
 const ARRIVED_NM = 0.03;
 const SLOW_DOWN_NM = 0.2;
-
-const away = (from: LatLon, to: LatLon) => distanceNm(from.lat, from.lon, to.lat, to.lon);
 
 /** Taxi straight to `target` (no taxiway data), slower when close. */
 function taxiTo(script: FlightScript, target: LatLon, gs: number): void {
@@ -35,6 +33,15 @@ function taxiToRunway(script: FlightScript, runway: RunwayEnd): void {
     (s) => (s.gs = 4),
     120,
   );
+}
+
+/** Contact: the touchdown sample keeps the sink rate of the flare, then the aircraft rolls. */
+export function touchDown(script: FlightScript, rollSeconds: number): void {
+  script.run(1, (s) => (s.onGround = true));
+  script.run(rollSeconds, (s) => {
+    s.onGround = true;
+    s.vs = 0;
+  });
 }
 
 /** Boarding, pushback with engine start, taxi out to the departure runway. */
@@ -75,16 +82,13 @@ export function takeoff(script: FlightScript, scenario: Scenario): void {
 
 /** Landing roll on the runway (optionally with a bounce), taxi in, parking and shutdown. */
 export function arrivalGround(script: FlightScript, scenario: Scenario): void {
-  script.run(1, (s) => {
-    s.onGround = true;
-    s.vs = 0;
-  });
+  touchDown(script, 1);
   if (has(scenario, "bounce")) {
     script.run(2, (s, second) => {
       s.onGround = false;
       s.vs = second === 0 ? 300 : -300;
     });
-    script.run(1, (s) => (s.onGround = true));
+    touchDown(script, 1);
   }
   script.until(
     (s) => s.gs <= 20,

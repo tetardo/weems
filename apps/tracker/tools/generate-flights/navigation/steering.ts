@@ -1,8 +1,7 @@
-import { angleDiffDeg, normalizeDeg } from "../../../src/core/geo.ts";
+import { angleDiffDeg, normalizeDeg, RAD } from "../../../src/core/geo.ts";
 
 const G = 9.81;
 const MS_PER_KT = 0.514444;
-const RAD = Math.PI / 180;
 /** Standard rate turn: 360° in two minutes. */
 const STANDARD_RATE_DEG_S = 3;
 /** Airliners limit bank to about 25° (autopilot); above it the turn rate drops instead. */

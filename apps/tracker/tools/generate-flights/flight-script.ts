@@ -1,6 +1,6 @@
 import type { SimEventType } from "@weems/contrats";
 import type { ReplayRecord } from "../../src/connectors/replay/replay-format.ts";
-import { destinationPoint, distanceNm, type LatLon } from "../../src/core/geo.ts";
+import { destinationPoint, distanceBetweenNm, type LatLon } from "../../src/core/geo.ts";
 import type { RunwayEnd } from "./airports/airport-data.ts";
 import { type Leg, Navigator } from "./navigation/navigator.ts";
 import { pickRunway } from "./navigation/route-plan.ts";
@@ -49,12 +49,12 @@ export class FlightScript {
     this.random = seededRandom(scenario.seed);
     const drawn = drawChoices(scenario, seededRandom(scenario.seed ^ PLAN_SEED_SALT));
     this.choices = drawn.choices;
-    const { lat, lon, elevationFt } = scenario.departure;
+    const { lat, lon } = scenario.departure;
     this.state = {
       t: 0,
       lat,
       lon,
-      altMsl: elevationFt,
+      altMsl: drawn.choices.departureRunway.elevationFt,
       altAgl: 0,
       gs: 0,
       vs: 0,
@@ -141,13 +141,16 @@ export class FlightScript {
     s.altAgl = s.altMsl - ground;
   }
 
-  /** Terrain: from the departure to the arrival elevation, in proportion to the distances. */
+  /** Terrain: from the departure to the arrival runway elevation, in proportion to the distances. */
   private groundElevationFt(at: LatLon): number {
-    const { departure, arrival } = this.scenario;
-    const fromDeparture = distanceNm(departure.lat, departure.lon, at.lat, at.lon);
-    const toArrival = distanceNm(at.lat, at.lon, arrival.lat, arrival.lon);
+    const fromDeparture = distanceBetweenNm(this.scenario.departure, at);
+    const toArrival = distanceBetweenNm(at, this.scenario.arrival);
     const share = fromDeparture / Math.max(1e-9, fromDeparture + toArrival);
-    return departure.elevationFt + (arrival.elevationFt - departure.elevationFt) * share;
+    const { departureRunway, arrivalRunway } = this.choices;
+    return (
+      departureRunway.elevationFt +
+      (arrivalRunway.elevationFt - departureRunway.elevationFt) * share
+    );
   }
 
   /** Light noise on speeds, like a real recording; the state itself stays exact. */

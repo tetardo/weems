@@ -109,11 +109,22 @@ describe("generated tracks", () => {
     expect(Math.abs(landing.beside)).toBeLessThan(75);
   });
 
-  it("parks at the arrival airport, at its elevation", () => {
+  it("parks at the arrival airport, at the elevation of its runway", () => {
     const last = samplesOf(LFPG_LFBO).at(-1) as Sample;
     const { arrival } = LFPG_LFBO;
     expect(distanceNm(last.lat, last.lon, arrival.lat, arrival.lon)).toBeLessThan(0.05);
-    expect(last.altMsl).toBeCloseTo(arrival.elevationFt, 0);
+    const { arrivalRunway } = new FlightScript(LFPG_LFBO).choices;
+    expect(last.altMsl).toBeCloseTo(arrivalRunway.elevationFt, 0);
+  });
+
+  it("records the sink rate at touchdown, then nothing on the ground", () => {
+    for (const disturbances of [[], ["bounce"], ["touchAndGo"]] as Disturbance[][]) {
+      const samples = samplesOf({ ...LFPG_LFBO, disturbances });
+      const contacts = samples.filter((s, i) => s.onGround && samples[i - 1]?.onGround === false);
+      for (const contact of contacts) expect(contact.vs).toBeLessThan(-50);
+      const rolling = samples.filter((s, i) => s.onGround && samples[i - 1]?.onGround);
+      expect(rolling.every((s) => s.vs === 0)).toBe(true);
+    }
   });
 
   it("turns at standard rate, never beyond 25° of bank", () => {
@@ -123,9 +134,11 @@ describe("generated tracks", () => {
   });
 
   it("varies the touchdown with the seed", () => {
-    const choices = [1, 2, 3, 4, 5, 6].map(
-      (seed) => new FlightScript({ ...LFPG_LFBO, seed }).choices.touchdownVs,
-    );
-    expect(new Set(choices.map(Math.round)).size).toBe(6);
+    const rates = [1, 2, 3, 4].map((seed) => {
+      const samples = samplesOf({ ...LFPG_LFBO, seed });
+      const contact = samples.find((s, i) => s.onGround && samples[i - 1]?.onGround === false);
+      return Math.round(contact?.vs ?? 0);
+    });
+    expect(new Set(rates).size).toBe(4);
   });
 });

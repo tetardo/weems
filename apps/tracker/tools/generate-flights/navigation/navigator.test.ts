@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { angleDiffDeg, destinationPoint, distanceNm } from "../../../src/core/geo.ts";
+import {
+  angleDiffDeg,
+  bearingDeg,
+  destinationPoint,
+  distanceBetweenNm,
+  distanceNm,
+} from "../../../src/core/geo.ts";
 import { legsNm, Navigator } from "./navigator.ts";
 
 const ORIGIN = { lat: 45, lon: 5 };
@@ -44,5 +50,17 @@ describe("Navigator", () => {
     expect(legsNm(ORIGIN, legs)).toBeCloseTo(25, 3);
     const end = legs[1]?.fix ?? ORIGIN;
     expect(distanceNm(ORIGIN.lat, ORIGIN.lon, end.lat, end.lon)).toBeCloseTo(25, 3);
+  });
+
+  it("leaves a direct fix already behind (teleport past it)", () => {
+    const navigator = new Navigator();
+    const corner = north(10);
+    const end = destinationPoint(corner, 90, 10);
+    navigator.follow([{ fix: corner }, { fix: end }]);
+    navigator.desiredHeading(ORIGIN, 1);
+    // Jumped 5 NM past the corner, well outside the 1 NM lead: on to the next leg.
+    const jumped = north(15);
+    expect(navigator.desiredHeading(jumped, 1)).toBeCloseTo(bearingDeg(jumped, end), 6);
+    expect(navigator.remainingNm(jumped)).toBeCloseTo(distanceBetweenNm(jumped, end), 6);
   });
 });

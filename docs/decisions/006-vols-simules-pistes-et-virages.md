@@ -9,7 +9,7 @@ Le générateur de vols (`apps/tracker/tools/generate-flights/`) faisait avancer
 - vols normaux : toucher **9 à 17 NM avant l'aéroport** (descente calée sur le temps, pas sur la distance) ;
 - vols perturbés (rebond, décollage interrompu, toucher-rebond, remise des gaz) : arrivée au-dessus de l'aéroport à 12 500 ft, puis **immobile jusqu'à 8 min 30** ;
 - roulage le long de la route : décollage à 2,3 NM de l'aéroport ;
-- toucher toujours à environ −700 ft/min ; aéroports à 0 ft ; cap fixe, jamais d'inclinaison ;
+- taux de chute enregistré au toucher toujours à 0 ft/min (l'échantillon du toucher remettait la vitesse verticale à zéro) ; aéroports à 0 ft ; cap fixe, jamais d'inclinaison ;
 - trajet différent de l'orthodromie que trace la carte du direct.
 
 ## Options
@@ -32,8 +32,8 @@ L'avion avance selon son cap et sa vitesse sol. Un navigateur lui donne le cap �
 - **virages** au taux standard (3°/s), limités à 25° d'inclinaison (à grande vitesse le virage est plus lent) ;
 - **profil vertical** : niveau de croisière abaissé si la route est trop courte, descente sur une pente de 3° calculée sur la distance restante, palier si l'avion est sous la pente, arrondi dans les 20 derniers pieds ;
 - **remise des gaz et toucher-rebond** : circuit main gauche (2 000 ft ou 1 500 ft), puis nouvelle finale ;
-- **altitudes** : altitude au-dessus de la mer = terrain + hauteur, le terrain passant de l'altitude du départ à celle de l'arrivée ;
-- **toucher** : taux de chute tiré par la graine (−60 à −700 ft/min, la plupart sous −300).
+- **altitudes** : altitude au-dessus de la mer = terrain + hauteur, le terrain passant de l'altitude du seuil de départ à celle du seuil d'arrivée, sur laquelle la pente de 3° est calée ;
+- **toucher** : taux de chute tiré par la graine (−60 à −700 ft/min, la plupart sous −300), enregistré sur l'échantillon du toucher, puis zéro au sol.
 
 ![Avant / après sur la flotte J1](img/006-vols-simules-avant-apres.png)
 

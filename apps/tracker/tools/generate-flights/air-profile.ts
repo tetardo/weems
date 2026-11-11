@@ -1,4 +1,5 @@
 import type { FlightScript } from "./flight-script.ts";
+import { touchDown } from "./ground-profile.ts";
 import { legsNm } from "./navigation/navigator.ts";
 import { circuitLegs, enrouteLegs } from "./navigation/route-plan.ts";
 import {
@@ -19,6 +20,8 @@ const has = (scenario: Scenario, d: Scenario["disturbances"][number]) =>
 const MAX_FLIGHT_S = 6 * 3600;
 /** Margin kept before the top of descent by the in-cruise disturbances. */
 const MARGIN_NM = 10;
+/** A teleport always moves the aircraft, even with no room left before the descent. */
+const MIN_TELEPORT_NM = 2;
 /** Level flight before any disturbance, so that CRUISE is confirmed first (60 s). */
 const SETTLE_S = 70;
 
@@ -27,17 +30,18 @@ const toward = (gs: number, target: number) => gs + Math.max(-1, Math.min(1, tar
 
 /** Climb on the runway axis, turn toward the arrival, level at the highest fitting cruise level. */
 export function climb(script: FlightScript, scenario: Scenario): void {
-  const legs = enrouteLegs(script.choices.departureRunway, script.choices.arrivalRunway);
+  const { departureRunway, arrivalRunway } = script.choices;
+  const legs = enrouteLegs(departureRunway, arrivalRunway);
   script.follow(legs);
   const ceiling = cruiseCeilingFt(
     scenario.cruiseAltFt,
     legsNm(script.state, legs),
-    scenario.departure.elevationFt,
-    scenario.arrival.elevationFt,
+    departureRunway.elevationFt,
+    arrivalRunway.elevationFt,
   );
   script.run(10, (s) => (s.vs = 2500));
   const levelOffNow = (s: AircraftState) =>
-    mustLevelOff(s.altMsl, script.remainingNm, s.gs, scenario.arrival.elevationFt);
+    mustLevelOff(s.altMsl, script.remainingNm, s.gs, arrivalRunway.elevationFt);
   script.until(
     (s) => s.altMsl >= ceiling || levelOffNow(s),
     (s) => {
@@ -66,7 +70,7 @@ function cruiseDisturbances(script: FlightScript, scenario: Scenario, todNm: num
   if (has(scenario, "slew")) script.run(20, (s, i) => (s.slew = i < 19));
   if (has(scenario, "teleport")) {
     script.event("positionChanged");
-    script.jump(Math.max(0, Math.min(20, script.remainingNm - todNm - MARGIN_NM)));
+    script.jump(Math.max(MIN_TELEPORT_NM, Math.min(20, script.remainingNm - todNm - MARGIN_NM)));
   }
   if (has(scenario, "crash")) {
     script.event("crashed");
@@ -77,7 +81,7 @@ function cruiseDisturbances(script: FlightScript, scenario: Scenario, todNm: num
 
 /** Level cruise to the top of descent, with disturbances half-way; false if it ended (crash). */
 export function cruise(script: FlightScript, scenario: Scenario): boolean {
-  const todNm = pathDistanceNm(script.state.altMsl, scenario.arrival.elevationFt);
+  const todNm = pathDistanceNm(script.state.altMsl, script.choices.arrivalRunway.elevationFt);
   const halfWay = (script.remainingNm + todNm) / 2;
   const level = (s: AircraftState) => (s.vs = 0);
   script.run(SETTLE_S, level);
@@ -96,7 +100,7 @@ function targetSpeed(remainingNm: number, scenario: Scenario): number {
 
 /** Follows the 3° path down to `stopHeightFt` (0: touchdown, after the flare). */
 function descendTo(script: FlightScript, scenario: Scenario, stopHeightFt: number): void {
-  const elevation = scenario.arrival.elevationFt;
+  const elevation = script.choices.arrivalRunway.elevationFt;
   script.until(
     (s) => s.altAgl <= stopHeightFt,
     (s) => {
@@ -127,10 +131,7 @@ export function descentAndApproach(script: FlightScript, scenario: Scenario): vo
   }
   if (has(scenario, "touchAndGo")) {
     descendTo(script, scenario, 0);
-    script.run(5, (s) => {
-      s.onGround = true;
-      s.vs = 0;
-    });
+    touchDown(script, 4);
     script.run(1, (s) => (s.onGround = false));
     climbIntoCircuit(script, 1500, 1000);
   }

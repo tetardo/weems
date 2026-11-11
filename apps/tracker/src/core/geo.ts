@@ -1,5 +1,6 @@
 const EARTH_RADIUS_NM = 3440.065;
-const RAD = Math.PI / 180;
+/** Radians per degree. */
+export const RAD = Math.PI / 180;
 
 export interface LatLon {
   lat: number;
@@ -14,6 +15,10 @@ export function distanceNm(lat1: number, lon1: number, lat2: number, lon2: numbe
     Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * RAD) * Math.cos(lat2 * RAD) * Math.sin(dLon / 2) ** 2;
   return 2 * EARTH_RADIUS_NM * Math.asin(Math.sqrt(a));
 }
+
+/** Distance in nautical miles between two points (great circle). */
+export const distanceBetweenNm = (a: LatLon, b: LatLon): number =>
+  distanceNm(a.lat, a.lon, b.lat, b.lon);
 
 /** Angle in [0, 360). */
 export const normalizeDeg = (deg: number): number => ((deg % 360) + 360) % 360;
@@ -54,7 +59,7 @@ export function destinationPoint(from: LatLon, courseDeg: number, nm: number): L
 
 /** Distance from `point` to the great circle through `start` on course `courseDeg`: positive right. */
 export function crossTrackNm(point: LatLon, start: LatLon, courseDeg: number): number {
-  const angular = distanceNm(start.lat, start.lon, point.lat, point.lon) / EARTH_RADIUS_NM;
+  const angular = distanceBetweenNm(start, point) / EARTH_RADIUS_NM;
   const delta = (bearingDeg(start, point) - courseDeg) * RAD;
   return Math.asin(Math.sin(angular) * Math.sin(delta)) * EARTH_RADIUS_NM;
 }
