@@ -37,7 +37,8 @@
       "timeLeft": "≈ {time}",
       "noFlightPlan": "Départ ou arrivée non renseigné dans le tracker : pas de progression.",
       "unknownAirport": "Aéroport inconnu de Weems : pas de progression."
-    }
+    },
+    "showRoutes": "Trajets"
   },
   "Phases": {
     "BOARDING": "Embarquement",

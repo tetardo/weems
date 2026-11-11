@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { createBaseMap } from "../map/base-map.ts";
 import { currentMapTheme, type MapTheme } from "../map/map-theme.ts";
 import { addAircraftIcons, ICON_LOST, ICON_OK } from "./aircraft-icons.ts";
+import { addAllRoutesLayers, type AllRoutes, showAllRoutes } from "./all-routes-layers.ts";
 import type { LiveFlights } from "./flights-store.ts";
 import { addRouteLayers, followAircraft, showRoute } from "./route-layers.ts";
 import { Tracks } from "./tracks.ts";
@@ -18,6 +19,8 @@ interface Props {
   selectedId: string | null;
   /** Route of the selected flight, drawn under the aircraft. */
   route: LiveRoute | null;
+  /** Routes of the other flights (empty when the spectator hides them). */
+  allRoutes: AllRoutes;
   onSelect: (flightId: string | null) => void;
 }
 
@@ -43,8 +46,26 @@ function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
   });
 }
 
+/** Aircraft on top, then the selected route, then the faint routes of all flights. */
+function addLiveLayers(map: MapLibreMap, theme: MapTheme): void {
+  addFlightsLayer(map, theme);
+  addAllRoutesLayers(map, theme, SOURCE);
+  addRouteLayers(map, theme, SOURCE);
+}
+
+/** Calls `show(map, value)` when `value` changes, once the layers exist (else the load does). */
+function useShown<T>(
+  map: { current: MapLibreMap | null },
+  value: T,
+  show: (map: MapLibreMap, value: T) => void,
+): void {
+  useEffect(() => {
+    if (map.current?.getSource(SOURCE)) show(map.current, value);
+  }, [map, value, show]);
+}
+
 /** MapLibre map with one aircraft per open flight, gliding between updates, and the selected route. */
-export function LiveMap({ flights, selectedId, route, onSelect }: Props) {
+export function LiveMap({ flights, selectedId, route, allRoutes, onSelect }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const tracks = useRef(new Tracks());
@@ -54,6 +75,8 @@ export function LiveMap({ flights, selectedId, route, onSelect }: Props) {
   select.current = onSelect;
   const shownRoute = useRef(route);
   shownRoute.current = route;
+  const shownRoutes = useRef(allRoutes);
+  shownRoutes.current = allRoutes;
 
   useEffect(() => {
     if (!container.current) return;
@@ -72,8 +95,8 @@ export function LiveMap({ flights, selectedId, route, onSelect }: Props) {
       frame = requestAnimationFrame(draw);
     };
     instance.on("load", () => {
-      addFlightsLayer(instance, theme);
-      addRouteLayers(instance, theme, SOURCE);
+      addLiveLayers(instance, theme);
+      showAllRoutes(instance, shownRoutes.current);
       showRoute(instance, shownRoute.current);
       draw();
     });
@@ -90,10 +113,8 @@ export function LiveMap({ flights, selectedId, route, onSelect }: Props) {
 
   useEffect(() => tracks.current.update(flights, performance.now()), [flights]);
 
-  useEffect(() => {
-    const instance = map.current;
-    if (instance?.getSource(SOURCE)) showRoute(instance, route);
-  }, [route]);
+  useShown(map, route, showRoute);
+  useShown(map, allRoutes, showAllRoutes);
 
   return <div ref={container} style={{ position: "absolute", inset: 0 }} />;
 }

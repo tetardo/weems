@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Latitude, Longitude } from "../telemetry/common.ts";
+import { Airport } from "./airports.ts";
 import { FlightId, IcaoCode, UtcTimestamp } from "./common.ts";
 import { PositionReport } from "./flights.ts";
 
@@ -30,15 +31,6 @@ export const LiveUpdate = z.object({
   removed: z.array(FlightId),
 });
 export type LiveUpdate = z.infer<typeof LiveUpdate>;
-
-/** An airport of the route, from the API's airport list (OurAirports, decision 005). */
-export const Airport = z.object({
-  icao: IcaoCode,
-  name: z.string(),
-  lat: Latitude,
-  lon: Longitude,
-});
-export type Airport = z.infer<typeof Airport>;
 
 /**
  * GET /v1/live/flights/{flightId}/route: what the live map draws for the selected flight.

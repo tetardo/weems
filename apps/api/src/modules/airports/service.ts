@@ -12,4 +12,9 @@ export class AirportsService {
   find(icao: string | null): Airport | null {
     return (icao && this.airports.get(icao.toUpperCase())) || null;
   }
+
+  /** The airports among `codes` that are in the list, in the same order; unknown codes are left out. */
+  findAll(codes: readonly string[]): Airport[] {
+    return codes.flatMap((code) => this.find(code) ?? []);
+  }
 }

@@ -3,7 +3,7 @@
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
 J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
-J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab. J4 : navigation en barre flottante (fiche 003) ; la page de connexion sert aussi au tracker (OAuth). J4 : sur la carte en direct, le vol sélectionné montre sa trace, l'orthodromie restante, ses aéroports et sa progression.
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab. J4 : navigation en barre flottante (fiche 003) ; la page de connexion sert aussi au tracker (OAuth). J4 : sur la carte en direct, le vol sélectionné montre sa trace, l'orthodromie restante, ses aéroports et sa progression ; tous les avions montrent leur trajet (bouton « Trajets » pour les masquer).
 
 ## Où trouver quoi
 
@@ -65,6 +65,10 @@ src/
     route-geojson.ts      trace, ligne restante et aéroports en GeoJSON
     route-layers.ts       calques MapLibre de la route (sous les avions)
     route-summary.tsx     barre de progression du panneau du vol
+    airport-book.ts, use-airports.ts   aéroports des vols, demandés une fois par code
+    all-routes.ts         trajets de tous les vols (fait / reste) en GeoJSON
+    all-routes-layers.ts  calques pâles des trajets de tous les vols
+    use-show-routes.ts    bouton « Trajets », choix gardé dans le navigateur
     aircraft-icons.ts     silhouettes d'avion dessinées
     live-map.tsx          carte MapLibre
     flight-panel.tsx      panneau du vol choisi

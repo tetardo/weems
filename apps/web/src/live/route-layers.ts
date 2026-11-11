@@ -41,9 +41,9 @@ export function addRouteLayers(map: MapLibreMap, theme: MapTheme, beforeId: stri
       source: AIRCRAFT_LINES,
       filter: ["==", ["get", "kind"], "ahead"],
       paint: {
-        "line-color": theme.ink,
-        "line-opacity": 0.7,
-        "line-width": 2,
+        "line-color": theme.aircraft,
+        "line-opacity": 0.9,
+        "line-width": 2.5,
         "line-dasharray": [2, 2],
       },
     },

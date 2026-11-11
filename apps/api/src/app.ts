@@ -8,6 +8,7 @@ import { PilotIdentifier } from "./modules/accounts/pilot-identifier.ts";
 import { AccountsRepository } from "./modules/accounts/repository.ts";
 import { registerAccountRoutes } from "./modules/accounts/routes.ts";
 import { readAirportsFile } from "./modules/airports/airports-file.ts";
+import { registerAirportRoutes } from "./modules/airports/routes.ts";
 import { AirportsService } from "./modules/airports/service.ts";
 import { AccountsService } from "./modules/accounts/service.ts";
 import { ensureTrackerClient } from "./modules/accounts/tracker-client.ts";
@@ -73,6 +74,7 @@ export async function buildApp({
     guards,
   );
   const airports = new AirportsService(readAirportsFile());
+  registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   if (config.env !== "production") registerDevLiveRoutes(app, board, stream);
   app.addHook("onReady", async () => stream.start());
