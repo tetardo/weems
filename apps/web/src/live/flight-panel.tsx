@@ -1,8 +1,15 @@
-import type { LiveFlight } from "@weems/contrats";
+import type { LiveFlight, LiveRoute } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
+import { RouteSummary } from "./route-summary.tsx";
 
-/** Details of the selected flight (spec J1, part 4). */
-export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: () => void }) {
+interface Props {
+  flight: LiveFlight;
+  route: LiveRoute | null;
+  onClose: () => void;
+}
+
+/** Details of the selected flight (spec J1, part 4) and its progress along the route. */
+export function FlightPanel({ flight, route, onClose }: Props) {
   const t = useTranslations("Live");
   const phases = useTranslations("Phases");
   const format = useFormatter();
@@ -33,6 +40,7 @@ export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: 
           </div>
         ))}
       </dl>
+      <RouteSummary flight={flight} route={route} />
     </aside>
   );
 }

@@ -12,6 +12,7 @@ RUN pnpm install --frozen-lockfile --prod --filter @weems/api...
 COPY packages/contrats/src packages/contrats/src
 COPY apps/api/src apps/api/src
 COPY apps/api/migrations apps/api/migrations
+COPY apps/api/data apps/api/data
 
 ENV NODE_ENV=production
 USER node

@@ -12,6 +12,7 @@
     "db:migrate": "node src/db/migrate-cli.ts",
     "invite": "node --env-file-if-exists=.env src/modules/accounts/invite-cli.ts",
     "alpha-report": "node --env-file-if-exists=.env src/modules/alpha/report-cli.ts",
+    "airports:update": "node src/modules/airports/update-cli.ts",
     "reclassify": "node --env-file-if-exists=.env src/modules/flights/reclassify-cli.ts"
   },
   "dependencies": {

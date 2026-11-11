@@ -3,7 +3,7 @@
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
 J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
-J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public »).
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public ») ; sur la carte en direct, tous les avions montrent leur trajet (bouton « Trajets » pour les masquer) et le vol sélectionné sa trace, l'orthodromie restante, ses aéroports et sa progression.
 
 ## Où trouver quoi
 
@@ -12,6 +12,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 | Règles communes (terminé, tests, branches, sécurité) | `../../docs/developpement/regles-de-developpement.md` |
 | Carte en direct (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
 | Site minimal (J2) | `../../docs/cahiers-des-charges/web/spec-J2-site-minimal.md` |
+| Trajectoire et progression en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md` |
 | Comptes et connexion (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
 | Catégories d'avion (J4) | `../../docs/cahiers-des-charges/spec-J4-categories-avion.md` |
@@ -75,6 +76,16 @@ src/
     flights-store.ts      vols en cours (fonctions pures)
     tracks.ts             glissement entre deux positions
     interpolate.ts        calcul du point intermédiaire et du cap
+    use-live-route.ts     route du vol sélectionné (aéroports, trace), relue toutes les 30 s
+    great-circle.ts       orthodromie : distance en NM, points de la route, antiméridien
+    route-progress.ts     progression, distance et temps restants
+    route-geojson.ts      trace, ligne restante et aéroports en GeoJSON
+    route-layers.ts       calques MapLibre de la route (sous les avions)
+    route-summary.tsx     barre de progression du panneau du vol
+    airport-book.ts, use-airports.ts   aéroports des vols, demandés une fois par code
+    all-routes.ts         trajets de tous les vols (fait / reste) en GeoJSON
+    all-routes-layers.ts  calques pâles des trajets de tous les vols
+    use-show-routes.ts    bouton « Trajets », choix gardé dans le navigateur
     aircraft-shapes.ts    silhouette et taille par catégorie d'avion, nom des images (testé)
     aircraft-icons.ts     dessin des silhouettes, couleur de la catégorie (lue dans global.css), grise si signal perdu
     live-map.tsx          carte MapLibre
