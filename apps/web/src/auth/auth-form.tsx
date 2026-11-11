@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { type AuthError, authRequest } from "./auth-request.ts";
+import { Button } from "../ui/button.tsx";
 import { safeNext } from "./session-cookie.ts";
 
 interface Props {
@@ -38,23 +39,24 @@ export function AuthForm({ path, submitLabel, children }: Props) {
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-3">
+    <form onSubmit={submit}>
       {search.has("sig") && (
-        <p className="rounded bg-sky-50 p-2 text-sm text-sky-900">{t("tracker")}</p>
+        <p className="mb-6 rounded-lg border border-blue-500 bg-blue-500 px-3 py-3 text-white">
+          {t("tracker")}
+        </p>
       )}
       {children}
       {error && (
-        <p role="alert" className="text-sm text-red-700">
+        <p
+          role="alert"
+          className="mb-6 rounded-lg border border-red-500 bg-red-500 px-3 py-3 text-white"
+        >
           {t(`errors.${error}`)}
         </p>
       )}
-      <button
-        type="submit"
-        disabled={busy}
-        className="rounded bg-slate-900 px-3 py-2 text-white disabled:opacity-60"
-      >
+      <Button type="submit" disabled={busy}>
         {submitLabel}
-      </button>
+      </Button>
     </form>
   );
 }
