@@ -40,6 +40,14 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 - L'en-tête montre le nom du pilote et un bouton de déconnexion.
 - Tracker : l'API envoie le navigateur sur la page de connexion du site, dans la langue du navigateur. Après la connexion, le navigateur repart vers le tracker (`127.0.0.1`). Vérifié par un test navigateur (`pnpm test:j3`) avec le vrai site et la vraie API, jusqu'aux jetons.
 
+## 3. Connexion du tracker
+
+- Module `apps/tracker/src/account/`, sans Electron : il tourne et se teste sur Mac.
+- Connexion : le tracker lit `GET /v1/tracker/login`, ouvre un petit serveur sur `127.0.0.1` (port libre, fermé dès la réponse ou après 10 min), ouvre le navigateur du pilote, vérifie le `state`, puis échange le code (PKCE).
+- Jetons gardés dans un fichier chiffré par le système (Electron `safeStorage` : DPAPI sous Windows). Un fichier illisible équivaut à « déconnecté ».
+- Le jeton d'accès est renouvelé 1 minute avant sa fin. Si le jeton de rafraîchissement est refusé, le pilote est déconnecté et l'envoi s'arrête (401) ; les vols restent dans la file locale et partent après la reconnexion. Une panne réseau pendant le renouvellement ne déconnecte pas.
+- Testé contre la vraie API (`e2e/tracker-account.test.ts`) : connexion, renouvellement, refus du jeton de rafraîchissement.
+
 ## Choix faits pendant le développement
 
 | Sujet | Choix | Pourquoi |

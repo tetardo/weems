@@ -128,6 +128,22 @@ describe("outbox sender", () => {
     expect(await sender.drain(600_000)).toBe(0);
   });
 
+  it("waits for the pilot to log in again (401), then sends again", async () => {
+    recorder.open(flight(1));
+    let status = 401;
+    const { api, calls } = fakeApi(() => status);
+    const sender = new OutboxSender(recorder.db, api, () => 0);
+    await sender.drain(0);
+    expect(sender.block).toBe("unauthorized");
+    expect(await sender.drain(600_000)).toBe(0);
+
+    status = 201;
+    sender.resumeAfterLogin();
+    expect(await sender.drain(600_000)).toBe(1);
+    expect(calls).toHaveLength(2);
+    expect(sender.pendingCount()).toBe(0);
+  });
+
   it("knows when a flight's opening has been accepted", async () => {
     const f = flight(1);
     recorder.open(f);

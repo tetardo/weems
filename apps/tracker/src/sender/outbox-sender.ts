@@ -85,6 +85,11 @@ export class OutboxSender {
     return this.blocked;
   }
 
+  /** The pilot logged in again: sending starts again (a required update stays blocked). */
+  resumeAfterLogin(): void {
+    if (this.blocked === "unauthorized") this.blocked = null;
+  }
+
   /** Number of messages still to send (parked ones excluded). */
   pendingCount(): number {
     return (
