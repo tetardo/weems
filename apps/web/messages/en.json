@@ -158,5 +158,27 @@
       "title": "Score",
       "later": "The score comes with flight scoring."
     }
+  },
+  "Auth": {
+    "title": "Log in",
+    "signupTitle": "Create my account",
+    "email": "E-mail address",
+    "password": "Password",
+    "name": "Pseudonym (seen by other pilots)",
+    "inviteCode": "Invitation code",
+    "submit": "Log in",
+    "signupSubmit": "Create my account",
+    "toSignup": "Received an invitation? Create my account",
+    "toLogin": "Already have an account? Log in",
+    "signOut": "Log out",
+    "tracker": "The tracker is waiting for you to log in: it will take over by itself.",
+    "passwordRule": "At least 10 characters.",
+    "errors": {
+      "credentials": "Wrong e-mail address or password.",
+      "invitation": "This invitation code does not match this address, or has already been used.",
+      "exists": "An account already exists with this address.",
+      "password": "The password must be at least 10 characters long.",
+      "unknown": "Logging in did not work. Try again in a moment."
+    }
   }
 }

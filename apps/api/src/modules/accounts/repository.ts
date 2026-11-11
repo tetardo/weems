@@ -74,7 +74,7 @@ export class AccountsRepository {
           updatedAt: now,
         })
         .onConflictDoNothing();
-      const inserted = await tx
+      await tx
         .insert(oauthClients)
         .values({
           id: uuidV7(),
@@ -92,9 +92,17 @@ export class AccountsRepository {
           createdAt: now,
           updatedAt: now,
         })
-        .onConflictDoNothing()
-        .returning({ id: oauthClients.id });
-      if (inserted.length === 0) return;
+        .onConflictDoNothing();
+      // Also when the client already exists: the API's address (the resource) may have changed.
+      const link = and(
+        eq(oauthClientResources.clientId, client.clientId),
+        eq(oauthClientResources.resourceId, client.resource),
+      );
+      const linked = await tx
+        .select({ id: oauthClientResources.id })
+        .from(oauthClientResources)
+        .where(link);
+      if (linked.length > 0) return;
       await tx.insert(oauthClientResources).values({
         id: uuidV7(),
         clientId: client.clientId,

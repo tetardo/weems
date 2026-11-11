@@ -158,5 +158,27 @@
       "title": "Note",
       "later": "La note arrive avec la notation des vols."
     }
+  },
+  "Auth": {
+    "title": "Connexion",
+    "signupTitle": "Créer mon compte",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "name": "Pseudo (visible des autres pilotes)",
+    "inviteCode": "Code d'invitation",
+    "submit": "Se connecter",
+    "signupSubmit": "Créer mon compte",
+    "toSignup": "Vous avez reçu une invitation ? Créer mon compte",
+    "toLogin": "Déjà un compte ? Se connecter",
+    "signOut": "Se déconnecter",
+    "tracker": "Le tracker attend votre connexion : il reprendra la main tout seul.",
+    "passwordRule": "10 caractères au moins.",
+    "errors": {
+      "credentials": "Adresse e-mail ou mot de passe incorrect.",
+      "invitation": "Ce code d'invitation ne correspond pas à cette adresse, ou a déjà servi.",
+      "exists": "Un compte existe déjà avec cette adresse.",
+      "password": "Le mot de passe doit faire au moins 10 caractères.",
+      "unknown": "La connexion n'a pas abouti. Réessayez dans un instant."
+    }
   }
 }

@@ -33,6 +33,13 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 - Chaque requête de l'API reconnaît le pilote par son jeton (tracker) ou par le cookie de session (site). Un pilote ne lit que ses propres vols (déjà vrai depuis J0, vérifié par un test avec deux pilotes).
 - **Développement** : le jeton fixe `dev-token` reste accepté hors production (`pnpm simulate`, `pnpm fly`). Ses vols appartiennent au pilote de développement, qui peut se connecter au site avec `pilote@weems.local` et le mot de passe `weems-dev-password`.
 
+## 2. Connexion du site
+
+- Tout le site demande d'être connecté, sauf `/login` et `/signup`. Sans session, le visiteur passe par la page de connexion puis revient à la page demandée.
+- `/signup?code=…` : l'adresse donnée par `pnpm invite` remplit le code d'invitation.
+- L'en-tête montre le nom du pilote et un bouton de déconnexion.
+- Tracker : l'API envoie le navigateur sur la page de connexion du site, dans la langue du navigateur. Après la connexion, le navigateur repart vers le tracker (`127.0.0.1`). Vérifié par un test navigateur (`pnpm test:j3`) avec le vrai site et la vraie API, jusqu'aux jetons.
+
 ## Choix faits pendant le développement
 
 | Sujet | Choix | Pourquoi |
@@ -45,7 +52,8 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 | Mot de passe oublié | Pas en J3 : Greg crée une nouvelle invitation après suppression du compte | 5 pilotes ; un service d'envoi d'e-mails n'est utile qu'avec l'inscription libre |
 | Tables de Better Auth | Écrites à la main dans `apps/api/src/db/auth-schema.ts`, migrations Drizzle comme le reste | Une seule façon de faire évoluer la base. À comparer après chaque mise à jour de la bibliothèque |
 | Identifiants | UUID v7 pour les pilotes aussi | Même convention que les vols (spec J0) |
-| Carte en direct | Reste publique en J3 (indicatif et position, sans nom ni e-mail) | Rien de personnel n'y est montré. À revoir avant J4 |
+| Look du site | Admin One React (justboil, licence MIT) : seuls les composants utiles sont recopiés, sans Redux ni pages de démonstration (choix de Greg) | Même rendu que le modèle, sans code mort ; PR séparée |
+| Carte en direct | Le flux de l'API (`/v1/live/stream`) reste public en J3 (indicatif et position, sans nom ni e-mail) ; la page `/live` du site demande la connexion comme le reste | Rien de personnel n'y est montré. À revoir avant J4 |
 
 ## Questions ouvertes
 
