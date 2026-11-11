@@ -1,4 +1,4 @@
-import Database from "better-sqlite3";
+import { type Database, inTransaction, openDatabase } from "./sqlite.ts";
 import type {
   CloseFlightRequest,
   FlightEvent,
@@ -28,13 +28,11 @@ interface SessionRow {
  * being scheduled for sending. Samples are buffered and written once per second (flush).
  */
 export class Recorder {
-  readonly db: Database.Database;
+  readonly db: Database;
   private buffer: { flightId: string; sample: Sample; at: string }[] = [];
 
   constructor(path: string) {
-    this.db = new Database(path);
-    this.db.pragma("journal_mode = WAL");
-    this.db.pragma("foreign_keys = ON");
+    this.db = openDatabase(path);
     migrate(this.db);
   }
 
@@ -44,19 +42,19 @@ export class Recorder {
   }
 
   open(request: OpenFlightRequest): void {
-    this.db.transaction(() => {
+    inTransaction(this.db, () => {
       this.db
         .prepare(
           "INSERT INTO sessions (flight_id, state, aircraft_title, opened_at) VALUES (?, 'flying', ?, ?)",
         )
         .run(request.flightId, request.aircraft.title, request.openedAt);
       this.enqueue(request.flightId, "open", request);
-    })();
+    });
   }
 
   event(flightId: string, event: FlightEvent): void {
     const phase = event.type === "phaseChanged" ? (event.context["to"] as FlightPhase) : null;
-    this.db.transaction(() => {
+    inTransaction(this.db, () => {
       this.db
         .prepare("INSERT INTO events (flight_id, seq, data) VALUES (?, ?, ?)")
         .run(flightId, event.seq, JSON.stringify(event));
@@ -67,7 +65,7 @@ export class Recorder {
         )
         .run(event.seq, event.at, phase, flightId);
       this.enqueue(flightId, "events", { events: [event] });
-    })();
+    });
   }
 
   /** Positions are not queued (only the newest counts): the session row keeps the last one. */
@@ -82,7 +80,7 @@ export class Recorder {
 
   closeFlight(flightId: string, request: CloseFlightRequest): void {
     this.flush();
-    this.db.transaction(() => {
+    inTransaction(this.db, () => {
       this.db
         .prepare(
           "UPDATE sessions SET state = 'closed', closed_at = ?, close_reason = ? WHERE flight_id = ?",
@@ -91,7 +89,7 @@ export class Recorder {
       this.enqueue(flightId, "close", request);
       const points = this.trackOf(flightId);
       if (points.length > 0) this.enqueue(flightId, "track", { points });
-    })();
+    });
   }
 
   /** `at`: UTC time of the sample, for the trajectory sent after closing. */
@@ -107,17 +105,17 @@ export class Recorder {
     );
     const pending = this.buffer;
     this.buffer = [];
-    this.db.transaction(() => {
+    inTransaction(this.db, () => {
       for (const { flightId, sample, at } of pending)
         insert.run(flightId, sample.t, at, JSON.stringify(sample));
-    })();
+    });
   }
 
   /** Flights still "flying" at start-up: the tracker or the PC stopped during a flight. */
   unfinishedFlights(): SavedFlight[] {
     const rows = this.db
       .prepare("SELECT * FROM sessions WHERE state = 'flying' ORDER BY opened_at")
-      .all() as SessionRow[];
+      .all() as unknown as SessionRow[];
     return rows.map((row) => ({
       flightId: row.flight_id,
       aircraftTitle: row.aircraft_title,
@@ -134,7 +132,7 @@ export class Recorder {
   private trackOf(flightId: string) {
     const rows = this.db
       .prepare("SELECT at, data FROM samples WHERE flight_id = ? AND at IS NOT NULL ORDER BY rowid")
-      .all(flightId) as { at: string; data: string }[];
+      .all(flightId) as unknown as { at: string; data: string }[];
     return thinTrack(rows.map((row) => toTrackPoint(JSON.parse(row.data) as Sample, row.at)));
   }
 

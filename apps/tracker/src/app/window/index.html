@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'" />
+    <title>Weems Tracker</title>
+    <link rel="stylesheet" href="window.css" />
+  </head>
+  <body>
+    <header><b>Weems</b> Tracker <span id="version"></span></header>
+    <main>
+      <section class="card">
+        <h2 data-text="account"></h2>
+        <p id="account-status"></p>
+        <button id="log-in" class="primary" data-text="logIn"></button>
+        <button id="log-out" data-text="logOut"></button>
+      </section>
+      <section class="card">
+        <h2 data-text="simulator"></h2>
+        <p id="simulator-status"></p>
+        <p id="aircraft" class="muted"></p>
+      </section>
+      <section class="card">
+        <h2 data-text="flight"></h2>
+        <p id="flight-status"></p>
+        <p id="sending" class="muted"></p>
+        <button id="close-flight" data-text="closeFlight"></button>
+      </section>
+      <section class="card">
+        <h2 data-text="nextFlight"></h2>
+        <form id="settings">
+          <label
+            ><span data-text="callsign"></span><input name="callsign" maxlength="8" required
+          /></label>
+          <div class="row">
+            <label
+              ><span data-text="departure"></span><input name="departureIcao" maxlength="4"
+            /></label>
+            <label
+              ><span data-text="arrival"></span><input name="arrivalIcao" maxlength="4"
+            /></label>
+          </div>
+          <button type="submit" data-text="save"></button>
+        </form>
+      </section>
+      <p id="notice" role="alert"></p>
+    </main>
+    <script src="view.js"></script>
+  </body>
+</html>

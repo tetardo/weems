@@ -6,7 +6,7 @@ import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
 import { SimConnectLink } from "../../src/connectors/msfs/simconnect-link.ts";
 import { httpApiClient } from "../../src/sender/api-client.ts";
-import { startFly } from "./fly.ts";
+import { startMsfsTracker } from "../../src/runtime/msfs-tracker.ts";
 
 /**
  * pnpm fly --api http://<Mac>:3000 [--callsign WMS1] [--from LFPG --to LFBO] [--no-record]
@@ -42,7 +42,7 @@ const flightPlan =
     ? { departureIcao: values.from.toUpperCase(), arrivalIcao: values.to.toUpperCase() }
     : undefined;
 
-const fly = startFly({
+const fly = startMsfsTracker({
   link: new SimConnectLink(),
   api: httpApiClient({ baseUrl: values.api, token: values.token, trackerVersion }),
   databasePath: join(dataDir, "tracker.db"),

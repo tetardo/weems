@@ -1,4 +1,4 @@
-import type Database from "better-sqlite3";
+import { type Database, inTransaction } from "./sqlite.ts";
 
 /**
  * Local database migrations, applied in order; `user_version` remembers the last one.
@@ -63,12 +63,13 @@ const MIGRATIONS: readonly string[] = [
   `,
 ];
 
-export function migrate(db: Database.Database): void {
-  const current = db.pragma("user_version", { simple: true }) as number;
+export function migrate(db: Database): void {
+  const current = (db.prepare("PRAGMA user_version").get() as { user_version: number })
+    .user_version;
   MIGRATIONS.slice(current).forEach((sql, index) => {
-    db.transaction(() => {
+    inTransaction(db, () => {
       db.exec(sql);
-      db.pragma(`user_version = ${current + index + 1}`);
-    })();
+      db.exec(`PRAGMA user_version = ${current + index + 1}`);
+    });
   });
 }

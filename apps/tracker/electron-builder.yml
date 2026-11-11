@@ -1,0 +1,22 @@
+# Desktop tracker installer (J3, closed alpha). Built by .github/workflows/tracker-installer.yml.
+appId: app.weems.tracker
+productName: Weems Tracker
+copyright: Weems
+directories:
+  app: dist/app # built by scripts/build-app.ts: bundles only, no node_modules
+  output: dist/installer
+win:
+  target: nsis
+nsis:
+  oneClick: true
+  perMachine: false
+linux:
+  target: dir # only to check the packaging on Linux (CI, Claude Code); never distributed
+mac:
+  target: dir # same, on Greg's Mac
+# Updates: electron-updater reads the latest release of this repository (public).
+publish:
+  provider: github
+  owner: tetardo
+  repo: weems
+  releaseType: release

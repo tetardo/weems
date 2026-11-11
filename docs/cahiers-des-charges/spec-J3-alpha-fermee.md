@@ -48,6 +48,20 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 - Le jeton d'accès est renouvelé 1 minute avant sa fin. Si le jeton de rafraîchissement est refusé, le pilote est déconnecté et l'envoi s'arrête (401) ; les vols restent dans la file locale et partent après la reconnexion. Une panne réseau pendant le renouvellement ne déconnecte pas.
 - Testé contre la vraie API (`e2e/tracker-account.test.ts`) : connexion, renouvellement, refus du jeton de rafraîchissement.
 
+## 4. Application du tracker
+
+![Application du tracker](../schemas/img/j3-app-tracker.png)
+
+- Module `apps/tracker/src/app/` : `desktop-tracker.ts` assemble le compte, les réglages du prochain vol et le tracker MSFS, sans Electron (testé sur Mac). `main.ts`, `preload.ts` et `window/` sont la seule partie Electron.
+- Fenêtre (français ou anglais selon le système) : compte (connexion, déconnexion), simulateur (détecté ou non, avion chargé), vol en cours (phase, messages en attente, bouton « Clôturer le vol »), prochain vol (indicatif, départ, arrivée), message d'erreur.
+- La fenêtre n'a aucun accès à Node : elle affiche l'état reçu chaque seconde et transmet les clics (isolation du contexte, bac à sable, politique de sécurité du contenu). Les liens s'ouvrent dans le navigateur du pilote.
+- Données sur le PC, dans le dossier de l'application : `tracker.db` (vols et file d'envoi), `account.bin` (jetons chiffrés), `settings.json` (prochain vol).
+- Les réglages refusent un indicatif ou un code OACI mal formé, et ne changent pas pendant un vol.
+- Une seule instance à la fois. À la fermeture, le tracker s'arrête proprement (le vol reste dans la file locale).
+- Adresse de l'API : fixée à la construction (`WEEMS_TRACKER_API_URL`), remplaçable au lancement par `WEEMS_API_URL` (essais sur le réseau local).
+- Paquet : `electron-builder`, installateur Windows NSIS par utilisateur (sans droits d'administrateur), mises à jour automatiques depuis les versions publiées sur GitHub (`electron-updater`). L'installateur n'est pas signé en alpha : Windows affiche un avertissement SmartScreen.
+- Vérifié ici : fenêtre lancée pour de vrai (capture jointe à la PR, Linux), paquet de contrôle Linux construit. **Pas encore vérifié** : installateur Windows et mise à jour automatique (construits par GitHub Actions sur Windows, étape suivante).
+
 ## Choix faits pendant le développement
 
 | Sujet | Choix | Pourquoi |
@@ -61,6 +75,9 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 | Tables de Better Auth | Écrites à la main dans `apps/api/src/db/auth-schema.ts`, migrations Drizzle comme le reste | Une seule façon de faire évoluer la base. À comparer après chaque mise à jour de la bibliothèque |
 | Identifiants | UUID v7 pour les pilotes aussi | Même convention que les vols (spec J0) |
 | Look du site | Admin One React (justboil, licence MIT) : seuls les composants utiles sont recopiés, sans Redux ni pages de démonstration (choix de Greg) | Même rendu que le modèle, sans code mort ; PR séparée |
+| SQLite dans le tracker | `node:sqlite` (intégré à Node 24 et à Electron 45) au lieu de `better-sqlite3` | `better-sqlite3` est un module natif : il n'existe pas de binaire prêt pour Electron 45, il faudrait le compiler pour chaque version d'Electron sur Windows. `node:sqlite` est intégré, même SQL, mêmes transactions, WAL. Inconvénient : API encore marquée « release candidate » par Node [Confiance moyenne] |
+| Construction de l'application | `esbuild` regroupe le code en trois fichiers (processus principal, préchargement, fenêtre), `electron-builder` fait l'installateur | Electron ne lit pas le TypeScript des paquets du dépôt ; un seul fichier par processus démarre vite |
+| Distribution en alpha | Installateur NSIS sur les versions GitHub, mises à jour automatiques | Le Microsoft Store attend la micro-entreprise (J4) |
 | Carte en direct | Le flux de l'API (`/v1/live/stream`) reste public en J3 (indicatif et position, sans nom ni e-mail) ; la page `/live` du site demande la connexion comme le reste | Rien de personnel n'y est montré. À revoir avant J4 |
 
 ## Questions ouvertes

@@ -1,12 +1,12 @@
 import { uuidV7 } from "@weems/contrats";
-import { MsfsConnector } from "../../src/connectors/msfs/msfs-connector.ts";
-import type { SimLink } from "../../src/connectors/msfs/sim-link.ts";
-import { ReplayWriter } from "../../src/connectors/replay/replay-writer.ts";
-import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
-import { createTracker } from "../../src/runtime/create-tracker.ts";
-import type { ApiClient } from "../../src/sender/api-client.ts";
+import { MsfsConnector } from "../connectors/msfs/msfs-connector.ts";
+import type { SimLink } from "../connectors/msfs/sim-link.ts";
+import { ReplayWriter } from "../connectors/replay/replay-writer.ts";
+import { AIRLINER_PARAMS } from "../core/phases/params.ts";
+import { createTracker } from "./create-tracker.ts";
+import type { ApiClient } from "../sender/api-client.ts";
 
-export interface FlyOptions {
+export interface MsfsTrackerOptions {
   link: SimLink;
   api: ApiClient;
   /** Kept between runs: a flight cut by a crash resumes there (ENF-02). */
@@ -25,10 +25,10 @@ export interface FlyOptions {
 }
 
 /**
- * J2: the real tracker without window, reading MSFS and sending to the API.
- * Runs until `stop()`. A flight left open by a stop resumes on the next start.
+ * The real tracker reading MSFS and sending to the API: `pnpm fly` (J2, without window)
+ * and the desktop app (J3). Runs until `stop()`. A flight left open by a stop resumes on the next start.
  */
-export function startFly(options: FlyOptions) {
+export function startMsfsTracker(options: MsfsTrackerOptions) {
   const connector = new MsfsConnector({
     link: options.link,
     now: options.now,
@@ -63,6 +63,7 @@ export function startFly(options: FlyOptions) {
 
   return {
     tracker,
+    connector,
     /** Manual close by the pilot (EF-12). */
     closeFlight: () => tracker.runtime.closeManually(),
     async stop(): Promise<number> {

@@ -42,7 +42,7 @@ module.exports = {
           "^apps/tracker/src/(connectors|storage|sender|app)/",
           "^(node:)?(fs|net|http|https|child_process)$",
           "electron",
-          "better-sqlite3",
+          "node:sqlite",
           "node-simconnect",
         ],
       },

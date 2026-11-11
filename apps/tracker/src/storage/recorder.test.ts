@@ -34,7 +34,7 @@ beforeEach(() => {
   recorder = new Recorder(path);
 });
 afterEach(() => {
-  if (recorder.db.open) recorder.close();
+  if (recorder.db.isOpen) recorder.close();
   rmSync(dir, { recursive: true, force: true });
 });
 

@@ -1,0 +1,18 @@
+flowchart LR
+  subgraph W["Fenêtre (sans accès à Node)"]
+    V["window/view.ts<br/>affiche l'état, transmet les clics"]
+  end
+  subgraph M["Processus principal Electron"]
+    MAIN["main.ts<br/>fenêtre, safeStorage,<br/>mises à jour, instance unique"]
+    D["desktop-tracker.ts<br/>(sans Electron, testé sur Mac)"]
+    ACC["account/<br/>connexion, jetons"]
+    RT["runtime/msfs-tracker.ts<br/>connecteur → cœur → SQLite → envoi"]
+  end
+  V -- "preload.ts : état chaque seconde / commandes" --- MAIN
+  MAIN --> D
+  D --> ACC
+  D --> RT
+  RT -- SimConnect --> SIM[(MSFS)]
+  RT -- "HTTPS + jeton" --> API[API Weems]
+  ACC -- "navigateur du pilote" --> API
+  D --> F[("tracker.db<br/>account.bin<br/>settings.json")]
