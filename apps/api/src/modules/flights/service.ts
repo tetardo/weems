@@ -5,6 +5,7 @@ import {
   type FlightList,
   type FlightListQuery,
   type FlightPhase,
+  type FlightSummary,
   type FlightView,
   type OpenFlightRequest,
   phaseChangeOf,
@@ -17,7 +18,19 @@ import { flightTimes } from "./flight-times.ts";
 import { summarize } from "./flight-summary.ts";
 import { decodeCursor, encodeCursor } from "./list-cursor.ts";
 import type { LiveFeed, LiveFlightInfo } from "./live-feed.ts";
-import type { FlightRecord, FlightsRepository } from "./repository.ts";
+import type { FlightRecord, FlightsRepository, ListFilters } from "./repository.ts";
+
+/** A line of a flight list with the events it was computed from (statistics need them). */
+export interface SummaryWithEvents {
+  summary: FlightSummary;
+  events: FlightEvent[];
+}
+
+/** One page of flights, and the cursor of the next one (null on the last page). */
+interface Page {
+  flights: SummaryWithEvents[];
+  nextCursor: string | null;
+}
 
 const CREATED: Receipt = { result: "created" };
 const ALREADY_RECEIVED: Receipt = { result: "alreadyReceived" };
@@ -129,20 +142,51 @@ export class FlightsService {
   /** The caller's flights, newest first, one page at a time. */
   async list(caller: Caller, query: FlightListQuery): Promise<FlightList> {
     const { cursor, limit, ...filters } = query;
+    const page = await this.page(caller.pilotId, filters, cursor, limit);
+    return { flights: page.flights.map((f) => f.summary), nextCursor: page.nextCursor };
+  }
+
+  /** Flights of a public profile (spec J4): closed, not hidden, newest first, one page at a time. */
+  async listPublic(
+    pilotId: string,
+    hidden: readonly string[],
+    query: { cursor?: string | undefined; limit: number },
+  ): Promise<Page> {
+    return this.page(pilotId, { closedOnly: true, excluded: hidden }, query.cursor, query.limit);
+  }
+
+  /** Every flight a public profile shows, for its statistics. */
+  async allPublic(pilotId: string, hidden: readonly string[]): Promise<SummaryWithEvents[]> {
+    const found = await this.repository.listFlights(pilotId, {
+      closedOnly: true,
+      excluded: hidden,
+    });
+    return this.withEvents(found);
+  }
+
+  private async page(
+    pilotId: string,
+    filters: ListFilters,
+    cursor: string | undefined,
+    limit: number,
+  ): Promise<Page> {
     const after = cursor === undefined ? undefined : decodeCursor(cursor);
     // One more than asked: tells whether a next page exists.
-    const found = await this.repository.listFlights(
-      caller.pilotId,
-      { ...filters, after },
-      limit + 1,
-    );
+    const found = await this.repository.listFlights(pilotId, { ...filters, after }, limit + 1);
     const page = found.slice(0, limit);
-    const events = await this.repository.eventsOf(page.map((f) => f.flightId));
     const last = page[page.length - 1];
     return {
-      flights: page.map((f) => summarize(f, events.get(f.flightId) ?? [])),
+      flights: await this.withEvents(page),
       nextCursor: found.length > limit && last ? encodeCursor(last) : null,
     };
+  }
+
+  private async withEvents(found: FlightRecord[]): Promise<SummaryWithEvents[]> {
+    const events = await this.repository.eventsOf(found.map((f) => f.flightId));
+    return found.map((f) => {
+      const own = events.get(f.flightId) ?? [];
+      return { summary: summarize(f, own), events: own };
+    });
   }
 
   /** Development only: empties the caller's flight list (and takes them off the live map). */

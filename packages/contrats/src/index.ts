@@ -41,6 +41,7 @@ export {
   MyProfile,
   PilotHandle,
   PilotLevel,
+  PilotRoutes,
   PilotStats,
   ProfileUpdate,
   PublicFlightList,

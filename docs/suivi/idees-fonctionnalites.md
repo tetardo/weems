@@ -15,6 +15,15 @@ Liste tenue à jour au fil du projet : idées validées sur le principe par Greg
 - **Signaler une photo de profil** (ajouté le 11/11/2026, profil public)
   Bouton « signaler » sur le profil public et retrait par Weems. À faire avant l'inscription libre.
 
+- **Suivre un pilote, fil d'activité** (ajouté le 11/11/2026, profil public)
+  Suivre d'autres pilotes et voir leurs derniers vols dans un fil.
+
+- **Rejeu d'un vol et export PDF du carnet** (ajouté le 11/11/2026)
+  À garder pour l'abonnement pilote (lot 2).
+
+- **Heures en ligne VATSIM et IVAO** (ajouté le 11/11/2026, profil public)
+  Lues depuis les données publiques des deux réseaux, à partir des identifiants du profil. Vérifier leurs conditions d'usage.
+
 ## Planifiées
 
 - **Compagnies du pilote sur son profil** : lot 3 (VACommunity). Emplacement montré sur la maquette du profil public.

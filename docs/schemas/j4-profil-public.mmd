@@ -17,4 +17,4 @@ flowchart LR
   PROF -- "GET /v1/pilots/{handle}<br/>…/flights" --> API
   VOL -- "GET …/flights/{id}<br/>…/track" --> API
   MAP -- "GET /v1/pilots" --> API
-  API --> DB[("PostgreSQL<br/>pilot_profiles<br/>flights.hidden_on_profile")]
+  API --> DB[("PostgreSQL<br/>pilot_profiles, pilot_photos<br/>profile_hidden_flights")]

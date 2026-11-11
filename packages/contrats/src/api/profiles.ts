@@ -2,6 +2,7 @@ import { z } from "zod";
 import { FlightView } from "./flights.ts";
 import { FlightSummary } from "./flight-list.ts";
 import { IcaoCode, UtcTimestamp } from "./common.ts";
+import { Latitude, Longitude } from "../telemetry/common.ts";
 
 /**
  * Public profile of a pilot (spec J4 profil public). Public formats list their fields one by one:
@@ -30,6 +31,8 @@ export const SimbriefId = z.string().regex(/^[A-Za-z0-9_.-]{1,32}$/);
 /** Fields the pilot fills in, all optional. */
 const ProfileFields = z.object({
   country: CountryCode.nullable(),
+  /** Home airport, shown in the header. */
+  homeIcao: IcaoCode.nullable(),
   level: PilotLevel.nullable(),
   vatsimId: VatsimId.nullable(),
   ivaoId: IvaoId.nullable(),
@@ -49,6 +52,7 @@ export const MyProfile = ProfileUpdate.extend({
   suggestedHandle: PilotHandle,
   /** When the profile was last made public; null if never. */
   publishedAt: UtcTimestamp.nullable(),
+  hasPhoto: z.boolean(),
 });
 export type MyProfile = z.infer<typeof MyProfile>;
 
@@ -81,6 +85,16 @@ export const PilotStats = z.object({
     })
     .nullable(),
   goArounds: z.number().int().nonnegative(),
+  /**
+   * Airborne time by day and by night (sun more than 6° below the horizon, EASA definition),
+   * from the trajectories: flights without one count in neither.
+   */
+  dayS: z.number().nonnegative(),
+  nightS: z.number().nonnegative(),
+  /** Airborne time of each of the last 12 months, oldest first; month as YYYY-MM (UTC). */
+  months: z.array(
+    z.object({ month: z.string().regex(/^\d{4}-\d{2}$/), airborneS: z.number().nonnegative() }),
+  ),
 });
 export type PilotStats = z.infer<typeof PilotStats>;
 
@@ -89,10 +103,13 @@ export const PublicPilot = z.object({
   handle: PilotHandle,
   name: z.string(),
   country: CountryCode.nullable(),
+  homeIcao: IcaoCode.nullable(),
   level: PilotLevel.nullable(),
   vatsimId: VatsimId.nullable(),
   ivaoId: IvaoId.nullable(),
   memberSince: UtcTimestamp,
+  /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
+  hasPhoto: z.boolean(),
   stats: PilotStats,
 });
 export type PublicPilot = z.infer<typeof PublicPilot>;
@@ -144,3 +161,17 @@ export type PublicPilotIndex = z.infer<typeof PublicPilotIndex>;
 /** PUT and GET /v1/flights/{flightId}/visibility: hide a flight from the public profile. */
 export const FlightVisibility = z.object({ hiddenOnProfile: z.boolean() });
 export type FlightVisibility = z.infer<typeof FlightVisibility>;
+
+const RouteEnd = z.object({ icao: IcaoCode.nullable(), lat: Latitude, lon: Longitude });
+
+/** GET /v1/pilots/{handle}/routes: public flights grouped by route, for the map of the profile. */
+export const PilotRoutes = z.object({
+  routes: z.array(
+    z.object({
+      from: RouteEnd,
+      to: RouteEnd,
+      flights: z.number().int().positive(),
+    }),
+  ),
+});
+export type PilotRoutes = z.infer<typeof PilotRoutes>;
