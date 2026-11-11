@@ -1,0 +1,7 @@
+flowchart LR
+  A["Augmenter la version<br/>apps/tracker/package.json<br/>(PR fusionnée)"] --> B["GitHub : Actions →<br/>Tracker Windows →<br/>Run workflow (main)"]
+  B --> C["CI Windows : tests,<br/>installateur, fenêtre vérifiée"]
+  C --> D["Version BROUILLON<br/>tracker-v&lt;version&gt;"]
+  D --> E{"Greg vérifie<br/>et publie"}
+  E -- publié --> F["Les trackers des testeurs<br/>se mettent à jour seuls"]
+  E -- non --> G["Supprimer le brouillon,<br/>rien n'est parti"]

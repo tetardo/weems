@@ -154,6 +154,17 @@
     "score": {
       "title": "Note",
       "later": "La note arrive avec la notation des vols."
+    },
+    "review": {
+      "title": "Vérification des phases",
+      "question": "Les phases détectées par le tracker sont-elles justes pour ce vol ?",
+      "correct": "Oui, toutes justes",
+      "wrong": "Non, au moins une est fausse",
+      "note": "Si non, laquelle et pourquoi (facultatif)",
+      "send": "Envoyer",
+      "saved": "Merci, réponse enregistrée.",
+      "error": "Réponse non enregistrée, réessayez.",
+      "already": "Vous avez déjà répondu : vous pouvez corriger."
     }
   },
   "Auth": {

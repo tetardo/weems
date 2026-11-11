@@ -65,6 +65,22 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 - **Publication d'une version** : « Run workflow » sur `main`. La CI dépose l'installateur dans une version **brouillon** `tracker-v<version>` sur GitHub ; rien n'arrive aux testeurs tant que Greg ne la publie pas à la main. Une fois publiée, le tracker des testeurs la télécharge au démarrage (`electron-updater`) et l'installe à la fermeture. Refusé si la version existe déjà (augmenter `version` dans `apps/tracker/package.json`) ou si la variable `WEEMS_TRACKER_API_URL` (adresse de l'API de l'alpha) n'est pas définie dans le dépôt.
 - Limite : `electron-updater` lit la dernière version publiée **du dépôt**. Tant que seul le tracker publie des versions, c'est la sienne ; si une autre application en publie un jour, il faudra un dépôt de versions séparé. [Confiance élevée]
 
+## 5. Mesures de l'alpha
+
+![Mesures de l'alpha](../schemas/img/j3-mesures-alpha.png)
+
+Outils pour vérifier le critère de sortie sans tableur.
+
+- **Vérification des phases** : sur la page d'un vol terminé, une carte « Vérification des phases » demande au pilote si les phases détectées sont justes (Oui / Non) avec une remarque facultative (1 000 caractères au plus). Une seule réponse par vol, la dernière remplace la précédente. API : `GET` et `PUT /v1/flights/{flightId}/review`, réservées au pilote du vol (404 pour un autre pilote), table `flight_reviews` (migration `0003`), contrat `FlightReview` dans `packages/contrats`.
+- **Rapport d'alpha** : `pnpm alpha-report --since <date de début de l'alpha>` dans `apps/api` (sur le serveur : `docker compose exec api node apps/api/src/modules/alpha/report-cli.ts --since <date>`). Il ne compte que les vols ouverts depuis cette date, pour écarter les vols d'essai. Il affiche le nombre de vols, les vols suspects, les vérifications, puis les quatre lignes du critère (OK / NON) ; code de sortie 0 si le critère est atteint, 1 sinon.
+- **Calcul** (`apps/api/src/modules/alpha/alpha-report.ts`, testé sans base) :
+  - pilotes = pilotes ayant au moins un vol terminé ;
+  - vols = vols terminés ;
+  - **vol suspect** = vol ouvert depuis plus de 24 h sans clôture, ou vol terminé sans trajectoire. Un vol clos il y a quelques secondes peut apparaître sans trajectoire le temps qu'elle arrive : relancer le rapport ;
+  - phases justes = réponses « Oui » ÷ vols vérifiés (les vols sans réponse ne comptent pas). Aucune vérification = critère non atteint.
+- **Limite** : l'API ne voit que les vols qu'elle a reçus. Un vol que le tracker n'a jamais envoyé (PC réinstallé avant l'envoi, tracker non lancé) est invisible ; la file d'envoi locale le garde jusqu'à l'accusé de réception, et les testeurs signalent tout vol manquant à leur carnet. [Confiance élevée]
+- **Qui vérifie** : le critère dit « vérifiés à la main ». Ici, c'est le pilote qui répond, sur son propre vol. Il connaît son vol mieux que personne, mais peut répondre « Oui » sans regarder. Greg relit les réponses « Non » (la remarque dit quelle phase) et un échantillon de « Oui » avant de déclarer le critère atteint. [Confiance moyenne]
+
 ## Choix faits pendant le développement
 
 | Sujet | Choix | Pourquoi |
@@ -81,6 +97,7 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 | SQLite dans le tracker | `node:sqlite` (intégré à Node 24 et à Electron 45) au lieu de `better-sqlite3` | `better-sqlite3` est un module natif : il n'existe pas de binaire prêt pour Electron 45, il faudrait le compiler pour chaque version d'Electron sur Windows. `node:sqlite` est intégré, même SQL, mêmes transactions, WAL. Inconvénient : API encore marquée « release candidate » par Node [Confiance moyenne] |
 | Construction de l'application | `esbuild` regroupe le code en trois fichiers (processus principal, préchargement, fenêtre), `electron-builder` fait l'installateur | Electron ne lit pas le TypeScript des paquets du dépôt ; un seul fichier par processus démarre vite |
 | Distribution en alpha | Installateur NSIS sur les versions GitHub, mises à jour automatiques, publication à la main d'un brouillon | Le Microsoft Store attend la micro-entreprise (J4) ; le brouillon évite qu'une erreur de CI parte chez les testeurs |
+| Mesures de l'alpha | Réponse du pilote sur la page du vol + rapport en ligne de commande lu dans la base | Pas de tableau de bord à construire pour 5 pilotes ; le rapport se relance à tout moment et suit exactement le critère de la feuille de route |
 | Carte en direct | Le flux de l'API (`/v1/live/stream`) reste public en J3 (indicatif et position, sans nom ni e-mail) ; la page `/live` du site demande la connexion comme le reste | Rien de personnel n'y est montré. À revoir avant J4 |
 
 ## Questions ouvertes

@@ -1,4 +1,10 @@
-import { FlightList, FlightView, TrackView } from "@weems/contrats";
+import {
+  type FlightReview,
+  FlightList,
+  FlightReviewView,
+  FlightView,
+  TrackView,
+} from "@weems/contrats";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
 import { forwardedCookies } from "../auth/server-session.ts";
@@ -14,15 +20,23 @@ export class ApiUnavailable extends Error {
 }
 
 /**
- * GET on the API from the site's server, as the logged-in pilot (session cookie forwarded).
+ * A request to the API from the site's server, as the logged-in pilot (session cookie forwarded).
  * Null when the resource does not exist or is another pilot's (404); expired session → login page.
  */
-async function get<T extends z.ZodType>(path: string, schema: T): Promise<z.infer<T> | null> {
+async function request<T extends z.ZodType>(
+  path: string,
+  schema: T,
+  write?: { method: "PUT"; body: unknown },
+): Promise<z.infer<T> | null> {
   const url = serverApiUrl();
+  const headers: Record<string, string> = { cookie: await forwardedCookies() };
+  if (write) headers["content-type"] = "application/json";
   let response: Response;
   try {
     response = await fetch(`${url}${path}`, {
-      headers: { cookie: await forwardedCookies() },
+      method: write?.method ?? "GET",
+      headers,
+      body: write ? JSON.stringify(write.body) : null,
       cache: "no-store",
     });
   } catch (error) {
@@ -34,15 +48,33 @@ async function get<T extends z.ZodType>(path: string, schema: T): Promise<z.infe
   return schema.parse(await response.json());
 }
 
+const get = <T extends z.ZodType>(path: string, schema: T) => request(path, schema);
+const flightPath = (flightId: string) => `/v1/flights/${encodeURIComponent(flightId)}`;
+
 export async function listFlights(query: URLSearchParams): Promise<FlightList> {
   const list = await get(`/v1/flights?${query.toString()}`, FlightList);
   return list ?? { flights: [], nextCursor: null };
 }
 
 export function getFlight(flightId: string): Promise<FlightView | null> {
-  return get(`/v1/flights/${encodeURIComponent(flightId)}`, FlightView);
+  return get(flightPath(flightId), FlightView);
 }
 
 export function getTrack(flightId: string): Promise<TrackView | null> {
-  return get(`/v1/flights/${encodeURIComponent(flightId)}/track`, TrackView);
+  return get(`${flightPath(flightId)}/track`, TrackView);
+}
+
+/** The pilot's review of the flight's phases (spec J3), null when not given yet. */
+export function getReview(flightId: string): Promise<FlightReviewView | null> {
+  return get(`${flightPath(flightId)}/review`, FlightReviewView);
+}
+
+export function saveReview(
+  flightId: string,
+  review: FlightReview,
+): Promise<FlightReviewView | null> {
+  return request(`${flightPath(flightId)}/review`, FlightReviewView, {
+    method: "PUT",
+    body: review,
+  });
 }
