@@ -225,7 +225,9 @@
         "level": "Niveau inconnu.",
         "vatsimId": "Identifiant VATSIM : des chiffres seulement.",
         "ivaoId": "Identifiant IVAO : des chiffres seulement.",
-        "simbriefId": "Identifiant SimBrief invalide."
+        "simbriefId": "Identifiant SimBrief invalide.",
+        "instagram": "Compte Instagram : le nom du compte ou le lien de votre profil.",
+        "facebook": "Compte Facebook : le nom du compte ou le lien de votre profil."
       }
     },
     "publication": {
@@ -241,7 +243,21 @@
       "available": "✓ disponible",
       "taken": "✗ déjà pris",
       "reserved": "✗ mot réservé",
-      "invalid": "✗ invalide"
+      "invalid": "✗ invalide",
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "open": "Ouvrir dans un nouvel onglet",
+      "saveFirst": "Enregistrez d'abord la nouvelle adresse",
+      "offline": "Activez votre page pour la partager",
+      "changing": "L'ancienne adresse <b>{handle}</b> cessera de fonctionner à l'enregistrement."
+    },
+    "handleChange": {
+      "title": "Changer l'adresse de votre page ?",
+      "move": "Votre page passera de <code>{from}</code> à <code>{to}</code>.",
+      "links": "Les liens déjà partagés (Discord, forums) mèneront à une page introuvable.",
+      "free": "L'ancienne adresse redevient libre : un autre pilote pourra la prendre.",
+      "cancel": "Annuler",
+      "confirm": "Changer l'adresse"
     },
     "photo": {
       "label": "Photo",
@@ -264,6 +280,10 @@
       "vatsimHelp": "Public, avec un lien vers votre page VATSIM",
       "ivaoId": "Identifiant IVAO",
       "ivaoHelp": "Public, avec un lien vers votre page IVAO",
+      "instagram": "Compte Instagram",
+      "instagramHelp": "Public, avec un lien vers votre compte. Nom (@pseudo) ou lien du profil",
+      "facebook": "Compte Facebook",
+      "facebookHelp": "Public, avec un lien vers votre compte. Nom ou lien du profil",
       "simbriefId": "Identifiant SimBrief",
       "simbriefHelp": "Jamais affiché : servira plus tard à lire vos plans de vol"
     },
@@ -271,7 +291,7 @@
       "title": "Ce qui est visible",
       "shown": {
         "identity": "Pseudo, photo, pays, niveau, aéroport de base",
-        "networks": "Identifiants VATSIM et IVAO",
+        "networks": "Identifiants VATSIM et IVAO, comptes Instagram et Facebook",
         "stats": "Statistiques, graphiques et carte de vos vols terminés",
         "flights": "Chaque vol terminé non masqué"
       },

@@ -21,6 +21,8 @@ const EMPTY = {
   level: null,
   vatsimId: null,
   ivaoId: null,
+  instagram: null,
+  facebook: null,
   simbriefId: null,
 };
 let counter = 0;
@@ -88,6 +90,18 @@ describe("own profile settings (spec J4)", () => {
     expect(
       (await saveProfile(other, { handle: uniqueHandle(), country: "France" })).statusCode,
     ).toBe(400);
+    expect(
+      (await saveProfile(other, { handle: uniqueHandle(), instagram: "https://evil.example" }))
+        .statusCode,
+    ).toBe(400);
+  });
+
+  it("shows the Instagram and Facebook account names on the public profile", async () => {
+    const { handle } = await publicPilot({ instagram: "greg.flies_", facebook: "100012345678" });
+    expect((await visit(`/v1/pilots/${handle}`)).json()).toMatchObject({
+      instagram: "greg.flies_",
+      facebook: "100012345678",
+    });
   });
 
   it("answers the same to an identical re-send, and keeps the first publication date", async () => {

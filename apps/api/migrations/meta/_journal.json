@@ -36,6 +36,13 @@
       "when": 1794422626524,
       "tag": "0004_pilot_profiles",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794431901395,
+      "tag": "0005_profile_social",
+      "breakpoints": true
     }
   ]
 }

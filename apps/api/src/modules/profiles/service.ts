@@ -22,6 +22,8 @@ const EMPTY_FIELDS = {
   level: null,
   vatsimId: null,
   ivaoId: null,
+  instagram: null,
+  facebook: null,
   simbriefId: null,
   publishedAt: null,
   unpublishedAt: null,

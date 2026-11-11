@@ -50,7 +50,7 @@ function Choice({
   );
 }
 
-type TextName = "homeIcao" | "vatsimId" | "ivaoId" | "simbriefId";
+type TextName = "homeIcao" | "vatsimId" | "ivaoId" | "instagram" | "facebook" | "simbriefId";
 
 /** Typed fields: limits of the contract (packages/contrats), help key in Settings.fields. */
 const TEXT_FIELDS: Record<
@@ -64,6 +64,9 @@ const TEXT_FIELDS: Record<
   },
   vatsimId: { help: "vatsimHelp", maxLength: 8, extra: { inputMode: "numeric" } },
   ivaoId: { help: "ivaoHelp", maxLength: 7, extra: { inputMode: "numeric" } },
+  // Room for a pasted profile link: the form keeps the account name only.
+  instagram: { help: "instagramHelp", maxLength: 100, extra: { autoComplete: "off" } },
+  facebook: { help: "facebookHelp", maxLength: 100, extra: { autoComplete: "off" } },
   simbriefId: { help: "simbriefHelp", maxLength: 32, warn: true },
 };
 
@@ -83,7 +86,7 @@ function TextField({ name, profile }: { name: TextName; profile: MyProfile }) {
   );
 }
 
-/** Country, home airport, level and network ids (spec J4, « Champs saisis par le pilote »). */
+/** Country, home airport, level, network ids and social accounts (spec J4, « Champs saisis par le pilote »). */
 export function InformationFields({
   profile,
   countries,
@@ -115,6 +118,8 @@ export function InformationFields({
       <div />
       <TextField name="vatsimId" profile={profile} />
       <TextField name="ivaoId" profile={profile} />
+      <TextField name="instagram" profile={profile} />
+      <TextField name="facebook" profile={profile} />
       <TextField name="simbriefId" profile={profile} />
     </div>
   );

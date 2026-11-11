@@ -61,5 +61,7 @@ export {
   SimbriefId,
   TOUCHDOWN_BUCKETS_FPM,
   VatsimId,
+  InstagramName,
+  FacebookName,
 } from "./api/profiles.ts";
 export { DevMetrics } from "./api/dev-metrics.ts";
