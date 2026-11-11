@@ -19,7 +19,7 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 ## Stack
 
 - Node.js LTS, TypeScript strict, Fastify (en attente de confirmation de Thibault ; NestJS seulement s'il code l'API).
-- PostgreSQL avec Drizzle ; fichiers dans un stockage compatible S3 (MinIO en local).
+- PostgreSQL avec Drizzle ; fichiers dans un stockage compatible S3 à partir de J2 (outil local à choisir).
 - Validation et documentation OpenAPI à partir des schémas Zod de `packages/contrats`.
 - Tests : Vitest contre une vraie base PostgreSQL dans Docker.
 
@@ -58,7 +58,7 @@ docker-compose.yml
 
 | Commande (depuis `apps/api/`) | Effet |
 | --- | --- |
-| `docker compose up` | API sur http://localhost:3000, PostgreSQL et MinIO ; documentation sur http://localhost:3000/docs |
+| `docker compose up` | API sur http://localhost:3000 et PostgreSQL ; documentation sur http://localhost:3000/docs |
 | `docker compose up -d db` | Base seule, suffisante pour `pnpm dev` et pour les tests |
 | `pnpm dev` | API hors Docker, relancée à chaque modification (variables : `.env.example`) |
 | `pnpm db:generate` | Crée la migration après une modification de `src/db/schema.ts` |

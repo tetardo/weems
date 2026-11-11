@@ -8,7 +8,7 @@ Une API qui tourne sur le Mac avec Docker et qui reçoit et stocke un vol envoy�
 
 **Critère de sortie** :
 
-1. `docker compose up` démarre l'API, PostgreSQL et le stockage de fichiers sur le Mac, sans autre installation.
+1. `docker compose up` démarre l'API et PostgreSQL sur le Mac, sans autre installation. Le stockage de fichiers arrive en J2 avec les trajectoires.
 2. Un vol synthétique du tracker (ouverture, événements, positions, clôture) est stocké, et le relire par l'API redonne exactement ce qui a été envoyé.
 3. Renvoyer n'importe quel message une deuxième fois ne change rien en base.
 4. La documentation OpenAPI est générée automatiquement et publiée par l'API elle-même.
@@ -48,7 +48,7 @@ Seules les tables marquées J0 sont créées à J0. Les autres sont listées pou
 
 **Positions en direct** : pas de table. La dernière position de chaque vol ouvert reste en mémoire (décision de l'étape 2).
 
-**Fichiers** : trajectoires dans un stockage compatible S3 (MinIO sur le Mac, Scaleway en production), à partir de J2.
+**Fichiers** : trajectoires dans un stockage compatible S3 (outil local à choisir en J2, Scaleway en production), à partir de J2.
 
 **Contrainte clé** : `flight_events` a une clé unique (vol, numéro de séquence). C'est elle qui garantit l'absence de doublon.
 
@@ -82,7 +82,7 @@ apps/api/
     app.ts              assemblage des modules
     server.ts           démarrage
   migrations/           évolutions de la base, versionnées
-  docker-compose.yml    API, PostgreSQL, MinIO
+  docker-compose.yml    API, PostgreSQL
 packages/contrats/      formats des messages, partagés avec le tracker et le site
 ```
 
@@ -115,6 +115,7 @@ packages/contrats/      formats des messages, partagés avec le tracker et le si
 | Position ancienne ou après clôture | Ignorée, réponse 200 | Seule la plus récente compte pour la carte |
 | Vol d'un autre pilote | 404, pas 403 | Ne révèle pas l'existence du vol |
 | Ordre des contrôles | Connexion (401) et version (426) avant le format (400) | Un client inconnu n'apprend rien du format attendu |
+| Stockage de fichiers | Retiré de J0 ; choix de l'outil compatible S3 en J2 | L'image Docker de MinIO n'est plus publiée (constaté le 11/11/2026) et rien ne stocke de fichier avant J2 |
 | Base des tests | `weems_test`, distincte de la base de développement | Les tests ne touchent jamais les données de travail |
 
 ## Questions ouvertes
