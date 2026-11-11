@@ -3,8 +3,8 @@
     "name": "Weems",
     "description": "Suivi des vols en simulation",
     "nav": {
-      "live": "Carte en direct",
-      "flights": "Mes vols"
+      "flights": "Mes vols",
+      "live": "Carte en direct"
     },
     "language": "English",
     "notMeasured": "non mesuré",

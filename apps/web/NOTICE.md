@@ -2,7 +2,7 @@
 
 ## Admin One React Tailwind (JustBoil.me), licence MIT
 
-La mise en page et les composants de `src/site/app-shell.tsx`, `src/site/aside-menu.tsx` et `src/ui/` sont adaptés du modèle https://github.com/justboil/admin-one-react-tailwind (version 2.1.0), sans Redux ni pages de démonstration.
+La mise en page de `src/site/app-shell.tsx` et `src/site/aside-menu.tsx` (menu latéral fixe, tiroir sur petit écran) vient du modèle https://github.com/justboil/admin-one-react-tailwind (version 2.1.0), sans Redux ni pages de démonstration. Le style a été remplacé le 11/11/2026 par celui du projet GameLab IA (même auteur que Weems).
 
 ```
 The MIT License (MIT)

@@ -16,17 +16,7 @@ export function LiveView({ apiUrl }: { apiUrl: string }) {
   return (
     <main className="relative flex-1">
       <LiveMap flights={flights} selectedId={selectedId} onSelect={setSelectedId} />
-      <div
-        style={{
-          position: "absolute",
-          top: 12,
-          left: 12,
-          padding: "6px 10px",
-          background: "#fff",
-          borderRadius: 8,
-          boxShadow: "0 2px 8px rgba(0,0,0,.2)",
-        }}
-      >
+      <div className="absolute top-3 left-3 rounded-[10px] border border-line bg-surface px-3 py-1.5">
         {t("count", { count: flights.size })} · {t(`connection.${connection}`)}
       </div>
       {selected && <FlightPanel flight={selected} onClose={() => setSelectedId(null)} />}

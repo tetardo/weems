@@ -3,33 +3,34 @@
 import { mdiMenu } from "@mdi/js";
 import { useTranslations } from "next-intl";
 import { type ReactNode, useState } from "react";
+import { buttonClass } from "../ui/button.tsx";
 import { Icon } from "../ui/icon.tsx";
 import { AsideMenu } from "./aside-menu.tsx";
 
 /**
- * Frame of the pages of a logged-in pilot (Admin One layout): side menu, top bar, content.
+ * Frame of the pages of a logged-in pilot (GameLab look): side menu, 52 px top bar, content.
  * `topBar`: right side of the top bar (language, pilot), rendered by the server.
  */
 export function AppShell({ topBar, children }: { topBar: ReactNode; children: ReactNode }) {
   const t = useTranslations("Site");
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 pt-14 xl:pl-60">
-      <nav className="fixed inset-x-0 top-0 z-30 flex h-14 items-stretch bg-gray-50 xl:pl-60">
+    <div className="flex min-h-screen flex-col bg-bg pt-13 lg:pl-60">
+      <nav className="fixed inset-x-0 top-0 z-30 flex h-13 items-center gap-1 border-b border-line bg-surface px-3 text-sm lg:pl-63">
         <button
           type="button"
-          className="flex items-center px-3 xl:hidden"
+          className={`${buttonClass("ghost")} lg:hidden`}
           onClick={() => setMenuOpen(true)}
           aria-label={t("openMenu")}
         >
-          <Icon path={mdiMenu} size={24} />
+          <Icon path={mdiMenu} size={22} />
         </button>
-        <div className="ml-auto flex items-stretch">{topBar}</div>
+        <div className="ml-auto flex items-center gap-1">{topBar}</div>
       </nav>
       <AsideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
       {menuOpen && (
         <div
-          className="fixed inset-0 z-30 bg-gray-900/60 xl:hidden"
+          className="fixed inset-0 z-30 bg-[rgb(5_8_15/.6)] lg:hidden"
           onClick={() => setMenuOpen(false)}
         />
       )}
