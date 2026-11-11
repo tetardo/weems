@@ -1,6 +1,6 @@
 # Espace d'administration : contenu des pages
 
-Rédigée le 11/11/2026, validée par Greg le 11/11/2026 (questions 1 à 6 tranchées ci-dessous). Maquettes : navigation G « barre latérale libellée », choisie le 11/11/2026 ; pages Services et Trafic v2 dans `/mnt/project-files/admin/services-v2/` et `trafic-v2/` (bureau et mobile, sombre et clair).
+Rédigée le 11/11/2026, validée par Greg le 11/11/2026 (questions 1 à 6 tranchées ci-dessous). Maquettes : navigation G « barre latérale libellée », choisie le 11/11/2026 ; pages Services, Trafic et Comptes v2 dans `/mnt/project-files/admin/services-v2/`, `trafic-v2/` et `comptes-v2/` (bureau et mobile, sombre et clair).
 
 ## Objectif
 
@@ -102,7 +102,7 @@ flowchart LR
 
 **En-tête** : titre, phrase « 4 comptes · 1 administrateur · 1 invitation en attente », bouton **Créer un compte**.
 
-**Filtres** : Tous, Pilotes, Administrateurs, Invitations en attente ; recherche sur le nom et l'e-mail. 50 lignes par page, les plus récentes d'abord.
+**Filtres** : Tous, Pilotes, Administrateurs, Invitations (en attente ou expirées) ; recherche sur le nom et l'e-mail. 50 lignes par page, les plus récentes d'abord.
 
 **Colonnes** (cartes sur mobile : nom, e-mail, rôle ou état, nombre de vols)
 
@@ -110,7 +110,7 @@ flowchart LR
 | --- | --- |
 | Compte | Nom et e-mail. Le pilote de développement porte un badge « Développement ». |
 | Rôle | Pilote ou Administrateur |
-| État | Actif, Invitation en attente (avec « expire dans N j »), ou Invitation expirée. Une invitation n'a pas encore de compte : nom vide |
+| État | Actif, Désactivé, Invitation en attente (avec « expire dans N j »), ou Invitation expirée. Une invitation n'a pas encore de compte : nom vide |
 | Vols | Nombre de vols du compte |
 | Créé le | Date de création du compte ou de l'invitation |
 | Dernière connexion | Date de la dernière session ouverte, sur le site ou le tracker |
@@ -119,6 +119,7 @@ flowchart LR
 - Invitation en attente : **Copier le lien**, **Renouveler** (nouveau code, valable 14 jours de plus ; l'ancien lien ne marche plus), **Annuler l'invitation** (avec confirmation).
 - Invitation expirée : affichée « Expirée », avec **Renouveler** et **Annuler**.
 - Compte : **Changer le rôle** (Pilote ↔ Administrateur). Impossible de retirer son propre rôle d'administrateur, ni le dernier administrateur.
+- Compte : **Désactiver** (décidé par Greg le 11/11/2026), avec confirmation. Le pilote ne peut plus se connecter au site ni envoyer de vols depuis le tracker ; ses sessions et jetons en cours sont révoqués ; ses vols sont gardés. Un compte désactivé affiche l'état « Désactivé » et l'action **Réactiver**. Impossible de se désactiver soi-même. La suppression définitive (droit à l'effacement) aura sa propre spec.
 
 **Connexion** : si personne n'est connecté, la page affiche à la place un formulaire e-mail et mot de passe. Un compte sans le rôle Administrateur est refusé. Le premier administrateur est nommé par une commande : `pnpm make-admin <e-mail>` (même principe que `pnpm invite`).
 
@@ -131,6 +132,8 @@ S'ouvre à droite (en bas sur mobile).
 | E-mail | Obligatoire, adresse valide. Refusé si un compte existe déjà. Si une invitation est déjà en attente pour cette adresse, le panneau propose de copier son lien au lieu d'en créer une autre. |
 | Rôle | Pilote (par défaut) ou Administrateur. Le rôle est appliqué à la création du compte. |
 | Langue du lien | Français (par défaut) ou anglais : page d'inscription ouverte par le lien. |
+
+**Création par invitation seulement** (décidé par Greg le 11/11/2026) : l'administrateur ne manipule jamais de mot de passe.
 
 **Résultat** : le code, sa date d'expiration (14 jours) et le lien d'inscription (`http://localhost:3001/fr/signup?code=…`), avec un bouton **Copier**. Aucun e-mail n'est envoyé : Greg transmet le lien lui-même, comme avec `pnpm invite`. Boutons **En créer un autre** et **Terminé**.
 
@@ -150,7 +153,7 @@ Aujourd'hui un code d'invitation reste valable sans limite. Or l'inscription ne 
 
 ## Hors périmètre de cette première version
 
-Comptes simulés (un compte par pilote simulé, prévu plus tard), remise à zéro de la base, migrations, tracker de bureau, envoi d'e-mails, création directe avec mot de passe, suppression ou désactivation d'un compte, réinitialisation de mot de passe, liste des vols de tous les pilotes, modération des compagnies (lot 3), mise en ligne.
+Comptes simulés (un compte par pilote simulé, prévu plus tard), remise à zéro de la base, migrations, tracker de bureau, envoi d'e-mails, création directe avec mot de passe, suppression définitive d'un compte, réinitialisation de mot de passe, liste des vols de tous les pilotes, modération des compagnies (lot 3), mise en ligne.
 
 ## Décisions sur les questions ouvertes
 
