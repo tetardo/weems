@@ -77,7 +77,7 @@ tools/fly/                J2 : tracker sans interface sur le PC Windows (même a
 | Commande (depuis `apps/tracker/`) | Effet |
 | --- | --- |
 | `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
-| `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts` ; au-delà de 10, routes tirées par `fleetOf`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
+| `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts` ; au-delà de 10, routes tirées par `fleetOf`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer ; Ctrl+C clôt les vols en l'air comme « interrompus » ; `--progress` écrit une ligne JSON par seconde (format `SimulationLine` de `packages/contrats`, lu par la console d'administration) |
 | `pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO` | J2, sur le PC Windows avec MSFS lancé : enregistre le vol, l'envoie à l'API, écrit le rejeu dans `recordings/` (ignoré par git). « fin » + Entrée clôt le vol, Ctrl+C quitte |
 | `pnpm app` | J3 : lance l'application de bureau (API : http://localhost:3000, ou `WEEMS_API_URL`) |
 | `pnpm app:package` | Construit l'installateur dans `dist/installer/`. Windows : par GitHub Actions (`tracker-installer.yml`), « Run workflow » sur main = version brouillon à publier à la main |

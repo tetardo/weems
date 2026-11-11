@@ -21,7 +21,8 @@
     "test:j2": "pnpm --filter @weems/web build && vitest run --config e2e/vitest.j2.config.ts",
     "test:j3": "pnpm --filter @weems/web build && vitest run --config e2e/vitest.j3.config.ts",
     "test:tracker-app": "pnpm --filter @weems/tracker app:build && vitest run --config e2e/vitest.tracker-app.config.ts",
-    "load": "node e2e/load/cli.ts"
+    "load": "node e2e/load/cli.ts",
+    "admin": "pnpm --filter @weems/admin dev"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

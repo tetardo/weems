@@ -4,7 +4,8 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import type { ApiClient } from "../../src/sender/api-client.ts";
 import { fleetOf } from "../generate-flights/fleet.ts";
-import { runSimulation, type SimulationProgress } from "./simulation.ts";
+import type { SimulationProgress } from "@weems/contrats";
+import { runSimulation } from "./simulation.ts";
 
 const acceptAll: ApiClient = { post: async () => ({ status: 201 }) };
 const options = (overrides: Partial<Parameters<typeof runSimulation>[0]>) => ({
@@ -55,6 +56,9 @@ describe("runSimulation stopped by a signal (admin console)", () => {
     expect(Date.now() - startedAt).toBeLessThan(10_000);
     expect(results[1]?.flightId).toBeNull();
     expect(closes).toEqual([expect.objectContaining({ reason: "interrupted" })]);
-    expect(progress.at(-1)).toMatchObject({ total: 2, departed: 1, pending: 0 });
+    const last = progress.at(-1);
+    expect(last).toMatchObject({ total: 2, departed: 1, pending: 0 });
+    expect(last?.pilots[0]?.progress).toBeGreaterThan(0);
+    expect(last?.pilots[1]).toMatchObject({ phase: null, progress: 0 });
   });
 });

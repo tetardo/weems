@@ -19,6 +19,8 @@ export interface LoadOptions {
   minutes: number;
   /** Folder for the local databases of the simulated trackers. */
   workDir: string;
+  /** Stops the run early (Ctrl+C, admin console): flights closed as interrupted, report kept. */
+  signal?: AbortSignal;
 }
 
 const TRACKER_VERSION = "0.1.0";
@@ -92,6 +94,7 @@ export async function runLoad(options: LoadOptions): Promise<LoadMeasures> {
     trackerVersion: TRACKER_VERSION,
     stopAfterMs: options.minutes * 60_000,
     drainTimeoutMs: 30_000,
+    ...(options.signal ? { signal: options.signal } : {}),
   });
   await wait(3_000); // last live batch
   const neverShown = viewers.reduce((sum, v) => sum + v.missed(Date.now(), FROZEN_AFTER_MS), 0);

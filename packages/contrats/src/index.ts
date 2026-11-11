@@ -63,6 +63,7 @@ export {
   VatsimId,
 } from "./api/profiles.ts";
 export { DevFlightCounts, DevMetrics } from "./api/dev-metrics.ts";
+export { PilotProgress, SimulationLine, SimulationProgress } from "./tools/simulation-progress.ts";
 export {
   AccountRole,
   AccountUpdate,

@@ -164,6 +164,16 @@ Comptes simulés (un compte par pilote simulé, prévu plus tard), remise à zé
 5. **Rôles** : Pilote et Administrateur seulement.
 6. **Invitations** : valables 14 jours, renouvelables (section « Expiration des invitations »).
 
+## Écarts du développement (11/11/2026)
+
+Ce qui diffère des maquettes validées, et pourquoi :
+
+- **Thème** : suit le réglage du système, sans bouton. Un bouton demanderait de garder un choix pour une console d'un seul utilisateur.
+- **Barre latérale** : pas de nombre de comptes à côté de « Comptes » (il demande la connexion administrateur) ; « Carte en direct » est un bouton de la page Trafic plutôt qu'un raccourci. Sur mobile, trois onglets (Services, Trafic, Comptes), sans pastilles dans la barre du haut.
+- **Administrateur connecté** : son nom est sur le bouton de déconnexion de la page Comptes, pas dans la barre du haut.
+- **Trafic** : la colonne « Positions envoyées » n'existe pas (le tracker ne les compte pas par vol) ; le tableau par pilote existe pour `pnpm simulate` seulement, le test de charge montre ses mesures puis son rapport à la fin.
+- **Formulaires** : alignés sur le modèle C choisi par Greg pour tous les formulaires (champs de 44 px, choix segmenté dans un cadre).
+
 ## Critère de sortie
 
 1. Depuis la console, Greg démarre la base, l'API et le site, puis les arrête, sans ouvrir de Terminal.

@@ -3,7 +3,8 @@ import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { httpApiClient } from "../../src/sender/api-client.ts";
 import { fleetOf } from "../generate-flights/fleet.ts";
-import { runSimulation, type SimulationProgress } from "./simulation.ts";
+import type { SimulationProgress } from "@weems/contrats";
+import { runSimulation } from "./simulation.ts";
 
 /**
  * pnpm simulate [--count 10] [--speed 1] [--stagger 30] [--api http://localhost:3000] [--progress]

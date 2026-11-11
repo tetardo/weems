@@ -15,6 +15,7 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Liste des vols, trajectoires (J2) | `../../docs/cahiers-des-charges/spec-J2-premier-vrai-vol.md` |
 | Comptes, connexion du site et du tracker (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public du pilote (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
+| Comptes vus par la console d'administration (rôles, désactivation, invitations) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, fiche `../../docs/decisions/007-console-admin-locale.md` |
 | Ce que le tracker envoie | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` (section « Contrat avec l'API ») |
 | Formats des messages | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 | Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici) |
@@ -70,6 +71,7 @@ docker-compose.yml
 | `pnpm db:migrate` | Applique les migrations (fait aussi au démarrage de l'API) |
 | `pnpm check` (racine) | Tout : types, style, structure, tests ; les tests exigent la base `weems_test` |
 | `pnpm alpha-report --since <AAAA-MM-JJ>` | Rapport de l'alpha : vols, vols suspects, phases justes, critère de sortie (dans Docker : `docker compose exec api node apps/api/src/modules/alpha/report-cli.ts --since <date>`) |
+| `pnpm make-admin <e-mail>` | Donne le rôle Administrateur à un compte existant (premier administrateur de la console) |
 | `pnpm invite <e-mail>` | Crée un code d'invitation pour l'alpha et affiche l'adresse d'inscription (dans Docker : `docker compose exec api node apps/api/src/modules/accounts/invite-cli.ts <e-mail>`) |
 
 ## Connexion (J3)
@@ -79,6 +81,13 @@ docker-compose.yml
 - Les tables de Better Auth sont dans `src/db/auth-schema.ts`, écrites à la main (noms de champs de la bibliothèque) : à comparer après chaque mise à jour de la bibliothèque.
 - Hors production, le jeton de développement `Authorization: Bearer dev-token` reste accepté (`pnpm simulate`, `pnpm fly`) ; ses vols appartiennent au pilote de développement, qui peut se connecter au site avec `pilote@weems.local` / `weems-dev-password`.
 - Hors production seulement, `GET /v1/dev/metrics` donne le retard de la boucle d'événements, la mémoire, le nombre de spectateurs et de vols en direct (`modules/live/dev-routes.ts`, lu par `pnpm load`, spec J4 montée en charge).
-- Hors production seulement, `DELETE /v1/flights` supprime tous les vols du pilote connecté, avec événements, trajectoire et vérification (`modules/flights/dev-routes.ts`, bouton du site en `pnpm dev`). En production la route n'existe pas : un vol réel n'est jamais effacé (EF-14).
+- Hors production seulement, `DELETE /v1/flights` supprime tous les vols du pilote connecté, avec événements, trajectoire et vérification (`modules/flights/dev-routes.ts`, bouton du site en `pnpm dev`) ; avec `?simulator=replay`, seulement les vols simulés (console d'administration, `pnpm load`), jamais les vrais vols de `pnpm fly`. `GET /v1/dev/flight-counts` compte les vols simulés et réels. En production ces routes n'existent pas : un vol réel n'est jamais effacé (EF-14).
+
+## Administration (console locale `apps/admin`)
+
+- Rôles `pilot` et `admin` (`users.role`) ; une invitation porte le rôle donné à l'inscription. Invitations valables 14 jours, renouvelables (nouveau code), annulables ; une invitation expirée est refusée à l'inscription.
+- Routes `/v1/admin/*` (`modules/accounts/admin-routes.ts`, garde `guards.admin`) : session par cookie d'un administrateur, 401 sans session, 403 pour un pilote ; le jeton de développement n'y donne pas accès. Un administrateur ne change jamais son propre compte ; le dernier administrateur actif garde son rôle.
+- Désactiver un compte (`users.disabled_at`) supprime ses sessions et ses jetons du tracker ; `PilotIdentifier` refuse ensuite ses jetons d'accès déjà émis et la connexion est refusée (403). Ses vols restent ; réactivable.
+- Hors production, l'origine de la console (`WEEMS_ADMIN_URL`, http://127.0.0.1:3002) est autorisée à se connecter.
 
 En-tête obligatoire du tracker : `Weems-Client: tracker/0.1.0`.

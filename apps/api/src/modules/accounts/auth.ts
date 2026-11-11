@@ -48,7 +48,9 @@ export function createAuth(config: Config, db: Database, hooks: AuthHooks) {
     baseURL: config.siteUrl,
     basePath: AUTH_BASE_PATH,
     secret: config.authSecret,
-    trustedOrigins: [config.siteUrl],
+    // The admin console runs on the Mac only, never next to the production API.
+    trustedOrigins:
+      config.env === "production" ? [config.siteUrl] : [config.siteUrl, config.adminUrl],
     telemetry: { enabled: false },
     database: drizzleAdapter(db, { provider: "pg", schema: authTables }),
     advanced: { database: { generateId: () => uuidV7() } },
