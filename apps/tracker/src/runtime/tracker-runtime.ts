@@ -61,6 +61,11 @@ export class TrackerRuntime {
     this.session.closeManually();
   }
 
+  /** Closes the flight being recorded as interrupted (simulation stopped). */
+  interruptFlight(): void {
+    this.session.interrupt();
+  }
+
   async pump(nowMs: number): Promise<void> {
     this.parts.recorder.flush();
     const { sender, positions } = this.parts;

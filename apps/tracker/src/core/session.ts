@@ -53,6 +53,10 @@ export type SessionState = "waiting" | "armed" | "flying" | "closed";
 
 const engineRunning = (s: Sample) => s.engines.some((e) => e.running);
 
+/** EF-07: the flight starts at the first engine start or pushback, or when loaded in the air. */
+export const flightStarts = (s: Sample): boolean =>
+  engineRunning(s) || s.pushback === true || !s.onGround;
+
 /**
  * One flight, from aircraft loading to closing (architecture interne, part 2).
  * Pure core: no I/O, time comes from samples and the injected clock.
@@ -111,9 +115,7 @@ export class FlightSession {
     if (this.stateValue === "waiting" && this.aircraft) {
       this.stateValue = "armed";
     }
-    // EF-07: the flight starts at the first engine start or pushback, or when loaded in the air.
-    const starts = engineRunning(sample) || sample.pushback === true || !sample.onGround;
-    if (this.stateValue === "armed" && starts) this.open(sample);
+    if (this.stateValue === "armed" && flightStarts(sample)) this.open(sample);
     if (this.stateValue === "flying") this.record(sample);
   }
 
@@ -151,7 +153,16 @@ export class FlightSession {
 
   /** Manual close by the pilot (EF-12). */
   closeManually(): void {
-    if (this.stateValue === "flying" && this.lastSample) this.close(this.lastSample.t, "manual");
+    this.closeAtLastSample("manual");
+  }
+
+  /** Stopped from outside before its end (simulation stopped from the admin console). */
+  interrupt(): void {
+    this.closeAtLastSample("interrupted");
+  }
+
+  private closeAtLastSample(reason: "manual" | "interrupted"): void {
+    if (this.stateValue === "flying" && this.lastSample) this.close(this.lastSample.t, reason);
   }
 
   private open(sample: Sample): void {

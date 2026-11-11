@@ -11,3 +11,13 @@ export const DevMetrics = z.object({
   live: z.object({ viewers: z.number().int(), flights: z.number().int() }),
 });
 export type DevMetrics = z.infer<typeof DevMetrics>;
+
+/**
+ * GET /v1/dev/flight-counts, outside production only (spec admin, page Trafic simulé):
+ * the caller's flights, simulated ones (simulator "replay") apart from real ones (pnpm fly).
+ */
+export const DevFlightCounts = z.object({
+  simulated: z.number().int().nonnegative(),
+  real: z.number().int().nonnegative(),
+});
+export type DevFlightCounts = z.infer<typeof DevFlightCounts>;

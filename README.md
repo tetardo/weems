@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Cœur (phases, enregistrement, envoi), connecteur de rejeu, pilotes simulés ; connecteur MSFS et commande `pnpm fly` (J2) |
 | `apps/api` | API centrale | Vols (J0), carte en direct par SSE (J1) |
+| `apps/admin` | Console d'administration locale (jamais déployée) | Services, trafic simulé, comptes et invitations |
 | `apps/web` | Suivi des vols sur le web | Carte en direct `/live` (J1) ; liste et page de vol, français et anglais (J2) |
 | `packages/contrats` | Formats échangés entre le tracker, l'API et le site | En place |
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À créer au lot T0 |
@@ -58,6 +59,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 | `pnpm test:j1` | Test de sortie de J1 : 10 pilotes simulés à ×10 sur la vraie API et son flux en direct (environ 6 minutes) ; base `weems_test` nécessaire |
 | `docker compose -f apps/api/docker-compose.yml up` | API complète sur http://localhost:3000, documentation sur http://localhost:3000/docs |
 | `pnpm --filter @weems/web dev` | Site sur http://localhost:3001, carte en direct sur http://localhost:3001/live |
+| `pnpm admin` | Console d'administration sur http://127.0.0.1:3002 : démarre la base, l'API et le site, lance du trafic simulé, gère les comptes |
 
 **Schémas** : sources Mermaid dans `docs/schemas/`, images régénérées par `bash scripts/render-schemas.sh`.
 

@@ -177,4 +177,10 @@ describe("closing", () => {
     expect(closed).toEqual([{ closedAt: "2026-11-11T08:00:00.000Z", reason: "manual" }]);
     expect(events.at(-1)?.context).toEqual({ from: "BOARDING", to: "ARRIVED" });
   });
+
+  it("closes as interrupted when stopped from outside", () => {
+    session.interrupt();
+    session.closeManually();
+    expect(closed).toEqual([{ closedAt: "2026-11-11T08:00:00.000Z", reason: "interrupted" }]);
+  });
 });

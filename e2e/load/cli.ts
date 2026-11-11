@@ -9,6 +9,7 @@ import { formatReport, isSuccess, judge } from "./report.ts";
  * pnpm load [--pilots 50] [--viewers 100] [--minutes 30] [--speed 1]
  *           [--api http://localhost:3000] [--out rapport.json]
  * Spec J4 (montée en charge du direct), against an API already running outside production.
+ * Ctrl+C (or SIGTERM, sent by the admin console) ends the run early, with the report so far.
  */
 const { values } = parseArgs({
   options: {
@@ -22,6 +23,10 @@ const { values } = parseArgs({
   },
 });
 
+const controller = new AbortController();
+for (const signal of ["SIGINT", "SIGTERM"] as const) {
+  process.once(signal, () => controller.abort());
+}
 const stamp = new Date().toISOString().replaceAll(":", "-").slice(0, 19);
 const options = {
   baseUrl: values.api,
@@ -31,6 +36,7 @@ const options = {
   minutes: Number(values.minutes),
   speed: Number(values.speed),
   workDir: join(tmpdir(), `weems-load-${stamp}`),
+  signal: controller.signal,
 };
 process.stdout.write(
   `Charge : ${options.pilots} pilotes, ${options.viewers} spectateurs, ×${options.speed}, ` +

@@ -25,7 +25,8 @@ module.exports = {
           "(^|/)src/(index|main|server)\\.ts$",
           "(^|/)tools/",
           "(^|/)scripts/",
-          "(^|/)apps/web/src/app/", // Next.js routes: loaded by the framework
+          "(^|/)apps/(web|admin)/src/app/", // Next.js routes: loaded by the framework
+          "(^|/)apps/(web|admin)/src/proxy\\.ts$", // Next.js proxy: loaded by the framework
         ],
       },
       to: {},

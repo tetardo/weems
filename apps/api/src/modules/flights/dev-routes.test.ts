@@ -52,6 +52,30 @@ describe("delete all my flights (development only)", () => {
     expect(await listOf(other.cookie)).toHaveLength(1);
   });
 
+  it("with ?simulator=replay, deletes the simulated flights and keeps the real ones", async () => {
+    const { cookie, tracker: headers } = await newTrackerPilot(app);
+    const simulated = syntheticFlight();
+    const real = syntheticFlight();
+    real.open.aircraft.simulator = "msfs2024";
+    for (const flight of [simulated, real]) {
+      await app.inject({ method: "POST", url: "/v1/flights", headers, payload: flight.open });
+    }
+    const counts = () =>
+      app.inject({ method: "GET", url: "/v1/dev/flight-counts", headers: { cookie } });
+    expect((await counts()).json()).toEqual({ simulated: 1, real: 1 });
+
+    const deleted = await app.inject({
+      method: "DELETE",
+      url: "/v1/flights?simulator=replay",
+      headers: { cookie },
+    });
+    expect(deleted.statusCode).toBe(204);
+    expect((await counts()).json()).toEqual({ simulated: 0, real: 1 });
+    expect((await listOf(cookie)).map((f: { flightId: string }) => f.flightId)).toEqual([
+      real.open.flightId,
+    ]);
+  });
+
   it("needs a logged-in pilot", async () => {
     expect((await app.inject({ method: "DELETE", url: "/v1/flights" })).statusCode).toBe(401);
   });

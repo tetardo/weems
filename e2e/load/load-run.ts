@@ -24,6 +24,8 @@ export interface LoadOptions {
    * it shares the development pilot with the other test files running at the same time.
    */
   clearFlights?: boolean;
+  /** Stops the run early (Ctrl+C, admin console): flights closed as interrupted, report kept. */
+  signal?: AbortSignal;
 }
 
 const TRACKER_VERSION = "0.1.0";
@@ -31,14 +33,17 @@ const TRACKER_VERSION = "0.1.0";
 const FROZEN_AFTER_MS = 20_000;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** Empties the development pilot's flights, live map included, so runs do not add up. */
+/**
+ * Empties the development pilot's simulated flights, live map included, so runs do not add up.
+ * Real flights of `pnpm fly` (same pilot) are kept.
+ */
 async function clearFlights({
   baseUrl,
   token,
   clearFlights: clear = true,
 }: LoadOptions): Promise<void> {
   if (!clear) return;
-  const response = await fetch(new URL("/v1/flights", baseUrl), {
+  const response = await fetch(new URL("/v1/flights?simulator=replay", baseUrl), {
     method: "DELETE",
     headers: { authorization: `Bearer ${token}`, "weems-client": `tracker/${TRACKER_VERSION}` },
   });
@@ -99,6 +104,8 @@ export async function runLoad(options: LoadOptions): Promise<LoadMeasures> {
     trackerVersion: TRACKER_VERSION,
     stopAfterMs: options.minutes * 60_000,
     drainTimeoutMs: 30_000,
+    skipBoarding: true,
+    ...(options.signal ? { signal: options.signal } : {}),
   });
   await wait(3_000); // last live batch
   const neverShown = viewers.reduce((sum, v) => sum + v.missed(Date.now(), FROZEN_AFTER_MS), 0);

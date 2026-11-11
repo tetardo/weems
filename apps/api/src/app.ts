@@ -3,9 +3,12 @@ import Fastify, { type FastifyInstance } from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import type { Config } from "./config.ts";
 import type { DatabaseHandle } from "./db/client.ts";
+import { registerAdminAccountRoutes } from "./modules/accounts/admin-routes.ts";
+import { AdminAccountsService } from "./modules/accounts/admin-service.ts";
 import { createAuth } from "./modules/accounts/auth.ts";
 import { ensureDevPilot } from "./modules/accounts/dev-pilot.ts";
 import { PilotIdentifier } from "./modules/accounts/pilot-identifier.ts";
+import { AdminAccountsRepository } from "./modules/accounts/repository-admin.ts";
 import { AccountsRepository } from "./modules/accounts/repository.ts";
 import { registerAccountRoutes } from "./modules/accounts/routes.ts";
 import { readAirportsFile } from "./modules/airports/airports-file.ts";
@@ -45,12 +48,8 @@ export interface AppDependencies {
   logger?: boolean;
 }
 
-/** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
-export async function buildApp({
-  config,
-  database,
-  logger = true,
-}: AppDependencies): Promise<FastifyInstance> {
+/** Fastify with its plugins: validation, errors, documentation, rate limits. */
+async function createServer(config: Config, logger: boolean): Promise<FastifyInstance> {
   const app = Fastify({
     logger: logger && { redact: ["req.headers.authorization"] },
     // request.ip is the visitor's, not the site server's (rate limits of the public routes).
@@ -62,7 +61,16 @@ export async function buildApp({
   await registerDocs(app);
   // Only on the routes that ask for it (public pages): the tracker and the site are not limited.
   await app.register(rateLimit, { global: false });
+  return app;
+}
 
+/** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
+export async function buildApp({
+  config,
+  database,
+  logger = true,
+}: AppDependencies): Promise<FastifyInstance> {
+  const app = await createServer(config, logger);
   registerHealthRoutes(app, database.ping);
   const board = new LiveBoard();
   const stream = new LiveStream(board);
@@ -73,7 +81,13 @@ export async function buildApp({
   await ensureTrackerClient(accountsRepository, config);
   if (config.env !== "production") await ensureDevPilot(accountsRepository);
   registerAccountRoutes(app, auth, config);
-  const guards = registerAuth(app, config, new PilotIdentifier(auth, config.apiUrl));
+  const identifier = new PilotIdentifier(auth, config.apiUrl, (id) => accounts.statusOf(id));
+  const guards = registerAuth(app, config, identifier);
+  registerAdminAccountRoutes(
+    app,
+    new AdminAccountsService(new AdminAccountsRepository(database.db), accounts, flights),
+    guards,
+  );
   registerFlightRoutes(app, flights, guards);
   if (config.env !== "production") registerDevFlightRoutes(app, flights, guards);
   const tracks = new TracksService(new PostgresTrackStore(database.db), flights);

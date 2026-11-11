@@ -16,6 +16,8 @@ export interface Identify {
   fromAccessToken(token: string): Promise<string | null>;
   /** Pilot of the session cookie the site forwards, or null. */
   fromSession(headers: Headers): Promise<string | null>;
+  /** Whether the account has the administrator role. */
+  isAdmin(pilotId: string): Promise<boolean>;
 }
 
 declare module "fastify" {
@@ -45,6 +47,8 @@ export interface Guards {
   pilot: onRequestAsyncHookHandler;
   /** A tracker recent enough (426 otherwise), with an access token. */
   tracker: onRequestAsyncHookHandler;
+  /** An administrator logged in with a session cookie (admin console); 403 for anyone else. */
+  admin: onRequestAsyncHookHandler;
 }
 
 /**
@@ -78,7 +82,15 @@ export function registerAuth(app: FastifyInstance, config: Config, identify: Ide
     const header = request.headers[CLIENT_HEADER];
     assertTrackerVersion(typeof header === "string" ? header : undefined, config.minTrackerVersion);
   };
-  return { pilot, tracker };
+  const admin: onRequestAsyncHookHandler = async (request) => {
+    const pilotId = await identify.fromSession(headersOf(request));
+    if (!pilotId) throw unauthorized("Log in with an administrator account.");
+    if (!(await identify.isAdmin(pilotId))) {
+      throw new ApiProblem(403, "Forbidden", "Reserved to administrators.");
+    }
+    request.caller = { pilotId };
+  };
+  return { pilot, tracker, admin };
 }
 
 /** The caller set by a guard. A route without a guard calling this is a programming error. */

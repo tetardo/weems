@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { sample } from "../../core/testing/sample.ts";
 import { ReplayConnector } from "./replay-connector.ts";
-import { parseReplay, type Replay, replayUntil, serializeReplay } from "./replay-format.ts";
+import {
+  parseReplay,
+  type Replay,
+  replayFrom,
+  replayUntil,
+  serializeReplay,
+} from "./replay-format.ts";
 
 const replay: Replay = {
   header: { format: "weems-replay", version: 1, source: "synthetic", seed: 1 },
@@ -36,6 +42,15 @@ describe("replay format", () => {
     const start = replayUntil(replay, 20);
     expect(start.header).toEqual(replay.header);
     expect(start.records.map((r) => r.t)).toEqual([0, 0, 20]);
+  });
+
+  it("starts from the first matching sample, aircraft kept and moved to it", () => {
+    const from = replayFrom(replay, (s) => s.t >= 40);
+    expect(from.records.map((r) => [r.type, r.t])).toEqual([
+      ["aircraft", 40],
+      ["sample", 40],
+    ]);
+    expect(replayFrom(replay, () => false)).toBe(replay);
   });
 
   it("names the faulty line", () => {

@@ -17,6 +17,11 @@ export interface Config {
   siteUrl: string;
   /** Public address of the API: the audience of tracker access tokens. */
   apiUrl: string;
+  /**
+   * Address of the local admin console (apps/admin), allowed to log in outside production only:
+   * its server signs in to /api/auth with this origin.
+   */
+  adminUrl: string;
   /** Signs sessions and keys; at least 32 characters, mandatory in production. */
   authSecret: string;
   /**
@@ -45,6 +50,15 @@ function readAuthSecret(env: Config["env"], value: string | undefined): string {
   return DEV_AUTH_SECRET;
 }
 
+/** Addresses of the site, the API and the local admin console. */
+function readAddresses(source: NodeJS.ProcessEnv): Pick<Config, "siteUrl" | "apiUrl" | "adminUrl"> {
+  return {
+    siteUrl: source["WEEMS_SITE_URL"] ?? "http://localhost:3001",
+    apiUrl: source["WEEMS_API_URL"] ?? "http://localhost:3000",
+    adminUrl: source["WEEMS_ADMIN_URL"] ?? "http://127.0.0.1:3002",
+  };
+}
+
 export function loadConfig(source: NodeJS.ProcessEnv = process.env): Config {
   const env = readEnv(source["WEEMS_ENV"]);
   return {
@@ -55,8 +69,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): Config {
     devToken: source["WEEMS_DEV_TOKEN"] ?? "dev-token",
     minTrackerVersion: source["WEEMS_MIN_TRACKER_VERSION"] ?? "0.1.0",
     migrateOnStart: source["WEEMS_MIGRATE_ON_START"] !== "false",
-    siteUrl: source["WEEMS_SITE_URL"] ?? "http://localhost:3001",
-    apiUrl: source["WEEMS_API_URL"] ?? "http://localhost:3000",
+    ...readAddresses(source),
     authSecret: readAuthSecret(env, source["WEEMS_AUTH_SECRET"]),
     trustedProxies: (source["WEEMS_TRUSTED_PROXIES"] ?? "127.0.0.1,::1")
       .split(",")
