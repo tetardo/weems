@@ -10,6 +10,15 @@ export interface Config {
   minTrackerVersion: string;
   /** Apply pending database migrations at start-up (convenient with docker compose). */
   migrateOnStart: boolean;
+  /**
+   * Public address of the site, which also serves the login routes (/api/auth, proxied to the API).
+   * Session cookies live there; the tracker opens it to log in.
+   */
+  siteUrl: string;
+  /** Public address of the API: the audience of tracker access tokens. */
+  apiUrl: string;
+  /** Signs sessions and keys; at least 32 characters, mandatory in production. */
+  authSecret: string;
 }
 
 const ENVS = ["development", "production", "test"] as const;
@@ -22,14 +31,27 @@ function readEnv(value: string | undefined): Config["env"] {
   return env as Config["env"];
 }
 
+const DEV_AUTH_SECRET = "development-secret-not-for-production-use";
+
+function readAuthSecret(env: Config["env"], value: string | undefined): string {
+  if (value && value.length >= 32) return value;
+  if (env === "production")
+    throw new Error("WEEMS_AUTH_SECRET (32 characters or more) is mandatory in production");
+  return DEV_AUTH_SECRET;
+}
+
 export function loadConfig(source: NodeJS.ProcessEnv = process.env): Config {
+  const env = readEnv(source["WEEMS_ENV"]);
   return {
-    env: readEnv(source["WEEMS_ENV"]),
+    env,
     port: Number(source["PORT"] ?? 3000),
     host: source["HOST"] ?? "0.0.0.0",
     databaseUrl: source["DATABASE_URL"] ?? "postgres://weems:weems@localhost:5432/weems",
     devToken: source["WEEMS_DEV_TOKEN"] ?? "dev-token",
     minTrackerVersion: source["WEEMS_MIN_TRACKER_VERSION"] ?? "0.1.0",
     migrateOnStart: source["WEEMS_MIGRATE_ON_START"] !== "false",
+    siteUrl: source["WEEMS_SITE_URL"] ?? "http://localhost:3001",
+    apiUrl: source["WEEMS_API_URL"] ?? "http://localhost:3000",
+    authSecret: readAuthSecret(env, source["WEEMS_AUTH_SECRET"]),
   };
 }

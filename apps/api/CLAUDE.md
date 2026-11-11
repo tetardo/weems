@@ -2,7 +2,7 @@
 
 API REST unique de Weems : seule à écrire dans la base. Tous les autres programmes (tracker, site web, app iPad, gestion de compagnie) sont ses clients.
 
-Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point).
+Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point). J3 : module `accounts` (comptes pilotes avec Better Auth, inscription sur invitation, connexion du tracker en OAuth 2.1 avec PKCE).
 
 ## Où trouver quoi
 
@@ -13,6 +13,7 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Conventions, modèle de données, routes de J0 | `../../docs/cahiers-des-charges/api/spec-J0-api.md` |
 | Positions en direct et flux SSE (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
 | Liste des vols, trajectoires (J2) | `../../docs/cahiers-des-charges/spec-J2-premier-vrai-vol.md` |
+| Comptes, connexion du site et du tracker (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Ce que le tracker envoie | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` (section « Contrat avec l'API ») |
 | Formats des messages | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 | Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici) |
@@ -66,5 +67,13 @@ docker-compose.yml
 | `pnpm db:generate` | Crée la migration après une modification de `src/db/schema.ts` |
 | `pnpm db:migrate` | Applique les migrations (fait aussi au démarrage de l'API) |
 | `pnpm check` (racine) | Tout : types, style, structure, tests ; les tests exigent la base `weems_test` |
+| `pnpm invite <e-mail>` | Crée un code d'invitation pour l'alpha et affiche l'adresse d'inscription (dans Docker : `docker compose exec api node apps/api/src/modules/accounts/invite-cli.ts <e-mail>`) |
 
-Jeton de développement : `Authorization: Bearer dev-token`. En-tête obligatoire du tracker : `Weems-Client: tracker/0.1.0`.
+## Connexion (J3)
+
+- Site : session par cookie. Les routes `/api/auth/*` (Better Auth) sont servies par l'API mais appelées à travers le site, pour que le cookie soit celui du site ; le serveur du site renvoie ce cookie à l'API.
+- Tracker : OAuth 2.1, code d'autorisation avec PKCE, retour sur `http://127.0.0.1:{port}/callback`. Jetons d'accès JWT (audience `WEEMS_API_URL`, 1 h), jetons de rafraîchissement tournants (90 jours). `GET /v1/tracker/login` donne tout au tracker.
+- Les tables de Better Auth sont dans `src/db/auth-schema.ts`, écrites à la main (noms de champs de la bibliothèque) : à comparer après chaque mise à jour de la bibliothèque.
+- Hors production, le jeton de développement `Authorization: Bearer dev-token` reste accepté (`pnpm simulate`, `pnpm fly`) ; ses vols appartiennent au pilote de développement, qui peut se connecter au site avec `pilote@weems.local` / `weems-dev-password`.
+
+En-tête obligatoire du tracker : `Weems-Client: tracker/0.1.0`.

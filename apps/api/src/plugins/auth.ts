@@ -3,11 +3,19 @@ import type { Config } from "../config.ts";
 import { ApiProblem } from "./problem.ts";
 import { assertTrackerVersion, CLIENT_HEADER } from "./tracker-version.ts";
 
-/** The only pilot until accounts arrive at J3. */
-const DEV_PILOT_ID = "01970000-0000-7000-8000-000000000001";
+/** Pilot of the development token; also created as a real account in development (dev-pilot.ts). */
+export const DEV_PILOT_ID = "01970000-0000-7000-8000-000000000001";
 
 export interface Caller {
   pilotId: string;
+}
+
+/** How a request is tied to a pilot: implemented by the accounts module. */
+export interface Identify {
+  /** Pilot of an access token issued to the tracker, or null. */
+  fromAccessToken(token: string): Promise<string | null>;
+  /** Pilot of the session cookie the site forwards, or null. */
+  fromSession(headers: Headers): Promise<string | null>;
 }
 
 declare module "fastify" {
@@ -18,38 +26,55 @@ declare module "fastify" {
 
 const unauthorized = (detail: string) => new ApiProblem(401, "Unauthorized", detail);
 
-/**
- * J0 login: a fixed development token, refused outside development mode.
- * OAuth 2 with PKCE replaces it at J3 (spec J0, "Connexion à J0").
- */
-function authenticate(request: FastifyRequest, config: Config): Caller {
-  if (config.env === "production") {
-    throw unauthorized("Development token refused outside development mode.");
+export function headersOf(request: FastifyRequest): Headers {
+  const headers = new Headers();
+  for (const [name, value] of Object.entries(request.headers)) {
+    if (Array.isArray(value)) value.forEach((item) => headers.append(name, item));
+    else if (value !== undefined) headers.set(name, value);
   }
-  if (request.headers.authorization !== `Bearer ${config.devToken}`) {
-    throw unauthorized("Missing or invalid bearer token.");
-  }
-  return { pilotId: DEV_PILOT_ID };
+  return headers;
+}
+
+function bearerOf(request: FastifyRequest): string | null {
+  const header = request.headers.authorization;
+  return header?.startsWith("Bearer ") ? header.slice("Bearer ".length) : null;
 }
 
 export interface Guards {
-  /** Any signed-in client. */
+  /** A pilot: the tracker (access token) or the site (session cookie). */
   pilot: onRequestAsyncHookHandler;
-  /** A signed-in tracker recent enough (426 otherwise). */
+  /** A tracker recent enough (426 otherwise), with an access token. */
   tracker: onRequestAsyncHookHandler;
 }
 
 /**
- * Checks run on request arrival, before the body is validated:
- * an unknown caller gets 401 whatever they send.
+ * Checks run on request arrival, before the body is validated: an unknown caller gets 401 whatever they send.
+ * The fixed development token (spec J0) still works outside production, for `pnpm simulate` and `pnpm fly`.
  */
-export function registerAuth(app: FastifyInstance, config: Config): Guards {
+export function registerAuth(app: FastifyInstance, config: Config, identify: Identify): Guards {
   app.decorateRequest("caller", null);
+
+  async function fromBearer(token: string): Promise<Caller> {
+    if (config.env !== "production" && token === config.devToken) return { pilotId: DEV_PILOT_ID };
+    const pilotId = await identify.fromAccessToken(token);
+    if (!pilotId) throw unauthorized("Invalid or expired access token.");
+    return { pilotId };
+  }
+
   const pilot: onRequestAsyncHookHandler = async (request) => {
-    request.caller = authenticate(request, config);
+    const token = bearerOf(request);
+    if (token) {
+      request.caller = await fromBearer(token);
+      return;
+    }
+    const pilotId = await identify.fromSession(headersOf(request));
+    if (!pilotId) throw unauthorized("Log in, or send an access token.");
+    request.caller = { pilotId };
   };
   const tracker: onRequestAsyncHookHandler = async (request) => {
-    request.caller = authenticate(request, config);
+    const token = bearerOf(request);
+    if (!token) throw unauthorized("Missing bearer token.");
+    request.caller = await fromBearer(token);
     const header = request.headers[CLIENT_HEADER];
     assertTrackerVersion(typeof header === "string" ? header : undefined, config.minTrackerVersion);
   };
