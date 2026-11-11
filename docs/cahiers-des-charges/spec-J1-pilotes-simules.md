@@ -77,7 +77,7 @@ Les formats sont écrits une seule fois dans `packages/contrats` et partagés pa
 ## 4. Carte minimale (site web)
 
 - Une page `/live` dans Next.js, avec une carte MapLibre.
-- Fonds de carte gratuits sans clé ; fournisseur à choisir au démarrage de J1. Piste : OpenFreeMap [Confiance faible].
+- Fonds de carte gratuits sans clé : OpenFreeMap (choisi au démarrage de J1).
 - Un avion par vol ouvert, orienté selon son cap. Son déplacement est lissé entre deux positions pour éviter les sauts.
 - Un clic sur un avion ouvre un panneau : indicatif, avion, départ, arrivée, phase, altitude, vitesse sol.
 - Un compteur affiche le nombre de vols en cours. Les avions en « signal perdu » sont grisés.
@@ -101,10 +101,22 @@ Les formats sont écrits une seule fois dans `packages/contrats` et partagés pa
 - des positions envoyées par lots toutes les 2 secondes aux navigateurs ;
 - « signal perdu » à 60 secondes, disparition à 10 minutes.
 
+## Choix faits pendant le développement (11/11/2026)
+
+| Sujet | Choix | Pourquoi |
+| --- | --- | --- |
+| Fond de carte | OpenFreeMap, style « positron » | Gratuit, sans clé ni compte, sans quota annoncé ; à revoir avant l'ouverture publique si le trafic grossit [Confiance moyenne] |
+| Cadence des positions | 5 s au décollage et de l'approche à l'atterrissage, 10 s au sol et en montée ou descente, 15 s en croisière, rien à l'embarquement et à l'arrivée | Plus précis là où l'avion change vite, moins de messages en croisière |
+| Positions avant l'ouverture du vol | Gardées en mémoire par le tracker et envoyées une fois le vol accepté ; au-delà de 30 s, seule la plus récente est gardée | Pas de position pour un vol inconnu de l'API, pas de rafale après une coupure |
+| Flux en direct | Public, sans connexion, autorisé depuis n'importe quel site (CORS) | Les données affichées sont celles de la carte publique ; la connexion arrive en J3 |
+| Navigateur et API | Le navigateur se connecte directement à l'API, pas à travers Next.js | Next.js ne garde pas de connexion ouverte par visiteur |
+| Lissage | Chaque avion glisse en 2 s de sa position affichée vers la nouvelle, cap par le plus court | Même durée que les lots de l'API : pas de saut ni d'arrêt |
+
+![Carte en direct : du flux SSE à l'écran](../schemas/img/web-carte-direct.png)
+
 ## Questions ouvertes
 
 | Question | Qui | Bloquant pour |
 | --- | --- | --- |
-| Fournisseur de fonds de carte gratuit | Claude, au démarrage de J1 | Carte |
 | Vols réels A32NX ou Sky Dolly disponibles ? | Houssine | Rien : repli sur les vols synthétiques |
 | Organisation du code de l'API (Fastify par défaut, réponse de Thibault) | Thibault | Rien : Fastify par défaut |

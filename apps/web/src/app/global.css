@@ -1,0 +1,9 @@
+/* No branding before J4: plain, readable, full-screen map. */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, sans-serif;
+  color: #14273a;
+  background: #ffffff;
+}

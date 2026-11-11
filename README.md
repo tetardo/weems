@@ -6,10 +6,10 @@
 
 | Dossier | Contenu | État |
 | --- | --- | --- |
-| `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Documentation de référence en place, code à venir (lot T0) |
-| `apps/api` | API centrale | Plus tard |
-| `apps/web` | Suivi des vols sur le web | Plus tard |
-| `packages/contrats` | Formats échangés entre le tracker et l'API | À créer au lot T0 |
+| `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Cœur (phases, enregistrement, envoi), connecteur de rejeu, pilotes simulés ; connexion à MSFS au lot T1 |
+| `apps/api` | API centrale | Vols (J0), carte en direct par SSE (J1) |
+| `apps/web` | Suivi des vols sur le web | Carte en direct `/live` (J1) |
+| `packages/contrats` | Formats échangés entre le tracker, l'API et le site | En place |
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À créer au lot T0 |
 | `docs/cadrage` | Parc applicatif, positionnement | Étape 1 livrée |
 | `docs/cahiers-des-charges` | Cahiers des charges par application | Tracker complet |
@@ -52,6 +52,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 | `pnpm structure` | Frontières entre modules, code dupliqué, code inutilisé |
 | `pnpm test` | Tests de toutes les applications et de tous les paquets, et le test de bout en bout `e2e/` (tracker → API → base) ; base `weems_test` nécessaire |
 | `docker compose -f apps/api/docker-compose.yml up` | API complète sur http://localhost:3000, documentation sur http://localhost:3000/docs |
+| `pnpm --filter @weems/web dev` | Site sur http://localhost:3001, carte en direct sur http://localhost:3001/live |
 
 **Schémas** : sources Mermaid dans `docs/schemas/`, images régénérées par `bash scripts/render-schemas.sh`.
 
