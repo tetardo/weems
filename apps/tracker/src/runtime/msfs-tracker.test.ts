@@ -3,16 +3,16 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { type FlightEvent, uuidV7 } from "@weems/contrats";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { FakeSimLink } from "../../src/connectors/msfs/fake-sim-link.ts";
-import { rawFromAircraft, rawFromSample } from "../../src/connectors/msfs/raw-sample-fixture.ts";
-import { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts";
-import { parseReplay } from "../../src/connectors/replay/replay-format.ts";
-import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
-import { createTracker } from "../../src/runtime/create-tracker.ts";
-import type { ApiClient } from "../../src/sender/api-client.ts";
-import { generateFlight } from "../generate-flights/generator.ts";
-import { LFPG_LFBO } from "../generate-flights/scenario.ts";
-import { startFly } from "./fly.ts";
+import { FakeSimLink } from "../connectors/msfs/fake-sim-link.ts";
+import { rawFromAircraft, rawFromSample } from "../connectors/msfs/raw-sample-fixture.ts";
+import { ReplayConnector } from "../connectors/replay/replay-connector.ts";
+import { parseReplay } from "../connectors/replay/replay-format.ts";
+import { AIRLINER_PARAMS } from "../core/phases/params.ts";
+import { createTracker } from "../runtime/create-tracker.ts";
+import type { ApiClient } from "../sender/api-client.ts";
+import { generateFlight } from "../../tools/generate-flights/generator.ts";
+import { LFPG_LFBO } from "../../tools/generate-flights/scenario.ts";
+import { startMsfsTracker } from "./msfs-tracker.ts";
 
 let dir: string;
 beforeEach(() => (dir = mkdtempSync(join(tmpdir(), "weems-fly-"))));
@@ -36,7 +36,7 @@ describe("pnpm fly, without the simulator", () => {
     let now = 0;
     let replay = "";
     const reports: string[] = [];
-    const fly = startFly({
+    const fly = startMsfsTracker({
       link,
       api,
       databasePath: join(dir, "tracker.db"),

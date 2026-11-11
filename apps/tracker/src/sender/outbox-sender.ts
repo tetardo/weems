@@ -1,4 +1,4 @@
-import type Database from "better-sqlite3";
+import { type Database, inTransaction } from "../storage/sqlite.ts";
 import type { FlightEvent } from "@weems/contrats";
 import type { ApiClient } from "./api-client.ts";
 import { actionFor, retryDelayMs } from "./retry.ts";
@@ -70,12 +70,12 @@ function toMessages(rows: OutboxRow[]): Message[] {
  * when one is not accepted, the rest of that flight waits. Nothing is lost if the PC stops.
  */
 export class OutboxSender {
-  private readonly db: Database.Database;
+  private readonly db: Database;
   private readonly api: ApiClient;
   private readonly random: () => number;
   private blocked: SenderBlock = null;
 
-  constructor(db: Database.Database, api: ApiClient, random: () => number = Math.random) {
+  constructor(db: Database, api: ApiClient, random: () => number = Math.random) {
     this.db = db;
     this.api = api;
     this.random = random;
@@ -104,7 +104,7 @@ export class OutboxSender {
     if (this.blocked) return 0;
     const rows = this.db
       .prepare("SELECT * FROM outbox WHERE status = 'pending' ORDER BY id")
-      .all() as OutboxRow[];
+      .all() as unknown as OutboxRow[];
     const waiting = new Set<string>();
     let accepted = 0;
     for (const message of toMessages(rows)) {
@@ -127,7 +127,7 @@ export class OutboxSender {
   private isDue(message: Message, nowMs: number): boolean {
     const row = this.db
       .prepare("SELECT next_attempt_at AS at FROM outbox WHERE id = ?")
-      .get(message.ids[0]) as { at: number };
+      .get(message.ids[0] ?? -1) as { at: number };
     return row.at <= nowMs;
   }
 
@@ -149,7 +149,7 @@ export class OutboxSender {
 
   private remove(message: Message): void {
     const remove = this.db.prepare("DELETE FROM outbox WHERE id = ?");
-    this.db.transaction(() => message.ids.forEach((id) => remove.run(id)))();
+    inTransaction(this.db, () => message.ids.forEach((id) => remove.run(id)));
   }
 
   private postpone(message: Message, nowMs: number): void {
@@ -158,7 +158,7 @@ export class OutboxSender {
     const update = this.db.prepare(
       "UPDATE outbox SET attempts = ?, next_attempt_at = ? WHERE id = ?",
     );
-    this.db.transaction(() => message.ids.forEach((id) => update.run(attempts, next, id)))();
+    inTransaction(this.db, () => message.ids.forEach((id) => update.run(attempts, next, id)));
   }
 
   /** 409 or another 4xx: set aside, logged, never re-sent in a loop. */
@@ -166,6 +166,6 @@ export class OutboxSender {
     const update = this.db.prepare(
       "UPDATE outbox SET status = 'parked', last_error = ? WHERE id = ?",
     );
-    this.db.transaction(() => message.ids.forEach((id) => update.run(`HTTP ${status}`, id)))();
+    inTransaction(this.db, () => message.ids.forEach((id) => update.run(`HTTP ${status}`, id)));
   }
 }

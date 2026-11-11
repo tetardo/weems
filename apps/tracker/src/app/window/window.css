@@ -1,0 +1,102 @@
+/* Same look as the site (Admin One): dark bar, light background, white cards. */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font:
+    15px system-ui,
+    sans-serif;
+  color: #1f2937;
+  background: #f9fafb;
+}
+header {
+  background: #111827;
+  color: #fff;
+  padding: 14px 20px;
+}
+header span {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-left: 6px;
+}
+main {
+  padding: 16px;
+}
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+h2 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+p {
+  margin: 4px 0;
+}
+.muted {
+  color: #6b7280;
+  font-size: 13px;
+}
+.ok::before,
+.wait::before,
+.ko::before {
+  content: "●";
+  margin-right: 6px;
+}
+.ok::before {
+  color: #059669;
+}
+.wait::before {
+  color: #d97706;
+}
+.ko::before {
+  color: #dc2626;
+}
+button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  background: #f3f4f6;
+  cursor: pointer;
+}
+button.primary,
+form button {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+button[hidden] {
+  display: none;
+}
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+input {
+  display: block;
+  width: 100%;
+  height: 36px;
+  margin-top: 4px;
+  padding: 0 10px;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  font: inherit;
+  text-transform: uppercase;
+}
+.row {
+  display: flex;
+  gap: 12px;
+}
+.row label {
+  flex: 1;
+}
+#notice {
+  color: #b91c1c;
+  min-height: 1em;
+}

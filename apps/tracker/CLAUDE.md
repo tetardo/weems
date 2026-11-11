@@ -12,11 +12,11 @@ Weems est un écosystème freemium pour passionnés de simulation (amateurs à s
 
 ## Stack (proposée le 2026-11-10, à confirmer par le prototype)
 
-- TypeScript (Node.js) partout ; application de bureau Electron ; SQLite pour l'enregistreur local.
+- TypeScript (Node.js) partout ; application de bureau Electron ; SQLite (`node:sqlite`, intégré) pour l'enregistreur local.
 - Connecteur MSFS : `node-simconnect` (protocole SimConnect en TypeScript pur). Repli si insuffisant : connecteur C# séparé avec le SDK officiel, même interface.
 - Python seulement pour l'analyse des vols de test, pas dans l'application.
 - Code partagé avec l'API : formats échangés dans `../../packages/contrats`, règles et calcul de la note dans `../../packages/notation`. Ne jamais les dupliquer ici.
-- Distribution : Microsoft Store (paquet MSIX construit par GitHub Actions sur Windows). Développement sur Mac : le cœur doit tourner et être testé sans Windows.
+- Distribution : installateur NSIS sur les versions GitHub pour l'alpha (J3), Microsoft Store ensuite (J4). Développement sur Mac : le cœur doit tourner et être testé sans Windows.
 
 ## Où trouver quoi
 
@@ -63,9 +63,14 @@ src/account/              J3 : compte du pilote. Connexion par le navigateur (OA
                           127.0.0.1, loopback-server.ts), jetons gardés chiffrés (token-store.ts, chiffrement
                           fourni par Electron), renouvellement avant expiration (account.ts). Le tracker ne voit
                           jamais le mot de passe ; sans jeton valide, l'envoi s'arrête (401) jusqu'à la reconnexion
+src/app/                  J3 : application de bureau. desktop-tracker.ts (assemblage sans Electron, testé sur Mac),
+                          app-state.ts et settings-file.ts ; main.ts et preload.ts (Electron), window/ (fenêtre :
+                          aucun accès à Node, affiche l'état et transmet les clics)
+src/storage/sqlite.ts     seul fichier qui ouvre SQLite (`node:sqlite`, intégré à Node et à Electron)
+scripts/build-app.ts      regroupe l'application dans dist/app/ (esbuild) ; electron-builder.yml : installateur
 tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes
 tools/simulate/           J1 : N trackers sans interface dans un seul processus
-tools/fly/                J2 : tracker sans interface sur le PC Windows, branché sur MSFS
+tools/fly/                J2 : tracker sans interface sur le PC Windows (même assemblage que l'app : src/runtime/msfs-tracker.ts)
 ```
 
 | Commande (depuis `apps/tracker/`) | Effet |
@@ -73,6 +78,8 @@ tools/fly/                J2 : tracker sans interface sur le PC Windows, branch�
 | `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
 | `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
 | `pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO` | J2, sur le PC Windows avec MSFS lancé : enregistre le vol, l'envoie à l'API, écrit le rejeu dans `recordings/` (ignoré par git). « fin » + Entrée clôt le vol, Ctrl+C quitte |
+| `pnpm app` | J3 : lance l'application de bureau (API : http://localhost:3000, ou `WEEMS_API_URL`) |
+| `pnpm app:package` | Construit l'installateur dans `dist/installer/` (Windows : sur le PC ou par GitHub Actions) |
 | `pnpm check` (racine) | Types, style, structure, tests |
 
 - Un seuil se change dans `params.ts`, jamais dans une règle.

@@ -3,5 +3,6 @@ packages:
   - "packages/*"
   - "e2e"
 onlyBuiltDependencies:
-  # Native SQLite module of the tracker (prebuilt binary, compiled if none fits).
-  - better-sqlite3
+  # Desktop tracker (J3): Electron downloads its binary, esbuild its compiler for this computer.
+  - electron
+  - esbuild

@@ -1,1 +1,8 @@
-{ "$schema": "https://unpkg.com/knip@6/schema.json" }
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    "apps/tracker": {
+      "entry": ["src/app/main.ts", "src/app/preload.ts", "src/app/window/view.ts"]
+    }
+  }
+}
