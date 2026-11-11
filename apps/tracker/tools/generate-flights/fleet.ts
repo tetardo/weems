@@ -1,4 +1,5 @@
 import type { AircraftInfo } from "@weems/contrats";
+import { seededRandom } from "./random.ts";
 import { A320, type Disturbance, type Point, type Scenario } from "./scenario.ts";
 
 const aircraft = (
@@ -109,15 +110,47 @@ const LEGS: Leg[] = [
   },
 ];
 
-export const FLEET: readonly Scenario[] = LEGS.map((leg, index) => ({
-  name: `${leg.from.toLowerCase()}-${leg.to.toLowerCase()}`,
-  callsign: `WMS${101 + index}`,
-  seed: 101 + index,
-  aircraft: leg.aircraft,
-  departure: { icao: leg.from, ...AIRPORTS[leg.from] },
-  arrival: { icao: leg.to, ...AIRPORTS[leg.to] },
-  cruiseAltFt: leg.cruiseAltFt,
-  cruiseGs: leg.cruiseGs,
-  approachGs: leg.approachGs,
-  disturbances: leg.disturbances ?? [],
-}));
+function toScenario(leg: Leg, index: number): Scenario {
+  return {
+    name: `${leg.from.toLowerCase()}-${leg.to.toLowerCase()}`,
+    callsign: `WMS${101 + index}`,
+    seed: 101 + index,
+    aircraft: leg.aircraft,
+    departure: { icao: leg.from, ...AIRPORTS[leg.from] },
+    arrival: { icao: leg.to, ...AIRPORTS[leg.to] },
+    cruiseAltFt: leg.cruiseAltFt,
+    cruiseGs: leg.cruiseGs,
+    approachGs: leg.approachGs,
+    disturbances: leg.disturbances ?? [],
+  };
+}
+
+export const FLEET: readonly Scenario[] = LEGS.map(toScenario);
+
+/** Performance of each type for the extra legs of a large fleet (no disturbance). */
+const TYPES = [
+  { aircraft: A320, cruiseAltFt: 33000, cruiseGs: 450, approachGs: 140 },
+  { aircraft: A319, cruiseAltFt: 31000, cruiseGs: 440, approachGs: 135 },
+  { aircraft: B738, cruiseAltFt: 34000, cruiseGs: 455, approachGs: 145 },
+  { aircraft: E190, cruiseAltFt: 30000, cruiseGs: 420, approachGs: 130 },
+  { aircraft: CRJ9, cruiseAltFt: 29000, cruiseGs: 410, approachGs: 135 },
+  { aircraft: AT76, cruiseAltFt: 19000, cruiseGs: 270, approachGs: 115 },
+] as const;
+
+const ICAOS = Object.keys(AIRPORTS) as Icao[];
+
+/**
+ * Spec J4 (montée en charge): `count` flights, the 10 J1 routes first, then routes drawn
+ * deterministically between the same airports. Same count, same fleet, on every machine.
+ */
+export function fleetOf(count: number): Scenario[] {
+  const random = seededRandom(2026);
+  const pick = <T>(list: readonly T[]): T => list[Math.floor(random() * list.length)] as T;
+  return Array.from({ length: count }, (_, index) => {
+    const known = LEGS[index];
+    if (known) return toScenario(known, index);
+    const from = pick(ICAOS);
+    const to = pick(ICAOS.filter((icao) => icao !== from));
+    return toScenario({ from, to, ...pick(TYPES) }, index);
+  });
+}
