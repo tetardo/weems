@@ -1,3 +1,4 @@
+import { AircraftCategory } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { Link } from "../i18n/navigation.ts";
 import { Button, buttonClass } from "../ui/button.tsx";
@@ -7,9 +8,10 @@ import type { ListFilters } from "./list-query.ts";
 
 const FIELD = "flex flex-col gap-1.5 font-semibold";
 
-/** Period, aircraft, airport: a plain form, the filters live in the page address. */
+/** Period, aircraft, category, airport: a plain form, the filters live in the page address. */
 export function FlightFilters({ filters }: { filters: ListFilters }) {
   const t = useTranslations("Flights.filters");
+  const aircraft = useTranslations("Aircraft.categories");
   return (
     <CardBox className="mb-6">
       <form className="flex flex-wrap items-end gap-4" method="get">
@@ -24,6 +26,17 @@ export function FlightFilters({ filters }: { filters: ListFilters }) {
         <label className={`${FIELD} min-w-40 flex-1 sm:flex-none`}>
           {t("aircraft")}
           <input className={INPUT} name="aircraft" defaultValue={filters.aircraft} maxLength={64} />
+        </label>
+        <label className={`${FIELD} min-w-40 flex-1 sm:flex-none`}>
+          {t("category")}
+          <select className={INPUT} name="category" defaultValue={filters.category ?? ""}>
+            <option value="">{t("allCategories")}</option>
+            {AircraftCategory.options.map((category) => (
+              <option key={category} value={category}>
+                {aircraft(category)}
+              </option>
+            ))}
+          </select>
         </label>
         <label className={`${FIELD} w-36`}>
           {t("airport")}

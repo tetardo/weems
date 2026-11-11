@@ -15,6 +15,7 @@ export function summarize(flight: FlightRecord, events: readonly FlightEvent[]):
     callsign: flight.callsign,
     aircraftTitle: flight.aircraft.title,
     aircraftModel: flight.aircraft.model,
+    aircraftClass: flight.aircraftClass,
     departureIcao: flight.departureIcao,
     plannedArrivalIcao: flight.plannedArrivalIcao,
     openedAt: flight.openedAt,

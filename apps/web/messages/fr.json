@@ -113,6 +113,8 @@
       "from": "Du",
       "to": "Au",
       "aircraft": "Avion",
+      "category": "Catégorie",
+      "allCategories": "Toutes",
       "airport": "Aéroport (OACI)",
       "apply": "Filtrer",
       "reset": "Tout afficher"
@@ -325,7 +327,7 @@
       "label": "Explication",
       "level": "Niveau déclaré par le pilote lui-même. Weems ne le vérifie pas.",
       "distance": "Somme des distances le long des trajectoires enregistrées, vols montrés seulement. Tour de la Terre à l'équateur : 21 600 nm.",
-      "map": "Un arc par trajet, plus épais quand il est volé souvent. Les aéroports sont placés au premier et au dernier point enregistré de chaque vol.",
+      "map": "Un arc par trajet, plus épais quand il est volé souvent, de la couleur de la catégorie d'avion la plus volée sur ce trajet. Les aéroports sont placés au premier et au dernier point enregistré de chaque vol.",
       "activity": "Heures de vol par mois de départ (heure UTC). Un mois vide reste affiché.",
       "takeoffs": "Décollages par jour de la semaine et par heure, à l'heure locale de l'aéroport de départ. Plus la case est foncée, plus il y a de décollages.",
       "flights": "Vols terminés que le pilote a choisi de montrer. Les vols en cours et les vols masqués ne comptent pas.",
@@ -336,13 +338,16 @@
       "airports": "Aéroports de départ et d'arrivée différents, sur l'ensemble des vols montrés.",
       "aircraft": "Avions différents selon leur type OACI (A20N, B738…), ou leur nom dans le simulateur quand le type est inconnu.",
       "clean": "Atterrissages finaux avec un seul toucher, sans rebond ni remise des gaz.",
-      "average": "Vitesse verticale au premier contact de l'atterrissage final (après une éventuelle remise des gaz), moyenne sur les vols où elle a été mesurée.",
-      "best": "L'atterrissage final le plus doux : la vitesse verticale au toucher la plus proche de zéro."
+      "average": "Vitesse verticale au premier contact de l'atterrissage final (après une éventuelle remise des gaz), moyenne sur les vols où elle a été mesurée, pour tous les avions puis par catégorie : un toucher ferme n'a pas le même sens en C172 et en 787.",
+      "best": "L'atterrissage final le plus doux de chaque catégorie volée : la vitesse verticale au toucher la plus proche de zéro. Un seul record pour tous les avions favorisait les avions légers.",
+      "experience": "Heures de vol (roues en l'air) des vols terminés et montrés, rangées selon le type OACI de l'avion. Si le type est inconnu, Weems estime la catégorie à partir du moteur et de la masse que donne le simulateur.",
+      "engines": "Mêmes colonnes que le carnet de vol EASA : monomoteur (SE) et multimoteur (ME), d'après le nombre de moteurs donné par le simulateur."
     },
     "map": {
       "title": "Carte des vols",
       "note": "{airports, plural, =0 {aucun aéroport} one {# aéroport} other {# aéroports}} · {flights, plural, =0 {aucun vol} one {# vol} other {# vols}}",
-      "empty": "Pas encore de trajet à afficher."
+      "empty": "Pas encore de trajet à afficher.",
+      "width": "épaisseur = nombre de vols"
     },
     "stats": {
       "title": "Statistiques",
@@ -382,9 +387,22 @@
         "sub": "ft/min · {goArounds, plural, =0 {aucune remise des gaz} one {# remise des gaz} other {# remises des gaz}}"
       },
       "best": {
-        "label": "Meilleur atterrissage",
-        "sub": "ft/min · {airport}, {date}"
+        "label": "Meilleur atterrissage par catégorie",
+        "sub": "ft/min"
       }
+    },
+    "experience": {
+      "title": "Expérience par catégorie",
+      "note": "{hours} en vol",
+      "legend": "Répartition des heures en vol",
+      "singleEngine": "Monomoteur (SE)",
+      "multiEngine": "Multimoteur (ME)",
+      "flights": "{flights, plural, one {# vol} other {# vols}}",
+      "average": "Toucher moy.",
+      "hours": "Heures",
+      "fpm": "ft/min",
+      "flightsShare": "{flights, plural, one {# vol} other {# vols}} · {share}",
+      "notYet": "Pas encore volé :"
     },
     "charts": {
       "activity": {
@@ -430,5 +448,19 @@
       "hours": "de vol",
       "airports": "{count, plural, one {aéroport} other {aéroports}}"
     }
+  },
+  "Aircraft": {
+    "categories": {
+      "light": "Léger",
+      "turboprop": "Turbopropulseur",
+      "businessJet": "Jet d'affaires",
+      "regionalJet": "Jet régional",
+      "narrowBody": "Moyen-courrier",
+      "wideBody": "Long-courrier",
+      "helicopter": "Hélicoptère",
+      "other": "Autres"
+    },
+    "estimated": "{category} · estimée",
+    "estimatedHint": "Type absent du catalogue Weems : catégorie estimée d'après le moteur et la masse donnés par le simulateur."
   }
 }

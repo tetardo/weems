@@ -1,0 +1,12 @@
+flowchart LR
+  S["Simulateur<br/>ATC MODEL, CATEGORY,<br/>ENGINE TYPE, MAX GROSS WEIGHT"] --> T["Tracker<br/>type OACI extrait<br/>(TT:ATCCOM.AC_MODEL_B738…)"]
+  T -->|ouverture du vol| A{"API<br/>type dans le<br/>catalogue Weems ?"}
+  A -->|oui| K["Catégorie du catalogue"]
+  A -->|non| R{"Moteur, voilure,<br/>masse connus ?"}
+  R -->|oui| E["Catégorie estimée<br/>(pastille en pointillé)"]
+  R -->|non| U["Non classé"]
+  K --> D[("Base : catégorie<br/>stockée avec le vol")]
+  E --> D
+  U --> D
+  D --> W["Site : Mes vols, page de vol,<br/>filtre Catégorie"]
+  C["Catalogue modifié"] -.->|pnpm reclassify| D

@@ -58,15 +58,20 @@ describe("SimVars read by the MSFS connector", () => {
   });
 
   it("decodes the aircraft identity, strings first", () => {
-    const strings = ["Airbus A320neo", "A320", "F-WEMS"];
-    const numbers = [2, 90_000];
+    const strings = ["Airbus A320neo", "A320", "F-WEMS", "Airplane"];
+    const numbers = [2, 90_000, 1, 170_000];
     const raw = decodeAircraft(
       () => strings.shift() ?? "",
       () => numbers.shift() ?? 0,
     );
     expect(raw).toEqual({
-      strings: { title: "Airbus A320neo", model: "A320", registration: "F-WEMS" },
-      numbers: { engineCount: 2, emptyWeightLb: 90_000 },
+      strings: {
+        title: "Airbus A320neo",
+        model: "A320",
+        registration: "F-WEMS",
+        airframe: "Airplane",
+      },
+      numbers: { engineCount: 2, emptyWeightLb: 90_000, engineType: 1, maxGrossWeightLb: 170_000 },
     });
   });
 });

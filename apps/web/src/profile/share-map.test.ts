@@ -10,8 +10,8 @@ describe("share image map", () => {
 
   it("fits the arcs in the box, with one dot per airport", () => {
     const routes = [
-      { from: end("LFBO", 43.63, 1.37), to: end("EGLL", 51.47, -0.45), flights: 4 },
-      { from: end("EGLL", 51.47, -0.45), to: end("LFBO", 43.63, 1.37), flights: 1 },
+      { from: end("LFBO", 43.63, 1.37), to: end("EGLL", 51.47, -0.45), flights: 4, category: null },
+      { from: end("EGLL", 51.47, -0.45), to: end("LFBO", 43.63, 1.37), flights: 1, category: null },
     ];
     const map = shareMap(routes, 500, 300, 10);
     expect(map.lines).toHaveLength(2);

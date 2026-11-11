@@ -1,4 +1,5 @@
 import { type AircraftInfo, Sample, type Simulator } from "@weems/contrats";
+import { airframeOf, engineTypeOf, icaoTypeOf } from "./aircraft-identity.ts";
 import type { RawAircraft, RawSample } from "./sim-vars.ts";
 
 const FT_PER_S_TO_FT_PER_MIN = 60;
@@ -146,17 +147,25 @@ export function toSample(raw: RawSample, context: SampleContext): Sample | null 
 /** Empty strings from the simulator become null (spec T0: model and registration may be empty). */
 const textOrNull = (text: string): string | null => (text.trim() === "" ? null : text.trim());
 
+function positiveKg(pounds: number): number | null {
+  const weight = kg(pounds);
+  return weight !== null && weight > 0 ? weight : null;
+}
+
 export function toAircraft(raw: RawAircraft, simulator: Simulator): AircraftInfo | null {
   const title = textOrNull(raw.strings.title);
   if (title === null) return null;
   const engineCount = within(Math.round(raw.numbers.engineCount), 0, 8);
-  const emptyWeight = kg(raw.numbers.emptyWeightLb);
+  const model = textOrNull(raw.strings.model);
   return {
     simulator,
     title,
-    model: textOrNull(raw.strings.model),
+    model: model && icaoTypeOf(model),
     registration: textOrNull(raw.strings.registration),
     engineCount: engineCount ?? 0,
-    emptyWeightKg: emptyWeight !== null && emptyWeight > 0 ? emptyWeight : null,
+    emptyWeightKg: positiveKg(raw.numbers.emptyWeightLb),
+    engineType: engineTypeOf(raw.numbers.engineType),
+    airframe: airframeOf(raw.strings.airframe),
+    maxGrossWeightKg: positiveKg(raw.numbers.maxGrossWeightLb),
   };
 }

@@ -198,6 +198,11 @@ describe("public profile (spec J4)", () => {
     expect(profile.stats.dayS).toBeGreaterThan(0);
     expect(profile.stats.distanceNm).toBeGreaterThan(0);
     expect(profile.stats.cleanLandings).toEqual({ clean: 1, landings: 1 });
+    expect(profile.stats.experience).toMatchObject({
+      categories: [{ category: "narrowBody", flights: 1, averageTouchdownVs: -100 }],
+      multiEngine: { flights: 1 },
+      singleEngine: { flights: 0 },
+    });
     expect(profile.charts.recentLandings).toEqual([expect.objectContaining({ touchdownVs: -100 })]);
 
     const list = (await visit(`/v1/pilots/${handle}/flights`)).json();
@@ -257,6 +262,7 @@ describe("public profile (spec J4)", () => {
         from: { icao: "LFPG", lat: 49, lon: 2.5 },
         to: { icao: "LFBO", lat: 44, lon: 1.5 },
         flights: 2,
+        category: "narrowBody",
       },
     ]);
   });

@@ -30,6 +30,7 @@ Choix faits dans le connecteur sans avoir pu tester ; chaque ligne devient un pi
 - **Codes de `PUSHBACK STATE`** — Supposés 0, 1, 2 = repoussage en cours, 3 = aucun. Si faux, le vol s'ouvrirait au chargement ou jamais par le repoussage.
 - **MSFS 2020 ou 2024** — Déduit de la version renvoyée à la connexion (11 = 2020, 12 = 2024).
 - **N1 des moteurs à pistons** — 0 lu → « non mesuré ». À vérifier sur un Cessna 172.
+- **ATC MODEL en clé de traduction** — Sur MSFS 2020, beaucoup d'avions donnent `TT:ATCCOM.AC_MODEL_B738.0.text` au lieu de `B738` [Confiance moyenne, à confirmer sur le PC]. — Le connecteur extrait le type (`connectors/msfs/aircraft-identity.ts`) ; à vérifier sur les vols de référence de J2. — forums MSFS SDK
 - **Pause (`Pause_EX1`)** — Toute valeur non nulle = en pause. Croiser avec les pièges de pause ci-dessus.
 
 ## À compléter pendant les tests

@@ -113,6 +113,8 @@
       "from": "From",
       "to": "To",
       "aircraft": "Aircraft",
+      "category": "Category",
+      "allCategories": "All",
       "airport": "Airport (ICAO)",
       "apply": "Filter",
       "reset": "Show all"
@@ -325,7 +327,7 @@
       "label": "Explanation",
       "level": "Level declared by the pilot. Weems does not check it.",
       "distance": "Sum of the distances along the recorded tracks, shown flights only. Around the Earth at the equator: 21,600 nm.",
-      "map": "One arc per route, thicker when flown often. Airports are placed at the first and last recorded point of each flight.",
+      "map": "One arc per route, thicker when flown often, in the colour of the aircraft category most flown on it. Airports are placed at the first and last recorded point of each flight.",
       "activity": "Flight hours by month of departure (UTC). An empty month is still shown.",
       "takeoffs": "Takeoffs by day of the week and hour, in the local time of the departure airport. The darker the cell, the more takeoffs.",
       "flights": "Finished flights the pilot chose to show. Flights in progress and hidden flights do not count.",
@@ -336,13 +338,16 @@
       "airports": "Different departure and arrival airports, over all shown flights.",
       "aircraft": "Different aircraft by ICAO type (A20N, B738…), or by their simulator name when the type is unknown.",
       "clean": "Final landings with a single touchdown, no bounce and no go-around.",
-      "average": "Vertical speed at the first contact of the final landing (after any go-around), averaged over the flights where it was measured.",
-      "best": "The softest final landing: the touchdown vertical speed closest to zero."
+      "average": "Vertical speed at the first contact of the final landing (after any go-around), averaged over the flights where it was measured, for all aircraft then by category: a firm touchdown does not mean the same in a C172 and in a 787.",
+      "best": "The softest final landing of each flown category: the touchdown vertical speed closest to zero. A single record for all aircraft favoured light aircraft.",
+      "experience": "Airborne hours (wheels off the ground) of the finished, shown flights, sorted by the aircraft's ICAO type. When the type is unknown, Weems estimates the category from the engine and weight given by the simulator.",
+      "engines": "Same columns as the EASA logbook: single-engine (SE) and multi-engine (ME), from the number of engines given by the simulator."
     },
     "map": {
       "title": "Flight map",
       "note": "{airports, plural, =0 {no airports} one {# airport} other {# airports}} · {flights, plural, =0 {no flights} one {# flight} other {# flights}}",
-      "empty": "No route to show yet."
+      "empty": "No route to show yet.",
+      "width": "width = number of flights"
     },
     "stats": {
       "title": "Statistics",
@@ -382,9 +387,22 @@
         "sub": "ft/min · {goArounds, plural, =0 {no go-arounds} one {# go-around} other {# go-arounds}}"
       },
       "best": {
-        "label": "Best landing",
-        "sub": "ft/min · {airport}, {date}"
+        "label": "Best landing by category",
+        "sub": "ft/min"
       }
+    },
+    "experience": {
+      "title": "Experience by category",
+      "note": "{hours} airborne",
+      "legend": "Split of airborne hours",
+      "singleEngine": "Single-engine (SE)",
+      "multiEngine": "Multi-engine (ME)",
+      "flights": "{flights, plural, one {# flight} other {# flights}}",
+      "average": "Avg. touchdown",
+      "hours": "Hours",
+      "fpm": "ft/min",
+      "flightsShare": "{flights, plural, one {# flight} other {# flights}} · {share}",
+      "notYet": "Not flown yet:"
     },
     "charts": {
       "activity": {
@@ -430,5 +448,19 @@
       "hours": "flight hours",
       "airports": "{count, plural, one {airport} other {airports}}"
     }
+  },
+  "Aircraft": {
+    "categories": {
+      "light": "Light",
+      "turboprop": "Turboprop",
+      "businessJet": "Business jet",
+      "regionalJet": "Regional jet",
+      "narrowBody": "Narrow-body",
+      "wideBody": "Wide-body",
+      "helicopter": "Helicopter",
+      "other": "Other"
+    },
+    "estimated": "{category} · estimated",
+    "estimatedHint": "Type missing from the Weems catalogue: category estimated from the engines and weight given by the simulator."
   }
 }
