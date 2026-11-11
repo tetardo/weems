@@ -3,13 +3,29 @@
     "name": "Weems",
     "description": "Flight tracking for simulator pilots",
     "nav": {
+      "flights": "My flights",
       "live": "Live map",
-      "flights": "My flights"
+      "stats": "Statistics",
+      "logbook": "Logbook",
+      "vaDashboard": "Dashboard",
+      "vaFleet": "Fleet",
+      "vaRoutes": "Routes",
+      "vaPilots": "Pilots",
+      "vaBookings": "Bookings",
+      "vaSettings": "Settings",
+      "tracker": "Download the tracker",
+      "account": "My account",
+      "subscription": "Subscription"
     },
     "language": "Français",
     "notMeasured": "not measured",
     "openMenu": "Open the menu",
-    "closeMenu": "Close the menu"
+    "closeMenu": "Close the menu",
+    "menu": {
+      "airline": "My airline",
+      "account": "Account"
+    },
+    "planned": "Planned for lot {lot}"
   },
   "Live": {
     "title": "Live map",

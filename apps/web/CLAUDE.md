@@ -19,7 +19,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 
 - Next.js (App Router), React, TypeScript strict.
 - Traductions : `next-intl`, textes dans `messages/fr.json` et `messages/en.json`, jamais écrits en dur ; un test vérifie que les deux fichiers ont les mêmes clés.
-- Mise en forme : Tailwind CSS 4 (`src/app/global.css`). **Branche de maquette `mock/gamelab-side`** : look du projet GameLab IA de Greg (thème sombre par défaut, clair selon le système, jetons de couleur dans `global.css`, polices Inter et Space Grotesk servies par `next/font`, menu latéral de 240 px, en tiroir sous 1024 px ; variante sans menu latéral : branche `mock/gamelab`). Composants dans `src/ui/` et `src/site/`. Icônes : `@mdi/js`.
+- Mise en forme : Tailwind CSS 4 (`src/app/global.css`). **Branche de maquette `mock/gamelab-menus`** (menu final estimé : `src/site/menu-items.ts`, entrées des lots futurs affichées sans lien) : look du projet GameLab IA de Greg (thème sombre par défaut, clair selon le système, jetons de couleur dans `global.css`, polices Inter et Space Grotesk servies par `next/font`, menu latéral de 240 px, en tiroir sous 1024 px ; variante sans menu latéral : branche `mock/gamelab`). Composants dans `src/ui/` et `src/site/`. Icônes : `@mdi/js`.
 - Ne pas ajouter de bibliothèque de gestion d'état (Redux…) : les données viennent du serveur, les filtres sont dans l'adresse, le reste reste dans le composant.
 - Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé).
 - Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.

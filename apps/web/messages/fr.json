@@ -3,13 +3,29 @@
     "name": "Weems",
     "description": "Suivi des vols en simulation",
     "nav": {
+      "flights": "Mes vols",
       "live": "Carte en direct",
-      "flights": "Mes vols"
+      "stats": "Statistiques",
+      "logbook": "Carnet de vol",
+      "vaDashboard": "Tableau de bord",
+      "vaFleet": "Flotte",
+      "vaRoutes": "Lignes",
+      "vaPilots": "Pilotes",
+      "vaBookings": "Réservations",
+      "vaSettings": "Réglages",
+      "tracker": "Télécharger le tracker",
+      "account": "Mon compte",
+      "subscription": "Abonnement"
     },
     "language": "English",
     "notMeasured": "non mesuré",
     "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu"
+    "closeMenu": "Fermer le menu",
+    "menu": {
+      "airline": "Ma compagnie",
+      "account": "Compte"
+    },
+    "planned": "Prévu au lot {lot}"
   },
   "Live": {
     "title": "Carte en direct",
