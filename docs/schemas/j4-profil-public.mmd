@@ -1,0 +1,20 @@
+flowchart LR
+  subgraph PILOTE["Pilote connecté"]
+    direction TB
+    SET["/settings/profile<br/>activer, pseudo d'adresse"]
+    HIDE["Page de vol privée<br/>masquer ce vol"]
+  end
+  subgraph VISITEUR["Visiteur sans compte, moteur de recherche"]
+    direction TB
+    PROF["/pilots/{handle}<br/>pseudo, statistiques, vols"]
+    VOL["/pilots/{handle}/flights/{id}<br/>vol en lecture seule"]
+    MAP["sitemap.xml"]
+    PROF --> VOL
+    MAP --> PROF
+  end
+  SET -- "PUT /v1/me/profile" --> API["API<br/>module profiles"]
+  HIDE -- "PUT /v1/flights/{id}/visibility" --> API
+  PROF -- "GET /v1/pilots/{handle}<br/>…/flights" --> API
+  VOL -- "GET …/flights/{id}<br/>…/track" --> API
+  MAP -- "GET /v1/pilots" --> API
+  API --> DB[("PostgreSQL<br/>pilot_profiles<br/>flights.hidden_on_profile")]

@@ -48,7 +48,7 @@ Le « premier jalon » voulu par Greg (une API, un tracker et un site simple qui
 | J1 | Rédigé le 11/11/2026 : [spécification J1](../cahiers-des-charges/spec-J1-pilotes-simules.md) | Non |
 | J2 | Rédigés le 11/11/2026 : [spécification J2](../cahiers-des-charges/spec-J2-premier-vrai-vol.md) et [site minimal](../cahiers-des-charges/web/spec-J2-site-minimal.md) | Non |
 | J3 | Organisation du code de l'API (Fastify, réponse de Thibault) ; liste des 5 pilotes testeurs (Houssine) | Non |
-| J4 | Contenu du débriefing ; CGU et confidentialité ; vérification de la marque « Weems » ; micro-entreprise créée et compte Store ouvert à son nom | Débriefing : oui |
+| J4 | Rédigée le 11/11/2026 : [spécification du profil public](../cahiers-des-charges/spec-J4-profil-public.md) ; contenu du débriefing ; CGU et confidentialité ; vérification de la marque « Weems » ; micro-entreprise créée et compte Store ouvert à son nom | Débriefing : oui |
 | J5 | Procédure de support et de correctif d'urgence | Non |
 
 ## Lots suivants
