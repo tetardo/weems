@@ -17,7 +17,7 @@ export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: 
     [t("fields.groundSpeed"), `${number(position.gs)} kt`],
   ];
   return (
-    <aside className="absolute top-3 right-3 w-60 rounded-2xl border border-line bg-surface p-3 shadow-[0_8px_24px_rgb(0_0_0/.18)]">
+    <aside className="absolute top-21 right-3 w-60 sm:right-6 rounded-2xl border border-line bg-surface p-3 shadow-[0_8px_24px_rgb(0_0_0/.18)]">
       <div className="flex items-baseline justify-between">
         <strong className="text-lg">{flight.callsign}</strong>
         <button type="button" onClick={onClose} aria-label={t("close")}>

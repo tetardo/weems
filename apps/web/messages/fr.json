@@ -8,8 +8,8 @@
     },
     "language": "English",
     "notMeasured": "non mesuré",
-    "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu"
+    "mainNav": "Navigation principale",
+    "accountMenu": "Menu de {name}"
   },
   "Live": {
     "title": "Carte en direct",

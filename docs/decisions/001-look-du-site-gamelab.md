@@ -1,6 +1,6 @@
 # 001 — Look du site : style GameLab IA, menu latéral
 
-Date : 11/11/2026. Décidé par Greg.
+Date : 11/11/2026. Décidé par Greg. Partie « menu latéral » remplacée par la fiche 003 (barre flottante).
 
 ## Contexte
 

@@ -8,8 +8,8 @@
     },
     "language": "Français",
     "notMeasured": "not measured",
-    "openMenu": "Open the menu",
-    "closeMenu": "Close the menu"
+    "mainNav": "Main navigation",
+    "accountMenu": "{name}'s menu"
   },
   "Live": {
     "title": "Live map",

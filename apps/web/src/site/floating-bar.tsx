@@ -1,0 +1,16 @@
+import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
+import { Brand } from "./brand.tsx";
+import { MainNav } from "./main-nav.tsx";
+
+/** Translucent bar floating above the page: brand, tabs, then the pilot's menu. */
+export function FloatingBar({ account }: { account: ReactNode }) {
+  const t = useTranslations("Site");
+  return (
+    <header className="glass sticky top-3 z-30 mx-3 mt-3 flex h-15 items-center gap-2 rounded-[18px] pr-2 pl-3 sm:mx-6 xl:mx-auto xl:w-[1152px]">
+      <Brand name={t("name")} />
+      <MainNav />
+      <div className="ml-auto flex items-center gap-1 md:ml-0">{account}</div>
+    </header>
+  );
+}

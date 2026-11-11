@@ -18,7 +18,7 @@ export function SignOutButton({ label }: { label: string }) {
   return (
     <button type="button" onClick={signOut} className={buttonClass("ghost")} title={label}>
       <SignOutIcon size={20} aria-hidden="true" />
-      <span className="hidden lg:inline">{label}</span>
+      {label}
     </button>
   );
 }
