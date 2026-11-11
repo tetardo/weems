@@ -7,12 +7,9 @@
       "flights": "Mes vols"
     },
     "language": "English",
-    "notMeasured": "non mesuré"
-  },
-  "Home": {
-    "title": "Weems",
-    "live": "Carte en direct",
-    "flights": "Mes vols"
+    "notMeasured": "non mesuré",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
   },
   "Live": {
     "title": "Carte en direct",
