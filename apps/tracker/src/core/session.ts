@@ -28,16 +28,19 @@ export interface SessionOutput {
   close(request: CloseFlightRequest): void;
 }
 
-/** Airports known before the flight (SimBrief from T2). */
-interface FlightPlan {
+/** Airports entered by the pilot before the flight (SimBrief from T2). */
+export interface FlightPlan {
   departureIcao: string;
   arrivalIcao: string;
 }
 
 export interface SessionOptions {
   callsign: string;
-  /** Absent: departure and arrival are sent as unknown. */
-  flightPlan?: FlightPlan;
+  /**
+   * Required to open a flight (decision 007): null = the session never opens a new flight,
+   * because the live map needs the arrival. A flight resumed after a crash already has its own.
+   */
+  flightPlan: FlightPlan | null;
   trackerVersion: string;
   clock: Clock;
   /** New flight id (UUID v7) for the given UTC time. */
@@ -153,7 +156,8 @@ export class FlightSession {
 
   private open(sample: Sample): void {
     const aircraft = this.aircraft;
-    if (!aircraft) return;
+    const plan = this.options.flightPlan;
+    if (!aircraft || !plan) return;
     const nowUtcMs = this.options.clock.nowUtcMs();
     this.log = new FlightLog(nowUtcMs - sample.t, (event) => this.output.event(event));
     this.stateValue = "flying";
@@ -161,8 +165,8 @@ export class FlightSession {
       flightId: this.options.newFlightId(nowUtcMs),
       callsign: this.options.callsign,
       aircraft,
-      departureIcao: this.options.flightPlan?.departureIcao ?? null,
-      plannedArrivalIcao: this.options.flightPlan?.arrivalIcao ?? null,
+      departureIcao: plan.departureIcao,
+      plannedArrivalIcao: plan.arrivalIcao,
       openedAt: this.log.at(sample.t),
       trackerVersion: this.options.trackerVersion,
     });
