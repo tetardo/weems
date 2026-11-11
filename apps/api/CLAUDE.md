@@ -15,7 +15,7 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Liste des vols, trajectoires (J2) | `../../docs/cahiers-des-charges/spec-J2-premier-vrai-vol.md` |
 | Comptes, connexion du site et du tracker (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public du pilote (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
-| Comptes vus par la console d'administration (rôles, désactivation, invitations) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, fiche `../../docs/decisions/007-console-admin-locale.md` |
+| Comptes vus par la console d'administration (rôles, désactivation, invitations) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, fiche `../../docs/decisions/009-console-admin-locale.md` |
 | Ce que le tracker envoie | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` (section « Contrat avec l'API ») |
 | Formats des messages | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 | Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici) |
