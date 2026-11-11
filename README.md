@@ -6,7 +6,7 @@
 
 | Dossier | Contenu | État |
 | --- | --- | --- |
-| `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Cœur (phases, enregistrement, envoi), connecteur de rejeu, pilotes simulés ; connexion à MSFS au lot T1 |
+| `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Cœur (phases, enregistrement, envoi), connecteur de rejeu, pilotes simulés ; connecteur MSFS et commande `pnpm fly` (J2) |
 | `apps/api` | API centrale | Vols (J0), carte en direct par SSE (J1) |
 | `apps/web` | Suivi des vols sur le web | Carte en direct `/live` (J1) ; liste et page de vol, français et anglais (J2) |
 | `packages/contrats` | Formats échangés entre le tracker, l'API et le site | En place |
