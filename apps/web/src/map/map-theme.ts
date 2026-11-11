@@ -42,6 +42,6 @@ const LIGHT: MapTheme = {
 
 export const mapTheme = (dark: boolean): MapTheme => (dark ? DARK : LIGHT);
 
-/** Theme of the page, from the system setting, as global.css does. */
+/** Theme of the page, set on <html> by src/site/theme.ts. */
 export const currentMapTheme = (): MapTheme =>
-  mapTheme(!window.matchMedia("(prefers-color-scheme: light)").matches);
+  mapTheme(document.documentElement.dataset.theme !== "light");

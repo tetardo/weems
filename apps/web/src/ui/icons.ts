@@ -12,10 +12,11 @@ export {
   ChartLine as StatsIcon,
   Share2 as ShareIcon,
   CircleUserRound as ProfileIcon,
+  Globe as LanguageIcon,
   LogOut as SignOutIcon,
   type LucideIcon as IconComponent,
-  Menu as MenuIcon,
+  Moon as ThemeDarkIcon,
   Radar as LiveIcon,
+  Sun as ThemeLightIcon,
   Trash2 as DeleteIcon,
-  X as CloseIcon,
 } from "lucide-react";

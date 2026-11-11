@@ -4,14 +4,14 @@
     "description": "Flight tracking for simulator pilots",
     "nav": {
       "flights": "My flights",
-      "live": "Live map",
-      "account": "Account",
+      "live": "Live",
       "profile": "My public profile"
     },
     "language": "Français",
     "notMeasured": "not measured",
-    "openMenu": "Open the menu",
-    "closeMenu": "Close the menu",
+    "mainNav": "Main navigation",
+    "accountMenu": "{name}'s menu",
+    "toggleTheme": "Switch between light and dark theme",
     "public": {
       "logbook": "My logbook",
       "login": "Log in",

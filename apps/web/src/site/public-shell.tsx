@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Link } from "../i18n/navigation.ts";
 import { buttonClass } from "../ui/button.tsx";
-import { Brand } from "./brand.tsx";
+import { FloatingBar } from "./floating-bar.tsx";
 import { OtherLanguage } from "./top-bar.tsx";
 
 /** Way into Weems: the logbook when logged in, else login and sign-up (mock-up J4). */
@@ -28,20 +28,20 @@ function Entry({ loggedIn }: { loggedIn: boolean }) {
 }
 
 /**
- * Frame of the public pages (spec J4): no side menu, a top bar with the brand, the language and
- * the way into Weems.
+ * Frame of the public pages (spec J4): the same floating bar as the pilot's pages, without tabs
+ * nor dock; language, then the way into Weems.
  */
 export function PublicShell({ loggedIn, children }: { loggedIn: boolean; children: ReactNode }) {
-  const t = useTranslations("Site");
   return (
-    <div className="flex min-h-screen flex-col bg-bg pt-13">
-      <nav className="fixed inset-x-0 top-0 z-30 flex h-13 items-center gap-1 border-b border-line bg-surface px-4 text-sm">
-        <Brand name={t("name")} />
-        <div className="ml-auto flex items-center gap-1">
-          <OtherLanguage />
-          <Entry loggedIn={loggedIn} />
-        </div>
-      </nav>
+    <div className="app-glow flex min-h-screen flex-col">
+      <FloatingBar
+        account={
+          <>
+            <OtherLanguage />
+            <Entry loggedIn={loggedIn} />
+          </>
+        }
+      />
       <div className="flex flex-1 flex-col">{children}</div>
     </div>
   );

@@ -4,14 +4,14 @@
     "description": "Suivi des vols en simulation",
     "nav": {
       "flights": "Mes vols",
-      "live": "Carte en direct",
-      "account": "Compte",
+      "live": "Direct",
       "profile": "Mon profil public"
     },
     "language": "English",
     "notMeasured": "non mesuré",
-    "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu",
+    "mainNav": "Navigation principale",
+    "accountMenu": "Menu de {name}",
+    "toggleTheme": "Passer en thème clair ou sombre",
     "public": {
       "logbook": "Mon carnet",
       "login": "Se connecter",

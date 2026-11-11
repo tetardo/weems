@@ -1,9 +1,12 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Suspense } from "react";
 import { PilotMenu } from "../auth/pilot-menu.tsx";
+import { Link } from "../i18n/navigation.ts";
+import { buttonClass } from "../ui/button.tsx";
+import { ProfileIcon } from "../ui/icons.ts";
 import { LanguageSwitch } from "./language-switch.tsx";
 
-/** Button to the same page in the other language (top bar of every page). */
+/** Button to the same page in the other language (pilot's menu, public bar). */
 export function OtherLanguage() {
   const t = useTranslations("Site");
   const locale = useLocale();
@@ -14,12 +17,20 @@ export function OtherLanguage() {
   );
 }
 
-/** Right side of the top bar: language, then the pilot and the sign-out button. */
+/** Right side of the floating bar: the pilot's menu, with the public profile, language, sign out. */
 export function TopBar() {
+  const t = useTranslations("Site.nav");
   return (
-    <>
-      <OtherLanguage />
-      <PilotMenu />
-    </>
+    <PilotMenu
+      before={
+        <>
+          <Link href="/settings/profile" className={buttonClass("ghost")}>
+            <ProfileIcon size={20} aria-hidden="true" />
+            {t("profile")}
+          </Link>
+          <OtherLanguage />
+        </>
+      }
+    />
   );
 }
