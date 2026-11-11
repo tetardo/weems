@@ -19,6 +19,11 @@ export interface Config {
   apiUrl: string;
   /** Signs sessions and keys; at least 32 characters, mandatory in production. */
   authSecret: string;
+  /**
+   * Addresses allowed to give the visitor's address (X-Forwarded-For): the site's server, which
+   * calls the public routes for its visitors. Anyone else could fake it to escape the rate limits.
+   */
+  trustedProxies: string[];
 }
 
 const ENVS = ["development", "production", "test"] as const;
@@ -53,5 +58,9 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): Config {
     siteUrl: source["WEEMS_SITE_URL"] ?? "http://localhost:3001",
     apiUrl: source["WEEMS_API_URL"] ?? "http://localhost:3000",
     authSecret: readAuthSecret(env, source["WEEMS_AUTH_SECRET"]),
+    trustedProxies: (source["WEEMS_TRUSTED_PROXIES"] ?? "127.0.0.1,::1")
+      .split(",")
+      .map((address) => address.trim())
+      .filter(Boolean),
   };
 }

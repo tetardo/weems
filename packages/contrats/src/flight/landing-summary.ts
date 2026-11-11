@@ -1,4 +1,5 @@
-import { type FlightEvent, touchdownVsOf } from "@weems/contrats";
+import type { FlightEvent } from "../api/flights.ts";
+import { touchdownVsOf } from "./event-context.ts";
 
 export interface LandingSummary {
   /** Vertical speed of the first touchdown of the final landing, ft/min; null if not measured. */

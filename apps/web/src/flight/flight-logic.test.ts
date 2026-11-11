@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { eventValues, logEntries } from "./event-log.ts";
-import { landingSummary } from "./landing-summary.ts";
 import { PHASE_COLORS } from "./phase-colors.ts";
 import { phaseTimeline } from "./phase-timeline.ts";
 import { nearestIndex, profileGeometry } from "./profile-geometry.ts";
@@ -25,29 +24,6 @@ describe("phase timeline", () => {
   it("leaves the duration unknown while the flight is open, and ARRIVED without duration", () => {
     expect(phaseTimeline([phase(0, "CRUISE")], null)[0]?.durationS).toBeNull();
     expect(phaseTimeline([phase(0, "ARRIVED")], "2026-11-11T09:00:00.000Z")[0]?.durationS).toBe(0);
-  });
-});
-
-describe("landing summary", () => {
-  it("keeps the final landing after a go-around, and counts its bounces", () => {
-    const events = [
-      event(50, "touchdown", { vs: -900 }),
-      event(51, "goAround"),
-      event(60, "touchdown", { vs: -180.4 }),
-      event(60, "bounce"),
-      event(61, "touchdown", { vs: -60 }),
-    ];
-    expect(landingSummary(events)).toEqual({
-      touchdownVs: -180.4,
-      bounces: 1,
-      touchdowns: 3,
-      goArounds: 1,
-    });
-  });
-
-  it("is null without touchdown, and the rate unknown when not measured", () => {
-    expect(landingSummary([event(1, "paused")])).toBeNull();
-    expect(landingSummary([event(1, "touchdown")])?.touchdownVs).toBeNull();
   });
 });
 

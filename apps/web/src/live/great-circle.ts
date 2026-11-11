@@ -1,24 +1,22 @@
+import { distanceNm as sharedDistanceNm } from "@weems/contrats";
+
 /** A point in decimal degrees. */
 export interface LatLon {
   lat: number;
   lon: number;
 }
 
-/** Mean Earth radius in nautical miles. */
+/** Mean Earth radius in nautical miles, as in the shared distanceNm of packages/contrats. */
 const EARTH_RADIUS_NM = 3_440.065;
 const rad = (degrees: number) => (degrees * Math.PI) / 180;
 const deg = (radians: number) => (radians * 180) / Math.PI;
 
-/** Central angle between two points, in radians (haversine: stable for short distances). */
-function centralAngle(a: LatLon, b: LatLon): number {
-  const h =
-    Math.sin(rad(b.lat - a.lat) / 2) ** 2 +
-    Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(rad(b.lon - a.lon) / 2) ** 2;
-  return 2 * Math.asin(Math.min(1, Math.sqrt(h)));
-}
+/** Great-circle (orthodromic) distance in nautical miles (shared with the API's statistics). */
+export const distanceNm = (a: LatLon, b: LatLon): number =>
+  sharedDistanceNm(a.lat, a.lon, b.lat, b.lon);
 
-/** Great-circle (orthodromic) distance in nautical miles. */
-export const distanceNm = (a: LatLon, b: LatLon): number => EARTH_RADIUS_NM * centralAngle(a, b);
+/** Central angle between two points, in radians. */
+const centralAngle = (a: LatLon, b: LatLon): number => distanceNm(a, b) / EARTH_RADIUS_NM;
 
 /** Point at `fraction` (0 to 1) of the great circle from `a` to `b`. */
 function pointAlong(a: LatLon, b: LatLon, angle: number, fraction: number): [number, number] {
