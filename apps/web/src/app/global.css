@@ -1,9 +1,20 @@
-/* No branding before J4: plain, readable, full-screen map. */
+@import "tailwindcss";
+
+/* No branding before J4: plain and readable. Phase colours are in src/flight/phase-colors.ts. */
+@theme {
+  --color-ink: #14273a;
+  --color-muted: #5b6b7b;
+  --color-line: #dde3ea;
+}
+
 html,
 body {
-  margin: 0;
   height: 100%;
+}
+
+body {
+  margin: 0;
   font-family: system-ui, sans-serif;
-  color: #14273a;
+  color: var(--color-ink);
   background: #ffffff;
 }

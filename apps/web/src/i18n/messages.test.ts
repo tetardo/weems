@@ -1,0 +1,28 @@
+import { CloseReason, FLIGHT_PHASES, FlightAlert, FlightEventType } from "@weems/contrats";
+import { describe, expect, it } from "vitest";
+import en from "../../messages/en.json" with { type: "json" };
+import fr from "../../messages/fr.json" with { type: "json" };
+
+/** Every key path of a messages file, e.g. "Flight.header.date". */
+function keys(messages: object, prefix = ""): string[] {
+  return Object.entries(messages).flatMap(([key, value]) =>
+    typeof value === "object" && value !== null
+      ? keys(value, `${prefix}${key}.`)
+      : [`${prefix}${key}`],
+  );
+}
+
+describe("translations (spec J2, criterion 5)", () => {
+  it("has the same texts in French and English", () => {
+    expect(keys(en).sort()).toEqual(keys(fr).sort());
+  });
+
+  it.each([
+    ["Phases", FLIGHT_PHASES],
+    ["Events", FlightEventType.options],
+    ["Alerts", FlightAlert.options],
+    ["Status", [...CloseReason.options, "open"]],
+  ] as const)("translates every value shown under %s", (namespace, values) => {
+    for (const value of values) expect(keys(fr)).toContain(`${namespace}.${value}`);
+  });
+});

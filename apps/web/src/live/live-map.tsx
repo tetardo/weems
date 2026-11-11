@@ -1,22 +1,14 @@
 "use client";
 
-import {
-  type GeoJSONSource,
-  Map as MapLibreMap,
-  type MapMouseEvent,
-  setWorkerUrl,
-} from "maplibre-gl";
+import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
+import { createBaseMap } from "../map/base-map.ts";
 import { addAircraftIcons, ICON_LOST, ICON_OK } from "./aircraft-icons.ts";
 import type { LiveFlights } from "./flights-store.ts";
 import { Tracks } from "./tracks.ts";
 
-/** Free basemap without key (spec J1, open question settled at the start of J1). */
-const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 const SOURCE = "flights";
-/** Copied into public/ by scripts/copy-map-worker.ts. */
-const WORKER_URL = "/maplibre-gl-worker.mjs";
 
 interface Props {
   flights: LiveFlights;
@@ -58,13 +50,7 @@ export function LiveMap({ flights, selectedId, onSelect }: Props) {
 
   useEffect(() => {
     if (!container.current) return;
-    setWorkerUrl(WORKER_URL);
-    const instance = new MapLibreMap({
-      container: container.current,
-      style: STYLE_URL,
-      center: [5, 47],
-      zoom: 4.3,
-    });
+    const instance = createBaseMap(container.current, { center: [5, 47], zoom: 4.3 });
     map.current = instance;
     let frame = 0;
     const draw = () => {

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const config: NextConfig = {
   // Shared formats are TypeScript sources, compiled by the site like its own code.
@@ -8,4 +9,7 @@ const config: NextConfig = {
   agentRules: false,
 };
 
-export default config;
+/** Translations: messages/*.json, loaded by src/i18n/request.ts. */
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
+export default withNextIntl(config);

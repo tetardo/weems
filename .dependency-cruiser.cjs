@@ -20,7 +20,7 @@ module.exports = {
         orphan: true,
         pathNot: [
           "\\.test\\.ts$",
-          "\\.config\\.(js|ts|cjs)$",
+          "\\.config\\.(js|ts|cjs|mjs)$",
           "\\.d\\.ts$",
           "(^|/)src/(index|main|server)\\.ts$",
           "(^|/)tools/",

@@ -2,7 +2,8 @@
 
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
-J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API. La page de vol, les comptes et le reste du site arrivent en J2 et J3.
+J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). Les comptes arrivent en J3.
 
 ## Où trouver quoi
 
@@ -16,15 +17,35 @@ J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/
 ## Stack
 
 - Next.js (App Router), React, TypeScript strict.
+- Traductions : `next-intl`, textes dans `messages/fr.json` et `messages/en.json`, jamais écrits en dur ; un test vérifie que les deux fichiers ont les mêmes clés.
+- Mise en forme : Tailwind CSS 4 (`src/app/global.css`), sobre jusqu'à J4.
 - Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé).
-- Tests : Vitest sur la logique pure (`src/live/*.test.ts`) ; les composants React restent minces.
+- Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.
+- Les pages de vol sont rendues côté serveur : le serveur du site appelle l'API avec le jeton de développement (`WEEMS_API_URL`, `WEEMS_API_TOKEN`) ; seule la carte en direct appelle l'API depuis le navigateur.
 
 ## Organisation
 
 ```
+messages/              textes en français et en anglais
 src/
-  app/                 routes Next.js (pages et mise en page), sans logique
-  live/                carte en direct
+  app/[locale]/        routes Next.js (pages et mise en page), sans logique
+  proxy.ts             langue dans l'adresse (/ → /fr)
+  i18n/                langues, chargement des textes, liens qui gardent la langue
+  api/weems-api.ts     appels à l'API depuis le serveur du site (liste, vol, trajectoire)
+  site/                en-tête, choix de la langue, adresse de l'API, API injoignable
+  map/base-map.ts      carte MapLibre commune (fond OpenFreeMap, fond de secours sans réseau)
+  format/              durées h:mm, trajet, heure UTC
+  flights/             liste des vols : filtres (list-query.ts), tableau, pastilles, état
+  flight/              page de vol
+    phase-colors.ts       une couleur par phase (carte, profil, frise)
+    phase-timeline.ts     phases et durées depuis les événements
+    landing-summary.ts    taux au toucher, rebonds, remises des gaz
+    event-log.ts          événements du journal
+    track-geojson.ts      tracé par phase pour la carte
+    profile-geometry.ts   profil vertical en coordonnées SVG
+    track-map.tsx, vertical-profile.tsx, flight-track.tsx (point partagé carte/profil)
+    flight-header.tsx, phase-timeline-table.tsx, landing-panel.tsx, event-log-table.tsx
+  live/                carte en direct (J1)
     use-live-flights.ts   connexion SSE et reconnexion
     flights-store.ts      vols en cours (fonctions pures)
     tracks.ts             glissement entre deux positions
@@ -45,6 +66,6 @@ scripts/
 
 | Commande | Rôle |
 | --- | --- |
-| `pnpm --filter @weems/web dev` | Site sur http://localhost:3001 (l'API doit tourner sur le port 3000) |
+| `pnpm --filter @weems/web dev` | Site sur http://localhost:3001 (redirige vers /fr ; l'API doit tourner sur le port 3000) |
 | `pnpm --filter @weems/web build` | Construction de production |
 | `NEXT_PUBLIC_API_URL=… pnpm --filter @weems/web dev` | Viser une autre API |

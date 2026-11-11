@@ -151,6 +151,11 @@ Voir la [spécification du site minimal](web/spec-J2-site-minimal.md) : liste `/
 | Cadence de lecture (EF-09) | Chaque image pendant le décollage, l'atterrissage et sous 1 000 ft en vol ; une fois par seconde ailleurs, roulage compris | Le roulage dure longtemps et n'a pas besoin de chaque image ; garde la base locale légère |
 | Base locale de `pnpm fly` | `~/.weems-tracker/tracker.db`, gardée d'un lancement à l'autre | Un vol coupé (Ctrl+C, plantage) reprend au lancement suivant (ENF-02) |
 | À confirmer au premier vol réel | Signe de l'assiette et de l'inclinaison, codes de `PUSHBACK STATE`, numéro de version MSFS 2020/2024 | Choisis d'après la doc ; listés dans `pieges.md`, vérifiés par les vols de référence |
+| Pages du site | Rendues par le serveur du site, qui appelle l'API avec le jeton de développement ; seule la carte en direct appelle l'API depuis le navigateur | Le jeton ne part pas dans le navigateur ; une seule requête par page. Mesuré : vol de 2 h (7 200 points, 418 affichés) en 0,15 à 0,36 s |
+| Filtres de la liste | Formulaire simple, filtres dans l'adresse (jours UTC entiers) | Fonctionne sans JavaScript, une adresse filtrée se partage |
+| Fond de carte | Fond uni de secours si OpenFreeMap ne répond pas | La trajectoire reste visible sans réseau Internet |
+| Atterrissage | Taux au toucher, rebonds, touchers, remises des gaz ; facteur de charge non affiché | Le facteur de charge au toucher n'est pas encore dans les événements du tracker : il viendra avec les critères de notation (point 4 de la spec T0) |
+| Journal | Tous les événements sauf les changements de phase | Les phases ont leur propre frise |
 
 ## Questions ouvertes
 
