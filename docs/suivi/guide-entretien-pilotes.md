@@ -12,6 +12,8 @@ Le positionnement de Weems repose sur l'étude des concurrents, pas sur des pilo
 | H2 — Être jugé sur les règles réelles (approche stabilisée, 250 kt sous le niveau 100) intéresse | Il cite des règles réelles qu'il essaie de respecter | Il vole pour se détendre et rejette toute notation |
 | H3 — Une partie des pilotes paie déjà pour le réalisme | Il paie déjà Navigraph, des avions payants, un abonnement | Il n'a jamais rien payé au-delà du simulateur |
 
+**Avis du fondateur** (Greg, 11/11/2026) : H1 et H2 sont vraies. C'est le point de départ ; les entretiens servent à le confirmer auprès de pilotes qui ne connaissent pas le projet.
+
 **Seuil de décision** : si au moins 3 pilotes sur 5 confirment H1 et H2, le positionnement tient. Sinon, on revoit la différenciation avant l'alpha.
 
 ## Règles de conduite
