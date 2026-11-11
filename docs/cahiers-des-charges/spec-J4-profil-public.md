@@ -64,7 +64,7 @@ Règles :
 
 Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols ; statistiques (en tête de section, Activités et Heures de décollage sur une ligne, puis Durée des vols et Répartition des touchers (quart de largeur chacun) et Atterrissages (demi-largeur, à droite) sur la suivante ; ensuite les tuiles) ; compagnies (lot 3) ; expérience par catégorie et médailles côte à côte (toutes deux plus tard) ; liste des vols.
 
-- En-tête : photo (initiales à défaut), pseudo, drapeau et nom du pays, niveau déclaré, « sur Weems depuis » (création du compte), avion le plus volé, liens vers les pages VATSIM et IVAO du pilote, **distance parcourue** (somme des distances le long des trajectoires, en nautiques, avec l'équivalence en tours de la Terre, 21 600 nm), bouton « Partager ».
+- En-tête : photo (initiales à défaut), pseudo, drapeau et nom du pays, niveau déclaré, « sur Weems depuis » (création du compte), avion le plus volé, liens vers les pages VATSIM et IVAO et les comptes Instagram et Facebook du pilote, **distance parcourue** (somme des distances le long des trajectoires, en nautiques, avec l'équivalence en tours de la Terre, 21 600 nm), bouton « Partager ».
 - Statistiques : dix cases sur deux lignes, rangées pour la lecture (choix de Greg du 11/11/2026).
   - Volume : vols, heures de vol (temps en vol) et heures bloc, jour et nuit, plus long vol, **série en cours** (semaines d'affilée, du lundi au dimanche en UTC, avec au moins un vol montré ; et le record).
   - Lieux, avions et atterrissages : aéroports différents visités, avions différents, **atterrissages propres** (pourcentage de vols terminés par un seul toucher, sans rebond ni remise des gaz), toucher moyen avec le nombre de remises des gaz, meilleur atterrissage (le plus doux).
@@ -81,11 +81,13 @@ Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols 
 
 **Vol public** (`/pilots/{handle}/flights/{id}`) : la page de vol existante (carte colorée par phase, profil vertical, phases, atterrissage, journal), en lecture seule, avec un lien vers le profil. Le vol doit appartenir au pilote de l'adresse, sinon 404.
 
-**Réglages** (`/settings/profile`, connecté) : interrupteur, pseudo d'adresse, photo (envoyer, remplacer, retirer), pays, niveau, identifiants VATSIM, IVAO et SimBrief, lien « Voir mon profil public », rappel de ce qui est public. Ces champs sont gardés même profil désactivé (ils ne sont alors montrés à personne). Nouvelle section « Compte » du menu, entrée « Mon profil public ».
+**Réglages** (`/settings/profile`, connecté) : interrupteur, pseudo d'adresse, photo (envoyer, remplacer, retirer), pays, niveau, identifiants VATSIM, IVAO et SimBrief, comptes Instagram et Facebook, lien « Voir mon profil public », rappel de ce qui est public. Ces champs sont gardés même profil désactivé (ils ne sont alors montrés à personne). Nouvelle section « Compte » du menu, entrée « Mon profil public ».
 
 ![Maquette des réglages du profil public](img/j4-maquette-reglages.png)
 
 - Deux colonnes : à gauche « Publication » (interrupteur, date de publication, adresse avec vérification au fil de la frappe : disponible, déjà pris, mot réservé ; case d'accord obligatoire à la première activation) puis « Informations » (photo, pays, aéroport de base, niveau, identifiants, bouton « Enregistrer ») ; à droite « Ce qui est visible » (public ou jamais public) et « Vols masqués » (liste avec « Remontrer »).
+- Adresse de la page (ajout du 11/11/2026, maquette `/mnt/project-files/j4-profil/maquette-adresse.html` validée par Greg) : à droite du champ, « Copier le lien » (bulle « Lien copié » 2 secondes) et « Ouvrir dans un nouvel onglet ». Elles agissent sur l'adresse enregistrée : grisées tant que la page est désactivée, ou tant qu'une nouvelle adresse n'est pas enregistrée (le champ passe alors en orange avec l'avertissement « l'ancienne adresse cessera de fonctionner »).
+- Changer l'adresse d'une page publiée demande une confirmation à l'enregistrement : l'API ne garde pas les anciennes adresses, donc les liens déjà partagés mènent à une page introuvable et l'ancienne adresse redevient libre pour un autre pilote. Pas de confirmation pour une page désactivée (aucun lien ne peut casser). Une redirection de l'ancienne adresse n'est pas prévue.
 - La liste des vols masqués demande une route de plus : `GET /v1/me/profile/hidden-flights` (date et trajet de chaque vol masqué du pilote).
 - La vérification de l'adresse au fil de la frappe demande `GET /v1/me/profile/handle-check?handle=…` (disponible, pris, réservé, mal formé), limitée à 60 par minute et par pilote (toutes les demandes passent par l'adresse du site : une limite par adresse IP serait commune à tous).
 
@@ -98,9 +100,11 @@ Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols 
 | Niveau déclaré | `beginner`, `intermediate`, `advanced`, `realPilot` (Débutant, Intermédiaire, Confirmé, Pilote réel) | Pastille ; déclaratif, rien ne le vérifie |
 | VATSIM | Identifiant numérique (CID), 6 à 8 chiffres | Lien vers sa page de statistiques VATSIM |
 | IVAO | Identifiant numérique (VID), 5 à 7 chiffres | Lien vers sa page de membre IVAO |
+| Instagram (ajout du 11/11/2026) | Nom du compte, 1 à 30 caractères `A-Z a-z 0-9 . _` ; le formulaire accepte aussi `@nom` ou le lien du profil collé, et n'en garde que le nom | Pastille « Instagram @nom », lien vers `instagram.com/nom` |
+| Facebook (ajout du 11/11/2026) | Nom du compte ou identifiant numérique, 1 à 50 caractères `A-Z a-z 0-9 .` ; même lecture que pour Instagram (`profile.php?id=…` compris) | Pastille « Facebook nom » (« Facebook » seul pour un identifiant numérique), lien vers `facebook.com/nom` |
 | SimBrief | Nom d'utilisateur ou identifiant de pilote, 1 à 32 caractères `A-Z a-z 0-9 _ . -` | Jamais public (import du plan de vol par le tracker, plus tard) |
 
-Les adresses VATSIM et IVAO sont construites par le site à partir de l'identifiant, jamais saisies : aucun lien arbitraire sur une page publique.
+Les adresses VATSIM, IVAO, Instagram et Facebook sont construites par le site à partir de l'identifiant ou du nom du compte, jamais saisies : aucun lien arbitraire sur une page publique.
 
 **Photo** :
 
@@ -145,7 +149,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | `GET /v1/pilots/{handle}/photo` | Public | Photo en WebP 256 × 256 |
 | `GET /v1/pilots` | Public | Profils activés et date de mise à jour, pour le plan du site |
 
-- Base : nouvelle table `pilot_profiles` (compte, pseudo d'adresse unique, activé oui ou non, pays, aéroport de base, niveau, identifiants VATSIM, IVAO et SimBrief, dates d'activation, de désactivation et de mise à jour), une table `profile_hidden_flights` (vols masqués, avec le pilote) et une table `pilot_photos`. Ni la table `flights` ni celles de Better Auth ne changent : le module `profiles` n'écrit que dans ses tables, et lit les vols par le service du module `flights`.
+- Base : nouvelle table `pilot_profiles` (compte, pseudo d'adresse unique, activé oui ou non, pays, aéroport de base, niveau, identifiants VATSIM, IVAO et SimBrief, comptes Instagram et Facebook, dates d'activation, de désactivation et de mise à jour), une table `profile_hidden_flights` (vols masqués, avec le pilote) et une table `pilot_photos`. Ni la table `flights` ni celles de Better Auth ne changent : le module `profiles` n'écrit que dans ses tables, et lit les vols par le service du module `flights`.
 - Formats des réponses publiques dans `packages/contrats`, **distincts** des formats privés : un format public ne contient que les champs de la colonne « public » ci-dessus. C'est ce qui empêche une fuite si on ajoute plus tard un champ privé à un vol.
 - Statistiques calculées à la demande à partir des vols et de leurs événements. Suffisant en local et pour l'alpha ; à remplacer par des valeurs stockées à la clôture du vol si un profil dépasse quelques centaines de vols [Confiance moyenne].
 - Routes publiques limitées en débit par adresse IP du visiteur (protection contre l'aspiration des profils). Le serveur du site appelle l'API pour ses visiteurs : il transmet la dernière adresse de `X-Forwarded-For`, et l'API ne croit cet en-tête que venant des adresses de `WEEMS_TRUSTED_PROXIES` (le serveur du site). En ligne, le site devra rester derrière un proxy inverse qui ajoute l'adresse du visiteur (Caddy, nginx) : sans lui, un visiteur pourrait écrire l'en-tête lui-même.
@@ -167,7 +171,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | Vol en cours | Absent de la liste et 404 en public |
 | Aucune donnée privée | La réponse publique ne contient ni e-mail, ni identifiant de compte, ni version du tracker (test sur le contenu brut) |
 | Pseudo d'adresse | Mal formé : 400 ; réservé : 422 ; déjà pris : 409 ; deux demandes simultanées : une seule gagne |
-| Champs saisis | Pays, aéroport de base, niveau, VATSIM, IVAO ou SimBrief hors format : 400 ; SimBrief absent de la réponse publique |
+| Champs saisis | Pays, aéroport de base, niveau, VATSIM, IVAO, Instagram, Facebook ou SimBrief hors format : 400 ; SimBrief absent de la réponse publique |
 | Photo | Fichier qui n'est pas une image JPEG, PNG ou WebP : 422 ; type annoncé non accepté : 415 ; plus de 5 Mo : 413 ; image rendue en WebP 256 × 256 sans métadonnées ; 404 si le profil est désactivé |
 | Carte | Les trajets regroupent les vols dans les deux sens séparément ; vols masqués et sans trajectoire exclus |
 | Droits | Masquer le vol d'un autre pilote : 404 |

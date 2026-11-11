@@ -9,6 +9,8 @@ const FIELD_ERRORS = [
   "level",
   "vatsimId",
   "ivaoId",
+  "instagram",
+  "facebook",
   "simbriefId",
 ] as const;
 export type FieldError = (typeof FIELD_ERRORS)[number];
@@ -17,6 +19,18 @@ const text = (form: FormData, name: string): string | null => {
   const value = form.get(name);
   return typeof value === "string" && value.trim() !== "" ? value.trim() : null;
 };
+
+/**
+ * An account typed as @name or pasted as a link (instagram.com/name/, facebook.com/name,
+ * facebook.com/profile.php?id=123): the name alone, which the contract checks.
+ */
+export function accountName(value: string | null): string | null {
+  if (value === null) return null;
+  const numericId = /[?&]id=(\d+)/.exec(value)?.[1];
+  if (numericId) return numericId;
+  const path = value.replace(/^@/, "").replace(/^(https?:\/\/)?([a-z]+\.)?[a-z]+\.com\//i, "");
+  return path.replace(/[/?#].*$/, "");
+}
 
 /** The typed values, trimmed, empty as null, codes in their expected case. */
 const valuesOf = (form: FormData, isPublic: boolean) => ({
@@ -27,6 +41,8 @@ const valuesOf = (form: FormData, isPublic: boolean) => ({
   level: text(form, "level"),
   vatsimId: text(form, "vatsimId"),
   ivaoId: text(form, "ivaoId"),
+  instagram: accountName(text(form, "instagram")),
+  facebook: accountName(text(form, "facebook")),
   simbriefId: text(form, "simbriefId"),
 });
 
@@ -50,4 +66,18 @@ export function readProfileForm(
   // The API refuses a public page without address (422): said here, on the right field.
   if (isPublic && parsed.data.handle === null) return { ok: false, field: "handle" };
   return { ok: true, update: parsed.data };
+}
+
+/**
+ * True when saving this form moves a page that is online to another address: the old address
+ * stops working at once, so the pilot confirms first. A page that is or goes offline has no
+ * link to break.
+ */
+export function changesPublishedHandle(
+  saved: { isPublic: boolean; handle: string | null },
+  form: FormData,
+): boolean {
+  const handle = text(form, "handle")?.toLowerCase() ?? null;
+  const staysPublic = saved.isPublic && form.get("isPublic") === "on";
+  return staysPublic && saved.handle !== null && handle !== saved.handle;
 }

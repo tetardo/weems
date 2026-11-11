@@ -1,90 +1,74 @@
+"use client";
+
 import { type MyProfile, PilotLevel } from "@weems/contrats";
 import { useTranslations } from "next-intl";
-import type { ReactNode } from "react";
-import { INPUT_CLASS } from "../ui/input-class.ts";
+import type { InputHTMLAttributes } from "react";
+import { CountryFlag } from "../ui/country-flag.tsx";
+import { Field, FieldBadge } from "../ui/field.tsx";
+import { FieldGrid } from "../ui/form-section.tsx";
+import { AircraftIcon, type IconComponent, NetworkIcon, PrivateIcon } from "../ui/icons.ts";
+import { SearchSelect } from "../ui/search-select.tsx";
+import { Segmented } from "../ui/segmented.tsx";
+import { TextInput } from "../ui/text-input.tsx";
 
-/** A labelled field of the settings, with its help line. */
-function Field({
-  label,
-  help,
-  warn = false,
-  children,
-}: {
-  label: string;
-  help?: string;
-  warn?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <label className="mt-3.5 flex flex-col gap-1.5">
-      <span className="font-semibold">{label}</span>
-      {children}
-      {help && (
-        <span className={`text-[.9em] ${warn ? "text-accent-2" : "text-muted"}`}>{help}</span>
-      )}
-    </label>
-  );
+type TextName = "homeIcao" | "vatsimId" | "ivaoId" | "instagram" | "facebook" | "simbriefId";
+
+interface TextSpec {
+  help: string;
+  maxLength: number;
+  icon?: IconComponent;
+  prefix?: string;
+  input?: InputHTMLAttributes<HTMLInputElement>;
 }
-
-/** A list with « not specified » first. */
-function Choice({
-  name,
-  value,
-  options,
-  none,
-}: {
-  name: string;
-  value: string | null;
-  options: readonly { value: string; label: string }[];
-  none: string;
-}) {
-  return (
-    <select name={name} defaultValue={value ?? ""} className={INPUT_CLASS}>
-      <option value="">{none}</option>
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-type TextName = "homeIcao" | "vatsimId" | "ivaoId" | "simbriefId";
 
 /** Typed fields: limits of the contract (packages/contrats), help key in Settings.fields. */
-const TEXT_FIELDS: Record<
-  TextName,
-  { help: string; maxLength: number; extra?: object; warn?: true }
-> = {
+const TEXT_FIELDS: Record<TextName, TextSpec> = {
   homeIcao: {
     help: "homeIcaoHelp",
     maxLength: 4,
-    extra: { className: `${INPUT_CLASS} uppercase` },
+    icon: AircraftIcon,
+    input: { className: "font-mono uppercase tracking-wider", placeholder: "LFPG" },
   },
-  vatsimId: { help: "vatsimHelp", maxLength: 8, extra: { inputMode: "numeric" } },
-  ivaoId: { help: "ivaoHelp", maxLength: 7, extra: { inputMode: "numeric" } },
-  simbriefId: { help: "simbriefHelp", maxLength: 32, warn: true },
+  vatsimId: {
+    help: "vatsimHelp",
+    maxLength: 8,
+    icon: NetworkIcon,
+    input: { inputMode: "numeric" },
+  },
+  ivaoId: { help: "ivaoHelp", maxLength: 7, icon: NetworkIcon, input: { inputMode: "numeric" } },
+  // Room for a pasted profile link: the form keeps the account name only.
+  instagram: { help: "instagramHelp", maxLength: 100, prefix: "instagram.com/" },
+  facebook: { help: "facebookHelp", maxLength: 100, prefix: "facebook.com/" },
+  simbriefId: { help: "simbriefHelp", maxLength: 32, icon: PrivateIcon },
 };
 
 function TextField({ name, profile }: { name: TextName; profile: MyProfile }) {
   const t = useTranslations("Settings.fields");
-  const { help, maxLength, extra, warn = false } = TEXT_FIELDS[name];
+  const { help, maxLength, icon, prefix, input } = TEXT_FIELDS[name];
+  const isPrivate = name === "simbriefId";
   return (
-    <Field label={t(name)} help={t(help)} warn={warn}>
-      <input
+    <Field
+      label={t(name)}
+      htmlFor={name}
+      help={t(help)}
+      badge={isPrivate && <FieldBadge icon={PrivateIcon}>{t("private")}</FieldBadge>}
+    >
+      <TextInput
+        id={name}
         name={name}
         defaultValue={profile[name] ?? ""}
         maxLength={maxLength}
-        className={INPUT_CLASS}
-        {...extra}
+        autoComplete="off"
+        icon={icon}
+        prefix={prefix}
+        {...input}
       />
     </Field>
   );
 }
 
-/** Country, home airport, level and network ids (spec J4, « Champs saisis par le pilote »). */
-export function InformationFields({
+/** Country, home airport and level, under the photo (spec J4, « Champs saisis par le pilote »). */
+export function IdentityFields({
   profile,
   countries,
 }: {
@@ -94,28 +78,54 @@ export function InformationFields({
   const t = useTranslations("Settings.fields");
   const levels = useTranslations("Profile.levels");
   return (
-    <div className="grid gap-x-4 sm:grid-cols-2">
-      <Field label={t("country")}>
-        <Choice
+    <FieldGrid>
+      <Field label={t("country")} help={t("countryHelp")}>
+        <SearchSelect
           name="country"
-          value={profile.country}
+          label={t("country")}
+          defaultValue={profile.country}
           none={t("none")}
-          options={countries.map(({ code, name }) => ({ value: code, label: name }))}
+          empty={t("noCountry")}
+          options={countries.map(({ code, name }) => ({
+            value: code,
+            label: name,
+            icon: <CountryFlag code={code} name={name} />,
+          }))}
         />
       </Field>
       <TextField name="homeIcao" profile={profile} />
-      <Field label={t("level")} help={t("levelHelp")}>
-        <Choice
+      <Field label={t("level")} help={t("levelHelp")} className="@xl:col-span-2">
+        <Segmented
           name="level"
-          value={profile.level}
-          none={t("none")}
-          options={PilotLevel.options.map((level) => ({ value: level, label: levels(level) }))}
+          label={t("level")}
+          defaultValue={profile.level ?? ""}
+          options={[
+            { value: "", label: t("none") },
+            ...PilotLevel.options.map((level) => ({ value: level, label: levels(level) })),
+          ]}
         />
       </Field>
-      <div />
+    </FieldGrid>
+  );
+}
+
+/** Flight networks and social accounts, linked from the public page. */
+export function NetworkFields({ profile }: { profile: MyProfile }) {
+  return (
+    <FieldGrid>
       <TextField name="vatsimId" profile={profile} />
       <TextField name="ivaoId" profile={profile} />
+      <TextField name="instagram" profile={profile} />
+      <TextField name="facebook" profile={profile} />
+    </FieldGrid>
+  );
+}
+
+/** What Weems keeps for itself and never shows. */
+export function PrivateFields({ profile }: { profile: MyProfile }) {
+  return (
+    <FieldGrid>
       <TextField name="simbriefId" profile={profile} />
-    </div>
+    </FieldGrid>
   );
 }

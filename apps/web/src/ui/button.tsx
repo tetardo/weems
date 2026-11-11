@@ -6,6 +6,9 @@ const VARIANTS = {
     "bg-accent text-on-accent hover:bg-[color-mix(in_srgb,var(--color-accent)_85%,var(--color-ink))]",
   outline: "border border-line hover:bg-ink/9",
   ghost: "hover:bg-ink/9",
+  /** Goes ahead with something that cannot be undone, after a warning. */
+  caution:
+    "bg-accent-2 text-bg hover:bg-[color-mix(in_srgb,var(--color-accent-2)_85%,var(--color-ink))]",
   danger: "border border-danger/50 text-danger hover:bg-danger/12",
 } as const;
 

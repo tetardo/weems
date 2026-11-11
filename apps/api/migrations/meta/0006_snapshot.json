@@ -1,5 +1,5 @@
 {
-  "id": "8728a81c-f8b8-449a-8ae1-7f18d386dd32",
+  "id": "fed183e6-5b37-4422-96f9-487b0855e969",
   "prevId": "f7136177-a375-4828-bbc8-a52f434ab008",
   "version": "7",
   "dialect": "postgresql",
@@ -496,6 +496,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "instagram": {
+          "name": "instagram",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "facebook": {
+          "name": "facebook",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "simbrief_id": {
           "name": "simbrief_id",
           "type": "text",
@@ -707,20 +719,6 @@
           "type": "timestamp (3) with time zone",
           "primaryKey": false,
           "notNull": false
-        },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'pilot'"
-        },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "timestamp (3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now() + interval '14 days'"
         }
       },
       "indexes": {},
@@ -1976,19 +1974,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'pilot'"
-        },
-        "disabled_at": {
-          "name": "disabled_at",
-          "type": "timestamp (3) with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},

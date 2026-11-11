@@ -104,6 +104,8 @@ export const pilotProfiles = pgTable(
     level: text("level"),
     vatsimId: text("vatsim_id"),
     ivaoId: text("ivao_id"),
+    instagram: text("instagram"),
+    facebook: text("facebook"),
     simbriefId: text("simbrief_id"),
     /** Last time the profile was made public: proof of consent. */
     publishedAt: utc("published_at"),
