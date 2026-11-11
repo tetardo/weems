@@ -1,6 +1,6 @@
 # Espace d'administration : contenu des pages
 
-Rédigée le 11/11/2026, validée par Greg le 11/11/2026 (questions 1 à 6 tranchées ci-dessous). Maquettes : navigation G « barre latérale libellée », choisie le 11/11/2026 ; page Services v2 dans `/mnt/project-files/admin/services-v2/` (5 états, bureau et mobile, sombre et clair).
+Rédigée le 11/11/2026, validée par Greg le 11/11/2026 (questions 1 à 6 tranchées ci-dessous). Maquettes : navigation G « barre latérale libellée », choisie le 11/11/2026 ; pages Services et Trafic v2 dans `/mnt/project-files/admin/services-v2/` et `trafic-v2/` (bureau et mobile, sombre et clair).
 
 ## Objectif
 
@@ -77,7 +77,7 @@ flowchart LR
 | --- | --- | --- |
 | Commande | `pnpm simulate` | `pnpm load` |
 | Réglages | Pilotes : 1 à 10 (les 10 trajets de la flotte J1, en Europe), défaut 10. Vitesse : ×1, ×10, ×50, ×100, défaut ×10. Décalage entre deux départs : en secondes, défaut 30 | Pilotes : défaut 50. Spectateurs : défaut 100. Durée : en minutes, défaut 30. Vitesse : défaut ×1 |
-| Avertissement | Les vols sont enregistrés au nom du pilote de développement (`pilote@weems.local`) | Le test commence par **vider les vols du pilote de développement** (rappelé à côté du bouton) |
+| Avertissement | Les vols sont enregistrés au nom du pilote de développement (`pilote@weems.local`) | Le test commence par vider les vols simulés (jamais les vols MSFS), rappelé à côté du bouton |
 
 **Pendant un lancement** (bloc en haut de page)
 - État « En cours », réglages, heure de départ, temps écoulé, bouton **Arrêter** (sans confirmation).
@@ -90,7 +90,11 @@ flowchart LR
 
 **Derniers lancements** : les 20 derniers, du plus récent au plus ancien : date, mode, réglages, durée, résultat. Un clic ouvre le résumé. Gardés dans un fichier local de la console, ignoré par git.
 
-**Supprimer les vols simulés** : bouton en bas de page, avec confirmation, qui vide les vols du pilote de développement (route existante, absente en production).
+**Vols simulés en base** (bloc à côté de l'historique) : nombre de vols simulés, nombre de vols MSFS conservés, bouton **Supprimer les vols simulés** avec confirmation (« Supprimer 184 vols simulés ? »).
+
+**Règle de suppression** (décidée par Greg le 11/11/2026) : seuls les vols simulés sont supprimés, reconnus à leur simulateur `replay`. Les vols MSFS faits avec `pnpm fly`, qui appartiennent au même pilote de développement, ne sont jamais touchés. La même règle s'applique au nettoyage de départ de `pnpm load` (code déjà dans main, à corriger). La route de suppression reste absente en production.
+
+**Bouton Arrêter** (décidé par Greg le 11/11/2026) : les vols en cours sont clos avec la raison « interrompu » (`interrupted`) ; ils quittent la carte en direct et apparaissent « interrompus » dans la liste des vols. Le lancement est noté « Arrêté » dans l'historique.
 
 ## Page Comptes
 
