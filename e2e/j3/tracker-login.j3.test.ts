@@ -57,7 +57,9 @@ describe("J3 site and tracker login", () => {
     expect(new URL(page.url()).pathname).toBe("/en/login");
     await fillLogin(page);
     await page.waitForURL("**/en/flights?status=closed");
-    await expect(page.locator("header").innerText()).resolves.toContain("Pilote de développement");
+    await expect(page.locator("nav").first().innerText()).resolves.toContain(
+      "Pilote de développement",
+    );
     await page.close();
   });
 

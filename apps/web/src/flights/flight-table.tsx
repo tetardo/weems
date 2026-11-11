@@ -10,15 +10,13 @@ const COLUMNS = ["date", "callsign", "route", "aircraft", "airborne", "status", 
 /** One line per flight, newest first (spec site minimal, list). */
 export function FlightTable({ flights }: { flights: readonly FlightSummary[] }) {
   const t = useTranslations("Flights.columns");
-  const site = useTranslations("Site");
-  const format = useFormatter();
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-left text-sm">
-        <thead className="border-b border-line text-muted">
+      <table className="w-full text-left">
+        <thead>
           <tr>
             {COLUMNS.map((column) => (
-              <th key={column} className="px-2 py-1.5 font-normal">
+              <th key={column} className="p-3 font-semibold">
                 {t(column)}
               </th>
             ))}
@@ -26,33 +24,36 @@ export function FlightTable({ flights }: { flights: readonly FlightSummary[] }) 
         </thead>
         <tbody>
           {flights.map((flight) => (
-            <tr key={flight.flightId} className="border-b border-line hover:bg-slate-50">
-              <td className="px-2 py-1.5 whitespace-nowrap">
-                <Link href={`/flights/${flight.flightId}`} className="underline">
-                  {format.dateTime(new Date(flight.openedAt), {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  })}
-                </Link>
-              </td>
-              <td className="px-2 py-1.5 whitespace-nowrap">{flight.callsign}</td>
-              <td className="px-2 py-1.5 whitespace-nowrap">
-                {formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}
-              </td>
-              <td className="px-2 py-1.5">{flight.aircraftModel ?? flight.aircraftTitle}</td>
-              <td className="px-2 py-1.5">
-                {formatDuration(flight.times.airborneS) ?? site("notMeasured")}
-              </td>
-              <td className="px-2 py-1.5">
-                <FlightStatus closeReason={flight.closeReason} />
-              </td>
-              <td className="px-2 py-1.5">
-                <AlertBadges alerts={flight.alerts} />
-              </td>
-            </tr>
+            <FlightRow key={flight.flightId} flight={flight} />
           ))}
         </tbody>
       </table>
     </div>
+  );
+}
+
+function FlightRow({ flight }: { flight: FlightSummary }) {
+  const site = useTranslations("Site");
+  const format = useFormatter();
+  return (
+    <tr className="odd:bg-gray-100/50 hover:bg-gray-100">
+      <td className="p-3 whitespace-nowrap">
+        <Link href={`/flights/${flight.flightId}`} className="text-blue-600 hover:underline">
+          {format.dateTime(new Date(flight.openedAt), { dateStyle: "short", timeStyle: "short" })}
+        </Link>
+      </td>
+      <td className="p-3 whitespace-nowrap">{flight.callsign}</td>
+      <td className="p-3 whitespace-nowrap">
+        {formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}
+      </td>
+      <td className="p-3">{flight.aircraftModel ?? flight.aircraftTitle}</td>
+      <td className="p-3">{formatDuration(flight.times.airborneS) ?? site("notMeasured")}</td>
+      <td className="p-3">
+        <FlightStatus closeReason={flight.closeReason} />
+      </td>
+      <td className="p-3">
+        <AlertBadges alerts={flight.alerts} />
+      </td>
+    </tr>
   );
 }
