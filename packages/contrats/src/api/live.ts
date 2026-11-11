@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AircraftClass } from "./aircraft-class.ts";
 import { FlightId, IcaoCode, UtcTimestamp } from "./common.ts";
 import { PositionReport } from "./flights.ts";
 
@@ -8,6 +9,8 @@ export const LiveFlight = z.object({
   callsign: z.string(),
   aircraftTitle: z.string(),
   aircraftModel: z.string().nullable(),
+  /** Colour and silhouette on the map (spec J4, aircraft categories). */
+  aircraftClass: AircraftClass.nullable(),
   departureIcao: IcaoCode.nullable(),
   plannedArrivalIcao: IcaoCode.nullable(),
   position: PositionReport,
