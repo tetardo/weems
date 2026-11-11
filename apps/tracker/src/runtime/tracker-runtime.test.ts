@@ -15,6 +15,8 @@ const flight = generateFlight(LFPG_LFBO);
 let ids = 0;
 
 let dir: string;
+/** Databases left open by a simulated crash: closed before cleaning (Windows cannot delete them). */
+let opened: { db: { isOpen: boolean; close(): void } }[] = [];
 let calls: { path: string; body: unknown }[];
 const api: ApiClient = {
   post: async (path, body) => {
@@ -33,13 +35,15 @@ const sessionAt = (utcMs: number) => ({
 
 /** One tracker run on the same local database file, with the clock at `utcMs`. */
 function runtime(replay: Replay, utcMs: number, connector = new ReplayConnector(replay)) {
-  return createTracker({
+  const tracker = createTracker({
     connector,
     databasePath: join(dir, "tracker.db"),
     api,
     random: () => 0,
     session: sessionAt(utcMs),
   });
+  opened.push(tracker.recorder);
+  return tracker;
 }
 
 /** Splits the generated flight at sample time `t`; the second part starts with the aircraft. */
@@ -63,7 +67,11 @@ beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), "weems-runtime-"));
   calls = [];
 });
-afterEach(() => rmSync(dir, { recursive: true, force: true }));
+afterEach(() => {
+  for (const { db } of opened) if (db.isOpen) db.close();
+  opened = [];
+  rmSync(dir, { recursive: true, force: true });
+});
 
 describe("tracker runtime", () => {
   it("records and sends a whole flight", async () => {
