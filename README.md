@@ -23,6 +23,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 - [Architecture et flux](docs/cadrage/02-architecture-et-flux.md) : API, données, flux, hébergement, décisions ouvertes
 - [Fondamentaux](docs/cadrage/03-fondamentaux.md) : moyens, objectif, gratuit et payant, statut juridique, environnements
 - [Lots et feuille de route](docs/cadrage/04-lots-et-feuille-de-route.md) : lots 1 à 4, jalons J0 à J5 du lot 1
+- [Règles de développement](docs/developpement/regles-de-developpement.md) : définition de « terminé », tests, branches, garde-fous Claude Code
 - [Spécification J0 de l'API](docs/cahiers-des-charges/api/spec-J0-api.md) : conventions, modèle de données, routes
 - [Spécification J1](docs/cahiers-des-charges/spec-J1-pilotes-simules.md) : 10 pilotes simulés sur la carte en direct
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4

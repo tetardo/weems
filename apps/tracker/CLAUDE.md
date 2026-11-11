@@ -24,6 +24,7 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 
 | Besoin | Fichier |
 | --- | --- |
+| Règles communes (terminé, tests, branches, sécurité) | `../../docs/developpement/regles-de-developpement.md` |
 | Pourquoi on fait ça, fonctionnalités, concurrence, données à exploiter | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` |
 | Données reçues par le cœur, règles des 12 phases, seuils (lot T0) | `../../docs/cahiers-des-charges/tracker/spec-T0.md` |
 | Quelle SimVar lire, son unité, sa fiabilité | `docs/reference/simvars.yaml` |

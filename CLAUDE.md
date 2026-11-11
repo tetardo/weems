@@ -1,6 +1,6 @@
 # Weems — dépôt unique
 
-Lire d'abord `README.md` (organisation). Chaque application a son propre `CLAUDE.md` (par exemple `apps/tracker/CLAUDE.md`).
+Lire d'abord `README.md` (organisation), puis `docs/developpement/regles-de-developpement.md` avant toute modification de code. Chaque application a son propre `CLAUDE.md` (par exemple `apps/tracker/CLAUDE.md`).
 
 - Langue des documents : français. Code et identifiants : anglais.
 - Stack : TypeScript partout (Node.js), Python seulement pour l'analyse de données, Swift seulement pour l'app iPad (après le lot 1).
