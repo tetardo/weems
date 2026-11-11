@@ -31,14 +31,14 @@ Une modification n'est terminée que si **tous** ces points sont vrais :
 
 | Sujet | Choix | Pourquoi |
 | --- | --- | --- |
-| Node.js | Version LTS en cours, fixée dans `.nvmrc` | La même sur le Mac, le PC et l'intégration continue |
+| Node.js | Version 24 (LTS), fixée dans `.nvmrc` | La même sur le Mac, le PC et l'intégration continue |
 | Gestion du dépôt | pnpm avec espaces de travail (`apps/*`, `packages/*`) [Confiance moyenne] | Gère proprement les paquets partagés d'un dépôt unique, rapide, économe en disque |
-| TypeScript | Mode strict, aucun `any` sans commentaire qui le justifie | Les erreurs de type sont la première protection quand personne ne relit |
+| TypeScript | Version 6, mode strict renforcé (`tsconfig.base.json`), aucun `any` | Les erreurs de type sont la première protection quand personne ne relit |
 | Style | ESLint et Prettier, appliqués automatiquement | Aucun débat de forme, diff lisibles |
 | Tests | Vitest partout | Un seul outil à connaître |
 | Formats partagés | Zod dans `packages/contrats` | Une seule définition pour le tracker, l'API et le site |
 
-Une commande à la racine lance tout : `pnpm check` (types, style, analyse de structure, tests).
+Une commande à la racine lance tout : `pnpm check` (types, style, analyse de structure, tests). Les réglages sont dans `eslint.config.js`, `.dependency-cruiser.cjs`, `.jscpd.json` et `knip.json`.
 
 ## 4. Structure du code
 

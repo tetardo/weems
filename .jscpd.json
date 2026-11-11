@@ -1,0 +1,11 @@
+{
+  "threshold": 1,
+  "minLines": 8,
+  "minTokens": 70,
+  "path": ["apps", "packages"],
+  "format": ["typescript", "tsx"],
+  "ignore": ["**/node_modules/**", "**/dist/**", "**/*.test.ts", "**/docs/**"],
+  "reporters": ["console"],
+  "exitCode": 1,
+  "gitignore": true
+}

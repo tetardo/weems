@@ -1,0 +1,34 @@
+{
+  "name": "weems",
+  "private": true,
+  "description": "Weems monorepo: tracker, API, web, shared packages",
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "check": "pnpm typecheck && pnpm lint && pnpm structure && pnpm test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write . && eslint . --fix",
+    "structure": "pnpm structure:deps && pnpm structure:duplicates && pnpm structure:unused",
+    "structure:deps": "depcruise apps packages --config .dependency-cruiser.cjs",
+    "structure:duplicates": "jscpd",
+    "structure:unused": "knip",
+    "test": "vitest run --passWithNoTests"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "^24.19.2",
+    "dependency-cruiser": "18.7.2",
+    "eslint": "10.14.0",
+    "eslint-config-prettier": "10.1.8",
+    "jscpd": "5.4.3",
+    "knip": "6.45.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
+    "vitest": "5.1.0"
+  }
+}

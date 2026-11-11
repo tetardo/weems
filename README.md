@@ -38,8 +38,18 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 ## Travailler sur le projet
 
 1. Cloner le dépôt : `git clone https://github.com/tetardo/weems`
-2. L'ouvrir dans VS Code avec Claude Code : les fichiers `CLAUDE.md` donnent le contexte à l'agent.
-3. Documentation SDK MSFS (copie locale, non versionnée) : `cd apps/tracker && bash scripts/update-msfs-docs.sh`
+2. Installer Node.js 24 (version fixée dans `.nvmrc`, par exemple avec `nvm install`) et activer pnpm : `corepack enable`
+3. Installer les dépendances : `pnpm install`
+4. Tout vérifier (types, style, structure, tests) : `pnpm check`
+5. L'ouvrir dans VS Code avec Claude Code : les fichiers `CLAUDE.md` donnent le contexte à l'agent, et Claude ne peut pas annoncer une tâche terminée si `pnpm check` échoue (réglage dans `.claude/settings.json`).
+6. Documentation SDK MSFS (copie locale, non versionnée) : `cd apps/tracker && bash scripts/update-msfs-docs.sh`
+
+| Commande | Rôle |
+| --- | --- |
+| `pnpm check` | Tout : types, style, structure, tests. Doit passer avant toute fusion |
+| `pnpm format` | Remet le code en forme automatiquement |
+| `pnpm structure` | Frontières entre modules, code dupliqué, code inutilisé |
+| `pnpm test` | Tests de toutes les applications et de tous les paquets |
 
 **Schémas** : sources Mermaid dans `docs/schemas/`, images régénérées par `bash scripts/render-schemas.sh`.
 
