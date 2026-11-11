@@ -75,7 +75,8 @@ src/
     flights-store.ts      vols en cours (fonctions pures)
     tracks.ts             glissement entre deux positions
     interpolate.ts        calcul du point intermédiaire et du cap
-    aircraft-icons.ts     silhouettes d'avion dessinées
+    aircraft-shapes.ts    silhouette et taille par catégorie d'avion, nom des images (testé)
+    aircraft-icons.ts     dessin des silhouettes, couleur de la catégorie (lue dans global.css), grise si signal perdu
     live-map.tsx          carte MapLibre
     flight-panel.tsx      panneau du vol choisi
     live-view.tsx         assemblage de la page

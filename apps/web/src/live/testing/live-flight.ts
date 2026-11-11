@@ -7,6 +7,7 @@ export function liveFlight(flightId: string, overrides: Partial<LiveFlight> = {}
     callsign: "WMS101",
     aircraftTitle: "Airbus A320neo",
     aircraftModel: "A20N",
+    aircraftClass: { category: "narrowBody", estimated: false },
     departureIcao: "LFLL",
     plannedArrivalIcao: "LFMN",
     position: {

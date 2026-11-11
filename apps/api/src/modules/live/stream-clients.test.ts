@@ -27,6 +27,7 @@ const info: LiveFlightInfo = {
   callsign: "WMS101",
   aircraftTitle: "Airbus A320neo",
   aircraftModel: "A20N",
+  aircraftClass: { category: "narrowBody", estimated: false },
   departureIcao: "LFLL",
   plannedArrivalIcao: "LFMN",
 };
