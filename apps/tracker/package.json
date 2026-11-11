@@ -1,0 +1,15 @@
+{
+  "name": "@weems/tracker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Weems flight tracker: core, connectors, recorder, sender",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "generate-flight": "node tools/generate-flights/cli.ts"
+  },
+  "dependencies": {
+    "@weems/contrats": "workspace:*",
+    "zod": "4.6.7"
+  }
+}

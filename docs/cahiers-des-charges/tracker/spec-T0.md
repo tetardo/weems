@@ -150,6 +150,21 @@ Les points 3 et 4 doivent être traités avant la fin de T0 : sans eux, pas de s
 | Changement d'avion en cours de vol | Événement noté, vol clôturé, motif « changement d'avion » |
 | Accélération du temps | Autorisée, notée avec sa durée. La décision (valide ou non) revient à la règle |
 
+### Choix faits pendant le développement du cœur (11/11/2026)
+
+À relire avec le pilote, en même temps que les seuils.
+
+| Sujet | Choix | Pourquoi |
+| --- | --- | --- |
+| Toucher sans passer par `FINAL` | `DESCENT` ou `APPROACH` au sol passent aussi en `LANDING` | Sans cela, un avion posé avec le train mal lu resterait bloqué en approche et le vol ne se clôturerait jamais |
+| `DESCENT` vers `CRUISE` | Seulement au-dessus de `APPROACH_HEIGHT` | Un palier à 2 500 ft pendant la descente finale est une approche, pas une croisière |
+| Hauteur de référence | `altAgl` à J0 | La base des aéroports arrive en J2 |
+| Vitesse verticale au toucher | Celle du premier échantillon au sol | À remplacer par les données `Touchdown` du simulateur en T1 |
+| Train sorti | `gearHandle` inconnu (`null`) est traité comme un train fixe | Ne pas bloquer la finale d'un avion dont on ne lit pas le train |
+| Cadence de lecture (EF-09) | Pas encore décidée par le cœur | Utile seulement avec le connecteur MSFS (T1) |
+
+Code : `apps/tracker/src/core/phases/` (règles dans `rules.ts`, seuils dans `params.ts`).
+
 ### Paramètres de départ, à valider avec un pilote
 
 | Paramètre | Valeur | Rôle |

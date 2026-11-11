@@ -42,6 +42,24 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 - Une donnée indisponible sur un avion ne doit jamais pénaliser le pilote : le tracker l'indique « non mesurée ».
 - Les tests passent par le connecteur de test (rejeu de vols enregistrés et scénarios), pas par le simulateur.
 
+## Code (J0)
+
+```
+src/core/                 cœur sans dépendance : session de vol, journal des événements, phases
+  phases/                 params.ts (seuils), rules.ts (transitions), phase-machine.ts, landing-tracker.ts
+  connector.ts            interface SimConnector ; clock.ts : horloge injectée
+src/connectors/replay/    format de rejeu JSONL et connecteur de rejeu
+tools/generate-flights/   générateur de vols synthétiques déterministe
+```
+
+| Commande (depuis `apps/tracker/`) | Effet |
+| --- | --- |
+| `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
+| `pnpm check` (racine) | Types, style, structure, tests |
+
+- Un seuil se change dans `params.ts`, jamais dans une règle.
+- Toute nouvelle règle ou cas particulier : un test dans `phase-machine.test.ts` et, si possible, une perturbation du générateur testée de bout en bout dans `generator.test.ts`.
+
 ## Mettre la documentation à jour
 
 ```
