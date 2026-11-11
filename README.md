@@ -30,6 +30,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4
 - [Architecture interne du tracker](docs/cahiers-des-charges/tracker/architecture-interne.md) : cœur indépendant, connecteurs, enregistreur, envoi hors ligne
 - [Spécification T0 du tracker](docs/cahiers-des-charges/tracker/spec-T0.md) : données reçues et règles des phases
+- [Guide d'entretien pilotes](docs/suivi/guide-entretien-pilotes.md) : valider le produit avec 5 pilotes avant l'alpha
 - [À voir avec Houssine](docs/suivi/a-voir-avec-houssine.md) : questions en attente pour la communauté
 - [À voir avec Thibault](docs/suivi/a-voir-avec-thibault.md) : questions techniques en attente
 - [Référence MSFS du tracker](apps/tracker/CLAUDE.md) : quelles données lire et comment
