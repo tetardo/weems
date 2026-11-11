@@ -1,6 +1,6 @@
 # Espace d'administration : contenu des pages
 
-Rédigée le 11/11/2026, validée par Greg le 11/11/2026 (questions 1 à 6 tranchées ci-dessous). Maquettes : navigation G « barre latérale libellée », choisie le 11/11/2026 (`/mnt/project-files/admin/`, à reprendre après validation de cette spec).
+Rédigée le 11/11/2026, validée par Greg le 11/11/2026 (questions 1 à 6 tranchées ci-dessous). Maquettes : navigation G « barre latérale libellée », choisie le 11/11/2026 ; page Services v2 dans `/mnt/project-files/admin/services-v2/` (5 états, bureau et mobile, sombre et clair).
 
 ## Objectif
 
@@ -48,14 +48,17 @@ flowchart LR
 
 | | Base de données | API | Site web |
 | --- | --- | --- | --- |
-| Lancement | Conteneur `db` (Docker) | Conteneur `api` (Docker) | Processus `pnpm --filter @weems/web dev`, lancé par la console |
+| Lancement | Conteneur `db` (Docker) | Processus `pnpm --filter @weems/api dev`, lancé par la console (mode **Développement**, par défaut) ; ou conteneur `api` (mode **Docker**) | Processus `pnpm --filter @weems/web dev`, lancé par la console |
 | Port | 5432 | 3000 | 3001 |
 | Santé affichée | Contrôle Docker (`pg_isready`) | `GET /v1/health` : code et temps de réponse | La page d'accueil répond |
-| Informations | État, depuis quand, image | État, depuis quand, date de construction de l'image | État, depuis quand |
-| Actions | Démarrer, Arrêter, Redémarrer, Journaux | Démarrer, Arrêter, Redémarrer, **Reconstruire**, Journaux | Démarrer, Arrêter, Redémarrer, Journaux |
+| Informations | État, depuis quand, image | État, mode, processus, depuis quand | État, depuis quand |
+| Actions | Démarrer, Arrêter, Redémarrer, Journaux | Démarrer, Arrêter, Redémarrer, Journaux ; choix du mode Développement / Docker | Démarrer, Arrêter, Redémarrer, Journaux |
 
 - **États possibles** : En marche, Arrêté, Démarre…, En erreur (le conteneur s'arrête tout seul, ou la santé échoue 3 fois de suite), **Lancé hors console** (le port est pris par un programme que la console n'a pas lancé, par exemple `pnpm dev` dans un Terminal : la console l'affiche mais ne l'arrête pas).
-- **Reconstruire l'API** : reconstruit l'image puis redémarre le conteneur. Nécessaire après chaque modification du code de l'API, sinon le conteneur garde l'ancienne version.
+- **Mode de l'API** (décidé par Greg le 11/11/2026) : en **Développement**, l'API tourne en `pnpm dev` et se relance seule à chaque modification du code. Le mode **Docker** sert à vérifier l'API telle qu'elle tournera en ligne ; passer en Docker reconstruit l'image avec le code du moment. Changer de mode arrête l'API puis la redémarre dans l'autre mode.
+- **Lancé hors console** : la console n'a ni ses journaux ni le droit de l'arrêter ; un message dit d'arrêter le programme dans le Terminal qui l'a lancé.
+- **En erreur** : la carte montre la cause en clair, la dernière ligne d'erreur et un bouton **Réessayer**.
+- Un service qui dépend d'un autre arrêté ne peut pas démarrer, et la carte dit pourquoi (« Démarrage impossible : la base est arrêtée »).
 - **Confirmation** demandée seulement pour arrêter la base quand l'API tourne (« l'API ne répondra plus »). Aucune action ne supprime de données : jamais de `docker compose down -v`.
 
 **Journaux** (sous les cartes) : un onglet par service, les 200 dernières lignes, suivi en direct activable, bouton Copier. Les lignes d'avertissement et d'erreur sont colorées.
@@ -149,7 +152,7 @@ Comptes simulés (un compte par pilote simulé, prévu plus tard), remise à zé
 
 1. **Connexion** : console sans connexion (elle n'écoute que sur le Mac), connexion administrateur seulement pour la page Comptes. Validé par Greg le 11/11/2026.
 2. **Langue** : français seulement, par exception à la règle « français et anglais » qui vise les pilotes.
-3. **Reconstruire l'API** depuis la page Services : oui.
+3. **API** : lancée en `pnpm dev` par défaut, mode Docker au choix ; pas de bouton Reconstruire. Pas de carte pour la base de test `weems_test` (même conteneur que la base). Journaux : 200 lignes, sans recherche. Validé par Greg le 11/11/2026.
 4. **Supprimer les vols simulés** depuis la page Trafic : oui.
 5. **Rôles** : Pilote et Administrateur seulement.
 6. **Invitations** : valables 14 jours, renouvelables (section « Expiration des invitations »).
