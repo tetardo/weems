@@ -164,6 +164,13 @@ export class FlightsService {
     return this.withEvents(found);
   }
 
+  /** Some of the caller's flights, newest first: the ones hidden from their profile (spec J4). */
+  async summariesOf(caller: Caller, flightIds: readonly string[]): Promise<FlightSummary[]> {
+    if (flightIds.length === 0) return [];
+    const found = await this.repository.listFlights(caller.pilotId, { only: flightIds });
+    return (await this.withEvents(found)).map((f) => f.summary);
+  }
+
   private async page(
     pilotId: string,
     filters: ListFilters,

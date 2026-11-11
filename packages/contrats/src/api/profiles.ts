@@ -91,12 +91,52 @@ export const PilotStats = z.object({
    */
   dayS: z.number().nonnegative(),
   nightS: z.number().nonnegative(),
+  /** Length of the trajectories, nautical miles: flights without one count for nothing. */
+  distanceNm: z.number().nonnegative(),
+  /**
+   * Weeks in a row (Monday to Sunday, UTC) with at least one flight. The current run still counts
+   * while the week before has a flight; `recordWeeks` is the longest run ever.
+   */
+  streak: z.object({
+    currentWeeks: z.number().int().nonnegative(),
+    recordWeeks: z.number().int().nonnegative(),
+  }),
+  /** Final landings with a single touchdown and no go-around, among the flights that landed. */
+  cleanLandings: z.object({
+    clean: z.number().int().nonnegative(),
+    landings: z.number().int().nonnegative(),
+  }),
+});
+export type PilotStats = z.infer<typeof PilotStats>;
+
+/** Upper bounds of the flight duration buckets, hours: < 1, 1-2, 2-4, 4-8, > 8 (block time). */
+export const DURATION_BUCKETS_H = [1, 2, 4, 8] as const;
+/** Upper bounds of the touchdown buckets, ft/min: soft < 60, normal, firm, hard > 600. */
+export const TOUCHDOWN_BUCKETS_FPM = [60, 240, 600] as const;
+/** Number of landings on the landing curve of the profile. */
+export const RECENT_LANDINGS = 30;
+
+const Count = z.number().int().nonnegative();
+
+/** Data of the charts of a public profile (spec J4 profil public, section Statistiques). */
+export const PilotCharts = z.object({
   /** Airborne time of each of the last 12 months, oldest first; month as YYYY-MM (UTC). */
   months: z.array(
     z.object({ month: z.string().regex(/^\d{4}-\d{2}$/), airborneS: z.number().nonnegative() }),
   ),
+  /**
+   * Takeoffs by weekday (0 = Monday) and hour, in the local time of the place of takeoff:
+   * 7 rows of 24 counts.
+   */
+  takeoffs: z.array(z.array(Count).length(24)).length(7),
+  /** Flights per block time bucket (DURATION_BUCKETS_H): 5 counts. */
+  durations: z.array(Count).length(DURATION_BUCKETS_H.length + 1),
+  /** Final landings per touchdown bucket (TOUCHDOWN_BUCKETS_FPM): 4 counts. */
+  touchdowns: z.array(Count).length(TOUCHDOWN_BUCKETS_FPM.length + 1),
+  /** Last final touchdowns (RECENT_LANDINGS at most), oldest first. */
+  recentLandings: z.array(z.object({ at: UtcTimestamp, touchdownVs: z.number() })),
 });
-export type PilotStats = z.infer<typeof PilotStats>;
+export type PilotCharts = z.infer<typeof PilotCharts>;
 
 /** GET /v1/pilots/{handle} */
 export const PublicPilot = z.object({
@@ -111,6 +151,7 @@ export const PublicPilot = z.object({
   /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
   hasPhoto: z.boolean(),
   stats: PilotStats,
+  charts: PilotCharts,
 });
 export type PublicPilot = z.infer<typeof PublicPilot>;
 
@@ -175,3 +216,26 @@ export const PilotRoutes = z.object({
   ),
 });
 export type PilotRoutes = z.infer<typeof PilotRoutes>;
+
+/** GET /v1/me/profile/hidden-flights: the pilot's flights hidden from the profile, newest first. */
+export const HiddenFlights = z.object({
+  flights: z.array(
+    FlightSummary.pick({
+      flightId: true,
+      callsign: true,
+      departureIcao: true,
+      plannedArrivalIcao: true,
+      openedAt: true,
+    }),
+  ),
+});
+export type HiddenFlights = z.infer<typeof HiddenFlights>;
+
+/** GET /v1/me/profile/handle-check?handle=…: can the pilot take this address? */
+export const HandleCheckQuery = z.object({ handle: z.string().max(64) });
+export const HandleCheck = z.object({
+  handle: z.string(),
+  /** Their own current handle counts as available. */
+  status: z.enum(["available", "taken", "reserved", "invalid"]),
+});
+export type HandleCheck = z.infer<typeof HandleCheck>;

@@ -1,7 +1,16 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { FlightId, FlightVisibility, MyProfile, Problem, ProfileUpdate } from "@weems/contrats";
+import {
+  FlightId,
+  FlightVisibility,
+  HandleCheck,
+  HandleCheckQuery,
+  HiddenFlights,
+  MyProfile,
+  Problem,
+  ProfileUpdate,
+} from "@weems/contrats";
 import { callerOf, type Guards } from "../../plugins/auth.ts";
 import { ApiProblem } from "../../plugins/problem.ts";
 import type { ProfilesService } from "./service.ts";
@@ -12,6 +21,8 @@ const tags = ["profiles"];
 const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
 /** Upload limit of a photo; it is stored reduced to about 20 KB. */
 const PHOTO_MAX_BYTES = 5 * 1024 * 1024;
+/** Checks of an address as the pilot types it: enough for typing, too few to list the handles. */
+const HANDLE_CHECKS_PER_MINUTE = 60;
 
 /** HTTP layer of the pilot's own profile settings (spec J4 profil public): schemas only. */
 export function registerProfileRoutes(
@@ -39,6 +50,8 @@ export function registerProfileRoutes(
 
   registerPhotoRoutes(app, service, guards);
 
+  registerSettingsHelpers(app, service, guards);
+
   const visibility = {
     ...own,
     schema: {
@@ -56,6 +69,36 @@ export function registerProfileRoutes(
     { ...visibility, schema: { ...visibility.schema, body: FlightVisibility } },
     async (request) =>
       service.setVisibility(callerOf(request), request.params.flightId, request.body),
+  );
+}
+
+/** Lists and checks the settings page needs: hidden flights, address availability. */
+function registerSettingsHelpers(
+  parent: FastifyInstance,
+  service: ProfilesService,
+  guards: Guards,
+): void {
+  const app = parent.withTypeProvider<ZodTypeProvider>();
+  const own = { onRequest: guards.pilot };
+  app.get(
+    "/v1/me/profile/hidden-flights",
+    { ...own, schema: { tags, security, response: { 200: HiddenFlights, ...errors } } },
+    async (request) => service.hiddenFlights(callerOf(request)),
+  );
+
+  app.get(
+    "/v1/me/profile/handle-check",
+    {
+      ...own,
+      config: { rateLimit: { max: HANDLE_CHECKS_PER_MINUTE, timeWindow: "1 minute" } },
+      schema: {
+        tags,
+        security,
+        querystring: HandleCheckQuery,
+        response: { 200: HandleCheck, ...errors },
+      },
+    },
+    async (request) => service.checkHandle(callerOf(request), request.query.handle),
   );
 }
 

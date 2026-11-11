@@ -116,6 +116,45 @@ describe("own profile settings (spec J4)", () => {
   });
 });
 
+describe("settings helpers (spec J4)", () => {
+  const ask = (pilot: Pilot, url: string) =>
+    app.inject({ method: "GET", url, headers: { cookie: pilot.cookie } });
+
+  it("lists the pilot's own hidden flights, newest first", async () => {
+    const pilot = await newTrackerPilot(app);
+    const [first, second, shown] = [await fly(pilot), await fly(pilot), await fly(pilot)];
+    for (const id of [first, second]) {
+      await app.inject({
+        method: "PUT",
+        url: `/v1/flights/${id}/visibility`,
+        headers: { cookie: pilot.cookie },
+        payload: { hiddenOnProfile: true },
+      });
+    }
+    const { flights } = (await ask(pilot, "/v1/me/profile/hidden-flights")).json();
+    expect(flights.map((f: { flightId: string }) => f.flightId)).toEqual([second, first]);
+    expect(flights.map((f: { flightId: string }) => f.flightId)).not.toContain(shown);
+    const other = await newTrackerPilot(app);
+    expect((await ask(other, "/v1/me/profile/hidden-flights")).json()).toEqual({ flights: [] });
+  });
+
+  it("checks an address as the pilot types it", async () => {
+    const { pilot, handle } = await publicPilot();
+    const other = await newTrackerPilot(app);
+    const check = async (who: Pilot, value: string) =>
+      (await ask(who, `/v1/me/profile/handle-check?handle=${encodeURIComponent(value)}`)).json()
+        .status;
+    expect(await check(pilot, handle)).toBe("available");
+    expect(await check(other, handle)).toBe("taken");
+    expect(await check(other, "weems")).toBe("reserved");
+    expect(await check(other, "-Bad")).toBe("invalid");
+    expect(await check(other, uniqueHandle())).toBe("available");
+    expect(
+      (await app.inject({ method: "GET", url: "/v1/me/profile/handle-check?handle=x" })).statusCode,
+    ).toBe(401);
+  });
+});
+
 describe("public profile (spec J4)", () => {
   it("answers the same 404 for a profile turned off and an unknown handle", async () => {
     const pilot = await newTrackerPilot(app);
@@ -149,6 +188,9 @@ describe("public profile (spec J4)", () => {
     expect(profile).toMatchObject({ handle, country: "FR", homeIcao: "LFBO", level: "advanced" });
     expect(profile.stats).toMatchObject({ flights: 1, averageTouchdownVs: -100, nightS: 0 });
     expect(profile.stats.dayS).toBeGreaterThan(0);
+    expect(profile.stats.distanceNm).toBeGreaterThan(0);
+    expect(profile.stats.cleanLandings).toEqual({ clean: 1, landings: 1 });
+    expect(profile.charts.recentLandings).toEqual([expect.objectContaining({ touchdownVs: -100 })]);
 
     const list = (await visit(`/v1/pilots/${handle}/flights`)).json();
     expect(list.flights.map((f: { flightId: string }) => f.flightId)).toEqual([shown]);

@@ -1,4 +1,5 @@
 export { Heading, Latitude, Longitude, MonotonicMs, measured } from "./telemetry/common.ts";
+export { distanceNm } from "./telemetry/geo.ts";
 export { Sample } from "./telemetry/sample.ts";
 export { AircraftInfo, Simulator } from "./telemetry/aircraft.ts";
 export { Touchdown } from "./telemetry/touchdown.ts";
@@ -36,9 +37,14 @@ export { FlightReview, FlightReviewView } from "./api/flight-review.ts";
 export { landingSummary, type LandingSummary } from "./flight/landing-summary.ts";
 export {
   CountryCode,
+  DURATION_BUCKETS_H,
   FlightVisibility,
+  HandleCheck,
+  HandleCheckQuery,
+  HiddenFlights,
   IvaoId,
   MyProfile,
+  PilotCharts,
   PilotHandle,
   PilotLevel,
   PilotRoutes,
@@ -49,6 +55,8 @@ export {
   PublicFlightView,
   PublicPilot,
   PublicPilotIndex,
+  RECENT_LANDINGS,
   SimbriefId,
+  TOUCHDOWN_BUCKETS_FPM,
   VatsimId,
 } from "./api/profiles.ts";

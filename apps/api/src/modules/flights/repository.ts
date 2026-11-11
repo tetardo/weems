@@ -76,13 +76,17 @@ export interface ListFilters {
   /** Public profile (spec J4): closed flights only, without the ones the pilot hid. */
   closedOnly?: boolean;
   excluded?: readonly string[];
+  /** Profile settings (spec J4): only these flights, the hidden ones. */
+  only?: readonly string[];
 }
 
-/** Public profile filters: closed flights, hidden ones left out. */
-function publicConditions({ closedOnly = false, excluded = [] }: ListFilters): SQL | undefined {
+/** Profile filters: closed flights, hidden ones left out, or only some flights. */
+function profileConditions(filters: ListFilters): SQL | undefined {
+  const { closedOnly = false, excluded = [], only } = filters;
   return and(
     closedOnly ? isNotNull(flights.closedAt) : undefined,
     excluded.length > 0 ? notInArray(flights.id, [...excluded]) : undefined,
+    only ? inArray(flights.id, [...only]) : undefined,
   );
 }
 
@@ -102,7 +106,7 @@ function listConditions(pilotId: string, filters: ListFilters): SQL | undefined 
     airport
       ? or(eq(flights.departureIcao, airport), eq(flights.plannedArrivalIcao, airport))
       : undefined,
-    publicConditions(filters),
+    profileConditions(filters),
   );
 }
 

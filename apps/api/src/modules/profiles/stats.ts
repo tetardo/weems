@@ -1,6 +1,8 @@
-import { landingSummary, type PilotStats, type TrackPoint } from "@weems/contrats";
+import { distanceNm, type PilotStats, type TrackPoint } from "@weems/contrats";
 import type { SummaryWithEvents } from "../flights/service.ts";
-import { dayAndNight, monthlyActivity } from "./activity.ts";
+import { dayAndNight } from "./day-night.ts";
+import { finalLandings, measured } from "./landings.ts";
+import { weeklyStreak } from "./streak.ts";
 
 type Landing = NonNullable<PilotStats["bestLanding"]>;
 
@@ -21,15 +23,6 @@ function mostFrequent(flights: readonly SummaryWithEvents[]): string | null {
   return best?.title ?? null;
 }
 
-/** Vertical speed of each flight's final touchdown, where measured. */
-function landingsOf(flights: readonly SummaryWithEvents[]): Landing[] {
-  return flights.flatMap(({ summary, events }) => {
-    const touchdownVs = landingSummary(events)?.touchdownVs ?? null;
-    if (touchdownVs === null) return [];
-    return [{ touchdownVs, airportIcao: summary.plannedArrivalIcao, at: summary.openedAt }];
-  });
-}
-
 function longestOf(flights: readonly SummaryWithEvents[]): PilotStats["longestFlight"] {
   let longest: SummaryWithEvents | null = null;
   for (const flight of flights) {
@@ -42,6 +35,33 @@ function longestOf(flights: readonly SummaryWithEvents[]): PilotStats["longestFl
 
 const sum = (values: readonly number[]) => values.reduce((total, value) => total + value, 0);
 
+/** Length of a trajectory, nautical miles, point to point. */
+function lengthNm(points: readonly TrackPoint[]): number {
+  let total = 0;
+  for (let i = 1; i < points.length; i++) {
+    const [a, b] = [points[i - 1], points[i]];
+    if (a && b) total += distanceNm(a.lat, a.lon, b.lat, b.lon);
+  }
+  return total;
+}
+
+/** Touchdown statistics: mean, softest, share of clean final landings. */
+function landingStats(flights: readonly SummaryWithEvents[]) {
+  const landings = finalLandings(flights);
+  const withVs = measured(landings);
+  return {
+    averageTouchdownVs:
+      withVs.length === 0 ? null : sum(withVs.map((l) => l.touchdownVs)) / withVs.length,
+    // Softest: the vertical speed closest to zero (they are negative).
+    bestLanding: withVs.reduce<Landing | null>(
+      (best, { touchdownVs, airportIcao, at }) =>
+        !best || touchdownVs > best.touchdownVs ? { touchdownVs, airportIcao, at } : best,
+      null,
+    ),
+    cleanLandings: { clean: landings.filter((l) => l.clean).length, landings: landings.length },
+  };
+}
+
 /**
  * Statistics of a public profile, from its public flights and their simplified trajectories
  * (spec J4 profil public).
@@ -51,7 +71,6 @@ export function pilotStats(
   tracks: ReadonlyMap<string, readonly TrackPoint[]>,
   now: Date,
 ): PilotStats {
-  const landings = landingsOf(flights);
   const airports = new Set(
     flights.flatMap(({ summary }) => [summary.departureIcao, summary.plannedArrivalIcao]),
   );
@@ -63,16 +82,14 @@ export function pilotStats(
     airports: airports.size,
     aircraft: new Set(flights.map(aircraftKey)).size,
     favoriteAircraft: mostFrequent(flights),
-    averageTouchdownVs:
-      landings.length === 0 ? null : sum(landings.map((l) => l.touchdownVs)) / landings.length,
-    // Softest: the vertical speed closest to zero (they are negative).
-    bestLanding: landings.reduce<Landing | null>(
-      (best, landing) => (!best || landing.touchdownVs > best.touchdownVs ? landing : best),
-      null,
-    ),
+    ...landingStats(flights),
     longestFlight: longestOf(flights),
     goArounds: sum(flights.map(({ events }) => events.filter((e) => e.type === "goAround").length)),
     ...dayAndNight(tracks.values()),
-    months: monthlyActivity(flights, now),
+    distanceNm: sum([...tracks.values()].map(lengthNm)),
+    streak: weeklyStreak(
+      flights.map(({ summary }) => new Date(summary.openedAt)),
+      now,
+    ),
   };
 }

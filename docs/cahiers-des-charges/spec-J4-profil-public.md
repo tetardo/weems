@@ -133,10 +133,12 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | `GET /v1/me/profile` | Pilote connecté | État du profil, pseudo d'adresse, pseudo proposé |
 | `PUT /v1/me/profile` | Pilote connecté | Activer ou désactiver, changer le pseudo d'adresse (400 s'il est mal formé, 422 s'il est réservé ou absent alors qu'on publie, 409 s'il est pris) |
 | `PUT /v1/flights/{id}/visibility` | Propriétaire du vol | Masquer ou montrer un vol sur le profil |
-| `GET /v1/pilots/{handle}` | Public | Profil et statistiques |
+| `GET /v1/pilots/{handle}` | Public | Profil, statistiques (`stats`) et données des graphiques (`charts`) |
 | `GET /v1/pilots/{handle}/flights` | Public | Vols publics, par pages (même curseur que `/v1/flights`) |
 | `GET /v1/pilots/{handle}/flights/{id}` et `…/track` | Public | Vol public et trajectoire simplifiée |
 | `GET /v1/pilots/{handle}/routes` | Public | Trajets agrégés pour la carte (départ, arrivée, coordonnées, nombre de vols) |
+| `GET /v1/me/profile/hidden-flights` | Pilote connecté | Ses vols masqués du profil, du plus récent au plus ancien |
+| `GET /v1/me/profile/handle-check?handle=…` | Pilote connecté | `available`, `taken`, `reserved` ou `invalid` ; 60 par minute au plus |
 | `GET`, `PUT` et `DELETE /v1/me/profile/photo` | Pilote connecté | Voir, envoyer (image brute, `Content-Type: image/jpeg`, `image/png` ou `image/webp`) ou retirer sa photo |
 | `GET /v1/flights/{id}/visibility` | Propriétaire du vol | Savoir si le vol est masqué |
 | `GET /v1/pilots/{handle}/photo` | Public | Photo en WebP 256 × 256 |

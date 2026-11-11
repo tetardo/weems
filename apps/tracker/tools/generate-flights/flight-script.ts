@@ -1,6 +1,5 @@
-import type { SimEventType } from "@weems/contrats";
+import { distanceNm, type SimEventType } from "@weems/contrats";
 import type { ReplayRecord } from "../../src/connectors/replay/replay-format.ts";
-import { distanceNm } from "../../src/core/geo.ts";
 import { seededRandom } from "./random.ts";
 import { type AircraftState, toSample } from "./sample-factory.ts";
 import type { Scenario } from "./scenario.ts";

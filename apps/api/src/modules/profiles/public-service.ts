@@ -12,6 +12,7 @@ import type { AccountsService } from "../accounts/service.ts";
 import type { FlightsService, SummaryWithEvents } from "../flights/service.ts";
 import type { TracksService } from "../tracks/service.ts";
 import type { ProfileRecord, ProfilesRepository } from "./repository.ts";
+import { pilotCharts } from "./charts.ts";
 import { routesOf } from "./route-map.ts";
 import { pilotStats } from "./stats.ts";
 
@@ -49,6 +50,7 @@ export class PublicProfilesService {
     if (!identity) throw noProfile();
     const flights = await this.flights.allPublic(profile.pilotId, await this.hidden(profile));
     const tracks = await this.tracks.simplifiedOf(flights.map((f) => f.summary.flightId));
+    const now = new Date();
     return {
       handle,
       name: identity.name,
@@ -59,7 +61,8 @@ export class PublicProfilesService {
       ivaoId: profile.ivaoId,
       memberSince: identity.createdAt.toISOString(),
       hasPhoto: await this.repository.hasPhoto(profile.pilotId),
-      stats: pilotStats(flights, tracks, new Date()),
+      stats: pilotStats(flights, tracks, now),
+      charts: pilotCharts(flights, tracks, now),
     };
   }
 

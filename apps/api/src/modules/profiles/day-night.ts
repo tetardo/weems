@@ -25,3 +25,18 @@ export function dayNightSeconds(points: readonly TrackPoint[]): { dayS: number; 
   }
   return { dayS, nightS };
 }
+
+/** Day and night airborne time of all the trajectories. */
+export function dayAndNight(tracks: Iterable<readonly TrackPoint[]>): {
+  dayS: number;
+  nightS: number;
+} {
+  let dayS = 0;
+  let nightS = 0;
+  for (const points of tracks) {
+    const flight = dayNightSeconds(points);
+    dayS += flight.dayS;
+    nightS += flight.nightS;
+  }
+  return { dayS, nightS };
+}

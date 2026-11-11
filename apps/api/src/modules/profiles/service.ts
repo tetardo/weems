@@ -1,4 +1,11 @@
-import type { FlightVisibility, MyProfile, ProfileUpdate } from "@weems/contrats";
+import {
+  PilotHandle,
+  type FlightVisibility,
+  type HandleCheck,
+  type HiddenFlights,
+  type MyProfile,
+  type ProfileUpdate,
+} from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
 import { conflict, notFound, unprocessable } from "../../plugins/problem.ts";
 import type { AccountsService } from "../accounts/service.ts";
@@ -100,6 +107,35 @@ export class ProfilesService {
     await this.flights.read(caller, flightId);
     await this.repository.setHidden(caller.pilotId, flightId, visibility.hiddenOnProfile);
     return visibility;
+  }
+
+  /** The caller's flights hidden from the profile, newest first. */
+  async hiddenFlights(caller: Caller): Promise<HiddenFlights> {
+    const ids = await this.repository.hiddenFlightsOf(caller.pilotId);
+    const summaries = await this.flights.summariesOf(caller, ids);
+    return {
+      flights: summaries.map(
+        ({ flightId, callsign, departureIcao, plannedArrivalIcao, openedAt }) => ({
+          flightId,
+          callsign,
+          departureIcao,
+          plannedArrivalIcao,
+          openedAt,
+        }),
+      ),
+    };
+  }
+
+  /** Whether the caller can take this address, checked as they type it. */
+  async checkHandle(caller: Caller, handle: string): Promise<HandleCheck> {
+    const status = !PilotHandle.safeParse(handle).success
+      ? "invalid"
+      : isReservedHandle(handle)
+        ? "reserved"
+        : (await this.repository.isHandleTaken(handle, caller.pilotId))
+          ? "taken"
+          : "available";
+    return { handle, status };
   }
 
   private async view(pilotId: string, stored: ProfileRecord | null): Promise<MyProfile> {
