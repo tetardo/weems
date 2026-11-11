@@ -4,12 +4,13 @@
     "description": "Flight tracking for simulator pilots",
     "nav": {
       "flights": "My flights",
-      "live": "Live map"
+      "live": "Live"
     },
     "language": "Français",
     "notMeasured": "not measured",
     "mainNav": "Main navigation",
-    "accountMenu": "{name}'s menu"
+    "accountMenu": "{name}'s menu",
+    "toggleTheme": "Switch between light and dark theme"
   },
   "Live": {
     "title": "Live map",

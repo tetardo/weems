@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Inter, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import { routing } from "../../i18n/routing.ts";
+import { THEME_SCRIPT } from "../../site/theme.ts";
 import "../global.css";
 
 /** GameLab fonts, self-hosted by Next.js at build time (no request to Google from the browser). */
@@ -35,7 +36,15 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   return (
-    <html lang={locale} className={`${inter.variable} ${grotesk.variable}`}>
+    // data-theme is set by THEME_SCRIPT before React runs: the attribute differs from the server.
+    <html
+      lang={locale}
+      className={`${inter.variable} ${grotesk.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full bg-bg text-ink">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

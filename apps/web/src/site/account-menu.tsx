@@ -2,12 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { type ReactNode, useCallback, useRef, useState } from "react";
-import { ChevronIcon } from "../ui/icons.ts";
 import { useDismiss } from "../ui/use-dismiss.ts";
 
 /**
- * Pilot's button at the right of the floating bar (initial, name on large screens) opening
- * a small menu: `children` are its entries (language, sign out).
+ * Pilot's initial at the right of the floating bar, opening a small menu (name first): `children` are its entries (language, sign out).
  */
 export function AccountMenu({ name, children }: { name: string; children: ReactNode }) {
   const t = useTranslations("Site");
@@ -23,16 +21,14 @@ export function AccountMenu({ name, children }: { name: string; children: ReactN
         aria-expanded={open}
         aria-haspopup="true"
         aria-label={t("accountMenu", { name })}
-        className="flex min-h-11 items-center gap-2 rounded-xl px-1.5 transition-colors hover:bg-ink/9"
+        className="grid size-11 place-items-center rounded-full transition-colors hover:bg-ink/9"
       >
         <span
           aria-hidden="true"
-          className="grid size-8 flex-none place-items-center rounded-full bg-accent-2 text-[13px] font-bold text-on-accent"
+          className="avatar grid size-9 place-items-center rounded-full font-title text-sm font-bold"
         >
           {name.slice(0, 1).toUpperCase()}
         </span>
-        <span className="max-w-48 truncate text-sm font-medium max-lg:hidden">{name}</span>
-        <ChevronIcon size={16} aria-hidden="true" className="text-muted max-lg:hidden" />
       </button>
       {open && (
         <div className="absolute top-[calc(100%+10px)] right-0 flex w-60 flex-col rounded-2xl border border-line bg-surface p-1.5 shadow-floating [&>*]:w-full [&>*]:justify-start">

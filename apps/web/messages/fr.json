@@ -4,12 +4,13 @@
     "description": "Suivi des vols en simulation",
     "nav": {
       "flights": "Mes vols",
-      "live": "Carte en direct"
+      "live": "Direct"
     },
     "language": "English",
     "notMeasured": "non mesuré",
     "mainNav": "Navigation principale",
-    "accountMenu": "Menu de {name}"
+    "accountMenu": "Menu de {name}",
+    "toggleTheme": "Passer en thème clair ou sombre"
   },
   "Live": {
     "title": "Carte en direct",
