@@ -3,6 +3,7 @@ import { CloseReason, FlightPhase } from "../flight/phase.ts";
 import { AircraftInfo } from "../telemetry/aircraft.ts";
 import { Heading, Latitude, Longitude } from "../telemetry/common.ts";
 import { FlightId, IcaoCode, Sequence, UtcTimestamp } from "./common.ts";
+import { FlightTimes } from "./flight-list.ts";
 
 /** POST /v1/flights */
 export const OpenFlightRequest = z.object({
@@ -78,6 +79,7 @@ export const FlightView = OpenFlightRequest.omit({ trackerVersion: true }).exten
   closedAt: UtcTimestamp.nullable(),
   closeReason: CloseReason.nullable(),
   lastPhase: FlightPhase.nullable(),
+  times: FlightTimes,
   events: z.array(FlightEvent),
 });
 export type FlightView = z.infer<typeof FlightView>;

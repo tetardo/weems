@@ -2,6 +2,8 @@ import { isDeepStrictEqual } from "node:util";
 import {
   type CloseFlightRequest,
   type FlightEvent,
+  type FlightList,
+  type FlightListQuery,
   FlightPhase,
   type FlightView,
   type OpenFlightRequest,
@@ -10,6 +12,9 @@ import {
 } from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
 import { ApiProblem, conflict, notFound } from "../../plugins/problem.ts";
+import { flightTimes } from "./flight-times.ts";
+import { summarize } from "./flight-summary.ts";
+import { decodeCursor, encodeCursor } from "./list-cursor.ts";
 import type { LiveFeed, LiveFlightInfo } from "./live-feed.ts";
 import type { FlightRecord, FlightsRepository } from "./repository.ts";
 
@@ -123,7 +128,26 @@ export class FlightsService {
     const flight = await this.ownFlight(caller, flightId);
     const events = await this.repository.listEvents(flightId);
     const { trackerVersion: _version, pilotId: _pilot, ...view } = flight;
-    return { ...view, lastPhase: lastPhaseOf(events), events };
+    return { ...view, lastPhase: lastPhaseOf(events), times: flightTimes(flight, events), events };
+  }
+
+  /** The caller's flights, newest first, one page at a time. */
+  async list(caller: Caller, query: FlightListQuery): Promise<FlightList> {
+    const { cursor, limit, ...filters } = query;
+    const after = cursor === undefined ? undefined : decodeCursor(cursor);
+    // One more than asked: tells whether a next page exists.
+    const found = await this.repository.listFlights(
+      caller.pilotId,
+      { ...filters, after },
+      limit + 1,
+    );
+    const page = found.slice(0, limit);
+    const events = await this.repository.eventsOf(page.map((f) => f.flightId));
+    const last = page[page.length - 1];
+    return {
+      flights: page.map((f) => summarize(f, events.get(f.flightId) ?? [])),
+      nextCursor: found.length > limit && last ? encodeCursor(last) : null,
+    };
   }
 
   /** A pilot only sees their own flights: someone else's flight is "not found". */

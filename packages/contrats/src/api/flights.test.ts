@@ -105,7 +105,14 @@ describe("CloseFlightRequest and FlightView", () => {
 
   it("describes an open flight with no closure yet", () => {
     const { trackerVersion: _unused, ...flight } = openFlight();
-    const view = { ...flight, closedAt: null, closeReason: null, lastPhase: null, events: [] };
+    const view = {
+      ...flight,
+      closedAt: null,
+      closeReason: null,
+      lastPhase: null,
+      times: { blockS: null, airborneS: null, pausedS: 0 },
+      events: [],
+    };
     expect(FlightView.safeParse(view).success).toBe(true);
   });
 });
