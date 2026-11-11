@@ -9,6 +9,7 @@ import type {
 } from "@weems/contrats";
 import type { SavedFlight } from "../core/recovery.ts";
 import { migrate } from "./schema.ts";
+import { thinTrack, toTrackPoint } from "./track-points.ts";
 
 interface SessionRow {
   flight_id: string;
@@ -28,7 +29,7 @@ interface SessionRow {
  */
 export class Recorder {
   readonly db: Database.Database;
-  private buffer: { flightId: string; sample: Sample }[] = [];
+  private buffer: { flightId: string; sample: Sample; at: string }[] = [];
 
   constructor(path: string) {
     this.db = new Database(path);
@@ -88,22 +89,27 @@ export class Recorder {
         )
         .run(request.closedAt, request.reason, flightId);
       this.enqueue(flightId, "close", request);
+      const points = this.trackOf(flightId);
+      if (points.length > 0) this.enqueue(flightId, "track", { points });
     })();
   }
 
-  sample(flightId: string, sample: Sample): void {
-    this.buffer.push({ flightId, sample });
+  /** `at`: UTC time of the sample, for the trajectory sent after closing. */
+  sample(flightId: string, sample: Sample, at: string): void {
+    this.buffer.push({ flightId, sample, at });
   }
 
   /** Writes buffered samples in one transaction; called every second by the runtime. */
   flush(): void {
     if (this.buffer.length === 0) return;
-    const insert = this.db.prepare("INSERT INTO samples (flight_id, t, data) VALUES (?, ?, ?)");
+    const insert = this.db.prepare(
+      "INSERT INTO samples (flight_id, t, at, data) VALUES (?, ?, ?, ?)",
+    );
     const pending = this.buffer;
     this.buffer = [];
     this.db.transaction(() => {
-      for (const { flightId, sample } of pending)
-        insert.run(flightId, sample.t, JSON.stringify(sample));
+      for (const { flightId, sample, at } of pending)
+        insert.run(flightId, sample.t, at, JSON.stringify(sample));
     })();
   }
 
@@ -124,7 +130,19 @@ export class Recorder {
     }));
   }
 
-  private enqueue(flightId: string, kind: "open" | "events" | "close", payload: unknown): void {
+  /** Trajectory of a flight from its recorded samples, at most one point per second. */
+  private trackOf(flightId: string) {
+    const rows = this.db
+      .prepare("SELECT at, data FROM samples WHERE flight_id = ? AND at IS NOT NULL ORDER BY rowid")
+      .all(flightId) as { at: string; data: string }[];
+    return thinTrack(rows.map((row) => toTrackPoint(JSON.parse(row.data) as Sample, row.at)));
+  }
+
+  private enqueue(
+    flightId: string,
+    kind: "open" | "events" | "close" | "track",
+    payload: unknown,
+  ): void {
     this.db
       .prepare("INSERT INTO outbox (flight_id, kind, payload) VALUES (?, ?, ?)")
       .run(flightId, kind, JSON.stringify(payload));

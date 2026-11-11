@@ -69,10 +69,18 @@ export class TrackerRuntime {
   }
 
   private onSample(sample: Sample): void {
+    // Recorded before the session sees it: the sample that closes the flight (ARRIVED)
+    // must be in the trajectory built at closing.
+    const wasFlying = this.session.state === "flying";
+    if (wasFlying) this.recordSample(sample);
     if (this.saved && this.aircraft) this.recover(this.saved, this.aircraft, sample);
     else this.session.handleSample(sample);
-    if (this.flightId && this.session.state === "flying")
-      this.parts.recorder.sample(this.flightId, sample);
+    if (!wasFlying && this.session.state === "flying") this.recordSample(sample); // opened or resumed
+  }
+
+  private recordSample(sample: Sample): void {
+    const at = this.session.utcAt(sample.t);
+    if (this.flightId && at) this.parts.recorder.sample(this.flightId, sample, at);
   }
 
   /** ENF-02: first sample after a crash of the tracker or the PC. */

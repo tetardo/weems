@@ -59,13 +59,33 @@ describe("recorder", () => {
 
   it("writes samples only on flush, in one go", () => {
     recorder.open(open);
-    recorder.sample(id, sample({ t: 1000 }));
-    recorder.sample(id, sample({ t: 2000 }));
+    recorder.sample(id, sample({ t: 1000 }), "2026-11-11T08:00:01.000Z");
+    recorder.sample(id, sample({ t: 2000 }), "2026-11-11T08:00:02.000Z");
     const count = () =>
       (recorder.db.prepare("SELECT count(*) AS n FROM samples").get() as { n: number }).n;
     expect(count()).toBe(0);
     recorder.flush();
     expect(count()).toBe(2);
+  });
+
+  it("queues the trajectory after the closing, one point per second at most", () => {
+    recorder.open(open);
+    for (let t = 0; t < 3000; t += 250) {
+      recorder.sample(id, sample({ t }), new Date(Date.parse(open.openedAt) + t).toISOString());
+    }
+    recorder.closeFlight(id, { closedAt: "2026-11-11T09:00:00.000Z", reason: "normal" });
+    expect(outbox(recorder)).toEqual(["open", "close", "track"]);
+    const row = recorder.db.prepare("SELECT payload FROM outbox WHERE kind = 'track'").get() as {
+      payload: string;
+    };
+    const { points } = JSON.parse(row.payload) as { points: { at: string; lat: number }[] };
+    expect(points.map((p) => p.at.slice(11))).toEqual([
+      "08:00:00.000Z",
+      "08:00:01.000Z",
+      "08:00:02.000Z",
+      "08:00:02.750Z",
+    ]);
+    expect(points[0]).toMatchObject({ lat: sample({}).lat, onGround: sample({}).onGround });
   });
 
   it("finds the open flight again after a crash, with its last state", () => {
