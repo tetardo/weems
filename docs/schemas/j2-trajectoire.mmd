@@ -1,0 +1,14 @@
+sequenceDiagram
+  autonumber
+  participant T as Tracker
+  participant A as API
+  participant S as Site
+  T->>A: POST close (motif : arrivée)
+  A-->>T: 201
+  T->>A: PUT track (7 200 points, gzip)
+  A->>A: phase de chaque point, simplification (~500 points)
+  A-->>T: 201 (200 si déjà reçue)
+  Note over T,A: coupure : la trajectoire attend dans la file d'envoi
+  S->>A: GET /v1/flights/{id}
+  S->>A: GET /v1/flights/{id}/track
+  A-->>S: ~500 points avec leur phase

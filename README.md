@@ -27,6 +27,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 - [Spécification J0 de l'API](docs/cahiers-des-charges/api/spec-J0-api.md) : conventions, modèle de données, routes
 - [Site web minimal](docs/cahiers-des-charges/web/spec-J2-site-minimal.md) : liste des vols, page de vol, connexion (J2 et J3)
 - [Spécification J1](docs/cahiers-des-charges/spec-J1-pilotes-simules.md) : 10 pilotes simulés sur la carte en direct
+- [Spécification J2](docs/cahiers-des-charges/spec-J2-premier-vrai-vol.md) : premier vrai vol dans MSFS, trajectoire, liste et page de vol
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4
 - [Architecture interne du tracker](docs/cahiers-des-charges/tracker/architecture-interne.md) : cœur indépendant, connecteurs, enregistreur, envoi hors ligne
 - [Spécification T0 du tracker](docs/cahiers-des-charges/tracker/spec-T0.md) : données reçues et règles des phases
