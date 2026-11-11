@@ -48,17 +48,21 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 src/core/                 cœur sans dépendance : session de vol, journal des événements, phases
   phases/                 params.ts (seuils), rules.ts (transitions), phase-machine.ts, landing-tracker.ts
   connector.ts            interface SimConnector ; clock.ts : horloge injectée
+  position-cadence.ts     fréquence des positions selon la phase (spec J1)
   recovery.ts             reprise après crash (ENF-02) : même avion, < 5 NM, < 30 min
 src/connectors/replay/    format de rejeu JSONL et connecteur de rejeu
 src/storage/              enregistreur SQLite (WAL) : sessions, échantillons, événements, outbox
-src/sender/               envoi de l'outbox dans l'ordre, relances 2 s → 5 min, 409 mis de côté, 426 bloque
+src/sender/               envoi de l'outbox dans l'ordre, relances 2 s → 5 min, 409 mis de côté, 426 bloque ;
+                          positions en mémoire, envoyées dans l'ordre après l'ouverture (position-queue.ts)
 src/runtime/              assemblage connecteur → cœur → enregistreur → envoi
-tools/generate-flights/   générateur de vols synthétiques déterministe
+tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes
+tools/simulate/           J1 : N trackers sans interface dans un seul processus
 ```
 
 | Commande (depuis `apps/tracker/`) | Effet |
 | --- | --- |
 | `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
+| `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
 | `pnpm check` (racine) | Types, style, structure, tests |
 
 - Un seuil se change dans `params.ts`, jamais dans une règle.

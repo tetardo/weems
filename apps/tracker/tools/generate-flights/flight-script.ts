@@ -1,5 +1,6 @@
 import type { SimEventType } from "@weems/contrats";
 import type { ReplayRecord } from "../../src/connectors/replay/replay-format.ts";
+import { distanceNm } from "../../src/core/recovery.ts";
 import { seededRandom } from "./random.ts";
 import { type AircraftState, toSample } from "./sample-factory.ts";
 import type { Scenario } from "./scenario.ts";
@@ -27,7 +28,7 @@ export class FlightScript {
     this.scenario = scenario;
     this.random = seededRandom(scenario.seed);
     const { departure, arrival } = scenario;
-    this.totalNm = Math.hypot(arrival.lat - departure.lat, arrival.lon - departure.lon) * 60;
+    this.totalNm = distanceNm(departure.lat, departure.lon, arrival.lat, arrival.lon);
     this.state = {
       t: 0,
       ...departure,

@@ -43,7 +43,6 @@ beforeEach(() => {
       clock: { nowUtcMs: () => START_UTC },
       newFlightId: () => "0197a000-0000-7000-8000-000000000042",
       params: AIRLINER_PARAMS,
-      positionIntervalMs: 10_000,
     },
     {
       open: (r) => opened.push(r),
@@ -105,12 +104,15 @@ describe("events and positions", () => {
     ]);
   });
 
-  it("sends a position every 10 s of sample time", () => {
-    hold(25, { engines: RUNNING });
-    expect(positions.map((p) => [p.seq, p.at])).toEqual([
-      [1, "2026-11-11T08:00:00.000Z"],
-      [2, "2026-11-11T08:00:10.000Z"],
-      [3, "2026-11-11T08:00:20.000Z"],
+  it("sends no position while parked, then one every 10 s when taxiing", () => {
+    hold(20, { engines: RUNNING });
+    expect(positions).toEqual([]);
+    hold(30, { engines: RUNNING, gs: 15, parkingBrake: false });
+    // Taxi seen from +21 s, TAXI_OUT confirmed 5 s later, then a position every 10 s.
+    expect(positions.map((p) => [p.seq, p.at, p.phase])).toEqual([
+      [1, "2026-11-11T08:00:26.000Z", "TAXI_OUT"],
+      [2, "2026-11-11T08:00:36.000Z", "TAXI_OUT"],
+      [3, "2026-11-11T08:00:46.000Z", "TAXI_OUT"],
     ]);
   });
 

@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "generate-flight": "node tools/generate-flights/cli.ts"
+    "generate-flight": "node tools/generate-flights/cli.ts",
+    "simulate": "node tools/simulate/cli.ts"
   },
   "dependencies": {
     "@weems/contrats": "workspace:*",

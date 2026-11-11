@@ -128,24 +128,12 @@ describe("outbox sender", () => {
     expect(await sender.drain(600_000)).toBe(0);
   });
 
-  it("drops a live position older than 30 s", async () => {
-    const { api, calls } = fakeApi(() => 200);
-    const sender = new OutboxSender(recorder.db, api);
-    const at = "2026-11-11T08:00:00.000Z";
-    const report = {
-      seq: 1,
-      at,
-      lat: 46,
-      lon: 2,
-      altMsl: 0,
-      gs: 0,
-      heading: 0,
-      vs: 0,
-      phase: "CRUISE" as const,
-      onGround: false,
-    };
-    expect(await sender.sendPosition("f", report, Date.parse(at) + 31_000)).toBe(false);
-    expect(await sender.sendPosition("f", report, Date.parse(at) + 5_000)).toBe(true);
-    expect(calls).toHaveLength(1);
+  it("knows when a flight's opening has been accepted", async () => {
+    const f = flight(1);
+    recorder.open(f);
+    const sender = new OutboxSender(recorder.db, fakeApi(() => 201).api);
+    expect(sender.isOpened(f.flightId)).toBe(false);
+    await sender.drain(0);
+    expect(sender.isOpened(f.flightId)).toBe(true);
   });
 });

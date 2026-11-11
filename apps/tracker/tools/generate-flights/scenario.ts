@@ -12,7 +12,7 @@ export type Disturbance =
   | "teleport"
   | "crash";
 
-interface Point {
+export interface Point {
   lat: number;
   lon: number;
 }
@@ -20,6 +20,7 @@ interface Point {
 /** Description of a synthetic flight. Same scenario + same seed = same file. */
 export interface Scenario {
   name: string;
+  callsign: string;
   seed: number;
   aircraft: AircraftInfo;
   departure: Point;
@@ -31,7 +32,7 @@ export interface Scenario {
   disturbances: readonly Disturbance[];
 }
 
-const A320: AircraftInfo = {
+export const A320: AircraftInfo = {
   simulator: "replay",
   title: "Airbus A320neo",
   model: "A20N",
@@ -43,6 +44,7 @@ const A320: AircraftInfo = {
 /** Paris-Charles-de-Gaulle to Toulouse-Blagnac, short airliner flight. */
 export const LFPG_LFBO: Scenario = {
   name: "lfpg-lfbo",
+  callsign: "WMS100",
   seed: 42,
   aircraft: A320,
   departure: { lat: 49.0097, lon: 2.5479 },

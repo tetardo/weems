@@ -13,6 +13,7 @@ import { FlightLog } from "./flight-log.ts";
 import type { PhaseParams } from "./phases/params.ts";
 import { PhaseMachine, type PhaseOutput } from "./phases/phase-machine.ts";
 import type { SavedFlight } from "./recovery.ts";
+import { positionIntervalMs } from "./position-cadence.ts";
 import { SimStateWatcher } from "./sim-state-watcher.ts";
 
 /** Where a session sends what it produces: the recorder, then the sender. */
@@ -30,8 +31,6 @@ export interface SessionOptions {
   /** New flight id (UUID v7) for the given UTC time. */
   newFlightId: (nowUtcMs: number) => string;
   params: PhaseParams;
-  /** Live position every this many ms of sample time (spec J1: 5 to 15 s). */
-  positionIntervalMs: number;
 }
 
 /** Waiting: no aircraft. Armed: aircraft on the ground, engines off. Flying: recording. */
@@ -168,11 +167,10 @@ export class FlightSession {
   }
 
   private sendPosition(sample: Sample, log: FlightLog): void {
-    const due =
-      this.lastPositionT === null ||
-      sample.t - this.lastPositionT >= this.options.positionIntervalMs;
     const phase = this.machine.phase;
-    if (!due || phase === null) return;
+    const interval = phase === null ? null : positionIntervalMs(phase);
+    if (phase === null || interval === null) return;
+    if (this.lastPositionT !== null && sample.t - this.lastPositionT < interval) return;
     this.lastPositionT = sample.t;
     this.positionSeq += 1;
     this.output.position({

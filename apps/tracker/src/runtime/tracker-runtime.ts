@@ -10,24 +10,25 @@ import type { SimConnector } from "../core/connector.ts";
 import { decideRecovery, type SavedFlight } from "../core/recovery.ts";
 import { FlightSession, type SessionOptions, type SessionOutput } from "../core/session.ts";
 import type { OutboxSender } from "../sender/outbox-sender.ts";
+import type { PositionQueue } from "../sender/position-queue.ts";
 import type { Recorder } from "../storage/recorder.ts";
 
 export interface RuntimeParts {
   connector: SimConnector;
   recorder: Recorder;
   sender: OutboxSender;
+  positions: PositionQueue;
   session: SessionOptions;
 }
 
 /**
  * Wires connector → session (core) → recorder → sender. Holds no flight rule itself.
- * `pump` runs once per second: writes buffered samples, sends the outbox and the live position.
+ * `pump` runs every half second: writes buffered samples, sends the outbox, then live positions.
  */
 export class TrackerRuntime {
   private session: FlightSession;
   private flightId: string | null = null;
   private aircraft: AircraftInfo | null = null;
-  private latestPosition: PositionReport | null = null;
   private saved: SavedFlight | null;
   private readonly parts: RuntimeParts;
 
@@ -56,12 +57,9 @@ export class TrackerRuntime {
 
   async pump(nowMs: number): Promise<void> {
     this.parts.recorder.flush();
-    await this.parts.sender.drain(nowMs);
-    const position = this.latestPosition;
-    if (position && this.flightId) {
-      this.latestPosition = null;
-      await this.parts.sender.sendPosition(this.flightId, position, nowMs);
-    }
+    const { sender, positions } = this.parts;
+    await sender.drain(nowMs);
+    await positions.flush(nowMs, (flightId) => sender.isOpened(flightId));
   }
 
   private onAircraft(aircraft: AircraftInfo): void {
@@ -121,7 +119,7 @@ export class TrackerRuntime {
       position: (report: PositionReport) => {
         if (!this.flightId) return;
         recorder.position(this.flightId, report);
-        this.latestPosition = report;
+        this.parts.positions.push(this.flightId, report);
       },
       close: (request: CloseFlightRequest) => {
         if (this.flightId) recorder.closeFlight(this.flightId, request);
