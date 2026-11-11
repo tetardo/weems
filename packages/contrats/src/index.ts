@@ -1,5 +1,15 @@
 export { Heading, Latitude, Longitude, MonotonicMs, measured } from "./telemetry/common.ts";
-export { distanceNm } from "./telemetry/geo.ts";
+export {
+  angleDiffDeg,
+  bearingDeg,
+  crossTrackNm,
+  destinationPoint,
+  distanceBetweenNm,
+  distanceNm,
+  type LatLon,
+  normalizeDeg,
+  RAD,
+} from "./telemetry/geo.ts";
 export { Sample } from "./telemetry/sample.ts";
 export { AircraftInfo, Airframe, EngineType, Simulator } from "./telemetry/aircraft.ts";
 export { AircraftCategory, AircraftClass } from "./api/aircraft-class.ts";
