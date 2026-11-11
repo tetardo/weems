@@ -75,7 +75,7 @@ flowchart LR
 
 | | Pilotes simulés | Test de charge |
 | --- | --- | --- |
-| Commande | `pnpm simulate` | `pnpm load` (disponible après la fusion de la PR #34) |
+| Commande | `pnpm simulate` | `pnpm load` |
 | Réglages | Pilotes : 1 à 10 (les 10 trajets de la flotte J1, en Europe), défaut 10. Vitesse : ×1, ×10, ×50, ×100, défaut ×10. Décalage entre deux départs : en secondes, défaut 30 | Pilotes : défaut 50. Spectateurs : défaut 100. Durée : en minutes, défaut 30. Vitesse : défaut ×1 |
 | Avertissement | Les vols sont enregistrés au nom du pilote de développement (`pilote@weems.local`) | Le test commence par **vider les vols du pilote de développement** (rappelé à côté du bouton) |
 
