@@ -2,7 +2,7 @@
 
 API REST unique de Weems : seule à écrire dans la base. Tous les autres programmes (tracker, site web, app iPad, gestion de compagnie) sont ses clients.
 
-Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point). J3 : module `accounts` (comptes pilotes avec Better Auth, inscription sur invitation, connexion du tracker en OAuth 2.1 avec PKCE), module `reviews` (le pilote dit si les phases d'un vol sont justes), module `alpha` (rapport du critère de sortie de l'alpha). J4 : module `profiles` (profil public du pilote, désactivé par défaut : réglages du pilote dans `service.ts` et `routes.ts`, pages publiques sans compte dans `public-service.ts` et `public-routes.ts`, statistiques, heures de jour et de nuit, distance, série de semaines, données des graphiques dont les heures de décollage en heure locale (fuseau trouvé hors ligne, fiche 004), carte des trajets, photo réduite par `sharp`).
+Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point). J3 : module `accounts` (comptes pilotes avec Better Auth, inscription sur invitation, connexion du tracker en OAuth 2.1 avec PKCE), module `reviews` (le pilote dit si les phases d'un vol sont justes), module `alpha` (rapport du critère de sortie de l'alpha). J4 : module `profiles` (profil public du pilote, désactivé par défaut : réglages du pilote dans `service.ts` et `routes.ts`, pages publiques sans compte dans `public-service.ts` et `public-routes.ts`, statistiques, heures de jour et de nuit, distance, série de semaines, données des graphiques dont les heures de décollage en heure locale (fuseau trouvé hors ligne, fiche 004), carte des trajets, photo réduite par `sharp`). J4 : module `aircraft` (catalogue des types OACI et catégorie d'avion de chaque vol, spec `../../docs/cahiers-des-charges/spec-J4-categories-avion.md`).
 
 ## Où trouver quoi
 
@@ -72,6 +72,7 @@ docker-compose.yml
 | `pnpm check` (racine) | Tout : types, style, structure, tests ; les tests exigent la base `weems_test` |
 | `pnpm alpha-report --since <AAAA-MM-JJ>` | Rapport de l'alpha : vols, vols suspects, phases justes, critère de sortie (dans Docker : `docker compose exec api node apps/api/src/modules/alpha/report-cli.ts --since <date>`) |
 | `pnpm make-admin <e-mail>` | Donne le rôle Administrateur à un compte existant (premier administrateur de la console) |
+| `pnpm reclassify` | Recalcule la catégorie d'avion de tous les vols, après une modification de `modules/aircraft/catalogue.ts` (dans Docker : `docker compose exec api node apps/api/src/modules/flights/reclassify-cli.ts`) |
 | `pnpm invite <e-mail>` | Crée un code d'invitation pour l'alpha et affiche l'adresse d'inscription (dans Docker : `docker compose exec api node apps/api/src/modules/accounts/invite-cli.ts <e-mail>`) |
 
 ## Connexion (J3)

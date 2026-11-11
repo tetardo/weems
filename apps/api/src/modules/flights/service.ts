@@ -15,6 +15,7 @@ import {
   type Simulator,
 } from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
+import { classifyAircraft } from "../aircraft/classify.ts";
 import { ApiProblem, conflict, notFound } from "../../plugins/problem.ts";
 import { flightTimes } from "./flight-times.ts";
 import { summarize } from "./flight-summary.ts";
@@ -26,6 +27,8 @@ import type { FlightRecord, FlightsRepository, ListFilters } from "./repository.
 export interface SummaryWithEvents {
   summary: FlightSummary;
   events: FlightEvent[];
+  /** Engines of the aircraft: single- or multi-engine time of the profile. */
+  engineCount: number;
 }
 
 /** One page of flights, and the cursor of the next one (null on the last page). */
@@ -38,7 +41,13 @@ const CREATED: Receipt = { result: "created" };
 const ALREADY_RECEIVED: Receipt = { result: "alreadyReceived" };
 
 function openedPart(flight: FlightRecord): OpenFlightRequest {
-  const { pilotId: _pilot, closedAt: _closedAt, closeReason: _reason, ...opened } = flight;
+  const {
+    pilotId: _pilot,
+    closedAt: _closedAt,
+    closeReason: _reason,
+    aircraftClass: _class,
+    ...opened
+  } = flight;
   return opened;
 }
 
@@ -53,6 +62,7 @@ function liveInfo(flight: FlightRecord): LiveFlightInfo {
     callsign: flight.callsign,
     aircraftTitle: flight.aircraft.title,
     aircraftModel: flight.aircraft.model,
+    aircraftClass: flight.aircraftClass,
     departureIcao: flight.departureIcao,
     plannedArrivalIcao: flight.plannedArrivalIcao,
   };
@@ -78,7 +88,8 @@ export class FlightsService {
   }
 
   async open(caller: Caller, request: OpenFlightRequest): Promise<Receipt> {
-    if (await this.repository.insertFlight(caller.pilotId, request)) return CREATED;
+    const aircraftClass = classifyAircraft(request.aircraft);
+    if (await this.repository.insertFlight(caller.pilotId, request, aircraftClass)) return CREATED;
     const existing = await this.repository.findFlight(request.flightId);
     if (existing?.pilotId === caller.pilotId && isDeepStrictEqual(openedPart(existing), request)) {
       return ALREADY_RECEIVED;
@@ -194,7 +205,7 @@ export class FlightsService {
     const events = await this.repository.eventsOf(found.map((f) => f.flightId));
     return found.map((f) => {
       const own = events.get(f.flightId) ?? [];
-      return { summary: summarize(f, own), events: own };
+      return { summary: summarize(f, own), events: own, engineCount: f.aircraft.engineCount };
     });
   }
 

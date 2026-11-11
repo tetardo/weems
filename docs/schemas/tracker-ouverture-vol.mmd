@@ -1,0 +1,6 @@
+flowchart LR
+  A["Attente<br/>(aucun avion)"] -->|avion chargé| B["Armé<br/>(au sol, moteurs coupés)"]
+  B -->|moteur, repoussage<br/>ou chargé en vol| C{"Départ et arrivée<br/>saisis ?"}
+  C -->|oui| D["Vol ouvert<br/>(envoyé à l'API, carte en direct)"]
+  C -->|non| E["Reste armé<br/>la fenêtre demande<br/>départ et arrivée"]
+  E -->|pilote enregistre<br/>départ et arrivée| B

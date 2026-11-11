@@ -15,7 +15,11 @@ import {
   type SQL,
 } from "drizzle-orm";
 import {
+  AircraftCategory,
+  type AircraftClass,
+  Airframe,
   CloseReason,
+  EngineType,
   type CloseFlightRequest,
   type FlightEvent,
   FlightEventType,
@@ -29,6 +33,7 @@ import type { ListPosition } from "./list-cursor.ts";
 /** A stored flight, in the shared formats. */
 export interface FlightRecord extends OpenFlightRequest {
   pilotId: string;
+  aircraftClass: AircraftClass | null;
   closedAt: string | null;
   closeReason: CloseReason | null;
 }
@@ -48,13 +53,33 @@ function toRecord(row: FlightRow): FlightRecord {
       registration: row.aircraftRegistration,
       engineCount: row.aircraftEngineCount,
       emptyWeightKg: row.aircraftEmptyWeightKg,
+      engineType: EngineType.nullable().parse(row.aircraftEngineType),
+      airframe: Airframe.nullable().parse(row.aircraftAirframe),
+      maxGrossWeightKg: row.aircraftMaxGrossWeightKg,
     },
+    aircraftClass: classOf(row),
     departureIcao: row.departureIcao,
     plannedArrivalIcao: row.plannedArrivalIcao,
     openedAt: row.openedAt.toISOString(),
     trackerVersion: row.trackerVersion,
     closedAt: row.closedAt?.toISOString() ?? null,
     closeReason: row.closeReason === null ? null : CloseReason.parse(row.closeReason),
+  };
+}
+
+function classOf(row: FlightRow): AircraftClass | null {
+  if (row.aircraftCategory === null) return null;
+  return {
+    category: AircraftCategory.parse(row.aircraftCategory),
+    estimated: row.aircraftCategoryEstimated,
+  };
+}
+
+/** Columns of the aircraft category; no category is stored as null. */
+function classColumns(aircraftClass: AircraftClass | null) {
+  return {
+    aircraftCategory: aircraftClass?.category ?? null,
+    aircraftCategoryEstimated: aircraftClass?.estimated ?? false,
   };
 }
 
@@ -73,6 +98,7 @@ export interface ListFilters {
   from?: string | undefined;
   to?: string | undefined;
   aircraft?: string | undefined;
+  category?: AircraftCategory | undefined;
   airport?: string | undefined;
   /** Public profile (spec J4): closed flights only, without the ones the pilot hid. */
   closedOnly?: boolean;
@@ -92,7 +118,7 @@ function profileConditions(filters: ListFilters): SQL | undefined {
 }
 
 function listConditions(pilotId: string, filters: ListFilters): SQL | undefined {
-  const { after, from, to, aircraft, airport } = filters;
+  const { after, from, to, aircraft, category, airport } = filters;
   const like = aircraft && `%${aircraft.replace(/[%_\\]/g, (c) => `\\${c}`)}%`;
   return and(
     eq(flights.pilotId, pilotId),
@@ -104,6 +130,7 @@ function listConditions(pilotId: string, filters: ListFilters): SQL | undefined 
     from ? gte(flights.openedAt, new Date(from)) : undefined,
     to ? lt(flights.openedAt, new Date(to)) : undefined,
     like ? or(ilike(flights.aircraftTitle, like), ilike(flights.aircraftModel, like)) : undefined,
+    category ? eq(flights.aircraftCategory, category) : undefined,
     airport
       ? or(eq(flights.departureIcao, airport), eq(flights.plannedArrivalIcao, airport))
       : undefined,
@@ -125,7 +152,11 @@ export class FlightsRepository {
   }
 
   /** Inserts the flight unless the id exists. Returns false when it already existed. */
-  async insertFlight(pilotId: string, flight: OpenFlightRequest): Promise<boolean> {
+  async insertFlight(
+    pilotId: string,
+    flight: OpenFlightRequest,
+    aircraftClass: AircraftClass | null,
+  ): Promise<boolean> {
     const inserted = await this.db
       .insert(flights)
       .values({
@@ -138,6 +169,10 @@ export class FlightsRepository {
         aircraftRegistration: flight.aircraft.registration,
         aircraftEngineCount: flight.aircraft.engineCount,
         aircraftEmptyWeightKg: flight.aircraft.emptyWeightKg,
+        aircraftEngineType: flight.aircraft.engineType,
+        aircraftAirframe: flight.aircraft.airframe,
+        aircraftMaxGrossWeightKg: flight.aircraft.maxGrossWeightKg,
+        ...classColumns(aircraftClass),
         departureIcao: flight.departureIcao,
         plannedArrivalIcao: flight.plannedArrivalIcao,
         openedAt: new Date(flight.openedAt),
@@ -183,6 +218,16 @@ export class FlightsRepository {
       const deleted = await tx.delete(flights).where(mine).returning({ id: flights.id });
       return deleted.map((row) => row.id);
     });
+  }
+
+  /** Every flight, for re-classifying them after a catalogue change. */
+  async allFlights(): Promise<FlightRecord[]> {
+    const rows = await this.db.select().from(flights);
+    return rows.map(toRecord);
+  }
+
+  async setAircraftClass(flightId: string, aircraftClass: AircraftClass | null): Promise<void> {
+    await this.db.update(flights).set(classColumns(aircraftClass)).where(eq(flights.id, flightId));
   }
 
   /** Closes the flight if still open. Returns false when it was already closed. */

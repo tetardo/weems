@@ -43,6 +43,13 @@
       "when": 1794430731907,
       "tag": "0005_aircraft_categories",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794433701968,
+      "tag": "0006_admin",
+      "breakpoints": true
     }
   ]
 }

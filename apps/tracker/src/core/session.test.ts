@@ -17,6 +17,9 @@ const A320 = {
   registration: null,
   engineCount: 2,
   emptyWeightKg: null,
+  engineType: null,
+  airframe: null,
+  maxGrossWeightKg: null,
 };
 const START_UTC = Date.UTC(2026, 10, 11, 8, 0, 0);
 
@@ -39,6 +42,7 @@ beforeEach(() => {
   session = new FlightSession(
     {
       callsign: "WMS123",
+      flightPlan: { departureIcao: "LFPG", arrivalIcao: "LFBO" },
       trackerVersion: "0.1.0",
       clock: { nowUtcMs: () => START_UTC },
       newFlightId: () => "0197a000-0000-7000-8000-000000000042",
@@ -68,19 +72,19 @@ describe("opening (EF-07)", () => {
         flightId: "0197a000-0000-7000-8000-000000000042",
         callsign: "WMS123",
         aircraft: A320,
-        departureIcao: null,
-        plannedArrivalIcao: null,
+        departureIcao: "LFPG",
+        plannedArrivalIcao: "LFBO",
         openedAt: "2026-11-11T08:00:00.000Z",
         trackerVersion: "0.1.0",
       },
     ]);
   });
 
-  it("sends the airports of the flight plan when it is known", () => {
-    const withPlan = new FlightSession(
+  it("never opens a flight without departure and arrival (decision 007)", () => {
+    const withoutPlan = new FlightSession(
       {
         callsign: "WMS123",
-        flightPlan: { departureIcao: "LFPG", arrivalIcao: "LFBO" },
+        flightPlan: null,
         trackerVersion: "0.1.0",
         clock: { nowUtcMs: () => START_UTC },
         newFlightId: () => "0197a000-0000-7000-8000-000000000043",
@@ -88,9 +92,11 @@ describe("opening (EF-07)", () => {
       },
       { open: (r) => opened.push(r), event: () => {}, position: () => {}, close: () => {} },
     );
-    withPlan.setAircraft(A320);
-    withPlan.handleSample(sample({ t: 1000, engines: RUNNING }));
-    expect(opened[0]).toMatchObject({ departureIcao: "LFPG", plannedArrivalIcao: "LFBO" });
+    withoutPlan.setAircraft(A320);
+    withoutPlan.handleSample(sample({ t: 1000, engines: RUNNING }));
+    withoutPlan.handleSample(sample({ t: 2000, onGround: false, altAgl: 3000, engines: RUNNING }));
+    expect(withoutPlan.state).toBe("armed");
+    expect(opened).toEqual([]);
   });
 
   it("opens at pushback even with engines off", () => {

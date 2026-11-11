@@ -1,5 +1,6 @@
 import type { LiveFlight } from "@weems/contrats";
 import type { FeatureCollection } from "geojson";
+import { iconNameOf, scaleOf } from "./aircraft-shapes.ts";
 import { type DrawnPosition, interpolate } from "./interpolate.ts";
 import type { LiveFlights } from "./flights-store.ts";
 
@@ -39,6 +40,8 @@ export class Tracks {
       type: "FeatureCollection",
       features: [...this.tracks.values()].map((track) => {
         const at = this.drawnAt(track, nowMs);
+        const lost = track.flight.signal === "lost";
+        const category = track.flight.aircraftClass?.category ?? null;
         return {
           type: "Feature",
           geometry: { type: "Point", coordinates: [at.lon, at.lat] },
@@ -46,7 +49,8 @@ export class Tracks {
             flightId: track.flight.flightId,
             callsign: track.flight.callsign,
             heading: at.heading,
-            lost: track.flight.signal === "lost",
+            icon: iconNameOf(category, lost),
+            scale: scaleOf(category),
             selected: track.flight.flightId === selectedId,
           },
         };
