@@ -19,12 +19,17 @@ import { RecordingClient } from "./recording-client.ts";
 
 /**
  * J1 exit test (spec J1, part 5): 10 simulated pilots at ×10 through the real tracker,
- * the real API and its live stream, plus 2 more pilots whose network is cut for 60 s.
+ * the real API and its live stream, plus 2 more pilots whose network is cut for 70 s.
  * About 7 minutes: run by `pnpm test:j1`, not by `pnpm check`.
  */
 const SPEED = 10;
 const OUTAGE_AFTER_MS = 90_000;
-const OUTAGE_MS = 60_000;
+/**
+ * Criterion 6 asks for 60 s; the cut lasts 70 s so that the API's 60 s silence rule surely greys
+ * the aircraft (with exactly 60 s, the silence only passes 60 s by the time since the last position
+ * before the cut, sometimes too little before the next sweep: the test failed now and then).
+ */
+const OUTAGE_MS = 70_000;
 
 let api: Awaited<ReturnType<typeof startTestApp>>;
 let baseUrl: string;
