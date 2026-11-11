@@ -96,6 +96,8 @@
       "from": "From",
       "to": "To",
       "aircraft": "Aircraft",
+      "category": "Category",
+      "allCategories": "All",
       "airport": "Airport (ICAO)",
       "apply": "Filter",
       "reset": "Show all"
@@ -192,5 +194,19 @@
       "password": "The password must be at least 10 characters long.",
       "unknown": "Logging in did not work. Try again in a moment."
     }
+  },
+  "Aircraft": {
+    "categories": {
+      "light": "Light",
+      "turboprop": "Turboprop",
+      "businessJet": "Business jet",
+      "regionalJet": "Regional jet",
+      "narrowBody": "Narrow-body",
+      "wideBody": "Wide-body",
+      "helicopter": "Helicopter",
+      "other": "Other"
+    },
+    "estimated": "{category} · estimated",
+    "estimatedHint": "Type missing from the Weems catalogue: category estimated from the engines and weight given by the simulator."
   }
 }

@@ -53,6 +53,8 @@ simvars:
 
   # --- 6. Moteurs ---
   - { name: NUMBER OF ENGINES, unit: number, family: 6, tier: socle, verified: true, reliability: tous_avions }
+  - { name: ENGINE TYPE, unit: enum, family: 6, tier: socle, verified: true, reliability: tous_avions,
+      notes: "0 pistons, 1 réacteur, 2 aucun (planeur), 3 turbine d'hélicoptère, 4 non géré, 5 turbopropulseur. Sert à estimer la catégorie d'un type inconnu du catalogue." }
   - { name: "GENERAL ENG COMBUSTION:n", unit: bool, family: 6, tier: socle, verified: true, reliability: tous_avions }
   - { name: "TURB ENG N1:n", unit: percent, family: 6, tier: socle, verified: true, reliability: tous_avions,
       notes: "Réacteurs seulement ; pour les pistons, utiliser le régime (GENERAL ENG RPM:n)." }
@@ -64,6 +66,8 @@ simvars:
   # --- 8. Masse ---
   - { name: TOTAL WEIGHT, unit: pounds, family: 8, tier: socle, verified: true, reliability: depend_avion }
   - { name: EMPTY WEIGHT, unit: pounds, family: 8, tier: socle, verified: true, reliability: tous_avions }
+  - { name: MAX GROSS WEIGHT, unit: pounds, family: 8, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Masse maximale : sépare les réacteurs d'un type inconnu (affaires, régional, moyen et long-courrier)." }
 
   # --- 9. Atterrissage ---
   - { name: PLANE TOUCHDOWN NORMAL VELOCITY, unit: feet per second, family: 9, tier: socle, verified: true, reliability: tous_avions,
@@ -78,7 +82,10 @@ simvars:
   # --- 10. Identité de l'avion ---
   - { name: TITLE, unit: string, family: 10, tier: socle, verified: true, reliability: tous_avions,
       notes: "Chaîne : à lire avec SIMCONNECT_PERIOD_ONCE (pas en périodique), relire régulièrement pour détecter un changement d'avion." }
-  - { name: ATC MODEL, unit: string, family: 10, tier: socle, verified: true, reliability: depend_avion }
+  - { name: ATC MODEL, unit: string, family: 10, tier: socle, verified: true, reliability: depend_avion,
+      notes: "Sur MSFS 2020, souvent une clé de traduction (TT:ATCCOM.AC_MODEL_B738.0.text) : le connecteur en extrait le type OACI." }
+  - { name: CATEGORY, unit: string, family: 10, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Airplane, Helicopter… Chaîne : lue avec le titre." }
   - { name: ATC ID, unit: string, family: 10, tier: socle, verified: true, reliability: depend_avion }
 
   # --- 11. Temps ---

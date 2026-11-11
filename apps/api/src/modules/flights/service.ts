@@ -12,6 +12,7 @@ import {
   type Receipt,
 } from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
+import { classifyAircraft } from "../aircraft/classify.ts";
 import { ApiProblem, conflict, notFound } from "../../plugins/problem.ts";
 import { flightTimes } from "./flight-times.ts";
 import { summarize } from "./flight-summary.ts";
@@ -23,7 +24,13 @@ const CREATED: Receipt = { result: "created" };
 const ALREADY_RECEIVED: Receipt = { result: "alreadyReceived" };
 
 function openedPart(flight: FlightRecord): OpenFlightRequest {
-  const { pilotId: _pilot, closedAt: _closedAt, closeReason: _reason, ...opened } = flight;
+  const {
+    pilotId: _pilot,
+    closedAt: _closedAt,
+    closeReason: _reason,
+    aircraftClass: _class,
+    ...opened
+  } = flight;
   return opened;
 }
 
@@ -63,7 +70,8 @@ export class FlightsService {
   }
 
   async open(caller: Caller, request: OpenFlightRequest): Promise<Receipt> {
-    if (await this.repository.insertFlight(caller.pilotId, request)) return CREATED;
+    const aircraftClass = classifyAircraft(request.aircraft);
+    if (await this.repository.insertFlight(caller.pilotId, request, aircraftClass)) return CREATED;
     const existing = await this.repository.findFlight(request.flightId);
     if (existing?.pilotId === caller.pilotId && isDeepStrictEqual(openedPart(existing), request)) {
       return ALREADY_RECEIVED;

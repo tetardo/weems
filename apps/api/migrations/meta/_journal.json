@@ -29,6 +29,13 @@
       "when": 1794379892475,
       "tag": "0003_flight_reviews",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794429680122,
+      "tag": "0004_aircraft_categories",
+      "breakpoints": true
     }
   ]
 }

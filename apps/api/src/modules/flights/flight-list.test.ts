@@ -43,15 +43,38 @@ beforeAll(async () => {
   await open(10, {
     aircraft: { ...syntheticFlight().open.aircraft, title: "Cessna 172 Skyhawk", model: "C172" },
   });
+  // An add-on missing from the catalogue, from a tracker that sends the engines.
+  await open(11, {
+    aircraft: {
+      ...syntheticFlight().open.aircraft,
+      title: "Zenith CH 701",
+      model: "CH70",
+      engineType: "piston",
+    },
+  });
+  // The same unknown type from an older tracker: nothing to estimate from.
+  await open(12, {
+    aircraft: {
+      ...syntheticFlight().open.aircraft,
+      model: "CH70",
+      engineType: null,
+      airframe: null,
+      maxGrossWeightKg: null,
+    },
+  });
 });
 afterAll(() => stop());
 
 describe("flight list (spec J2)", () => {
   it("lists the newest first, page by page with a cursor", async () => {
     const first = await list("limit=2");
-    expect(first.flights.map((f: { flightId: string }) => f.flightId)).toEqual([ids[2], ids[1]]);
-    const second = await list(`limit=2&cursor=${first.nextCursor}`);
-    expect(second.flights.map((f: { flightId: string }) => f.flightId)).toEqual([ids[0]]);
+    expect(first.flights.map((f: { flightId: string }) => f.flightId)).toEqual([ids[4], ids[3]]);
+    const second = await list(`limit=3&cursor=${first.nextCursor}`);
+    expect(second.flights.map((f: { flightId: string }) => f.flightId)).toEqual([
+      ids[2],
+      ids[1],
+      ids[0],
+    ]);
     expect(second.nextCursor).toBeNull();
   });
 
@@ -59,7 +82,35 @@ describe("flight list (spec J2)", () => {
     expect((await list("aircraft=c172")).flights).toHaveLength(1);
     expect((await list("aircraft=skyhawk")).flights).toHaveLength(1);
     expect((await list("airport=EHAM")).flights).toHaveLength(1);
-    expect((await list("airport=LFPG")).flights).toHaveLength(2);
+    expect((await list("airport=LFPG")).flights).toHaveLength(4);
+  });
+
+  it("gives the aircraft category: from the catalogue, estimated, or unknown", async () => {
+    const classes = (await list("")).flights.map(
+      (f: { aircraftClass: unknown }) => f.aircraftClass,
+    );
+    expect(classes).toEqual([
+      null,
+      { category: "light", estimated: true },
+      { category: "light", estimated: false },
+      { category: "narrowBody", estimated: false },
+      { category: "narrowBody", estimated: false },
+    ]);
+  });
+
+  it("filters by aircraft category", async () => {
+    expect((await list("category=light")).flights).toHaveLength(2);
+    expect((await list("category=narrowBody")).flights).toHaveLength(2);
+    expect((await list("category=helicopter")).flights).toHaveLength(0);
+  });
+
+  it("answers 400 to an unknown category", async () => {
+    const answer = await app.inject({
+      method: "GET",
+      url: "/v1/flights?category=spaceship",
+      headers: TRACKER_HEADERS,
+    });
+    expect(answer.statusCode).toBe(400);
   });
 
   it("gives times and alerts for each flight", async () => {

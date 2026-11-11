@@ -13,6 +13,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 | Carte en direct (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
 | Site minimal (J2) | `../../docs/cahiers-des-charges/web/spec-J2-site-minimal.md` |
 | Comptes et connexion (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
+| Catégories d'avion (J4) | `../../docs/cahiers-des-charges/spec-J4-categories-avion.md` |
 | Formats reçus de l'API | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 
 ## Stack
@@ -43,6 +44,7 @@ src/
   ui/                  composants visuels : icônes, panneau, bouton, champ, titre de section, fermeture des menus (use-dismiss)
   map/                 carte MapLibre commune (base-map.ts : fond OpenFreeMap, fond de secours sans réseau ; map-theme.ts : fond et couleurs selon le thème)
   format/              durées h:mm, trajet, heure UTC
+  aircraft/            catégorie d'avion : pastille (category-badge.tsx), couleurs (category-tone.ts, variables --wm-cat-* de global.css)
   flights/             liste des vols : filtres (list-query.ts), tableau, pastilles, état
   flight/              page de vol
     phase-colors.ts       une couleur par phase (carte, profil, frise)

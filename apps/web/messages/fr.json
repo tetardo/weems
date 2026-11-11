@@ -96,6 +96,8 @@
       "from": "Du",
       "to": "Au",
       "aircraft": "Avion",
+      "category": "Catégorie",
+      "allCategories": "Toutes",
       "airport": "Aéroport (OACI)",
       "apply": "Filtrer",
       "reset": "Tout afficher"
@@ -192,5 +194,19 @@
       "password": "Le mot de passe doit faire au moins 10 caractères.",
       "unknown": "La connexion n'a pas abouti. Réessayez dans un instant."
     }
+  },
+  "Aircraft": {
+    "categories": {
+      "light": "Léger",
+      "turboprop": "Turbopropulseur",
+      "businessJet": "Jet d'affaires",
+      "regionalJet": "Jet régional",
+      "narrowBody": "Moyen-courrier",
+      "wideBody": "Long-courrier",
+      "helicopter": "Hélicoptère",
+      "other": "Autres"
+    },
+    "estimated": "{category} · estimée",
+    "estimatedHint": "Type absent du catalogue Weems : catégorie estimée d'après le moteur et la masse donnés par le simulateur."
   }
 }

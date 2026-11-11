@@ -1,6 +1,7 @@
 import type { FlightView } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { formatDuration, formatRoute } from "../format/flight-format.ts";
+import { CategoryBadge } from "../aircraft/category-badge.tsx";
 import { FlightStatus } from "../flights/flight-status.tsx";
 import { CardBox } from "../ui/card-box.tsx";
 
@@ -32,7 +33,15 @@ export function FlightHeader({ flight }: { flight: FlightView }) {
           </span>
           <FlightStatus closeReason={flight.closeReason} />
         </div>
-        <p className="mt-1 mb-0 text-muted">{flight.aircraft.title}</p>
+        <p className="mt-1 mb-0 flex flex-wrap items-center gap-2 text-muted">
+          {flight.aircraft.title}
+          {flight.aircraft.model && (
+            <code className="rounded-md bg-line px-1.5 py-px text-[.85em] font-semibold text-ink">
+              {flight.aircraft.model}
+            </code>
+          )}
+          <CategoryBadge aircraftClass={flight.aircraftClass} />
+        </p>
         <dl className="mt-5 mb-0 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-[1.7fr_repeat(5,1fr)]">
           {facts.map(([label, value]) => (
             <div key={label}>

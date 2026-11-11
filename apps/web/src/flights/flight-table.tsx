@@ -1,5 +1,6 @@
 import type { FlightSummary } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
+import { CategoryBadge } from "../aircraft/category-badge.tsx";
 import { Link } from "../i18n/navigation.ts";
 import { formatDuration, formatRoute } from "../format/flight-format.ts";
 import { AlertBadges } from "./alert-badges.tsx";
@@ -52,7 +53,12 @@ function FlightRow({ flight }: { flight: FlightSummary }) {
       <td className="whitespace-nowrap">
         {formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}
       </td>
-      <td>{flight.aircraftModel ?? flight.aircraftTitle}</td>
+      <td>
+        <span className="inline-flex flex-wrap items-center gap-2 max-sm:justify-end">
+          {flight.aircraftModel ?? flight.aircraftTitle}
+          <CategoryBadge aircraftClass={flight.aircraftClass} />
+        </span>
+      </td>
       <td>{formatDuration(flight.times.airborneS) ?? site("notMeasured")}</td>
       <td>
         <FlightStatus closeReason={flight.closeReason} />

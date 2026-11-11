@@ -68,7 +68,7 @@ describe("raw SimConnect sample to core sample (spec T0, part A)", () => {
 });
 
 describe("raw aircraft identity", () => {
-  it("keeps empty strings as unknown and converts the weight", () => {
+  it("keeps empty strings as unknown, reads the ICAO type and converts the weights", () => {
     expect(toAircraft(rawA320(), "msfs2024")).toEqual({
       simulator: "msfs2024",
       title: "Airbus A320neo Weems",
@@ -76,6 +76,9 @@ describe("raw aircraft identity", () => {
       registration: null,
       engineCount: 2,
       emptyWeightKg: 93_000 * 0.45359237,
+      engineType: "jet",
+      airframe: "airplane",
+      maxGrossWeightKg: 174_165 * 0.45359237,
     });
   });
 
