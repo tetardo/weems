@@ -1,0 +1,192 @@
+{
+  "Site": {
+    "name": "Weems",
+    "description": "Suivi des vols en simulation",
+    "nav": {
+      "flights": "Mes vols",
+      "live": "Carte en direct"
+    },
+    "language": "English",
+    "notMeasured": "non mesuré",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "Live": {
+    "title": "Carte en direct",
+    "count": "{count, plural, =0 {Aucun vol en cours} one {# vol en cours} other {# vols en cours}}",
+    "connection": {
+      "connecting": "Connexion…",
+      "open": "En direct",
+      "retrying": "Reconnexion…"
+    },
+    "signalLost": "Signal perdu",
+    "close": "Fermer",
+    "fields": {
+      "aircraft": "Avion",
+      "departure": "Départ",
+      "arrival": "Arrivée",
+      "phase": "Phase",
+      "altitude": "Altitude",
+      "groundSpeed": "Vitesse sol"
+    }
+  },
+  "Phases": {
+    "BOARDING": "Embarquement",
+    "PUSHBACK": "Repoussage",
+    "TAXI_OUT": "Roulage départ",
+    "TAKEOFF": "Décollage",
+    "CLIMB": "Montée",
+    "CRUISE": "Croisière",
+    "DESCENT": "Descente",
+    "APPROACH": "Approche",
+    "FINAL": "Finale",
+    "LANDING": "Atterrissage",
+    "TAXI_IN": "Roulage arrivée",
+    "ARRIVED": "Arrivé"
+  },
+  "Alerts": {
+    "paused": "Pause",
+    "simRateChanged": "Accélération",
+    "slew": "Slew",
+    "positionChanged": "Téléportation",
+    "crashed": "Crash"
+  },
+  "Status": {
+    "open": "En cours",
+    "normal": "Terminé",
+    "manual": "Clos à la main",
+    "crash": "Crash",
+    "interrupted": "Interrompu",
+    "aircraftChanged": "Avion changé"
+  },
+  "Events": {
+    "phaseChanged": "Phase : {phase}",
+    "rejectedTakeoff": "Décollage interrompu",
+    "touchdown": "Toucher à {vs} ft/min",
+    "touchdownUnknown": "Toucher",
+    "bounce": "Rebond",
+    "goAround": "Remise des gaz",
+    "touchAndGo": "Touch and go",
+    "paused": "Pause",
+    "unpaused": "Fin de la pause",
+    "simRateChanged": "Vitesse de simulation ×{rate}",
+    "slew": "Mode slew {state, select, on {activé} other {désactivé}}",
+    "positionChanged": "Téléportation",
+    "aircraftChanged": "Changement d'avion",
+    "crashed": "Crash",
+    "resumed": "Reprise après coupure du tracker",
+    "connectionLost": "Simulateur déconnecté",
+    "connectionRestored": "Simulateur reconnecté"
+  },
+  "Flights": {
+    "title": "Mes vols",
+    "empty": "Aucun vol pour l'instant. Lancez pnpm fly sur le PC, puis faites un vol.",
+    "emptyFiltered": "Aucun vol ne correspond à ces filtres.",
+    "columns": {
+      "date": "Date (UTC)",
+      "callsign": "Indicatif",
+      "route": "Trajet",
+      "aircraft": "Avion",
+      "airborne": "Durée de vol",
+      "status": "État",
+      "alerts": "Alertes"
+    },
+    "filters": {
+      "from": "Du",
+      "to": "Au",
+      "aircraft": "Avion",
+      "airport": "Aéroport (OACI)",
+      "apply": "Filtrer",
+      "reset": "Tout afficher"
+    },
+    "next": "Vols plus anciens",
+    "first": "Retour aux plus récents",
+    "apiDown": "L'API ne répond pas ({url}). Est-elle lancée sur le Mac ?"
+  },
+  "Flight": {
+    "back": "Mes vols",
+    "notFound": "Ce vol n'existe pas.",
+    "header": {
+      "date": "Date",
+      "block": "Temps bloc",
+      "airborne": "Temps de vol",
+      "paused": "Pauses",
+      "status": "État",
+      "simulator": "Simulateur",
+      "registration": "Immatriculation"
+    },
+    "map": {
+      "title": "Trajectoire",
+      "noTrack": "Trajectoire pas encore reçue : elle arrive à la clôture du vol."
+    },
+    "profile": {
+      "title": "Profil vertical",
+      "altitude": "Altitude (ft)",
+      "speed": "Vitesse sol (kt)"
+    },
+    "point": {
+      "time": "Heure",
+      "altitude": "Altitude",
+      "speed": "Vitesse sol",
+      "vs": "Vario",
+      "phase": "Phase"
+    },
+    "phases": {
+      "title": "Phases",
+      "start": "Début (UTC)",
+      "duration": "Durée",
+      "none": "Aucune phase enregistrée."
+    },
+    "landing": {
+      "title": "Atterrissage",
+      "vs": "Taux de chute au toucher",
+      "bounces": "Rebonds",
+      "touchdowns": "Touchers",
+      "goArounds": "Remises des gaz",
+      "none": "Pas d'atterrissage enregistré."
+    },
+    "log": {
+      "title": "Journal",
+      "time": "Heure (UTC)",
+      "event": "Événement",
+      "none": "Aucun événement notable."
+    },
+    "score": {
+      "title": "Note",
+      "later": "La note arrive avec la notation des vols."
+    },
+    "review": {
+      "title": "Vérification des phases",
+      "question": "Les phases détectées par le tracker sont-elles justes pour ce vol ?",
+      "correct": "Oui, toutes justes",
+      "wrong": "Non, au moins une est fausse",
+      "note": "Si non, laquelle et pourquoi (facultatif)",
+      "send": "Envoyer",
+      "saved": "Merci, réponse enregistrée.",
+      "error": "Réponse non enregistrée, réessayez.",
+      "already": "Vous avez déjà répondu : vous pouvez corriger."
+    }
+  },
+  "Auth": {
+    "title": "Connexion",
+    "signupTitle": "Créer mon compte",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "name": "Pseudo (visible des autres pilotes)",
+    "inviteCode": "Code d'invitation",
+    "submit": "Se connecter",
+    "signupSubmit": "Créer mon compte",
+    "toSignup": "Vous avez reçu une invitation ? Créer mon compte",
+    "toLogin": "Déjà un compte ? Se connecter",
+    "signOut": "Se déconnecter",
+    "tracker": "Le tracker attend votre connexion : il reprendra la main tout seul.",
+    "passwordRule": "10 caractères au moins.",
+    "errors": {
+      "credentials": "Adresse e-mail ou mot de passe incorrect.",
+      "invitation": "Ce code d'invitation ne correspond pas à cette adresse, ou a déjà servi.",
+      "exists": "Un compte existe déjà avec cette adresse.",
+      "password": "Le mot de passe doit faire au moins 10 caractères.",
+      "unknown": "La connexion n'a pas abouti. Réessayez dans un instant."
+    }
+  }
+}

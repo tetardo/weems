@@ -88,7 +88,7 @@ Une session suit un vol du chargement de l'avion à la clôture.
 - Mode WAL et écriture groupée **chaque seconde** : un crash du PC fait perdre au plus 1 seconde de données.
 - Ordre de grandeur : 7 200 échantillons pour un vol de 2 h à 1 par seconde, plus quelques milliers près du sol. SQLite tient sans difficulté.
 - Une fois le rapport accusé par l'API, les échantillons sont gardés 30 jours en local, puis supprimés ; la fiche du vol reste.
-- Bibliothèque : `better-sqlite3`, éprouvée et fonctionnelle sur Mac et Windows [Confiance moyenne] ; à valider avec Electron au prototype T1.
+- Bibliothèque : `node:sqlite`, le SQLite intégré à Node et à Electron (décidé en J3, 11/11/2026). `better-sqlite3`, choisi au départ, n'avait pas de binaire prêt pour Electron 45 : il aurait fallu le compiler sur chaque machine et dans la CI. Accès limité à `src/storage/sqlite.ts` (ouverture, WAL, transactions).
 
 ## 4. Envoi et file d'attente hors ligne
 

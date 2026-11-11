@@ -26,9 +26,9 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     env:
-      DATABASE_URL: postgres://weems:weems@localhost:5432/weems_test
+      TEST_DATABASE_URL: postgres://weems:weems@localhost:5432/weems_test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v7
         with:
@@ -43,3 +43,11 @@ jobs:
         run: pnpm structure
       - name: Tests
         run: pnpm test
+      - name: J1 (10 pilotes simulés à ×10, environ 6 min)
+        run: pnpm test:j1
+      - name: Navigateur des tests J2 et J3
+        run: pnpm --filter @weems/e2e exec playwright install --with-deps chromium
+      - name: J2 (page d'un vol de 2 h en moins de 2 s, français et anglais)
+        run: pnpm test:j2
+      - name: J3 (connexion du site et du tracker dans le navigateur)
+        run: pnpm test:j3

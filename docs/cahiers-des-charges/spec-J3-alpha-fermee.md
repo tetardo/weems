@@ -1,0 +1,111 @@
+# J3 — Alpha fermée
+
+Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sans spécification préalable). Ce document note ce qui est fait et les choix pris au fil de l'eau ; il se complète à chaque PR du jalon. Jalon J3 du lot 1 (voir [Lots et feuille de route](../cadrage/04-lots-et-feuille-de-route.md)).
+
+## Objectif
+
+5 pilotes testeurs installent le tracker sur leur PC, se connectent à leur compte et volent. Leurs vols arrivent sur l'API en ligne (machine virtuelle sur le serveur Hetzner de Greg) et ils les retrouvent sur le site, dans leur carnet personnel.
+
+**Critère de sortie** (feuille de route) : 5 pilotes, 50 vols, zéro vol perdu, phases correctes sur au moins 95 % des vols vérifiés à la main.
+
+## Périmètre
+
+| Dans J3 | Hors J3 (jalon prévu) |
+| --- | --- |
+| Comptes pilotes, inscription sur invitation (alpha fermée) | Inscription libre (J4) |
+| Connexion du site (e-mail et mot de passe) | Lien magique, mot de passe oublié par e-mail (il faut un service d'envoi d'e-mails) |
+| Connexion du tracker par le navigateur (OAuth 2.1 avec PKCE) | Application iPad (lot 4) |
+| Application tracker avec interface (Electron) et installateur Windows | Microsoft Store (J4 : micro-entreprise et compte Store) |
+| Carnet personnel, page de vol réservée au pilote | Profil public, vols publics |
+| Rapport de vol : phases, temps, atterrissage | **Note et débriefing** : les critères ne sont pas encore définis avec un pilote |
+| Mise en ligne sur une machine virtuelle Hetzner, sauvegardes hors serveur | Scaleway (production publique) |
+
+**Écart avec la feuille de route** : elle prévoyait le « recalcul de la note » côté API. Il n'y a pas encore de note : ses critères (point 4 de la spec T0) attendent la séance avec un pilote. Le rapport de vol montre donc les mesures, sans note.
+
+## 1. Comptes (API)
+
+![Connexion du tracker](../schemas/img/j3-connexion-tracker.png)
+
+- Bibliothèque : **Better Auth 1.7** dans l'API, avec ses extensions `jwt` et `oauth-provider`. Les tables sont dans la base PostgreSQL de l'API (`users`, `sessions`, `accounts`, clés de signature, clients et jetons OAuth).
+- **Inscription** : seulement avec un code d'invitation créé pour cette adresse e-mail (`pnpm invite <e-mail>`), utilisable une fois.
+- **Site** : session par cookie. Les routes `/api/auth/*` sont appelées à travers le site (même adresse que les pages), qui les relaie à l'API.
+- **Tracker** : il demande à l'API comment se connecter (`GET /v1/tracker/login`), ouvre le navigateur du pilote, reçoit le code sur `127.0.0.1` (port libre), puis l'échange contre un jeton d'accès de 1 heure et un jeton de rafraîchissement de 90 jours. Le pilote ne se reconnecte que s'il reste plus de 90 jours sans voler.
+- Chaque requête de l'API reconnaît le pilote par son jeton (tracker) ou par le cookie de session (site). Un pilote ne lit que ses propres vols (déjà vrai depuis J0, vérifié par un test avec deux pilotes).
+- **Développement** : le jeton fixe `dev-token` reste accepté hors production (`pnpm simulate`, `pnpm fly`). Ses vols appartiennent au pilote de développement, qui peut se connecter au site avec `pilote@weems.local` et le mot de passe `weems-dev-password`.
+
+## 2. Connexion du site
+
+- Tout le site demande d'être connecté, sauf `/login` et `/signup`. Sans session, le visiteur passe par la page de connexion puis revient à la page demandée.
+- `/signup?code=…` : l'adresse donnée par `pnpm invite` remplit le code d'invitation.
+- L'en-tête montre le nom du pilote et un bouton de déconnexion.
+- Tracker : l'API envoie le navigateur sur la page de connexion du site, dans la langue du navigateur. Après la connexion, le navigateur repart vers le tracker (`127.0.0.1`). Vérifié par un test navigateur (`pnpm test:j3`) avec le vrai site et la vraie API, jusqu'aux jetons.
+
+## 3. Connexion du tracker
+
+- Module `apps/tracker/src/account/`, sans Electron : il tourne et se teste sur Mac.
+- Connexion : le tracker lit `GET /v1/tracker/login`, ouvre un petit serveur sur `127.0.0.1` (port libre, fermé dès la réponse ou après 10 min), ouvre le navigateur du pilote, vérifie le `state`, puis échange le code (PKCE).
+- Jetons gardés dans un fichier chiffré par le système (Electron `safeStorage` : DPAPI sous Windows). Un fichier illisible équivaut à « déconnecté ».
+- Le jeton d'accès est renouvelé 1 minute avant sa fin. Si le jeton de rafraîchissement est refusé, le pilote est déconnecté et l'envoi s'arrête (401) ; les vols restent dans la file locale et partent après la reconnexion. Une panne réseau pendant le renouvellement ne déconnecte pas.
+- Testé contre la vraie API (`e2e/tracker-account.test.ts`) : connexion, renouvellement, refus du jeton de rafraîchissement.
+
+## 4. Application du tracker
+
+![Application du tracker](../schemas/img/j3-app-tracker.png)
+
+- Module `apps/tracker/src/app/` : `desktop-tracker.ts` assemble le compte, les réglages du prochain vol et le tracker MSFS, sans Electron (testé sur Mac). `main.ts`, `preload.ts` et `window/` sont la seule partie Electron.
+- Fenêtre (français ou anglais selon le système) : compte (connexion, déconnexion), simulateur (détecté ou non, avion chargé), vol en cours (phase, messages en attente, bouton « Clôturer le vol »), prochain vol (indicatif, départ, arrivée), message d'erreur.
+- La fenêtre n'a aucun accès à Node : elle affiche l'état reçu chaque seconde et transmet les clics (isolation du contexte, bac à sable, politique de sécurité du contenu). Les liens s'ouvrent dans le navigateur du pilote.
+- Données sur le PC, dans le dossier de l'application : `tracker.db` (vols et file d'envoi), `account.bin` (jetons chiffrés), `settings.json` (prochain vol).
+- **Rapport de vol** : le rapport complet (phases, temps bloc et vol, atterrissage, événements, trajectoire, profil) est la page du vol sur le site, en place depuis J2 ; le tracker l'envoie à la clôture et le renvoie jusqu'à l'accusé de réception (EF-21). La fenêtre du tracker montre le **dernier vol** clos sur ce PC, lu dans sa base locale : avion, heures et durée, vitesse verticale au dernier toucher, remises des gaz et rebonds, état de l'envoi (envoyé, en attente, refusé), et un bouton « Voir le rapport » qui ouvre la page du vol dans le navigateur une fois le vol envoyé. L'adresse du site est donnée par l'API (`siteUrl` dans `GET /v1/tracker/login`), rien n'est écrit en dur dans le tracker. Pas de note (voir Périmètre).
+- Les réglages refusent un indicatif ou un code OACI mal formé, et ne changent pas pendant un vol.
+- Une seule instance à la fois. À la fermeture, le tracker s'arrête proprement (le vol reste dans la file locale).
+- Adresse de l'API : fixée à la construction (`WEEMS_TRACKER_API_URL`), remplaçable au lancement par `WEEMS_API_URL` (essais sur le réseau local).
+- Paquet : `electron-builder`, installateur Windows NSIS par utilisateur (sans droits d'administrateur). L'installateur n'est pas signé en alpha : Windows affiche un avertissement SmartScreen.
+- **Construction sur Windows** (`.github/workflows/tracker-installer.yml`, machine Windows de GitHub) à chaque PR qui touche le tracker : tests du tracker sur Windows, installateur, puis lancement de l'application installée et vérification de la fenêtre (`e2e/tracker-app/`, aussi lançable sur Mac ou Linux par `pnpm test:tracker-app`). L'installateur reste 7 jours dans les artefacts de la CI.
+- **Publication d'une version** : « Run workflow » sur `main`. La CI dépose l'installateur dans une version **brouillon** `tracker-v<version>` sur GitHub ; rien n'arrive aux testeurs tant que Greg ne la publie pas à la main. Une fois publiée, le tracker des testeurs la télécharge au démarrage (`electron-updater`) et l'installe à la fermeture. Refusé si la version existe déjà (augmenter `version` dans `apps/tracker/package.json`) ou si la variable `WEEMS_TRACKER_API_URL` (adresse de l'API de l'alpha) n'est pas définie dans le dépôt.
+- Limite : `electron-updater` lit la dernière version publiée **du dépôt**. Tant que seul le tracker publie des versions, c'est la sienne ; si une autre application en publie un jour, il faudra un dépôt de versions séparé. [Confiance élevée]
+
+## 5. Mesures de l'alpha
+
+![Mesures de l'alpha](../schemas/img/j3-mesures-alpha.png)
+
+Outils pour vérifier le critère de sortie sans tableur.
+
+- **Vérification des phases** : sur la page d'un vol terminé, une carte « Vérification des phases » demande au pilote si les phases détectées sont justes (Oui / Non) avec une remarque facultative (1 000 caractères au plus). Une seule réponse par vol, la dernière remplace la précédente. API : `GET` et `PUT /v1/flights/{flightId}/review`, réservées au pilote du vol (404 pour un autre pilote), table `flight_reviews` (migration `0003`), contrat `FlightReview` dans `packages/contrats`.
+- **Rapport d'alpha** : `pnpm alpha-report --since <date de début de l'alpha>` dans `apps/api` (sur le serveur : `docker compose exec api node apps/api/src/modules/alpha/report-cli.ts --since <date>`). Il ne compte que les vols ouverts depuis cette date, pour écarter les vols d'essai. Il affiche le nombre de vols, les vols suspects, les vérifications, puis les quatre lignes du critère (OK / NON) ; code de sortie 0 si le critère est atteint, 1 sinon.
+- **Calcul** (`apps/api/src/modules/alpha/alpha-report.ts`, testé sans base) :
+  - pilotes = pilotes ayant au moins un vol terminé ;
+  - vols = vols terminés ;
+  - **vol suspect** = vol ouvert depuis plus de 24 h sans clôture, ou vol terminé sans trajectoire. Un vol clos il y a quelques secondes peut apparaître sans trajectoire le temps qu'elle arrive : relancer le rapport ;
+  - phases justes = réponses « Oui » ÷ vols vérifiés (les vols sans réponse ne comptent pas). Aucune vérification = critère non atteint.
+- **Limite** : l'API ne voit que les vols qu'elle a reçus. Un vol que le tracker n'a jamais envoyé (PC réinstallé avant l'envoi, tracker non lancé) est invisible ; la file d'envoi locale le garde jusqu'à l'accusé de réception, et les testeurs signalent tout vol manquant à leur carnet. [Confiance élevée]
+- **Qui vérifie** : le critère dit « vérifiés à la main ». Ici, c'est le pilote qui répond, sur son propre vol. Il connaît son vol mieux que personne, mais peut répondre « Oui » sans regarder. Greg relit les réponses « Non » (la remarque dit quelle phase) et un échantillon de « Oui » avant de déclarer le critère atteint. [Confiance moyenne]
+
+## Choix faits pendant le développement
+
+| Sujet | Choix | Pourquoi |
+| --- | --- | --- |
+| Bibliothèque de comptes | Better Auth 1.7.20 [Confiance moyenne] | TypeScript, gère à la fois les comptes du site et un vrai fournisseur OAuth 2.1 (PKCE, port libre sur 127.0.0.1 accepté, jetons de rafraîchissement tournants), adaptateur Drizzle. Lucia n'est plus maintenu comme bibliothèque ; écrire soi-même un serveur OAuth est à proscrire |
+| Connexion du tracker | Code d'autorisation + PKCE, retour sur 127.0.0.1 (RFC 8252) | Standard des applications de bureau ; le tracker ne voit jamais le mot de passe (décision d'architecture) |
+| Jetons du tracker | JWT signés, audience = l'API, vérifiés par l'API sans aller en base | Rapide, et prêt pour une API séparée du site plus tard |
+| Client OAuth du tracker | `weems-tracker`, créé au démarrage de l'API, sans écran de consentement | C'est l'application de Weems, pas un tiers |
+| Alpha fermée | Codes d'invitation liés à une adresse e-mail | Évite qu'un inconnu crée un compte ; pas besoin d'envoyer d'e-mails |
+| Mot de passe oublié | Pas en J3 : Greg crée une nouvelle invitation après suppression du compte | 5 pilotes ; un service d'envoi d'e-mails n'est utile qu'avec l'inscription libre |
+| Tables de Better Auth | Écrites à la main dans `apps/api/src/db/auth-schema.ts`, migrations Drizzle comme le reste | Une seule façon de faire évoluer la base. À comparer après chaque mise à jour de la bibliothèque |
+| Identifiants | UUID v7 pour les pilotes aussi | Même convention que les vols (spec J0) |
+| Look du site | Admin One React (justboil, licence MIT) : seuls les composants utiles sont recopiés, sans Redux ni pages de démonstration (choix de Greg) | Même rendu que le modèle, sans code mort ; PR séparée |
+| SQLite dans le tracker | `node:sqlite` (intégré à Node 24 et à Electron 45) au lieu de `better-sqlite3` | `better-sqlite3` est un module natif : il n'existe pas de binaire prêt pour Electron 45, il faudrait le compiler pour chaque version d'Electron sur Windows. `node:sqlite` est intégré, même SQL, mêmes transactions, WAL. Inconvénient : API encore marquée « release candidate » par Node [Confiance moyenne] |
+| Construction de l'application | `esbuild` regroupe le code en trois fichiers (processus principal, préchargement, fenêtre), `electron-builder` fait l'installateur | Electron ne lit pas le TypeScript des paquets du dépôt ; un seul fichier par processus démarre vite |
+| Distribution en alpha | Installateur NSIS sur les versions GitHub, mises à jour automatiques, publication à la main d'un brouillon | Le Microsoft Store attend la micro-entreprise (J4) ; le brouillon évite qu'une erreur de CI parte chez les testeurs |
+| Mesures de l'alpha | Réponse du pilote sur la page du vol + rapport en ligne de commande lu dans la base | Pas de tableau de bord à construire pour 5 pilotes ; le rapport se relance à tout moment et suit exactement le critère de la feuille de route |
+| Carte en direct | Le flux de l'API (`/v1/live/stream`) reste public en J3 (indicatif et position, sans nom ni e-mail) ; la page `/live` du site demande la connexion comme le reste | Rien de personnel n'y est montré. À revoir avant J4 |
+
+## Questions ouvertes
+
+| Question | Qui | Bloquant pour |
+| --- | --- | --- |
+| Nom de domaine de l'alpha (et risque de marque « Weems ») | Greg | La mise en ligne |
+| Accès à une machine virtuelle sur le serveur Hetzner | Greg | La mise en ligne |
+| Liste des 5 pilotes testeurs | Houssine | Les invitations |
+| Entretiens pilotes (hypothèses H1 et H2) | Greg et Houssine | Rien techniquement ; prévu avant l'alpha |
+| Vols de référence de J2 | Greg | La version du tracker donnée aux testeurs |

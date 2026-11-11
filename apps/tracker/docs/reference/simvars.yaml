@@ -36,8 +36,9 @@ simvars:
 
   # --- 3. Attitude et cap ---
   - { name: PLANE PITCH DEGREES, unit: degrees, doc_unit: radians, family: 3, tier: socle, verified: true, reliability: tous_avions,
-      notes: "Vérifier le signe (cabré positif ou négatif) au premier test." }
-  - { name: PLANE BANK DEGREES, unit: degrees, doc_unit: radians, family: 3, tier: socle, verified: true, reliability: tous_avions }
+      notes: "Le connecteur inverse le signe (cabré = négatif dans MSFS d'après la doc). À confirmer au premier vol (pieges.md)." }
+  - { name: PLANE BANK DEGREES, unit: degrees, doc_unit: radians, family: 3, tier: socle, verified: true, reliability: tous_avions,
+      notes: "Le connecteur inverse le signe (droite = positif dans le cœur). À confirmer au premier vol (pieges.md)." }
   - { name: PLANE HEADING DEGREES TRUE, unit: degrees, doc_unit: radians, family: 3, tier: socle, verified: true, reliability: tous_avions }
 
   # --- 4. État au sol ---
@@ -127,7 +128,8 @@ simvars:
 
   # --- 21. Moteurs et APU détaillés ---
   - { name: APU PCT RPM, unit: percent_over_100, family: 21, tier: differenciation, verified: true, reliability: depend_avion }
-  - { name: PUSHBACK STATE, unit: enum, family: 21, tier: differenciation, verified: true, reliability: a_tester }
+  - { name: PUSHBACK STATE, unit: enum, family: 21, tier: differenciation, verified: true, reliability: a_tester,
+      notes: "Codes supposés : 0 droit, 1 gauche, 2 droite, 3 aucun repoussage. À confirmer au premier vol (pieges.md)." }
 
   # --- 22. Piste et surface ---
   - { name: SURFACE TYPE, unit: enum, family: 22, tier: differenciation, verified: true, reliability: tous_avions,

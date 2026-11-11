@@ -1,0 +1,16 @@
+{
+  "name": "@weems/e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "End-to-end tests: tracker and API together, on a real database",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@weems/contrats": "workspace:*"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

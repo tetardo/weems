@@ -1,0 +1,261 @@
+{
+  "id": "3c4f71dd-23f8-4e4e-a1e1-27d0115719ba",
+  "prevId": "5e7bdd1d-9946-4ecd-9f89-a3d8c93c8369",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.flight_events": {
+      "name": "flight_events",
+      "schema": "",
+      "columns": {
+        "flight_id": {
+          "name": "flight_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "seq": {
+          "name": "seq",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "at": {
+          "name": "at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "context": {
+          "name": "context",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "flight_events_flight_id_flights_id_fk": {
+          "name": "flight_events_flight_id_flights_id_fk",
+          "tableFrom": "flight_events",
+          "tableTo": "flights",
+          "columnsFrom": ["flight_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "flight_events_flight_id_seq_pk": {
+          "name": "flight_events_flight_id_seq_pk",
+          "columns": ["flight_id", "seq"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.flight_tracks": {
+      "name": "flight_tracks",
+      "schema": "",
+      "columns": {
+        "flight_id": {
+          "name": "flight_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "recorded_points": {
+          "name": "recorded_points",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sha256": {
+          "name": "sha256",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points": {
+          "name": "points",
+          "type": "bytea",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "simplified": {
+          "name": "simplified",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "received_at": {
+          "name": "received_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "flight_tracks_flight_id_flights_id_fk": {
+          "name": "flight_tracks_flight_id_flights_id_fk",
+          "tableFrom": "flight_tracks",
+          "tableTo": "flights",
+          "columnsFrom": ["flight_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.flights": {
+      "name": "flights",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pilot_id": {
+          "name": "pilot_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "callsign": {
+          "name": "callsign",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "simulator": {
+          "name": "simulator",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aircraft_title": {
+          "name": "aircraft_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aircraft_model": {
+          "name": "aircraft_model",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aircraft_registration": {
+          "name": "aircraft_registration",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aircraft_engine_count": {
+          "name": "aircraft_engine_count",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aircraft_empty_weight_kg": {
+          "name": "aircraft_empty_weight_kg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "departure_icao": {
+          "name": "departure_icao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "planned_arrival_icao": {
+          "name": "planned_arrival_icao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "opened_at": {
+          "name": "opened_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "closed_at": {
+          "name": "closed_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "close_reason": {
+          "name": "close_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tracker_version": {
+          "name": "tracker_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "flights_pilot_opened_idx": {
+          "name": "flights_pilot_opened_idx",
+          "columns": [
+            {
+              "expression": "pilot_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "opened_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

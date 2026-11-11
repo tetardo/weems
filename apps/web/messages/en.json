@@ -1,0 +1,192 @@
+{
+  "Site": {
+    "name": "Weems",
+    "description": "Flight tracking for simulator pilots",
+    "nav": {
+      "flights": "My flights",
+      "live": "Live map"
+    },
+    "language": "Français",
+    "notMeasured": "not measured",
+    "openMenu": "Open the menu",
+    "closeMenu": "Close the menu"
+  },
+  "Live": {
+    "title": "Live map",
+    "count": "{count, plural, =0 {No flight in progress} one {# flight in progress} other {# flights in progress}}",
+    "connection": {
+      "connecting": "Connecting…",
+      "open": "Live",
+      "retrying": "Reconnecting…"
+    },
+    "signalLost": "Signal lost",
+    "close": "Close",
+    "fields": {
+      "aircraft": "Aircraft",
+      "departure": "Departure",
+      "arrival": "Arrival",
+      "phase": "Phase",
+      "altitude": "Altitude",
+      "groundSpeed": "Ground speed"
+    }
+  },
+  "Phases": {
+    "BOARDING": "Boarding",
+    "PUSHBACK": "Pushback",
+    "TAXI_OUT": "Taxi out",
+    "TAKEOFF": "Takeoff",
+    "CLIMB": "Climb",
+    "CRUISE": "Cruise",
+    "DESCENT": "Descent",
+    "APPROACH": "Approach",
+    "FINAL": "Final",
+    "LANDING": "Landing",
+    "TAXI_IN": "Taxi in",
+    "ARRIVED": "Arrived"
+  },
+  "Alerts": {
+    "paused": "Pause",
+    "simRateChanged": "Time acceleration",
+    "slew": "Slew",
+    "positionChanged": "Teleport",
+    "crashed": "Crash"
+  },
+  "Status": {
+    "open": "In progress",
+    "normal": "Completed",
+    "manual": "Closed by hand",
+    "crash": "Crash",
+    "interrupted": "Interrupted",
+    "aircraftChanged": "Aircraft changed"
+  },
+  "Events": {
+    "phaseChanged": "Phase: {phase}",
+    "rejectedTakeoff": "Rejected takeoff",
+    "touchdown": "Touchdown at {vs} ft/min",
+    "touchdownUnknown": "Touchdown",
+    "bounce": "Bounce",
+    "goAround": "Go-around",
+    "touchAndGo": "Touch and go",
+    "paused": "Paused",
+    "unpaused": "Pause ended",
+    "simRateChanged": "Simulation rate ×{rate}",
+    "slew": "Slew mode {state, select, on {on} other {off}}",
+    "positionChanged": "Teleport",
+    "aircraftChanged": "Aircraft changed",
+    "crashed": "Crash",
+    "resumed": "Resumed after a tracker cut",
+    "connectionLost": "Simulator disconnected",
+    "connectionRestored": "Simulator reconnected"
+  },
+  "Flights": {
+    "title": "My flights",
+    "empty": "No flight yet. Start pnpm fly on the PC, then fly.",
+    "emptyFiltered": "No flight matches these filters.",
+    "columns": {
+      "date": "Date (UTC)",
+      "callsign": "Callsign",
+      "route": "Route",
+      "aircraft": "Aircraft",
+      "airborne": "Flight time",
+      "status": "Status",
+      "alerts": "Alerts"
+    },
+    "filters": {
+      "from": "From",
+      "to": "To",
+      "aircraft": "Aircraft",
+      "airport": "Airport (ICAO)",
+      "apply": "Filter",
+      "reset": "Show all"
+    },
+    "next": "Older flights",
+    "first": "Back to the latest",
+    "apiDown": "The API does not answer ({url}). Is it running on the Mac?"
+  },
+  "Flight": {
+    "back": "My flights",
+    "notFound": "This flight does not exist.",
+    "header": {
+      "date": "Date",
+      "block": "Block time",
+      "airborne": "Flight time",
+      "paused": "Pauses",
+      "status": "Status",
+      "simulator": "Simulator",
+      "registration": "Registration"
+    },
+    "map": {
+      "title": "Track",
+      "noTrack": "Track not received yet: it arrives when the flight is closed."
+    },
+    "profile": {
+      "title": "Vertical profile",
+      "altitude": "Altitude (ft)",
+      "speed": "Ground speed (kt)"
+    },
+    "point": {
+      "time": "Time",
+      "altitude": "Altitude",
+      "speed": "Ground speed",
+      "vs": "Vertical speed",
+      "phase": "Phase"
+    },
+    "phases": {
+      "title": "Phases",
+      "start": "Start (UTC)",
+      "duration": "Duration",
+      "none": "No phase recorded."
+    },
+    "landing": {
+      "title": "Landing",
+      "vs": "Rate of descent at touchdown",
+      "bounces": "Bounces",
+      "touchdowns": "Touchdowns",
+      "goArounds": "Go-arounds",
+      "none": "No landing recorded."
+    },
+    "log": {
+      "title": "Log",
+      "time": "Time (UTC)",
+      "event": "Event",
+      "none": "No notable event."
+    },
+    "score": {
+      "title": "Score",
+      "later": "The score comes with flight scoring."
+    },
+    "review": {
+      "title": "Phase check",
+      "question": "Are the phases detected by the tracker right for this flight?",
+      "correct": "Yes, all right",
+      "wrong": "No, at least one is wrong",
+      "note": "If not, which one and why (optional)",
+      "send": "Send",
+      "saved": "Thanks, answer saved.",
+      "error": "Answer not saved, please try again.",
+      "already": "You already answered: you can change it."
+    }
+  },
+  "Auth": {
+    "title": "Log in",
+    "signupTitle": "Create my account",
+    "email": "E-mail address",
+    "password": "Password",
+    "name": "Pseudonym (seen by other pilots)",
+    "inviteCode": "Invitation code",
+    "submit": "Log in",
+    "signupSubmit": "Create my account",
+    "toSignup": "Received an invitation? Create my account",
+    "toLogin": "Already have an account? Log in",
+    "signOut": "Log out",
+    "tracker": "The tracker is waiting for you to log in: it will take over by itself.",
+    "passwordRule": "At least 10 characters.",
+    "errors": {
+      "credentials": "Wrong e-mail address or password.",
+      "invitation": "This invitation code does not match this address, or has already been used.",
+      "exists": "An account already exists with this address.",
+      "password": "The password must be at least 10 characters long.",
+      "unknown": "Logging in did not work. Try again in a moment."
+    }
+  }
+}

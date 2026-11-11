@@ -1,0 +1,35 @@
+# Everything the API needs on the Mac (file storage arrives at J2 with flight tracks): `docker compose up` from apps/api/ (spec J0, criterion 1).
+# Tests only need the database: `docker compose up -d db`.
+name: weems
+
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    environment:
+      WEEMS_ENV: development
+      DATABASE_URL: postgres://weems:weems@db:5432/weems
+      WEEMS_DEV_TOKEN: dev-token
+    ports: ["3000:3000"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: weems
+      POSTGRES_PASSWORD: weems
+      POSTGRES_DB: weems
+    ports: ["5432:5432"]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./docker/create-test-database.sql:/docker-entrypoint-initdb.d/create-test-database.sql:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "weems"]
+      interval: 2s
+      retries: 15
+
+volumes:
+  db-data:

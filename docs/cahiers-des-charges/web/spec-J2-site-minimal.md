@@ -33,6 +33,7 @@ Qu'un pilote retrouve ses vols et comprenne chacun d'eux d'un coup d'œil : où 
 
 Une ligne par vol, du plus récent au plus ancien, 50 par page :
 - date ;
+- indicatif (ex. WMS101) ;
 - départ et arrivée (codes OACI) ;
 - avion ;
 - durée de vol ;

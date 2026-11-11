@@ -1,0 +1,7 @@
+flowchart LR
+  API["API<br/>GET /v1/live/stream"] -- "SSE : instantané,<br/>puis lots toutes les 2 s" --> H["use-live-flights<br/>connexion et reconnexion"]
+  H -- "instantané / mise à jour" --> S["flights-store<br/>vols en cours, par identifiant"]
+  S --> T["tracks<br/>glissement de 2 s<br/>entre deux positions"]
+  T -- "GeoJSON à chaque image" --> M["live-map<br/>MapLibre, fond OpenFreeMap"]
+  M -- "clic sur un avion" --> P["flight-panel<br/>indicatif, avion, phase,<br/>altitude, vitesse sol"]
+  S --> C["Compteur<br/>et état de connexion"]

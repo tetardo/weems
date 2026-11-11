@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/*
+ * Mock-up: look of Greg's GameLab IA project (its tokens --gl-*, packages/shell/src/theme.ts):
+ * dark night blue by default, light theme from the system preference, cyan accent, orange second
+ * accent, Inter for text and Space Grotesk for titles. Phase colours: src/flight/phase-colors.ts.
+ */
+@theme {
+  --color-bg: var(--wm-bg);
+  --color-surface: var(--wm-surface);
+  --color-line: var(--wm-line);
+  --color-ink: var(--wm-text);
+  --color-muted: var(--wm-text-muted);
+  --color-accent: var(--wm-accent);
+  --color-on-accent: var(--wm-on-accent);
+  --color-link: var(--wm-link);
+  --color-accent-2: var(--wm-accent-2);
+  --color-danger: var(--wm-danger);
+  --color-success: var(--wm-success);
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-title: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+  --wm-bg: #0e1320;
+  --wm-surface: #171e2e;
+  --wm-line: #26304a;
+  --wm-text: #e8ecf5;
+  --wm-text-muted: #9aa6bf;
+  --wm-accent: #4fd1e8;
+  --wm-on-accent: #0e1320;
+  --wm-link: #4fd1e8;
+  --wm-accent-2: #ffb454;
+  --wm-danger: #ff8a80;
+  --wm-success: #6ee7a8;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --wm-bg: #f5f7fb;
+    --wm-surface: #ffffff;
+    --wm-line: #dde1ee;
+    --wm-text: #1f2430;
+    --wm-text-muted: #5a6378;
+    --wm-accent: #0e8fa6;
+    --wm-on-accent: #0e1320;
+    --wm-link: #0b7285;
+    --wm-accent-2: #b86a00;
+    --wm-danger: #b3261e;
+    --wm-success: #1b7f4b;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font:
+    15px/1.5 var(--font-sans),
+    sans-serif;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

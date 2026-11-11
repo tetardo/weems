@@ -1,0 +1,10 @@
+flowchart LR
+  T["Tracker du testeur"] -- "ouverture, événements,<br/>clôture, trajectoire" --> API[API Weems]
+  P["Pilote sur la page du vol<br/>« Les phases sont-elles justes ? »"] -- "PUT /v1/flights/:id/review" --> API
+  API --> DB[("PostgreSQL<br/>flights, flight_tracks,<br/>flight_reviews")]
+  DB --> R["pnpm alpha-report --since AAAA-MM-JJ<br/>(Greg, sur le serveur)"]
+  R --> C{"Critère de sortie J3"}
+  C --> C1["≥ 5 pilotes ayant terminé un vol"]
+  C --> C2["≥ 50 vols terminés"]
+  C --> C3["0 vol suspect :<br/>ouvert depuis plus de 24 h<br/>ou terminé sans trajectoire"]
+  C --> C4["≥ 95 % de phases justes<br/>parmi les vols vérifiés"]
