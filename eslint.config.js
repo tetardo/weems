@@ -6,7 +6,16 @@ import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
   {
-    ignores: ["**/dist/**", "**/out/**", "**/coverage/**", "**/node_modules/**", "docs/**"],
+    ignores: [
+      "**/dist/**",
+      "**/out/**",
+      "**/coverage/**",
+      "**/node_modules/**",
+      "**/.next/**",
+      "apps/web/public/**",
+      "**/next-env.d.ts",
+      "docs/**",
+    ],
   },
   js.configs.recommended,
   {

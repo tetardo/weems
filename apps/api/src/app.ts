@@ -2,11 +2,13 @@ import Fastify, { type FastifyInstance } from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import type { Config } from "./config.ts";
 import type { DatabaseHandle } from "./db/client.ts";
-import { LivePositions } from "./modules/flights/live-positions.ts";
 import { FlightsRepository } from "./modules/flights/repository.ts";
 import { registerFlightRoutes } from "./modules/flights/routes.ts";
 import { FlightsService } from "./modules/flights/service.ts";
 import { registerHealthRoutes } from "./modules/health/routes.ts";
+import { LiveBoard } from "./modules/live/live-board.ts";
+import { registerLiveRoutes } from "./modules/live/routes.ts";
+import { LiveStream } from "./modules/live/stream.ts";
 import { registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
@@ -33,8 +35,13 @@ export async function buildApp({
   await registerDocs(app);
 
   registerHealthRoutes(app, database.ping);
-  const flights = new FlightsService(new FlightsRepository(database.db), new LivePositions());
+  const board = new LiveBoard();
+  const stream = new LiveStream(board);
+  const flights = new FlightsService(new FlightsRepository(database.db), board);
   registerFlightRoutes(app, flights, registerAuth(app, config));
+  registerLiveRoutes(app, stream);
+  app.addHook("onReady", async () => stream.start());
+  app.addHook("preClose", async () => stream.stop());
 
   await app.ready();
   return app;

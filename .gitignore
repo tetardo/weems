@@ -8,3 +8,6 @@ coverage/
 *.tsbuildinfo
 .env.*
 !.env.example
+.next/
+next-env.d.ts
+apps/web/public/maplibre-gl-worker.mjs

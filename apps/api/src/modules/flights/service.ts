@@ -10,7 +10,7 @@ import {
 } from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
 import { ApiProblem, conflict, notFound } from "../../plugins/problem.ts";
-import type { LivePositions } from "./live-positions.ts";
+import type { LiveFeed, LiveFlightInfo } from "./live-feed.ts";
 import type { FlightRecord, FlightsRepository } from "./repository.ts";
 
 const CREATED: Receipt = { result: "created" };
@@ -32,6 +32,17 @@ export function lastPhaseOf(events: FlightEvent[]): FlightPhase | null {
   return null;
 }
 
+function liveInfo(flight: FlightRecord): LiveFlightInfo {
+  return {
+    flightId: flight.flightId,
+    callsign: flight.callsign,
+    aircraftTitle: flight.aircraft.title,
+    aircraftModel: flight.aircraft.model,
+    departureIcao: flight.departureIcao,
+    plannedArrivalIcao: flight.plannedArrivalIcao,
+  };
+}
+
 function assertDistinctSeqs(events: FlightEvent[]): void {
   if (new Set(events.map((e) => e.seq)).size !== events.length) {
     throw new ApiProblem(400, "Bad Request", "Two events of the request share the same seq.");
@@ -44,9 +55,9 @@ function assertDistinctSeqs(events: FlightEvent[]): void {
  */
 export class FlightsService {
   private readonly repository: FlightsRepository;
-  private readonly live: LivePositions;
+  private readonly live: LiveFeed;
 
-  constructor(repository: FlightsRepository, live: LivePositions) {
+  constructor(repository: FlightsRepository, live: LiveFeed) {
     this.repository = repository;
     this.live = live;
   }
@@ -84,21 +95,21 @@ export class FlightsService {
     position: PositionReport,
   ): Promise<Receipt> {
     const flight = await this.ownFlight(caller, flightId);
-    const last = this.live.get(flightId);
+    const last = this.live.lastPosition(flightId);
     if (last && position.seq === last.seq) {
       if (isDeepStrictEqual(last, position)) return ALREADY_RECEIVED;
       throw conflict(`Position ${position.seq} of flight ${flightId} differs from the stored one.`);
     }
     // Late (older) positions and positions after closing are ignored: only the newest counts.
     if ((last && position.seq < last.seq) || flight.closedAt !== null) return ALREADY_RECEIVED;
-    this.live.set(flightId, position);
+    this.live.position(liveInfo(flight), position);
     return CREATED;
   }
 
   async close(caller: Caller, flightId: string, request: CloseFlightRequest): Promise<Receipt> {
     await this.ownFlight(caller, flightId);
     if (await this.repository.closeFlight(flightId, request)) {
-      this.live.delete(flightId);
+      this.live.closed(flightId);
       return CREATED;
     }
     const flight = await this.ownFlight(caller, flightId);
