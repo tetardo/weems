@@ -59,8 +59,10 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 - Les réglages refusent un indicatif ou un code OACI mal formé, et ne changent pas pendant un vol.
 - Une seule instance à la fois. À la fermeture, le tracker s'arrête proprement (le vol reste dans la file locale).
 - Adresse de l'API : fixée à la construction (`WEEMS_TRACKER_API_URL`), remplaçable au lancement par `WEEMS_API_URL` (essais sur le réseau local).
-- Paquet : `electron-builder`, installateur Windows NSIS par utilisateur (sans droits d'administrateur), mises à jour automatiques depuis les versions publiées sur GitHub (`electron-updater`). L'installateur n'est pas signé en alpha : Windows affiche un avertissement SmartScreen.
-- Vérifié ici : fenêtre lancée pour de vrai (capture jointe à la PR, Linux), paquet de contrôle Linux construit. **Pas encore vérifié** : installateur Windows et mise à jour automatique (construits par GitHub Actions sur Windows, étape suivante).
+- Paquet : `electron-builder`, installateur Windows NSIS par utilisateur (sans droits d'administrateur). L'installateur n'est pas signé en alpha : Windows affiche un avertissement SmartScreen.
+- **Construction sur Windows** (`.github/workflows/tracker-installer.yml`, machine Windows de GitHub) à chaque PR qui touche le tracker : tests du tracker sur Windows, installateur, puis lancement de l'application installée et vérification de la fenêtre (`e2e/tracker-app/`, aussi lançable sur Mac ou Linux par `pnpm test:tracker-app`). L'installateur reste 7 jours dans les artefacts de la CI.
+- **Publication d'une version** : « Run workflow » sur `main`. La CI dépose l'installateur dans une version **brouillon** `tracker-v<version>` sur GitHub ; rien n'arrive aux testeurs tant que Greg ne la publie pas à la main. Une fois publiée, le tracker des testeurs la télécharge au démarrage (`electron-updater`) et l'installe à la fermeture. Refusé si la version existe déjà (augmenter `version` dans `apps/tracker/package.json`) ou si la variable `WEEMS_TRACKER_API_URL` (adresse de l'API de l'alpha) n'est pas définie dans le dépôt.
+- Limite : `electron-updater` lit la dernière version publiée **du dépôt**. Tant que seul le tracker publie des versions, c'est la sienne ; si une autre application en publie un jour, il faudra un dépôt de versions séparé. [Confiance élevée]
 
 ## Choix faits pendant le développement
 
@@ -77,7 +79,7 @@ Rédigée le 11/11/2026, pendant le développement (Greg a choisi de coder J3 sa
 | Look du site | Admin One React (justboil, licence MIT) : seuls les composants utiles sont recopiés, sans Redux ni pages de démonstration (choix de Greg) | Même rendu que le modèle, sans code mort ; PR séparée |
 | SQLite dans le tracker | `node:sqlite` (intégré à Node 24 et à Electron 45) au lieu de `better-sqlite3` | `better-sqlite3` est un module natif : il n'existe pas de binaire prêt pour Electron 45, il faudrait le compiler pour chaque version d'Electron sur Windows. `node:sqlite` est intégré, même SQL, mêmes transactions, WAL. Inconvénient : API encore marquée « release candidate » par Node [Confiance moyenne] |
 | Construction de l'application | `esbuild` regroupe le code en trois fichiers (processus principal, préchargement, fenêtre), `electron-builder` fait l'installateur | Electron ne lit pas le TypeScript des paquets du dépôt ; un seul fichier par processus démarre vite |
-| Distribution en alpha | Installateur NSIS sur les versions GitHub, mises à jour automatiques | Le Microsoft Store attend la micro-entreprise (J4) |
+| Distribution en alpha | Installateur NSIS sur les versions GitHub, mises à jour automatiques, publication à la main d'un brouillon | Le Microsoft Store attend la micro-entreprise (J4) ; le brouillon évite qu'une erreur de CI parte chez les testeurs |
 | Carte en direct | Le flux de l'API (`/v1/live/stream`) reste public en J3 (indicatif et position, sans nom ni e-mail) ; la page `/live` du site demande la connexion comme le reste | Rien de personnel n'y est montré. À revoir avant J4 |
 
 ## Questions ouvertes

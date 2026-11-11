@@ -3,7 +3,7 @@ import { defineProject } from "vitest/config";
 export default defineProject({
   test: {
     name: "e2e",
-    exclude: ["j1/**", "j2/**", "j3/**", "**/node_modules/**"],
+    exclude: ["j1/**", "j2/**", "j3/**", "tracker-app/**", "**/node_modules/**"],
     globalSetup: ["../apps/api/src/testing/global-setup.ts"],
   },
 });
