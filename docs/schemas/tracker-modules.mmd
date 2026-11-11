@@ -6,13 +6,17 @@ flowchart TB
     ST["storage<br/>SQLite"]
     SE["sender<br/>envoi + file hors ligne"]
     APP["app<br/>Electron"]
+    ACC["account<br/>connexion, jetons"]
+    RT["runtime<br/>assemblage"]
   end
   CORE["core<br/>session de vol, 12 phases, événements<br/>ne dépend de rien"]
   MS -- "SimConnector" --> CORE
   RP -- "SimConnector" --> CORE
   CORE -- "enregistre" --> ST
   CORE -- "programme les envois" --> SE
-  APP -- "affiche l'état" --> CORE
+  RT -- "branche" --> CORE
+  APP -- "lance" --> RT
+  ACC -- "jeton d'accès" --> SE
   CORE --> PK["packages/contrats<br/>packages/notation"]
   SE -- "HTTPS" --> API["API Weems"]
   classDef core fill:#1F5F99,color:#FFFFFF,stroke:#14273A

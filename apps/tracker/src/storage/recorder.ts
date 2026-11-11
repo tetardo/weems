@@ -1,11 +1,12 @@
 import { type Database, inTransaction, openDatabase } from "./sqlite.ts";
-import type {
-  CloseFlightRequest,
-  FlightEvent,
-  FlightPhase,
-  OpenFlightRequest,
-  PositionReport,
-  Sample,
+import {
+  type CloseFlightRequest,
+  type FlightEvent,
+  type FlightPhase,
+  type OpenFlightRequest,
+  type PositionReport,
+  type Sample,
+  phaseChangeOf,
 } from "@weems/contrats";
 import type { SavedFlight } from "../core/recovery.ts";
 import { migrate } from "./schema.ts";
@@ -53,7 +54,7 @@ export class Recorder {
   }
 
   event(flightId: string, event: FlightEvent): void {
-    const phase = event.type === "phaseChanged" ? (event.context["to"] as FlightPhase) : null;
+    const phase = phaseChangeOf(event)?.to ?? null;
     inTransaction(this.db, () => {
       this.db
         .prepare("INSERT INTO events (flight_id, seq, data) VALUES (?, ?, ?)")

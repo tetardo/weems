@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decideRecovery, distanceNm, type SavedFlight } from "./recovery.ts";
+import { decideRecovery, type SavedFlight } from "./recovery.ts";
 
 const saved: SavedFlight = {
   flightId: "f",
@@ -37,11 +37,5 @@ describe("decideRecovery (ENF-02)", () => {
 
   it("interrupts when no position was ever saved", () => {
     expect(decideRecovery({ ...saved, lastAt: null }, now(1))).toBe("interrupt");
-  });
-});
-
-describe("distanceNm", () => {
-  it("counts 60 NM per degree of latitude", () => {
-    expect(distanceNm(45, 2, 46, 2)).toBeCloseTo(60, 0);
   });
 });

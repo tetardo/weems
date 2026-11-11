@@ -4,9 +4,10 @@ import {
   type FlightEvent,
   type FlightList,
   type FlightListQuery,
-  FlightPhase,
+  type FlightPhase,
   type FlightView,
   type OpenFlightRequest,
+  phaseChangeOf,
   type PositionReport,
   type Receipt,
 } from "@weems/contrats";
@@ -28,13 +29,7 @@ function openedPart(flight: FlightRecord): OpenFlightRequest {
 
 /** Last phase reached, from the most recent "phaseChanged" event. */
 export function lastPhaseOf(events: FlightEvent[]): FlightPhase | null {
-  for (let i = events.length - 1; i >= 0; i--) {
-    const event = events[i];
-    if (event?.type !== "phaseChanged") continue;
-    const phase = FlightPhase.safeParse(event.context["to"]);
-    if (phase.success) return phase.data;
-  }
-  return null;
+  return events.map(phaseChangeOf).findLast((change) => change !== null)?.to ?? null;
 }
 
 function liveInfo(flight: FlightRecord): LiveFlightInfo {
