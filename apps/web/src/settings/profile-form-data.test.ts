@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readProfileForm } from "./profile-form-data.ts";
+import { accountName, readProfileForm } from "./profile-form-data.ts";
 
 const form = (fields: Record<string, string>) => {
   const data = new FormData();
@@ -29,6 +29,8 @@ describe("settings form", () => {
         level: null,
         vatsimId: null,
         ivaoId: null,
+        instagram: null,
+        facebook: null,
         simbriefId: null,
       },
     });
@@ -62,5 +64,22 @@ describe("settings form", () => {
       ok: false,
       field: "level",
     });
+  });
+
+  it("keeps the account name of a typed @name or a pasted profile link", () => {
+    expect(accountName("@greg.flies")).toBe("greg.flies");
+    expect(accountName("https://www.instagram.com/greg.flies/?hl=fr")).toBe("greg.flies");
+    expect(accountName("instagram.com/greg_flies")).toBe("greg_flies");
+    expect(accountName("https://m.facebook.com/greg.dupont")).toBe("greg.dupont");
+    expect(accountName("https://www.facebook.com/profile.php?id=100012345678")).toBe(
+      "100012345678",
+    );
+    expect(accountName(null)).toBeNull();
+  });
+
+  it("names a wrong social account", () => {
+    expect(
+      readProfileForm(form({ handle: "greg-fr", instagram: "https://evil.example/x y" })),
+    ).toEqual({ ok: false, field: "instagram" });
   });
 });

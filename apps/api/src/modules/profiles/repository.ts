@@ -13,6 +13,8 @@ export interface ProfileRecord {
   level: PilotLevel | null;
   vatsimId: string | null;
   ivaoId: string | null;
+  instagram: string | null;
+  facebook: string | null;
   simbriefId: string | null;
   publishedAt: Date | null;
   unpublishedAt: Date | null;

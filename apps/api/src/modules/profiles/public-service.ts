@@ -59,6 +59,8 @@ export class PublicProfilesService {
       level: profile.level,
       vatsimId: profile.vatsimId,
       ivaoId: profile.ivaoId,
+      instagram: profile.instagram,
+      facebook: profile.facebook,
       memberSince: identity.createdAt.toISOString(),
       hasPhoto: await this.repository.hasPhoto(profile.pilotId),
       stats: pilotStats(flights, tracks, now),

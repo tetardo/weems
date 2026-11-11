@@ -5,6 +5,8 @@
 export {
   ArrowLeft as BackIcon,
   BookOpen as FlightsIcon,
+  Check as DoneIcon,
+  Copy as CopyIcon,
   ExternalLink as ExternalIcon,
   EyeOff as HideIcon,
   Eye as ShowIcon,
@@ -21,4 +23,5 @@ export {
   Route as RoutesIcon,
   Sun as ThemeLightIcon,
   Trash2 as DeleteIcon,
+  TriangleAlert as WarningIcon,
 } from "lucide-react";

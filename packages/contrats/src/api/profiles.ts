@@ -26,6 +26,10 @@ export type PilotLevel = z.infer<typeof PilotLevel>;
 export const VatsimId = z.string().regex(/^\d{6,8}$/);
 /** IVAO member id (VID). */
 export const IvaoId = z.string().regex(/^\d{5,7}$/);
+/** Instagram user name, without @: 1 to 30 of letters, digits, dot and underscore. */
+export const InstagramName = z.string().regex(/^[A-Za-z0-9._]{1,30}$/);
+/** Facebook user name or numeric profile id: 1 to 50 of letters, digits and dot. */
+export const FacebookName = z.string().regex(/^[A-Za-z0-9.]{1,50}$/);
 /** SimBrief user name or pilot id. Never public: used by the tracker to import flight plans. */
 export const SimbriefId = z.string().regex(/^[A-Za-z0-9_.-]{1,32}$/);
 
@@ -37,6 +41,9 @@ const ProfileFields = z.object({
   level: PilotLevel.nullable(),
   vatsimId: VatsimId.nullable(),
   ivaoId: IvaoId.nullable(),
+  /** Account names only: the site builds the links, so a public page never shows a free link. */
+  instagram: InstagramName.nullable(),
+  facebook: FacebookName.nullable(),
   simbriefId: SimbriefId.nullable(),
 });
 
@@ -178,6 +185,8 @@ export const PublicPilot = z.object({
   level: PilotLevel.nullable(),
   vatsimId: VatsimId.nullable(),
   ivaoId: IvaoId.nullable(),
+  instagram: InstagramName.nullable(),
+  facebook: FacebookName.nullable(),
   memberSince: UtcTimestamp,
   /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
   hasPhoto: z.boolean(),

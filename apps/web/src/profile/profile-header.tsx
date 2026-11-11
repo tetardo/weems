@@ -9,11 +9,30 @@ import { ShareButton } from "./share-button.tsx";
 /** Circumference of the Earth at the equator, nautical miles. */
 const EARTH_NM = 21_600;
 
-/** Network pages built from the ids, never typed by the pilot: no free link on a public page. */
-const NETWORK_LINKS = {
-  VATSIM: (id: string) => `https://stats.vatsim.net/stats/${id}`,
-  IVAO: (id: string) => `https://www.ivao.aero/Member.aspx?Id=${id}`,
+/**
+ * Network pages and social accounts built from ids and account names, never typed by the pilot:
+ * no free link on a public page. `shown`: what the chip says after the network's name.
+ */
+const ACCOUNTS = {
+  VATSIM: {
+    link: (id: string) => `https://stats.vatsim.net/stats/${id}`,
+    shown: (id: string) => id,
+  },
+  IVAO: {
+    link: (id: string) => `https://www.ivao.aero/Member.aspx?Id=${id}`,
+    shown: (id: string) => id,
+  },
+  Instagram: {
+    link: (name: string) => `https://www.instagram.com/${name}/`,
+    shown: (name: string) => `@${name}`,
+  },
+  // A numeric profile id says nothing to a visitor: the chip then shows « Facebook » alone.
+  Facebook: {
+    link: (name: string) => `https://www.facebook.com/${name}`,
+    shown: (name: string) => (/^\d+$/.test(name) ? "" : name),
+  },
 };
+type Account = keyof typeof ACCOUNTS;
 
 function Photo({ pilot }: { pilot: PublicPilot }) {
   return (
@@ -29,20 +48,25 @@ function Photo({ pilot }: { pilot: PublicPilot }) {
 }
 
 function Networks({ pilot }: { pilot: PublicPilot }) {
-  const ids = { VATSIM: pilot.vatsimId, IVAO: pilot.ivaoId };
+  const ids: Record<Account, string | null> = {
+    VATSIM: pilot.vatsimId,
+    IVAO: pilot.ivaoId,
+    Instagram: pilot.instagram,
+    Facebook: pilot.facebook,
+  };
   return (
     <div className="mt-3.5 flex flex-wrap gap-2">
-      {(Object.keys(ids) as (keyof typeof ids)[]).map((network) => {
-        const id = ids[network];
+      {(Object.keys(ids) as Account[]).map((account) => {
+        const id = ids[account];
         return id ? (
           <a
-            key={network}
-            href={NETWORK_LINKS[network](id)}
-            rel="nofollow noopener"
+            key={account}
+            href={ACCOUNTS[account].link(id)}
+            rel="nofollow noopener noreferrer"
             target="_blank"
             className="rounded-full border border-line px-3 py-1 text-[13px] text-ink"
           >
-            <b className="font-semibold text-muted">{network}</b> {id}
+            <b className="font-semibold text-muted">{account}</b> {ACCOUNTS[account].shown(id)}
           </a>
         ) : null;
       })}
