@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { serverApiUrl } from "../site/api-url.ts";
+import { hasSessionCookie } from "./session-cookie.ts";
 
 export interface Pilot {
   id: string;
@@ -26,4 +27,9 @@ export async function currentPilot(): Promise<Pilot | null> {
   } catch {
     return null;
   }
+}
+
+/** A session cookie is present: enough to choose a link, never to grant access (the API checks). */
+export async function hasSession(): Promise<boolean> {
+  return hasSessionCookie((await cookies()).getAll().map((cookie) => cookie.name));
 }

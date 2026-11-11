@@ -95,7 +95,7 @@ Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols 
 | --- | --- | --- |
 | Aéroport de base | Code OACI (`LFBO`) | Texte dans l'en-tête |
 | Pays | Code ISO 3166-1 alpha-2 (`FR`) | Nom traduit (`Intl.DisplayNames`) et drapeau en image (bibliothèque `flag-icons`, licence MIT : Windows n'affiche pas les drapeaux en émoji) |
-| Niveau déclaré | `beginner`, `intermediate`, `advanced`, `real_pilot` (Débutant, Intermédiaire, Confirmé, Pilote réel) | Pastille ; déclaratif, rien ne le vérifie |
+| Niveau déclaré | `beginner`, `intermediate`, `advanced`, `realPilot` (Débutant, Intermédiaire, Confirmé, Pilote réel) | Pastille ; déclaratif, rien ne le vérifie |
 | VATSIM | Identifiant numérique (CID), 6 à 8 chiffres | Lien vers sa page de statistiques VATSIM |
 | IVAO | Identifiant numérique (VID), 5 à 7 chiffres | Lien vers sa page de membre IVAO |
 | SimBrief | Nom d'utilisateur ou identifiant de pilote, 1 à 32 caractères `A-Z a-z 0-9 _ . -` | Jamais public (import du plan de vol par le tracker, plus tard) |
@@ -122,6 +122,7 @@ Textes en français et en anglais, comme le reste du site.
 - Adresse canonique et variantes de langue (`hreflang` fr et en).
 - `sitemap.xml` : les profils activés, avec leur date de mise à jour ; `robots.txt` : tout le reste du site (pages connectées) est exclu.
 - Pages connectées marquées `noindex`.
+- L'image de partage montre les initiales, pas la photo : le générateur d'images de Next.js ne lit pas le WebP [Confiance moyenne] ; à revoir si la photo y est jugée utile.
 - Limite assumée [Confiance élevée] : en local, rien n'est indexé ; on vérifie les balises et le plan du site, pas le classement.
 
 ## 6. API

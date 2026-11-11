@@ -5,6 +5,13 @@
 export {
   ArrowLeft as BackIcon,
   BookOpen as FlightsIcon,
+  ExternalLink as ExternalIcon,
+  EyeOff as HideIcon,
+  Eye as ShowIcon,
+  Map as MapIcon,
+  ChartLine as StatsIcon,
+  Share2 as ShareIcon,
+  CircleUserRound as ProfileIcon,
   LogOut as SignOutIcon,
   type LucideIcon as IconComponent,
   Menu as MenuIcon,

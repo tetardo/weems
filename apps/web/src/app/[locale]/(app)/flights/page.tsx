@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ApiUnavailable, listFlights } from "../../../../api/weems-api.ts";
+import { ApiUnavailable } from "../../../../api/api-request.ts";
+import { listFlights } from "../../../../api/weems-api.ts";
 import { FlightList } from "../../../../flights/flight-list.tsx";
 import { readFilters, toApiQuery } from "../../../../flights/list-query.ts";
 import { ApiDown } from "../../../../site/api-down.tsx";

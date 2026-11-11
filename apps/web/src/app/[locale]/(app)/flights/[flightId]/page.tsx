@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { ApiUnavailable, getFlight, getReview, getTrack } from "../../../../../api/weems-api.ts";
+import { ApiUnavailable } from "../../../../../api/api-request.ts";
+import { getVisibility } from "../../../../../api/profile-api.ts";
+import { getFlight, getReview, getTrack } from "../../../../../api/weems-api.ts";
 import { FlightPage } from "../../../../../flight/flight-page.tsx";
 import { formatRoute } from "../../../../../format/flight-format.ts";
 import { ApiDown } from "../../../../../site/api-down.tsx";
@@ -28,13 +30,21 @@ export default async function FlightRoute({ params }: Props) {
   const { locale, flightId } = await params;
   setRequestLocale(locale);
   try {
-    const [flight, track, review] = await Promise.all([
+    const [flight, track, review, visibility] = await Promise.all([
       getFlight(flightId),
       getTrack(flightId),
       getReview(flightId),
+      getVisibility(flightId),
     ]);
     if (!flight) notFound();
-    return <FlightPage flight={flight} track={track} review={review} />;
+    return (
+      <FlightPage
+        flight={flight}
+        track={track}
+        review={review}
+        hiddenOnProfile={visibility?.hiddenOnProfile ?? null}
+      />
+    );
   } catch (error) {
     if (error instanceof ApiUnavailable) return <ApiDown url={error.url} />;
     throw error;

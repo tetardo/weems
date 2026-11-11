@@ -29,13 +29,22 @@ export function AsideMenu({ open, onClose }: { open: boolean; onClose: () => voi
         </button>
       </div>
       <nav className="flex-1 overflow-y-auto p-3">
-        <ul className="flex flex-col gap-0.5">
-          {MENU.map((item) => (
-            <li key={item.href}>
-              <MenuEntry item={item} onClose={onClose} />
-            </li>
-          ))}
-        </ul>
+        {MENU.map((section) => (
+          <div key={section.title ?? "main"}>
+            {section.title && (
+              <p className="mx-3 mt-4 mb-1.5 text-xs tracking-wider text-muted uppercase">
+                {t(`nav.${section.title}`)}
+              </p>
+            )}
+            <ul className="flex flex-col gap-0.5">
+              {section.items.map((item) => (
+                <li key={item.href}>
+                  <MenuEntry item={item} onClose={onClose} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </nav>
     </aside>
   );
