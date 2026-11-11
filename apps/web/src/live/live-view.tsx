@@ -6,7 +6,10 @@ import { FlightPanel } from "./flight-panel.tsx";
 import { LiveMap } from "./live-map.tsx";
 import { useLiveFlights } from "./use-live-flights.ts";
 
-/** The /live page: map, flight counter, panel of the selected flight. */
+/**
+ * The /live page: map, flight counter, panel of the selected flight. The map goes up under the
+ * floating bar and down under the dock (decision 003): -mt-18 is the bar and its top margin.
+ */
 export function LiveView({ apiUrl }: { apiUrl: string }) {
   const t = useTranslations("Live");
   const { flights, connection } = useLiveFlights(apiUrl);
@@ -14,9 +17,9 @@ export function LiveView({ apiUrl }: { apiUrl: string }) {
   const selected = selectedId ? flights.get(selectedId) : undefined;
 
   return (
-    <main className="relative flex-1">
+    <main className="relative -mt-18 flex-1 max-md:-mb-24">
       <LiveMap flights={flights} selectedId={selectedId} onSelect={setSelectedId} />
-      <div className="absolute top-3 left-3 rounded-[10px] border border-line bg-surface px-3 py-1.5">
+      <div className="absolute top-21 left-3 rounded sm:left-6-[10px] border border-line bg-surface px-3 py-1.5">
         {t("count", { count: flights.size })} · {t(`connection.${connection}`)}
       </div>
       {selected && <FlightPanel flight={selected} onClose={() => setSelectedId(null)} />}

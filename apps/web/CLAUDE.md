@@ -3,7 +3,7 @@
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
 J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
-J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth).
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab. J4 : navigation en barre flottante (fiche 003) ; la page de connexion sert aussi au tracker (OAuth).
 
 ## Où trouver quoi
 
@@ -19,7 +19,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 
 - Next.js (App Router), React, TypeScript strict.
 - Traductions : `next-intl`, textes dans `messages/fr.json` et `messages/en.json`, jamais écrits en dur ; un test vérifie que les deux fichiers ont les mêmes clés.
-- Mise en forme : Tailwind CSS 4 (`src/app/global.css`), look du projet GameLab IA de Greg (choix du 11/11/2026, fiche `docs/decisions/001-look-du-site-gamelab.md`) : thème sombre par défaut, clair selon le réglage du système, couleurs en variables dans `global.css` (jamais de couleur Tailwind en dur comme `bg-white` ou `text-blue-600`), polices Inter et Space Grotesk servies par `next/font`, menu latéral de 240 px (en tiroir sous 1024 px), boutons et champs de 44 px. Composants dans `src/ui/` et `src/site/`, pages du menu dans `src/site/menu-items.ts`. Icônes : Lucide (`lucide-react`), importé seulement dans `src/ui/icons.ts`, qui les renomme selon leur sens (fiche `docs/decisions/002-icones-lucide-et-carte-sombre.md`).
+- Mise en forme : Tailwind CSS 4 (`src/app/global.css`), look du projet GameLab IA de Greg (choix du 11/11/2026, fiche `docs/decisions/001-look-du-site-gamelab.md`) : thème sombre ou clair au choix du pilote (bouton de la barre, gardé dans le navigateur), sinon selon le réglage du système (`src/site/theme.ts`, attribut `data-theme` sur `<html>`), couleurs en variables dans `global.css` (jamais de couleur Tailwind en dur comme `bg-white` ou `text-blue-600`), polices Inter et Space Grotesk servies par `next/font`, boutons et champs de 44 px. Navigation (fiche `docs/decisions/003-navigation-barre-flottante.md`) : barre flottante translucide avec onglets (5 entrées au plus), menu du pilote à droite, dock flottant en bas sous 768 px. Composants dans `src/ui/` et `src/site/`, pages du menu dans `src/site/menu-items.ts`. Icônes : Lucide (`lucide-react`), importé seulement dans `src/ui/icons.ts`, qui les renomme selon leur sens (fiche `docs/decisions/002-icones-lucide-et-carte-sombre.md`).
 - Ne pas ajouter de bibliothèque de gestion d'état (Redux…) : les données viennent du serveur, les filtres sont dans l'adresse, le reste reste dans le composant.
 - Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé) : « dark » en thème sombre, « positron » en clair ; couleurs des calques de la carte dans `src/map/map-theme.ts`.
 - Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.
@@ -33,14 +33,14 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 messages/              textes en français et en anglais
 src/
   app/[locale]/        routes Next.js (pages et mise en page), sans logique
-    (app)/               pages du pilote connecté : menu latéral + barre du haut
+    (app)/               pages du pilote connecté : barre flottante + dock mobile
     (auth)/              connexion et inscription, panneau centré
   proxy.ts             relais /api/auth vers l'API, connexion obligatoire, langue dans l'adresse (/ → /fr)
   i18n/                langues, chargement des textes, liens qui gardent la langue
   api/weems-api.ts     appels à l'API depuis le serveur du site (liste, vol, trajectoire), en tant que pilote connecté
   auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion
-  site/                cadre des pages (app-shell, marque, menu latéral, barre du haut), choix de la langue, adresse de l'API, API injoignable
-  ui/                  composants visuels : icônes, panneau, bouton, champ, titre de section
+  site/                cadre des pages (app-shell, barre flottante, onglets, dock mobile, menu du pilote, page active), choix de la langue, adresse de l'API, API injoignable
+  ui/                  composants visuels : icônes, panneau, bouton, champ, titre de section, fermeture des menus (use-dismiss)
   map/                 carte MapLibre commune (base-map.ts : fond OpenFreeMap, fond de secours sans réseau ; map-theme.ts : fond et couleurs selon le thème)
   format/              durées h:mm, trajet, heure UTC
   flights/             liste des vols : filtres (list-query.ts), tableau, pastilles, état

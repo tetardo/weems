@@ -2,9 +2,11 @@
 
 /*
  * Mock-up: look of Greg's GameLab IA project (its tokens --gl-*, packages/shell/src/theme.ts):
- * dark night blue by default, light theme from the system preference, cyan accent, orange second
- * accent, Inter for text and Space Grotesk for titles. Phase colours: src/flight/phase-colors.ts.
+ * dark night blue by default, light theme chosen by the pilot or the system (src/site/theme.ts), cyan
+ * accent, orange second accent, Inter for text and Space Grotesk for titles. Phase colours: src/flight/phase-colors.ts.
  */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
 @theme {
   --color-bg: var(--wm-bg);
   --color-surface: var(--wm-surface);
@@ -17,6 +19,8 @@
   --color-accent-2: var(--wm-accent-2);
   --color-danger: var(--wm-danger);
   --color-success: var(--wm-success);
+  --shadow-raised: 0 1px 0 var(--wm-line), 0 4px 14px var(--wm-shadow);
+  --shadow-floating: 0 10px 30px var(--wm-shadow);
   --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-title: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
 }
@@ -34,23 +38,30 @@
   --wm-accent-2: #ffb454;
   --wm-danger: #ff8a80;
   --wm-success: #6ee7a8;
+  --wm-glass: rgb(23 30 46 / 0.72);
+  --wm-glow: rgb(79 209 232 / 0.16);
+  --wm-shadow: rgb(0 0 0 / 0.35);
+  --wm-avatar: linear-gradient(135deg, #2b6cb0, #4fd1e8);
+  --wm-avatar-ink: #0e1320;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --wm-bg: #f5f7fb;
-    --wm-surface: #ffffff;
-    --wm-line: #dde1ee;
-    --wm-text: #1f2430;
-    --wm-text-muted: #5a6378;
-    --wm-accent: #0e8fa6;
-    --wm-on-accent: #0e1320;
-    --wm-link: #0b7285;
-    --wm-accent-2: #b86a00;
-    --wm-danger: #b3261e;
-    --wm-success: #1b7f4b;
-  }
+/* Light theme: set on <html> by the head script (src/site/theme.ts). */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --wm-bg: #f5f7fb;
+  --wm-surface: #ffffff;
+  --wm-line: #dde1ee;
+  --wm-text: #1f2430;
+  --wm-text-muted: #5a6378;
+  --wm-accent: #0e8fa6;
+  --wm-on-accent: #0e1320;
+  --wm-link: #0b7285;
+  --wm-accent-2: #b86a00;
+  --wm-danger: #b3261e;
+  --wm-success: #1b7f4b;
+  --wm-glass: rgb(255 255 255 / 0.75);
+  --wm-glow: rgb(14 143 166 / 0.12);
+  --wm-shadow: rgb(30 40 70 / 0.12);
 }
 
 html,
@@ -79,4 +90,24 @@ h3 {
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* Floating bar and dock (decision 003): translucent surface over the page. */
+@utility glass {
+  background: var(--wm-glass);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-floating);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Soft light from the top of the page, behind the floating bar. */
+@utility app-glow {
+  background:
+    radial-gradient(1200px 380px at 50% -120px, var(--wm-glow), transparent 70%), var(--color-bg);
+}
+
+/* Pilot's initial in the floating bar (blue gradient of the mock-up, both themes). */
+@utility avatar {
+  background: var(--wm-avatar);
+  color: var(--wm-avatar-ink);
 }
