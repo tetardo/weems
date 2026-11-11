@@ -119,9 +119,10 @@ Voir la [spécification du site minimal](web/spec-J2-site-minimal.md) : liste `/
 | Test | Type | Vérifie |
 | --- | --- | --- |
 | Traduction des valeurs brutes MSFS | Automatique, sur le Mac | Unités, valeurs absentes, événements |
+| Vol lu par `pnpm fly` avec un faux simulateur, puis son rejeu | Automatique (`tools/fly/fly.test.ts`) | Critère 2 sur un vol synthétique : mêmes phases et événements en direct et rejoué |
 | Vol rejoué → API → trajectoire relue | Automatique, dans l'intégration continue | Critère 6 |
 | Simplification de la trajectoire | Automatique | Points de changement de phase gardés, moins de 600 points |
-| Page d'un vol de 2 heures | Automatique (navigateur sans écran) | Critère 4 |
+| Page d'un vol de 2 heures | Automatique (navigateur sans écran), `pnpm test:j2`, dans l'intégration continue | Critères 4 et 5 |
 | Les 10 vols de référence | Manuel, par Greg | Critères 1, 2 et 3 |
 
 ## Choix faits dans cette spécification
