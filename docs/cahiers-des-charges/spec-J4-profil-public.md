@@ -66,6 +66,7 @@ Règles :
 - Statistiques : nombre de vols, heures de vol (temps en vol) et heures bloc, aéroports différents visités, nombre d'avions différents, taux de chute moyen au toucher et meilleur atterrissage (le plus doux), plus long vol, nombre de remises des gaz, heures de jour et de nuit.
 - **Heures de nuit** : définition réglementaire (EASA, DGAC) : de la fin du crépuscule civil du soir au début de celui du matin, soit le soleil à plus de 6° sous l'horizon. Calculées sur la trajectoire simplifiée (environ 500 points par vol), en vol seulement : la position du soleil est calculée au milieu de chaque intervalle entre deux points, à la position de l'avion. Précision de l'ordre de la minute, suffisante pour un carnet de simulation [Confiance élevée]. Un vol sans trajectoire compte en heures de vol mais ni de jour ni de nuit.
 - **Activité par mois** : heures de vol des 12 derniers mois, un bâton par mois.
+- **Aides** (demande de Greg) : une petite icône « i » en haut à droite des cases dont le calcul n'est pas évident (vols comptés, heures de vol et bloc, jour et nuit, aéroports, toucher moyen, meilleur atterrissage, plus long vol, avions, activité, carte, niveau déclaré) ; une bulle explique le calcul au survol, et au toucher sur mobile. Textes dans les fichiers de traduction.
 - Liste des vols, du plus récent au plus ancien, 20 par page : date, indicatif, trajet, avion, temps bloc, pastilles (remise des gaz, rebond…). Même tableau que « Mes vols », sans filtres.
 - **Carte des vols** (juste sous l'en-tête, au-dessus des compagnies et des statistiques, demande de Greg) : un arc par trajet entre départ et arrivée, plus épais quand le trajet est volé souvent, un point par aéroport. Les coordonnées viennent du premier et du dernier point de la trajectoire de chaque vol (pas besoin de l'import OurAirports) ; un vol sans trajectoire n'est pas dessiné. Une route API dédiée renvoie les trajets agrégés (`GET /v1/pilots/{handle}/routes`), pas les trajectoires complètes : la page reste légère quel que soit le nombre de vols.
 
@@ -100,6 +101,9 @@ Textes en français et en anglais, comme le reste du site.
 
 - Pages rendues côté serveur (déjà le cas), titre et description par page (« Greg-FR — 42 vols sur Weems »), image de partage (Open Graph) générique Weems en J4.
 - **Image de partage** (aperçu dans Discord, Facebook, forums) : générée par le site pour chaque profil, avec photo, pseudo, trois statistiques et la carte simplifiée des trajets (générateur d'images de Next.js, sans service externe).
+
+  ![Maquette de l'image de partage](img/j4-maquette-partage.png)
+
 - Adresse canonique et variantes de langue (`hreflang` fr et en).
 - `sitemap.xml` : les profils activés, avec leur date de mise à jour ; `robots.txt` : tout le reste du site (pages connectées) est exclu.
 - Pages connectées marquées `noindex`.
