@@ -5,9 +5,11 @@ import type {
   FlightEvent,
   FlightPhase,
   OpenFlightRequest,
+  PhaseChange,
   PositionReport,
   Sample,
   SimEvent,
+  TouchdownContext,
 } from "@weems/contrats";
 import type { Clock } from "./clock.ts";
 import { FlightLog } from "./flight-log.ts";
@@ -177,14 +179,15 @@ export class FlightSession {
 
   private logPhaseOutput(output: PhaseOutput, log: FlightLog): void {
     if (output.kind === "phaseChanged") {
-      const context = {
+      const context: PhaseChange = {
         from: output.from,
         to: output.to,
         ...(output.airStart && { airStart: true }),
       };
       log.record("phaseChanged", output.t, context);
     } else if (output.kind === "touchdown") {
-      log.record("touchdown", output.t, { vs: output.vs });
+      const context: TouchdownContext = { vs: output.vs };
+      log.record("touchdown", output.t, context);
     } else {
       log.record(output.kind, output.t);
     }

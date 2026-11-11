@@ -1,4 +1,4 @@
-import type { FlightEvent } from "@weems/contrats";
+import { type FlightEvent, touchdownVsOf } from "@weems/contrats";
 
 export interface LandingSummary {
   /** Vertical speed of the first touchdown of the final landing, ft/min; null if not measured. */
@@ -19,9 +19,8 @@ export function landingSummary(events: readonly FlightEvent[]): LandingSummary |
   const final = events.slice(lastRestart + 1);
   const touchdown = final.find((e) => e.type === "touchdown");
   if (!touchdown) return null;
-  const vs = touchdown.context["vs"];
   return {
-    touchdownVs: typeof vs === "number" ? vs : null,
+    touchdownVs: touchdownVsOf(touchdown),
     bounces: final.filter((e) => e.type === "bounce").length,
     touchdowns: events.filter((e) => e.type === "touchdown").length,
     goArounds: events.filter((e) => e.type === "goAround").length,

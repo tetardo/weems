@@ -1,3 +1,4 @@
+import { touchdownVsOf } from "@weems/contrats";
 import type { LastFlight } from "../core/last-flight.ts";
 import type { Database } from "./sqlite.ts";
 
@@ -32,7 +33,7 @@ export function lastClosedFlight(db: Database): LastFlight | null {
     openedAt: row.opened_at,
     closedAt: row.closed_at,
     closeReason: row.close_reason,
-    touchdownFpm: typeof touchdown?.context["vs"] === "number" ? touchdown.context["vs"] : null,
+    touchdownFpm: touchdown ? touchdownVsOf(touchdown) : null,
     goArounds: count("goAround"),
     bounces: count("bounce"),
   };
