@@ -8,7 +8,7 @@ import { type Theme, THEME_STORAGE_KEY } from "./theme.ts";
 /**
  * Switches between the dark and light themes and remembers the choice in this browser. Both
  * icons are rendered and CSS shows the one of the other theme: no mismatch with the server.
- * Maps keep the theme they were opened with until the page is reloaded (decision 002).
+ * Open maps follow the change (src/map/base-map.ts).
  */
 export function ThemeToggle() {
   const t = useTranslations("Site");
