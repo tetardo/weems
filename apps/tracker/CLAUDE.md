@@ -48,7 +48,11 @@ Lire le fichier indiqué AVANT de chercher sur le web. Si l'information manque, 
 src/core/                 cœur sans dépendance : session de vol, journal des événements, phases
   phases/                 params.ts (seuils), rules.ts (transitions), phase-machine.ts, landing-tracker.ts
   connector.ts            interface SimConnector ; clock.ts : horloge injectée
+  recovery.ts             reprise après crash (ENF-02) : même avion, < 5 NM, < 30 min
 src/connectors/replay/    format de rejeu JSONL et connecteur de rejeu
+src/storage/              enregistreur SQLite (WAL) : sessions, échantillons, événements, outbox
+src/sender/               envoi de l'outbox dans l'ordre, relances 2 s → 5 min, 409 mis de côté, 426 bloque
+src/runtime/              assemblage connecteur → cœur → enregistreur → envoi
 tools/generate-flights/   générateur de vols synthétiques déterministe
 ```
 

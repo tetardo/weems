@@ -1,0 +1,132 @@
+import type {
+  AircraftInfo,
+  CloseFlightRequest,
+  FlightEvent,
+  OpenFlightRequest,
+  PositionReport,
+  Sample,
+} from "@weems/contrats";
+import type { SimConnector } from "../core/connector.ts";
+import { decideRecovery, type SavedFlight } from "../core/recovery.ts";
+import { FlightSession, type SessionOptions, type SessionOutput } from "../core/session.ts";
+import type { OutboxSender } from "../sender/outbox-sender.ts";
+import type { Recorder } from "../storage/recorder.ts";
+
+export interface RuntimeParts {
+  connector: SimConnector;
+  recorder: Recorder;
+  sender: OutboxSender;
+  session: SessionOptions;
+}
+
+/**
+ * Wires connector → session (core) → recorder → sender. Holds no flight rule itself.
+ * `pump` runs once per second: writes buffered samples, sends the outbox and the live position.
+ */
+export class TrackerRuntime {
+  private session: FlightSession;
+  private flightId: string | null = null;
+  private aircraft: AircraftInfo | null = null;
+  private latestPosition: PositionReport | null = null;
+  private saved: SavedFlight | null;
+  private readonly parts: RuntimeParts;
+
+  constructor(parts: RuntimeParts) {
+    this.parts = parts;
+    this.saved = this.closeAllButLastUnfinished();
+    this.session = this.newSession();
+  }
+
+  /** The flight being recorded, if any. */
+  get currentFlightId(): string | null {
+    return this.flightId;
+  }
+
+  async start(): Promise<void> {
+    const { connector } = this.parts;
+    connector.onAircraft((aircraft) => this.onAircraft(aircraft));
+    connector.onSample((sample) => this.onSample(sample));
+    connector.onEvent((event) => this.session.handleSimEvent(event));
+    await connector.start();
+  }
+
+  closeManually(): void {
+    this.session.closeManually();
+  }
+
+  async pump(nowMs: number): Promise<void> {
+    this.parts.recorder.flush();
+    await this.parts.sender.drain(nowMs);
+    const position = this.latestPosition;
+    if (position && this.flightId) {
+      this.latestPosition = null;
+      await this.parts.sender.sendPosition(this.flightId, position, nowMs);
+    }
+  }
+
+  private onAircraft(aircraft: AircraftInfo): void {
+    if (this.session.state === "closed") this.session = this.newSession();
+    this.aircraft = aircraft;
+    this.session.setAircraft(aircraft);
+  }
+
+  private onSample(sample: Sample): void {
+    if (this.saved && this.aircraft) this.recover(this.saved, this.aircraft, sample);
+    else this.session.handleSample(sample);
+    if (this.flightId && this.session.state === "flying")
+      this.parts.recorder.sample(this.flightId, sample);
+  }
+
+  /** ENF-02: first sample after a crash of the tracker or the PC. */
+  private recover(saved: SavedFlight, aircraft: AircraftInfo, sample: Sample): void {
+    this.saved = null;
+    const utcMs = this.parts.session.clock.nowUtcMs();
+    const decision = decideRecovery(saved, {
+      aircraftTitle: aircraft.title,
+      lat: sample.lat,
+      lon: sample.lon,
+      utcMs,
+    });
+    if (decision === "resume") {
+      this.flightId = saved.flightId;
+      this.session.resume(saved, sample);
+      return;
+    }
+    this.interrupt(saved);
+    this.session.handleSample(sample);
+  }
+
+  private interrupt(saved: SavedFlight): void {
+    const closedAt = saved.lastAt ?? new Date(this.parts.session.clock.nowUtcMs()).toISOString();
+    this.parts.recorder.closeFlight(saved.flightId, { closedAt, reason: "interrupted" });
+  }
+
+  /** Only the most recent unfinished flight may resume; older ones are closed as interrupted. */
+  private closeAllButLastUnfinished(): SavedFlight | null {
+    const unfinished = this.parts.recorder.unfinishedFlights();
+    unfinished.slice(0, -1).forEach((saved) => this.interrupt(saved));
+    return unfinished.at(-1) ?? null;
+  }
+
+  private newSession(): FlightSession {
+    const { recorder } = this.parts;
+    const output: SessionOutput = {
+      open: (request: OpenFlightRequest) => {
+        this.flightId = request.flightId;
+        recorder.open(request);
+      },
+      event: (event: FlightEvent) => {
+        if (this.flightId) recorder.event(this.flightId, event);
+      },
+      position: (report: PositionReport) => {
+        if (!this.flightId) return;
+        recorder.position(this.flightId, report);
+        this.latestPosition = report;
+      },
+      close: (request: CloseFlightRequest) => {
+        if (this.flightId) recorder.closeFlight(this.flightId, request);
+      },
+    };
+    return new FlightSession(this.parts.session, output);
+  }
+}

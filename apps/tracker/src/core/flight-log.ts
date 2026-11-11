@@ -10,8 +10,10 @@ export class FlightLog {
   private readonly epochUtcMs: number;
   private readonly emit: (event: FlightEvent) => void;
 
-  constructor(epochUtcMs: number, emit: (event: FlightEvent) => void) {
+  /** `lastSeq`: last number already used, when a flight resumes after a crash. */
+  constructor(epochUtcMs: number, emit: (event: FlightEvent) => void, lastSeq = 0) {
     this.epochUtcMs = epochUtcMs;
+    this.seq = lastSeq;
     this.emit = emit;
   }
 

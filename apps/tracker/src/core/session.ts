@@ -12,6 +12,7 @@ import type { Clock } from "./clock.ts";
 import { FlightLog } from "./flight-log.ts";
 import type { PhaseParams } from "./phases/params.ts";
 import { PhaseMachine, type PhaseOutput } from "./phases/phase-machine.ts";
+import type { SavedFlight } from "./recovery.ts";
 import { SimStateWatcher } from "./sim-state-watcher.ts";
 
 /** Where a session sends what it produces: the recorder, then the sender. */
@@ -98,6 +99,26 @@ export class FlightSession {
     } else if (event.type === "connectionLost" || event.type === "connectionRestored") {
       this.log?.record(event.type, event.t);
     }
+  }
+
+  /**
+   * Continues a flight interrupted by a crash (ENF-02), once `decideRecovery` said so:
+   * same flight id, numbering continues, a "resumed" event marks the gap.
+   */
+  resume(saved: SavedFlight, sample: Sample): void {
+    if (!this.aircraft || this.stateValue === "flying" || this.stateValue === "closed") return;
+    const nowUtcMs = this.options.clock.nowUtcMs();
+    this.log = new FlightLog(
+      nowUtcMs - sample.t,
+      (event) => this.output.event(event),
+      saved.lastSeq,
+    );
+    this.positionSeq = saved.lastPositionSeq;
+    if (saved.lastPhase) this.machine.resumeAt(saved.lastPhase);
+    this.stateValue = "flying";
+    this.log.record("resumed", sample.t, { lastAt: saved.lastAt });
+    this.lastSample = sample;
+    this.record(sample);
   }
 
   /** Manual close by the pilot (EF-12). */
