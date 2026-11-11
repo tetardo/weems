@@ -1,0 +1,153 @@
+# Espace d'administration : contenu des pages
+
+Rédigée le 11/11/2026. **Proposition à valider par Greg** avant tout code. Maquettes : navigation G « barre latérale libellée », choisie le 11/11/2026 (`/mnt/project-files/admin/`, à reprendre après validation de cette spec).
+
+## Objectif
+
+Donner à Greg, sur son Mac, un seul écran pour faire ce qu'il fait aujourd'hui en ligne de commande : démarrer ou arrêter les services, lancer du trafic simulé, lister les comptes et en créer.
+
+## Ce que c'est, et ce que ce n'est pas
+
+- Une **console locale** : nouvelle application `apps/admin`, ouverte sur http://127.0.0.1:3002, accessible seulement depuis le Mac (jamais depuis le réseau).
+- Elle **n'est jamais mise en ligne**. Elle pilote Docker et lance des commandes `pnpm` : ce pouvoir n'a pas sa place dans un site public.
+- Elle **n'écrit jamais dans la base** directement. Les comptes passent par de nouvelles routes de l'API, réservées au rôle Administrateur ; elles resserviront le jour où une administration en ligne sera nécessaire.
+
+```mermaid
+flowchart LR
+  G[Greg dans son navigateur] --> C[Console admin<br/>127.0.0.1:3002]
+  C -->|docker compose| D[(Base<br/>conteneur db)]
+  C -->|docker compose| A[API<br/>conteneur api]
+  C -->|processus| S[Site<br/>pnpm dev :3001]
+  C -->|processus| T[pnpm simulate<br/>pnpm load]
+  T -->|vols simulés| A
+  C -->|/v1/admin/* avec session admin| A
+  C -->|/v1/dev/metrics| A
+  A --> D
+```
+
+## Cadre commun à toutes les pages
+
+| Élément | Contenu |
+| --- | --- |
+| Barre latérale | Logo « Weems Admin ». Groupe **Exploitation** : Services (compteur « 2 / 3 » en marche), Trafic simulé (pastille « en cours » pendant un lancement). Groupe **Utilisateurs** : Comptes (nombre de comptes). Groupe **Raccourcis** : Site (:3001), Carte en direct, Documentation de l'API (:3000/docs), chacun ouvert dans un nouvel onglet. |
+| Bloc « État local » | En bas de la barre : Base, API, Site, chacun avec une pastille (en marche, arrêté, en erreur) et son port. Rafraîchi toutes les 5 secondes. |
+| Barre du haut | Fil d'Ariane (Admin / page), badge « localhost · Mac », bouton thème clair/sombre, administrateur connecté (s'il l'est). |
+| Mobile (moins de 768 px) | La barre latérale devient des onglets en bas : Services, Trafic, Comptes, Site. L'état local devient trois pastilles dans la barre du haut. |
+| Thème | Clair ou sombre, mêmes couleurs que le site. |
+| Langue | Français seulement (voir question 2). |
+
+**Accès** : pas de connexion pour Services et Trafic, puisque la console n'écoute que sur le Mac (mêmes droits que le Terminal) et doit fonctionner **API arrêtée** (c'est là qu'on en a besoin pour la démarrer). La page Comptes demande la connexion d'un compte Administrateur, car elle passe par l'API (voir question 1).
+
+## Page Services
+
+**But** : voir d'un coup d'œil ce qui tourne, et le démarrer ou l'arrêter sans Terminal.
+
+**En-tête** : titre, phrase d'état (« Docker Desktop · projet weems · 2 sur 3 en marche »), boutons **Tout démarrer** (base, puis API, puis site, chacun après que le précédent répond) et **Tout arrêter** (dans l'ordre inverse).
+
+**Une carte par service**
+
+| | Base de données | API | Site web |
+| --- | --- | --- | --- |
+| Lancement | Conteneur `db` (Docker) | Conteneur `api` (Docker) | Processus `pnpm --filter @weems/web dev`, lancé par la console |
+| Port | 5432 | 3000 | 3001 |
+| Santé affichée | Contrôle Docker (`pg_isready`) | `GET /v1/health` : code et temps de réponse | La page d'accueil répond |
+| Informations | État, depuis quand, image | État, depuis quand, date de construction de l'image | État, depuis quand |
+| Actions | Démarrer, Arrêter, Redémarrer, Journaux | Démarrer, Arrêter, Redémarrer, **Reconstruire**, Journaux | Démarrer, Arrêter, Redémarrer, Journaux |
+
+- **États possibles** : En marche, Arrêté, Démarre…, En erreur (le conteneur s'arrête tout seul, ou la santé échoue 3 fois de suite), **Lancé hors console** (le port est pris par un programme que la console n'a pas lancé, par exemple `pnpm dev` dans un Terminal : la console l'affiche mais ne l'arrête pas).
+- **Reconstruire l'API** : reconstruit l'image puis redémarre le conteneur. Nécessaire après chaque modification du code de l'API, sinon le conteneur garde l'ancienne version.
+- **Confirmation** demandée seulement pour arrêter la base quand l'API tourne (« l'API ne répondra plus »). Aucune action ne supprime de données : jamais de `docker compose down -v`.
+
+**Journaux** (sous les cartes) : un onglet par service, les 200 dernières lignes, suivi en direct activable, bouton Copier. Les lignes d'avertissement et d'erreur sont colorées.
+
+**Cas particuliers**
+- Docker Desktop n'est pas lancé : bandeau en haut de page, bouton **Ouvrir Docker Desktop**, cartes Base et API grisées.
+- Une action échoue : message sous la carte avec la fin de la sortie de la commande.
+
+## Page Trafic simulé
+
+**But** : remplir la carte en direct et mesurer la tenue de l'API, sans Terminal. **Un seul lancement à la fois.** Les boutons Lancer sont désactivés, avec la raison affichée, si l'API ne répond pas.
+
+**Deux modes, côte à côte**
+
+| | Pilotes simulés | Test de charge |
+| --- | --- | --- |
+| Commande | `pnpm simulate` | `pnpm load` (disponible après la fusion de la PR #34) |
+| Réglages | Pilotes : 1 à 10 (les 10 trajets de la flotte J1, en Europe), défaut 10. Vitesse : ×1, ×10, ×50, ×100, défaut ×10. Décalage entre deux départs : en secondes, défaut 30 | Pilotes : défaut 50. Spectateurs : défaut 100. Durée : en minutes, défaut 30. Vitesse : défaut ×1 |
+| Avertissement | Les vols sont enregistrés au nom du pilote de développement (`pilote@weems.local`) | Le test commence par **vider les vols du pilote de développement** (rappelé à côté du bouton) |
+
+**Pendant un lancement** (bloc en haut de page)
+- État « En cours », réglages, heure de départ, temps écoulé, bouton **Arrêter** (sans confirmation).
+- Barre d'avancement : vols terminés sur le total.
+- Quatre mesures lues sur `/v1/dev/metrics` toutes les 2 secondes, avec une courbe des 5 dernières minutes : vols en direct, spectateurs connectés, délai de la boucle d'événements (p99), mémoire de l'API.
+- Tableau des pilotes (cartes sur mobile) : indicatif, trajet, phase actuelle, avancement, positions envoyées, positions en attente d'envoi.
+- Bouton **Ouvrir la carte en direct**.
+
+**À la fin** : résumé « Réussi » ou « Échec » (pilotes simulés : tous les vols clos et plus rien en attente ; test de charge : chaque critère de la spec J4 avec sa valeur et son seuil).
+
+**Derniers lancements** : les 20 derniers, du plus récent au plus ancien : date, mode, réglages, durée, résultat. Un clic ouvre le résumé. Gardés dans un fichier local de la console, ignoré par git.
+
+**Supprimer les vols simulés** : bouton en bas de page, avec confirmation, qui vide les vols du pilote de développement (route existante, absente en production).
+
+## Page Comptes
+
+**But** : savoir qui a un compte et inviter un nouveau pilote.
+
+**En-tête** : titre, phrase « 4 comptes · 1 administrateur · 1 invitation en attente », bouton **Créer un compte**.
+
+**Filtres** : Tous, Pilotes, Administrateurs, Invitations en attente ; recherche sur le nom et l'e-mail. 50 lignes par page, les plus récentes d'abord.
+
+**Colonnes** (cartes sur mobile : nom, e-mail, rôle ou état, nombre de vols)
+
+| Colonne | Contenu |
+| --- | --- |
+| Compte | Nom et e-mail. Le pilote de développement porte un badge « Développement ». |
+| Rôle | Pilote ou Administrateur |
+| État | Actif, ou Invitation en attente (une invitation n'a pas encore de compte : nom vide) |
+| Vols | Nombre de vols du compte |
+| Créé le | Date de création du compte ou de l'invitation |
+| Dernière connexion | Date de la dernière session ouverte, sur le site ou le tracker |
+
+**Actions par ligne**
+- Invitation en attente : **Copier le lien**, **Annuler l'invitation** (avec confirmation).
+- Compte : **Changer le rôle** (Pilote ↔ Administrateur). Impossible de retirer son propre rôle d'administrateur, ni le dernier administrateur.
+
+**Connexion** : si personne n'est connecté, la page affiche à la place un formulaire e-mail et mot de passe. Un compte sans le rôle Administrateur est refusé. Le premier administrateur est nommé par une commande : `pnpm make-admin <e-mail>` (même principe que `pnpm invite`).
+
+## Panneau « Créer un compte »
+
+S'ouvre à droite (en bas sur mobile).
+
+| Champ | Règle |
+| --- | --- |
+| E-mail | Obligatoire, adresse valide. Refusé si un compte existe déjà. Si une invitation est déjà en attente pour cette adresse, le panneau propose de copier son lien au lieu d'en créer une autre. |
+| Rôle | Pilote (par défaut) ou Administrateur. Le rôle est appliqué à la création du compte. |
+| Langue du lien | Français (par défaut) ou anglais : page d'inscription ouverte par le lien. |
+
+**Résultat** : le code et le lien d'inscription (`http://localhost:3001/fr/signup?code=…`), avec un bouton **Copier**. Aucun e-mail n'est envoyé : Greg transmet le lien lui-même, comme avec `pnpm invite`. Boutons **En créer un autre** et **Terminé**.
+
+## Corrections par rapport à la première maquette
+
+- Il n'existe pas de « comptes simulés » : tous les vols simulés appartiennent au pilote de développement. Le filtre « Simulés » disparaît.
+- Les invitations n'expirent pas aujourd'hui : la mention « expire dans 6 j » disparaît (voir question 6).
+
+## Hors périmètre de cette première version
+
+Remise à zéro de la base, migrations, tracker de bureau, envoi d'e-mails, création directe avec mot de passe, suppression ou désactivation d'un compte, réinitialisation de mot de passe, liste des vols de tous les pilotes, modération des compagnies (lot 3), mise en ligne.
+
+## Questions encore ouvertes (choix par défaut entre parenthèses)
+
+1. **Connexion** : la console sans connexion (elle n'écoute que sur le Mac), et une connexion administrateur seulement pour la page Comptes ? (oui). Ce choix remplace celui du premier message : une connexion pour toute la console bloquerait la page Services quand l'API est arrêtée.
+2. **Langue** : français seulement, par exception à la règle « français et anglais » qui vise les pilotes ? (oui)
+3. **Reconstruire l'API** depuis la page Services ? (oui)
+4. **Supprimer les vols simulés** depuis la page Trafic ? (oui)
+5. **Rôles** : Pilote et Administrateur seulement ? (oui)
+6. **Durée de validité des invitations** : aucune comme aujourd'hui, ou 7 jours ? (aucune pour l'instant)
+
+## Critère de sortie
+
+1. Depuis la console, Greg démarre la base, l'API et le site, puis les arrête, sans ouvrir de Terminal.
+2. Il lance 10 pilotes simulés à ×10, les voit sur la carte en direct, et lit le résumé à la fin.
+3. Il crée une invitation, l'ouvre dans le site, crée le compte, et le voit passer en « Actif » dans la liste.
+4. Un compte sans rôle Administrateur ne peut ni lister ni créer de comptes, même en appelant l'API directement (test automatique).
+5. La console n'est pas joignable depuis une autre machine du réseau (test automatique de l'adresse d'écoute).
