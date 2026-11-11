@@ -13,6 +13,7 @@ flowchart TB
   DESCENT --> |"< 3 000 ft sol"| APPROACH
   APPROACH --> |"< 1 000 ft, train sorti"| FINAL
   FINAL --> |toucher| LANDING["LANDING<br/>rebonds comptés"]
+  APPROACH -. "toucher sans finale" .-> LANDING
   APPROACH -. "remise des gaz" .-> GA(("Remise<br/>des gaz"))
   FINAL -. "remise des gaz" .-> GA
   GA -.-> CLIMB
