@@ -5,7 +5,7 @@ import { formatDuration, formatRoute } from "../format/flight-format.ts";
 import { AlertBadges } from "./alert-badges.tsx";
 import { FlightStatus } from "./flight-status.tsx";
 
-const COLUMNS = ["date", "route", "aircraft", "airborne", "status", "alerts"] as const;
+const COLUMNS = ["date", "callsign", "route", "aircraft", "airborne", "status", "alerts"] as const;
 
 /** One line per flight, newest first (spec site minimal, list). */
 export function FlightTable({ flights }: { flights: readonly FlightSummary[] }) {
@@ -35,6 +35,7 @@ export function FlightTable({ flights }: { flights: readonly FlightSummary[] }) 
                   })}
                 </Link>
               </td>
+              <td className="px-2 py-1.5 whitespace-nowrap">{flight.callsign}</td>
               <td className="px-2 py-1.5 whitespace-nowrap">
                 {formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}
               </td>

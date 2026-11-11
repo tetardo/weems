@@ -87,6 +87,7 @@
     "emptyFiltered": "No flight matches these filters.",
     "columns": {
       "date": "Date (UTC)",
+      "callsign": "Callsign",
       "route": "Route",
       "aircraft": "Aircraft",
       "airborne": "Flight time",

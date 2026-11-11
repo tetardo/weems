@@ -87,6 +87,7 @@
     "emptyFiltered": "Aucun vol ne correspond à ces filtres.",
     "columns": {
       "date": "Date (UTC)",
+      "callsign": "Indicatif",
       "route": "Trajet",
       "aircraft": "Avion",
       "airborne": "Durée de vol",
