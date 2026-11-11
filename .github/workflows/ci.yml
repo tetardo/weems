@@ -43,3 +43,5 @@ jobs:
         run: pnpm structure
       - name: Tests
         run: pnpm test
+      - name: J1 (10 pilotes simulés à ×10, environ 6 min)
+        run: pnpm test:j1

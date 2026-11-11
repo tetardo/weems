@@ -16,7 +16,8 @@
     "structure:deps": "depcruise apps packages --config .dependency-cruiser.cjs",
     "structure:duplicates": "jscpd",
     "structure:unused": "knip",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "test:j1": "vitest run --config e2e/vitest.j1.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
