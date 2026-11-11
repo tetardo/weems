@@ -5,7 +5,7 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { createBaseMap } from "../map/base-map.ts";
-import { currentMapTheme, type MapTheme } from "../map/map-theme.ts";
+import type { MapTheme } from "../map/map-theme.ts";
 import { airportPoints, routeLines, routesBounds } from "./routes-geojson.ts";
 
 function addRouteLayers(map: MapLibreMap, routes: PilotRoutes["routes"], theme: MapTheme): void {
@@ -49,13 +49,11 @@ export function RoutesMap({ routes }: { routes: PilotRoutes["routes"] }) {
   useEffect(() => {
     const frame = routesBounds(routes);
     if (!container.current || !frame) return;
-    const theme = currentMapTheme();
     const map = createBaseMap(
       container.current,
       { bounds: frame, fitBoundsOptions: { padding: 48, maxZoom: 7 } },
-      theme,
+      (target, theme) => addRouteLayers(target, routes, theme),
     );
-    map.on("load", () => addRouteLayers(map, routes, theme));
     return () => map.remove();
   }, [routes]);
   return (

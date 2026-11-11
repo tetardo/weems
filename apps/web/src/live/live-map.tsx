@@ -4,7 +4,7 @@ import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { createBaseMap } from "../map/base-map.ts";
-import { currentMapTheme, type MapTheme } from "../map/map-theme.ts";
+import type { MapTheme } from "../map/map-theme.ts";
 import { addAircraftIcons, ICON_LOST, ICON_OK } from "./aircraft-icons.ts";
 import type { LiveFlights } from "./flights-store.ts";
 import { Tracks } from "./tracks.ts";
@@ -51,8 +51,11 @@ export function LiveMap({ flights, selectedId, onSelect }: Props) {
 
   useEffect(() => {
     if (!container.current) return;
-    const theme = currentMapTheme();
-    const instance = createBaseMap(container.current, { center: [5, 47], zoom: 4.3 }, theme);
+    const instance = createBaseMap(
+      container.current,
+      { center: [5, 47], zoom: 4.3 },
+      addFlightsLayer,
+    );
     map.current = instance;
     let frame = 0;
     const draw = () => {
@@ -60,10 +63,7 @@ export function LiveMap({ flights, selectedId, onSelect }: Props) {
       source?.setData(tracks.current.features(performance.now(), selected.current));
       frame = requestAnimationFrame(draw);
     };
-    instance.on("load", () => {
-      addFlightsLayer(instance, theme);
-      draw();
-    });
+    instance.once("load", draw);
     instance.on("click", (event: MapMouseEvent) => {
       const [feature] = instance.queryRenderedFeatures(event.point, { layers: [SOURCE] });
       select.current((feature?.properties["flightId"] as string | undefined) ?? null);

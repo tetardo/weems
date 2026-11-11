@@ -14,5 +14,5 @@ La fiche 001 gardait les icônes `@mdi/js` et laissait le fond de carte clair en
 ## Conséquences
 
 - Une dépendance remplacée par une autre, de taille comparable une fois réduite aux icônes utilisées.
-- Le thème de la carte est lu à l'ouverture de la page : un changement de thème du système pendant la visite ne s'applique qu'au rechargement.
+- Le thème de la carte est lu à l'ouverture de la page : un changement de thème du système pendant la visite ne s'applique qu'au rechargement. Mis à jour par la fiche 003 : la carte suit le bouton thème du site sans rechargement.
 - Si le style « dark » d'OpenFreeMap ne charge pas, la carte retombe sur un fond uni sombre (comportement de secours existant).
