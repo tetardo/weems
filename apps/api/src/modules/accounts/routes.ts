@@ -77,6 +77,7 @@ function registerTrackerLogin(parent: FastifyInstance, config: Config) {
         scopes: [...TRACKER_SCOPES],
         resource: config.apiUrl,
         redirectPath: new URL(TRACKER_REDIRECT_URI).pathname,
+        siteUrl: config.siteUrl,
       }),
     );
 }

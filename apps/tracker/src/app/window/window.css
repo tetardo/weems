@@ -69,7 +69,8 @@ form button {
   border-color: #2563eb;
   color: #fff;
 }
-button[hidden] {
+button[hidden],
+.card[hidden] {
   display: none;
 }
 label {

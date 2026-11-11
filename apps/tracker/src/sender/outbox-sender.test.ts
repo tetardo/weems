@@ -152,4 +152,16 @@ describe("outbox sender", () => {
     await sender.drain(0);
     expect(sender.isOpened(f.flightId)).toBe(true);
   });
+
+  it("tells whether a flight is sent, waiting or refused", async () => {
+    recorder.open(flight(1));
+    recorder.open(flight(2));
+    let opened = 0; // the API accepts the first flight and refuses the second
+    const { api } = fakeApi(() => (opened++ === 0 ? 201 : 409));
+    const sender = new OutboxSender(recorder.db, api, () => 0);
+    expect(sender.deliveryOf(flight(1).flightId)).toBe("waiting");
+    await sender.drain(0);
+    expect(sender.deliveryOf(flight(1).flightId)).toBe("sent");
+    expect(sender.deliveryOf(flight(2).flightId)).toBe("refused");
+  });
 });

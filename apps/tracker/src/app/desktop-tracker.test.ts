@@ -1,4 +1,6 @@
 import { mkdtempSync, rmSync } from "node:fs";
+import { createServer, type Server } from "node:http";
+import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -18,19 +20,44 @@ let dir: string;
 let link: FakeSimLink;
 let now: number;
 let desktop: DesktopTracker;
+let opened: string[];
+let api: Server;
+
+/** A stand-in API that only answers GET /v1/tracker/login (the pilot stays logged out). */
+async function startApi(): Promise<string> {
+  api = createServer((request, response) => {
+    if (request.url !== "/v1/tracker/login") return void response.writeHead(404).end();
+    response.setHeader("content-type", "application/json");
+    response.end(
+      JSON.stringify({
+        authorizationEndpoint: "http://127.0.0.1:1/oauth2/authorize",
+        tokenEndpoint: "http://127.0.0.1:1/oauth2/token",
+        clientId: "weems-tracker",
+        scopes: ["openid"],
+        resource: "http://127.0.0.1:1",
+        redirectPath: "/callback",
+        siteUrl: "https://site.example",
+      }),
+    );
+  });
+  await new Promise<void>((resolve) => api.listen(0, "127.0.0.1", resolve));
+  return `http://127.0.0.1:${(api.address() as AddressInfo).port}`;
+}
 
 beforeEach(async () => {
   dir = mkdtempSync(join(tmpdir(), "weems-desktop-"));
   link = new FakeSimLink();
   link.simulatorRunning = true;
   now = 0;
+  opened = [];
   desktop = new DesktopTracker({
-    apiUrl: "http://127.0.0.1:9", // nothing listens: the pilot is not logged in anyway
+    apiUrl: await startApi(),
     version: "0.1.0",
     dataDir: dir,
     newLink: () => link,
-    openBrowser: async () => {
-      throw new Error("no browser in tests");
+    openBrowser: async (url) => {
+      opened.push(url);
+      if (!url.startsWith("https://site.example/flights/")) throw new Error("no login in tests");
     },
     cipher,
     now: () => now,
@@ -40,6 +67,7 @@ beforeEach(async () => {
 });
 afterEach(async () => {
   await desktop.stop();
+  await new Promise((resolve) => api.close(resolve));
   rmSync(dir, { recursive: true, force: true });
 });
 
@@ -87,5 +115,21 @@ describe("desktop tracker (without Electron)", () => {
       loggingIn: false,
       notice: "loginFailed",
     });
+  });
+
+  it("shows the last flight once closed, and opens its report on the site", async () => {
+    flyUntilOpened();
+    desktop.closeFlight();
+    await tick();
+    const last = desktop.state().lastFlight;
+    expect(last).toMatchObject({
+      aircraftTitle: expect.any(String),
+      closeReason: "manual",
+      delivery: "waiting", // logged out: kept on the PC
+    });
+
+    await desktop.openReport();
+    expect(opened).toEqual([`https://site.example/flights/${last?.flightId}`]);
+    expect(desktop.state().notice).toBeNull();
   });
 });
