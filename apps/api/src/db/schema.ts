@@ -69,3 +69,4 @@ export const flightTracks = pgTable("flight_tracks", {
   simplified: jsonb("simplified").$type<unknown[]>().notNull(),
   receivedAt: utc("received_at").notNull(),
 });
+export * from "./auth-schema.ts";

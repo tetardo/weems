@@ -1,0 +1,21 @@
+sequenceDiagram
+  autonumber
+  participant P as Pilote
+  participant T as Tracker (PC)
+  participant N as Navigateur
+  participant S as Site (/api/auth)
+  participant A as API
+  P->>T: « Se connecter »
+  T->>A: GET /v1/tracker/login
+  A-->>T: adresses, client weems-tracker
+  T->>T: écoute sur 127.0.0.1:{port libre}, crée le code PKCE
+  T->>N: ouvre /api/auth/oauth2/authorize
+  N->>S: page de connexion (e-mail, mot de passe)
+  S->>A: vérifie la session
+  A-->>N: redirection vers 127.0.0.1:{port}/callback?code=…
+  N->>T: code
+  T->>S: POST /oauth2/token (code + vérificateur PKCE)
+  S->>A: (relayé)
+  A-->>T: jeton d'accès (1 h) + jeton de rafraîchissement (90 j)
+  T->>A: POST /v1/flights… (Authorization: Bearer)
+  Note over T,A: jeton expiré : le tracker le renouvelle seul, sans rouvrir le navigateur
