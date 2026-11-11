@@ -104,6 +104,7 @@ export async function runLoad(options: LoadOptions): Promise<LoadMeasures> {
     trackerVersion: TRACKER_VERSION,
     stopAfterMs: options.minutes * 60_000,
     drainTimeoutMs: 30_000,
+    skipBoarding: true,
     ...(options.signal ? { signal: options.signal } : {}),
   });
   await wait(3_000); // last live batch

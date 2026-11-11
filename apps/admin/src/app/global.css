@@ -1649,3 +1649,15 @@ button:disabled {
 .scroll-x {
   overflow-x: auto;
 }
+/* Number fields: no native arrows, which sat on top of the unit (« 1 à 50 », « min »). */
+.f input[type="number"] {
+  appearance: textfield;
+}
+.f input[type="number"]::-webkit-inner-spin-button,
+.f input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+.f .with-unit input {
+  padding-right: 64px;
+}

@@ -2,8 +2,9 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { uuidV7 } from "@weems/contrats";
 import { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts";
-import { replayUntil } from "../../src/connectors/replay/replay-format.ts";
+import { replayFrom, replayUntil } from "../../src/connectors/replay/replay-format.ts";
 import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
+import { flightStarts } from "../../src/core/session.ts";
 import { createTracker } from "../../src/runtime/create-tracker.ts";
 import type { ApiClient } from "../../src/sender/api-client.ts";
 import { generateFlight } from "../generate-flights/generator.ts";
@@ -27,6 +28,11 @@ export interface SimulationOptions {
   drainTimeoutMs?: number;
   /** Real ms after which every replay stops, flights left open (load test, spec J4). */
   stopAfterMs?: number;
+  /**
+   * Starts each replay at the pushback (EF-07), without the minute of boarding at the gate when
+   * nothing is sent: a short load test at ×1 would otherwise show no flight at all.
+   */
+  skipBoarding?: boolean;
   /** Stops every replay and closes the flights in the air as interrupted (admin console). */
   signal?: AbortSignal;
   /** Called after each sending round. */
@@ -49,7 +55,8 @@ interface Run extends ProgressSource {
 }
 
 function buildTracker(scenario: Scenario, options: SimulationOptions) {
-  const flight = generateFlight(scenario);
+  const generated = generateFlight(scenario);
+  const flight = options.skipBoarding ? replayFrom(generated, flightStarts) : generated;
   // Only what can be played before the stop stays in memory (2 000 pilots in one process).
   const replay =
     options.stopAfterMs === undefined
