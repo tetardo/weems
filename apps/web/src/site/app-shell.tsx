@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { FloatingBar } from "./floating-bar.tsx";
+import { MainNav } from "./main-nav.tsx";
 import { MobileDock } from "./mobile-dock.tsx";
 
 /**
@@ -10,7 +11,7 @@ import { MobileDock } from "./mobile-dock.tsx";
 export function AppShell({ account, children }: { account: ReactNode; children: ReactNode }) {
   return (
     <div className="app-glow flex min-h-screen flex-col">
-      <FloatingBar account={account} />
+      <FloatingBar nav={<MainNav />} account={account} />
       <div className="flex flex-1 flex-col pb-24 md:pb-0">{children}</div>
       <MobileDock />
     </div>

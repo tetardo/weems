@@ -1,4 +1,18 @@
-import { and, asc, desc, eq, gte, ilike, inArray, isNull, lt, or, type SQL } from "drizzle-orm";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  isNotNull,
+  isNull,
+  lt,
+  notInArray,
+  or,
+  type SQL,
+} from "drizzle-orm";
 import {
   CloseReason,
   type CloseFlightRequest,
@@ -59,6 +73,21 @@ export interface ListFilters {
   to?: string | undefined;
   aircraft?: string | undefined;
   airport?: string | undefined;
+  /** Public profile (spec J4): closed flights only, without the ones the pilot hid. */
+  closedOnly?: boolean;
+  excluded?: readonly string[];
+  /** Profile settings (spec J4): only these flights, the hidden ones. */
+  only?: readonly string[];
+}
+
+/** Profile filters: closed flights, hidden ones left out, or only some flights. */
+function profileConditions(filters: ListFilters): SQL | undefined {
+  const { closedOnly = false, excluded = [], only } = filters;
+  return and(
+    closedOnly ? isNotNull(flights.closedAt) : undefined,
+    excluded.length > 0 ? notInArray(flights.id, [...excluded]) : undefined,
+    only ? inArray(flights.id, [...only]) : undefined,
+  );
 }
 
 function listConditions(pilotId: string, filters: ListFilters): SQL | undefined {
@@ -77,6 +106,7 @@ function listConditions(pilotId: string, filters: ListFilters): SQL | undefined 
     airport
       ? or(eq(flights.departureIcao, airport), eq(flights.plannedArrivalIcao, airport))
       : undefined,
+    profileConditions(filters),
   );
 }
 
@@ -145,14 +175,19 @@ export class FlightsRepository {
     return updated.length > 0;
   }
 
-  /** A pilot's flights, newest first. */
-  async listFlights(pilotId: string, filters: ListFilters, limit: number): Promise<FlightRecord[]> {
-    const rows = await this.db
+  /** A pilot's flights, newest first; all of them when no limit is given. */
+  async listFlights(
+    pilotId: string,
+    filters: ListFilters,
+    limit?: number,
+  ): Promise<FlightRecord[]> {
+    const query = this.db
       .select()
       .from(flights)
       .where(listConditions(pilotId, filters))
       .orderBy(desc(flights.openedAt), desc(flights.id))
-      .limit(limit);
+      .$dynamic();
+    const rows = await (limit === undefined ? query : query.limit(limit));
     return rows.map(toRecord);
   }
 
