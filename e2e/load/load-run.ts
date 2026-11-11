@@ -19,6 +19,11 @@ export interface LoadOptions {
   minutes: number;
   /** Folder for the local databases of the simulated trackers. */
   workDir: string;
+  /**
+   * Empty the pilot's flights before and after (default true). The automated test turns it off:
+   * it shares the development pilot with the other test files running at the same time.
+   */
+  clearFlights?: boolean;
 }
 
 const TRACKER_VERSION = "0.1.0";
@@ -27,7 +32,12 @@ const FROZEN_AFTER_MS = 20_000;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Empties the development pilot's flights, live map included, so runs do not add up. */
-async function clearFlights({ baseUrl, token }: LoadOptions): Promise<void> {
+async function clearFlights({
+  baseUrl,
+  token,
+  clearFlights: clear = true,
+}: LoadOptions): Promise<void> {
+  if (!clear) return;
   const response = await fetch(new URL("/v1/flights", baseUrl), {
     method: "DELETE",
     headers: { authorization: `Bearer ${token}`, "weems-client": `tracker/${TRACKER_VERSION}` },
