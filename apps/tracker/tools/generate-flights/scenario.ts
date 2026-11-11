@@ -1,4 +1,5 @@
 import type { AircraftInfo } from "@weems/contrats";
+import { type AirportData, airportOf } from "./airports/airport-data.ts";
 
 /** Disturbances the generator can inject (architecture interne, part 6). */
 export type Disturbance =
@@ -12,23 +13,16 @@ export type Disturbance =
   | "teleport"
   | "crash";
 
-export interface Point {
-  lat: number;
-  lon: number;
-}
-
-interface Airport extends Point {
-  icao: string;
-}
-
 /** Description of a synthetic flight. Same scenario + same seed = same file. */
 export interface Scenario {
   name: string;
   callsign: string;
   seed: number;
   aircraft: AircraftInfo;
-  departure: Airport;
-  arrival: Airport;
+  /** Real airports with their runways (airports/airports.json). */
+  departure: AirportData;
+  arrival: AirportData;
+  /** Wanted cruise level, ft above sea level; lowered on routes too short for it. */
   cruiseAltFt: number;
   /** Ground speeds in kt. */
   cruiseGs: number;
@@ -51,8 +45,8 @@ export const LFPG_LFBO: Scenario = {
   callsign: "WMS100",
   seed: 42,
   aircraft: A320,
-  departure: { icao: "LFPG", lat: 49.0097, lon: 2.5479 },
-  arrival: { icao: "LFBO", lat: 43.6293, lon: 1.3638 },
+  departure: airportOf("LFPG"),
+  arrival: airportOf("LFBO"),
   cruiseAltFt: 35000,
   cruiseGs: 450,
   approachGs: 140,

@@ -1,10 +1,43 @@
+import { angleDiffDeg, distanceNm, type LatLon } from "../../src/core/geo.ts";
+import type { RunwayEnd } from "./airports/airport-data.ts";
 import type { FlightScript } from "./flight-script.ts";
+import { runwayAxisLeg } from "./navigation/route-plan.ts";
 import type { Scenario } from "./scenario.ts";
 
 const has = (scenario: Scenario, d: Scenario["disturbances"][number]) =>
   scenario.disturbances.includes(d);
 
-/** Boarding, pushback with engine start, taxi out. */
+/** Close enough to a taxi target (about 50 m). */
+const ARRIVED_NM = 0.03;
+const SLOW_DOWN_NM = 0.2;
+
+const away = (from: LatLon, to: LatLon) => distanceNm(from.lat, from.lon, to.lat, to.lon);
+
+/** Taxi straight to `target` (no taxiway data), slower when close. */
+function taxiTo(script: FlightScript, target: LatLon, gs: number): void {
+  script.follow([{ fix: target }]);
+  script.until(
+    (s) => away(s, target) < ARRIVED_NM,
+    (s) => {
+      s.pushback = false;
+      s.gs = away(s, target) < SLOW_DOWN_NM ? Math.min(8, gs) : gs;
+    },
+    1800,
+  );
+}
+
+/** Taxi to the runway threshold and line up on its axis. */
+function taxiToRunway(script: FlightScript, runway: RunwayEnd): void {
+  taxiTo(script, runway, 15);
+  script.follow([runwayAxisLeg(runway)]);
+  script.until(
+    (s) => Math.abs(angleDiffDeg(s.heading, runway.headingDeg)) < 3,
+    (s) => (s.gs = 4),
+    120,
+  );
+}
+
+/** Boarding, pushback with engine start, taxi out to the departure runway. */
 export function departureGround(script: FlightScript): void {
   script.run(60);
   script.run(90, (s, second) => {
@@ -13,14 +46,12 @@ export function departureGround(script: FlightScript): void {
     s.gs = 2;
     if (second >= 30) s.enginesRunning = true;
   });
-  script.run(300, (s) => {
-    s.pushback = false;
-    s.gs = 15;
-  });
+  taxiToRunway(script, script.choices.departureRunway);
 }
 
-/** Take-off roll and lift-off; optionally a rejected take-off first. */
+/** Take-off roll on the runway axis and lift-off; optionally a rejected take-off first. */
 export function takeoff(script: FlightScript, scenario: Scenario): void {
+  const runway = script.choices.departureRunway;
   if (has(scenario, "rejectedTakeoff")) {
     script.until(
       (s) => s.gs >= 80,
@@ -30,7 +61,7 @@ export function takeoff(script: FlightScript, scenario: Scenario): void {
       (s) => s.gs <= 10,
       (s) => (s.gs -= 4),
     );
-    script.run(60, (s) => (s.gs = 15));
+    taxiToRunway(script, runway);
   }
   script.until(
     (s) => s.gs >= 160,
@@ -42,16 +73,16 @@ export function takeoff(script: FlightScript, scenario: Scenario): void {
   });
 }
 
-/** Landing roll (optionally with a bounce), taxi in, parking and shutdown. */
+/** Landing roll on the runway (optionally with a bounce), taxi in, parking and shutdown. */
 export function arrivalGround(script: FlightScript, scenario: Scenario): void {
   script.run(1, (s) => {
     s.onGround = true;
     s.vs = 0;
   });
   if (has(scenario, "bounce")) {
-    script.run(2, (s) => {
+    script.run(2, (s, second) => {
       s.onGround = false;
-      s.altAgl = 5;
+      s.vs = second === 0 ? 300 : -300;
     });
     script.run(1, (s) => (s.onGround = true));
   }
@@ -59,7 +90,7 @@ export function arrivalGround(script: FlightScript, scenario: Scenario): void {
     (s) => s.gs <= 20,
     (s) => (s.gs -= 3),
   );
-  script.run(200, (s) => (s.gs = 12));
+  taxiTo(script, scenario.arrival, 12);
   script.run(20, (s) => {
     s.gs = 0;
     s.parkingBrake = true;
