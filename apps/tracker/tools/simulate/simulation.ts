@@ -40,6 +40,7 @@ function startOne(scenario: Scenario, index: number, options: SimulationOptions)
     api: options.api,
     session: {
       callsign: scenario.callsign,
+      flightPlan: { departureIcao: scenario.departure.icao, arrivalIcao: scenario.arrival.icao },
       trackerVersion: options.trackerVersion,
       clock: { nowUtcMs: () => Date.now() },
       newFlightId: uuidV7,
