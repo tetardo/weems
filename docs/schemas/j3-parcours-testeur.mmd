@@ -1,0 +1,9 @@
+flowchart TD
+  I["1. Greg crée l'invitation<br/>(pnpm invite e-mail)"] --> M["2. Le pilote reçoit le lien<br/>d'inscription et l'installateur"]
+  M --> C["3. Il crée son compte sur le site"]
+  C --> T["4. Il installe le tracker<br/>(avertissement Windows : « Exécuter quand même »)"]
+  T --> L["5. « Se connecter » dans le tracker<br/>→ navigateur → retour au tracker"]
+  L --> V["6. Il lance MSFS et vole :<br/>le tracker démarre seul"]
+  V --> R["7. Après le vol : « Voir le rapport »<br/>→ page du vol sur le site"]
+  R --> F["8. Il signale ce qui ne va pas<br/>(phase fausse, vol manquant)"]
+  F --> V
