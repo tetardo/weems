@@ -9,8 +9,9 @@
     "generate-flight": "node tools/generate-flights/cli.ts",
     "simulate": "node tools/simulate/cli.ts",
     "fly": "node tools/fly/cli.ts",
-    "app": "node scripts/build-app.ts && electron dist/app",
-    "app:package": "node scripts/build-app.ts && electron-builder --config electron-builder.yml"
+    "app": "pnpm app:build && electron dist/app",
+    "app:build": "node scripts/build-app.ts",
+    "app:package": "pnpm app:build && electron-builder --config electron-builder.yml"
   },
   "dependencies": {
     "@weems/contrats": "workspace:*",

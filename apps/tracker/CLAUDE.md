@@ -79,7 +79,8 @@ tools/fly/                J2 : tracker sans interface sur le PC Windows (même a
 | `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer |
 | `pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO` | J2, sur le PC Windows avec MSFS lancé : enregistre le vol, l'envoie à l'API, écrit le rejeu dans `recordings/` (ignoré par git). « fin » + Entrée clôt le vol, Ctrl+C quitte |
 | `pnpm app` | J3 : lance l'application de bureau (API : http://localhost:3000, ou `WEEMS_API_URL`) |
-| `pnpm app:package` | Construit l'installateur dans `dist/installer/` (Windows : sur le PC ou par GitHub Actions) |
+| `pnpm app:package` | Construit l'installateur dans `dist/installer/`. Windows : par GitHub Actions (`tracker-installer.yml`), « Run workflow » sur main = version brouillon à publier à la main |
+| `pnpm test:tracker-app` (racine) | Lance la vraie fenêtre et la vérifie (sous Linux sans écran : `xvfb-run -a`) |
 | `pnpm check` (racine) | Types, style, structure, tests |
 
 - Un seuil se change dans `params.ts`, jamais dans une règle.

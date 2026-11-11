@@ -1,0 +1,69 @@
+name: Tracker Windows
+
+# Desktop tracker (J3): tests on Windows, Windows installer, real window check.
+# Pull requests touching the tracker: build only (the installer is kept 7 days as a CI artifact).
+# "Run workflow" on main: also uploads it to a draft GitHub release tracker-v<version>;
+# publishing that release by hand sends the update to the testers.
+
+on:
+  pull_request:
+    paths:
+      - "apps/tracker/**"
+      - "packages/contrats/**"
+      - "e2e/tracker-app/**"
+      - ".github/workflows/tracker-installer.yml"
+      - "pnpm-lock.yaml"
+  workflow_dispatch:
+
+concurrency:
+  group: tracker-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    permissions:
+      contents: write # draft release, on "Run workflow" only
+    env:
+      # Repository variable (Settings > Secrets and variables > Actions > Variables): the alpha API.
+      WEEMS_TRACKER_API_URL: ${{ vars.WEEMS_TRACKER_API_URL || 'http://localhost:3000' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Tests du tracker sur Windows
+        run: pnpm exec vitest run --project tracker
+      - name: Installateur
+        working-directory: apps/tracker
+        run: pnpm app:package --win --publish never
+      - name: Vraie fenêtre de l'application installée (sans simulateur ni API)
+        env:
+          TRACKER_EXECUTABLE: ${{ github.workspace }}\apps\tracker\dist\installer\win-unpacked\Weems Tracker.exe
+        run: pnpm exec vitest run --config e2e/vitest.tracker-app.config.ts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: weems-tracker-windows
+          path: apps/tracker/dist/installer/*.exe
+          retention-days: 7
+      - name: Version brouillon sur GitHub
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        working-directory: apps/tracker
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then echo "Seulement depuis main"; exit 1; fi
+          if [[ -z "${{ vars.WEEMS_TRACKER_API_URL }}" ]]; then echo "Variable WEEMS_TRACKER_API_URL absente"; exit 1; fi
+          version=$(node -p "require('./package.json').version")
+          if gh release view "tracker-v$version" >/dev/null 2>&1; then
+            echo "tracker-v$version existe déjà : augmenter la version dans apps/tracker/package.json"; exit 1
+          fi
+          pnpm exec electron-builder --config electron-builder.yml --win --prepackaged dist/installer/win-unpacked --publish always
