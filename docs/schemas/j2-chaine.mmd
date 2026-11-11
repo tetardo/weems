@@ -1,0 +1,14 @@
+flowchart LR
+  subgraph PC["PC Windows"]
+    direction TB
+    MSFS["MSFS 2020 ou 2024"] -- "SimConnect" --> CO["Connecteur MSFS<br/>(node-simconnect)"]
+    CO --> C["Cœur du tracker<br/>phases, enregistreur, envoi"]
+    C --> R[("Fichier de rejeu<br/>recordings/")]
+  end
+  C -- "HTTP, réseau local<br/>ouverture, positions,<br/>événements, clôture,<br/>trajectoire" --> API
+  subgraph MAC["Mac"]
+    direction TB
+    API["API (Docker)"] --> DB[("PostgreSQL<br/>vols, événements,<br/>trajectoires")]
+    API --> WEB["Site<br/>/live, /flights,<br/>/flights/{id}"]
+  end
+  R -. "copié sur le Mac" .-> T["Tests de rejeu"]
