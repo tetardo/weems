@@ -50,7 +50,7 @@ Un seul dépôt pour tout : le tracker et l'API partagent du code (`packages/`),
 | `pnpm check` | Tout : types, style, structure, tests. Doit passer avant toute fusion |
 | `pnpm format` | Remet le code en forme automatiquement |
 | `pnpm structure` | Frontières entre modules, code dupliqué, code inutilisé |
-| `pnpm test` | Tests de toutes les applications et de tous les paquets (base `weems_test` nécessaire) |
+| `pnpm test` | Tests de toutes les applications et de tous les paquets, et le test de bout en bout `e2e/` (tracker → API → base) ; base `weems_test` nécessaire |
 | `docker compose -f apps/api/docker-compose.yml up` | API complète sur http://localhost:3000, documentation sur http://localhost:3000/docs |
 
 **Schémas** : sources Mermaid dans `docs/schemas/`, images régénérées par `bash scripts/render-schemas.sh`.

@@ -1,3 +1,7 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "e2e"
+onlyBuiltDependencies:
+  # Native SQLite module of the tracker (prebuilt binary, compiled if none fits).
+  - better-sqlite3

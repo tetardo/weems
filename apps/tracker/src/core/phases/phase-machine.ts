@@ -43,6 +43,12 @@ export class PhaseMachine {
     return this.current;
   }
 
+  /** Continues a flight resumed after a crash from its last known phase. */
+  resumeAt(phase: FlightPhase): void {
+    this.current = phase;
+    this.pending = null;
+  }
+
   /** Ends the flight whatever the phase (manual close, crash, aircraft change). */
   close(t: number): PhaseOutput | null {
     if (this.current === null || this.current === "ARRIVED") return null;
