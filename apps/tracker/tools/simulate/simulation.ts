@@ -2,6 +2,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { uuidV7 } from "@weems/contrats";
 import { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts";
+import { replayUntil } from "../../src/connectors/replay/replay-format.ts";
 import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
 import { createTracker } from "../../src/runtime/create-tracker.ts";
 import type { ApiClient } from "../../src/sender/api-client.ts";
@@ -35,8 +36,24 @@ export interface SimulatedFlight {
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function startOne(scenario: Scenario, index: number, options: SimulationOptions, stopAtMs: number) {
-  const connector = new ReplayConnector(generateFlight(scenario), options.speed);
+type Tracker = ReturnType<typeof createTracker>;
+
+interface Run {
+  scenario: Scenario;
+  /** Built at departure only: N pilots never hold N whole flights in memory at once. */
+  tracker: Tracker | null;
+  connector: ReplayConnector | null;
+  done: Promise<void>;
+}
+
+function buildTracker(scenario: Scenario, options: SimulationOptions) {
+  const flight = generateFlight(scenario);
+  // Only what can be played before the stop stays in memory (2 000 pilots in one process).
+  const replay =
+    options.stopAfterMs === undefined
+      ? flight
+      : replayUntil(flight, options.stopAfterMs * options.speed);
+  const connector = new ReplayConnector(replay, options.speed);
   const tracker = createTracker({
     connector,
     databasePath: join(options.workDir, `${scenario.callsign}.db`),
@@ -50,13 +67,22 @@ function startOne(scenario: Scenario, index: number, options: SimulationOptions,
       params: AIRLINER_PARAMS,
     },
   });
+  return { connector, tracker };
+}
+
+function startOne(scenario: Scenario, index: number, options: SimulationOptions, stopAtMs: number) {
+  const run: Run = { scenario, tracker: null, connector: null, done: Promise.resolve() };
   const delayMs = (index * options.staggerS * 1000) / options.speed;
   // A pilot whose departure comes after the stop never takes off.
-  const done = wait(Math.min(delayMs, stopAtMs - Date.now())).then(() =>
-    Date.now() < stopAtMs ? tracker.runtime.start() : undefined,
-  );
-  return { scenario, tracker, connector, done };
+  run.done = wait(Math.min(delayMs, stopAtMs - Date.now())).then(() => {
+    if (Date.now() >= stopAtMs) return;
+    Object.assign(run, buildTracker(scenario, options));
+    return run.tracker?.runtime.start();
+  });
+  return run;
 }
+
+const trackersOf = (runs: readonly Run[]) => runs.flatMap((r) => (r.tracker ? [r.tracker] : []));
 
 /**
  * J1: N headless trackers in one process, each replaying its own flight
@@ -69,15 +95,16 @@ export async function runSimulation(options: SimulationOptions): Promise<Simulat
     startOne(scenario, index, options, stopAtMs),
   );
   if (options.stopAfterMs !== undefined) {
-    const stopAll = () => Promise.all(runs.map((r) => r.connector.stop()));
+    const stopAll = () => Promise.all(runs.map((r) => r.connector?.stop()));
     setTimeout(() => void stopAll(), options.stopAfterMs).unref();
   }
   let replaying = true;
   const pumping = (async () => {
     const deadline = () => Date.now() > drainEnd;
     let drainEnd = Number.POSITIVE_INFINITY;
-    while (replaying || (!deadline() && runs.some((r) => r.tracker.sender.pendingCount() > 0))) {
-      await Promise.all(runs.map((r) => r.tracker.runtime.pump(Date.now())));
+    const pending = () => trackersOf(runs).some((t) => t.sender.pendingCount() > 0);
+    while (replaying || (!deadline() && pending())) {
+      await Promise.all(trackersOf(runs).map((t) => t.runtime.pump(Date.now())));
       await wait(options.pumpEveryMs ?? 500);
       if (!replaying && drainEnd === Number.POSITIVE_INFINITY) {
         drainEnd = Date.now() + (options.drainTimeoutMs ?? 120_000);
@@ -87,14 +114,14 @@ export async function runSimulation(options: SimulationOptions): Promise<Simulat
   await Promise.all(runs.map((r) => r.done));
   replaying = false;
   await pumping;
-  await Promise.all(runs.map((r) => r.tracker.runtime.pump(Date.now())));
+  await Promise.all(trackersOf(runs).map((t) => t.runtime.pump(Date.now())));
   return runs.map((r) => {
     const result = {
       scenario: r.scenario,
-      flightId: r.tracker.runtime.currentFlightId,
-      pending: r.tracker.sender.pendingCount(),
+      flightId: r.tracker?.runtime.currentFlightId ?? null,
+      pending: r.tracker?.sender.pendingCount() ?? 0,
     };
-    r.tracker.recorder.close();
+    r.tracker?.recorder.close();
     return result;
   });
 }

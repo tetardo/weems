@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { sample } from "../../core/testing/sample.ts";
 import { ReplayConnector } from "./replay-connector.ts";
-import { parseReplay, type Replay, serializeReplay } from "./replay-format.ts";
+import { parseReplay, type Replay, replayUntil, serializeReplay } from "./replay-format.ts";
 
 const replay: Replay = {
   header: { format: "weems-replay", version: 1, source: "synthetic", seed: 1 },
@@ -27,6 +27,12 @@ const replay: Replay = {
 describe("replay format", () => {
   it("reads back what it writes", () => {
     expect(parseReplay(serializeReplay(replay))).toEqual(replay);
+  });
+
+  it("keeps only the first milliseconds of a replay, header unchanged", () => {
+    const start = replayUntil(replay, 20);
+    expect(start.header).toEqual(replay.header);
+    expect(start.records.map((r) => r.t)).toEqual([0, 0, 20]);
   });
 
   it("names the faulty line", () => {
