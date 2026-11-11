@@ -23,21 +23,21 @@ export function FlightHeader({ flight }: { flight: FlightView }) {
     [t("registration"), flight.aircraft.registration ?? site("notMeasured")],
   ];
   return (
-    <CardBox className="my-6">
+    <CardBox className="mt-2 mb-5 border-t-4 border-t-accent">
       <header>
         <div className="flex flex-wrap items-baseline gap-3">
-          <h1 className="text-3xl leading-tight">{flight.callsign}</h1>
-          <span className="text-lg">
+          <h1 className="m-0 text-[1.9em]">{flight.callsign}</h1>
+          <span className="font-title text-lg text-link">
             {formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}
           </span>
           <FlightStatus closeReason={flight.closeReason} />
         </div>
-        <p className="text-gray-500">{flight.aircraft.title}</p>
-        <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
+        <p className="mt-1 mb-0 text-muted">{flight.aircraft.title}</p>
+        <dl className="mt-5 mb-0 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-[1.7fr_repeat(5,1fr)]">
           {facts.map(([label, value]) => (
             <div key={label}>
-              <dt className="text-sm text-gray-500">{label}</dt>
-              <dd className="m-0 text-lg font-semibold">{value}</dd>
+              <dt className="text-[.85em] tracking-wide text-muted uppercase">{label}</dt>
+              <dd className="m-0 font-title text-lg font-bold tabular-nums">{value}</dd>
             </div>
           ))}
         </dl>

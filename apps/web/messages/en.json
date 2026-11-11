@@ -3,8 +3,8 @@
     "name": "Weems",
     "description": "Flight tracking for simulator pilots",
     "nav": {
-      "live": "Live map",
-      "flights": "My flights"
+      "flights": "My flights",
+      "live": "Live map"
     },
     "language": "Français",
     "notMeasured": "not measured",

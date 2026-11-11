@@ -111,6 +111,9 @@ export function TrackMap({ points, selected, onSelect }: Props) {
   }, [selected, points]);
 
   return (
-    <div ref={container} className="h-80 w-full rounded-lg border border-gray-100 md:h-[28rem]" />
+    <div
+      ref={container}
+      className="h-80 w-full overflow-hidden rounded-[10px] border border-line md:h-[28rem]"
+    />
   );
 }

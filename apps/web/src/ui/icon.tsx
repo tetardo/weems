@@ -1,4 +1,4 @@
-/** A Material Design icon (path from @mdi/js), as in the Admin One template. */
+/** A Material Design icon (path from @mdi/js). */
 export function Icon({
   path,
   size = 18,

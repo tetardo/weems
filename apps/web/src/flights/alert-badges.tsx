@@ -7,7 +7,10 @@ export function AlertBadges({ alerts }: { alerts: readonly FlightAlert[] }) {
   return (
     <span className="flex flex-wrap gap-1">
       {alerts.map((alert) => (
-        <span key={alert} className="rounded bg-amber-50 px-1.5 py-0.5 text-xs text-amber-900">
+        <span
+          key={alert}
+          className="rounded-full border border-accent-2/40 px-2 py-0.5 text-[.85em] text-accent-2"
+        >
           {t(alert)}
         </span>
       ))}

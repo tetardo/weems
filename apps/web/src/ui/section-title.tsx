@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { Icon } from "./icon.tsx";
 
 /**
- * Title of a page (`main`, round icon, h1) or of a block of the page (small icon, h2),
- * with optional content on the right.
+ * Title of a page (`main`, h1) or of a block of the page (h2), in Space Grotesk as on the
+ * GameLab pages, with optional content on the right.
  */
 export function SectionTitle({
   icon,
@@ -17,21 +17,13 @@ export function SectionTitle({
   children?: ReactNode;
 }) {
   return (
-    <div className={`${main ? "" : "pt-6"} mb-6 flex items-center justify-between gap-3`}>
-      <div className="flex items-center">
+    <div className={`${main ? "" : "pt-6"} mb-4 flex flex-wrap items-end justify-between gap-3`}>
+      <div className="flex items-center gap-2.5">
+        <Icon path={icon} size={main ? 26 : 20} className="text-link" />
         {main ? (
-          <Icon
-            path={icon}
-            size={24}
-            className="mr-3 h-12 w-12 rounded-full bg-white text-slate-700"
-          />
+          <h1 className="m-0 text-[1.9em]">{title}</h1>
         ) : (
-          <Icon path={icon} size={20} className="mr-2" />
-        )}
-        {main ? (
-          <h1 className="text-3xl leading-tight">{title}</h1>
-        ) : (
-          <h2 className="text-2xl leading-tight">{title}</h2>
+          <h2 className="m-0 text-[1.5em]">{title}</h2>
         )}
       </div>
       {children}

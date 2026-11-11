@@ -4,11 +4,11 @@ import type { FlightReviewView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { Button } from "../ui/button.tsx";
+import { INPUT_CLASS } from "../ui/input-class.ts";
 import { type ReviewState, submitReview } from "./review-action.ts";
 import { Section } from "./section.tsx";
 
-const NOTE_CLASS =
-  "w-full rounded-sm border border-gray-700 bg-white px-3 py-2 focus:border-blue-600 focus:ring-3 focus:ring-blue-600 focus:outline-hidden";
+const NOTE_CLASS = `${INPUT_CLASS} min-h-24`;
 
 /** Yes / no, ticked with the previous answer. */
 function PhasesChoice({ current }: { current: FlightReviewView | null }) {
@@ -16,8 +16,9 @@ function PhasesChoice({ current }: { current: FlightReviewView | null }) {
   return (
     <div className="flex flex-wrap gap-x-6 gap-y-2">
       {(["correct", "wrong"] as const).map((value) => (
-        <label key={value} className="flex items-center gap-2">
+        <label key={value} className="flex min-h-11 cursor-pointer items-center gap-2">
           <input
+            className="size-5 accent-accent"
             type="radio"
             name="phases"
             value={value}

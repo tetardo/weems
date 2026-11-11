@@ -1,6 +1,9 @@
+import { mdiArrowLeft } from "@mdi/js";
 import type { FlightReviewView, FlightView, TrackView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { Link } from "../i18n/navigation.ts";
+import { buttonClass } from "../ui/button.tsx";
+import { Icon } from "../ui/icon.tsx";
 import { SectionMain } from "../ui/section-main.tsx";
 import { EventLogTable } from "./event-log-table.tsx";
 import { FlightHeader } from "./flight-header.tsx";
@@ -26,8 +29,9 @@ export function FlightPage({
   const t = useTranslations("Flight");
   return (
     <SectionMain>
-      <Link href="/flights" className="text-sm text-blue-600 hover:underline">
-        ← {t("back")}
+      <Link href="/flights" className={`${buttonClass("ghost")} -ml-3 text-link`}>
+        <Icon path={mdiArrowLeft} size={20} />
+        {t("back")}
       </Link>
       <FlightHeader flight={flight} />
       <Section title={t("map.title")}>
@@ -37,7 +41,7 @@ export function FlightPage({
           <p className="text-muted">{t("map.noTrack")}</p>
         )}
       </Section>
-      <div className="grid gap-x-6 md:grid-cols-3">
+      <div className="grid gap-x-5 md:grid-cols-3">
         <PhaseTimelineTable flight={flight} />
         <LandingPanel events={flight.events} />
         <Section title={t("score.title")}>

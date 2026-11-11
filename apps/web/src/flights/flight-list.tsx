@@ -1,6 +1,6 @@
 import type { FlightList as FlightListData } from "@weems/contrats";
 import { useTranslations } from "next-intl";
-import { mdiBookOpenPageVariant } from "@mdi/js";
+import { mdiBookOpenPageVariantOutline } from "@mdi/js";
 import { Link } from "../i18n/navigation.ts";
 import { CardBox } from "../ui/card-box.tsx";
 import { SectionMain } from "../ui/section-main.tsx";
@@ -16,11 +16,11 @@ export function FlightList({ list, filters }: { list: FlightListData; filters: L
   const filtered = Object.keys(kept).length > 0;
   return (
     <SectionMain>
-      <SectionTitle icon={mdiBookOpenPageVariant} title={t("title")} main />
+      <SectionTitle icon={mdiBookOpenPageVariantOutline} title={t("title")} main />
       <FlightFilters filters={filters} />
       {list.flights.length === 0 ? (
         <CardBox>
-          <p className="text-gray-500">{filtered ? t("emptyFiltered") : t("empty")}</p>
+          <p className="m-0 text-muted">{filtered ? t("emptyFiltered") : t("empty")}</p>
         </CardBox>
       ) : (
         <CardBox flush>
@@ -31,7 +31,7 @@ export function FlightList({ list, filters }: { list: FlightListData; filters: L
         {filters.cursor && (
           <Link
             href={{ pathname: "/flights", query: { ...kept } }}
-            className="text-blue-600 hover:underline"
+            className="text-link hover:underline"
           >
             {t("first")}
           </Link>
@@ -39,7 +39,7 @@ export function FlightList({ list, filters }: { list: FlightListData; filters: L
         {list.nextCursor && (
           <Link
             href={{ pathname: "/flights", query: { ...kept, cursor: list.nextCursor } }}
-            className="text-blue-600 hover:underline"
+            className="text-link hover:underline"
           >
             {t("next")}
           </Link>

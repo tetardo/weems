@@ -16,8 +16,9 @@ interface Props {
 
 /** Drawing units; the SVG stretches to the page width. */
 const SIZE = { width: 1000, height: 200 };
-const ALTITUDE_COLOR = "#14273a";
-const SPEED_COLOR = "#b7791f";
+/** Theme colours (global.css): the lines stay readable in the dark and the light theme. */
+const ALTITUDE_COLOR = "var(--color-ink)";
+const SPEED_COLOR = "var(--color-accent-2)";
 
 /** Phase bands, speed and altitude lines, and the selected time. */
 function ProfileDrawing({ profile, cursorX }: { profile: Profile; cursorX: number | null }) {
@@ -30,20 +31,20 @@ function ProfileDrawing({ profile, cursorX }: { profile: Profile; cursorX: numbe
           width={band.width}
           height={SIZE.height}
           fill={colorOf(band.phase)}
-          opacity={0.18}
+          opacity={0.22}
         />
       ))}
       <path
         d={profile.speedPath}
         fill="none"
-        stroke={SPEED_COLOR}
+        style={{ stroke: SPEED_COLOR }}
         strokeWidth={1.5}
         vectorEffect="non-scaling-stroke"
       />
       <path
         d={profile.altitudePath}
         fill="none"
-        stroke={ALTITUDE_COLOR}
+        style={{ stroke: ALTITUDE_COLOR }}
         strokeWidth={2}
         vectorEffect="non-scaling-stroke"
       />
@@ -53,7 +54,7 @@ function ProfileDrawing({ profile, cursorX }: { profile: Profile; cursorX: numbe
           x2={cursorX}
           y1={0}
           y2={SIZE.height}
-          stroke="#14273a"
+          style={{ stroke: ALTITUDE_COLOR }}
           strokeDasharray="4 3"
           vectorEffect="non-scaling-stroke"
         />
@@ -88,7 +89,7 @@ export function VerticalProfile({ points, selected, onSelect }: Props) {
       <svg
         viewBox={`0 0 ${SIZE.width} ${SIZE.height}`}
         preserveAspectRatio="none"
-        className="h-48 w-full cursor-crosshair rounded border border-line"
+        className="h-48 w-full cursor-crosshair rounded-[10px] border border-line bg-bg"
         onMouseMove={pick}
         onClick={pick}
         onMouseLeave={() => onSelect(null)}
