@@ -153,6 +153,14 @@ describe("settings helpers (spec J4)", () => {
       (await app.inject({ method: "GET", url: "/v1/me/profile/handle-check?handle=x" })).statusCode,
     ).toBe(401);
   });
+
+  it("limits the checks per pilot, not per address (all come through the site)", async () => {
+    const [busy, other] = [await newTrackerPilot(app), await newTrackerPilot(app)];
+    const url = `/v1/me/profile/handle-check?handle=${uniqueHandle()}`;
+    for (let i = 0; i < 60; i++) await ask(busy, url);
+    expect((await ask(busy, url)).statusCode).toBe(429);
+    expect((await ask(other, url)).statusCode).toBe(200);
+  });
 });
 
 describe("public profile (spec J4)", () => {

@@ -16,7 +16,8 @@
       "logbook": "Mon carnet",
       "login": "Se connecter",
       "signup": "Créer mon carnet"
-    }
+    },
+    "busy": "Trop de visites en ce moment. Réessayez dans une minute."
   },
   "Live": {
     "title": "Carte en direct",
@@ -219,7 +220,9 @@
       "invalid": {
         "handle": "Adresse invalide : 3 à 30 caractères, lettres minuscules, chiffres et tirets.",
         "consent": "Cochez la case d'accord pour publier votre page.",
+        "country": "Pays inconnu.",
         "homeIcao": "Aéroport de base : code OACI de 4 lettres.",
+        "level": "Niveau inconnu.",
         "vatsimId": "Identifiant VATSIM : des chiffres seulement.",
         "ivaoId": "Identifiant IVAO : des chiffres seulement.",
         "simbriefId": "Identifiant SimBrief invalide."

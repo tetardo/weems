@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
@@ -22,10 +22,17 @@ const listQuery = z.object({
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(20),
 });
-/** Per visitor address: plenty for a person browsing, not for copying every profile. */
-const config = { rateLimit: { max: 120, timeWindow: "1 minute" } };
-/** No caching anywhere: a profile taken down disappears at the next load (spec J4). */
-const noStore = "no-store";
+/**
+ * Options of every public route. Rate limit per visitor address (given by the site's server, see
+ * config.trustedProxies): plenty for a person browsing, not for copying every profile. No caching
+ * anywhere: a profile taken down disappears at the next load (spec J4).
+ */
+const options = {
+  config: { rateLimit: { max: 120, timeWindow: "1 minute" } },
+  onSend: async (_request: FastifyRequest, reply: FastifyReply) => {
+    reply.header("cache-control", "no-store");
+  },
+};
 
 /** Routes anyone can call, without account (spec J4 profil public). */
 export function registerPublicProfileRoutes(
@@ -33,24 +40,20 @@ export function registerPublicProfileRoutes(
   service: PublicProfilesService,
 ): void {
   const app = parent.withTypeProvider<ZodTypeProvider>();
-  app.addHook("onSend", async (request, reply) => {
-    if (request.url.startsWith("/v1/pilots")) reply.header("cache-control", noStore);
-  });
-
   app.get(
     "/v1/pilots",
-    { config, schema: { tags, response: { 200: PublicPilotIndex, ...errors } } },
+    { ...options, schema: { tags, response: { 200: PublicPilotIndex, ...errors } } },
     async () => service.index(),
   );
   app.get(
     "/v1/pilots/:handle",
-    { config, schema: { tags, params: handle, response: { 200: PublicPilot, ...errors } } },
+    { ...options, schema: { tags, params: handle, response: { 200: PublicPilot, ...errors } } },
     async (request) => service.pilot(request.params.handle),
   );
   app.get(
     "/v1/pilots/:handle/flights",
     {
-      config,
+      ...options,
       schema: {
         tags,
         params: handle,
@@ -62,7 +65,7 @@ export function registerPublicProfileRoutes(
   );
   app.get(
     "/v1/pilots/:handle/photo",
-    { config, schema: { tags, params: handle } },
+    { ...options, schema: { tags, params: handle } },
     async (request, reply) => {
       const photo = await service.photo(request.params.handle);
       return reply.type("image/webp").send(photo);
@@ -70,7 +73,7 @@ export function registerPublicProfileRoutes(
   );
   app.get(
     "/v1/pilots/:handle/routes",
-    { config, schema: { tags, params: handle, response: { 200: PilotRoutes, ...errors } } },
+    { ...options, schema: { tags, params: handle, response: { 200: PilotRoutes, ...errors } } },
     async (request) => service.routes(request.params.handle),
   );
   registerPublicFlightRoutes(app, service);
@@ -82,14 +85,17 @@ function registerPublicFlightRoutes(parent: FastifyInstance, service: PublicProf
   app.get(
     "/v1/pilots/:handle/flights/:flightId",
     {
-      config,
+      ...options,
       schema: { tags, params: handleAndFlight, response: { 200: PublicFlightView, ...errors } },
     },
     async (request) => service.flight(request.params.handle, request.params.flightId),
   );
   app.get(
     "/v1/pilots/:handle/flights/:flightId/track",
-    { config, schema: { tags, params: handleAndFlight, response: { 200: TrackView, ...errors } } },
+    {
+      ...options,
+      schema: { tags, params: handleAndFlight, response: { 200: TrackView, ...errors } },
+    },
     async (request) => service.track(request.params.handle, request.params.flightId),
   );
 }

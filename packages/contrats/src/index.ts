@@ -56,6 +56,8 @@ export {
   PublicPilot,
   PublicPilotIndex,
   RECENT_LANDINGS,
+  PHOTO_MAX_BYTES,
+  PHOTO_TYPES,
   SimbriefId,
   TOUCHDOWN_BUCKETS_FPM,
   VatsimId,

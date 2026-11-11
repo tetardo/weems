@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
@@ -8,6 +8,8 @@ import {
   HandleCheckQuery,
   HiddenFlights,
   MyProfile,
+  PHOTO_MAX_BYTES,
+  PHOTO_TYPES,
   Problem,
   ProfileUpdate,
 } from "@weems/contrats";
@@ -18,9 +20,6 @@ import type { ProfilesService } from "./service.ts";
 const errors = { 400: Problem, 401: Problem, 404: Problem, 409: Problem, 422: Problem };
 const security = [{ bearer: [] }];
 const tags = ["profiles"];
-const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
-/** Upload limit of a photo; it is stored reduced to about 20 KB. */
-const PHOTO_MAX_BYTES = 5 * 1024 * 1024;
 /** Checks of an address as the pilot types it: enough for typing, too few to list the handles. */
 const HANDLE_CHECKS_PER_MINUTE = 60;
 
@@ -90,7 +89,15 @@ function registerSettingsHelpers(
     "/v1/me/profile/handle-check",
     {
       ...own,
-      config: { rateLimit: { max: HANDLE_CHECKS_PER_MINUTE, timeWindow: "1 minute" } },
+      // Counted per pilot, after the login check: every pilot comes through the site's address.
+      config: {
+        rateLimit: {
+          max: HANDLE_CHECKS_PER_MINUTE,
+          timeWindow: "1 minute",
+          hook: "preHandler",
+          keyGenerator: (request: FastifyRequest) => callerOf(request).pilotId,
+        },
+      },
       schema: {
         tags,
         security,
@@ -105,7 +112,7 @@ function registerSettingsHelpers(
 /** The photo is sent as the raw image body (Content-Type image/jpeg, image/png or image/webp). */
 function registerPhotoRoutes(app: FastifyInstance, service: ProfilesService, guards: Guards): void {
   app.addContentTypeParser(
-    PHOTO_TYPES,
+    [...PHOTO_TYPES],
     { parseAs: "buffer", bodyLimit: PHOTO_MAX_BYTES },
     (_request, body, done) => done(null, body),
   );

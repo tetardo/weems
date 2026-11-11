@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ApiUnavailable } from "../../../../../api/api-request.ts";
 import { getHiddenFlights, getMyProfile } from "../../../../../api/profile-api.ts";
 import { currentPilot } from "../../../../../auth/server-session.ts";
 import { SettingsPage } from "../../../../../settings/settings-page.tsx";
-import { ApiDown } from "../../../../../site/api-down.tsx";
+import { ApiUnavailable } from "../../../../../api/api-request.ts";
+import { apiFallback } from "../../../../../site/api-fallback.tsx";
 import { siteUrl } from "../../../../../site/site-url.ts";
 
 interface Props {
@@ -35,7 +35,6 @@ export default async function SettingsRoute({ params }: Props) {
       />
     );
   } catch (error) {
-    if (error instanceof ApiUnavailable) return <ApiDown url={error.url} />;
-    throw error;
+    return apiFallback(error);
   }
 }

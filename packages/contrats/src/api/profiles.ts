@@ -109,6 +109,10 @@ export const PilotStats = z.object({
 });
 export type PilotStats = z.infer<typeof PilotStats>;
 
+/** Photo of a profile: image types the API reads, and upload limit (stored reduced to ~20 KB). */
+export const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
+export const PHOTO_MAX_BYTES = 5 * 1024 * 1024;
+
 /** Upper bounds of the flight duration buckets, hours: < 1, 1-2, 2-4, 4-8, > 8 (block time). */
 export const DURATION_BUCKETS_H = [1, 2, 4, 8] as const;
 /** Upper bounds of the touchdown buckets, ft/min: soft < 60, normal, firm, hard > 600. */

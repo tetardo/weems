@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ApiUnavailable } from "../../../../../api/api-request.ts";
 import { getPilotRoutes, getPublicFlights, getPublicPilot } from "../../../../../api/public-api.ts";
 import { publicPageMetadata } from "../../../../../profile/page-metadata.ts";
 import { ProfilePage } from "../../../../../profile/profile-page.tsx";
-import { ApiDown } from "../../../../../site/api-down.tsx";
+import { apiFallback } from "../../../../../site/api-fallback.tsx";
 
 interface Props {
   params: Promise<{ locale: string; handle: string }>;
@@ -45,7 +44,6 @@ export default async function PilotRoute({ params, searchParams }: Props) {
     if (!pilot || !routes || !flights) notFound();
     return <ProfilePage pilot={pilot} routes={routes} flights={flights} cursor={page} />;
   } catch (error) {
-    if (error instanceof ApiUnavailable) return <ApiDown url={error.url} />;
-    throw error;
+    return apiFallback(error);
   }
 }

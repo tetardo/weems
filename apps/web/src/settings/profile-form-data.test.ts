@@ -45,4 +45,22 @@ describe("settings form", () => {
     expect(readProfileForm(form({ vatsimId: "12" }))).toEqual({ ok: false, field: "vatsimId" });
     expect(readProfileForm(form({ handle: "-x" }))).toEqual({ ok: false, field: "handle" });
   });
+
+  it("needs an address to publish", () => {
+    expect(readProfileForm(form({ isPublic: "on", consent: "on" }))).toEqual({
+      ok: false,
+      field: "handle",
+    });
+  });
+
+  it("names a wrong country or level", () => {
+    expect(readProfileForm(form({ handle: "greg-fr", country: "fr" }))).toEqual({
+      ok: false,
+      field: "country",
+    });
+    expect(readProfileForm(form({ handle: "greg-fr", level: "ace" }))).toEqual({
+      ok: false,
+      field: "level",
+    });
+  });
 });

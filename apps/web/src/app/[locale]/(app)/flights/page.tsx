@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ApiUnavailable } from "../../../../api/api-request.ts";
 import { listFlights } from "../../../../api/weems-api.ts";
 import { FlightList } from "../../../../flights/flight-list.tsx";
 import { readFilters, toApiQuery } from "../../../../flights/list-query.ts";
-import { ApiDown } from "../../../../site/api-down.tsx";
+import { apiFallback } from "../../../../site/api-fallback.tsx";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -24,7 +23,6 @@ export default async function FlightsPage({ params, searchParams }: Props) {
     const list = await listFlights(toApiQuery(filters));
     return <FlightList list={list} filters={filters} />;
   } catch (error) {
-    if (error instanceof ApiUnavailable) return <ApiDown url={error.url} />;
-    throw error;
+    return apiFallback(error);
   }
 }

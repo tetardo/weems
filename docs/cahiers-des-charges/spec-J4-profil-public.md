@@ -87,7 +87,7 @@ Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols 
 
 - Deux colonnes : à gauche « Publication » (interrupteur, date de publication, adresse avec vérification au fil de la frappe : disponible, déjà pris, mot réservé ; case d'accord obligatoire à la première activation) puis « Informations » (photo, pays, aéroport de base, niveau, identifiants, bouton « Enregistrer ») ; à droite « Ce qui est visible » (public ou jamais public) et « Vols masqués » (liste avec « Remontrer »).
 - La liste des vols masqués demande une route de plus : `GET /v1/me/profile/hidden-flights` (date et trajet de chaque vol masqué du pilote).
-- La vérification de l'adresse au fil de la frappe demande `GET /v1/me/profile/handle-check?handle=…` (disponible, pris, réservé, mal formé), limitée en débit.
+- La vérification de l'adresse au fil de la frappe demande `GET /v1/me/profile/handle-check?handle=…` (disponible, pris, réservé, mal formé), limitée à 60 par minute et par pilote (toutes les demandes passent par l'adresse du site : une limite par adresse IP serait commune à tous).
 
 **Champs saisis par le pilote** (tous facultatifs) :
 
@@ -148,7 +148,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 - Base : nouvelle table `pilot_profiles` (compte, pseudo d'adresse unique, activé oui ou non, pays, aéroport de base, niveau, identifiants VATSIM, IVAO et SimBrief, dates d'activation, de désactivation et de mise à jour), une table `profile_hidden_flights` (vols masqués, avec le pilote) et une table `pilot_photos`. Ni la table `flights` ni celles de Better Auth ne changent : le module `profiles` n'écrit que dans ses tables, et lit les vols par le service du module `flights`.
 - Formats des réponses publiques dans `packages/contrats`, **distincts** des formats privés : un format public ne contient que les champs de la colonne « public » ci-dessus. C'est ce qui empêche une fuite si on ajoute plus tard un champ privé à un vol.
 - Statistiques calculées à la demande à partir des vols et de leurs événements. Suffisant en local et pour l'alpha ; à remplacer par des valeurs stockées à la clôture du vol si un profil dépasse quelques centaines de vols [Confiance moyenne].
-- Routes publiques limitées en débit par adresse IP (protection contre l'aspiration des profils).
+- Routes publiques limitées en débit par adresse IP du visiteur (protection contre l'aspiration des profils). Le serveur du site appelle l'API pour ses visiteurs : il transmet la dernière adresse de `X-Forwarded-For`, et l'API ne croit cet en-tête que venant des adresses de `WEEMS_TRUSTED_PROXIES` (le serveur du site). En ligne, le site devra rester derrière un proxy inverse qui ajoute l'adresse du visiteur (Caddy, nginx) : sans lui, un visiteur pourrait écrire l'en-tête lui-même.
 
 ## 7. Site
 

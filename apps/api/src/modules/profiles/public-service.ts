@@ -7,7 +7,7 @@ import type {
   TrackView,
 } from "@weems/contrats";
 import { landingSummary } from "@weems/contrats";
-import { notFound } from "../../plugins/problem.ts";
+import { ApiProblem, notFound } from "../../plugins/problem.ts";
 import type { AccountsService } from "../accounts/service.ts";
 import type { FlightsService, SummaryWithEvents } from "../flights/service.ts";
 import type { TracksService } from "../tracks/service.ts";
@@ -123,8 +123,8 @@ export class PublicProfilesService {
   private async publicFlight(handle: string, flightId: string) {
     const profile = await this.publicProfile(handle);
     const owner = { pilotId: profile.pilotId };
-    const flight = await this.flights.read(owner, flightId).catch(() => {
-      throw noFlight();
+    const flight = await this.flights.read(owner, flightId).catch((error: unknown) => {
+      throw error instanceof ApiProblem && error.status === 404 ? noFlight() : error;
     });
     if (flight.closedAt === null || (await this.repository.isHidden(flightId))) throw noFlight();
     return { owner, flight };

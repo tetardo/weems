@@ -48,6 +48,8 @@ export async function buildApp({
 }: AppDependencies): Promise<FastifyInstance> {
   const app = Fastify({
     logger: logger && { redact: ["req.headers.authorization"] },
+    // request.ip is the visitor's, not the site server's (rate limits of the public routes).
+    trustProxy: config.trustedProxies,
   });
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ApiUnavailable } from "../../../../../../../api/api-request.ts";
 import { getPublicFlight, getPublicTrack } from "../../../../../../../api/public-api.ts";
 import { formatRoute } from "../../../../../../../format/flight-format.ts";
 import { publicPageMetadata } from "../../../../../../../profile/page-metadata.ts";
 import { PublicFlightPage } from "../../../../../../../profile/public-flight-page.tsx";
-import { ApiDown } from "../../../../../../../site/api-down.tsx";
+import { apiFallback } from "../../../../../../../site/api-fallback.tsx";
 
 interface Props {
   params: Promise<{ locale: string; handle: string; flightId: string }>;
@@ -42,7 +41,6 @@ export default async function PublicFlightRoute({ params }: Props) {
     if (!flight) notFound();
     return <PublicFlightPage handle={handle} flight={flight} track={track} />;
   } catch (error) {
-    if (error instanceof ApiUnavailable) return <ApiDown url={error.url} />;
-    throw error;
+    return apiFallback(error);
   }
 }

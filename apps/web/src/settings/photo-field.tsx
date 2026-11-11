@@ -1,5 +1,6 @@
 "use client";
 
+import { PHOTO_MAX_BYTES, PHOTO_TYPES } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -7,9 +8,7 @@ import { OWN_PHOTO_URL } from "../site/api-relay.ts";
 import { Button } from "../ui/button.tsx";
 import { removePhotoAction } from "./profile-actions.ts";
 
-const ACCEPTED = "image/jpeg,image/png,image/webp";
-/** Same limit as the API: refused here before sending 5 MB for nothing. */
-const MAX_BYTES = 5 * 1024 * 1024;
+const ACCEPTED = PHOTO_TYPES.join(",");
 
 type Problem = "tooBig" | "wrongType" | "failed" | null;
 
@@ -25,7 +24,8 @@ function usePhotoUpload() {
   const [busy, setBusy] = useState(false);
 
   async function upload(file: File) {
-    if (file.size > MAX_BYTES) return setProblem("tooBig");
+    // Same limit as the API: refused here before sending megabytes for nothing.
+    if (file.size > PHOTO_MAX_BYTES) return setProblem("tooBig");
     setBusy(true);
     const response = await fetch(OWN_PHOTO_URL, {
       method: "PUT",

@@ -6,6 +6,7 @@ import {
   PublicPilotIndex,
   TrackView,
 } from "@weems/contrats";
+import { cache } from "react";
 import type { z } from "zod";
 import { apiRequest } from "./api-request.ts";
 
@@ -17,9 +18,10 @@ const pilotPath = (handle: string) => `/v1/pilots/${encodeURIComponent(handle)}`
 const flightPath = (handle: string, flightId: string) =>
   `${pilotPath(handle)}/flights/${encodeURIComponent(flightId)}`;
 
-export function getPublicPilot(handle: string): Promise<PublicPilot | null> {
-  return get(pilotPath(handle), PublicPilot);
-}
+/** Asked once per page view: the page and its metadata share the answer (React cache). */
+export const getPublicPilot = cache((handle: string): Promise<PublicPilot | null> =>
+  get(pilotPath(handle), PublicPilot),
+);
 
 export function getPilotRoutes(handle: string): Promise<PilotRoutes | null> {
   return get(`${pilotPath(handle)}/routes`, PilotRoutes);
@@ -33,12 +35,10 @@ export function getPublicFlights(
   return get(`${pilotPath(handle)}/flights${query}`, PublicFlightList);
 }
 
-export function getPublicFlight(
-  handle: string,
-  flightId: string,
-): Promise<PublicFlightView | null> {
-  return get(flightPath(handle, flightId), PublicFlightView);
-}
+export const getPublicFlight = cache(
+  (handle: string, flightId: string): Promise<PublicFlightView | null> =>
+    get(flightPath(handle, flightId), PublicFlightView),
+);
 
 export function getPublicTrack(handle: string, flightId: string): Promise<TrackView | null> {
   return get(`${flightPath(handle, flightId)}/track`, TrackView);
