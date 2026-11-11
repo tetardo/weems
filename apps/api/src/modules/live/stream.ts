@@ -30,6 +30,8 @@ export class LiveStream {
       "content-type": "text/event-stream",
       "cache-control": "no-cache",
       connection: "keep-alive",
+      // Public stream at J1: the map page is served by the web app from another port.
+      "access-control-allow-origin": "*",
     });
     write(client, "snapshot", this.board.snapshot());
     this.clients.add(client);
