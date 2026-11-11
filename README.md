@@ -11,6 +11,7 @@
 | `apps/admin` | Console d'administration locale (jamais déployée) | Services, trafic simulé, comptes et invitations |
 | `apps/web` | Suivi des vols sur le web | Carte en direct `/live` (J1) ; liste et page de vol, français et anglais (J2) |
 | `packages/contrats` | Formats échangés entre le tracker, l'API et le site | En place |
+| `packages/ui` | Composants React communs au site et à la console d'administration (formulaires, modèle C, fiche 008) | En place |
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À créer au lot T0 |
 | `docs/cadrage` | Parc applicatif, positionnement | Étape 1 livrée |
 | `docs/cahiers-des-charges` | Cahiers des charges par application | Tracker complet |

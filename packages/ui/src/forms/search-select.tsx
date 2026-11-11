@@ -10,7 +10,7 @@ import {
   ListBoxItem,
   Popover,
 } from "react-aria-components";
-import { ChevronIcon, DoneIcon } from "./icons.ts";
+import { ChevronIcon, DoneIcon } from "../icons.ts";
 import { BARE_INPUT_CLASS, CONTROL_CLASS } from "./input-class.ts";
 
 export interface SearchOption {

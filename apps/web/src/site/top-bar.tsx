@@ -2,7 +2,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Suspense } from "react";
 import { PilotMenu } from "../auth/pilot-menu.tsx";
 import { Link } from "../i18n/navigation.ts";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { ProfileIcon } from "../ui/icons.ts";
 import { LanguageSwitch } from "./language-switch.tsx";
 

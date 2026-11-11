@@ -1,6 +1,7 @@
 "use client";
 
 import { type AdminInvitation, signupPath } from "@weems/contrats";
+import { Field, FormField, Segmented } from "@weems/ui";
 import { useState } from "react";
 import { invite } from "../../actions/accounts.ts";
 import { shortDate } from "../../format/time.ts";
@@ -30,26 +31,21 @@ function Created({ invitation, siteUrl }: { invitation: AdminInvitation; siteUrl
   );
 }
 
-function RoleChoice(props: {
-  role: "pilot" | "admin";
-  disabled: boolean;
-  onRole: (role: "pilot" | "admin") => void;
-}) {
-  return ROLES.map((item) => (
-    <button
-      type="button"
-      key={item.role}
-      className={`radio ${props.role === item.role ? "on" : ""}`}
-      disabled={props.disabled}
-      onClick={() => props.onRole(item.role)}
-    >
-      <span className="o" />
-      <span>
-        <b>{item.label}</b>
-        <span>{item.help}</span>
-      </span>
-    </button>
-  ));
+const ROLE_OPTIONS = ROLES.map(({ role, label }) => ({ value: role, label }));
+
+function RoleChoice(props: { role: "pilot" | "admin"; onRole: (role: "pilot" | "admin") => void }) {
+  const help = ROLES.find((item) => item.role === props.role)?.help;
+  return (
+    <Field label="Rôle" help={help}>
+      <Segmented
+        name="role"
+        label="Rôle"
+        options={ROLE_OPTIONS}
+        value={props.role}
+        onChange={(value) => props.onRole(value === "admin" ? "admin" : "pilot")}
+      />
+    </Field>
+  );
 }
 
 function DrawerHeader({ onClose }: { onClose: () => void }) {
@@ -109,17 +105,15 @@ export function InviteDrawer({ siteUrl, onClose }: { siteUrl: string; onClose: (
             Une invitation de 14 jours, renouvelable. La personne choisit son nom et son mot de
             passe.
           </p>
-          <label className="field">
-            E-mail
-            <input
+          <fieldset disabled={created !== null} className="m-0 flex flex-col gap-5 border-0 p-0">
+            <FormField
+              label="E-mail"
               type="email"
-              required
               value={email}
-              disabled={created !== null}
               onChange={(e) => setEmail(e.target.value)}
             />
-          </label>
-          <RoleChoice role={role} disabled={created !== null} onRole={setRole} />
+            <RoleChoice role={role} onRole={setRole} />
+          </fieldset>
           <ErrorBox message={error} />
           {created && <Created invitation={created} siteUrl={siteUrl} />}
         </div>

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
-import { Button } from "../ui/button.tsx";
+import { Button } from "@weems/ui";
 
 /**
  * Asked before a page that is online moves to another address: the old one stops working at once

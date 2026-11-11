@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { ShareIcon } from "../ui/icons.ts";
 
 /** « Share »: the phone's share sheet when there is one, else the address copied to the clipboard. */

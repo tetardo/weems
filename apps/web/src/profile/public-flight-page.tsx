@@ -2,7 +2,7 @@ import type { PublicFlightView, TrackView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { FlightDetails } from "../flight/flight-details.tsx";
 import { Link } from "../i18n/navigation.ts";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { BackIcon } from "../ui/icons.ts";
 import { SectionMain } from "../ui/section-main.tsx";
 

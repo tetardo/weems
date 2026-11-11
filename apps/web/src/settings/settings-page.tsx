@@ -2,7 +2,7 @@ import type { HiddenFlights, MyProfile } from "@weems/contrats";
 import { useLocale, useTranslations } from "next-intl";
 import { countriesByName } from "../format/countries.ts";
 import { Link } from "../i18n/navigation.ts";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { ExternalIcon, ProfileIcon } from "../ui/icons.ts";
 import { SectionMain } from "../ui/section-main.tsx";
 import { SectionTitle } from "../ui/section-title.tsx";

@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { setFlightHiddenAction } from "../settings/profile-actions.ts";
-import { Button } from "../ui/button.tsx";
+import { Button } from "@weems/ui";
 import { HideIcon, ShowIcon } from "../ui/icons.ts";
 
 /** « Hide from my profile » on a closed flight (spec J4): the flight stays in the logbook. */

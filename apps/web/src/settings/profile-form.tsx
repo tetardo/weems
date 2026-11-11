@@ -10,10 +10,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { FormSection } from "../ui/form-section.tsx";
+import { FormSection, SaveBar, useFormChanges } from "@weems/ui";
 import { PrivateIcon } from "../ui/icons.ts";
-import { SaveBar } from "../ui/save-bar.tsx";
-import { useFormChanges } from "../ui/use-form-changes.ts";
 import { HandleChangeDialog } from "./handle-change-dialog.tsx";
 import { IdentityFields, NetworkFields, PrivateFields } from "./information-fields.tsx";
 import { type SaveState, saveProfileAction } from "./profile-actions.ts";
