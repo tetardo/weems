@@ -5,10 +5,12 @@
   "description": "Weems web site: live map, then flight pages",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/copy-map-worker.ts",
     "dev": "next dev --port 3001",
+    "prebuild": "node scripts/copy-map-worker.ts",
     "build": "next build",
     "start": "next start --port 3001",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "next typegen && tsc -p tsconfig.json"
   },
   "dependencies": {
     "@weems/contrats": "workspace:*",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/geojson": "7946.0.16",
+    "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0"
   }

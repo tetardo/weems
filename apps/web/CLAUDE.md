@@ -34,6 +34,9 @@ src/
     flight-panel.tsx      panneau du vol choisi
     live-view.tsx         assemblage de la page
     testing/              données de test
+scripts/
+  copy-map-worker.ts   copie le « worker » de MapLibre dans public/ avant dev et build
+                       (MapLibre 6 ne le trouve plus une fois empaqueté par Next.js)
 ```
 
 ![Carte en direct : du flux SSE à l'écran](../../docs/schemas/img/web-carte-direct.png)
