@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { angleDiffDeg, bearingDeg, crossTrackNm, destinationPoint } from "../../../src/core/geo.ts";
+import { angleDiffDeg, bearingDeg, crossTrackNm, destinationPoint } from "@weems/contrats";
 import { airportOf, type RunwayEnd } from "../airports/airport-data.ts";
 import { arrivalLegs, circuitLegs, pickRunway } from "./route-plan.ts";
 

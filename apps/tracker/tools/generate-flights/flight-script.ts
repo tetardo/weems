@@ -1,6 +1,10 @@
-import type { SimEventType } from "@weems/contrats";
+import {
+  destinationPoint,
+  distanceBetweenNm,
+  type LatLon,
+  type SimEventType,
+} from "@weems/contrats";
 import type { ReplayRecord } from "../../src/connectors/replay/replay-format.ts";
-import { destinationPoint, distanceBetweenNm, type LatLon } from "../../src/core/geo.ts";
 import type { RunwayEnd } from "./airports/airport-data.ts";
 import { type Leg, Navigator } from "./navigation/navigator.ts";
 import { pickRunway } from "./navigation/route-plan.ts";

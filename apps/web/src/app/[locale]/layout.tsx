@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Inter, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import { routing } from "../../i18n/routing.ts";
+import { siteUrl } from "../../site/site-url.ts";
 import { THEME_SCRIPT } from "../../site/theme.ts";
 import "../global.css";
 
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Site" });
   return {
+    metadataBase: siteUrl(),
     title: { default: t("name"), template: `%s · ${t("name")}` },
     description: t("description"),
   };

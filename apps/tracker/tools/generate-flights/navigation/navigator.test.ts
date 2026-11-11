@@ -5,7 +5,7 @@ import {
   destinationPoint,
   distanceBetweenNm,
   distanceNm,
-} from "../../../src/core/geo.ts";
+} from "@weems/contrats";
 import { legsNm, Navigator } from "./navigator.ts";
 
 const ORIGIN = { lat: 45, lon: 5 };

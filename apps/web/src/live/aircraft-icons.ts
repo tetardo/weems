@@ -45,7 +45,13 @@ function drawAircraft(color: string, halo: string): ImageData {
 export const ICON_OK = "aircraft-ok";
 export const ICON_LOST = "aircraft-lost";
 
+/** Draws both icons in the colours of `theme`, replacing those of the previous theme. */
 export function addAircraftIcons(map: MapLibreMap, theme: MapTheme): void {
-  map.addImage(ICON_OK, drawAircraft(theme.aircraft, theme.halo), { pixelRatio: 1.4 });
-  map.addImage(ICON_LOST, drawAircraft(theme.aircraftLost, theme.halo), { pixelRatio: 1.4 });
+  for (const [id, color] of [
+    [ICON_OK, theme.aircraft],
+    [ICON_LOST, theme.aircraftLost],
+  ] as const) {
+    if (map.hasImage(id)) map.removeImage(id);
+    map.addImage(id, drawAircraft(color, theme.halo), { pixelRatio: 1.4 });
+  }
 }

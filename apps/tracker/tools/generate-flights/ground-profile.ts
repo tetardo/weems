@@ -1,4 +1,4 @@
-import { angleDiffDeg, distanceBetweenNm as away, type LatLon } from "../../src/core/geo.ts";
+import { angleDiffDeg, distanceBetweenNm as away, type LatLon } from "@weems/contrats";
 import type { RunwayEnd } from "./airports/airport-data.ts";
 import type { FlightScript } from "./flight-script.ts";
 import { runwayAxisLeg } from "./navigation/route-plan.ts";

@@ -1,4 +1,4 @@
-import { angleDiffDeg, bearingDeg, destinationPoint, type LatLon } from "../../../src/core/geo.ts";
+import { angleDiffDeg, bearingDeg, destinationPoint, type LatLon } from "@weems/contrats";
 import type { AirportData, RunwayEnd } from "../airports/airport-data.ts";
 import type { Leg } from "./navigator.ts";
 

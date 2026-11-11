@@ -6,7 +6,7 @@ import {
   type LatLon,
   normalizeDeg,
   RAD,
-} from "../../../src/core/geo.ts";
+} from "@weems/contrats";
 
 /** A leg ends at `fix`: flown direct, or along `course` (runway axis) with cross-track correction. */
 export interface Leg {

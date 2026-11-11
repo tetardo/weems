@@ -3,8 +3,7 @@ import { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts
 import { parseReplay, serializeReplay } from "../../src/connectors/replay/replay-format.ts";
 import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
 import { FlightSession } from "../../src/core/session.ts";
-import type { Sample } from "@weems/contrats";
-import { angleDiffDeg, bearingDeg, crossTrackNm, distanceNm } from "../../src/core/geo.ts";
+import { angleDiffDeg, bearingDeg, crossTrackNm, distanceNm, type Sample } from "@weems/contrats";
 import { FlightScript } from "./flight-script.ts";
 import { generateFlight } from "./generator.ts";
 import { expectedTrace } from "./expected-phases.ts";

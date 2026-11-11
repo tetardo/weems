@@ -1,4 +1,4 @@
-import { angleDiffDeg, normalizeDeg, RAD } from "../../../src/core/geo.ts";
+import { angleDiffDeg, normalizeDeg, RAD } from "@weems/contrats";
 
 const G = 9.81;
 const MS_PER_KT = 0.514444;

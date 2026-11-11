@@ -25,6 +25,6 @@ Les couleurs « verre », lueur et ombres sont des variables du thème (`global.
 
 - **Limite assumée : 5 entrées au plus dans la barre.** Le menu final estimé en compte environ 13 (lot 3, compagnie virtuelle). La compagnie (« Ma compagnie ») ouvrira un menu déroulant, et le compte (réglages, abonnement, tracker) ira dans le menu du pilote. Recommandation contraire de Claude : rail d'icônes (direction A), qui accepte plus d'entrées sans menu caché. Si un pilote peut appartenir à plusieurs compagnies, il faudra revoir la question au lot 3.
 - `src/site/aside-menu.tsx` est supprimé ; la page active est calculée par `src/site/current-page.ts` (testé).
-- Les cartes (direct, page de vol) gardent le thème qu'elles avaient à l'ouverture de la page : changer de thème sur une carte ne la recolore qu'au rechargement.
+- Les cartes (direct, page de vol) suivent le bouton sans rechargement : le fond de carte est remplacé par celui du nouveau thème et nos calques (avions, trajectoire) sont redessinés dans ses couleurs (`src/map/base-map.ts`).
 - Écarts assumés avec la maquette : « Statistiques », « Ma compagnie », la recherche et les notifications n'apparaîtront qu'avec leurs pages (pas de lien mort).
 - Les menus déroulants partagent `src/ui/use-dismiss.ts` (Échap, clic à l'extérieur).

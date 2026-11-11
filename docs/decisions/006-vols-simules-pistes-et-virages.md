@@ -43,4 +43,4 @@ L'avion avance selon son cap et sa vitesse sol. Un navigateur lui donne le cap �
 - Les phases attendues ne changent pas : vérifié sur les 10 routes J1, sur `fleetOf(16)` et, une fois, sur 400 vols × 7 perturbations.
 - Les vols durent un peu plus longtemps (roulage réel, circuits) : 43 à 97 min sur les 16 premiers vols.
 - Restent pour plus tard (options 3 à 5) : vitesses et taux par catégorie d'avion (avec le catalogue des avions), 250 kt sous le FL100, vent et dérive, attente, aéroports hors flotte.
-- Les calculs d'orthodromie sont dans `apps/tracker/src/core/geo.ts`. Si le site garde son propre calcul (PR #39), les deux iront dans un paquet partagé de `packages/`.
+- Les calculs d'orthodromie (cap, point à distance, écart à une route) sont dans `packages/contrats/src/telemetry/geo.ts`, à côté de `distanceNm` : le site pourra s'en servir au lieu de son propre calcul (PR #39).

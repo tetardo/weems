@@ -1,6 +1,6 @@
 import { randomInt } from "node:crypto";
 import { ApiProblem } from "../../plugins/problem.ts";
-import type { AccountsRepository } from "./repository.ts";
+import type { AccountsRepository, PilotIdentity } from "./repository.ts";
 
 /** Readable on a screen or over the phone: no 0/O, 1/I/L. */
 const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
@@ -48,5 +48,10 @@ export class AccountsService {
 
   async signedUp(email: string): Promise<void> {
     await this.repository.markInvitationUsed(email);
+  }
+
+  /** Public name and creation date of an account; never its e-mail. */
+  async pilot(pilotId: string): Promise<PilotIdentity | null> {
+    return this.repository.findPilot(pilotId);
   }
 }

@@ -50,7 +50,6 @@ src/core/                 cœur sans dépendance : session de vol, journal des �
   connector.ts            interface SimConnector ; clock.ts : horloge injectée
   position-cadence.ts     fréquence des positions selon la phase (spec J1)
   recovery.ts             reprise après crash (ENF-02) : même avion, < 5 NM, < 30 min
-  geo.ts                  orthodromie : distance, cap, point à distance, écart à une route (reprise, générateur)
 src/connectors/replay/    format de rejeu JSONL, connecteur de rejeu, écriture d'un rejeu (replay-writer.ts)
 src/connectors/msfs/      J2 : connecteur MSFS. simconnect-link.ts (seul fichier qui importe node-simconnect),
                           sim-vars.ts (variables lues, vérifiées contre simvars.yaml par test), to-sample.ts,
