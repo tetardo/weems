@@ -1,5 +1,7 @@
 import {
   bigint,
+  customType,
+  integer,
   doublePrecision,
   index,
   jsonb,
@@ -50,3 +52,20 @@ export const flightEvents = pgTable(
   },
   (table) => [primaryKey({ columns: [table.flightId, table.seq] })],
 );
+
+const bytea = customType<{ data: Buffer }>({ dataType: () => "bytea" });
+
+/** Trajectory of a flight, received once after closing (spec J2). */
+export const flightTracks = pgTable("flight_tracks", {
+  flightId: uuid("flight_id")
+    .primaryKey()
+    .references(() => flights.id),
+  recordedPoints: integer("recorded_points").notNull(),
+  /** SHA-256 of the received points: an identical re-send is recognised without decompressing. */
+  sha256: text("sha256").notNull(),
+  /** Every received point, JSON compressed with gzip. */
+  points: bytea("points").notNull(),
+  /** About 500 points for the pages, computed once on receipt. */
+  simplified: jsonb("simplified").$type<unknown[]>().notNull(),
+  receivedAt: utc("received_at").notNull(),
+});

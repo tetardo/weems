@@ -5,6 +5,8 @@ import {
   CloseFlightRequest,
   FlightEventsRequest,
   FlightId,
+  FlightList,
+  FlightListQuery,
   FlightView,
   OpenFlightRequest,
   PositionReport,
@@ -34,6 +36,37 @@ const flightMessage = <Body extends z.ZodType>(onRequest: Guards["tracker"], bod
   const options = message(onRequest, body);
   return { ...options, schema: { ...options.schema, params } };
 };
+
+/** Reading routes, used by the site: the caller's flights, then one flight. */
+function registerReadRoutes(
+  parent: FastifyInstance,
+  service: FlightsService,
+  guards: Guards,
+): void {
+  const app = parent.withTypeProvider<ZodTypeProvider>();
+  app.get(
+    "/v1/flights",
+    {
+      onRequest: guards.pilot,
+      schema: {
+        tags: ["flights"],
+        security,
+        querystring: FlightListQuery,
+        response: { 200: FlightList, ...errors },
+      },
+    },
+    async (request) => service.list(callerOf(request), request.query),
+  );
+
+  app.get(
+    "/v1/flights/:flightId",
+    {
+      onRequest: guards.pilot,
+      schema: { tags: ["flights"], security, params, response: { 200: FlightView, ...errors } },
+    },
+    async (request) => service.read(callerOf(request), request.params.flightId),
+  );
+}
 
 const statusOf = (receipt: Receipt) => (receipt.result === "created" ? 201 : 200);
 
@@ -80,13 +113,5 @@ export function registerFlightRoutes(
       return reply.status(statusOf(receipt)).send(receipt);
     },
   );
-
-  app.get(
-    "/v1/flights/:flightId",
-    {
-      onRequest: guards.pilot,
-      schema: { tags: ["flights"], security, params, response: { 200: FlightView, ...errors } },
-    },
-    async (request) => service.read(callerOf(request), request.params.flightId),
-  );
+  registerReadRoutes(app, service, guards);
 }

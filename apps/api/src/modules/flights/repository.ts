@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray, isNull } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, inArray, isNull, lt, or, type SQL } from "drizzle-orm";
 import {
   CloseReason,
   type CloseFlightRequest,
@@ -9,6 +9,7 @@ import {
 } from "@weems/contrats";
 import type { Database } from "../../db/client.ts";
 import { flightEvents, flights } from "../../db/schema.ts";
+import type { ListPosition } from "./list-cursor.ts";
 
 /** A stored flight, in the shared formats. */
 export interface FlightRecord extends OpenFlightRequest {
@@ -49,6 +50,34 @@ function toEvent(row: EventRow): FlightEvent {
     type: FlightEventType.parse(row.type),
     context: row.context,
   };
+}
+
+/** Filters of the flight list, already validated. */
+export interface ListFilters {
+  after?: ListPosition | undefined;
+  from?: string | undefined;
+  to?: string | undefined;
+  aircraft?: string | undefined;
+  airport?: string | undefined;
+}
+
+function listConditions(pilotId: string, filters: ListFilters): SQL | undefined {
+  const { after, from, to, aircraft, airport } = filters;
+  const like = aircraft && `%${aircraft.replace(/[%_\\]/g, (c) => `\\${c}`)}%`;
+  return and(
+    eq(flights.pilotId, pilotId),
+    after &&
+      or(
+        lt(flights.openedAt, new Date(after.openedAt)),
+        and(eq(flights.openedAt, new Date(after.openedAt)), lt(flights.id, after.flightId)),
+      ),
+    from ? gte(flights.openedAt, new Date(from)) : undefined,
+    to ? lt(flights.openedAt, new Date(to)) : undefined,
+    like ? or(ilike(flights.aircraftTitle, like), ilike(flights.aircraftModel, like)) : undefined,
+    airport
+      ? or(eq(flights.departureIcao, airport), eq(flights.plannedArrivalIcao, airport))
+      : undefined,
+  );
 }
 
 /** The only place that talks to the database about flights. */
@@ -96,6 +125,30 @@ export class FlightsRepository {
       .where(and(eq(flights.id, flightId), isNull(flights.closedAt)))
       .returning({ id: flights.id });
     return updated.length > 0;
+  }
+
+  /** A pilot's flights, newest first. */
+  async listFlights(pilotId: string, filters: ListFilters, limit: number): Promise<FlightRecord[]> {
+    const rows = await this.db
+      .select()
+      .from(flights)
+      .where(listConditions(pilotId, filters))
+      .orderBy(desc(flights.openedAt), desc(flights.id))
+      .limit(limit);
+    return rows.map(toRecord);
+  }
+
+  /** Events of several flights at once, by flight, in sequence order. */
+  async eventsOf(flightIds: string[]): Promise<Map<string, FlightEvent[]>> {
+    const byFlight = new Map<string, FlightEvent[]>(flightIds.map((id) => [id, []]));
+    if (flightIds.length === 0) return byFlight;
+    const rows = await this.db
+      .select()
+      .from(flightEvents)
+      .where(inArray(flightEvents.flightId, flightIds))
+      .orderBy(asc(flightEvents.flightId), asc(flightEvents.seq));
+    for (const row of rows) byFlight.get(row.flightId)?.push(toEvent(row));
+    return byFlight;
   }
 
   async listEvents(flightId: string, seqs?: number[]): Promise<FlightEvent[]> {

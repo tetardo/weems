@@ -2,7 +2,7 @@
 
 API REST unique de Weems : seule à écrire dans la base. Tous les autres programmes (tracker, site web, app iPad, gestion de compagnie) sont ses clients.
 
-Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`).
+Squelette J0 en place : vols (ouverture, événements, positions, clôture, relecture), santé, documentation OpenAPI. J1 : module `live` (carte en direct, flux SSE `/v1/live/stream`). J2 : liste des vols `GET /v1/flights`, module `tracks` (trajectoire reçue à la clôture, stockée compressée dans PostgreSQL, relue simplifiée avec la phase de chaque point).
 
 ## Où trouver quoi
 
@@ -12,6 +12,7 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Principes : données, flux, sécurité, hébergement | `../../docs/cadrage/02-architecture-et-flux.md` |
 | Conventions, modèle de données, routes de J0 | `../../docs/cahiers-des-charges/api/spec-J0-api.md` |
 | Positions en direct et flux SSE (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
+| Liste des vols, trajectoires (J2) | `../../docs/cahiers-des-charges/spec-J2-premier-vrai-vol.md` |
 | Ce que le tracker envoie | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` (section « Contrat avec l'API ») |
 | Formats des messages | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 | Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici) |

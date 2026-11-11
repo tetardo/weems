@@ -40,6 +40,7 @@ describe("a complete synthetic flight (exit criterion 2)", () => {
       closedAt: flight.close.closedAt,
       closeReason: flight.close.reason,
       lastPhase: "CRUISE",
+      times: { blockS: 5400, airborneS: 3030, pausedS: 0 },
       events: flight.events,
     });
   });

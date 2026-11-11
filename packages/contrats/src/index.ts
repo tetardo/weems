@@ -16,4 +16,12 @@ export {
   PositionReport,
   Receipt,
 } from "./api/flights.ts";
+export {
+  FlightAlert,
+  FlightList,
+  FlightListQuery,
+  FlightSummary,
+  FlightTimes,
+} from "./api/flight-list.ts";
+export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
 export { LiveFlight, LiveSnapshot, LiveUpdate } from "./api/live.ts";

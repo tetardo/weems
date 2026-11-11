@@ -5,7 +5,7 @@ sequenceDiagram
   participant S as Site
   T->>A: POST close (motif : arrivée)
   A-->>T: 201
-  T->>A: PUT track (7 200 points, gzip)
+  T->>A: POST track (7 200 points)
   A->>A: phase de chaque point, simplification (~500 points)
   A-->>T: 201 (200 si déjà reçue)
   Note over T,A: coupure : la trajectoire attend dans la file d'envoi
