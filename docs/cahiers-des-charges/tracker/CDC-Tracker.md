@@ -284,7 +284,7 @@ Chaque exigence porte un identifiant, repris dans les tests et les critères d'a
 | ID | Exigence |
 | --- | --- |
 | EF-04 | Import du dernier plan de vol SimBrief du pilote (identifiant SimBrief saisi une fois dans le profil). |
-| EF-05 | Vol libre sans plan : départ et arrivée déduits des aéroports les plus proches (OurAirports). |
+| EF-05 | ~~Vol libre sans plan : départ et arrivée déduits des aéroports les plus proches (OurAirports).~~ Remplacée le 11/11/2026 ([décision 004](../../decisions/004-depart-et-arrivee-obligatoires.md)) : départ et arrivée sont obligatoires avant le vol. |
 | EF-06 | Contrôle avant départ : avion chargé conforme au type prévu, position à l'aéroport de départ. Le tracker alerte mais ne bloque pas. |
 
 ### Enregistrement du vol

@@ -15,6 +15,8 @@ export const MESSAGES = {
     disconnected: "MSFS non détecté : lancez le simulateur.",
     flight: "Vol en cours",
     noFlight: "Aucun vol : le tracker démarre seul quand l'avion est prêt.",
+    flightPlanMissing:
+      "Saisissez le départ et l'arrivée dans « Prochain vol » : sans eux, aucun vol ne démarre.",
     phase: "Phase",
     pending: "message(s) en attente d'envoi",
     allSent: "Tout est envoyé.",
@@ -37,7 +39,8 @@ export const MESSAGES = {
     save: "Enregistrer",
     loginFailed: "La connexion n'a pas abouti. Réessayez.",
     flightInProgress: "Impossible pendant un vol : ces réglages servent au prochain vol.",
-    invalidSettings: "Indicatif : 2 à 8 lettres ou chiffres ; aéroports : 4 lettres OACI.",
+    invalidSettings:
+      "Indicatif : 2 à 8 lettres ou chiffres ; départ et arrivée obligatoires, 4 lettres OACI.",
   },
   en: {
     account: "Account",
@@ -52,6 +55,8 @@ export const MESSAGES = {
     disconnected: "MSFS not found: start the simulator.",
     flight: "Current flight",
     noFlight: "No flight: the tracker starts by itself when the aircraft is ready.",
+    flightPlanMissing:
+      "Enter departure and arrival in “Next flight”: without them, no flight starts.",
     phase: "Phase",
     pending: "message(s) waiting to be sent",
     allSent: "Everything is sent.",
@@ -74,7 +79,8 @@ export const MESSAGES = {
     save: "Save",
     loginFailed: "The login did not go through. Try again.",
     flightInProgress: "Not during a flight: these settings are for the next flight.",
-    invalidSettings: "Callsign: 2 to 8 letters or digits; airports: 4-letter ICAO codes.",
+    invalidSettings:
+      "Callsign: 2 to 8 letters or digits; departure and arrival required, 4-letter ICAO codes.",
   },
 } as const;
 

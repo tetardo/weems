@@ -15,6 +15,7 @@ async function track(scenario: Scenario, disturbances: readonly Disturbance[]): 
   const session = new FlightSession(
     {
       callsign: "WMS1",
+      flightPlan: { departureIcao: "LFPG", arrivalIcao: "LFBO" },
       trackerVersion: "0.1.0",
       clock: { nowUtcMs: () => 0 },
       newFlightId: () => "id",

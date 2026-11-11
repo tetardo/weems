@@ -7,7 +7,7 @@ import { startMsfsTracker } from "../runtime/msfs-tracker.ts";
 import { httpApiClient } from "../sender/api-client.ts";
 import { lastClosedFlight } from "../storage/last-flight.ts";
 import type { AppState, FlightSettings } from "./app-state.ts";
-import { FlightSettingsSchema, loadSettings, saveSettings } from "./settings-file.ts";
+import { FlightSettingsSchema, flightPlanOf, loadSettings, saveSettings } from "./settings-file.ts";
 
 export interface DesktopTrackerOptions {
   apiUrl: string;
@@ -65,6 +65,7 @@ export class DesktopTracker {
       pending: sender.pendingCount(),
       blocked: sender.block,
       settings: this.settings,
+      flightPlanMissing: flightPlanOf(this.settings) === null,
       lastFlight: last && { ...last, delivery: sender.deliveryOf(last.flightId) },
       notice: this.notice,
     };
@@ -125,7 +126,6 @@ export class DesktopTracker {
   }
 
   private startTracker() {
-    const { departureIcao, arrivalIcao, callsign } = this.settings;
     const tracker = startMsfsTracker({
       link: this.options.newLink(),
       api: httpApiClient({
@@ -134,8 +134,8 @@ export class DesktopTracker {
         trackerVersion: this.options.version,
       }),
       databasePath: join(this.options.dataDir, "tracker.db"),
-      callsign,
-      ...(departureIcao && arrivalIcao && { flightPlan: { departureIcao, arrivalIcao } }),
+      callsign: this.settings.callsign,
+      flightPlan: flightPlanOf(this.settings),
       trackerVersion: this.options.version,
       report: () => undefined,
       now: this.options.now,

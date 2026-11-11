@@ -9,7 +9,7 @@ import { httpApiClient } from "../../src/sender/api-client.ts";
 import { startMsfsTracker } from "../../src/runtime/msfs-tracker.ts";
 
 /**
- * pnpm fly --api http://<Mac>:3000 [--callsign WMS1] [--from LFPG --to LFBO] [--no-record]
+ * pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO [--callsign WMS1] [--no-record]
  * J2: reads MSFS on the Windows PC and sends the flight to the API. Type "fin" + Entrée to
  * close the flight by hand, Ctrl+C to quit (an open flight resumes at the next start).
  */
@@ -24,6 +24,14 @@ const { values } = parseArgs({
   },
 });
 
+// Departure and arrival are required (decision 004): the live map needs the arrival.
+const icao = (code: string | undefined) => code?.trim().toUpperCase() ?? "";
+const flightPlan = { departureIcao: icao(values.from), arrivalIcao: icao(values.to) };
+if (![flightPlan.departureIcao, flightPlan.arrivalIcao].every((code) => /^[A-Z]{4}$/.test(code))) {
+  process.stderr.write("Départ et arrivée obligatoires : --from LFPG --to LFBO (codes OACI).\n");
+  process.exit(2);
+}
+
 const trackerVersion = "0.1.0";
 const say = (message: string) =>
   process.stdout.write(`${new Date().toLocaleTimeString("fr-FR")}  ${message}\n`);
@@ -37,17 +45,13 @@ const recordingPath = join(
   `${new Date().toISOString().replace(/[:.]/g, "-")}.jsonl`,
 );
 const recording = values["no-record"] ? null : createWriteStream(recordingPath);
-const flightPlan =
-  values.from && values.to
-    ? { departureIcao: values.from.toUpperCase(), arrivalIcao: values.to.toUpperCase() }
-    : undefined;
 
 const fly = startMsfsTracker({
   link: new SimConnectLink(),
   api: httpApiClient({ baseUrl: values.api, token: values.token, trackerVersion }),
   databasePath: join(dataDir, "tracker.db"),
   callsign: values.callsign,
-  ...(flightPlan && { flightPlan }),
+  flightPlan,
   trackerVersion,
   ...(recording && { record: (line: string) => recording.write(line) }),
   report: say,

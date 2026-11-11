@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -76,6 +76,14 @@ describe("desktop tracker window", () => {
     expect(await page.isVisible("#close-flight")).toBe(false);
   });
 
+  it("asks for departure and arrival before any flight (decision 004)", async () => {
+    await expect.poll(() => page.textContent("#flight-status")).toMatch(/^Saisissez le départ/);
+    await page.fill("[name=callsign]", "wms42");
+    await page.click("#settings [type=submit]");
+    expect(await page.locator("[name=departureIcao]:invalid").count()).toBe(1);
+    expect(existsSync(join(dataDir, "settings.json"))).toBe(false);
+  });
+
   it("shows the last flight, kept on the PC until it is sent", async () => {
     await expect.poll(() => page.textContent("#last-flight-summary")).toMatch(/^Airbus A320neo · /);
     expect(await page.textContent("#last-flight-summary")).toMatch(/\(1 h 25\)$/);
@@ -88,14 +96,15 @@ describe("desktop tracker window", () => {
 
   it("refuses a malformed callsign and keeps a valid next flight on the PC", async () => {
     await page.fill("[name=callsign]", "W");
+    await page.fill("[name=departureIcao]", "lfpg");
+    await page.fill("[name=arrivalIcao]", "lfbo");
     await page.click("#settings [type=submit]");
     await expect.poll(() => page.textContent("#notice")).not.toBe("");
 
     await page.fill("[name=callsign]", "wms42");
-    await page.fill("[name=departureIcao]", "lfpg");
-    await page.fill("[name=arrivalIcao]", "lfbo");
     await page.click("#settings [type=submit]");
     await expect.poll(() => page.textContent("#notice")).toBe("");
+    await expect.poll(() => page.textContent("#flight-status")).toMatch(/^Aucun vol/);
     const saved = JSON.parse(readFileSync(join(dataDir, "settings.json"), "utf8")) as unknown;
     expect(saved).toEqual({ callsign: "WMS42", departureIcao: "LFPG", arrivalIcao: "LFBO" });
   });

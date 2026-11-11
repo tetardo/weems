@@ -71,21 +71,42 @@ afterEach(async () => {
   rmSync(dir, { recursive: true, force: true });
 });
 
-/** The simulator plays the start of a synthetic flight, until the tracker opens it. */
-function flyUntilOpened() {
+const PLAN = { callsign: "AFR123", departureIcao: "LFPG", arrivalIcao: "LFBO" };
+
+/** The simulator plays the start of a synthetic flight; true once the tracker opened it. */
+function fly(): boolean {
   const flight = generateFlight({ ...LFPG_LFBO, disturbances: [] });
   for (const record of flight.records) {
     now = record.t;
     if (record.type === "aircraft") link.sim.aircraft(rawFromAircraft(record.data));
     if (record.type === "sample") link.sim.sample(rawFromSample(record.data));
-    if (desktop.state().flight) return;
+    if (desktop.state().flight) return true;
   }
-  throw new Error("the flight never opened");
+  return false;
+}
+
+/** The pilot enters the flight plan, then flies until the flight opens. */
+async function flyUntilOpened(): Promise<void> {
+  await desktop.saveSettings(PLAN);
+  if (!fly()) throw new Error("the flight never opened");
 }
 
 describe("desktop tracker (without Electron)", () => {
-  it("shows the simulator, the aircraft and the flight, logged out", () => {
-    flyUntilOpened();
+  it("opens no flight until departure and arrival are entered (decision 004)", async () => {
+    expect(desktop.state()).toMatchObject({ flightPlanMissing: true });
+    expect(fly()).toBe(false);
+    expect(desktop.state()).toMatchObject({ simulator: "connected", flight: null });
+
+    await desktop.saveSettings({ ...PLAN, arrivalIcao: "" });
+    expect(desktop.state()).toMatchObject({ notice: "invalidSettings", flightPlanMissing: true });
+
+    await desktop.saveSettings(PLAN);
+    expect(desktop.state()).toMatchObject({ notice: null, flightPlanMissing: false });
+    expect(fly()).toBe(true);
+  });
+
+  it("shows the simulator, the aircraft and the flight, logged out", async () => {
+    await flyUntilOpened();
     const state = desktop.state();
     expect(state).toMatchObject({ loggedIn: false, simulator: "connected" });
     expect(state.pending).toBeGreaterThan(0); // kept until the pilot logs in
@@ -94,14 +115,14 @@ describe("desktop tracker (without Electron)", () => {
   });
 
   it("keeps the flight settings, but not while a flight is recorded", async () => {
-    await desktop.saveSettings({ callsign: "AFR123", departureIcao: "LFPG", arrivalIcao: "LFBO" });
+    await desktop.saveSettings(PLAN);
     expect(desktop.state()).toMatchObject({ settings: { callsign: "AFR123" }, notice: null });
 
-    await desktop.saveSettings({ callsign: "bad callsign!", departureIcao: "", arrivalIcao: "" });
+    await desktop.saveSettings({ ...PLAN, callsign: "bad callsign!" });
     expect(desktop.state().notice).toBe("invalidSettings");
 
-    flyUntilOpened();
-    await desktop.saveSettings({ callsign: "AFR456", departureIcao: "", arrivalIcao: "" });
+    await flyUntilOpened();
+    await desktop.saveSettings({ ...PLAN, callsign: "AFR456" });
     expect(desktop.state()).toMatchObject({
       settings: { callsign: "AFR123" },
       notice: "flightInProgress",
@@ -118,7 +139,7 @@ describe("desktop tracker (without Electron)", () => {
   });
 
   it("shows the last flight once closed, and opens its report on the site", async () => {
-    flyUntilOpened();
+    await flyUntilOpened();
     desktop.closeFlight();
     await tick();
     const last = desktop.state().lastFlight;

@@ -40,7 +40,9 @@ function renderSimulator(state: AppState): void {
 
 function renderFlight(state: AppState): void {
   const phase = state.flight?.phase ? PHASES[lang][state.flight.phase] : "—";
-  show("flight-status", state.flight ? `${text("phase")} : ${phase}` : text("noFlight"));
+  if (state.flight) show("flight-status", `${text("phase")} : ${phase}`);
+  else if (state.flightPlanMissing) show("flight-status", text("flightPlanMissing"), "ko");
+  else show("flight-status", text("noFlight"));
   byId("close-flight").hidden = !state.flight;
   if (state.blocked === "upgradeRequired") show("sending", text("upgradeRequired"), "ko");
   else if (state.pending === 0) show("sending", text("allSent"), "ok");
