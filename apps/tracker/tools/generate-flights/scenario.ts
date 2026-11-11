@@ -17,14 +17,18 @@ export interface Point {
   lon: number;
 }
 
+interface Airport extends Point {
+  icao: string;
+}
+
 /** Description of a synthetic flight. Same scenario + same seed = same file. */
 export interface Scenario {
   name: string;
   callsign: string;
   seed: number;
   aircraft: AircraftInfo;
-  departure: Point;
-  arrival: Point;
+  departure: Airport;
+  arrival: Airport;
   cruiseAltFt: number;
   /** Ground speeds in kt. */
   cruiseGs: number;
@@ -47,8 +51,8 @@ export const LFPG_LFBO: Scenario = {
   callsign: "WMS100",
   seed: 42,
   aircraft: A320,
-  departure: { lat: 49.0097, lon: 2.5479 },
-  arrival: { lat: 43.6293, lon: 1.3638 },
+  departure: { icao: "LFPG", lat: 49.0097, lon: 2.5479 },
+  arrival: { icao: "LFBO", lat: 43.6293, lon: 1.3638 },
   cruiseAltFt: 35000,
   cruiseGs: 450,
   approachGs: 140,

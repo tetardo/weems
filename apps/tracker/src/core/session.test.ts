@@ -76,6 +76,23 @@ describe("opening (EF-07)", () => {
     ]);
   });
 
+  it("sends the airports of the flight plan when it is known", () => {
+    const withPlan = new FlightSession(
+      {
+        callsign: "WMS123",
+        flightPlan: { departureIcao: "LFPG", arrivalIcao: "LFBO" },
+        trackerVersion: "0.1.0",
+        clock: { nowUtcMs: () => START_UTC },
+        newFlightId: () => "0197a000-0000-7000-8000-000000000043",
+        params: AIRLINER_PARAMS,
+      },
+      { open: (r) => opened.push(r), event: () => {}, position: () => {}, close: () => {} },
+    );
+    withPlan.setAircraft(A320);
+    withPlan.handleSample(sample({ t: 1000, engines: RUNNING }));
+    expect(opened[0]).toMatchObject({ departureIcao: "LFPG", plannedArrivalIcao: "LFBO" });
+  });
+
   it("opens at pushback even with engines off", () => {
     session.setAircraft(A320);
     hold(1, { pushback: true });

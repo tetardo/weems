@@ -24,8 +24,16 @@ export interface SessionOutput {
   close(request: CloseFlightRequest): void;
 }
 
+/** Airports known before the flight (SimBrief from T2). */
+interface FlightPlan {
+  departureIcao: string;
+  arrivalIcao: string;
+}
+
 export interface SessionOptions {
   callsign: string;
+  /** Absent: departure and arrival are sent as unknown. */
+  flightPlan?: FlightPlan;
   trackerVersion: string;
   clock: Clock;
   /** New flight id (UUID v7) for the given UTC time. */
@@ -135,8 +143,8 @@ export class FlightSession {
       flightId: this.options.newFlightId(nowUtcMs),
       callsign: this.options.callsign,
       aircraft,
-      departureIcao: null,
-      plannedArrivalIcao: null,
+      departureIcao: this.options.flightPlan?.departureIcao ?? null,
+      plannedArrivalIcao: this.options.flightPlan?.arrivalIcao ?? null,
       openedAt: this.log.at(sample.t),
       trackerVersion: this.options.trackerVersion,
     });
