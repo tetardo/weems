@@ -1,4 +1,4 @@
-import type { FlightView } from "@weems/contrats";
+import type { PublicFlightView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { formatDuration, utcTime } from "../format/flight-format.ts";
 import { PHASE_COLORS } from "./phase-colors.ts";
@@ -6,7 +6,7 @@ import { phaseTimeline } from "./phase-timeline.ts";
 import { Section } from "./section.tsx";
 
 /** The phases with their start and duration (spec site minimal, timeline). */
-export function PhaseTimelineTable({ flight }: { flight: FlightView }) {
+export function PhaseTimelineTable({ flight }: { flight: PublicFlightView }) {
   const t = useTranslations("Flight.phases");
   const phases = useTranslations("Phases");
   const spans = phaseTimeline(flight.events, flight.closedAt);

@@ -1,5 +1,4 @@
-import type { FlightPhase } from "@weems/contrats";
-import { distanceNm } from "./geo.ts";
+import { distanceNm, type FlightPhase } from "@weems/contrats";
 
 /** What the local database remembers of a flight that was still open when the tracker stopped. */
 export interface SavedFlight {

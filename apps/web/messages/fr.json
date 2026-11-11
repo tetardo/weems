@@ -4,13 +4,20 @@
     "description": "Suivi des vols en simulation",
     "nav": {
       "flights": "Mes vols",
-      "live": "Direct"
+      "live": "Direct",
+      "profile": "Mon profil public"
     },
     "language": "English",
     "notMeasured": "non mesuré",
     "mainNav": "Navigation principale",
     "accountMenu": "Menu de {name}",
-    "toggleTheme": "Passer en thème clair ou sombre"
+    "toggleTheme": "Passer en thème clair ou sombre",
+    "public": {
+      "logbook": "Mon carnet",
+      "login": "Se connecter",
+      "signup": "Créer mon carnet"
+    },
+    "busy": "Trop de visites en ce moment. Réessayez dans une minute."
   },
   "Live": {
     "title": "Carte en direct",
@@ -90,7 +97,8 @@
       "aircraft": "Avion",
       "airborne": "Durée de vol",
       "status": "État",
-      "alerts": "Alertes"
+      "alerts": "Alertes",
+      "touchdown": "Toucher (ft/min)"
     },
     "filters": {
       "from": "Du",
@@ -169,6 +177,11 @@
       "saved": "Merci, réponse enregistrée.",
       "error": "Réponse non enregistrée, réessayez.",
       "already": "Vous avez déjà répondu : vous pouvez corriger."
+    },
+    "publicProfile": {
+      "hidden": "Masqué de votre profil public",
+      "hide": "Masquer de mon profil",
+      "show": "Remontrer sur mon profil"
     }
   },
   "Auth": {
@@ -191,6 +204,222 @@
       "exists": "Un compte existe déjà avec cette adresse.",
       "password": "Le mot de passe doit faire au moins 10 caractères.",
       "unknown": "La connexion n'a pas abouti. Réessayez dans un instant."
+    }
+  },
+  "Settings": {
+    "title": "Mon profil public",
+    "intro": "Une page que tout le monde peut voir et que les moteurs de recherche trouvent. Désactivée tant que vous ne l'activez pas.",
+    "view": "Voir ma page publique",
+    "information": "Informations",
+    "save": {
+      "button": "Enregistrer",
+      "saved": "Enregistré.",
+      "taken": "Cette adresse est déjà prise par un autre pilote.",
+      "reserved": "Cette adresse est un mot réservé.",
+      "error": "L'enregistrement a échoué. Réessayez.",
+      "invalid": {
+        "handle": "Adresse invalide : 3 à 30 caractères, lettres minuscules, chiffres et tirets.",
+        "consent": "Cochez la case d'accord pour publier votre page.",
+        "country": "Pays inconnu.",
+        "homeIcao": "Aéroport de base : code OACI de 4 lettres.",
+        "level": "Niveau inconnu.",
+        "vatsimId": "Identifiant VATSIM : des chiffres seulement.",
+        "ivaoId": "Identifiant IVAO : des chiffres seulement.",
+        "simbriefId": "Identifiant SimBrief invalide."
+      }
+    },
+    "publication": {
+      "title": "Publication",
+      "switch": "Rendre ma page publique",
+      "since": "Publiée le {date}",
+      "off": "Désactivée : personne ne voit votre page.",
+      "consent": "J'accepte que mon pseudo, ma photo, mon pays, mes statistiques et mes vols non masqués soient visibles par tout le monde et indexés par les moteurs de recherche. Je peux désactiver ma page à tout moment : elle disparaît aussitôt."
+    },
+    "handle": {
+      "label": "Adresse de ma page",
+      "help": "3 à 30 caractères : lettres minuscules, chiffres et tirets. Proposée à partir de votre pseudo.",
+      "available": "✓ disponible",
+      "taken": "✗ déjà pris",
+      "reserved": "✗ mot réservé",
+      "invalid": "✗ invalide"
+    },
+    "photo": {
+      "label": "Photo",
+      "help": "JPEG, PNG ou WebP, 5 Mo au plus. Recadrée en carré et réduite à 256 pixels.",
+      "add": "Ajouter une photo",
+      "change": "Changer",
+      "remove": "Retirer",
+      "tooBig": "Photo trop lourde : 5 Mo au plus.",
+      "wrongType": "Ce fichier n'est pas une image JPEG, PNG ou WebP lisible.",
+      "failed": "L'envoi a échoué. Réessayez."
+    },
+    "fields": {
+      "country": "Pays",
+      "none": "Non précisé",
+      "homeIcao": "Aéroport de base",
+      "homeIcaoHelp": "Code OACI, 4 lettres",
+      "level": "Niveau",
+      "levelHelp": "Déclaré par vous, non vérifié.",
+      "vatsimId": "Identifiant VATSIM",
+      "vatsimHelp": "Public, avec un lien vers votre page VATSIM",
+      "ivaoId": "Identifiant IVAO",
+      "ivaoHelp": "Public, avec un lien vers votre page IVAO",
+      "simbriefId": "Identifiant SimBrief",
+      "simbriefHelp": "Jamais affiché : servira plus tard à lire vos plans de vol"
+    },
+    "visible": {
+      "title": "Ce qui est visible",
+      "shown": {
+        "identity": "Pseudo, photo, pays, niveau, aéroport de base",
+        "networks": "Identifiants VATSIM et IVAO",
+        "stats": "Statistiques, graphiques et carte de vos vols terminés",
+        "flights": "Chaque vol terminé non masqué"
+      },
+      "never": {
+        "email": "Adresse e-mail, nom réel",
+        "simbrief": "Identifiant SimBrief",
+        "private": "Vols en cours, vols masqués",
+        "reviews": "Vos avis sur les phases"
+      }
+    },
+    "hidden": {
+      "title": "Vols masqués",
+      "count": "{count, plural, =0 {aucun} one {# vol} other {# vols}}",
+      "help": "Masquez un vol depuis sa page (« Masquer de mon profil »). Il reste dans votre carnet.",
+      "show": "Remontrer"
+    }
+  },
+  "Profile": {
+    "levels": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Confirmé",
+      "realPilot": "Pilote réel"
+    },
+    "meta": {
+      "title": "{name} — {flights, plural, =0 {aucun vol} one {# vol} other {# vols}} sur Weems",
+      "description": "Carnet de vol de {name} sur Weems : {flights, plural, =0 {aucun vol} one {# vol} other {# vols}}, {airports, plural, =0 {aucun aéroport} one {# aéroport} other {# aéroports}}, statistiques et carte des trajets.",
+      "flight": "Vol {callsign} {route} de {handle} sur Weems : trajectoire, phases et atterrissage."
+    },
+    "header": {
+      "level": "Niveau : {level}",
+      "since": "Sur Weems depuis {date}",
+      "favorite": "Avion favori : {name}",
+      "base": "Base : {icao}",
+      "distance": "{nm} nm",
+      "laps": "parcourus · {laps} × le tour de la Terre",
+      "share": "Partager",
+      "copied": "Adresse copiée",
+      "shareTitle": "{name} sur Weems"
+    },
+    "help": {
+      "label": "Explication",
+      "level": "Niveau déclaré par le pilote lui-même. Weems ne le vérifie pas.",
+      "distance": "Somme des distances le long des trajectoires enregistrées, vols montrés seulement. Tour de la Terre à l'équateur : 21 600 nm.",
+      "map": "Un arc par trajet, plus épais quand il est volé souvent. Les aéroports sont placés au premier et au dernier point enregistré de chaque vol.",
+      "activity": "Heures de vol par mois de départ (heure UTC). Un mois vide reste affiché.",
+      "takeoffs": "Décollages par jour de la semaine et par heure, à l'heure locale de l'aéroport de départ. Plus la case est foncée, plus il y a de décollages.",
+      "flights": "Vols terminés que le pilote a choisi de montrer. Les vols en cours et les vols masqués ne comptent pas.",
+      "hours": "Heures de vol : du décollage au dernier toucher, pauses exclues. Heures bloc : de la mise en route ou du repoussage à l'arrêt au parking.",
+      "dayNight": "Nuit au sens de la réglementation (EASA, DGAC) : soleil à plus de 6° sous l'horizon. Calculé à la position de l'avion, à chaque instant du vol.",
+      "longest": "Le vol au temps bloc le plus long.",
+      "streak": "Semaines d'affilée (du lundi au dimanche, heure UTC) avec au moins un vol terminé et montré.",
+      "airports": "Aéroports de départ et d'arrivée différents, sur l'ensemble des vols montrés.",
+      "aircraft": "Avions différents selon leur type OACI (A20N, B738…), ou leur nom dans le simulateur quand le type est inconnu.",
+      "clean": "Atterrissages finaux avec un seul toucher, sans rebond ni remise des gaz.",
+      "average": "Vitesse verticale au premier contact de l'atterrissage final (après une éventuelle remise des gaz), moyenne sur les vols où elle a été mesurée.",
+      "best": "L'atterrissage final le plus doux : la vitesse verticale au toucher la plus proche de zéro."
+    },
+    "map": {
+      "title": "Carte des vols",
+      "note": "{airports, plural, =0 {aucun aéroport} one {# aéroport} other {# aéroports}} · {flights, plural, =0 {aucun vol} one {# vol} other {# vols}}",
+      "empty": "Pas encore de trajet à afficher."
+    },
+    "stats": {
+      "title": "Statistiques",
+      "note": "Vols terminés et montrés",
+      "flights": {
+        "label": "Vols"
+      },
+      "hours": {
+        "label": "Heures de vol",
+        "block": "{block} bloc"
+      },
+      "dayNight": {
+        "label": "Jour / nuit",
+        "sub": "{night} de nuit"
+      },
+      "longest": {
+        "label": "Plus long vol"
+      },
+      "streak": {
+        "label": "Série en cours",
+        "value": "{weeks, plural, one {# semaine} other {# semaines}}",
+        "sub": "record : {weeks, plural, one {# semaine} other {# semaines}}"
+      },
+      "airports": {
+        "label": "Aéroports visités"
+      },
+      "aircraft": {
+        "label": "Avions différents",
+        "sub": "{name} le plus volé"
+      },
+      "clean": {
+        "label": "Atterrissages propres",
+        "sub": "{clean} sur {landings}"
+      },
+      "average": {
+        "label": "Toucher moyen",
+        "sub": "ft/min · {goArounds, plural, =0 {aucune remise des gaz} one {# remise des gaz} other {# remises des gaz}}"
+      },
+      "best": {
+        "label": "Meilleur atterrissage",
+        "sub": "ft/min · {airport}, {date}"
+      }
+    },
+    "charts": {
+      "activity": {
+        "title": "Activités",
+        "sub": "Heures de vol, 12 derniers mois"
+      },
+      "takeoffs": {
+        "title": "Heures de décollage",
+        "sub": "Par jour, heure locale de l'aéroport de départ"
+      },
+      "durations": {
+        "title": "Durée des vols",
+        "sub": "Nombre de vols par durée bloc"
+      },
+      "touchdowns": {
+        "title": "Répartition des touchers",
+        "sub": "Doux < {soft}, normal {soft}–{normal}, ferme {normal}–{firm}, dur > {firm} ft/min",
+        "soft": "Doux",
+        "normal": "Normal",
+        "firm": "Ferme",
+        "hard": "Dur"
+      },
+      "landings": {
+        "title": "Atterrissages",
+        "sub": "Vitesse verticale au toucher, {count, plural, one {dernier vol} other {# derniers vols}} (ft/min)",
+        "oldest": "plus ancien",
+        "newest": "plus récent",
+        "average": "moyenne"
+      }
+    },
+    "flights": {
+      "title": "Vols",
+      "note": "{count, plural, =0 {aucun vol} one {# vol} other {# vols}}",
+      "empty": "Pas encore de vol montré.",
+      "next": "Vols plus anciens",
+      "first": "Retour aux plus récents"
+    },
+    "back": "Retour au profil",
+    "footer": "Données enregistrées en simulation par le tracker Weems. Rien ici ne concerne de vrais vols.",
+    "share": {
+      "base": "base {icao}",
+      "flights": "{count, plural, one {vol} other {vols}}",
+      "hours": "de vol",
+      "airports": "{count, plural, one {aéroport} other {aéroports}}"
     }
   }
 }
