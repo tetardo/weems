@@ -81,7 +81,13 @@ Ordre des blocs (validé avec Greg sur la maquette) : en-tête ; carte des vols 
 
 **Vol public** (`/pilots/{handle}/flights/{id}`) : la page de vol existante (carte colorée par phase, profil vertical, phases, atterrissage, journal), en lecture seule, avec un lien vers le profil. Le vol doit appartenir au pilote de l'adresse, sinon 404.
 
-**Réglages** (`/settings/profile`, connecté) : interrupteur, pseudo d'adresse, photo (envoyer, remplacer, retirer), pays, niveau, identifiants VATSIM, IVAO et SimBrief, lien « Voir mon profil public », rappel de ce qui est public. Ces champs sont gardés même profil désactivé (ils ne sont alors montrés à personne). Nouvelle entrée « Profil public » dans le menu.
+**Réglages** (`/settings/profile`, connecté) : interrupteur, pseudo d'adresse, photo (envoyer, remplacer, retirer), pays, niveau, identifiants VATSIM, IVAO et SimBrief, lien « Voir mon profil public », rappel de ce qui est public. Ces champs sont gardés même profil désactivé (ils ne sont alors montrés à personne). Nouvelle section « Compte » du menu, entrée « Mon profil public ».
+
+![Maquette des réglages du profil public](img/j4-maquette-reglages.png)
+
+- Deux colonnes : à gauche « Publication » (interrupteur, date de publication, adresse avec vérification au fil de la frappe : disponible, déjà pris, mot réservé ; case d'accord obligatoire à la première activation) puis « Informations » (photo, pays, aéroport de base, niveau, identifiants, bouton « Enregistrer ») ; à droite « Ce qui est visible » (public ou jamais public) et « Vols masqués » (liste avec « Remontrer »).
+- La liste des vols masqués demande une route de plus : `GET /v1/me/profile/hidden-flights` (date et trajet de chaque vol masqué du pilote).
+- La vérification de l'adresse au fil de la frappe demande `GET /v1/me/profile/handle-check?handle=…` (disponible, pris, réservé, mal formé), limitée en débit.
 
 **Champs saisis par le pilote** (tous facultatifs) :
 
