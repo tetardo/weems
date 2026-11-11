@@ -33,8 +33,29 @@ describe("tracks", () => {
       0,
     );
     const [first] = tracks.features(0, "a").features;
-    expect(first?.properties).toMatchObject({ flightId: "a", lost: true, selected: true });
+    expect(first?.properties).toMatchObject({
+      flightId: "a",
+      icon: "aircraft-lost-airliner",
+      selected: true,
+    });
     tracks.update(fromSnapshot({ flights: [liveFlight("b")] }), 10);
     expect(tracks.features(10, null).features).toHaveLength(1);
+  });
+
+  it("draws each aircraft with the silhouette and size of its category", () => {
+    const tracks = new Tracks();
+    const wideBody = { category: "wideBody", estimated: false } as const;
+    tracks.update(
+      fromSnapshot({
+        flights: [
+          liveFlight("a", { aircraftClass: wideBody }),
+          liveFlight("b", { aircraftClass: null }),
+        ],
+      }),
+      0,
+    );
+    const [a, b] = tracks.features(0, null).features.map((feature) => feature.properties);
+    expect(a).toMatchObject({ icon: "aircraft-wideBody", scale: 1.25 });
+    expect(b).toMatchObject({ icon: "aircraft-unknown", scale: 1 });
   });
 });
