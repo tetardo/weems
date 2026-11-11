@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 import { getPathname } from "../i18n/navigation.ts";
 import { HANDLE_CHECK_URL } from "../site/api-relay.ts";
 import { Button } from "../ui/button.tsx";
-import { WarningIcon } from "../ui/icons.ts";
+import { Field } from "../ui/field.tsx";
+import { SaveIcon, WarningIcon } from "../ui/icons.ts";
+import { TextInput } from "../ui/text-input.tsx";
 import { AddressActions } from "./address-actions.tsx";
 
 type Status = HandleCheck["status"] | "checking" | null;
@@ -66,25 +68,29 @@ function AddressInput({
   const t = useTranslations("Settings.handle");
   const status = useHandleCheck(handle);
   return (
-    <span
-      className={`flex min-h-11 min-w-0 flex-1 items-center max-sm:basis-full rounded-[10px] border bg-bg pl-3 ${changing ? "border-accent-2" : "border-line"}`}
-    >
-      <span className="whitespace-nowrap text-muted">{siteHost}/pilots/</span>
-      <input
+    <span className="min-w-0 flex-1 max-sm:basis-full">
+      <TextInput
         id="handle"
         name="handle"
+        prefix={`${siteHost}/pilots/`}
+        warn={changing}
         value={handle}
         onChange={(event) => onChange(event.target.value.toLowerCase())}
         maxLength={30}
         autoComplete="off"
         spellCheck={false}
-        className="min-w-0 flex-1 bg-transparent py-2.5 pr-3 pl-0.5 text-ink outline-none"
+        end={
+          status &&
+          status !== "checking" && (
+            <span
+              role="status"
+              className={`text-sm font-semibold whitespace-nowrap ${STATUS_CLASS[status]}`}
+            >
+              {t(status)}
+            </span>
+          )
+        }
       />
-      {status && status !== "checking" && (
-        <span role="status" className={`px-3 text-sm font-semibold ${STATUS_CLASS[status]}`}>
-          {t(status)}
-        </span>
-      )}
     </span>
   );
 }
@@ -92,9 +98,9 @@ function AddressInput({
 /** Under the field: the rules of an address, or the warning while an online one is changed. */
 function HandleHint({ changingFrom }: { changingFrom: string | null }) {
   const t = useTranslations("Settings.handle");
-  if (changingFrom === null) return <span className="text-[.9em] text-muted">{t("help")}</span>;
+  if (changingFrom === null) return t("help");
   return (
-    <span className="flex items-start gap-2 text-[.9em] text-accent-2">
+    <span className="flex items-start gap-2 text-accent-2">
       <WarningIcon size={16} aria-hidden="true" className="mt-0.5 flex-none" />
       <span>{t.rich("changing", { handle: changingFrom, b: (chunks) => <b>{chunks}</b> })}</span>
     </span>
@@ -125,10 +131,11 @@ export function HandleField({
   const path =
     online !== null && !changing ? getPathname({ href: `/pilots/${online}`, locale }) : null;
   return (
-    <div className="mt-3.5 flex flex-col gap-1.5">
-      <label htmlFor="handle" className="font-semibold">
-        {t("label")}
-      </label>
+    <Field
+      label={t("label")}
+      htmlFor="handle"
+      help={<HandleHint changingFrom={changing ? online : null} />}
+    >
       <div className="flex flex-wrap items-stretch justify-end gap-2">
         <AddressInput
           handle={handle}
@@ -137,12 +144,17 @@ export function HandleField({
           changing={changing}
         />
         {/* Saves the whole form, like « Save » at the bottom: right next to what was changed. */}
-        <Button type="submit" disabled={!switchChanged && handle === saved.handle}>
-          {t("validate")}
+        <Button
+          type="submit"
+          title={t("validate")}
+          aria-label={t("validate")}
+          disabled={!switchChanged && handle === saved.handle}
+          className="w-11 px-0"
+        >
+          <SaveIcon size={18} aria-hidden="true" />
         </Button>
         <AddressActions path={path} offReason={t(changing ? "saveFirst" : "offline")} />
       </div>
-      <HandleHint changingFrom={changing ? online : null} />
-    </div>
+    </Field>
   );
 }

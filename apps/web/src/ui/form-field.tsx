@@ -1,17 +1,17 @@
-import type { InputHTMLAttributes } from "react";
+import { type InputHTMLAttributes, useId } from "react";
+import { Field } from "./field.tsx";
 import { INPUT_CLASS } from "./input-class.ts";
 
-/** A labelled input, with an optional help line below (GameLab .gl-field). */
+/** A required input with its label and an optional help line (sign-in and sign-up forms). */
 export function FormField({
   label,
   help,
   ...input
 }: { label: string; help?: string } & InputHTMLAttributes<HTMLInputElement>) {
+  const id = useId();
   return (
-    <label className="mb-3.5 flex flex-col gap-1.5">
-      <span className="font-semibold">{label}</span>
-      <input required className={INPUT_CLASS} {...input} />
-      {help && <span className="text-[.9em] text-muted">{help}</span>}
-    </label>
+    <Field label={label} htmlFor={id} help={help} className="mb-3.5">
+      <input id={id} required className={INPUT_CLASS} {...input} />
+    </Field>
   );
 }

@@ -5,7 +5,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { HandleField } from "./handle-field.tsx";
 
-/** Title, publication date and the switch that turns the page on. */
+/** The switch that turns the page on, with the date it went online. */
 function PublicationSwitch({
   profile,
   isPublic,
@@ -18,10 +18,10 @@ function PublicationSwitch({
   const t = useTranslations("Settings.publication");
   const format = useFormatter();
   return (
-    <div className="flex items-start justify-between gap-3">
+    <div className="flex items-center justify-between gap-3">
       <div>
-        <h2 className="m-0 text-[1.15em]">{t("title")}</h2>
-        <p className="m-0 mt-1 text-sm text-muted">
+        <p className="m-0 font-semibold">{t("page")}</p>
+        <p className="m-0 text-[.9em] text-muted">
           {profile.isPublic && profile.publishedAt
             ? t("since", {
                 date: format.dateTime(new Date(profile.publishedAt), {
@@ -63,7 +63,7 @@ export function PublicationFields({ profile, siteHost }: { profile: MyProfile; s
         switchChanged={isPublic !== profile.isPublic}
       />
       {isPublic && (
-        <label className="mt-4 flex items-start gap-2.5 rounded-xl bg-accent/12 px-3.5 py-3 text-sm">
+        <label className="flex items-start gap-2.5 rounded-xl bg-accent/12 px-3.5 py-3 text-sm">
           <input
             type="checkbox"
             name="consent"

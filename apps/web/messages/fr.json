@@ -221,7 +221,24 @@
     "title": "Mon profil public",
     "intro": "Une page que tout le monde peut voir et que les moteurs de recherche trouvent. Désactivée tant que vous ne l'activez pas.",
     "view": "Voir ma page publique",
-    "information": "Informations",
+    "sections": {
+      "publication": {
+        "title": "Publication",
+        "about": "Ce qui rend votre page visible par tout le monde."
+      },
+      "identity": {
+        "title": "Identité",
+        "about": "Ce que les visiteurs voient en haut de votre page."
+      },
+      "networks": {
+        "title": "Réseaux",
+        "about": "Liens affichés sur votre page, vers vos profils ailleurs."
+      },
+      "private": {
+        "title": "Privé",
+        "about": "Jamais affiché sur votre page, utilisé seulement par Weems."
+      }
+    },
     "save": {
       "button": "Enregistrer",
       "saved": "Enregistré.",
@@ -239,14 +256,15 @@
         "simbriefId": "Identifiant SimBrief invalide.",
         "instagram": "Compte Instagram : le nom du compte ou le lien de votre profil.",
         "facebook": "Compte Facebook : le nom du compte ou le lien de votre profil."
-      }
+      },
+      "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}"
     },
     "publication": {
-      "title": "Publication",
       "switch": "Rendre ma page publique",
       "since": "Publiée le {date}",
       "off": "Désactivée : personne ne voit votre page.",
-      "consent": "J'accepte que mon pseudo, ma photo, mon pays, mes statistiques et mes vols non masqués soient visibles par tout le monde et indexés par les moteurs de recherche. Je peux désactiver ma page à tout moment : elle disparaît aussitôt."
+      "consent": "J'accepte que mon pseudo, ma photo, mon pays, mes statistiques et mes vols non masqués soient visibles par tout le monde et indexés par les moteurs de recherche. Je peux désactiver ma page à tout moment : elle disparaît aussitôt.",
+      "page": "Page publique"
     },
     "handle": {
       "label": "Adresse de ma page",
@@ -261,7 +279,7 @@
       "saveFirst": "Enregistrez d'abord la nouvelle adresse",
       "offline": "Publiez votre page et enregistrez pour la partager",
       "changing": "L'ancienne adresse <b>{handle}</b> cessera de fonctionner à l'enregistrement.",
-      "validate": "Valider"
+      "validate": "Enregistrer l'adresse"
     },
     "handleChange": {
       "title": "Changer l'adresse de votre page ?",
@@ -285,7 +303,7 @@
       "country": "Pays",
       "none": "Non précisé",
       "homeIcao": "Aéroport de base",
-      "homeIcaoHelp": "Code OACI, 4 lettres",
+      "homeIcaoHelp": "Code OACI à 4 lettres, par exemple LFPG.",
       "level": "Niveau",
       "levelHelp": "Déclaré par vous, non vérifié.",
       "vatsimId": "Identifiant VATSIM",
@@ -297,7 +315,10 @@
       "facebook": "Compte Facebook",
       "facebookHelp": "Public, avec un lien vers votre compte. Nom ou lien du profil",
       "simbriefId": "Identifiant SimBrief",
-      "simbriefHelp": "Jamais affiché : servira plus tard à lire vos plans de vol"
+      "simbriefHelp": "Jamais affiché. Servira plus tard à lire vos plans de vol.",
+      "countryHelp": "Affiché avec votre drapeau.",
+      "noCountry": "Aucun pays trouvé",
+      "private": "Privé"
     },
     "visible": {
       "title": "Ce qui est visible",
