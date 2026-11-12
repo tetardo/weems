@@ -47,6 +47,7 @@ flowchart LR
 - [Spécification J3](docs/cahiers-des-charges/spec-J3-alpha-fermee.md) : alpha fermée, comptes, connexion du site et du tracker
 - [Profil public (J4)](docs/cahiers-des-charges/spec-J4-profil-public.md), [catégories d'avion (J4)](docs/cahiers-des-charges/spec-J4-categories-avion.md), [trajets sur la carte en direct (J4)](docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md), [montée en charge du direct (J4)](docs/cahiers-des-charges/api/spec-J4-montee-en-charge-direct.md)
 - [Console d'administration](docs/cahiers-des-charges/admin/spec-admin.md) : services, trafic simulé, comptes
+- [Vérification de la marque « Weems »](docs/identite/verification-marque-weems.md) : risque Weems & Plath, décision avant toute publication
 - [Fiches de décision](docs/decisions/) : une fiche par choix structurant (look du site, aéroports, formulaires, console, vols simulés…)
 - [Revues](docs/revues/) : revue de fin de J3, mesure du direct
 - [Cahier des charges du tracker](docs/cahiers-des-charges/tracker/CDC-Tracker.md) : exigences, contrat avec l'API, lots T0 à T4
