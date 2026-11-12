@@ -7,6 +7,8 @@ import { stateOf } from "./service-state.ts";
 import type { ApiMode, ServiceId, ServicesView, ServiceView } from "./service-view.ts";
 
 const PORTS: Record<ServiceId, number> = { db: 5432, api: 3000, site: 3001 };
+/** Only the site (next dev) has a lock besides its port. */
+const usesNextLock = (id: ServiceId) => id === "site";
 /** pnpm scripts started by the console, from the root of the repository. */
 const DEV_COMMANDS = {
   api: ["--filter", "@weems/api", "dev"],
@@ -70,9 +72,9 @@ export class ServicesManager {
     const managed = id === "db" ? null : this.processes[id];
     const container = id === "site" ? undefined : docker.containers[id];
     const view = viewOf(id, probe, managed, container);
-    // Only a service down whose port is open has a holder: lsof runs in that case only.
+    // Only a service down whose port is open (or site lock held) has a holder: lsof runs then only.
     if (id === "db" || view.state === "running" || view.state === "starting") return view;
-    const holder = await portHolder(PORTS[id], this.config.repoRoot);
+    const holder = await portHolder(PORTS[id], this.config.repoRoot, usesNextLock(id));
     // A Weems launch that does not answer yet (pnpm dev compiles its first page): starting.
     if (holder?.freeable) return { ...view, state: "starting", runner: "outside", holder };
     return { ...view, holder };
@@ -83,14 +85,14 @@ export class ServicesManager {
     if (current?.state === "running" || current?.state === "starting") return;
     if (id === "db") return this.docker.up("db");
     if (id === "api" && this.apiMode === "docker") return this.docker.up("api");
-    const holder = await portHolder(PORTS[id], this.config.repoRoot);
+    const holder = await portHolder(PORTS[id], this.config.repoRoot, usesNextLock(id));
     if (holder) throw new Error(holder.message);
     this.processes[id].start("pnpm", DEV_COMMANDS[id], this.config.repoRoot);
   }
 
-  /** « Libérer le port »: stops the old Weems launch holding it, then starts the service. */
+  /** « Libérer »: stops the old Weems launch holding the port (or site lock), then starts. */
   async freePortAndStart(id: "api" | "site"): Promise<void> {
-    await releasePort(PORTS[id], this.config.repoRoot);
+    await releasePort(PORTS[id], this.config.repoRoot, usesNextLock(id));
     await this.start(id);
   }
 

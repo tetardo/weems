@@ -16,7 +16,7 @@ export function PortHolderNote(props: { holder: PortHolder; busy: boolean; onFre
       </div>
       <div className="row">
         <button className="btn sm ghost" disabled={props.busy} onClick={props.onFree}>
-          <StartIcon size={15} /> Libérer le port et démarrer
+          <StartIcon size={15} /> Libérer et démarrer
         </button>
       </div>
     </>
