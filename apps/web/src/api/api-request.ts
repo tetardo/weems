@@ -12,6 +12,18 @@ export class ApiUnavailable extends Error {
   }
 }
 
+/**
+ * The API answered in a format the site does not know: usually an older API still running on the
+ * port (the weems-api-1 Docker container built from an old version of the code).
+ */
+export class ApiOutdated extends Error {
+  readonly url: string;
+  constructor(url: string, cause: unknown) {
+    super(`Weems API at ${url} answered in an unexpected format`, { cause });
+    this.url = url;
+  }
+}
+
 /** The API refused the request (400, 409, 413, 415, 422): `status` tells the form what to say. */
 export class ApiRefused extends Error {
   readonly status: number;
@@ -45,6 +57,13 @@ async function requestInit({ method = "GET", body, anonymous = false }: RequestO
   return { method, headers, body: json, cache: "no-store" } satisfies RequestInit;
 }
 
+/** Checks an answer against its contract: a mismatch means an API of another version. */
+function parseAnswer<T extends z.ZodType>(body: unknown, schema: T, url: string): z.infer<T> {
+  const parsed = schema.safeParse(body);
+  if (!parsed.success) throw new ApiOutdated(url, parsed.error);
+  return parsed.data;
+}
+
 /** Reads the answer: data, null when there is nothing at this address, or an error. */
 async function answerOf<T extends z.ZodType>(
   response: Response,
@@ -57,13 +76,14 @@ async function answerOf<T extends z.ZodType>(
   if (response.status >= 400 && response.status < 500) throw new ApiRefused(response.status);
   if (!response.ok) throw new ApiUnavailable(url, new Error(`HTTP ${response.status}`));
   // 204 No Content (a deletion): nothing to read.
-  return schema.parse(response.status === 204 ? null : await response.json());
+  return parseAnswer(response.status === 204 ? null : await response.json(), schema, url);
 }
 
 /**
  * A request to the API from the site's server, as the logged-in pilot (session cookie forwarded)
  * or anonymously. Null when the resource does not exist or is another pilot's (404); expired
- * session → login page; other refusals (429 too many requests…) → ApiRefused.
+ * session → login page; other refusals (429 too many requests…) → ApiRefused; answer that does
+ * not match the contract → ApiOutdated.
  */
 export async function apiRequest<T extends z.ZodType>(
   path: string,
