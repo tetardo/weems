@@ -509,5 +509,9 @@
     },
     "estimated": "{category} · estimée",
     "estimatedHint": "Type absent du catalogue Weems : catégorie estimée d'après le moteur et la masse donnés par le simulateur."
+  },
+  "Fictitious": {
+    "badge": "Compte fictif",
+    "help": "Compte créé par le simulateur d'activité, pour tester le site. Ce n'est pas un vrai pilote."
   }
 }

@@ -1,7 +1,7 @@
 import { dayAndClock } from "../../format/time.ts";
 import type { HistoryEntry } from "../../server/traffic/history.ts";
 import { StatusBadge } from "../../ui/status-badge.tsx";
-import { OUTCOMES } from "./run-panel.tsx";
+import { OUTCOMES } from "../../ui/run-state.tsx";
 
 export function HistoryPanel({ history }: { history: HistoryEntry[] }) {
   return (

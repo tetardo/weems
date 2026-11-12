@@ -4,7 +4,7 @@ import type { AdminAccount, AdminAccountList, AdminInvitation } from "@weems/con
 export type Row =
   { kind: "account"; account: AdminAccount } | { kind: "invitation"; invitation: AdminInvitation };
 
-export type Filter = "all" | "pilots" | "admins" | "invitations";
+export type Filter = "all" | "pilots" | "admins" | "fictitious" | "invitations";
 
 const matches = (search: string, ...texts: string[]) =>
   texts.some((text) => text.toLowerCase().includes(search.trim().toLowerCase()));
@@ -15,7 +15,8 @@ export function rowsOf(list: AdminAccountList, filter: Filter, search: string): 
       (a) =>
         filter === "all" ||
         (filter === "pilots" && a.role === "pilot") ||
-        (filter === "admins" && a.role === "admin"),
+        (filter === "admins" && a.role === "admin") ||
+        (filter === "fictitious" && a.fictitious),
     )
     .filter((a) => matches(search, a.name, a.email))
     .map((account) => ({ kind: "account", account }));
@@ -33,6 +34,7 @@ export function countsOf(list: AdminAccountList, nowMs: number) {
     accounts: list.accounts.length,
     pilots: list.accounts.filter((a) => a.role === "pilot").length,
     admins: list.accounts.filter((a) => a.role === "admin").length,
+    fictitious: list.accounts.filter((a) => a.fictitious).length,
     invitations: list.invitations.length,
     expired: list.invitations.filter((i) => Date.parse(i.expiresAt) <= nowMs).length,
   };

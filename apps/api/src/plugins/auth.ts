@@ -8,6 +8,8 @@ export const DEV_PILOT_ID = "01970000-0000-7000-8000-000000000001";
 
 export interface Caller {
   pilotId: string;
+  /** A fictitious account of the simulated activity, flying with the development token (page Activité simulée). */
+  fictitious?: boolean;
 }
 
 /** How a request is tied to a pilot: implemented by the accounts module. */
@@ -18,6 +20,8 @@ export interface Identify {
   fromSession(headers: Headers): Promise<string | null>;
   /** Whether the account has the administrator role. */
   isAdmin(pilotId: string): Promise<boolean>;
+  /** Whether the account is an active fictitious account (simulated activity). */
+  isFictitious(pilotId: string): Promise<boolean>;
 }
 
 declare module "fastify" {
@@ -25,6 +29,8 @@ declare module "fastify" {
     caller: Caller | null;
   }
 }
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const unauthorized = (detail: string) => new ApiProblem(401, "Unauthorized", detail);
 
@@ -53,13 +59,27 @@ export interface Guards {
 
 /**
  * Checks run on request arrival, before the body is validated: an unknown caller gets 401 whatever they send.
- * The fixed development token (spec J0) still works outside production, for `pnpm simulate` and `pnpm fly`.
+ * The fixed development token (spec J0) still works outside production, for `pnpm simulate` and `pnpm fly`;
+ * `<development token>:<pilot id>` flies as a fictitious account (page Activité simulée), never as a real one.
  */
 export function registerAuth(app: FastifyInstance, config: Config, identify: Identify): Guards {
   app.decorateRequest("caller", null);
 
+  async function fromDevToken(token: string): Promise<Caller | null> {
+    if (config.env === "production") return null;
+    if (token === config.devToken) return { pilotId: DEV_PILOT_ID };
+    const prefix = `${config.devToken}:`;
+    if (!token.startsWith(prefix)) return null;
+    const pilotId = token.slice(prefix.length);
+    if (!UUID.test(pilotId) || !(await identify.isFictitious(pilotId))) {
+      throw unauthorized("The development token flies only as a fictitious account.");
+    }
+    return { pilotId, fictitious: true };
+  }
+
   async function fromBearer(token: string): Promise<Caller> {
-    if (config.env !== "production" && token === config.devToken) return { pilotId: DEV_PILOT_ID };
+    const developer = await fromDevToken(token);
+    if (developer) return developer;
     const pilotId = await identify.fromAccessToken(token);
     if (!pilotId) throw unauthorized("Invalid or expired access token.");
     return { pilotId };

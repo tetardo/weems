@@ -33,11 +33,13 @@ export interface FirstPartyClient {
 export interface AccountStatus {
   role: string;
   disabledAt: Date | null;
+  fictitious: boolean;
 }
 
 export interface PilotIdentity {
   name: string;
   createdAt: Date;
+  fictitious: boolean;
 }
 
 export interface DevPilot {
@@ -188,7 +190,7 @@ export class AccountsRepository {
 
   async statusOf(userId: string): Promise<AccountStatus | null> {
     const [row] = await this.db
-      .select({ role: users.role, disabledAt: users.disabledAt })
+      .select({ role: users.role, disabledAt: users.disabledAt, fictitious: users.fictitious })
       .from(users)
       .where(eq(users.id, userId));
     return row ?? null;
@@ -196,7 +198,7 @@ export class AccountsRepository {
 
   async findPilot(pilotId: string): Promise<PilotIdentity | null> {
     const [row] = await this.db
-      .select({ name: users.name, createdAt: users.createdAt })
+      .select({ name: users.name, createdAt: users.createdAt, fictitious: users.fictitious })
       .from(users)
       .where(eq(users.id, pilotId));
     return row ?? null;

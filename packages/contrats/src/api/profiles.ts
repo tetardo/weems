@@ -190,6 +190,8 @@ export const PublicPilot = z.object({
   memberSince: UtcTimestamp,
   /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
   hasPhoto: z.boolean(),
+  /** Fictitious account of the simulated activity: the site shows a badge (development only). */
+  fictitious: z.boolean(),
   stats: PilotStats,
   charts: PilotCharts,
 });

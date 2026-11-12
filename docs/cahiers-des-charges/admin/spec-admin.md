@@ -123,6 +123,28 @@ flowchart LR
 
 **Connexion** : si personne n'est connecté, la page affiche à la place un formulaire e-mail et mot de passe. Un compte sans le rôle Administrateur est refusé. Le premier administrateur est nommé par une commande : `pnpm make-admin <e-mail>` (même principe que `pnpm invite`).
 
+## Page Activité simulée
+
+**But** : remplir tout le site (profils publics, carnets, compteurs, graphiques, carte en direct) avec des comptes fictifs. Décision et règles : fiche `../../decisions/011-activite-simulee-comptes-fictifs.md`. Validé par Greg le 12/11/2026 (proposition A).
+
+![Activité simulée : qui parle à qui](../../schemas/img/activite-simulee.png)
+
+**Bandeau Population fictive** : comptes, profils publics, vols, liens « Voir dans Comptes » et **Tout supprimer** (avec confirmation).
+
+**Deux blocs, côte à côte**
+
+| | Population fictive (reste en base) | Activité en direct (temporaire) |
+| --- | --- | --- |
+| Commande | `pnpm populate create` | `pnpm populate live` |
+| Réglages | Comptes : 1 à 500, défaut 50. Vols par compte : min–max, défaut 5–40. Historique : 1, 6 ou 12 mois, défaut 6. Profils publics : défaut 75 % | Vols en direct : défaut 12. Visiteurs : défaut 100. Durée : défaut 30 min. Vitesse : ×1, ×10, ×50 |
+| Avertissement | Remplace la population existante | Demande une population |
+
+**Pendant un lancement** : étapes (nettoyage, comptes, vols, vérification) avec compteurs et débit pour la population ; vols en l'air, partis, visiteurs, temps écoulé pour le direct. Bouton **Arrêter**.
+
+**À la fin** : résultat, puis « Pages remplies » : carte en direct, profil le plus rempli, connexion d'un compte fictif (mot de passe commun affiché).
+
+**Page Comptes** : filtre « Fictifs », badge « Fictif », lien « Voir le profil » sur toute ligne qui a un profil public (comptes réels compris).
+
 ## Panneau « Créer un compte »
 
 S'ouvre à droite (en bas sur mobile).
@@ -153,7 +175,7 @@ Aujourd'hui un code d'invitation reste valable sans limite. Or l'inscription ne 
 
 ## Hors périmètre de cette première version
 
-Comptes simulés (un compte par pilote simulé, prévu plus tard), remise à zéro de la base, migrations, tracker de bureau, envoi d'e-mails, création directe avec mot de passe, suppression définitive d'un compte, réinitialisation de mot de passe, liste des vols de tous les pilotes, modération des compagnies (lot 3), mise en ligne.
+Remise à zéro de la base, migrations, tracker de bureau, envoi d'e-mails, création directe avec mot de passe, suppression définitive d'un compte, réinitialisation de mot de passe, liste des vols de tous les pilotes, modération des compagnies (lot 3), mise en ligne.
 
 ## Décisions sur les questions ouvertes
 
@@ -169,7 +191,7 @@ Comptes simulés (un compte par pilote simulé, prévu plus tard), remise à zé
 Ce qui diffère des maquettes validées, et pourquoi :
 
 - **Thème** : suit le réglage du système, sans bouton. Un bouton demanderait de garder un choix pour une console d'un seul utilisateur.
-- **Barre latérale** : pas de nombre de comptes à côté de « Comptes » (il demande la connexion administrateur) ; « Carte en direct » est un bouton de la page Trafic plutôt qu'un raccourci. Sur mobile, trois onglets (Services, Trafic, Comptes), sans pastilles dans la barre du haut.
+- **Barre latérale** : pas de nombre de comptes à côté de « Comptes » (il demande la connexion administrateur) ; « Carte en direct » est un bouton de la page Trafic plutôt qu'un raccourci. Sur mobile, quatre onglets (Services, Trafic, Activité, Comptes), sans pastilles dans la barre du haut.
 - **Administrateur connecté** : son nom est sur le bouton de déconnexion de la page Comptes, pas dans la barre du haut.
 - **Trafic** : la colonne « Positions envoyées » n'existe pas (le tracker ne les compte pas par vol) ; le tableau par pilote existe pour `pnpm simulate` seulement, le test de charge montre ses mesures puis son rapport à la fin.
 - **Formulaires** : alignés sur le modèle C choisi par Greg pour tous les formulaires (champs de 44 px, choix segmenté dans un cadre).

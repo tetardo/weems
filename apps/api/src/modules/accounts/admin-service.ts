@@ -17,6 +17,16 @@ export interface FlightCounter {
   countByPilot(): Promise<Map<string, number>>;
 }
 
+/** Address of each public profile: implemented by the profiles module. */
+export interface ProfileDirectory {
+  publicHandles(): Promise<Map<string, string>>;
+}
+
+interface Directory {
+  flights: Map<string, number>;
+  handles: Map<string, string>;
+}
+
 const asRole = (role: string): AccountRole => (role === "admin" ? "admin" : "pilot");
 
 function toInvitation(invitation: InvitationRecord): AdminInvitation {
@@ -29,7 +39,7 @@ function toInvitation(invitation: InvitationRecord): AdminInvitation {
   };
 }
 
-function toAccount(account: AccountRecord, flights: Map<string, number>): AdminAccount {
+function toAccount(account: AccountRecord, { flights, handles }: Directory): AdminAccount {
   return {
     id: account.id,
     name: account.name,
@@ -37,6 +47,8 @@ function toAccount(account: AccountRecord, flights: Map<string, number>): AdminA
     role: asRole(account.role),
     disabledAt: account.disabledAt?.toISOString() ?? null,
     development: account.id === DEV_PILOT_ID,
+    fictitious: account.fictitious,
+    publicHandle: handles.get(account.id) ?? null,
     flights: flights.get(account.id) ?? 0,
     createdAt: account.createdAt.toISOString(),
     lastLoginAt: account.lastLoginAt?.toISOString() ?? null,
@@ -48,25 +60,29 @@ export class AdminAccountsService {
   private readonly repository: AdminAccountsRepository;
   private readonly accounts: AccountsService;
   private readonly flights: FlightCounter;
+  private readonly profiles: ProfileDirectory;
 
   constructor(
     repository: AdminAccountsRepository,
     accounts: AccountsService,
     flights: FlightCounter,
+    profiles: ProfileDirectory,
   ) {
     this.repository = repository;
     this.accounts = accounts;
     this.flights = flights;
+    this.profiles = profiles;
   }
 
   async list(): Promise<AdminAccountList> {
-    const [accounts, invitations, flights] = await Promise.all([
+    const [accounts, invitations, flights, handles] = await Promise.all([
       this.repository.listAccounts(),
       this.accounts.openInvitations(),
       this.flights.countByPilot(),
+      this.profiles.publicHandles(),
     ]);
     return {
-      accounts: accounts.map((account) => toAccount(account, flights)),
+      accounts: accounts.map((account) => toAccount(account, { flights, handles })),
       invitations: invitations.map(toInvitation),
     };
   }
