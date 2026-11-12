@@ -5,16 +5,18 @@ import {
   cleanupLines,
   cleanupResultText,
   growthText,
+  migrationLabel,
   migrationSummary,
+  migrationTone,
   simulatedShare,
   sizeDetail,
 } from "./model.ts";
 
-const migration = (tag: string | null, state: AdminDatabase["migrations"][number]["state"]) => ({
-  tag,
-  createdAt: "2026-11-12T03:58:00.000Z",
-  state,
-});
+const migration = (
+  tag: string | null,
+  state: AdminDatabase["migrations"][number]["state"],
+  createdAt = "2026-11-12T03:58:00.000Z",
+) => ({ tag, createdAt, state });
 
 describe("figures of the page Base de données", () => {
   it("sums up the migrations: up to date, pending, or a problem to fix by hand", () => {
@@ -23,6 +25,7 @@ describe("figures of the page Base de données", () => {
       inCode: 2,
       tone: "ok",
       status: "à jour",
+      detail: "appliquées sur celles du code",
     });
     const pending = migrationSummary([migration("a", "applied"), migration("b", "pending")]);
     expect(pending).toMatchObject({
@@ -33,14 +36,33 @@ describe("figures of the page Base de données", () => {
     });
     const broken = migrationSummary([
       migration("a", "applied"),
-      migration("a", "duplicate"),
-      migration(null, "unknown"),
+      migration("b", "skipped"),
+      migration(null, "unknown", "2026-11-13T00:00:00.000Z"),
     ]);
-    expect(broken).toMatchObject({
-      inCode: 1,
-      tone: "bad",
-      status: "2 anomalies à corriger à la main",
+    expect(broken).toMatchObject({ tone: "bad", status: "2 anomalies à corriger à la main" });
+  });
+
+  it("says that an extra row older than the newest migration changes nothing", () => {
+    // The case of the Mac on 12/11: 0007 recorded a second time, before 0008 and 0009.
+    const migrations = [
+      migration("0009", "applied", "2026-11-12T03:58:00.000Z"),
+      migration("0007", "applied", "2026-11-11T22:15:00.000Z"),
+      migration("0007", "duplicate", "2026-11-11T22:20:00.000Z"),
+    ];
+    expect(migrationSummary(migrations)).toMatchObject({
+      applied: 2,
+      inCode: 2,
+      harmless: 1,
+      tone: "ok",
+      status: "à jour",
+      detail: "appliquées · 1 ligne en trop en base, sans effet",
     });
+    const [, , extra] = migrations;
+    expect(extra && migrationTone(extra, migrations)).toBe("warn");
+    expect(extra && migrationLabel(extra, migrations)).toBe("en double, sans effet");
+    // Newer than every migration of the code, it would make Drizzle skip the next ones.
+    const blocking = migration(null, "unknown", "2026-11-14T00:00:00.000Z");
+    expect(migrationTone(blocking, [...migrations, blocking])).toBe("bad");
   });
 
   it("weights the simulated share by the size of the flight tables", () => {

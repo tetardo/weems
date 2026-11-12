@@ -80,7 +80,7 @@ export function SummaryTiles({ view, nowMs }: { view: DatabaseView; nowMs: numbe
         hint={<span className={`db-${migrations.tone}`}>{migrations.status}</span>}
         value={`${migrations.applied} / ${migrations.inCode}`}
         tone={migrations.tone}
-        detail="appliquées sur celles du code"
+        detail={migrations.detail}
       />
       <BackupTile backups={view.backups} nowMs={nowMs} />
       <Tile

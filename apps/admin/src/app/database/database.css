@@ -85,8 +85,9 @@ th.db-n {
   padding: 8px 10px;
   border-radius: var(--radius-inner);
   background: var(--surface2);
-  overflow-x: auto;
-  white-space: nowrap;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
   user-select: all;
 }
 

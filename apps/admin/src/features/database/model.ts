@@ -11,7 +11,7 @@ import { bytes } from "../../format/bytes.ts";
 const fr = (n: number) => n.toLocaleString("fr-FR");
 const plural = (n: number, one: string, many = `${one}s`) => `${fr(n)} ${n > 1 ? many : one}`;
 
-export const MIGRATION_LABELS: Record<MigrationState, string> = {
+const MIGRATION_LABELS: Record<MigrationState, string> = {
   applied: "appliquée",
   pending: "en attente",
   skipped: "sautée",
@@ -20,25 +20,60 @@ export const MIGRATION_LABELS: Record<MigrationState, string> = {
   unknown: "inconnue du dépôt",
 };
 
-/** Tone of a state: ok (green), warn (orange: one command fixes it), bad (red: by hand). */
-export function migrationTone(state: MigrationState): "ok" | "warn" | "bad" {
-  if (state === "applied") return "ok";
-  return state === "pending" ? "warn" : "bad";
+type Migration = AdminDatabase["migrations"][number];
+type Tone = "ok" | "warn" | "bad";
+
+const IN_CODE: readonly MigrationState[] = ["applied", "pending", "skipped", "changed"];
+const isExtraRow = (m: Migration) => m.state === "duplicate" || m.state === "unknown";
+
+/** Date of the newest migration of the code: Drizzle applies only what is newer than its last row. */
+function newestInCode(migrations: readonly Migration[]): number {
+  const dates = migrations
+    .filter((m) => IN_CODE.includes(m.state))
+    .map((m) => Date.parse(m.createdAt));
+  return Math.max(-Infinity, ...dates);
 }
 
-/** « 10 / 10 » applied out of the code's migrations, and what to say under it. */
-export function migrationSummary(migrations: AdminDatabase["migrations"]) {
+/**
+ * An extra row of drizzle.__drizzle_migrations (in double, or unknown) dated before the newest
+ * migration of the code changes nothing: Drizzle only looks at its newest row. Newer, it would
+ * make Drizzle skip the migrations dated before it.
+ */
+function isHarmless(m: Migration, newestMs: number): boolean {
+  return isExtraRow(m) && Date.parse(m.createdAt) <= newestMs;
+}
+
+/** Tone of a migration: ok (green), warn (orange: one command fixes it, or no effect), bad (red: by hand). */
+export function migrationTone(m: Migration, migrations: readonly Migration[]): Tone {
+  if (m.state === "applied") return "ok";
+  if (m.state === "pending" || isHarmless(m, newestInCode(migrations))) return "warn";
+  return "bad";
+}
+
+/** Label of a migration; an extra row without effect says so. */
+export function migrationLabel(m: Migration, migrations: readonly Migration[]): string {
+  const label = MIGRATION_LABELS[m.state];
+  return isHarmless(m, newestInCode(migrations)) ? `${label}, sans effet` : label;
+}
+
+/** « 10 / 10 » applied out of the code's migrations, and what to say about it. */
+export function migrationSummary(migrations: readonly Migration[]) {
+  const newestMs = newestInCode(migrations);
   const inCode = migrations.filter((m) => m.tag !== null && m.state !== "duplicate").length;
   const applied = migrations.filter((m) => m.state === "applied").length;
   const pending = migrations.filter((m) => m.state === "pending").length;
-  const problems = migrations.filter((m) => migrationTone(m.state) === "bad").length;
-  const tone = problems ? "bad" : pending ? "warn" : "ok";
+  const harmless = migrations.filter((m) => isHarmless(m, newestMs)).length;
+  const problems = migrations.filter((m) => migrationTone(m, migrations) === "bad").length;
+  const tone: Tone = problems ? "bad" : pending ? "warn" : "ok";
   const status = problems
     ? `${plural(problems, "anomalie")} à corriger à la main`
     : pending
       ? `${plural(pending, "migration")} en attente`
       : "à jour";
-  return { applied, inCode, pending, tone, status } as const;
+  const detail = harmless
+    ? `appliquées · ${plural(harmless, "ligne")} en trop en base, sans effet`
+    : "appliquées sur celles du code";
+  return { applied, inCode, pending, harmless, tone, status, detail } as const;
 }
 
 /** Share of the flight tables that is simulated, weighted by size. */
