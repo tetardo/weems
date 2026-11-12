@@ -2,8 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AccountsIcon, ServicesIcon, TerminalIcon, TrafficIcon } from "../ui/icons.ts";
-const TITLES = { "/services": "Services", "/traffic": "Trafic simulé", "/accounts": "Comptes" };
+import {
+  AccountsIcon,
+  ActivityIcon,
+  ServicesIcon,
+  TerminalIcon,
+  TrafficIcon,
+} from "../ui/icons.ts";
+const TITLES = {
+  "/services": "Services",
+  "/traffic": "Trafic simulé",
+  "/activity": "Activité simulée",
+  "/accounts": "Comptes",
+};
 const titleOf = (pathname: string) =>
   Object.entries(TITLES).find(([href]) => pathname.startsWith(href))?.[1] ?? "Admin";
 
@@ -35,6 +46,9 @@ export function MobileTabs() {
       </Link>
       <Link href="/traffic" className={on("/traffic")}>
         <TrafficIcon size={22} /> Trafic
+      </Link>
+      <Link href="/activity" className={on("/activity")}>
+        <ActivityIcon size={22} /> Activité
       </Link>
       <Link href="/accounts" className={on("/accounts")}>
         <AccountsIcon size={22} /> Comptes

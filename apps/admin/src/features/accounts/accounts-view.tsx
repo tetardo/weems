@@ -23,6 +23,9 @@ function Filters(props: { page: Ready; filter: Filter; onFilter: (f: Filter) => 
     ["all", "Tous", counts.accounts + counts.invitations],
     ["pilots", "Pilotes", counts.pilots],
     ["admins", "Administrateurs", counts.admins],
+    ...(counts.fictitious > 0
+      ? [["fictitious", "Fictifs", counts.fictitious] as [Filter, string, number]]
+      : []),
     ["invitations", "Invitations", counts.invitations],
   ];
   return (

@@ -2,7 +2,7 @@
 
 import type { AdminAccount, AdminInvitation } from "@weems/contrats";
 import { ago, daysLeft, shortDate } from "../../format/time.ts";
-import { AdminIcon, CopyIcon } from "../../ui/icons.ts";
+import { AdminIcon, CopyIcon, ProfileIcon } from "../../ui/icons.ts";
 import { StatusBadge } from "../../ui/status-badge.tsx";
 import { RowMenu } from "./row-menu.tsx";
 import { initialsOf } from "./rows.ts";
@@ -15,6 +15,8 @@ export interface RowActions {
   copyLink: (invitation: AdminInvitation) => void;
   renew: (invitation: AdminInvitation) => void;
   cancel: (invitation: AdminInvitation) => void;
+  /** Address of a public profile on the local site. */
+  profileUrl: (handle: string) => string;
 }
 
 const COLORS = ["#2b6cb0", "#7c3aed", "#d97706", "#0e8fa6", "#be185d", "#15803d"];
@@ -52,6 +54,27 @@ const Role = ({ role }: { role: "pilot" | "admin" }) =>
     <>Pilote</>
   );
 
+const AccountBadges = ({ account }: { account: AdminAccount }) => (
+  <>
+    {account.development && <StatusBadge tone="live">Développement</StatusBadge>}
+    {account.fictitious && <StatusBadge tone="warn">Fictif</StatusBadge>}
+  </>
+);
+
+/** Opens the public profile on the local site, for real and fictitious accounts alike. */
+const ProfileLink = ({ name, href }: { name: string; href: string }) => (
+  <a
+    className="iconbtn"
+    href={href}
+    target="_blank"
+    rel="noreferrer"
+    aria-label={`Voir le profil public de ${name}`}
+    title="Voir le profil public"
+  >
+    <ProfileIcon size={16} />
+  </a>
+);
+
 export function AccountRow(props: { account: AdminAccount; me: string; actions: RowActions }) {
   const { account, actions } = props;
   const self = account.id === props.me;
@@ -71,7 +94,7 @@ export function AccountRow(props: { account: AdminAccount; me: string; actions: 
           seed={account.email}
           name={account.name}
           sub={self ? "vous" : account.email}
-          extra={account.development && <StatusBadge tone="live">Développement</StatusBadge>}
+          extra={<AccountBadges account={account} />}
         />
       </td>
       <td>
@@ -88,6 +111,9 @@ export function AccountRow(props: { account: AdminAccount; me: string; actions: 
       <td>{shortDate(account.createdAt)}</td>
       <td>{account.lastLoginAt ? ago(account.lastLoginAt, Date.now()) : "—"}</td>
       <td className="act">
+        {account.publicHandle && (
+          <ProfileLink name={account.name} href={actions.profileUrl(account.publicHandle)} />
+        )}
         {!self && (
           <RowMenu
             title={account.email}

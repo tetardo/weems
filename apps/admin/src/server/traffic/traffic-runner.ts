@@ -34,16 +34,23 @@ export class TrafficRunner {
   private run: RunView | null = null;
   private process: ManagedProcess | null = null;
   private series: MetricsSample[] = [];
+  private readonly activityBusy: () => boolean;
 
-  constructor(config: ConsoleConfig) {
+  constructor(config: ConsoleConfig, activityBusy: () => boolean = () => false) {
     this.config = config;
+    this.activityBusy = activityBusy;
     this.api = new DevApi(config);
     this.history = new HistoryFile(config.dataDir);
   }
 
+  isBusy(): boolean {
+    return this.run !== null && this.run.state !== "ended";
+  }
+
   start(launch: Launch): void {
-    if (this.run?.state !== undefined && this.run.state !== "ended") {
-      throw new Error("Un lancement est déjà en cours.");
+    if (this.isBusy()) throw new Error("Un lancement est déjà en cours.");
+    if (this.activityBusy()) {
+      throw new Error("Un lancement est en cours sur la page Activité simulée.");
     }
     const id = new Date().toISOString().replaceAll(":", "-").slice(0, 19);
     const run: RunView = {

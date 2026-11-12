@@ -9,6 +9,8 @@ const account = (name: string, email: string, role: "pilot" | "admin") => ({
   role,
   disabledAt: null,
   development: false,
+  fictitious: false,
+  publicHandle: null,
   flights: 0,
   createdAt: "2026-11-10T10:00:00.000Z",
   lastLoginAt: null,
@@ -24,6 +26,7 @@ const list: AdminAccountList = {
   accounts: [
     account("Greg", "greg@example.com", "admin"),
     account("Camille R.", "camille@example.com", "pilot"),
+    { ...account("Léa Martin", "lea-martin-a1b2c3@fictif.weems.local", "pilot"), fictitious: true },
   ],
   invitations: [
     invitation("julien@example.com", "2026-11-24T10:00:00.000Z"),
@@ -34,7 +37,10 @@ const NOW = Date.parse("2026-11-11T20:00:00Z");
 
 describe("rows of the page Comptes", () => {
   it("filters by kind and searches names and e-mails", () => {
-    expect(rowsOf(list, "all", "")).toHaveLength(4);
+    expect(rowsOf(list, "all", "")).toHaveLength(5);
+    expect(rowsOf(list, "fictitious", "")).toEqual([
+      { kind: "account", account: list.accounts[2] },
+    ]);
     expect(rowsOf(list, "admins", "")).toHaveLength(1);
     expect(rowsOf(list, "invitations", "")).toHaveLength(2);
     expect(rowsOf(list, "all", " CAMILLE ")).toEqual([
@@ -45,9 +51,10 @@ describe("rows of the page Comptes", () => {
 
   it("counts, expired invitations apart", () => {
     expect(countsOf(list, NOW)).toEqual({
-      accounts: 2,
-      pilots: 1,
+      accounts: 3,
+      pilots: 2,
       admins: 1,
+      fictitious: 1,
       invitations: 2,
       expired: 1,
     });

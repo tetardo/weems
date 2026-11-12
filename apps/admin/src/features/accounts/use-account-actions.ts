@@ -17,6 +17,7 @@ export function useAccountActions(siteUrl: string, refresh: () => Promise<void>)
     setMessage((await run(action)) ? done : null);
 
   const actions: RowActions = {
+    profileUrl: (handle) => `${siteUrl}/fr/pilots/${handle}`,
     setRole: (account, role) =>
       void act(
         () => updateAccount(account.id, { role }),
