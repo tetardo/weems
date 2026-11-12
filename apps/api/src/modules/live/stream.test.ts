@@ -52,4 +52,28 @@ describe("GET /v1/live/stream", () => {
     expect(updates().some((u) => u.removed.includes(id))).toBe(true);
     await sse.close();
   });
+
+  it("announces each take-off and landing once, even when the tracker sends events again", async () => {
+    const flight = syntheticFlight();
+    const id = flight.open.flightId;
+    await post("/v1/flights", flight.open);
+    const sse = openSse(url);
+    await until(() => sse.events.length > 0);
+    await post(`/v1/flights/${id}/positions`, flight.position);
+    const firstHalf = flight.events.slice(0, 4);
+    await post(`/v1/flights/${id}/events`, { events: firstHalf });
+    await post(`/v1/flights/${id}/events`, { events: flight.events });
+    const events = () =>
+      sse.events
+        .filter((e) => e.event === "update")
+        .flatMap((e) => (e.data as LiveUpdate).events)
+        .filter((e) => e.flightId === id);
+    await until(() => events().some((e) => e.kind === "landing"));
+    expect(events().map((e) => [e.kind, e.airportIcao, e.touchdownVs])).toEqual([
+      ["takeoff", "LFPG", null],
+      ["landing", "LFBO", -142.5],
+    ]);
+    await post(`/v1/flights/${id}/close`, flight.close);
+    await sse.close();
+  });
 });

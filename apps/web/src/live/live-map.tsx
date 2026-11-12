@@ -10,6 +10,7 @@ import type { MapTheme } from "../map/map-theme.ts";
 import { addAircraftIcons } from "./aircraft-icons.ts";
 import { addAllRoutesLayers, type AllRoutes, showAllRoutes } from "./all-routes-layers.ts";
 import type { LiveFlights } from "./flights-store.ts";
+import { addOverlayLayers, type Overlays, showOverlays } from "./overlay-layers.ts";
 import { addRouteLayers, followAircraft, showRoute } from "./route-layers.ts";
 import type { MapPoint } from "./card-position.ts";
 import { Tracks } from "./tracks.ts";
@@ -28,6 +29,8 @@ interface Props {
   onHover: (hover: Hover | null) => void;
   /** Each new value centres the map on the selected aircraft (button « Recentrer »). */
   recenterRequest: number;
+  /** Night and busy airports. */
+  overlays: Overlays;
 }
 
 export interface Hover {
@@ -67,6 +70,14 @@ function watchHover(
   };
 }
 
+/** A click on an aircraft selects its flight; elsewhere, unselects. */
+function watchClicks(map: MapLibreMap, onSelect: { current: Props["onSelect"] }): void {
+  map.on("click", (event: MapMouseEvent) => {
+    const [feature] = map.queryRenderedFeatures(event.point, { layers: [SOURCE] });
+    onSelect.current((feature?.properties["flightId"] as string | undefined) ?? null);
+  });
+}
+
 function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
   addAircraftIcons(map, theme, categoryColors());
   map.addSource(SOURCE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
@@ -89,11 +100,15 @@ function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
   });
 }
 
-/** Aircraft on top, then the selected route, then the faint routes of all flights. */
+/**
+ * Aircraft on top, then busy airports, the selected route, the faint routes of all flights, and
+ * the night under them.
+ */
 function addLiveLayers(map: MapLibreMap, theme: MapTheme): void {
   addFlightsLayer(map, theme);
   addAllRoutesLayers(map, theme, SOURCE);
   addRouteLayers(map, theme, SOURCE);
+  addOverlayLayers(map, theme, SOURCE);
 }
 
 /** Calls `show(map, value)` when `value` changes, once the layers exist (else the load does). */
@@ -140,7 +155,8 @@ function useRecenter(
 
 /** MapLibre map with one aircraft per open flight, gliding between updates, and the selected route. */
 export function LiveMap(props: Props) {
-  const { flights, selectedId, route, allRoutes, onSelect, onHover, recenterRequest } = props;
+  const { flights, selectedId, route, allRoutes, onSelect, onHover, recenterRequest, overlays } =
+    props;
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const tracks = useRef(new Tracks());
@@ -149,6 +165,7 @@ export function LiveMap(props: Props) {
   const hover = useLatest(onHover);
   const shownRoute = useLatest(route);
   const shownRoutes = useLatest(allRoutes);
+  const shownOverlays = useLatest(overlays);
 
   useEffect(() => {
     if (!container.current) return;
@@ -157,6 +174,7 @@ export function LiveMap(props: Props) {
       addLiveLayers(target, theme);
       showAllRoutes(target, shownRoutes.current);
       showRoute(target, shownRoute.current);
+      showOverlays(target, shownOverlays.current);
     };
     const instance = createBaseMap(container.current, { center: [5, 47], zoom: 4.3 }, addLayers);
     map.current = instance;
@@ -174,10 +192,7 @@ export function LiveMap(props: Props) {
       frame = requestAnimationFrame(draw);
     };
     instance.once("load", draw);
-    instance.on("click", (event: MapMouseEvent) => {
-      const [feature] = instance.queryRenderedFeatures(event.point, { layers: [SOURCE] });
-      select.current((feature?.properties["flightId"] as string | undefined) ?? null);
-    });
+    watchClicks(instance, select);
     return () => {
       cancelAnimationFrame(frame);
       instance.remove();
@@ -191,6 +206,7 @@ export function LiveMap(props: Props) {
 
   useShown(map, route, showRoute);
   useShown(map, allRoutes, showAllRoutes);
+  useShown(map, overlays, showOverlays);
 
   return <div ref={container} style={{ position: "absolute", inset: 0 }} />;
 }

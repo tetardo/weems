@@ -1,4 +1,4 @@
-import type { LiveFlight, PositionReport } from "@weems/contrats";
+import type { FlightEvent, LiveFlight, PositionReport } from "@weems/contrats";
 
 /**
  * Flight details shown on the live map, without the position; with the pilot's id, which the
@@ -16,4 +16,6 @@ export interface LiveFeed {
   lastPosition(flightId: string): PositionReport | undefined;
   position(info: LiveFlightInfo, report: PositionReport): void;
   closed(flightId: string): void;
+  /** Events just received for a flight (each once): take-offs and landings appear on the map. */
+  events(flightId: string, events: readonly FlightEvent[]): void;
 }

@@ -1,8 +1,4 @@
-import type { TrackPoint } from "@weems/contrats";
-import { sunElevationDeg } from "./sun.ts";
-
-/** Night: from the end of evening civil twilight to the start of morning civil twilight (EASA). */
-const NIGHT_BELOW_DEG = -6;
+import { NIGHT_BELOW_DEG, sunElevationDeg, type TrackPoint } from "@weems/contrats";
 
 /**
  * Airborne seconds by day and by night along a trajectory: each interval between two airborne
