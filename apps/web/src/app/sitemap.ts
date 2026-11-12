@@ -18,11 +18,12 @@ function inEveryLanguage(path: string, lastModified?: string): MetadataRoute.Sit
   }));
 }
 
-/** The home page, the plans and the public profiles, in every language (spec J4 référencement, accueil). */
+/** The home page, Découvrir, the plans and the public profiles, in every language (spec J4 référencement, accueil). */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { pilots } = await getPilotIndex();
   return [
     ...inEveryLanguage(""),
+    ...inEveryLanguage("/discover"),
     ...inEveryLanguage("/plans"),
     ...inEveryLanguage("/plans/compare"),
     ...pilots.flatMap(({ handle, updatedAt }) => inEveryLanguage(`/pilots/${handle}`, updatedAt)),

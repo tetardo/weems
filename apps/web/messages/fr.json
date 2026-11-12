@@ -3,6 +3,7 @@
     "name": "Weems",
     "description": "Suivi des vols en simulation",
     "nav": {
+      "discover": "Découvrir",
       "logbook": "Mon carnet de bord",
       "flights": "Mes vols",
       "live": "Vols en direct",
@@ -27,6 +28,7 @@
     "languages": "Langue",
     "footer": {
       "copyright": "© {year} Weems",
+      "discover": "Découvrir Weems",
       "legal": "Mentions légales",
       "terms": "Conditions d'utilisation",
       "privacy": "Confidentialité",
@@ -789,5 +791,112 @@
       "membersText": "Les membres d'une compagnie volent avec Pilot Free. Seule la compagnie paie."
     },
     "fairUse": "* Usage raisonnable : au-delà de {count, number} pilotes actifs par compagnie, nous contacter."
+  },
+  "Discover": {
+    "meta": {
+      "title": "Découvrir Weems · Le principe",
+      "description": "Un tracker enregistre vos vols MSFS, le site les raconte, la communauté les voit passer, et vous progressez vol après vol."
+    },
+    "banner": {
+      "eyebrow": "Découvrir Weems",
+      "title": "Voler, comprendre, progresser.",
+      "slogan": "Un tracker enregistre chacun de vos vols dans le simulateur. Le site les raconte, la communauté les voit passer, et vous progressez vol après vol.",
+      "plans": "Voir les offres"
+    },
+    "stepNumber": "Étape {number}",
+    "steps": {
+      "tracker": {
+        "title": "Un tracker qui se fait oublier",
+        "text": "Installez-le une fois. Il reconnaît MSFS 2020 et 2024, enregistre votre vol dès la mise en route et le découpe en 12 phases, du roulage au parking.",
+        "point1": "Rien à remplir, rien à lancer en vol",
+        "point2": "Le vol est gardé si la connexion tombe, et envoyé au retour",
+        "point3": "Une fenêtre montre l'état du simulateur et du vol"
+      },
+      "followUp": {
+        "title": "Chaque vol, raconté",
+        "text": "Dès l'atterrissage, votre vol est dans votre carnet de bord : trajet sur la carte, profil d'altitude, phases, atterrissage et journal de bord.",
+        "point1": "Taux au toucher, rebonds, remises de gaz",
+        "point2": "Vos amis suivent votre vol en direct",
+        "point3": "Historique complet, sans limite de vols"
+      },
+      "community": {
+        "title": "Volez seul, jamais isolé",
+        "text": "Votre vol apparaît sur la carte des vols en direct, à côté de ceux des autres pilotes. Votre profil public montre vos heures, vos routes et vos avions, à partager où vous voulez.",
+        "point1": "Carte en direct ouverte à tous",
+        "point2": "Profil public à partager, privé tant que vous ne le publiez pas",
+        "point3": "Bientôt : les compagnies virtuelles et leurs pilotes"
+      },
+      "simplicity": {
+        "title": "Simple, dès le premier vol",
+        "text": "Un compte, le tracker, et vous volez. Pas de plan de vol à déposer, pas de réglage à comprendre.",
+        "point1": "Gratuit pour voler, sans limite de vols",
+        "point2": "Un seul compte pour le site et le tracker",
+        "point3": "En français et en anglais, en clair ou en sombre"
+      },
+      "training": {
+        "title": "Voler comme un vrai équipage",
+        "text": "Weems relit chaque vol avec les repères des pilotes de ligne : approche stabilisée, 250 kt sous le FL100, confort des passagers. Il vous montre ce qui est réussi et ce qui est à travailler.",
+        "point1": "Approche stabilisée à 1 000 et 500 ft",
+        "point2": "Vitesse sous le FL100 (règlement européen SERA)",
+        "point3": "Inclinaison et facteur de charge ressentis en cabine"
+      },
+      "progress": {
+        "title": "Voir le chemin parcouru",
+        "text": "Heures par catégorie d'avion, toucher moyen, régularité : vous voyez vos progrès vol après vol, et vous vous fixez des objectifs.",
+        "point1": "Statistiques de base pour tous",
+        "point2": "Objectifs et tendances sur la durée",
+        "point3": "Vous et la communauté, par catégorie d'avion"
+      }
+    },
+    "tags": {
+      "free": "Gratuit",
+      "freeBase": "Base gratuite",
+      "soonCompanies": "Compagnies : à venir",
+      "proAnalysis": "Analyse détaillée : Pilot Pro",
+      "proTrends": "Tendances et communauté : Pilot Pro"
+    },
+    "notice": {
+      "title": "Pour la simulation seulement.",
+      "text": "Weems ne remplace pas une formation aéronautique et ne sert jamais pour un vrai vol."
+    },
+    "illustration": {
+      "connected": "MSFS 2024 connecté",
+      "aircraft": "A320neo",
+      "cruise": "Croisière FL360",
+      "phase": "Phase 6 sur 12",
+      "duration": "1 h 46",
+      "touchdown": "Toucher",
+      "touchdownValue": "−142 ft/min",
+      "bounces": "0 rebond",
+      "fuel": "Carburant 4,1 t",
+      "live": "27 vols en direct",
+      "signup": "Créer un compte",
+      "install": "Installer le tracker",
+      "fly": "Voler",
+      "done": "C'est tout",
+      "approach": "Approche LEBL 25R",
+      "stable": "Stabilisé à 1 000 ft",
+      "speed": "Vitesse sur l'axe à 500 ft",
+      "sinkRate": "Vario 1 150 ft/min à 800 ft",
+      "zone": "Toucher dans la zone",
+      "average": "Toucher moyen",
+      "trend": "−38 % en 3 mois",
+      "from": "août",
+      "to": "nov."
+    },
+    "next": {
+      "features": {
+        "eyebrow": "En détail",
+        "title": "Toutes les fonctionnalités",
+        "text": "Chaque fonction de Weems, formule par formule.",
+        "link": "Voir les fonctionnalités"
+      },
+      "plans": {
+        "eyebrow": "Formules",
+        "title": "Gratuit pour voler",
+        "text": "Pilot Free pour tous ; Pilot Pro pour l'analyse, Company et Holding pour les compagnies.",
+        "link": "Voir les offres"
+      }
+    }
   }
 }
