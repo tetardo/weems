@@ -11,3 +11,20 @@ export function FeatureText({ feature, value }: { feature: FeatureKey; value: Fe
   if (value === "unlimited") return <>{t("unlimited")}</>;
   return <>{t("label")}</>;
 }
+
+/**
+ * A limit in a short cell, as the feature words it (« 12 mois », « Illimités* »), or the plain
+ * number / « Illimité » when it has no wording of its own. Comparison table and page Fonctionnalités.
+ */
+export function FeatureLimit({
+  feature,
+  value,
+}: {
+  feature: FeatureKey;
+  value: number | "unlimited";
+}) {
+  const t = useTranslations("Plans");
+  const own = `features.${feature}.${value === "unlimited" ? "cellUnlimited" : "cell"}` as const;
+  if (!t.has(own)) return <>{value === "unlimited" ? t("values.unlimited") : value}</>;
+  return <>{t(own, { count: value === "unlimited" ? 0 : value })}</>;
+}

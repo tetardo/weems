@@ -8,7 +8,8 @@
       "flights": "My flights",
       "live": "Live flights",
       "profile": "My public profile",
-      "plans": "Plans"
+      "plans": "Plans",
+      "features": "Features"
     },
     "notMeasured": "not measured",
     "mainNav": "Main navigation",
@@ -34,7 +35,8 @@
       "legal": "Legal notice",
       "terms": "Terms of use",
       "privacy": "Privacy",
-      "contact": "Contact"
+      "contact": "Contact",
+      "features": "Features"
     }
   },
   "Home": {
@@ -1074,6 +1076,150 @@
     "closing": {
       "title": "Every flight counts.",
       "text": "Make each one a step closer to the pilot you want to become."
+    }
+  },
+  "Features": {
+    "meta": {
+      "title": "Features",
+      "description": "Every Weems feature, from the MSFS tracker to running a virtual airline, and the plan that includes each one."
+    },
+    "title": "Everything Weems does",
+    "lead": "From your first recorded flight to running an airline: every feature, what it brings you and the plan that includes it.",
+    "toc": "Features summary",
+    "free": "Free",
+    "fromPlan": "From {plan}",
+    "soon": "Coming soon",
+    "groups": {
+      "fly": "Install the tracker and fly in MSFS: every flight is recorded and shown live, with nothing to type.",
+      "logbook": "Your personal logbook, filled in by itself, with all the data of every flight.",
+      "analysis": "Understand what happened and improve, flight after flight, with benchmarks taken from the regulations.",
+      "company": "Create a virtual airline, recruit pilots, approve their flights and run your rankings."
+    },
+    "items": {
+      "tracker": {
+        "title": "MSFS 2020 and 2024 tracker",
+        "text": "A small Windows app that connects to the simulator, detects departure and arrival and sends the flight, even if the connection drops on the way."
+      },
+      "liveMap": {
+        "title": "Live flight map",
+        "text": "Every pilot in the air on a real-time map: route flown, progress, active airports, search."
+      },
+      "publicProfile": {
+        "title": "Public profile",
+        "text": "A page in your name to share: hours, distance, aircraft, latest flights. You choose what is public."
+      },
+      "flightHistory": {
+        "title": "Full history",
+        "text": "All your flights are kept, with no limit on number or age, free plan included."
+      },
+      "simbriefNextFlight": {
+        "title": "Next SimBrief flight",
+        "text": "Your SimBrief flight plan shows in the logbook; one button starts the tracker ready to go."
+      },
+      "logbookSummary": {
+        "title": "Logbook summary",
+        "text": "At a glance: last flight, hours this month, average touchdown and consistency calendar."
+      },
+      "flightDetail": {
+        "title": "Flight sheet",
+        "text": "For each flight: route on the map, altitude profile, landing and phase timeline."
+      },
+      "flightBands": {
+        "title": "Flight bands",
+        "text": "Altitude, speed, vertical speed, bank, g, thrust, flaps, gear, autopilot… plotted over the whole flight."
+      },
+      "flightNotes": {
+        "title": "Notes and tags",
+        "text": "A private note and tags on each flight, to find an exercise or a route again."
+      },
+      "basicStats": {
+        "title": "Basic statistics",
+        "text": "Hours, touchdowns, flying days and hours, routes, aircraft, airports and distance flown."
+      },
+      "statsPeriod": {
+        "title": "Statistics period",
+        "text": "Statistics cover the last months on the free plan, your whole career with Pilot Pro."
+      },
+      "workOnBasic": {
+        "title": "“To work on”",
+        "text": "Bounces, alerts and go-arounds spotted on your latest flights, so you know what to practise."
+      },
+      "goals": {
+        "title": "Goals",
+        "text": "Set yourself a goal (hours, soft touchdowns, consistency) and follow its progress."
+      },
+      "approachAnalysis": {
+        "title": "Approach analysis",
+        "text": "Speed, vertical speed and centreline at 1,000 and 500 ft, flare, touchdown zone: was your approach stabilised?"
+      },
+      "workOnDetailed": {
+        "title": "Detailed “To work on”",
+        "text": "Each weak point in detail: long flare, speed out of tolerance at 500 ft…"
+      },
+      "flightBandsMarks": {
+        "title": "Marks on the bands",
+        "text": "Moments worth a second look are marked on the bands: high sink rate, bank, over 250 kt below FL100."
+      },
+      "plannedVsActual": {
+        "title": "Planned and actual",
+        "text": "Fuel and times planned by SimBrief compared with what you actually flew."
+      },
+      "community": {
+        "title": "You and the community",
+        "text": "Where do you stand? Percentiles by aircraft category, over every pilot's flights."
+      },
+      "compareFlights": {
+        "title": "Compare two flights",
+        "text": "Two flights side by side: approach, touchdown, fuel, time per phase."
+      },
+      "sameAircraftComparison": {
+        "title": "Same aircraft",
+        "text": "A flight against your other flights on the same aircraft."
+      },
+      "categoryTrends": {
+        "title": "Trends by category",
+        "text": "Your progress month after month, in airliners, turboprops or light aircraft."
+      },
+      "phaseTime": {
+        "title": "Time per phase",
+        "text": "Time spent taxiing, climbing, cruising and on approach, and how it changes."
+      },
+      "goodPractices": {
+        "title": "Good practices",
+        "text": "Flights without alerts, 250 kt below FL100, stabilised approaches, bank on approach: your rates."
+      },
+      "export": {
+        "title": "CSV and PDF export",
+        "text": "Your flights and analyses in a spreadsheet or a printable report."
+      },
+      "companies": {
+        "title": "Airlines",
+        "text": "Create your virtual airline with its public page; several airlines with Holding."
+      },
+      "activePilots": {
+        "title": "Active pilots",
+        "text": "The number of pilots flying for your airline over the last 30 days."
+      },
+      "fleetAndRoutes": {
+        "title": "Fleet, routes and schedules",
+        "text": "Declare your aircraft and network; your pilots pick their flights from it."
+      },
+      "flightValidation": {
+        "title": "Flight validation",
+        "text": "Each flight is checked (route, aircraft, rules) then approved automatically or by staff."
+      },
+      "rankings": {
+        "title": "Rankings",
+        "text": "Hours, touchdowns, consistency: rankings to bring the airline and its public page to life."
+      },
+      "sharedManagement": {
+        "title": "Shared management",
+        "text": "One management team for every airline of the group."
+      },
+      "groupStats": {
+        "title": "Group statistics",
+        "text": "The figures of all your airlines together in one table."
+      }
     }
   }
 }

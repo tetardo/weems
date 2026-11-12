@@ -70,6 +70,7 @@ export {
 } from "./api/live.ts";
 export { SiteStats } from "./api/stats.ts";
 export {
+  FeatureAvailability,
   FeatureGroup,
   FeatureKey,
   FeatureValue,
