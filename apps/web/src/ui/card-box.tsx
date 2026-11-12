@@ -12,7 +12,7 @@ export function CardBox({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-line bg-surface ${flush ? "overflow-hidden" : "px-6 py-5"} ${className}`}
+      className={`rounded-panel border border-line bg-surface ${flush ? "overflow-hidden" : "px-6 py-5"} ${className}`}
     >
       {children}
     </div>

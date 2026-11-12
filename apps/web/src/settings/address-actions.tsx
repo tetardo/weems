@@ -8,7 +8,7 @@ import { CopyIcon, DoneIcon, ExternalIcon } from "../ui/icons.ts";
 const COPIED_MS = 2000;
 
 const ICON_CLASS =
-  "relative grid size-11 flex-none place-items-center rounded-[10px] border transition-colors";
+  "relative grid size-11 flex-none place-items-center rounded-control border transition-colors";
 const ACTIVE_CLASS = "border-line text-ink hover:bg-ink/9";
 
 /** Both icons greyed: nothing online to share yet, `reason` says why. */
@@ -51,7 +51,7 @@ function CopyButton({ path }: { path: string }) {
       {copied && (
         <span
           role="status"
-          className="absolute right-0 bottom-[calc(100%+8px)] whitespace-nowrap rounded-lg bg-ink px-2.5 py-1.5 text-[12.5px] text-bg"
+          className="absolute right-0 bottom-[calc(100%+8px)] whitespace-nowrap rounded-control bg-ink px-2.5 py-1.5 text-[12.5px] text-bg"
         >
           {t("copied")}
         </span>

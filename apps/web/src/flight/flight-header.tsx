@@ -36,7 +36,7 @@ export function FlightHeader({ flight }: { flight: PublicFlightView }) {
         <p className="mt-1 mb-0 flex flex-wrap items-center gap-2 text-muted">
           {flight.aircraft.title}
           {flight.aircraft.model && (
-            <code className="rounded-md bg-line px-1.5 py-px text-[.85em] font-semibold text-ink">
+            <code className="rounded-tag bg-line px-1.5 py-px text-[.85em] font-semibold text-ink">
               {flight.aircraft.model}
             </code>
           )}

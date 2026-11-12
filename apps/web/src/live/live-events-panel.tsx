@@ -43,7 +43,7 @@ export function LiveEventsPanel({ events }: { events: LiveEvents }) {
   const now = useNow({ updateInterval: 30_000 });
   if (events.length === 0) return null;
   return (
-    <section className="w-90 rounded-2xl border border-line bg-surface px-4 py-3 shadow-[0_14px_36px_rgb(0_0_0/.18)]">
+    <section className="w-90 rounded-panel border border-line bg-surface px-4 py-3 shadow-[0_14px_36px_rgb(0_0_0/.18)]">
       <h2 className="m-0 text-[12px] font-bold tracking-[0.12em] text-accent-2 uppercase">
         {t("title")}
       </h2>

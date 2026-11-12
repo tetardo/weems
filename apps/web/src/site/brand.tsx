@@ -25,7 +25,7 @@ export function BrandMark({ size }: { size: number }) {
 /** Name of the site with its symbol (GameLab bar look). Leads to the home page. */
 export function Brand({ name }: { name: string }) {
   return (
-    <Link href="/" className="flex min-h-11 items-center gap-2 rounded-[10px] px-2">
+    <Link href="/" className="flex min-h-11 items-center gap-2 rounded-control px-2">
       <BrandMark size={24} />
       <span className="font-title text-[17px] font-bold tracking-[.01em]">{name}</span>
     </Link>

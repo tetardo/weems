@@ -72,7 +72,7 @@ export function RoutesMap({ routes }: { routes: PilotRoutes["routes"] }) {
   return (
     <div
       ref={container}
-      className="h-72 w-full overflow-hidden rounded-2xl border border-line md:h-[23rem]"
+      className="h-72 w-full overflow-hidden rounded-panel border border-line md:h-[23rem]"
     />
   );
 }

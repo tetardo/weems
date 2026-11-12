@@ -89,7 +89,7 @@ export function VerticalProfile({ points, selected, onSelect }: Props) {
       <svg
         viewBox={`0 0 ${SIZE.width} ${SIZE.height}`}
         preserveAspectRatio="none"
-        className="h-48 w-full cursor-crosshair rounded-[10px] border border-line bg-bg"
+        className="h-48 w-full cursor-crosshair rounded-control border border-line bg-bg"
         onMouseMove={pick}
         onClick={pick}
         onMouseLeave={() => onSelect(null)}

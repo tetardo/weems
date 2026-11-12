@@ -6,6 +6,7 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 @source "../../../../packages/ui/src";
+@import "../../../../packages/ui/src/radius.css";
 
 @theme {
   --color-bg: var(--bg);
@@ -147,7 +148,7 @@ svg.s {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 2px 7px;
-  border-radius: 6px;
+  border-radius: var(--radius-tag);
   background: var(--accent2);
   color: #0e1320;
 }
@@ -178,7 +179,7 @@ svg.s {
   place-items: center;
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   color: var(--muted);
   position: relative;
 }
@@ -188,7 +189,7 @@ svg.s {
   gap: 7px;
   height: 38px;
   padding: 0 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--accent);
   color: var(--on-accent);
   font-weight: 600;
@@ -206,7 +207,7 @@ svg.s {
   padding: 0 10px;
   gap: 6px;
   font-size: 13px;
-  border-radius: 9px;
+  border-radius: var(--radius-inner);
 }
 .btn.danger {
   background: transparent;
@@ -216,7 +217,7 @@ svg.s {
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
 }
 .st {
   display: inline-flex;
@@ -260,7 +261,7 @@ svg.s {
   gap: 7px;
   height: 30px;
   padding: 0 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-inner);
   border: 1px dashed color-mix(in srgb, var(--accent2) 60%, transparent);
   color: var(--accent2);
   font:
@@ -354,7 +355,7 @@ svg.s {
 .svc .ic {
   width: 42px;
   height: 42px;
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   display: grid;
   place-items: center;
   background: var(--soft);
@@ -418,14 +419,14 @@ svg.s {
   display: flex;
   gap: 2px;
   padding: 3px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--surface2);
   border: 1px solid var(--line);
 }
 .tabs a {
   height: 28px;
   padding: 0 11px;
-  border-radius: 7px;
+  border-radius: var(--radius-inner);
   display: flex;
   align-items: center;
   font-size: 13px;
@@ -486,7 +487,7 @@ svg.s {
 .mode .hd .ic {
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   display: grid;
   place-items: center;
   background: var(--soft);
@@ -554,7 +555,7 @@ svg.s {
 }
 .tile {
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   background: var(--surface2);
   border: 1px solid var(--line);
 }
@@ -612,7 +613,7 @@ td.c {
 td .bar2 {
   width: 120px;
   height: 6px;
-  border-radius: 9px;
+  border-radius: var(--radius-inner);
   background: var(--surface2);
   display: inline-block;
   vertical-align: middle;
@@ -742,7 +743,7 @@ td .bar2 i {
 }
 
 .result {
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   border: 1px dashed color-mix(in srgb, var(--success) 55%, transparent);
   background: color-mix(in srgb, var(--success) 7%, transparent);
   padding: 12px 14px;
@@ -761,7 +762,7 @@ td .bar2 i {
     "JetBrains Mono",
     monospace;
   padding: 8px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-inner);
   background: var(--bg);
   border: 1px solid var(--line);
   overflow: hidden;
@@ -796,14 +797,14 @@ td .bar2 i {
   display: flex;
   gap: 2px;
   padding: 3px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--surface2);
   border: 1px solid var(--line);
 }
 .mode2 span {
   flex: 1;
   height: 28px;
-  border-radius: 7px;
+  border-radius: var(--radius-inner);
   display: grid;
   place-items: center;
   font-size: 12.5px;
@@ -829,7 +830,7 @@ td .bar2 i {
   display: flex;
   gap: 8px;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   font-size: 13px;
   color: var(--danger);
   background: color-mix(in srgb, var(--danger) 8%, transparent);
@@ -853,7 +854,7 @@ td .bar2 i {
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  border-radius: 14px;
+  border-radius: var(--radius-box);
   margin-bottom: 20px;
   border: 1px solid;
 }
@@ -883,14 +884,14 @@ td .bar2 i {
   z-index: 21;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: var(--radius-panel);
   padding: 24px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
 }
 .modal .mi {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   display: grid;
   place-items: center;
   color: var(--danger);
@@ -1028,7 +1029,7 @@ td.act .iconbtn {
   white-space: normal;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-box);
   box-shadow: var(--shadow);
   padding: 6px;
 }
@@ -1043,7 +1044,7 @@ td.act .iconbtn {
   gap: 10px;
   height: 38px;
   padding: 0 10px;
-  border-radius: 9px;
+  border-radius: var(--radius-inner);
   font-size: 14px;
 }
 .pop a:first-of-type {
@@ -1070,7 +1071,7 @@ td.act .iconbtn {
 .loginbox .lk {
   width: 46px;
   height: 46px;
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   display: grid;
   place-items: center;
   background: var(--soft);
@@ -1124,7 +1125,7 @@ td.act .iconbtn {
   white-space: nowrap;
   height: 40px;
   padding: 0 10px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   color: var(--muted);
   font-size: 14.5px;
   font-weight: 500;
@@ -1153,7 +1154,7 @@ td.act .iconbtn {
 .stat {
   margin: auto 12px 12px;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   background: var(--surface2);
   border: 1px solid var(--line);
   font-size: 13px;
@@ -1277,7 +1278,7 @@ td.act .iconbtn {
     left: 0;
     width: auto;
     top: 56px;
-    border-radius: 20px 20px 0 0;
+    border-radius: var(--radius-panel) var(--radius-panel) 0 0;
     border-left: 0;
   }
   .hist .it .d {
@@ -1371,7 +1372,7 @@ button:disabled {
 .mode2 button {
   flex: 1;
   height: 28px;
-  border-radius: 7px;
+  border-radius: var(--radius-inner);
   border: 0;
   background: transparent;
   font-size: 12.5px;
@@ -1386,7 +1387,7 @@ button:disabled {
 .tabs button {
   height: 28px;
   padding: 0 11px;
-  border-radius: 7px;
+  border-radius: var(--radius-inner);
   border: 0;
   background: transparent;
   font-size: 13px;
@@ -1406,7 +1407,7 @@ button:disabled {
   width: 100%;
   height: 38px;
   padding: 0 10px;
-  border-radius: 9px;
+  border-radius: var(--radius-inner);
   font-size: 14px;
   border: 0;
   background: transparent;
@@ -1445,7 +1446,7 @@ button:disabled {
   gap: 10px;
   height: 40px;
   padding: 0 10px;
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   color: var(--muted);
   font-size: 14.5px;
   font-weight: 500;

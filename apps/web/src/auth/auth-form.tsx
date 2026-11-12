@@ -43,7 +43,7 @@ export function AuthForm({ path, submitLabel, children }: Props) {
   return (
     <form onSubmit={submit}>
       {search.has("sig") && (
-        <p className="mb-4 rounded-md border-l-4 border-accent bg-accent/14 px-3 py-2">
+        <p className="mb-4 rounded-tag border-l-4 border-accent bg-accent/14 px-3 py-2">
           {t("tracker")}
         </p>
       )}
@@ -51,7 +51,7 @@ export function AuthForm({ path, submitLabel, children }: Props) {
       {error && (
         <p
           role="alert"
-          className="mb-4 rounded-md border-l-4 border-danger bg-danger/14 px-3 py-2 font-semibold text-danger"
+          className="mb-4 rounded-tag border-l-4 border-danger bg-danger/14 px-3 py-2 font-semibold text-danger"
         >
           {t(`errors.${error}`)}
         </p>

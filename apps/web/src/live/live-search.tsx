@@ -37,7 +37,7 @@ function SearchResults({
     <ul
       id={id}
       role="listbox"
-      className="absolute inset-x-0 top-full z-30 mt-1 overflow-hidden rounded-[10px] border border-line bg-surface shadow-[0_14px_36px_rgb(0_0_0/.2)]"
+      className="absolute inset-x-0 top-full z-30 mt-1 overflow-hidden rounded-control border border-line bg-surface shadow-[0_14px_36px_rgb(0_0_0/.2)]"
     >
       {found.length === 0 && <li className="px-3 py-2 text-muted">{t("none")}</li>}
       {found.map((flight) => (
@@ -83,7 +83,7 @@ export function LiveSearch({
   };
   return (
     <div className="relative w-full">
-      <label className="flex min-h-11 items-center gap-2 rounded-[10px] border border-line bg-surface px-3 focus-within:border-accent">
+      <label className="flex min-h-11 items-center gap-2 rounded-control border border-line bg-surface px-3 focus-within:border-accent">
         <SearchIcon size={18} className="text-muted" aria-hidden="true" />
         <span className="sr-only">{t("label")}</span>
         <input
@@ -101,7 +101,7 @@ export function LiveSearch({
           }}
           className="min-w-0 flex-1 bg-transparent py-2 outline-none focus-visible:outline-none"
         />
-        <kbd className="rounded-md border border-line px-1.5 text-[12px] text-muted max-md:hidden">
+        <kbd className="rounded-tag border border-line px-1.5 text-[12px] text-muted max-md:hidden">
           /
         </kbd>
       </label>

@@ -1,0 +1,20 @@
+/*
+ * Corner radii of the whole product (site, admin console, shared components), one value per
+ * level of frame. Imported by the CSS of each application; Tailwind turns each token into a
+ * `rounded-<name>` class, and plain CSS reads it as `var(--radius-<name>)`.
+ * `static`: the variables exist even when no class uses them (the console's own CSS reads them).
+ */
+@theme static {
+  /* Photo of the home page. */
+  --radius-hero: 12px;
+  /* Cards, form sections, floating bar, menus, dialogs. */
+  --radius-panel: 8px;
+  /* Frames inside a card, drop-down lists. */
+  --radius-box: 6px;
+  /* Buttons, fields, search, legends, small maps. */
+  --radius-control: 6px;
+  /* Items inside a control: tabs, options, segmented choices. */
+  --radius-inner: 4px;
+  /* Badges, alerts, keys, split-flap digits. */
+  --radius-tag: 3px;
+}

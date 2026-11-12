@@ -59,7 +59,7 @@ function Row({ row, phone }: { row: BoardRow; phone: boolean }) {
           </span>
         )}
         <span
-          className={`rounded-[5px] px-2 py-0.5 text-xs font-bold tracking-[.06em] uppercase ${PHASE_TONE[row.phase]}`}
+          className={`rounded-tag px-2 py-0.5 text-xs font-bold tracking-[.06em] uppercase ${PHASE_TONE[row.phase]}`}
         >
           {t(`phases.${row.phase}`)}
         </span>
@@ -158,7 +158,7 @@ export function DeparturesBoard({ stats, apiUrl }: { stats: SiteStats | null; ap
   return (
     <section
       aria-label={t("title")}
-      className="overflow-hidden rounded-2xl border border-board-edge bg-board font-mono text-board-ink shadow-floating"
+      className="overflow-hidden rounded-panel border border-board-edge bg-board font-mono text-board-ink shadow-floating"
     >
       <BoardHead stats={stats} live={live} />
       <BoardTable rows={rows} />

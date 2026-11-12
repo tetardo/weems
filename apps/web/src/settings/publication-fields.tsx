@@ -63,7 +63,7 @@ export function PublicationFields({ profile, siteHost }: { profile: MyProfile; s
         switchChanged={isPublic !== profile.isPublic}
       />
       {isPublic && (
-        <label className="flex items-start gap-2.5 rounded-xl bg-accent/12 px-3.5 py-3 text-sm">
+        <label className="flex items-start gap-2.5 rounded-box bg-accent/12 px-3.5 py-3 text-sm">
           <input
             type="checkbox"
             name="consent"

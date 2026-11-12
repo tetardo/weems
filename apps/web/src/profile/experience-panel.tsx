@@ -38,7 +38,7 @@ function EngineTotals({ experience }: { experience: Experience }) {
   return (
     <div className="mt-3 mb-1 flex gap-2.5">
       {boxes.map(({ key, total }) => (
-        <div key={key} className="relative flex-1 rounded-xl border border-line px-3 py-2">
+        <div key={key} className="relative flex-1 rounded-box border border-line px-3 py-2">
           <span className="block text-xs text-muted">{t(key)}</span>
           <b className="font-title text-lg">{formatDuration(total.airborneS)}</b>
           <small className="ml-1 text-xs text-muted">

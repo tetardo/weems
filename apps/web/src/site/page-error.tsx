@@ -12,7 +12,7 @@ export function PageError({ retry }: { retry: () => void }) {
   const t = useTranslations("Site.error");
   return (
     <main className="grid gap-3 p-4">
-      <p className="rounded-md border-l-4 border-danger bg-danger/12 px-3 py-2">{t("text")}</p>
+      <p className="rounded-tag border-l-4 border-danger bg-danger/12 px-3 py-2">{t("text")}</p>
       <div>
         <Button variant="outline" onClick={retry}>
           {t("retry")}
