@@ -1,0 +1,19 @@
+flowchart TB
+  CAT["Catalogue des formules (API, versionné)<br/>formule → droits + limites"]
+  SUBU["Abonnement du pilote<br/>free / pro"]
+  SUBO["Abonnement de chaque compagnie<br/>company / holding"]
+  OVR["Ajustements admin<br/>offert, testeur alpha, date de fin"]
+  PAY["Service de paiement (plus tard, Paddle ?)<br/>webhooks → met à jour les abonnements"]
+  PAY --> SUBU
+  PAY --> SUBO
+  CAT --> CALC
+  SUBU --> CALC
+  SUBO --> CALC
+  OVR --> CALC
+  CALC["Calcul des droits (module entitlements de l'API)<br/>union des sources, limites au plus large"]
+  CALC --> ME["GET /v1/me<br/>formule affichée + droits + limites"]
+  CALC --> GUARD["Garde dans chaque route<br/>refus 403 RFC 9457 ou aperçu fictif"]
+  ME --> WEB["Site web"]
+  ME --> TRK["Tracker"]
+  ME --> IPAD["App iPad"]
+  GUARD --> DATA["Données réelles<br/>jamais envoyées sans le droit"]

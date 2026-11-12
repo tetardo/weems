@@ -12,7 +12,7 @@ describe("profile links", () => {
   it("points the logbook to the pilot's own photo and flight pages", () => {
     const links = logbookLinks(null);
     expect(links.photo).toBe("/api/me/profile/photo");
-    expect(links.page).toBe("/logbook");
+    expect(links.page).toBe("/logbook/public");
     expect(links.flight("f1")).toBe("/flights/f1");
     expect(links.share).toBeNull();
     expect(logbookLinks("greg-fr").share).toBe("/pilots/greg-fr");

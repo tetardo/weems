@@ -1,3 +1,4 @@
+import { gunzipSync } from "node:zlib";
 import { eq, inArray, sql } from "drizzle-orm";
 import type { TrackPoint } from "@weems/contrats";
 import type { Database } from "../../db/client.ts";
@@ -23,6 +24,8 @@ export interface TrackStore {
   find(flightId: string): Promise<StoredTrack | null>;
   /** Inserts unless the flight already has a trajectory. Returns false when it had one. */
   insert(flightId: string, track: NewTrack): Promise<boolean>;
+  /** Every received point, decompressed (flight bands); null without trajectory. */
+  recorded(flightId: string): Promise<TrackPoint[] | null>;
   /** Simplified points of each trajectory found; flights without one are left out. */
   simplifiedOf(flightIds: readonly string[]): Promise<Map<string, TrackPoint[]>>;
   /** First and last point of each trajectory found; flights without one are left out. */
@@ -61,6 +64,15 @@ export class PostgresTrackStore implements TrackStore {
       .onConflictDoNothing()
       .returning({ flightId: flightTracks.flightId });
     return inserted.length > 0;
+  }
+
+  async recorded(flightId: string): Promise<TrackPoint[] | null> {
+    const rows = await this.db
+      .select({ points: flightTracks.points })
+      .from(flightTracks)
+      .where(eq(flightTracks.flightId, flightId));
+    const row = rows[0];
+    return row ? (JSON.parse(gunzipSync(row.points).toString("utf8")) as TrackPoint[]) : null;
   }
 
   async endpoints(flightIds: readonly string[]): Promise<Map<string, TrackEndpoints>> {

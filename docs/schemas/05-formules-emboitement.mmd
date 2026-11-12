@@ -1,0 +1,11 @@
+flowchart TB
+  subgraph PIL["Axe pilote : l'abonnement appartient à la personne"]
+    direction LR
+    FREE["Pilot Free<br/>gratuit<br/>tracker, carnet, direct, profil"] -->|"+ options"| PRO["Pilot Pro<br/>analyse des vols<br/>(liste à affiner)"]
+  end
+  subgraph ORG["Axe compagnie : l'abonnement appartient à la compagnie"]
+    direction LR
+    CO["Company<br/>1 compagnie, X pilotes"] -->|"+ compagnies, + pilotes"| HO["Holding<br/>5 compagnies ?<br/>pilotes illimités (usage raisonnable)"]
+  end
+  ORG -->|"le titulaire reçoit Pilot Pro"| PRO
+  ORG -->|"les membres restent Pilot Free<br/>(à confirmer)"| FREE

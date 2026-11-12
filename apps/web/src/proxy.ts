@@ -11,7 +11,16 @@ const intl = createMiddleware(routing);
  * Pages open without an account: the home page ("") and the live map (spec J4 accueil), login,
  * sign-up and the public profiles (spec J4); everything else needs a session (closed alpha, J3).
  */
-const PUBLIC_PAGES = new Set(["", "live", "login", "signup", "pilots"]);
+const PUBLIC_PAGES = new Set([
+  "",
+  "discover",
+  "live",
+  "login",
+  "signup",
+  "pilots",
+  "plans",
+  "features",
+]);
 
 function localeAndPage(pathname: string): { locale: string; page: string } {
   const [first = "", second = ""] = pathname.split("/").filter(Boolean);

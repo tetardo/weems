@@ -55,6 +55,15 @@ export class TracksService {
     };
   }
 
+  /** Every recorded point with its phase (flight bands); 404 without trajectory. */
+  async recorded(caller: Caller, flightId: string): Promise<TrackView["points"]> {
+    const flight = await this.flights.read(caller, flightId);
+    const points = await this.store.recorded(flightId);
+    if (!points) throw notFound(`Flight ${flightId} has no trajectory yet.`);
+    const phases = phasesAt(phaseStarts(flight.events), timesOf(points));
+    return points.map((point, i) => ({ ...point, phase: phases[i] ?? null }));
+  }
+
   /*
    * The two readings below serve public profiles (map, day and night hours). No access check:
    * the caller (profiles service) passes only flights it may show.

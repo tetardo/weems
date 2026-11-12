@@ -14,6 +14,7 @@ Une modification n'est terminée que si **tous** ces points sont vrais :
 4. La vérification des types, le contrôle du style et tous les tests passent, sur le Mac et dans l'intégration continue.
 5. Elle a été relue par Claude (`/code-review`), avec `/security-review` si elle touche la connexion, les droits, les données personnelles ou les entrées venant de l'extérieur.
 6. La documentation concernée est à jour : spécification, `CLAUDE.md` de l'application, `README.md` si l'usage change.
+   Une fonction visible par le pilote, nouvelle ou modifiée, met aussi à jour le catalogue des formules (clé, ligne, textes : fiche [015](../decisions/015-catalogue-des-formules.md)) : la page Offres en dépend.
 7. Elle tourne sur le Mac de Greg (sauf le connecteur MSFS, testé sur le PC Windows).
 
 ## 2. Branches et fusions
