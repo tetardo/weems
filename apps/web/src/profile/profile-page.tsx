@@ -40,7 +40,7 @@ function ProfileMap({ routes }: { routes: PilotRoutes }) {
  * A public pilot profile (spec J4), in the order validated on the mock-up: header, map of the
  * flights, statistics (charts then tiles), experience by aircraft category, flights. Companies
  * (lot 3) and medals (beside the experience) come later: no empty block until then.
- * Also the pilot's own logbook (`links`, and `notice` above the header).
+ * Also the pilot's own logbook (`links`, and `notice` under the header).
  */
 export function ProfilePage({
   pilot,
@@ -60,8 +60,8 @@ export function ProfilePage({
   const t = useTranslations("Profile");
   return (
     <SectionMain>
-      {notice}
       <ProfileHeader pilot={pilot} links={links} />
+      {notice}
       <SectionTitle icon={MapIcon} title={t("map.title")}>
         <Note>
           {t("map.note", { airports: pilot.stats.airports, flights: pilot.stats.flights })}

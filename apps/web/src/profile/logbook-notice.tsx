@@ -11,7 +11,7 @@ export function LogbookNotice({ publicHandle }: { publicHandle: string | null })
   const Icon = publicHandle ? ShowIcon : PrivateIcon;
   const link = "font-semibold text-link hover:underline";
   return (
-    <p className="m-0 mb-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-muted">
+    <p className="m-0 mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-muted">
       <span className="mr-auto flex items-center gap-3">
         <Icon size={17} aria-hidden="true" className="flex-none" />
         {publicHandle ? t("public") : t("private")}
