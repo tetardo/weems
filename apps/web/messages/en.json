@@ -46,11 +46,8 @@
       "flights": "Flights",
       "live": "Airborne",
       "flight": "Flight",
-      "from": "From",
-      "to": "To",
       "phase": "Phase",
       "level": "Level",
-      "ground": "GND",
       "feet": "{value, number} ft",
       "none": "No flight right now.",
       "phases": {
@@ -59,12 +56,16 @@
         "cruise": "Cruise",
         "descent": "Descent",
         "approach": "Approach"
-      }
+      },
+      "route": "Route",
+      "direct": "Live",
+      "more": "+ {count, plural, one {# flight} other {# flights}}",
+      "seeMap": "See the live map"
     }
   },
   "Live": {
     "title": "Live map",
-    "count": "{count, plural, =0 {No flight in progress} one {# flight in progress} other {# flights in progress}}",
+    "count": "{count, plural, =0 {No flight} one {# flight} other {# flights}}",
     "connection": {
       "connecting": "Connecting…",
       "open": "Live",
@@ -98,6 +99,32 @@
       "copied": "Link copied",
       "shareTitle": "{callsign} live on Weems",
       "recenter": "Recenter"
+    },
+    "showNight": "Day / night",
+    "search": {
+      "label": "Search a flight",
+      "placeholder": "Callsign, pilot, airport",
+      "none": "No flight found"
+    },
+    "list": {
+      "title": "Flying",
+      "sortLabel": "Sort",
+      "sorts": {
+        "arrival": "Closest to arrival",
+        "callsign": "Callsign",
+        "phase": "Phase"
+      },
+      "toggle": "Show or hide the list of flights"
+    },
+    "legend": {
+      "label": "Aircraft categories: click to hide or show"
+    },
+    "events": {
+      "title": "Latest events",
+      "takeoff": "<strong>{callsign}</strong> took off{airport, select, none {} other { from {airport}}}",
+      "landing": "<strong>{callsign}</strong> landed{airport, select, none {} other { at {airport}}}",
+      "started": "<strong>{name}</strong> started a flight{from, select, none {} other { ({from} → {to})}}",
+      "vs": "{vs} ft/min"
     }
   },
   "Phases": {

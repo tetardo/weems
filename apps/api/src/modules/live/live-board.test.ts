@@ -1,4 +1,4 @@
-import type { PositionReport } from "@weems/contrats";
+import { MAX_LIVE_EVENTS, type PositionReport } from "@weems/contrats";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { LiveFlightInfo } from "../flights/live-feed.ts";
 import { LiveBoard } from "./live-board.ts";
@@ -52,6 +52,7 @@ describe("live board", () => {
         },
       ],
       removed: [],
+      events: [],
     });
     expect(board.takeUpdate()).toBeNull();
   });
@@ -81,7 +82,7 @@ describe("live board", () => {
   it("takes a closed flight off the map", () => {
     board.position(info, report(1));
     board.closed(info.flightId);
-    expect(board.takeUpdate()).toEqual({ flights: [], removed: [info.flightId] });
+    expect(board.takeUpdate()).toEqual({ flights: [], removed: [info.flightId], events: [] });
   });
 
   it("lists every flight on the map in the snapshot", () => {
@@ -107,5 +108,84 @@ describe("live board", () => {
     now += 30_000;
     await board.refreshPilots();
     expect(board.takeUpdate()?.flights[0]?.pilot).toBeNull();
+  });
+
+  describe("events", () => {
+    const phaseChanged = (from: string, to: string) => ({
+      seq: 1,
+      at: "2026-11-11T08:01:00.000Z",
+      type: "phaseChanged" as const,
+      context: { from, to },
+    });
+    const touchdown = {
+      seq: 2,
+      at: "2026-11-11T09:00:00.000Z",
+      type: "touchdown" as const,
+      context: { vs: -142 },
+    };
+
+    it("announces a take-off and a landing with its vertical speed, from the flight's airports", () => {
+      board.position(info, report(1));
+      board.takeUpdate();
+      board.events(info.flightId, [
+        phaseChanged("TAXI_OUT", "TAKEOFF"),
+        phaseChanged("TAKEOFF", "CLIMB"),
+      ]);
+      board.events(info.flightId, [touchdown]);
+      const events = board.takeUpdate()?.events;
+      expect(events?.map((e) => [e.kind, e.airportIcao, e.touchdownVs])).toEqual([
+        ["takeoff", "LFLL", null],
+        ["landing", "LFMN", -142],
+      ]);
+      expect(events?.[0]).toMatchObject({ callsign: "WMS101", pilot: null });
+      expect(board.snapshot().events.map((e) => e.kind)).toEqual(["landing", "takeoff"]);
+    });
+
+    it("never announces the start of a flight whose pilot is not public", () => {
+      board.position(info, { ...report(1), phase: "BOARDING", onGround: true });
+      expect(board.takeUpdate()?.events).toEqual([]);
+    });
+
+    it("does not announce as started a flight first seen in the air (API restarted)", async () => {
+      board.showPilots(new LivePilots(() => Promise.resolve(new Map([[info.pilotId, camille]]))));
+      board.position(info, report(1));
+      await board.refreshPilots();
+      expect(board.takeUpdate()?.events).toEqual([]);
+    });
+
+    it("announces the start of a public pilot's flight, with the planned route", async () => {
+      board.showPilots(new LivePilots(() => Promise.resolve(new Map([[info.pilotId, camille]]))));
+      board.position(info, { ...report(1), phase: "BOARDING", onGround: true });
+      board.position(info, report(2));
+      await board.refreshPilots();
+      expect(board.takeUpdate()?.events).toEqual([
+        {
+          at: report(1).at,
+          flightId: info.flightId,
+          callsign: "WMS101",
+          kind: "started",
+          airportIcao: "LFLL",
+          arrivalIcao: "LFMN",
+          touchdownVs: null,
+          pilot: camille,
+        },
+      ]);
+    });
+
+    it("ignores events of a flight that is not on the map", () => {
+      board.events(info.flightId, [touchdown]);
+      expect(board.takeUpdate()).toBeNull();
+    });
+
+    it("keeps the latest events for a new spectator, newest first", () => {
+      board.position(info, report(1));
+      for (let i = 0; i < MAX_LIVE_EVENTS + 2; i += 1) {
+        board.events(info.flightId, [{ ...touchdown, at: new Date(now + i * 1000).toISOString() }]);
+      }
+      board.takeUpdate();
+      const latest = board.snapshot().events;
+      expect(latest).toHaveLength(MAX_LIVE_EVENTS);
+      expect(latest[0]?.at).toBe(new Date(now + (MAX_LIVE_EVENTS + 1) * 1000).toISOString());
+    });
   });
 });

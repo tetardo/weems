@@ -6,11 +6,18 @@ export {
   destinationPoint,
   distanceBetweenNm,
   distanceNm,
+  EARTH_RADIUS_NM,
   type LatLon,
   normalizeDeg,
   RAD,
 } from "./telemetry/geo.ts";
 export { Sample } from "./telemetry/sample.ts";
+export {
+  NIGHT_BELOW_DEG,
+  subsolarPoint,
+  type SubsolarPoint,
+  sunElevationDeg,
+} from "./telemetry/sun.ts";
 export { AircraftInfo, Airframe, EngineType, Simulator } from "./telemetry/aircraft.ts";
 export { AircraftCategory, AircraftClass } from "./api/aircraft-class.ts";
 export { Touchdown } from "./telemetry/touchdown.ts";
@@ -42,7 +49,15 @@ export {
   FlightTimes,
 } from "./api/flight-list.ts";
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
-export { LiveFlight, LivePilot, LiveRoute, LiveSnapshot, LiveUpdate } from "./api/live.ts";
+export {
+  LiveEvent,
+  LiveFlight,
+  LivePilot,
+  LiveRoute,
+  LiveSnapshot,
+  LiveUpdate,
+  MAX_LIVE_EVENTS,
+} from "./api/live.ts";
 export { SiteStats } from "./api/stats.ts";
 export {
   HOME_IMAGE_MAX_BYTES,

@@ -3,7 +3,7 @@
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
 J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
-J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public ») ; sur la carte en direct, tous les avions montrent leur trajet (bouton « Trajets » pour les masquer) et le vol sélectionné sa trace, l'orthodromie restante, ses aéroports et sa progression ; bulle au survol d'un avion (pilote si son profil est public), clic = vol suivi avec lien vers le profil, feuille en bas sur téléphone, lien `/live?flight=<id>`. Accueil public `/` (spec J4 accueil) : image plein écran par thème, slogan, tableau des départs à palettes (compteurs de `GET /v1/stats`, vols du flux en direct) ; la carte en direct `/live` s'ouvre aussi sans compte ; barre v2 sur toutes les pages depuis le 12/11 (liens « Mon carnet de bord » et « Mes vols » pour le pilote connecté et « Vols en direct », « Créer un compte » et icône de connexion ou menu du pilote, thème, FR | EN, bouton menu sous 768 px, plus de dock) et pied de page sur une ligne (accueil et profils publics). « Mon carnet de bord » (`/logbook`, page d'arrivée après connexion, `LANDING_PAGE` dans `auth/session-cookie.ts`) : la page du profil public vue par son pilote, en aperçu tant qu'elle n'est pas publique (`profile/logbook-notice.tsx`, liens dans `profile/profile-links.ts`).
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public ») ; sur la carte en direct, tous les avions montrent leur trajet (bouton « Trajets » pour les masquer) et le vol sélectionné sa trace, l'orthodromie restante, ses aéroports et sa progression ; bulle au survol d'un avion (pilote si son profil est public), clic = vol suivi avec lien vers le profil, feuille en bas sur téléphone, lien `/live?flight=<id>` ; recherche, zone de nuit, liste « En vol », filtres par catégorie, aéroports actifs, derniers événements. Accueil public `/` (spec J4 accueil) : image par thème dans une carte arrondie, slogan à gauche, tableau des départs à palettes à droite (compteurs de `GET /v1/stats`, 8 vols du flux en direct sur une ligne chacun, 4 sur téléphone, niveau au survol, « + N vols » vers `/live`) ; la carte en direct `/live` s'ouvre aussi sans compte ; barre v2 sur toutes les pages depuis le 12/11 (liens « Mon carnet de bord » et « Mes vols » pour le pilote connecté et « Vols en direct », « Créer un compte » et icône de connexion ou menu du pilote, thème, FR | EN, bouton menu sous 768 px, plus de dock) et pied de page sur une ligne (accueil et profils publics). « Mon carnet de bord » (`/logbook`, page d'arrivée après connexion, `LANDING_PAGE` dans `auth/session-cookie.ts`) : la page du profil public vue par son pilote, en aperçu tant qu'elle n'est pas publique (`profile/logbook-notice.tsx`, liens dans `profile/profile-links.ts`).
 
 ## Où trouver quoi
 
@@ -13,7 +13,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 | Carte en direct (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
 | Site minimal (J2) | `../../docs/cahiers-des-charges/web/spec-J2-site-minimal.md` |
 | Trajectoire et progression en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md` |
-| Pilote, survol et vol suivi en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-direct-pilote.md` |
+| Pilote, survol, vol suivi et enrichissements du direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-direct-pilote.md` |
 | Comptes et connexion (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
 | Page d'accueil (J4) | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md`, images choisies dans la console : `spec-J4-personnalisation.md` |
@@ -38,7 +38,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 messages/              textes en français et en anglais
 src/
   app/[locale]/        routes Next.js (pages et mise en page), sans logique
-    (home)/              accueil public : barre posée sur l'image, pied de page
+    (home)/              accueil public : barre et pied de page des pages publiques
     (app)/               pages du pilote connecté (et /live sans session) : même barre, sans pied de page
     (auth)/              connexion et inscription, panneau centré
     (public)/            pages ouvertes à tous (profils publics) : même barre, pied de page
@@ -94,11 +94,19 @@ src/
     all-routes.ts         trajets de tous les vols (fait / reste) en GeoJSON
     all-routes-layers.ts  calques pâles des trajets de tous les vols, trajet de l'avion survolé en surbrillance
     use-live-routes.ts    trajets affichés : tous, ou seulement l'aperçu de l'avion survolé
-    use-show-routes.ts    bouton « Trajets », choix gardé dans le navigateur
+    use-stored-switch.ts  boutons « Trajets » et « Jour / nuit », choix gardé dans le navigateur
     aircraft-shapes.ts    silhouette et taille par catégorie d'avion, nom des images (testé)
     aircraft-icons.ts     dessin des silhouettes, couleur de la catégorie (lue dans global.css), grise si signal perdu
     live-map.tsx          carte MapLibre : clic, survol, recentrage
-    live-view.tsx, live-controls.tsx   page /live, compteur et bouton « Trajets »
+    live-view.tsx         page /live : assemblage ; use-following.ts : vol suivi, survol, recentrage
+    live-sidebar.tsx, live-controls.tsx   colonne de gauche : recherche, compteur, « Trajets », « Jour / nuit », liste
+    live-search.tsx, flight-finder.ts   recherche (indicatif, pilote public, aéroport, touche « / ») et tri de la liste (testés)
+    flight-list.tsx       liste « En vol » triable, feuille repliée en bas sur téléphone
+    category-filter.ts, category-legend.tsx, use-hidden-categories.ts   légende cliquable : compte et masque les catégories (testé)
+    night-area.ts         zone de nuit (soleil sous −6°, calcul commun de packages/contrats), testée
+    airport-activity.ts   aéroports actifs : départs et arrivées en cours (testé)
+    overlay-layers.ts, use-overlays.ts   calques de la nuit et des aéroports actifs
+    events-store.ts, live-events-panel.tsx   derniers événements du flux (décollages, atterrissages, débuts de vol publics)
     flight-facts.tsx      un vol d'un coup d'œil (indicatif, catégorie, progression, phase, niveau, vitesse), commun à la bulle et au panneau
     pilot-line.tsx        pilote au profil public, ou « Pilote Weems » anonyme
     flight-hover-card.tsx, card-position.ts   bulle au survol (souris seulement) et sa place (testé)

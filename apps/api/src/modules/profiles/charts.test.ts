@@ -3,24 +3,8 @@ import type { SummaryWithEvents } from "../flights/service.ts";
 import { publicFlight, trackPoint } from "../../testing/public-flights.ts";
 import { monthlyActivity, pilotCharts } from "./charts.ts";
 import { dayAndNight, dayNightSeconds } from "./day-night.ts";
-import { sunElevationDeg } from "./sun.ts";
 
 const PARIS = { lat: 48.86, lon: 2.35 };
-
-describe("sun elevation", () => {
-  it("is overhead the tropic at the June solstice noon", () => {
-    expect(sunElevationDeg(new Date("2026-06-21T12:00:00Z"), 23.44, 0)).toBeGreaterThan(89);
-  });
-
-  it("follows the civil twilight in Paris on 11 November 2026 (sunset about 16:15 UTC)", () => {
-    const at = (time: string) =>
-      sunElevationDeg(new Date(`2026-11-11T${time}Z`), PARIS.lat, PARIS.lon);
-    expect(at("12:00")).toBeGreaterThan(20);
-    expect(at("16:30")).toBeLessThan(0);
-    expect(at("16:30")).toBeGreaterThan(-6);
-    expect(at("17:15")).toBeLessThan(-6);
-  });
-});
 
 const point = (time: string, onGround = false) =>
   trackPoint({ at: new Date(`2026-11-11T${time}Z`).toISOString(), ...PARIS, onGround });

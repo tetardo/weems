@@ -2,7 +2,7 @@
 
 Date : 12/11/2026. Demande de Greg : « créer une nouvelle page qui sera la page d'accueil : image pleine page, garder le menu en haut, quelques compteurs par-dessus l'image (pilotes, vols, vols en direct), le logo et un slogan ».
 
-Maquettes validées par Greg le 12/11/2026 entre 1 h 45 et 2 h 30 : piste F « tableau des départs », barre v2, pied de page P2, icône « Mon compte » (copies dans le dossier du projet `accueil/`).
+Maquettes validées par Greg le 12/11/2026 entre 1 h 45 et 2 h 30 : piste F « tableau des départs », barre v2, pied de page P2, icône « Mon compte » (copies dans le dossier du projet `accueil/`). Mise en page revue et validée le 12/11/2026 à 4 h 33 : image dans une carte arrondie sous la barre (plus de plein écran), tableau « B » à droite face au texte, 8 vols sur une ligne chacun (maquette `accueil/tableau-droite/8-vols-une-ligne/`).
 
 ## 1. Ce que voit le visiteur
 
@@ -10,12 +10,12 @@ Maquettes validées par Greg le 12/11/2026 entre 1 h 45 et 2 h 30 : piste F « t
 
 | Zone | Contenu |
 | --- | --- |
-| Fond | Image plein écran, une par thème (clair, sombre), voile dégradé pour la lisibilité du texte ; sans image, dégradé « coucher de soleil » |
+| Carte image | Sous la barre, carte aux coins arrondis de la largeur de la barre (pas de plein écran) ; une image par thème (clair, sombre), voile dégradé à gauche pour la lisibilité du texte ; sans image, dégradé « coucher de soleil » |
 | Texte (à gauche) | Logo Waterline et « Weems », slogan « Décollez. Weems s'occupe du carnet. », phrase d'accroche, deux boutons : « Créer mon compte gratuit » (pilote connecté : « Mes vols ») et « Voir les vols en direct » |
-| Tableau des départs (en bas) | En-tête « En vol · In flight » et trois compteurs à palettes : pilotes, vols, en vol ; puis les vols en cours : indicatif, départ, arrivée, phase (étiquette colorée), niveau |
+| Tableau des départs (à droite, face au texte) | En-tête « En vol · In flight » avec le repère « Direct », trois compteurs à palettes côte à côte : pilotes, vols, en vol ; puis les vols en cours, un par ligne : indicatif, « départ → arrivée », phase (étiquette colorée) ; le niveau n'apparaît qu'au survol de la ligne ; en bas, « + N vols · voir la carte en direct → » vers `/live` |
 | Pied de page P2 | Une ligne centrée : © année Weems · Mentions légales · Conditions d'utilisation · Confidentialité · Contact (pages fictives pour l'instant) |
 
-Sur téléphone : texte en haut, tableau en bas (sans la colonne Niveau), pied de page sur deux lignes.
+Sous 1 024 px, le tableau passe sous le texte. Sur téléphone (sous 768 px) : 4 vols seulement, N recalculé en conséquence ; pied de page sur deux lignes.
 
 ## 2. Barre du haut des pages publiques (barre v2)
 
@@ -52,8 +52,9 @@ Limite de débit par adresse comme les pages publiques ; réponse gardée 30 s e
 ## 5. Tableau des vols en cours
 
 - Source : le flux public `/v1/live/stream` (déjà utilisé par la carte), lu par le navigateur.
-- Lignes : au plus 5 vols, ceux dont la position est la plus récente ; signal perdu exclu.
-- Niveau : altitude en centaines de pieds, `FL350` au-dessus de 10 000 ft, sinon en pieds (`4 500 ft`), « Sol » au sol.
+- Lignes : au plus 8 vols sur ordinateur, 4 sur téléphone, ceux dont la position est la plus récente ; signal perdu exclu.
+- « + N vols » : N = vols du flux en direct (signal perdu compris, comme sur la carte) moins les vols affichés ; à 0, seul « Voir la carte en direct → » reste.
+- Niveau (au survol de la ligne) : altitude en centaines de pieds, `FL350` au-dessus de 10 000 ft, sinon en pieds (`4 500 ft`) ; rien au sol (l’étiquette « Au sol » le dit déjà).
 - Phase : les 12 phases du tracker regroupées en 5 étiquettes (Au sol, Montée, Croisière, Descente, Approche).
 - Aucun vol : « Aucun vol en ce moment » à la place des lignes.
 

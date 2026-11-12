@@ -1,0 +1,11 @@
+flowchart LR
+    T[Tracker] -- "positions" --> B[API : tableau du direct]
+    T -- "événements (phase, toucher)" --> B
+    B -- "décollage, atterrissage, début de vol d'un pilote public" --> E[(10 derniers événements)]
+    B -- "flux SSE : vols + événements" --> S[Site : /live]
+    E -- "à la connexion" --> S
+    S --> R[Recherche : indicatif, pilote, aéroport]
+    S --> L[Liste « En vol » triable]
+    S --> F[Filtres par catégorie]
+    S --> N[Nuit : soleil sous -6°, calcul local]
+    S --> AA[Aéroports actifs : départs + arrivées]
