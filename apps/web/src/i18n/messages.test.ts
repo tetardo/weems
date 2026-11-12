@@ -1,4 +1,12 @@
-import { CloseReason, FLIGHT_PHASES, FlightAlert, FlightEventType } from "@weems/contrats";
+import {
+  CloseReason,
+  FeatureGroup,
+  FeatureKey,
+  FLIGHT_PHASES,
+  FlightAlert,
+  FlightEventType,
+  PlanId,
+} from "@weems/contrats";
 import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json" with { type: "json" };
 import fr from "../../messages/fr.json" with { type: "json" };
@@ -22,6 +30,11 @@ describe("translations (spec J2, criterion 5)", () => {
     ["Events", FlightEventType.options],
     ["Alerts", FlightAlert.options],
     ["Status", [...CloseReason.options, "open"]],
+    // Page Offres (decision 015): every feature of the shared list has its label.
+    ["Plans.features", FeatureKey.options.map((key) => `${key}.label`)],
+    ["Plans.names", PlanId.options],
+    ["Plans.descriptions", PlanId.options],
+    ["Plans.groups", FeatureGroup.options],
   ] as const)("translates every value shown under %s", (namespace, values) => {
     for (const value of values) expect(keys(fr)).toContain(`${namespace}.${value}`);
   });

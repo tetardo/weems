@@ -60,6 +60,17 @@ export {
 } from "./api/live.ts";
 export { SiteStats } from "./api/stats.ts";
 export {
+  FeatureGroup,
+  FeatureKey,
+  FeatureValue,
+  MyPlan,
+  PlanAudience,
+  PlanCatalog,
+  PlanFeature,
+  PlanId,
+  PlanOffer,
+} from "./api/plans.ts";
+export {
   AdminDatabase,
   CLEANUP_SIMULATED_AFTER_DAYS,
   DatabaseCleanupPreview,
