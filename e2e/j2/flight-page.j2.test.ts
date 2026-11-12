@@ -2,6 +2,7 @@ import type { AddressInfo } from "node:net";
 import { type Browser, type BrowserContext, chromium } from "playwright";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startTestApp } from "../../apps/api/src/testing/test-app.ts";
+import { freePort } from "../net/free-port.ts";
 import { loggedInContext } from "../site/log-in.ts";
 import { siteAddress, startSite } from "../site/site-server.ts";
 import { sendTwoHourFlight, TWO_HOUR_PHASES } from "./two-hour-flight.ts";
@@ -20,7 +21,7 @@ let flightId: string;
 let apiUrl: string;
 
 beforeAll(async () => {
-  const sitePort = 3_100 + Math.floor(Math.random() * 800);
+  const sitePort = await freePort();
   api = await startTestApp({ WEEMS_SITE_URL: siteAddress(sitePort) }); // login forms come from the site
   await api.app.listen({ port: 0, host: "127.0.0.1" });
   apiUrl = `http://127.0.0.1:${(api.app.server.address() as AddressInfo).port}`;
