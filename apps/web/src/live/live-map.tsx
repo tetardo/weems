@@ -11,6 +11,7 @@ import { addAircraftIcons } from "./aircraft-icons.ts";
 import { addAllRoutesLayers, type AllRoutes, showAllRoutes } from "./all-routes-layers.ts";
 import type { LiveFlights } from "./flights-store.ts";
 import { addRouteLayers, followAircraft, showRoute } from "./route-layers.ts";
+import type { MapPoint } from "./card-position.ts";
 import { Tracks } from "./tracks.ts";
 
 const SOURCE = "flights";
@@ -23,6 +24,47 @@ interface Props {
   /** Routes of the other flights (empty when the spectator hides them). */
   allRoutes: AllRoutes;
   onSelect: (flightId: string | null) => void;
+  /** The aircraft under the mouse and where it is on the map, or null when there is none. */
+  onHover: (hover: Hover | null) => void;
+  /** Each new value centres the map on the selected aircraft (button « Recentrer »). */
+  recenterRequest: number;
+}
+
+export interface Hover {
+  flightId: string;
+  point: MapPoint;
+}
+
+/** Farther than this from the mouse, the aircraft is no longer under it. */
+const HOVER_RADIUS_PX = 20;
+
+/**
+ * Calls `onHover` as the mouse moves over the aircraft, and shows the pointer cursor. Returns
+ * the check to run at each frame: an aircraft gliding away from a still mouse drops its card.
+ */
+function watchHover(
+  map: MapLibreMap,
+  tracks: { current: Tracks },
+  onHover: { current: Props["onHover"] },
+): (nowMs: number) => void {
+  let hovered: Hover | null = null;
+  const show = (next: Hover | null) => {
+    hovered = next;
+    map.getCanvas().style.cursor = next ? "pointer" : "";
+    onHover.current(next);
+  };
+  map.on("mousemove", SOURCE, (event) => {
+    const flightId = event.features?.[0]?.properties["flightId"] as string | undefined;
+    show(flightId ? { flightId, point: event.point } : null);
+  });
+  map.on("mouseleave", SOURCE, () => show(null));
+  return (nowMs) => {
+    if (!hovered) return;
+    const at = tracks.current.positionOf(hovered.flightId, nowMs);
+    const drawn = at && map.project([at.lon, at.lat]);
+    const { x, y } = hovered.point;
+    if (!drawn || Math.hypot(drawn.x - x, drawn.y - y) > HOVER_RADIUS_PX) show(null);
+  };
 }
 
 function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
@@ -65,19 +107,48 @@ function useShown<T>(
   }, [map, value, show]);
 }
 
+/** A ref that always holds the latest value: read by the map's handlers, created once. */
+function useLatest<T>(value: T): { readonly current: T } {
+  const ref = useRef(value);
+  ref.current = value;
+  return ref;
+}
+
+/**
+ * Shift of the centre so that the aircraft is not under the flight panel: left of it on a
+ * computer, above the sheet on a phone (flight-panel.tsx).
+ */
+function besidePanel(): [number, number] {
+  return window.matchMedia("(max-width: 767px)").matches ? [0, -window.innerHeight / 4] : [-170, 0];
+}
+
+/** Centres the map on the selected aircraft at each new request; a new selection alone does not. */
+function useRecenter(
+  map: { current: MapLibreMap | null },
+  tracks: { current: Tracks },
+  selected: { current: string | null },
+  request: number,
+): void {
+  useEffect(() => {
+    const aircraft =
+      selected.current && tracks.current.positionOf(selected.current, performance.now());
+    if (request > 0 && aircraft) {
+      map.current?.easeTo({ center: [aircraft.lon, aircraft.lat], offset: besidePanel() });
+    }
+  }, [map, tracks, selected, request]);
+}
+
 /** MapLibre map with one aircraft per open flight, gliding between updates, and the selected route. */
-export function LiveMap({ flights, selectedId, route, allRoutes, onSelect }: Props) {
+export function LiveMap(props: Props) {
+  const { flights, selectedId, route, allRoutes, onSelect, onHover, recenterRequest } = props;
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const tracks = useRef(new Tracks());
-  const selected = useRef(selectedId);
-  selected.current = selectedId;
-  const select = useRef(onSelect);
-  select.current = onSelect;
-  const shownRoute = useRef(route);
-  shownRoute.current = route;
-  const shownRoutes = useRef(allRoutes);
-  shownRoutes.current = allRoutes;
+  const selected = useLatest(selectedId);
+  const select = useLatest(onSelect);
+  const hover = useLatest(onHover);
+  const shownRoute = useLatest(route);
+  const shownRoutes = useLatest(allRoutes);
 
   useEffect(() => {
     if (!container.current) return;
@@ -89,9 +160,11 @@ export function LiveMap({ flights, selectedId, route, allRoutes, onSelect }: Pro
     };
     const instance = createBaseMap(container.current, { center: [5, 47], zoom: 4.3 }, addLayers);
     map.current = instance;
+    const checkHover = watchHover(instance, tracks, hover);
     let frame = 0;
     const draw = () => {
       const now = performance.now();
+      checkHover(now);
       const source = instance.getSource<GeoJSONSource>(SOURCE);
       source?.setData(tracks.current.features(now, selected.current));
       if (shownRoute.current && selected.current) {
@@ -113,6 +186,8 @@ export function LiveMap({ flights, selectedId, route, allRoutes, onSelect }: Pro
   }, []);
 
   useEffect(() => tracks.current.update(flights, performance.now()), [flights]);
+
+  useRecenter(map, tracks, selected, recenterRequest);
 
   useShown(map, route, showRoute);
   useShown(map, allRoutes, showAllRoutes);

@@ -25,6 +25,7 @@ export function liveFlight(flightId: string, overrides: Partial<LiveFlight> = {}
     receivedAt: "2026-11-11T08:00:00.100Z",
     signal: "ok",
     fictitious: false,
+    pilot: null,
     ...overrides,
   };
 }

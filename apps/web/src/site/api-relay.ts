@@ -23,7 +23,13 @@ export function relayTarget(pathname: string): string | null {
 
 /** Site address of a pilot's public photo. */
 export const pilotPhotoUrl = (handle: string) => `/api/pilots/${handle}/photo`;
-/** Site address of the logged-in pilot's own photo. */
+/** Site address of the logged-in pilot's own photo (upload, removal). */
 export const OWN_PHOTO_URL = "/api/me/profile/photo";
+/**
+ * Address to show the pilot's own photo, null without photo: it changes with each new photo
+ * (`photoUpdatedAt` of the profile), otherwise the browser keeps showing the previous one.
+ */
+export const ownPhotoSrc = (photoUpdatedAt: string | null) =>
+  photoUpdatedAt === null ? null : `${OWN_PHOTO_URL}?v=${Date.parse(photoUpdatedAt)}`;
 /** Site address of the check of a handle (query `handle`). */
 export const HANDLE_CHECK_URL = "/api/me/profile/handle-check";

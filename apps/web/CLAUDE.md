@@ -3,7 +3,7 @@
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
 J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
-J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public ») ; sur la carte en direct, tous les avions montrent leur trajet (bouton « Trajets » pour les masquer) et le vol sélectionné sa trace, l'orthodromie restante, ses aéroports et sa progression. Accueil public `/` (spec J4 accueil) : image plein écran par thème, slogan, tableau des départs à palettes (compteurs de `GET /v1/stats`, vols du flux en direct) ; la carte en direct `/live` s'ouvre aussi sans compte ; barre v2 sur toutes les pages depuis le 12/11 (liens « Mon carnet de bord » et « Mes vols » pour le pilote connecté et « Vols en direct », « Créer un compte » et icône de connexion ou menu du pilote, thème, FR | EN, bouton menu sous 768 px, plus de dock) et pied de page sur une ligne (accueil et profils publics). « Mon carnet de bord » (`/logbook`, page d'arrivée après connexion, `LANDING_PAGE` dans `auth/session-cookie.ts`) : la page du profil public vue par son pilote, en aperçu tant qu'elle n'est pas publique (`profile/logbook-notice.tsx`, liens dans `profile/profile-links.ts`).
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public ») ; sur la carte en direct, tous les avions montrent leur trajet (bouton « Trajets » pour les masquer) et le vol sélectionné sa trace, l'orthodromie restante, ses aéroports et sa progression ; bulle au survol d'un avion (pilote si son profil est public), clic = vol suivi avec lien vers le profil, feuille en bas sur téléphone, lien `/live?flight=<id>`. Accueil public `/` (spec J4 accueil) : image plein écran par thème, slogan, tableau des départs à palettes (compteurs de `GET /v1/stats`, vols du flux en direct) ; la carte en direct `/live` s'ouvre aussi sans compte ; barre v2 sur toutes les pages depuis le 12/11 (liens « Mon carnet de bord » et « Mes vols » pour le pilote connecté et « Vols en direct », « Créer un compte » et icône de connexion ou menu du pilote, thème, FR | EN, bouton menu sous 768 px, plus de dock) et pied de page sur une ligne (accueil et profils publics). « Mon carnet de bord » (`/logbook`, page d'arrivée après connexion, `LANDING_PAGE` dans `auth/session-cookie.ts`) : la page du profil public vue par son pilote, en aperçu tant qu'elle n'est pas publique (`profile/logbook-notice.tsx`, liens dans `profile/profile-links.ts`).
 
 ## Où trouver quoi
 
@@ -13,6 +13,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 | Carte en direct (J1) | `../../docs/cahiers-des-charges/spec-J1-pilotes-simules.md` |
 | Site minimal (J2) | `../../docs/cahiers-des-charges/web/spec-J2-site-minimal.md` |
 | Trajectoire et progression en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md` |
+| Pilote, survol et vol suivi en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-direct-pilote.md` |
 | Comptes et connexion (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
 | Page d'accueil (J4) | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md`, images choisies dans la console : `spec-J4-personnalisation.md` |
@@ -53,7 +54,7 @@ src/
   home/                accueil : héros (home-hero.tsx), image de chaque thème lue sur l'API ou `public/home/default.jpg` (home-image.ts, testé), compteurs et images lus par le serveur (home-data.ts),
                        tableau des départs (departures.ts testé : phases regroupées, niveau, lignes ; departures-board.tsx, split-flap.tsx)
   site/                cadre unique des pages (site-shell : barre flottante, liens site-nav, entrée ou menu du pilote site-account, menu téléphone site-menu, FR | EN language-choice, pied de page site-footer ; entrées dans menu-items.ts, page active current-page.ts), adresse de l'API, API injoignable
-  ui/                  composants visuels propres au site : icônes, panneau, titre de section (les formulaires et le bouton viennent de `@weems/ui`), fermeture des menus (use-dismiss) ;
+  ui/                  composants visuels propres au site : icônes, panneau, titre de section (les formulaires et le bouton viennent de `@weems/ui`), fermeture des menus (use-dismiss), photo ou initiale du pilote (pilot-avatar), bouton « Partager » (share-button) ;
                        formulaires (fiche 008) : carte de formulaire, champ, saisie, liste courte, barre de choix,
                        liste avec recherche, barre d'enregistrement, compteur de modifications (form-changes.ts, testé)
   map/                 carte MapLibre commune (base-map.ts : fond OpenFreeMap, fond de secours sans réseau ; map-theme.ts : fond et couleurs selon le thème)
@@ -88,16 +89,21 @@ src/
     route-progress.ts     progression, distance et temps restants
     route-geojson.ts      trace, ligne restante et aéroports en GeoJSON
     route-layers.ts       calques MapLibre de la route (sous les avions)
-    route-summary.tsx     barre de progression du panneau du vol
+    route-summary.tsx     départ, barre de progression, arrivée, restant (bulle et panneau)
     airport-book.ts, use-airports.ts   aéroports des vols, demandés une fois par code
     all-routes.ts         trajets de tous les vols (fait / reste) en GeoJSON
-    all-routes-layers.ts  calques pâles des trajets de tous les vols
+    all-routes-layers.ts  calques pâles des trajets de tous les vols, trajet de l'avion survolé en surbrillance
+    use-live-routes.ts    trajets affichés : tous, ou seulement l'aperçu de l'avion survolé
     use-show-routes.ts    bouton « Trajets », choix gardé dans le navigateur
     aircraft-shapes.ts    silhouette et taille par catégorie d'avion, nom des images (testé)
     aircraft-icons.ts     dessin des silhouettes, couleur de la catégorie (lue dans global.css), grise si signal perdu
-    live-map.tsx          carte MapLibre
-    flight-panel.tsx      panneau du vol choisi
-    live-view.tsx         assemblage de la page
+    live-map.tsx          carte MapLibre : clic, survol, recentrage
+    live-view.tsx, live-controls.tsx   page /live, compteur et bouton « Trajets »
+    flight-facts.tsx      un vol d'un coup d'œil (indicatif, catégorie, progression, phase, niveau, vitesse), commun à la bulle et au panneau
+    pilot-line.tsx        pilote au profil public, ou « Pilote Weems » anonyme
+    flight-hover-card.tsx, card-position.ts   bulle au survol (souris seulement) et sa place (testé)
+    flight-panel.tsx      vol suivi : panneau à droite, feuille en bas sur téléphone, Profil, Partager, Recentrer
+    use-selected-flight.ts   vol suivi gardé dans l'adresse (/live?flight=<id>)
     testing/              données de test
 scripts/
   copy-map-worker.ts   copie le « worker » de MapLibre dans public/ avant dev et build

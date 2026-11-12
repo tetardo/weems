@@ -1,4 +1,4 @@
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 import { type PilotLevel, PilotLevel as PilotLevelSchema } from "@weems/contrats";
 import type { Database } from "../../db/client.ts";
 import { hiddenFlights, pilotPhotos, pilotProfiles } from "../../db/schema.ts";
@@ -95,6 +95,26 @@ export class ProfilesRepository {
     return new Map(rows.flatMap((row) => (row.handle ? [[row.pilotId, row.handle]] : [])));
   }
 
+  /** Public profiles among these pilots, with whether each has a photo (live map). */
+  async publicOf(
+    pilotIds: string[],
+  ): Promise<{ pilotId: string; handle: string; country: string | null; hasPhoto: boolean }[]> {
+    if (pilotIds.length === 0) return [];
+    const rows = await this.db
+      .select({
+        pilotId: pilotProfiles.pilotId,
+        handle: pilotProfiles.handle,
+        country: pilotProfiles.country,
+        photo: pilotPhotos.pilotId,
+      })
+      .from(pilotProfiles)
+      .leftJoin(pilotPhotos, eq(pilotPhotos.pilotId, pilotProfiles.pilotId))
+      .where(and(eq(pilotProfiles.isPublic, true), inArray(pilotProfiles.pilotId, pilotIds)));
+    return rows.flatMap(({ photo, handle, ...row }) =>
+      handle ? [{ ...row, handle, hasPhoto: photo !== null }] : [],
+    );
+  }
+
   /** Public profiles, for the site map. */
   async listPublic(): Promise<{ handle: string; updatedAt: Date }[]> {
     const rows = await this.db
@@ -140,6 +160,15 @@ export class ProfilesRepository {
       .from(pilotPhotos)
       .where(eq(pilotPhotos.pilotId, pilotId));
     return row?.webp ?? null;
+  }
+
+  /** When the photo was last changed, null without photo: version of its address for the site. */
+  async photoUpdatedAt(pilotId: string): Promise<Date | null> {
+    const [row] = await this.db
+      .select({ updatedAt: pilotPhotos.updatedAt })
+      .from(pilotPhotos)
+      .where(eq(pilotPhotos.pilotId, pilotId));
+    return row?.updatedAt ?? null;
   }
 
   async hasPhoto(pilotId: string): Promise<boolean> {

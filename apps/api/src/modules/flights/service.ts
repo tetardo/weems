@@ -59,6 +59,7 @@ export function lastPhaseOf(events: FlightEvent[]): FlightPhase | null {
 function liveInfo(flight: FlightRecord, caller: Caller): LiveFlightInfo {
   return {
     fictitious: caller.fictitious === true,
+    pilotId: flight.pilotId,
     flightId: flight.flightId,
     callsign: flight.callsign,
     aircraftTitle: flight.aircraft.title,

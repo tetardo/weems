@@ -4,6 +4,7 @@
  */
 export {
   ArrowLeft as BackIcon,
+  ArrowUpRight as OpenProfileIcon,
   BookOpen as FlightsIcon,
   Check as DoneIcon,
   Copy as CopyIcon,
@@ -19,6 +20,8 @@ export {
   Share2 as ShareIcon,
   CircleUserRound as ProfileIcon,
   Lock as PrivateIcon,
+  LocateFixed as RecenterIcon,
+  MousePointerClick as ClickIcon,
   LogOut as SignOutIcon,
   type LucideIcon as IconComponent,
   Moon as ThemeDarkIcon,

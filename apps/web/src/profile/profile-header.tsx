@@ -4,8 +4,9 @@ import { countryName } from "../format/countries.ts";
 import { CountryFlag } from "../ui/country-flag.tsx";
 import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
 import { InfoTip } from "../ui/info-tip.tsx";
+import { PilotAvatar } from "../ui/pilot-avatar.tsx";
+import { ShareButton } from "../ui/share-button.tsx";
 import type { ProfileLinks } from "./profile-links.ts";
-import { ShareButton } from "./share-button.tsx";
 
 /** Circumference of the Earth at the equator, nautical miles. */
 const EARTH_NM = 21_600;
@@ -34,19 +35,6 @@ const ACCOUNTS = {
   },
 };
 type Account = keyof typeof ACCOUNTS;
-
-function Photo({ pilot, src }: { pilot: PilotPage; src: string }) {
-  return (
-    <span className="grid size-26 flex-none place-items-center overflow-hidden rounded-full border-3 border-line bg-accent font-title text-[38px] text-on-accent max-md:size-20">
-      {pilot.hasPhoto ? (
-        // Plain img: served by the API through the site, already 256 px.
-        <img src={src} alt="" className="size-full object-cover" />
-      ) : (
-        pilot.name.slice(0, 1).toUpperCase()
-      )}
-    </span>
-  );
-}
 
 function Networks({ pilot }: { pilot: PilotPage }) {
   const ids: Record<Account, string | null> = {
@@ -146,7 +134,11 @@ export function ProfileHeader({ pilot, links }: { pilot: PilotPage; links: Profi
   const country = pilot.country ? countryName(pilot.country, locale) : null;
   return (
     <section className="grid items-center gap-6 rounded-2xl border border-line bg-surface px-6 py-5 md:grid-cols-[auto_1fr_auto]">
-      <Photo pilot={pilot} src={links.photo} />
+      <PilotAvatar
+        pilot={pilot}
+        src={links.photo}
+        className="size-26 border-3 border-line text-[38px] max-md:size-20"
+      />
       <Identity pilot={pilot} country={country} />
       <DistanceAndShare pilot={pilot} share={links.share} />
     </section>

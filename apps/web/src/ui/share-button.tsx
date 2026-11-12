@@ -3,11 +3,12 @@
 import { useLocale } from "next-intl";
 import { useState } from "react";
 import { buttonClass } from "@weems/ui";
-import { ShareIcon } from "../ui/icons.ts";
+import { ShareIcon } from "./icons.ts";
 
 /**
  * « Share »: the phone's share sheet when there is one, else the address copied to the clipboard.
- * `path`: the page shared, without the language (the logbook shares the public page).
+ * `path`: the page shared, without the language (the logbook shares the public page); this page
+ * when absent.
  */
 export function ShareButton({
   path,
@@ -15,7 +16,7 @@ export function ShareButton({
   copied,
   title,
 }: {
-  path: string;
+  path?: string;
   label: string;
   copied: string;
   title: string;
@@ -23,7 +24,9 @@ export function ShareButton({
   const locale = useLocale();
   const [done, setDone] = useState(false);
   async function share() {
-    const url = new URL(`/${locale}${path}`, window.location.origin).href;
+    const url = path
+      ? new URL(`/${locale}${path}`, window.location.origin).href
+      : window.location.href;
     if (navigator.share) {
       await navigator.share({ title, url }).catch(() => undefined);
       return;

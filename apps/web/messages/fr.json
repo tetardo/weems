@@ -71,24 +71,34 @@
       "retrying": "Reconnexion…"
     },
     "signalLost": "Signal perdu",
-    "close": "Fermer",
     "fields": {
-      "aircraft": "Avion",
-      "departure": "Départ",
-      "arrival": "Arrivée",
       "phase": "Phase",
-      "altitude": "Altitude",
+      "level": "Niveau",
       "groundSpeed": "Vitesse sol"
     },
     "route": {
       "progress": "Progression du vol",
-      "percent": "{percent} %",
       "remaining": "{distance} NM restants",
       "timeLeft": "≈ {time}",
       "noFlightPlan": "Départ ou arrivée non renseigné dans le tracker : pas de progression.",
-      "unknownAirport": "Aéroport inconnu de Weems : pas de progression."
+      "unknownAirport": "Aéroport inconnu de Weems : pas de progression.",
+      "flown": "<strong>{percent} %</strong> parcourus"
     },
-    "showRoutes": "Trajets"
+    "showRoutes": "Trajets",
+    "hoverHint": "<strong>Clic</strong> : suivre ce vol",
+    "pilot": {
+      "anonymous": "Pilote Weems",
+      "private": "Profil non public"
+    },
+    "panel": {
+      "followed": "Vol suivi",
+      "close": "Ne plus suivre ce vol",
+      "profile": "Profil",
+      "share": "Partager le vol",
+      "copied": "Lien copié",
+      "shareTitle": "{callsign} en direct sur Weems",
+      "recenter": "Recentrer"
+    }
   },
   "Phases": {
     "BOARDING": "Embarquement",

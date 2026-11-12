@@ -1,3 +1,5 @@
+import type { AddressInfo } from "node:net";
+import type { LiveFlight, LiveUpdate } from "@weems/contrats";
 import type { FastifyInstance } from "fastify";
 import sharp from "sharp";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -8,6 +10,8 @@ import {
   saveProfile as save,
   uniqueHandle,
 } from "../../testing/profiles.ts";
+import { openSse } from "../../testing/sse-client.ts";
+import { syntheticFlight } from "../../testing/synthetic-flight.ts";
 import { startTestApp } from "../../testing/test-app.ts";
 
 let app: FastifyInstance;
@@ -40,7 +44,7 @@ describe("own profile settings (spec J4)", () => {
       headers: { cookie: pilot.cookie },
     });
     expect(profile.statusCode).toBe(200);
-    expect(profile.json()).toMatchObject({ isPublic: false, handle: null, hasPhoto: false });
+    expect(profile.json()).toMatchObject({ isPublic: false, handle: null, photoUpdatedAt: null });
     expect(profile.json().suggestedHandle).toMatch(/^test-pilot/);
   });
 
@@ -269,6 +273,31 @@ describe("profile photo (spec J4)", () => {
       headers: { cookie: pilot.cookie, "content-type": type },
       payload: body,
     });
+  const photoUpdatedAt = async (pilot: Pilot): Promise<string | null> =>
+    (
+      await app.inject({ method: "GET", url: "/v1/me/profile", headers: { cookie: pilot.cookie } })
+    ).json().photoUpdatedAt;
+
+  it("dates each photo change, so that the site changes the photo's address", async () => {
+    const pilot = await newTrackerPilot(app);
+    const png = (background: string) =>
+      sharp({ create: { width: 4, height: 4, channels: 3, background } })
+        .png()
+        .toBuffer();
+    await upload(pilot, await png("red"));
+    const first = await photoUpdatedAt(pilot);
+    expect(first).not.toBeNull();
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    await upload(pilot, await png("blue"));
+    const second = await photoUpdatedAt(pilot);
+    expect(Date.parse(second ?? "")).toBeGreaterThan(Date.parse(first ?? ""));
+    await app.inject({
+      method: "DELETE",
+      url: "/v1/me/profile/photo",
+      headers: { cookie: pilot.cookie },
+    });
+    expect(await photoUpdatedAt(pilot)).toBeNull();
+  });
 
   it("stores a square 256 px WebP without metadata, public only with the profile", async () => {
     const { pilot, handle } = await publicPilot();
@@ -317,4 +346,45 @@ describe("profile photo (spec J4)", () => {
     });
     expect((await visit(`/v1/pilots/${handle}/photo`)).statusCode).toBe(404);
   });
+});
+
+describe("pilot on the live map (spec J4, carte en direct)", () => {
+  /** The flight as the live stream sends it, once its pilot has been read. */
+  async function seenLive(pilot: Pilot, expected: (flight: LiveFlight) => boolean) {
+    if (!app.server.listening) await app.listen({ port: 0, host: "127.0.0.1" });
+    const { port } = app.server.address() as AddressInfo;
+    const sse = openSse(`http://127.0.0.1:${port}/v1/live/stream`);
+    const flight = syntheticFlight();
+    const { flightId } = flight.open;
+    const send = (url: string, payload: object) =>
+      app.inject({ method: "POST", url, headers: pilot.tracker, payload });
+    await send("/v1/flights", flight.open);
+    await send(`/v1/flights/${flightId}/positions`, flight.position);
+    const live = () =>
+      sse.events
+        .filter((e) => e.event === "update")
+        .flatMap((e) => (e.data as LiveUpdate).flights)
+        .findLast((f) => f.flightId === flightId);
+    const end = Date.now() + 8_000;
+    while (!(live() && expected(live() as LiveFlight)) && Date.now() < end) {
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    await sse.close();
+    return live();
+  }
+
+  it("names a pilot whose profile is public, with a link to the profile", async () => {
+    const { pilot, handle } = await publicPilot({ country: "FR" });
+    const flight = await seenLive(pilot, (f) => f.pilot !== null);
+    expect(flight?.pilot).toEqual({ handle, name: "Test pilot", country: "FR", hasPhoto: false });
+    expect(flight).not.toHaveProperty("pilotId");
+  }, 15_000);
+
+  it("keeps a pilot without public profile anonymous", async () => {
+    const pilot = await newTrackerPilot(app);
+    // Past one batch after the pilots are read: a named pilot would have been sent by then.
+    const readBy = Date.now() + 4_500;
+    const flight = await seenLive(pilot, () => Date.now() > readBy);
+    expect(flight?.pilot).toBeNull();
+  }, 15_000);
 });

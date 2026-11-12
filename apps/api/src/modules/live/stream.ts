@@ -21,9 +21,12 @@ export class LiveStream {
   private readonly clients = new Set<ServerResponse>();
   private readonly timers: ReturnType<typeof setInterval>[] = [];
   private readonly board: LiveBoard;
+  private readonly onError: (error: unknown) => void;
 
-  constructor(board: LiveBoard) {
+  /** `onError`: a failed read of the pilots (the batch still leaves, with the pilots known). */
+  constructor(board: LiveBoard, onError: (error: unknown) => void = () => undefined) {
     this.board = board;
+    this.onError = onError;
   }
 
   get clientCount(): number {
@@ -44,7 +47,7 @@ export class LiveStream {
   }
 
   start(): void {
-    this.timers.push(setInterval(() => this.broadcastUpdate(), BATCH_EVERY_MS));
+    this.timers.push(setInterval(() => void this.tick(), BATCH_EVERY_MS));
     this.timers.push(setInterval(() => this.heartbeat(), HEARTBEAT_EVERY_MS));
   }
 
@@ -52,6 +55,17 @@ export class LiveStream {
     this.timers.forEach(clearInterval);
     this.clients.forEach((client) => client.end());
     this.clients.clear();
+  }
+
+  /** Pilots first, so that a batch already carries a pilot who just appeared or left. */
+  async tick(): Promise<void> {
+    try {
+      await this.board.refreshPilots();
+    } catch (error) {
+      // Database unavailable: the batch leaves without fresh pilots; the next tick tries again.
+      this.onError(error);
+    }
+    this.broadcastUpdate();
   }
 
   broadcastUpdate(): void {

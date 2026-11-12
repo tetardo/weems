@@ -60,7 +60,8 @@ export const MyProfile = ProfileUpdate.extend({
   suggestedHandle: PilotHandle,
   /** When the profile was last made public; null if never. */
   publishedAt: UtcTimestamp.nullable(),
-  hasPhoto: z.boolean(),
+  /** When the photo was last changed; null without photo. Version of the photo's address. */
+  photoUpdatedAt: UtcTimestamp.nullable(),
 });
 export type MyProfile = z.infer<typeof MyProfile>;
 
