@@ -1,8 +1,16 @@
-import type { LiveFlight } from "@weems/contrats";
+import type { LiveFlight, LiveRoute } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
+import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
+import { RouteSummary } from "./route-summary.tsx";
 
-/** Details of the selected flight (spec J1, part 4). */
-export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: () => void }) {
+interface Props {
+  flight: LiveFlight;
+  route: LiveRoute | null;
+  onClose: () => void;
+}
+
+/** Details of the selected flight (spec J1, part 4) and its progress along the route. */
+export function FlightPanel({ flight, route, onClose }: Props) {
   const t = useTranslations("Live");
   const phases = useTranslations("Phases");
   const format = useFormatter();
@@ -17,13 +25,14 @@ export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: 
     [t("fields.groundSpeed"), `${number(position.gs)} kt`],
   ];
   return (
-    <aside className="absolute top-3 right-3 w-60 rounded-2xl border border-line bg-surface p-3 shadow-[0_8px_24px_rgb(0_0_0/.18)]">
+    <aside className="absolute top-21 right-3 w-60 sm:right-6 rounded-2xl border border-line bg-surface p-3 shadow-[0_8px_24px_rgb(0_0_0/.18)]">
       <div className="flex items-baseline justify-between">
         <strong className="text-lg">{flight.callsign}</strong>
         <button type="button" onClick={onClose} aria-label={t("close")}>
           ×
         </button>
       </div>
+      {flight.fictitious && <FictitiousBadge />}
       {flight.signal === "lost" && <p className="my-1 text-accent-2">{t("signalLost")}</p>}
       <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
         {rows.map(([label, value]) => (
@@ -33,6 +42,7 @@ export function FlightPanel({ flight, onClose }: { flight: LiveFlight; onClose: 
           </div>
         ))}
       </dl>
+      <RouteSummary flight={flight} route={route} />
     </aside>
   );
 }

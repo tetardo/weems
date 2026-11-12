@@ -29,6 +29,41 @@
       "when": 1794379892475,
       "tag": "0003_flight_reviews",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794422626524,
+      "tag": "0004_pilot_profiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794430731907,
+      "tag": "0005_aircraft_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794432597134,
+      "tag": "0006_profile_social",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794435743707,
+      "tag": "0007_admin",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794439816248,
+      "tag": "0008_fictitious_accounts",
+      "breakpoints": true
     }
   ]
 }

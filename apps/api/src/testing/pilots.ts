@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
-import { uuidV7 } from "@weems/contrats";
+import { type AccountRole, uuidV7 } from "@weems/contrats";
 import type { FastifyInstance, LightMyRequestResponse } from "fastify";
 import { AccountsRepository } from "../modules/accounts/repository.ts";
 import { AccountsService } from "../modules/accounts/service.ts";
@@ -10,10 +10,11 @@ const TEST_API_URL = "http://localhost:3000";
 export const PASSWORD = "correct horse battery staple";
 
 /** A new invitation in the test database, as `pnpm invite` makes it. */
-export async function invite(email: string): Promise<string> {
+export async function invite(email: string, role: AccountRole = "pilot"): Promise<string> {
   const database = connectTestDatabase();
   try {
-    return await new AccountsService(new AccountsRepository(database.db)).createInvitation(email);
+    const service = new AccountsService(new AccountsRepository(database.db));
+    return (await service.createInvitation(email, role)).code;
   } finally {
     await database.close();
   }
@@ -35,9 +36,22 @@ function sessionCookie(response: LightMyRequestResponse): string {
   return response.cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join("; ");
 }
 
-/** A new invited pilot, signed up and logged in: returns the session cookie. */
-export async function newPilot(app: FastifyInstance, email = uniqueEmail()): Promise<string> {
-  const inviteCode = await invite(email);
+export function signIn(app: FastifyInstance, email: string) {
+  return app.inject({
+    method: "POST",
+    url: "/api/auth/sign-in/email",
+    headers: { origin: SITE_ORIGIN, "content-type": "application/json" },
+    payload: JSON.stringify({ email, password: PASSWORD }),
+  });
+}
+
+/** A new invited pilot (or administrator), signed up and logged in: returns the session cookie. */
+export async function newPilot(
+  app: FastifyInstance,
+  email = uniqueEmail(),
+  role: AccountRole = "pilot",
+): Promise<string> {
+  const inviteCode = await invite(email, role);
   const response = await signUp(app, { email, password: PASSWORD, name: "Test pilot", inviteCode });
   if (response.statusCode !== 200) throw new Error(`sign-up failed: ${response.body}`);
   return sessionCookie(response);
@@ -89,4 +103,15 @@ export function exchange(app: FastifyInstance, form: Record<string, string>) {
     headers: { "content-type": "application/x-www-form-urlencoded" },
     payload: new URLSearchParams(form).toString(),
   });
+}
+
+/** A new pilot logged in on the site (cookie) and in the tracker (headers with an access token). */
+export async function newTrackerPilot(app: FastifyInstance) {
+  const cookie = await newPilot(app);
+  const tokens = await trackerLogin(app, cookie);
+  const tracker = {
+    authorization: `Bearer ${tokens.json().access_token}`,
+    "weems-client": "tracker/0.1.0",
+  };
+  return { cookie, tracker };
 }

@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { newPilot, trackerLogin } from "../../testing/pilots.ts";
+import { newTrackerPilot } from "../../testing/pilots.ts";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
 import { startTestApp } from "../../testing/test-app.ts";
 
@@ -14,12 +14,7 @@ afterAll(() => stop());
 
 /** A new pilot with one flight opened, with events and a review. */
 async function pilotWithFlight(): Promise<{ cookie: string; flightId: string }> {
-  const cookie = await newPilot(app);
-  const tokens = await trackerLogin(app, cookie);
-  const headers = {
-    authorization: `Bearer ${tokens.json().access_token}`,
-    "weems-client": "tracker/0.1.0",
-  };
+  const { cookie, tracker: headers } = await newTrackerPilot(app);
   const flight = syntheticFlight();
   const { flightId } = flight.open;
   await app.inject({ method: "POST", url: "/v1/flights", headers, payload: flight.open });
@@ -55,6 +50,30 @@ describe("delete all my flights (development only)", () => {
     expect(deleted.statusCode).toBe(204);
     expect(await listOf(me.cookie)).toHaveLength(0);
     expect(await listOf(other.cookie)).toHaveLength(1);
+  });
+
+  it("with ?simulator=replay, deletes the simulated flights and keeps the real ones", async () => {
+    const { cookie, tracker: headers } = await newTrackerPilot(app);
+    const simulated = syntheticFlight();
+    const real = syntheticFlight();
+    real.open.aircraft.simulator = "msfs2024";
+    for (const flight of [simulated, real]) {
+      await app.inject({ method: "POST", url: "/v1/flights", headers, payload: flight.open });
+    }
+    const counts = () =>
+      app.inject({ method: "GET", url: "/v1/dev/flight-counts", headers: { cookie } });
+    expect((await counts()).json()).toEqual({ simulated: 1, real: 1 });
+
+    const deleted = await app.inject({
+      method: "DELETE",
+      url: "/v1/flights?simulator=replay",
+      headers: { cookie },
+    });
+    expect(deleted.statusCode).toBe(204);
+    expect((await counts()).json()).toEqual({ simulated: 0, real: 1 });
+    expect((await listOf(cookie)).map((f: { flightId: string }) => f.flightId)).toEqual([
+      real.open.flightId,
+    ]);
   });
 
   it("needs a logged-in pilot", async () => {

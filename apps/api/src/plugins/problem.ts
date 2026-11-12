@@ -17,3 +17,5 @@ export class ApiProblem extends Error {
 
 export const notFound = (detail: string) => new ApiProblem(404, "Not Found", detail);
 export const conflict = (detail: string) => new ApiProblem(409, "Conflict", detail);
+export const unprocessable = (detail: string) =>
+  new ApiProblem(422, "Unprocessable Content", detail);

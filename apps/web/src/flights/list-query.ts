@@ -1,9 +1,12 @@
+import { AircraftCategory } from "@weems/contrats";
+
 /** Filters of the flight list, as they appear in the page address (spec site minimal). */
 export interface ListFilters {
   /** Dates as typed in the form, YYYY-MM-DD (UTC days). */
   from?: string;
   to?: string;
   aircraft?: string;
+  category?: AircraftCategory;
   airport?: string;
   cursor?: string;
 }
@@ -19,19 +22,27 @@ function first(value: string | string[] | undefined): string | undefined {
   return text ? text : undefined;
 }
 
+const day = (value: string | undefined) => (value && isDay(value) ? value : undefined);
+const icao = (value: string | undefined) => {
+  const code = value?.toUpperCase();
+  return code && /^[A-Z0-9]{4}$/.test(code) ? code : undefined;
+};
+const category = (value: string | undefined) => AircraftCategory.safeParse(value).data;
+
+/** `{ key: value }`, or nothing when the value is missing: absent filters are not sent. */
+function entry<K extends keyof ListFilters>(key: K, value: ListFilters[K]): Partial<ListFilters> {
+  return value === undefined ? {} : { [key]: value };
+}
+
 /** Reads the filters from the address; malformed values are ignored rather than sent. */
 export function readFilters(params: SearchParams): ListFilters {
-  const from = first(params["from"]);
-  const to = first(params["to"]);
-  const airport = first(params["airport"])?.toUpperCase();
-  const aircraft = first(params["aircraft"]);
-  const cursor = first(params["cursor"]);
   return {
-    ...(from && isDay(from) && { from }),
-    ...(to && isDay(to) && { to }),
-    ...(aircraft && { aircraft: aircraft.slice(0, 64) }),
-    ...(airport && /^[A-Z0-9]{4}$/.test(airport) && { airport }),
-    ...(cursor && { cursor }),
+    ...entry("from", day(first(params["from"]))),
+    ...entry("to", day(first(params["to"]))),
+    ...entry("aircraft", first(params["aircraft"])?.slice(0, 64)),
+    ...entry("category", category(first(params["category"]))),
+    ...entry("airport", icao(first(params["airport"]))),
+    ...entry("cursor", first(params["cursor"])),
   };
 }
 
@@ -41,6 +52,7 @@ export function toApiQuery(filters: ListFilters): URLSearchParams {
   if (filters.from) query.set("from", new Date(filters.from).toISOString());
   if (filters.to) query.set("to", new Date(Date.parse(filters.to) + DAY_MS).toISOString());
   if (filters.aircraft) query.set("aircraft", filters.aircraft);
+  if (filters.category) query.set("category", filters.category);
   if (filters.airport) query.set("airport", filters.airport);
   if (filters.cursor) query.set("cursor", filters.cursor);
   return query;

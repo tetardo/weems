@@ -7,7 +7,9 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json && tsc -p src/app/window/tsconfig.json",
     "generate-flight": "node tools/generate-flights/cli.ts",
+    "airports:simulated": "node tools/generate-flights/airports/update-cli.ts",
     "simulate": "node tools/simulate/cli.ts",
+    "populate": "node tools/populate/cli.ts",
     "fly": "node tools/fly/cli.ts",
     "app": "pnpm app:build && electron dist/app",
     "app:build": "node scripts/build-app.ts",

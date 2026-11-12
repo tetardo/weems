@@ -14,3 +14,6 @@ apps/web/public/maplibre-gl-worker.mjs
 
 # Real flights recorded by `pnpm fly` (pilot data, large files)
 apps/tracker/recordings/
+
+# Local files of the admin console (history of runs, load reports)
+apps/admin/.data/

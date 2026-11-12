@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant T as Tracker
+    participant A as API (live)
+    participant S as Site (carte Direct)
+    T->>A: POST position (toutes les 2 s)
+    A->>A: tableau du direct + trace en mémoire (1 point / 15 s)
+    A-->>S: flux SSE : positions de tous les vols
+    Note over S: clic sur un avion
+    S->>A: GET /v1/live/flights/{id}/route
+    A->>A: aéroports (liste OurAirports) + trace
+    A-->>S: départ, arrivée, trace
+    loop toutes les 30 s tant que le vol est sélectionné
+        S->>A: GET …/route
+    end
+    S->>S: trace + orthodromie restante, % et NM restants

@@ -56,7 +56,7 @@ Le cœur du tracker est le même qu'en J0 et J1. Seuls le connecteur et l'envoi 
 
 - Lance le tracker sans interface sur le PC : `pnpm fly --api http://<adresse-du-mac>:3000`.
 - Affiche dans la console l'état de la connexion, l'avion, la phase en cours et le nombre de messages en attente.
-- `--from LFPG --to LFBO` renseigne départ et arrivée ; `--callsign` l'indicatif ; « fin » + Entrée clôt le vol à la main ; Ctrl+C quitte (un vol ouvert reprend au lancement suivant).
+- `--from LFPG --to LFBO` renseigne départ et arrivée, obligatoires depuis la [décision 007](../decisions/007-depart-et-arrivee-obligatoires.md) ; `--callsign` l'indicatif ; « fin » + Entrée clôt le vol à la main ; Ctrl+C quitte (un vol ouvert reprend au lancement suivant).
 - Chaque vol est aussi écrit en fichier de rejeu dans `recordings/` (critère 2), à copier sur le Mac pour les tests.
 
 ### Trajectoire

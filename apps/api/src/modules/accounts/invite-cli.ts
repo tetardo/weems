@@ -1,4 +1,5 @@
 import { parseArgs } from "node:util";
+import { signupPath } from "@weems/contrats";
 import { loadConfig } from "../../config.ts";
 import { connectDatabase } from "../../db/client.ts";
 import { AccountsRepository } from "./repository.ts";
@@ -18,10 +19,14 @@ if (!email?.includes("@")) {
 const config = loadConfig();
 const database = connectDatabase(config.databaseUrl);
 try {
-  const code = await new AccountsService(new AccountsRepository(database.db)).createInvitation(
-    email,
+  const invitation = await new AccountsService(
+    new AccountsRepository(database.db),
+  ).createInvitation(email);
+  const until = invitation.expiresAt.toISOString().slice(0, 10);
+  process.stdout.write(
+    `Code: ${invitation.code} (valable jusqu'au ${until})\n` +
+      `Inscription : ${config.siteUrl}${signupPath("fr", invitation.code)}\n`,
   );
-  process.stdout.write(`Code: ${code}\nInscription : ${config.siteUrl}/fr/signup?code=${code}\n`);
 } finally {
   await database.close();
 }

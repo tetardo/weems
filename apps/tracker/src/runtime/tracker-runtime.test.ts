@@ -27,6 +27,7 @@ const api: ApiClient = {
 
 const sessionAt = (utcMs: number) => ({
   callsign: "WMS1",
+  flightPlan: { departureIcao: "LFPG", arrivalIcao: "LFBO" },
   trackerVersion: "0.1.0",
   clock: { nowUtcMs: () => utcMs },
   newFlightId: () => `0197a000-0000-7000-8000-00000000000${++ids}`,

@@ -42,6 +42,7 @@ async function flyThroughTheChain() {
     api: httpApiClient({ baseUrl, token: "dev-token", trackerVersion: "0.1.0" }),
     session: {
       callsign: "WMS123",
+      flightPlan: { departureIcao: "LFPG", arrivalIcao: "LFBO" },
       trackerVersion: "0.1.0",
       clock: { nowUtcMs: () => Date.UTC(2026, 10, 11, 8, 0, 0) },
       newFlightId: uuidV7,

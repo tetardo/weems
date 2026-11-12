@@ -9,7 +9,11 @@ export async function registerDocs(app: FastifyInstance): Promise<void> {
     openapi: {
       info: { title: "Weems API", version: "0.1.0" },
       components: {
-        securitySchemes: { bearer: { type: "http", scheme: "bearer" } },
+        securitySchemes: {
+          bearer: { type: "http", scheme: "bearer" },
+          // Session of the site and of the admin console (Better Auth cookie).
+          session: { type: "apiKey", in: "cookie", name: "better-auth.session_token" },
+        },
       },
     },
     transform: jsonSchemaTransform,

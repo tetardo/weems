@@ -37,7 +37,7 @@ Le tracker ne voit jamais votre mot de passe. Vous restez connecté tant que vou
 
 ## 4. Voler
 
-1. Dans **Prochain vol**, mettez votre indicatif et, si vous voulez, les aéroports de départ et d'arrivée (codes OACI : LFPG, LFBO…). Cliquez sur **Enregistrer**.
+1. Dans **Prochain vol**, mettez votre indicatif et les aéroports de départ et d'arrivée (codes OACI : LFPG, LFBO…), obligatoires : sans eux, aucun vol ne démarre. Cliquez sur **Enregistrer**. Pensez à les changer avant chaque vol : le tracker garde ceux du vol précédent.
 2. Lancez MSFS et chargez votre vol, moteurs coupés au parking de préférence.
 3. Le tracker passe à **MSFS connecté** et ouvre le vol tout seul quand l'avion est prêt. Volez normalement.
 4. Le vol se clôt tout seul après l'arrivée au parking. Pour le clore à la main : **Clore le vol**.

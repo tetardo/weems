@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray, sql } from "drizzle-orm";
 import type { TrackPoint } from "@weems/contrats";
 import type { Database } from "../../db/client.ts";
 import { flightTracks } from "../../db/schema.ts";
@@ -23,6 +23,15 @@ export interface TrackStore {
   find(flightId: string): Promise<StoredTrack | null>;
   /** Inserts unless the flight already has a trajectory. Returns false when it had one. */
   insert(flightId: string, track: NewTrack): Promise<boolean>;
+  /** Simplified points of each trajectory found; flights without one are left out. */
+  simplifiedOf(flightIds: readonly string[]): Promise<Map<string, TrackPoint[]>>;
+  /** First and last point of each trajectory found; flights without one are left out. */
+  endpoints(flightIds: readonly string[]): Promise<Map<string, TrackEndpoints>>;
+}
+
+export interface TrackEndpoints {
+  first: TrackPoint;
+  last: TrackPoint;
 }
 
 export class PostgresTrackStore implements TrackStore {
@@ -52,5 +61,27 @@ export class PostgresTrackStore implements TrackStore {
       .onConflictDoNothing()
       .returning({ flightId: flightTracks.flightId });
     return inserted.length > 0;
+  }
+
+  async endpoints(flightIds: readonly string[]): Promise<Map<string, TrackEndpoints>> {
+    if (flightIds.length === 0) return new Map();
+    const rows = await this.db
+      .select({
+        flightId: flightTracks.flightId,
+        first: sql<TrackPoint>`${flightTracks.simplified} -> 0`,
+        last: sql<TrackPoint>`${flightTracks.simplified} -> -1`,
+      })
+      .from(flightTracks)
+      .where(inArray(flightTracks.flightId, [...flightIds]));
+    return new Map(rows.map((row) => [row.flightId, { first: row.first, last: row.last }]));
+  }
+
+  async simplifiedOf(flightIds: readonly string[]): Promise<Map<string, TrackPoint[]>> {
+    if (flightIds.length === 0) return new Map();
+    const rows = await this.db
+      .select({ flightId: flightTracks.flightId, simplified: flightTracks.simplified })
+      .from(flightTracks)
+      .where(inArray(flightTracks.flightId, [...flightIds]));
+    return new Map(rows.map((row) => [row.flightId, row.simplified as TrackPoint[]]));
   }
 }
