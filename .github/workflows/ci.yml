@@ -21,7 +21,7 @@ jobs:
           POSTGRES_DB: weems_test
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U weems"
+          --health-cmd "pg_isready -U weems -d weems_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -45,8 +45,11 @@ jobs:
         run: pnpm test
       - name: J1 (10 pilotes simulés à ×10, environ 6 min)
         run: pnpm test:j1
+      # Without --with-deps: the ubuntu-24.04 image already has Chrome's system libraries.
+      # Installing them again through apt made CI depend on Ubuntu's mirror (down on 11/11/2026).
       - name: Navigateur des tests J2 et J3
-        run: pnpm --filter @weems/e2e exec playwright install --with-deps chromium
+        timeout-minutes: 5
+        run: pnpm --filter @weems/e2e exec playwright install chromium
       - name: J2 (page d'un vol de 2 h en moins de 2 s, français et anglais)
         run: pnpm test:j2
       - name: J3 (connexion du site et du tracker dans le navigateur)

@@ -14,7 +14,7 @@ Rédigée le 11/11/2026. Complète le [cahier des charges](CDC-Tracker.md) (exig
 
 ```
 packages/contrats/        formats Sample, AircraftInfo, SimEvent, Touchdown, messages de l'API (Zod)
-packages/notation/        règles et calcul de la note (partagé avec l'API)
+packages/notation/        règles et calcul de la note (partagé avec l'API) : à créer, attend les critères (point 4 de la spec T0)
 
 apps/tracker/
   src/core/               cœur : session de vol, machine à états des phases, détection d'événements
@@ -23,18 +23,21 @@ apps/tracker/
     replay/               rejeu de fichiers de vol (J1 et tous les tests)
   src/storage/            enregistreur local SQLite
   src/sender/             envoi à l'API et file d'attente hors ligne
-  src/app/                application Electron : fenêtre, icône, connexion au compte
+  src/runtime/            assemblage connecteur → cœur → enregistreur → envoi (partagé par l'app, simulate et fly)
+  src/account/            compte du pilote : connexion OAuth avec PKCE, jetons chiffrés, renouvellement
+  src/app/                application Electron : fenêtre, icône, état
   tools/
     simulate/             lance N cœurs sans interface (J1)
+    fly/                  tracker sans interface sur le PC Windows (J2)
     generate-flights/     générateur de vols synthétiques
-    import/               conversion des vols A32NX (.fdr) et Sky Dolly vers le format de rejeu
+    import/               prévu : conversion des vols A32NX (.fdr) et Sky Dolly vers le format de rejeu
 ```
 
 ![Modules du tracker : le cœur au centre, tout le reste branché](../../schemas/img/tracker-modules.png)
 
 | Règle | Pourquoi |
 | --- | --- |
-| `core/` n'importe rien de `connectors/`, `storage/`, `sender/` ni `app/` | Le cœur reste testable seul ; vérifié automatiquement par une règle ESLint |
+| `core/` n'importe rien du reste du tracker (`connectors/`, `storage/`, `sender/`, `runtime/`, `account/`, `app/`, `tools/`) | Le cœur reste testable seul ; vérifié automatiquement par dependency-cruiser (`pnpm structure`) |
 | `core/` reçoit l'horloge de l'extérieur | Le rejeu peut accélérer le temps (×10) sans fausser les durées |
 | Seul `connectors/msfs/` peut dépendre de Windows | Tout le reste tourne sur Mac |
 
@@ -135,6 +138,7 @@ Un fichier JSON Lines (une ligne JSON par objet). Format provisoire : le point 3
 - **Sortie** : un fichier de rejeu.
 - **Déterministe** : même scénario et même graine donnent exactement le même fichier, donc des tests reproductibles.
 - **Cinématique simple**, pas une simulation de vol : profils de vitesse et d'altitude plausibles, avec un léger bruit. Suffisant pour tester les phases et la chaîne ; les seuils fins se caleront sur les vrais vols (T1, puis bêta).
+- **Tracé plausible** (fiche [010](../../decisions/010-vols-simules-pistes-et-virages.md)) : pistes réelles d'OurAirports, roulage et décollage dans l'axe, virages au taux standard, orthodromie, arrivée simplifiée et finale alignée, descente sur une pente de 3°, circuit après une remise des gaz.
 - La liste des 20 scénarios de référence reste le point 3 de la spec T0, à faire avec un pilote ; le générateur doit savoir produire toutes les perturbations ci-dessus.
 
 ## 7. Application Electron

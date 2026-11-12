@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { buttonClass } from "../ui/button.tsx";
+import { buttonClass } from "@weems/ui";
 import { SignOutIcon } from "../ui/icons.ts";
 
 /** Ends the session on the API, then back to the login page. */
@@ -18,7 +18,7 @@ export function SignOutButton({ label }: { label: string }) {
   return (
     <button type="button" onClick={signOut} className={buttonClass("ghost")} title={label}>
       <SignOutIcon size={20} aria-hidden="true" />
-      <span className="hidden lg:inline">{label}</span>
+      {label}
     </button>
   );
 }

@@ -101,3 +101,6 @@ input {
   color: #b91c1c;
   min-height: 1em;
 }
+#notice.ok {
+  color: #047857;
+}

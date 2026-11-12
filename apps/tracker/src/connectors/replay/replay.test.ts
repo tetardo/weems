@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { sample } from "../../core/testing/sample.ts";
 import { ReplayConnector } from "./replay-connector.ts";
-import { parseReplay, type Replay, serializeReplay } from "./replay-format.ts";
+import {
+  parseReplay,
+  type Replay,
+  replayFrom,
+  replayUntil,
+  serializeReplay,
+} from "./replay-format.ts";
 
 const replay: Replay = {
   header: { format: "weems-replay", version: 1, source: "synthetic", seed: 1 },
@@ -16,6 +22,9 @@ const replay: Replay = {
         registration: null,
         engineCount: 2,
         emptyWeightKg: null,
+        engineType: null,
+        airframe: null,
+        maxGrossWeightKg: null,
       },
     },
     { type: "sample", t: 0, data: sample({ t: 0 }) },
@@ -27,6 +36,21 @@ const replay: Replay = {
 describe("replay format", () => {
   it("reads back what it writes", () => {
     expect(parseReplay(serializeReplay(replay))).toEqual(replay);
+  });
+
+  it("keeps only the first milliseconds of a replay, header unchanged", () => {
+    const start = replayUntil(replay, 20);
+    expect(start.header).toEqual(replay.header);
+    expect(start.records.map((r) => r.t)).toEqual([0, 0, 20]);
+  });
+
+  it("starts from the first matching sample, aircraft kept and moved to it", () => {
+    const from = replayFrom(replay, (s) => s.t >= 40);
+    expect(from.records.map((r) => [r.type, r.t])).toEqual([
+      ["aircraft", 40],
+      ["sample", 40],
+    ]);
+    expect(replayFrom(replay, () => false)).toBe(replay);
   });
 
   it("names the faulty line", () => {
@@ -57,5 +81,13 @@ describe("replay connector", () => {
 
   it("plays in the same order with real delays", async () => {
     expect(await played(new ReplayConnector(replay, 10))).toEqual(expected);
+  });
+
+  it("ends start() at once when stopped during a wait, without playing the rest", async () => {
+    const connector = new ReplayConnector(replay, 0.01); // 2 s between records
+    const playing = played(connector);
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    await connector.stop();
+    expect(await playing).toEqual(["connected", "aircraft", "sample@0", "disconnected"]);
   });
 });

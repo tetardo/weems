@@ -1,4 +1,4 @@
-import type { FlightPhase } from "@weems/contrats";
+import { distanceNm, type FlightPhase } from "@weems/contrats";
 
 /** What the local database remembers of a flight that was still open when the tracker stopped. */
 export interface SavedFlight {
@@ -15,16 +15,6 @@ export interface SavedFlight {
 
 /** Limits of a resume (spec T0 "Cas particuliers" and architecture interne, part 2). */
 const RECOVERY_LIMITS = { maxGapMs: 30 * 60_000, maxDistanceNm: 5 };
-
-/** Distance in nautical miles (great circle). */
-export function distanceNm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const rad = Math.PI / 180;
-  const dLat = (lat2 - lat1) * rad;
-  const dLon = (lon2 - lon1) * rad;
-  const a =
-    Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
-  return 2 * 3440.065 * Math.asin(Math.sqrt(a));
-}
 
 /**
  * ENF-02: the flight resumes when it is the same aircraft, close to its last known position,

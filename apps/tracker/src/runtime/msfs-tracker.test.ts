@@ -86,6 +86,7 @@ describe("pnpm fly, without the simulator", () => {
       api: { post: async (path, body) => (replayed.push({ path, body }), { status: 201 }) },
       session: {
         callsign: "WMS1",
+        flightPlan: { departureIcao: "LFPG", arrivalIcao: "LFBO" },
         trackerVersion: "0.1.0",
         clock: { nowUtcMs: () => Date.UTC(2026, 10, 11, 8, 0, 0) },
         newFlightId: uuidV7,

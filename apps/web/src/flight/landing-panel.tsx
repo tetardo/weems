@@ -1,6 +1,6 @@
 import type { FlightEvent } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
-import { landingSummary } from "./landing-summary.ts";
+import { landingSummary } from "@weems/contrats";
 import { Section } from "./section.tsx";
 
 /** Touchdown rate, bounces, go-arounds (spec site minimal; full context from J4). */

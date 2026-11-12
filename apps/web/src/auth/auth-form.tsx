@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { type AuthError, authRequest } from "./auth-request.ts";
-import { Button } from "../ui/button.tsx";
+import { Button } from "@weems/ui";
 import { safeNext } from "./session-cookie.ts";
 
 interface Props {

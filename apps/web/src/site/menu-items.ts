@@ -1,6 +1,6 @@
 import { FlightsIcon, type IconComponent, LiveIcon } from "../ui/icons.ts";
 
-/** One entry of the side menu: a page of the site. */
+/** One entry of the main navigation: a page of the site. */
 export interface MenuItem {
   readonly href: string;
   /** Key of the label in Site.nav. */
@@ -9,8 +9,8 @@ export interface MenuItem {
 }
 
 /**
- * Pages of the side menu. The estimated final menu, in titled sections (pilot pages,
- * « Ma compagnie » from lot 3, « Compte »), is on the mock-up branch mock/gamelab-menus.
+ * Pages of the floating bar (tabs on large screens) and of the dock at the bottom on phones.
+ * Decision 003: at most 5 entries here; later groups (« Ma compagnie », lot 3) open a menu.
  */
 export const MENU: readonly MenuItem[] = [
   { href: "/flights", label: "flights", icon: FlightsIcon },

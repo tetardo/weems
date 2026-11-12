@@ -5,9 +5,11 @@ import type {
   FlightEvent,
   FlightPhase,
   OpenFlightRequest,
+  PhaseChange,
   PositionReport,
   Sample,
   SimEvent,
+  TouchdownContext,
 } from "@weems/contrats";
 import type { Clock } from "./clock.ts";
 import { FlightLog } from "./flight-log.ts";
@@ -26,16 +28,19 @@ export interface SessionOutput {
   close(request: CloseFlightRequest): void;
 }
 
-/** Airports known before the flight (SimBrief from T2). */
-interface FlightPlan {
+/** Airports entered by the pilot before the flight (SimBrief from T2). */
+export interface FlightPlan {
   departureIcao: string;
   arrivalIcao: string;
 }
 
 export interface SessionOptions {
   callsign: string;
-  /** Absent: departure and arrival are sent as unknown. */
-  flightPlan?: FlightPlan;
+  /**
+   * Required to open a flight (decision 007): null = the session never opens a new flight,
+   * because the live map needs the arrival. A flight resumed after a crash already has its own.
+   */
+  flightPlan: FlightPlan | null;
   trackerVersion: string;
   clock: Clock;
   /** New flight id (UUID v7) for the given UTC time. */
@@ -47,6 +52,10 @@ export interface SessionOptions {
 export type SessionState = "waiting" | "armed" | "flying" | "closed";
 
 const engineRunning = (s: Sample) => s.engines.some((e) => e.running);
+
+/** EF-07: the flight starts at the first engine start or pushback, or when loaded in the air. */
+export const flightStarts = (s: Sample): boolean =>
+  engineRunning(s) || s.pushback === true || !s.onGround;
 
 /**
  * One flight, from aircraft loading to closing (architecture interne, part 2).
@@ -106,9 +115,7 @@ export class FlightSession {
     if (this.stateValue === "waiting" && this.aircraft) {
       this.stateValue = "armed";
     }
-    // EF-07: the flight starts at the first engine start or pushback, or when loaded in the air.
-    const starts = engineRunning(sample) || sample.pushback === true || !sample.onGround;
-    if (this.stateValue === "armed" && starts) this.open(sample);
+    if (this.stateValue === "armed" && flightStarts(sample)) this.open(sample);
     if (this.stateValue === "flying") this.record(sample);
   }
 
@@ -146,12 +153,22 @@ export class FlightSession {
 
   /** Manual close by the pilot (EF-12). */
   closeManually(): void {
-    if (this.stateValue === "flying" && this.lastSample) this.close(this.lastSample.t, "manual");
+    this.closeAtLastSample("manual");
+  }
+
+  /** Stopped from outside before its end (simulation stopped from the admin console). */
+  interrupt(): void {
+    this.closeAtLastSample("interrupted");
+  }
+
+  private closeAtLastSample(reason: "manual" | "interrupted"): void {
+    if (this.stateValue === "flying" && this.lastSample) this.close(this.lastSample.t, reason);
   }
 
   private open(sample: Sample): void {
     const aircraft = this.aircraft;
-    if (!aircraft) return;
+    const plan = this.options.flightPlan;
+    if (!aircraft || !plan) return;
     const nowUtcMs = this.options.clock.nowUtcMs();
     this.log = new FlightLog(nowUtcMs - sample.t, (event) => this.output.event(event));
     this.stateValue = "flying";
@@ -159,8 +176,8 @@ export class FlightSession {
       flightId: this.options.newFlightId(nowUtcMs),
       callsign: this.options.callsign,
       aircraft,
-      departureIcao: this.options.flightPlan?.departureIcao ?? null,
-      plannedArrivalIcao: this.options.flightPlan?.arrivalIcao ?? null,
+      departureIcao: plan.departureIcao,
+      plannedArrivalIcao: plan.arrivalIcao,
       openedAt: this.log.at(sample.t),
       trackerVersion: this.options.trackerVersion,
     });
@@ -177,14 +194,15 @@ export class FlightSession {
 
   private logPhaseOutput(output: PhaseOutput, log: FlightLog): void {
     if (output.kind === "phaseChanged") {
-      const context = {
+      const context: PhaseChange = {
         from: output.from,
         to: output.to,
         ...(output.airStart && { airStart: true }),
       };
       log.record("phaseChanged", output.t, context);
     } else if (output.kind === "touchdown") {
-      log.record("touchdown", output.t, { vs: output.vs });
+      const context: TouchdownContext = { vs: output.vs };
+      log.record("touchdown", output.t, context);
     } else {
       log.record(output.kind, output.t);
     }

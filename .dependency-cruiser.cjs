@@ -25,7 +25,8 @@ module.exports = {
           "(^|/)src/(index|main|server)\\.ts$",
           "(^|/)tools/",
           "(^|/)scripts/",
-          "(^|/)apps/web/src/app/", // Next.js routes: loaded by the framework
+          "(^|/)apps/(web|admin)/src/app/", // Next.js routes: loaded by the framework
+          "(^|/)apps/(web|admin)/src/proxy\\.ts$", // Next.js proxy: loaded by the framework
         ],
       },
       to: {},
@@ -34,12 +35,13 @@ module.exports = {
       name: "tracker-core-is-independent",
       severity: "error",
       comment:
-        "The tracker core must not depend on connectors, storage, sender, Electron or Node I/O " +
+        "The tracker core depends on nothing else of the tracker (connectors, storage, sender, " +
+        "account, runtime, app, tools), nor on Electron or Node I/O " +
         "(docs/cahiers-des-charges/tracker/architecture-interne.md).",
       from: { path: "^apps/tracker/src/core/" },
       to: {
         path: [
-          "^apps/tracker/src/(connectors|storage|sender|app)/",
+          "^apps/tracker/(?!src/core/)", // anything of the tracker outside core/ (tools/ included)
           "^(node:)?(fs|net|http|https|child_process)$",
           "electron",
           "node:sqlite",

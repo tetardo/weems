@@ -1,4 +1,4 @@
-import { type FlightEvent, FlightPhase } from "@weems/contrats";
+import { type FlightEvent, type FlightPhase, phaseChangeOf } from "@weems/contrats";
 
 interface PhaseStart {
   atMs: number;
@@ -8,9 +8,8 @@ interface PhaseStart {
 /** Phase changes of a flight, in time order, from its "phaseChanged" events (tracker's truth). */
 export function phaseStarts(events: readonly FlightEvent[]): PhaseStart[] {
   return events.flatMap((event) => {
-    if (event.type !== "phaseChanged") return [];
-    const phase = FlightPhase.safeParse(event.context["to"]);
-    return phase.success ? [{ atMs: Date.parse(event.at), phase: phase.data }] : [];
+    const change = phaseChangeOf(event);
+    return change ? [{ atMs: Date.parse(event.at), phase: change.to }] : [];
   });
 }
 

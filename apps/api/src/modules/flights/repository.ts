@@ -1,6 +1,25 @@
-import { and, asc, desc, eq, gte, ilike, inArray, isNull, lt, or, type SQL } from "drizzle-orm";
 import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  isNotNull,
+  isNull,
+  lt,
+  notInArray,
+  or,
+  type SQL,
+} from "drizzle-orm";
+import {
+  AircraftCategory,
+  type AircraftClass,
+  Airframe,
   CloseReason,
+  EngineType,
   type CloseFlightRequest,
   type FlightEvent,
   FlightEventType,
@@ -14,6 +33,7 @@ import type { ListPosition } from "./list-cursor.ts";
 /** A stored flight, in the shared formats. */
 export interface FlightRecord extends OpenFlightRequest {
   pilotId: string;
+  aircraftClass: AircraftClass | null;
   closedAt: string | null;
   closeReason: CloseReason | null;
 }
@@ -33,13 +53,33 @@ function toRecord(row: FlightRow): FlightRecord {
       registration: row.aircraftRegistration,
       engineCount: row.aircraftEngineCount,
       emptyWeightKg: row.aircraftEmptyWeightKg,
+      engineType: EngineType.nullable().parse(row.aircraftEngineType),
+      airframe: Airframe.nullable().parse(row.aircraftAirframe),
+      maxGrossWeightKg: row.aircraftMaxGrossWeightKg,
     },
+    aircraftClass: classOf(row),
     departureIcao: row.departureIcao,
     plannedArrivalIcao: row.plannedArrivalIcao,
     openedAt: row.openedAt.toISOString(),
     trackerVersion: row.trackerVersion,
     closedAt: row.closedAt?.toISOString() ?? null,
     closeReason: row.closeReason === null ? null : CloseReason.parse(row.closeReason),
+  };
+}
+
+function classOf(row: FlightRow): AircraftClass | null {
+  if (row.aircraftCategory === null) return null;
+  return {
+    category: AircraftCategory.parse(row.aircraftCategory),
+    estimated: row.aircraftCategoryEstimated,
+  };
+}
+
+/** Columns of the aircraft category; no category is stored as null. */
+function classColumns(aircraftClass: AircraftClass | null) {
+  return {
+    aircraftCategory: aircraftClass?.category ?? null,
+    aircraftCategoryEstimated: aircraftClass?.estimated ?? false,
   };
 }
 
@@ -58,11 +98,27 @@ export interface ListFilters {
   from?: string | undefined;
   to?: string | undefined;
   aircraft?: string | undefined;
+  category?: AircraftCategory | undefined;
   airport?: string | undefined;
+  /** Public profile (spec J4): closed flights only, without the ones the pilot hid. */
+  closedOnly?: boolean;
+  excluded?: readonly string[];
+  /** Profile settings (spec J4): only these flights, the hidden ones. */
+  only?: readonly string[];
+}
+
+/** Profile filters: closed flights, hidden ones left out, or only some flights. */
+function profileConditions(filters: ListFilters): SQL | undefined {
+  const { closedOnly = false, excluded = [], only } = filters;
+  return and(
+    closedOnly ? isNotNull(flights.closedAt) : undefined,
+    excluded.length > 0 ? notInArray(flights.id, [...excluded]) : undefined,
+    only ? inArray(flights.id, [...only]) : undefined,
+  );
 }
 
 function listConditions(pilotId: string, filters: ListFilters): SQL | undefined {
-  const { after, from, to, aircraft, airport } = filters;
+  const { after, from, to, aircraft, category, airport } = filters;
   const like = aircraft && `%${aircraft.replace(/[%_\\]/g, (c) => `\\${c}`)}%`;
   return and(
     eq(flights.pilotId, pilotId),
@@ -74,9 +130,11 @@ function listConditions(pilotId: string, filters: ListFilters): SQL | undefined 
     from ? gte(flights.openedAt, new Date(from)) : undefined,
     to ? lt(flights.openedAt, new Date(to)) : undefined,
     like ? or(ilike(flights.aircraftTitle, like), ilike(flights.aircraftModel, like)) : undefined,
+    category ? eq(flights.aircraftCategory, category) : undefined,
     airport
       ? or(eq(flights.departureIcao, airport), eq(flights.plannedArrivalIcao, airport))
       : undefined,
+    profileConditions(filters),
   );
 }
 
@@ -94,7 +152,11 @@ export class FlightsRepository {
   }
 
   /** Inserts the flight unless the id exists. Returns false when it already existed. */
-  async insertFlight(pilotId: string, flight: OpenFlightRequest): Promise<boolean> {
+  async insertFlight(
+    pilotId: string,
+    flight: OpenFlightRequest,
+    aircraftClass: AircraftClass | null,
+  ): Promise<boolean> {
     const inserted = await this.db
       .insert(flights)
       .values({
@@ -107,6 +169,10 @@ export class FlightsRepository {
         aircraftRegistration: flight.aircraft.registration,
         aircraftEngineCount: flight.aircraft.engineCount,
         aircraftEmptyWeightKg: flight.aircraft.emptyWeightKg,
+        aircraftEngineType: flight.aircraft.engineType,
+        aircraftAirframe: flight.aircraft.airframe,
+        aircraftMaxGrossWeightKg: flight.aircraft.maxGrossWeightKg,
+        ...classColumns(aircraftClass),
         departureIcao: flight.departureIcao,
         plannedArrivalIcao: flight.plannedArrivalIcao,
         openedAt: new Date(flight.openedAt),
@@ -117,22 +183,55 @@ export class FlightsRepository {
     return inserted.length > 0;
   }
 
+  /** Number of flights of each pilot (admin console). */
+  async countByPilot(): Promise<Map<string, number>> {
+    const rows = await this.db
+      .select({ pilotId: flights.pilotId, n: count() })
+      .from(flights)
+      .groupBy(flights.pilotId);
+    return new Map(rows.map((row) => [row.pilotId, row.n]));
+  }
+
+  /** Development only: the pilot's flights by simulator. */
+  async countBySimulator(pilotId: string): Promise<Map<string, number>> {
+    const rows = await this.db
+      .select({ simulator: flights.simulator, n: count() })
+      .from(flights)
+      .where(eq(flights.pilotId, pilotId))
+      .groupBy(flights.simulator);
+    return new Map(rows.map((row) => [row.simulator, row.n]));
+  }
+
   /**
-   * Development only (see dev-routes.ts): deletes every flight of the pilot with its events,
-   * trajectory and review. Returns the deleted ids.
+   * Development only (see dev-routes.ts): deletes the pilot's flights (only those of one
+   * simulator when given) with their events, trajectory and review. Returns the deleted ids.
    */
-  async deleteAllOf(pilotId: string): Promise<string[]> {
+  async deleteAllOf(pilotId: string, simulator?: Simulator): Promise<string[]> {
+    const mine = simulator
+      ? and(eq(flights.pilotId, pilotId), eq(flights.simulator, simulator))
+      : eq(flights.pilotId, pilotId);
     return this.db.transaction(async (tx) => {
-      const owned = tx.select({ id: flights.id }).from(flights).where(eq(flights.pilotId, pilotId));
+      // The list is fixed first: a flight the pilot opens meanwhile (a test running alongside)
+      // is left alone, instead of failing the delete on its trajectory's foreign key.
+      const rows = await tx.select({ id: flights.id }).from(flights).where(mine);
+      const owned = rows.map((row) => row.id);
+      if (owned.length === 0) return [];
       await tx.delete(flightEvents).where(inArray(flightEvents.flightId, owned));
       await tx.delete(flightTracks).where(inArray(flightTracks.flightId, owned));
       await tx.delete(flightReviews).where(inArray(flightReviews.flightId, owned));
-      const deleted = await tx
-        .delete(flights)
-        .where(eq(flights.pilotId, pilotId))
-        .returning({ id: flights.id });
-      return deleted.map((row) => row.id);
+      await tx.delete(flights).where(inArray(flights.id, owned));
+      return owned;
     });
+  }
+
+  /** Every flight, for re-classifying them after a catalogue change. */
+  async allFlights(): Promise<FlightRecord[]> {
+    const rows = await this.db.select().from(flights);
+    return rows.map(toRecord);
+  }
+
+  async setAircraftClass(flightId: string, aircraftClass: AircraftClass | null): Promise<void> {
+    await this.db.update(flights).set(classColumns(aircraftClass)).where(eq(flights.id, flightId));
   }
 
   /** Closes the flight if still open. Returns false when it was already closed. */
@@ -145,14 +244,19 @@ export class FlightsRepository {
     return updated.length > 0;
   }
 
-  /** A pilot's flights, newest first. */
-  async listFlights(pilotId: string, filters: ListFilters, limit: number): Promise<FlightRecord[]> {
-    const rows = await this.db
+  /** A pilot's flights, newest first; all of them when no limit is given. */
+  async listFlights(
+    pilotId: string,
+    filters: ListFilters,
+    limit?: number,
+  ): Promise<FlightRecord[]> {
+    const query = this.db
       .select()
       .from(flights)
       .where(listConditions(pilotId, filters))
       .orderBy(desc(flights.openedAt), desc(flights.id))
-      .limit(limit);
+      .$dynamic();
+    const rows = await (limit === undefined ? query : query.limit(limit));
     return rows.map(toRecord);
   }
 

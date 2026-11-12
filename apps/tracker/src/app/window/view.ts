@@ -40,7 +40,9 @@ function renderSimulator(state: AppState): void {
 
 function renderFlight(state: AppState): void {
   const phase = state.flight?.phase ? PHASES[lang][state.flight.phase] : "—";
-  show("flight-status", state.flight ? `${text("phase")} : ${phase}` : text("noFlight"));
+  if (state.flight) show("flight-status", `${text("phase")} : ${phase}`);
+  else if (state.flightPlanMissing) show("flight-status", text("flightPlanMissing"), "ko");
+  else show("flight-status", text("noFlight"));
   byId("close-flight").hidden = !state.flight;
   if (state.blocked === "upgradeRequired") show("sending", text("upgradeRequired"), "ko");
   else if (state.pending === 0) show("sending", text("allSent"), "ok");
@@ -70,6 +72,14 @@ function renderSettings(state: AppState): void {
   settingsShown = true;
 }
 
+/** Last problem in red, or the confirmation of saved settings in green. */
+function renderNotice({ notice, settings }: AppState): void {
+  if (notice === "settingsSaved") {
+    const route = `${settings.callsign}, ${settings.departureIcao} → ${settings.arrivalIcao}`;
+    show("notice", `${text("settingsSaved")} ${route}`, "ok");
+  } else show("notice", notice ? text(notice as MessageKey) : "");
+}
+
 function render(state: AppState): void {
   byId("version").textContent = state.version;
   renderAccount(state);
@@ -77,7 +87,7 @@ function render(state: AppState): void {
   renderFlight(state);
   renderLastFlight(state);
   renderSettings(state);
-  byId("notice").textContent = state.notice ? text(state.notice as MessageKey) : "";
+  renderNotice(state);
 }
 
 byId("log-in").addEventListener("click", () => void window.weems.logIn());

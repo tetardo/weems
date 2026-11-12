@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { AuthForm } from "./auth-form.tsx";
-import { FormField } from "../ui/form-field.tsx";
+import { FormField } from "@weems/ui";
 
 export function LoginForm() {
   const t = useTranslations("Auth");

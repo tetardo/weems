@@ -3,8 +3,7 @@
 import type { FlightReviewView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
-import { Button } from "../ui/button.tsx";
-import { INPUT_CLASS } from "../ui/input-class.ts";
+import { Button, INPUT_CLASS } from "@weems/ui";
 import { type ReviewState, submitReview } from "./review-action.ts";
 import { Section } from "./section.tsx";
 

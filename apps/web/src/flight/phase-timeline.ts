@@ -1,4 +1,4 @@
-import { type FlightEvent, FlightPhase } from "@weems/contrats";
+import { type FlightEvent, type FlightPhase, phaseChangeOf } from "@weems/contrats";
 
 export interface PhaseSpan {
   phase: FlightPhase;
@@ -15,9 +15,8 @@ export function phaseTimeline(
   closedAt: string | null,
 ): PhaseSpan[] {
   const starts = events.flatMap((event) => {
-    if (event.type !== "phaseChanged") return [];
-    const phase = FlightPhase.safeParse(event.context["to"]);
-    return phase.success ? [{ phase: phase.data, startAt: event.at }] : [];
+    const change = phaseChangeOf(event);
+    return change ? [{ phase: change.to, startAt: event.at }] : [];
   });
   return starts.map((start, i) => {
     const end = starts[i + 1]?.startAt ?? (start.phase === "ARRIVED" ? start.startAt : closedAt);

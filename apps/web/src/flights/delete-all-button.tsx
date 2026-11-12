@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
-import { Button } from "../ui/button.tsx";
+import { Button } from "@weems/ui";
 import { DeleteIcon } from "../ui/icons.ts";
 import { deleteAllAction } from "./delete-all-action.ts";
 

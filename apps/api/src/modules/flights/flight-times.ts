@@ -1,4 +1,4 @@
-import type { FlightEvent, FlightTimes } from "@weems/contrats";
+import { type FlightEvent, type FlightTimes, phaseChangeOf } from "@weems/contrats";
 
 const ms = (utc: string) => Date.parse(utc);
 const seconds = (fromMs: number, toMs: number) => Math.max(0, Math.round((toMs - fromMs) / 1000));
@@ -29,9 +29,9 @@ function overlapS(intervals: readonly [number, number][], fromMs: number, toMs: 
 /** Liftoff: end of the first takeoff (TAKEOFF → CLIMB); flights started in the air count from opening. */
 function liftoffMs(openedAtMs: number, events: readonly FlightEvent[]): number | null {
   for (const event of events) {
-    if (event.type !== "phaseChanged") continue;
-    if (event.context["from"] === "TAKEOFF" && event.context["to"] === "CLIMB") return ms(event.at);
-    if (event.context["from"] === null && event.context["airStart"] === true) return openedAtMs;
+    const change = phaseChangeOf(event);
+    if (change?.from === "TAKEOFF" && change.to === "CLIMB") return ms(event.at);
+    if (change?.from === null && change.airStart) return openedAtMs;
   }
   return null;
 }

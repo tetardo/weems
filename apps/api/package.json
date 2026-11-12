@@ -11,12 +11,17 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node src/db/migrate-cli.ts",
     "invite": "node --env-file-if-exists=.env src/modules/accounts/invite-cli.ts",
-    "alpha-report": "node --env-file-if-exists=.env src/modules/alpha/report-cli.ts"
+    "make-admin": "node --env-file-if-exists=.env src/modules/accounts/make-admin-cli.ts",
+    "alpha-report": "node --env-file-if-exists=.env src/modules/alpha/report-cli.ts",
+    "airports:update": "node src/modules/airports/update-cli.ts",
+    "reclassify": "node --env-file-if-exists=.env src/modules/flights/reclassify-cli.ts"
   },
   "dependencies": {
     "@better-auth/oauth-provider": "1.7.20",
+    "@fastify/rate-limit": "10.3.0",
     "@fastify/swagger": "9.9.3",
     "@fastify/swagger-ui": "6.1.3",
+    "@photostructure/tz-lookup": "11.7.0",
     "@weems/contrats": "workspace:*",
     "better-auth": "1.7.20",
     "drizzle-orm": "0.45.4",
@@ -24,6 +29,7 @@
     "fastify-type-provider-zod": "7.0.0",
     "jose": "6.2.17",
     "pg": "8.23.1",
+    "sharp": "0.34.5",
     "zod": "4.6.7"
   },
   "devDependencies": {
