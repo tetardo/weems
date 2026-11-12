@@ -670,6 +670,17 @@ td .bar2 i {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
+}
+.who .tx {
+  min-width: 0;
+}
+.who .nm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 6px;
+  min-width: 0;
 }
 .who .av {
   width: 30px;
@@ -684,11 +695,20 @@ td .bar2 i {
   color: #fff;
   flex: none;
 }
+.who b,
+.who .sub {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .who b {
-  display: block;
   font-size: 14px;
 }
-.who span {
+.who .nm b {
+  max-width: 100%;
+  white-space: nowrap;
+}
+.who .sub {
+  display: block;
   font-size: 12.5px;
   color: var(--muted);
 }
@@ -1004,20 +1024,28 @@ td .bar2 i {
   }
 }
 
+/* The account cell takes the room left and shortens long names and e-mails (« … »),
+   so the table never grows wider than its panel. */
+td.who-cell {
+  width: 100%;
+  max-width: 0;
+}
+/* Actions: two fixed slots (profile, then menu), so each icon keeps its place on every row. */
 td.act {
   position: relative;
-  text-align: right;
-  width: 84px;
+  width: 1%;
   padding-right: 10px;
+}
+td.act .slots {
+  display: grid;
+  grid-template-columns: repeat(2, 36px);
+  gap: 4px;
 }
 .panel.tbl {
   overflow: visible;
 }
 .panel.tbl table {
   table-layout: auto;
-}
-td.act .iconbtn {
-  display: inline-grid;
 }
 .pop {
   position: absolute;
@@ -1245,6 +1273,11 @@ td.act .iconbtn {
   }
   .panel.tbl {
     overflow-x: auto;
+  }
+  /* The table scrolls sideways on a phone: the account cell keeps a readable width. */
+  td.who-cell {
+    width: auto;
+    max-width: 240px;
   }
   .mcards {
     display: flex;

@@ -35,11 +35,14 @@ function Who(props: {
       <span className="av" style={{ background: colorOf(props.seed) }}>
         {props.initials}
       </span>
-      <div>
-        <b>
-          {props.name} {props.extra}
-        </b>
-        <span>{props.sub}</span>
+      <div className="tx">
+        <div className="nm">
+          <b title={props.name}>{props.name}</b>
+          {props.extra}
+        </div>
+        <span className="sub" title={props.sub}>
+          {props.sub}
+        </span>
       </div>
     </div>
   );
@@ -61,6 +64,14 @@ const AccountBadges = ({ account }: { account: AdminAccount }) => (
   </>
 );
 
+/** Fixed slots of the actions column (link, then menu): an absent action leaves its place empty. */
+const Slots = ({ link, menu }: { link?: React.ReactNode; menu?: React.ReactNode }) => (
+  <div className="slots">
+    {link || <span />}
+    {menu || <span />}
+  </div>
+);
+
 /** Opens the public profile on the local site, for real and fictitious accounts alike. */
 const ProfileLink = ({ name, href }: { name: string; href: string }) => (
   <a
@@ -75,9 +86,9 @@ const ProfileLink = ({ name, href }: { name: string; href: string }) => (
   </a>
 );
 
-export function AccountRow(props: { account: AdminAccount; me: string; actions: RowActions }) {
+/** Profile link and « … » menu of an account (no menu on one's own row). */
+function AccountActions(props: { account: AdminAccount; self: boolean; actions: RowActions }) {
   const { account, actions } = props;
-  const self = account.id === props.me;
   const menu = [
     account.role === "admin"
       ? { label: "Rendre pilote", onSelect: () => actions.setRole(account, "pilot") }
@@ -87,8 +98,31 @@ export function AccountRow(props: { account: AdminAccount; me: string; actions: 
       : { label: "Désactiver", danger: true, onSelect: () => actions.disable(account) },
   ];
   return (
+    <Slots
+      link={
+        account.publicHandle && (
+          <ProfileLink name={account.name} href={actions.profileUrl(account.publicHandle)} />
+        )
+      }
+      menu={
+        !props.self && (
+          <RowMenu
+            title={account.email}
+            items={menu}
+            note="Désactiver garde ses vols ; réactivable."
+          />
+        )
+      }
+    />
+  );
+}
+
+export function AccountRow(props: { account: AdminAccount; me: string; actions: RowActions }) {
+  const { account } = props;
+  const self = account.id === props.me;
+  return (
     <tr>
-      <td>
+      <td className="who-cell">
         <Who
           initials={initialsOf(account.name)}
           seed={account.email}
@@ -111,16 +145,7 @@ export function AccountRow(props: { account: AdminAccount; me: string; actions: 
       <td>{shortDate(account.createdAt)}</td>
       <td>{account.lastLoginAt ? ago(account.lastLoginAt, Date.now()) : "—"}</td>
       <td className="act">
-        {account.publicHandle && (
-          <ProfileLink name={account.name} href={actions.profileUrl(account.publicHandle)} />
-        )}
-        {!self && (
-          <RowMenu
-            title={account.email}
-            items={menu}
-            note="Désactiver garde ses vols ; réactivable."
-          />
-        )}
+        <AccountActions account={account} self={self} actions={props.actions} />
       </td>
     </tr>
   );
@@ -141,7 +166,7 @@ export function InvitationRow({
   ];
   return (
     <tr>
-      <td>
+      <td className="who-cell">
         <Who initials="?" seed={invitation.email} name="—" sub={invitation.email} />
       </td>
       <td>
@@ -158,14 +183,18 @@ export function InvitationRow({
       <td>{shortDate(invitation.createdAt)}</td>
       <td>—</td>
       <td className="act">
-        <button
-          className="iconbtn"
-          aria-label="Copier le lien"
-          onClick={() => actions.copyLink(invitation)}
-        >
-          <CopyIcon size={16} />
-        </button>
-        <RowMenu title={invitation.email} items={menu} />
+        <Slots
+          link={
+            <button
+              className="iconbtn"
+              aria-label="Copier le lien"
+              onClick={() => actions.copyLink(invitation)}
+            >
+              <CopyIcon size={16} />
+            </button>
+          }
+          menu={<RowMenu title={invitation.email} items={menu} />}
+        />
       </td>
     </tr>
   );
