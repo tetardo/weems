@@ -1,4 +1,9 @@
-import { landingSummary, type FlightAlert, type LogbookSummary } from "@weems/contrats";
+import {
+  landingSummary,
+  type FlightAlert,
+  type LogbookLastFlight,
+  type LogbookSummary,
+} from "@weems/contrats";
 import type { SummaryWithEvents } from "../flights/service.ts";
 import { dailyStreak } from "../profiles/streak.ts";
 import { sum } from "../profiles/sum.ts";
@@ -80,13 +85,25 @@ function workOn(flights: readonly Landed[]): LogbookSummary["workOn"] {
   };
 }
 
+type LastTrack = { distanceNm: number; fuelUsedKg: number | null } | null;
+
+const NO_LANDING = { touchdownVs: null, bounces: 0, goArounds: 0 };
+const NO_TRACK = { distanceNm: null, fuelUsedKg: null };
+
+/** « Dernier vol »: the flight, its final landing, and what its trajectory measured. */
+function lastFlightOf({ flight, landing }: Landed, track: LastTrack): LogbookLastFlight {
+  const { touchdownVs, bounces, goArounds } = landing ?? NO_LANDING;
+  const { distanceNm, fuelUsedKg } = track ?? NO_TRACK;
+  return { flight: flight.summary, touchdownVs, bounces, goArounds, distanceNm, fuelUsedKg };
+}
+
 /**
  * Page Résumé of the private logbook, from every closed flight of the pilot (newest first) and the
- * length of the last flight's trajectory.
+ * length and fuel of the last flight's trajectory (null without trajectory).
  */
 export function logbookSummary(
   closed: readonly SummaryWithEvents[],
-  lastFlightNm: number | null,
+  lastTrack: LastTrack,
   now: Date,
 ): LogbookSummary {
   const flights: Landed[] = closed.map((flight) => ({
@@ -98,15 +115,7 @@ export function logbookSummary(
   const day = now.getTime();
   const last = flights[0];
   return {
-    lastFlight: last
-      ? {
-          flight: last.flight.summary,
-          touchdownVs: last.landing?.touchdownVs ?? null,
-          bounces: last.landing?.bounces ?? 0,
-          goArounds: last.landing?.goArounds ?? 0,
-          distanceNm: lastFlightNm,
-        }
-      : null,
+    lastFlight: last ? lastFlightOf(last, lastTrack) : null,
     monthAirborneS: monthAirborne(flights, now),
     touchdownAverage: {
       current: mean(measured.slice(0, LANDINGS_COMPARED).map((t) => t.vs)),

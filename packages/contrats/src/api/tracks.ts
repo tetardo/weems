@@ -15,6 +15,23 @@ export const TrackPoint = z.object({
   vs: z.number(),
   heading: Heading,
   onGround: z.boolean(),
+  /**
+   * Flight bands (spec carnet privé, § 7), sent by trackers since 12/11/2026: absent on older
+   * flights, null when the simulator does not give the value.
+   */
+  bank: z.number().min(-180).max(180).optional(),
+  gForce: z.number().optional(),
+  /** Mean N1 of the running engines, percent; null for piston engines. */
+  n1: z.number().min(0).max(150).nullable().optional(),
+  flapsIndex: z.number().int().nonnegative().nullable().optional(),
+  gearHandle: z.number().min(0).max(1).nullable().optional(),
+  spoilers: z.number().min(0).max(1).nullable().optional(),
+  parkingBrake: z.boolean().nullable().optional(),
+  autopilot: z.boolean().nullable().optional(),
+  landingLight: z.boolean().nullable().optional(),
+  seatbelts: z.boolean().nullable().optional(),
+  cabinAlt: z.number().nullable().optional(),
+  fuelKg: z.number().nonnegative().nullable().optional(),
 });
 export type TrackPoint = z.infer<typeof TrackPoint>;
 

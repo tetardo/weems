@@ -3,7 +3,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { formatDuration } from "../../format/flight-format.ts";
 import { CalendarIcon } from "../../ui/icons.ts";
 import { type CalendarDay, flyingCalendar } from "./calendar.ts";
-import { SummaryCard } from "./summary-card.tsx";
+import { LogbookCard } from "../logbook-card.tsx";
 
 /** Same span as the API (17 weeks, about four months). */
 const WEEKS = 17;
@@ -68,7 +68,7 @@ export function Regularity({
   const days = flyingCalendar(flyingDays, today, WEEKS);
   const flown = days.filter((d) => d.flights > 0).length;
   return (
-    <SummaryCard icon={CalendarIcon} title={t("title")} aside={t("aside", { weeks: WEEKS })}>
+    <LogbookCard icon={CalendarIcon} title={t("title")} aside={t("aside", { weeks: WEEKS })}>
       <div
         className="grid gap-[3px]"
         style={{ gridTemplateColumns: `1.4em repeat(${WEEKS}, minmax(0, 1fr))` }}
@@ -97,6 +97,6 @@ export function Regularity({
         </span>
         <span>{t("total", { days: flown, weeks: WEEKS })}</span>
       </div>
-    </SummaryCard>
+    </LogbookCard>
   );
 }

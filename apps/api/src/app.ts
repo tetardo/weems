@@ -176,10 +176,11 @@ function registerPlans(
   database: DatabaseHandle,
   guards: Guards,
   testSwitch: boolean,
-): void {
+): PlansService {
   const plans = new PlansService(testSwitch ? new TestPlansRepository(database.db) : null);
   registerPlanRoutes(app, plans, guards);
   if (testSwitch) registerDevPlanRoutes(app, plans, guards);
+  return plans;
 }
 
 /** Routes that exist outside production only (simulation, measures, fictitious pilots). */
@@ -235,7 +236,8 @@ export async function buildApp({
   registerTrackRoutes(app, tracks, guards);
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
-  registerPrivateLogbookRoutes(app, new PrivateLogbookService(flights, tracks), guards);
+  const plans = registerPlans(app, database, guards, config.env !== "production");
+  registerPrivateLogbookRoutes(app, new PrivateLogbookService(flights, tracks, plans), guards);
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));
@@ -245,7 +247,6 @@ export async function buildApp({
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));
   registerSupervision(app, { database, guards, board, metrics });
   registerDatabaseRoutes(app, createDatabaseService(database.db, board), guards);
-  registerPlans(app, database, guards, config.env !== "production");
   if (config.env !== "production") {
     registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }

@@ -1,4 +1,4 @@
-import type { MyPlan, PlanCatalog, PlanId } from "@weems/contrats";
+import type { FeatureKey, MyPlan, PlanCatalog, PlanId } from "@weems/contrats";
 import { PLAN_CATALOG } from "./catalog.ts";
 import type { TestPlansRepository } from "./repository.ts";
 
@@ -21,6 +21,13 @@ export class PlansService {
   async planOf(pilotId: string): Promise<MyPlan> {
     const plan = (await this.testPlans?.planOf(pilotId)) ?? "pilot_free";
     return { plan, testSwitch: this.testPlans !== null };
+  }
+
+  /** The caller's plan includes a feature: a limit or "unlimited" counts, false does not. */
+  async includes(pilotId: string, key: FeatureKey): Promise<boolean> {
+    const { plan } = await this.planOf(pilotId);
+    const value = PLAN_CATALOG.features.find((feature) => feature.key === key)?.values[plan];
+    return value !== undefined && value !== false;
   }
 
   /** Test switch only: never called in production (the route does not exist there). */

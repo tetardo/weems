@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { BounceIcon, DoneIcon, WarningIcon, type IconComponent } from "../../ui/icons.ts";
 import { LockedCard } from "../locked-card.tsx";
-import { SummaryCard } from "./summary-card.tsx";
+import { LogbookCard } from "../logbook-card.tsx";
 
 type WorkOn = LogbookSummary["workOn"];
 
@@ -65,7 +65,7 @@ function Rows({ workOn }: { workOn: WorkOn }) {
 export function WorkOnCard({ workOn, detailed }: { workOn: WorkOn; detailed: boolean }) {
   const t = useTranslations("Logbook.summary.workOn");
   return (
-    <SummaryCard
+    <LogbookCard
       icon={WarningIcon}
       title={t("title")}
       aside={t("aside", { flights: workOn.flights })}
@@ -84,6 +84,6 @@ export function WorkOnCard({ workOn, detailed }: { workOn: WorkOn; detailed: boo
           <LockedCard title={t("detailed.title")} text={t("detailed.text")} />
         )}
       </div>
-    </SummaryCard>
+    </LogbookCard>
   );
 }

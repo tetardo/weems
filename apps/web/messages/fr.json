@@ -466,15 +466,7 @@
       "empty": "Aucun vol terminé pour l'instant. Lancez le traqueur et faites un premier vol : il apparaîtra ici.",
       "last": {
         "title": "Dernier vol",
-        "open": "Voir le vol",
-        "touchdown": "Toucher (ft/min)",
-        "duration": "Durée",
-        "distance": "Distance",
-        "nm": "{nm} nm",
-        "fuel": "Carburant",
-        "bounces": "Rebonds",
-        "alerts": "Alertes",
-        "noAlert": "Aucune"
+        "open": "Voir le vol"
       },
       "stages": {
         "label": "Profil d'altitude du dernier vol, par phase",
@@ -542,6 +534,95 @@
         "title": "Vols récents",
         "all": "Tous les vols"
       }
+    },
+    "minis": {
+      "touchdown": "Toucher (ft/min)",
+      "duration": "Durée",
+      "distance": "Distance",
+      "nm": "{nm} nm",
+      "fuel": "Carburant",
+      "tonnes": "{tonnes, number, ::.0} t",
+      "bounces": "Rebonds",
+      "alerts": "Alertes",
+      "noAlert": "Aucune"
+    },
+    "flights": {
+      "title": "Vols",
+      "count": "{count, plural, =0 {aucun vol} one {# vol} other {# vols}}",
+      "empty": "Aucun vol terminé pour l'instant.",
+      "all": "Tous les vols",
+      "fullPage": "Page complète du vol",
+      "bands": "Bandes de vol",
+      "bandsAside": "{minutes} min · {rows} paramètres",
+      "noTrack": "Ce vol n'a pas de trajectoire.",
+      "profile": "Profil d'altitude",
+      "intro": "{count, plural, =0 {Aucun vol} one {# vol} other {# vols}} · tous vos vols, y compris ceux masqués sur votre page publique.",
+      "filters": {
+        "all": "Tous",
+        "clean": "Propres",
+        "review": "À revoir"
+      },
+      "emptyFiltered": "Aucun vol pour ce filtre."
+    },
+    "verdicts": {
+      "clean": "Propre",
+      "firm": "Ferme",
+      "bounce": "Rebond",
+      "nonCompliant": "Non conforme",
+      "noLanding": "Sans atterrissage"
+    },
+    "bands": {
+      "phase": "Phase",
+      "hover": "Survolez une colonne pour lire toutes les valeurs de la minute. 1 case = 1 minute.",
+      "groups": {
+        "trajectory": "Trajectoire",
+        "controls": "Commandes",
+        "cabin": "Cabine"
+      },
+      "rows": {
+        "altitude": "Altitude",
+        "speed": "Vitesse",
+        "verticalSpeed": "Vitesse verticale",
+        "bank": "Inclinaison",
+        "gForce": "Facteur de charge",
+        "n1": "Poussée (N1)",
+        "flaps": "Volets",
+        "gear": "Train",
+        "spoilers": "Aérofreins",
+        "braking": "Freinage",
+        "parkingBrake": "Frein de parking",
+        "autopilot": "Pilote auto",
+        "landingLight": "Feux d'atterrissage",
+        "seatbelts": "Consigne ceintures",
+        "cabinAltitude": "Altitude cabine"
+      },
+      "values": {
+        "altitude": "{value} ft",
+        "speed": "{value} kt",
+        "verticalSpeed": "{value} ft/min",
+        "bank": "{value}°",
+        "g": "{value} g",
+        "n1": "{value} %",
+        "flaps": "cran {value}",
+        "gearDown": "sorti",
+        "gearUp": "rentré",
+        "percent": "{value} %",
+        "ktPerS": "{value} kt/s",
+        "on": "allumé",
+        "off": "éteint",
+        "share": "{value} % du temps",
+        "cabinAltitude": "{value} ft"
+      },
+      "marksLocked": "Pilot Pro signale sur les bandes les moments à retravailler (vario trop fort, inclinaison, vitesse sous le FL100…).",
+      "noMarks": "Aucun repère à revoir sur ce vol.",
+      "provisional": "critères provisoires, à valider avec un pilote",
+      "reasons": {
+        "speed250": "plus de 250 kt sous 10 000 ft",
+        "bank30": "inclinaison de plus de 30°",
+        "sinkRate": "plus de 1 000 ft/min de descente sous 1 000 ft"
+      },
+      "marksTitle": "Repères à revoir",
+      "discover": "Découvrir Pilot Pro"
     }
   },
   "Profile": {

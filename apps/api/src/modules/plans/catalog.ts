@@ -74,7 +74,7 @@ const ROWS: readonly Row[] = [
   ["simbriefNextFlight", "fly", false, ALL, SOON],
   ["logbookSummary", "logbook", true, ALL, NOW],
   ["flightDetail", "logbook", false, ALL, NOW],
-  ["flightBands", "logbook", false, ALL, SOON],
+  ["flightBands", "logbook", false, ALL, NOW],
   ["flightNotes", "logbook", false, ALL, SOON],
   ["basicStats", "logbook", true, ALL, NOW],
   ["statsPeriod", "logbook", true, [12, "unlimited", "unlimited", "unlimited"], SOON],

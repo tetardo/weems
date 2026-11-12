@@ -15,3 +15,21 @@ describe("trajectory points", () => {
     ]);
   });
 });
+
+describe("band values of a point", () => {
+  const at = "2026-11-12T08:00:00.000Z";
+  const engine = (running: boolean, n1: number | null) => ({ running, n1 });
+
+  it("keeps what the flight bands draw", () => {
+    const p = toTrackPoint(sample({ fuelKg: 2900, flapsIndex: 2, autopilot: true }), at);
+    expect(p).toMatchObject({ fuelKg: 2900, flapsIndex: 2, autopilot: true });
+  });
+
+  it("averages the N1 of the running engines, 0 when all are stopped", () => {
+    const n1 = (engines: { running: boolean; n1: number | null }[]) =>
+      toTrackPoint(sample({ engines }), at).n1;
+    expect(n1([engine(true, 80), engine(true, 90), engine(false, 20)])).toBe(85);
+    expect(n1([engine(false, null), engine(false, null)])).toBe(0);
+    expect(n1([engine(true, null)])).toBeNull();
+  });
+});

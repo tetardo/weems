@@ -23,13 +23,14 @@ describe("logbookSummary (page Résumé)", () => {
       extra: ["goAround", "bounce"],
     });
     const older = publicFlight(at("2026-11-11T18:00:00.000Z"));
-    const summary = logbookSummary([last, older], 372, NOW);
+    const summary = logbookSummary([last, older], { distanceNm: 372, fuelUsedKg: 2900 }, NOW);
     expect(summary.lastFlight).toMatchObject({
       flight: { flightId: last.summary.flightId },
       touchdownVs: -142,
       bounces: 1,
       goArounds: 1,
       distanceNm: 372,
+      fuelUsedKg: 2900,
     });
   });
 
