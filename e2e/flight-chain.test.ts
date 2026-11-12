@@ -18,6 +18,10 @@ import { LFPG_LFBO } from "../apps/tracker/tools/generate-flights/scenario.ts";
  * and reading it back gives exactly what the tracker recorded.
  * J2 criterion 6: its trajectory follows the same path and reads back simplified.
  */
+/** Past the longest retry delay of the tracker (5 min plus jitter). */
+const RETRY_STEP_MS = 6 * 60_000;
+const MAX_SENDING_ROUNDS = 5;
+
 let api: Awaited<ReturnType<typeof startTestApp>>;
 let baseUrl: string;
 let dir: string;
@@ -50,8 +54,18 @@ async function flyThroughTheChain() {
     },
   });
   await runtime.start();
-  await runtime.pump(Date.now());
-  return { recorder, sender, flightId: runtime.currentFlightId };
+  // Like the real tracker, keep sending past the retry delays (2 s to 5 min): with every test
+  // file sharing the API's database, one request can fail once (5xx) and wait for its retry.
+  // A message the API refused (parked) still fails the test, through deliveryOf below.
+  let nowMs = Date.now();
+  await runtime.pump(nowMs);
+  for (let round = 0; round < MAX_SENDING_ROUNDS && sender.pendingCount() > 0; round++) {
+    nowMs += RETRY_STEP_MS;
+    await runtime.pump(nowMs);
+  }
+  const flightId = runtime.currentFlightId;
+  expect(flightId && sender.deliveryOf(flightId)).toBe("sent");
+  return { recorder, sender, flightId };
 }
 
 describe("tracker to API", () => {

@@ -1,5 +1,6 @@
 import { type Browser, chromium } from "playwright";
 import { startTestApp } from "../../apps/api/src/testing/test-app.ts";
+import { freePort } from "../net/free-port.ts";
 import { siteAddress, startSite } from "../site/site-server.ts";
 
 export interface J3Stack {
@@ -9,12 +10,10 @@ export interface J3Stack {
   stop: () => Promise<void>;
 }
 
-const freePort = () => 4_000 + Math.floor(Math.random() * 900);
-
 /** The real API (test database) and the built site on free ports, plus a browser (spec J3). */
 export async function startJ3Stack(): Promise<J3Stack> {
-  const sitePort = freePort();
-  const apiPort = sitePort + 1_000;
+  const sitePort = await freePort();
+  const apiPort = await freePort();
   const apiUrl = `http://127.0.0.1:${apiPort}`;
   const api = await startTestApp({ WEEMS_SITE_URL: siteAddress(sitePort), WEEMS_API_URL: apiUrl });
   await api.app.listen({ port: apiPort, host: "127.0.0.1" });
