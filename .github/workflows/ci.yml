@@ -1,13 +1,23 @@
 name: CI
 
+# J1 (about 7 min) runs on a pull request only when it touches the tracker → API → live chain
+# (paths below, decision 013); always on main after a merge, every night and on "Run workflow".
 on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    - cron: "0 2 * * *" # 03:00 Paris in winter
+  workflow_dispatch:
 
 concurrency:
-  group: ci-${{ github.ref }}
+  # The nightly run must not cancel the run of a merge on main (and the reverse).
+  group: ci-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read # list of the files changed by a pull request (J1 paths)
 
 jobs:
   check:
@@ -43,7 +53,34 @@ jobs:
         run: pnpm structure
       - name: Tests
         run: pnpm test
-      - name: J1 (10 pilotes simulés à ×10, environ 6 min)
+      - name: Fichiers de la chaîne J1 modifiés ?
+        id: paths
+        if: github.event_name == 'pull_request'
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            j1:
+              - "apps/tracker/**"
+              - "apps/api/src/modules/{flights,live,tracks,aircraft,airports,accounts}/**"
+              - "apps/api/src/{app,config,server}.ts"
+              - "apps/api/src/db/{client,bytea}.ts"
+              - "apps/api/src/{plugins,testing}/**"
+              - "apps/api/package.json"
+              - "packages/contrats/package.json"
+              - "packages/contrats/src/{flight,telemetry}/**"
+              - "packages/contrats/src/api/{aircraft-class,airports,common,flight-list,flights,live,tracker-login,tracks,uuid-v7}.ts"
+              - "packages/contrats/src/tools/simulation-progress.ts"
+              - "e2e/j1/**"
+              - "e2e/vitest.j1.config.ts"
+              - "e2e/package.json"
+              - "package.json"
+              - "pnpm-lock.yaml"
+              - "pnpm-workspace.yaml"
+              - "tsconfig*.json"
+              - ".nvmrc"
+              - ".github/workflows/ci.yml"
+      - name: J1 (10 pilotes simulés à ×10, environ 7 min)
+        if: github.event_name != 'pull_request' || steps.paths.outputs.j1 == 'true'
         run: pnpm test:j1
       # Without --with-deps: the ubuntu-24.04 image already has Chrome's system libraries.
       # Installing them again through apt made CI depend on Ubuntu's mirror (down on 11/11/2026).
