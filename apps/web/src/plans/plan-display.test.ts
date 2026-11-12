@@ -44,16 +44,41 @@ const catalog: PlanCatalog = {
   fairUseActivePilots: 1000,
   plans,
   features: [
-    { key: "tracker", group: "fly", onCard: true, values: values(true, true, true, true) },
-    { key: "flightNotes", group: "logbook", onCard: false, values: values(true, true, true, true) },
+    {
+      key: "tracker",
+      group: "fly",
+      onCard: true,
+      availability: "available",
+      values: values(true, true, true, true),
+    },
+    {
+      key: "flightNotes",
+      group: "logbook",
+      onCard: false,
+      availability: "available",
+      values: values(true, true, true, true),
+    },
     {
       key: "goals",
       group: "logbook",
       onCard: true,
+      availability: "soon",
       values: values(1, "unlimited", "unlimited", "unlimited"),
     },
-    { key: "export", group: "analysis", onCard: true, values: values(false, true, true, true) },
-    { key: "companies", group: "company", onCard: true, values: values(false, false, 1, 5) },
+    {
+      key: "export",
+      group: "analysis",
+      onCard: true,
+      availability: "available",
+      values: values(false, true, true, true),
+    },
+    {
+      key: "companies",
+      group: "company",
+      onCard: true,
+      availability: "available",
+      values: values(false, false, 1, 5),
+    },
   ],
 };
 const [free, pro, company, holding] = plans as [

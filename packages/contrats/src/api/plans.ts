@@ -60,6 +60,13 @@ export const FeatureKey = z.enum([
 ]);
 export type FeatureKey = z.infer<typeof FeatureKey>;
 
+/**
+ * Whether pilots can use the function today. The catalogue describes the offer aimed at, so many
+ * functions are announced before they exist: the page Fonctionnalités marks them « Bientôt ».
+ */
+export const FeatureAvailability = z.enum(["available", "soon"]);
+export type FeatureAvailability = z.infer<typeof FeatureAvailability>;
+
 /** false: not included; true: included; a number: the limit; "unlimited": no limit. */
 export const FeatureValue = z.union([
   z.boolean(),
@@ -87,6 +94,7 @@ export const PlanFeature = z.object({
   group: FeatureGroup,
   /** Listed on the plan cards (the table shows every feature). */
   onCard: z.boolean(),
+  availability: FeatureAvailability,
   values: z.record(PlanId, FeatureValue),
 });
 export type PlanFeature = z.infer<typeof PlanFeature>;

@@ -4,11 +4,11 @@ import { menuFor } from "./menu-items.ts";
 const hrefs = (loggedIn: boolean) => menuFor(loggedIn).map((item) => item.href);
 
 describe("menuFor", () => {
-  it("shows Découvrir and the open pages to a visitor", () => {
-    expect(hrefs(false)).toEqual(["/discover", "/live", "/plans"]);
+  it("shows Découvrir, Fonctionnalités and the open pages to a visitor", () => {
+    expect(hrefs(false)).toEqual(["/discover", "/features", "/live", "/plans"]);
   });
 
-  it("shows the pilot pages but not Découvrir to a logged-in pilot", () => {
+  it("shows the pilot pages but not Découvrir nor Fonctionnalités to a logged-in pilot", () => {
     expect(hrefs(true)).toEqual(["/logbook", "/flights", "/live", "/plans"]);
   });
 

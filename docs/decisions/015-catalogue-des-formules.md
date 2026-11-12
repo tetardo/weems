@@ -24,9 +24,18 @@ Quatre formules : Pilot Free, Pilot Pro, Company, Holding. Le paiement n'existe 
 
 ![Une nouvelle fonction, du contrat à la page Offres](../schemas/img/015-catalogue-des-formules.png)
 
+## Page Fonctionnalités (12/11/2026)
+
+Greg a demandé une page qui explique chaque fonction de Weems (maquette A choisie : une ligne par fonction, sommaire à gauche) et qui reste **à jour automatiquement** avec les autres pages du site et les choix sur les formules. Elle ne contient donc aucune liste écrite à la main :
+
+- `/features` lit `GET /v1/plans` comme la page Offres : groupes, fonctions, première formule qui contient chaque fonction (« Gratuit », « Dès Pilot Pro »…), limites formule par formule.
+- Chaque fonction du catalogue porte `availability` : `available` (utilisable aujourd'hui) ou `soon` (annoncée, pas encore codée). La page affiche « Bientôt » pour `soon`. Le catalogue décrit l'offre visée ; ce champ évite de promettre comme existant ce qui ne l'est pas. Au 12/11 : tracker, carte en direct, profil public, historique, fiche de vol et statistiques de base sont disponibles ; le reste est « bientôt ».
+- Textes : `Features.items.<clé>.title` et `.text` (FR et EN), à côté du libellé court `Plans.features.<clé>.label` ; illustration dans `apps/web/src/features/illustrations/`.
+- Lien « Fonctionnalités » dans la barre des visiteurs (fiche 003) et dans le pied de page pour tous.
+
 ## Règle
 
-**Toute nouvelle fonction visible par le pilote, ou toute modification d'une fonction existante, met à jour le catalogue dans la même PR** : clé dans `FeatureKey`, ligne dans `catalog.ts`, textes FR et EN. La page Offres et le tableau suivent seuls. Des tests bloquent un oubli : chaque clé est décrite une fois par l'API, chaque clé a son texte, une formule ne perd jamais une fonction de la formule qu'elle contient.
+**Toute nouvelle fonction visible par le pilote, ou toute modification d'une fonction existante, met à jour le catalogue dans la même PR** : clé dans `FeatureKey`, ligne dans `catalog.ts` (avec sa disponibilité), libellé et explication FR et EN, illustration. **Une fonction qui devient utilisable passe de `soon` à `available` dans la PR qui la livre.** La page Offres, le tableau et la page Fonctionnalités suivent seuls. Des tests bloquent un oubli : chaque clé est décrite une fois par l'API, chaque clé a son libellé et son explication, chaque clé a son illustration (sinon le site ne compile pas), une formule ne perd jamais une fonction de la formule qu'elle contient.
 
 ## Conséquences
 

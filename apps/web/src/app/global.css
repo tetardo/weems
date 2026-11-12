@@ -22,6 +22,7 @@
   --color-accent-2: var(--wm-accent-2);
   --color-danger: var(--wm-danger);
   --color-success: var(--wm-success);
+  --color-holding: var(--wm-holding);
   /* Departures board of the home page (spec J4 accueil): dark like an airport board, light in the light theme. */
   --color-board: var(--wm-board);
   --color-board-head: var(--wm-board-head);
@@ -68,6 +69,8 @@
   --wm-accent-2: #ffb454;
   --wm-danger: #ff8a80;
   --wm-success: #6ee7a8;
+  /* Holding plan tag (page Fonctionnalités): the fourth plan colour, after success, link, accent 2. */
+  --wm-holding: #b9a2ff;
   --wm-glass: rgb(23 30 46 / 0.72);
   --wm-glow: rgb(79 209 232 / 0.16);
   --wm-shadow: rgb(0 0 0 / 0.35);
@@ -126,6 +129,7 @@
   --wm-accent-2: #b86a00;
   --wm-danger: #b3261e;
   --wm-success: #1b7f4b;
+  --wm-holding: #6a4fd1;
   --wm-glass: rgb(255 255 255 / 0.75);
   --wm-glow: rgb(12 127 148 / 0.12);
   --wm-shadow: rgb(30 40 70 / 0.12);
