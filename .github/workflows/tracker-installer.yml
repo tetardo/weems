@@ -47,7 +47,7 @@ jobs:
         env:
           TRACKER_EXECUTABLE: ${{ github.workspace }}\apps\tracker\dist\installer\win-unpacked\Weems Tracker.exe
         run: pnpm exec vitest run --config e2e/vitest.tracker-app.config.ts
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: weems-tracker-windows
           path: apps/tracker/dist/installer/*.exe
