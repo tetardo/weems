@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useCallback, useRef, useState } from "react";
+import { type ReactNode, useCallback, useRef, useState } from "react";
 import { buttonClass } from "@weems/ui";
 import { Link, usePathname } from "../i18n/navigation.ts";
 import { CloseIcon, MenuIcon } from "../ui/icons.ts";
@@ -11,8 +11,14 @@ import { menuFor } from "./menu-items.ts";
 
 const ROW = "flex h-12 items-center gap-3 rounded-box px-3.5 font-medium hover:bg-surface";
 
+interface Props {
+  loggedIn: boolean;
+  /** Bottom of the menu: the Free | Pro test switch, which has no room in the phone bar. */
+  footer?: ReactNode;
+}
+
 /** Menu button of the bar under 768 px: the links of the bar, then « Créer un compte » for a visitor. */
-export function SiteMenu({ loggedIn }: { loggedIn: boolean }) {
+export function SiteMenu({ loggedIn, footer }: Props) {
   const t = useTranslations("Site");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -56,6 +62,7 @@ export function SiteMenu({ loggedIn }: { loggedIn: boolean }) {
               {t("public.signup")}
             </Link>
           )}
+          {footer}
         </nav>
       )}
     </div>

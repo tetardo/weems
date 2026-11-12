@@ -26,6 +26,8 @@
       "retry": "Try again"
     },
     "languages": "Language",
+    "testPlan": "Test plan",
+    "testPlanHint": "Test tool, outside production: changes your account's plan to try the Pilot Free and Pilot Pro pages. It will be removed before version 1.0.",
     "footer": {
       "copyright": "© {year} Weems",
       "discover": "Discover Weems",

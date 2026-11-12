@@ -153,4 +153,16 @@ export const siteHomeImages = pgTable("site_home_images", {
   updatedBy: uuid("updated_by").references(() => users.id, { onDelete: "set null" }),
 });
 
+/**
+ * Plan chosen with the Free/Pro test switch of the site bar, outside production only (removed
+ * before the 1.0, when subscriptions answer GET /v1/me/plan). No row: Pilot Free.
+ */
+export const testPlans = pgTable("test_plans", {
+  pilotId: uuid("pilot_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  plan: text("plan").notNull(),
+  updatedAt: utc("updated_at").notNull(),
+});
+
 export * from "./auth-schema.ts";

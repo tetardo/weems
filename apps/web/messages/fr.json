@@ -26,6 +26,8 @@
       "retry": "Réessayer"
     },
     "languages": "Langue",
+    "testPlan": "Formule de test",
+    "testPlanHint": "Outil de test, hors production : change la formule de votre compte pour essayer les pages Pilot Free et Pilot Pro. Il sera retiré avant la version 1.0.",
     "footer": {
       "copyright": "© {year} Weems",
       "discover": "Découvrir Weems",

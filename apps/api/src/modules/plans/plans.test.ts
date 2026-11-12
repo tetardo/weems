@@ -52,10 +52,10 @@ describe("GET /v1/me/plan", () => {
     expect(response.statusCode).toBe(401);
   });
 
-  it("puts every pilot on Pilot Free until subscriptions open", async () => {
+  it("puts every pilot on Pilot Free until subscriptions open, and offers the test switch", async () => {
     const cookie = await newPilot(app);
     const response = await app.inject({ method: "GET", url: "/v1/me/plan", headers: { cookie } });
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toEqual({ plan: "pilot_free" });
+    expect(response.json()).toEqual({ plan: "pilot_free", testSwitch: true });
   });
 });
