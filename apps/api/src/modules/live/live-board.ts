@@ -59,6 +59,11 @@ export class LiveBoard implements LiveFeed {
     return this.entries.size;
   }
 
+  /** Identifiers of the flights currently on the map. */
+  flightIds(): string[] {
+    return [...this.entries.keys()];
+  }
+
   lastPosition(flightId: string): PositionReport | undefined {
     return this.entries.get(flightId)?.position;
   }

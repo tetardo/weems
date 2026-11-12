@@ -11,6 +11,7 @@ import {
   ExternalIcon,
   ServicesIcon,
   SiteIcon,
+  SupervisionIcon,
   TrafficIcon,
 } from "../ui/icons.ts";
 import { useConsoleStatus } from "./use-console-status.ts";
@@ -40,15 +41,35 @@ function LocalState({ services }: { services: ServiceView[] }) {
   );
 }
 
+function Shortcuts({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }) {
+  return (
+    <nav className="grp">
+      <div className="t">Raccourcis</div>
+      <a href={siteUrl} target="_blank" rel="noreferrer">
+        <SiteIcon /> Site <ExternalIcon className="c" size={16} />
+      </a>
+      <a href={`${apiUrl}/docs`} target="_blank" rel="noreferrer">
+        <DocsIcon /> Documentation API <ExternalIcon className="c" size={16} />
+      </a>
+    </nav>
+  );
+}
+
 export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }) {
   const pathname = usePathname();
   const status = useConsoleStatus();
-  const on = (href: string) => (pathname.startsWith(href) ? "on" : "");
+  const on = (href: string) =>
+    (href === "/" ? pathname === "/" : pathname.startsWith(href)) ? "on" : "";
   return (
     <aside className="side">
       <div className="top brand">
         Weems <span className="tag">Admin</span>
       </div>
+      <nav className="grp">
+        <Link href="/" className={on("/")}>
+          <SupervisionIcon /> Supervision
+        </Link>
+      </nav>
       <nav className="grp">
         <div className="t">Exploitation</div>
         <Link href="/services" className={on("/services")}>
@@ -75,15 +96,7 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
           <CustomizeIcon /> Personnalisation
         </Link>
       </nav>
-      <nav className="grp">
-        <div className="t">Raccourcis</div>
-        <a href={siteUrl} target="_blank" rel="noreferrer">
-          <SiteIcon /> Site <ExternalIcon className="c" size={16} />
-        </a>
-        <a href={`${apiUrl}/docs`} target="_blank" rel="noreferrer">
-          <DocsIcon /> Documentation API <ExternalIcon className="c" size={16} />
-        </a>
-      </nav>
+      <Shortcuts apiUrl={apiUrl} siteUrl={siteUrl} />
       <LocalState services={status.services} />
     </aside>
   );

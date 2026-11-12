@@ -4,6 +4,7 @@ import {
   AdminAccountList,
   AdminInvitation,
   AdminMe,
+  AdminSupervision,
   type InvitationRequest,
   Problem,
 } from "@weems/contrats";
@@ -60,6 +61,11 @@ export class AdminApi {
 
   list() {
     return this.call(AdminAccountList, "/v1/admin/accounts");
+  }
+
+  /** Every figure of the page Supervision, in one read. */
+  supervision() {
+    return this.call(AdminSupervision, "/v1/admin/supervision");
   }
 
   invite(request: InvitationRequest) {

@@ -1,0 +1,302 @@
+/* Page Supervision (spec admin): tiles with trend, Surveillance, Activité, Communauté. */
+
+.sv-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.sv-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+}
+.sv-status > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sv-status code,
+.sv-alert code {
+  font:
+    500 12px var(--font-mono),
+    monospace;
+}
+.sv-up {
+  color: var(--success);
+  font-size: 12px;
+}
+.sv-warn {
+  color: var(--accent2);
+}
+
+/* ---------- Tiles ---------- */
+.sv-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.sv-tile,
+.sv-block {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.sv-tile-head,
+.sv-block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.sv-tile-head .muted,
+.sv-block-head .muted {
+  font-size: 12px;
+}
+.sv-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.sv-tile-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
+}
+.sv-tile-body b,
+.sv-big {
+  font:
+    700 28px var(--font-grotesk),
+    "Space Grotesk",
+    sans-serif;
+}
+.sv-tile-body .sv-bars {
+  width: 66px;
+  height: 30px;
+}
+.sv-detail {
+  font-size: 12px;
+  color: var(--muted);
+}
+.sv-alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent2) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent2) 8%, transparent);
+  color: var(--accent2);
+  font-size: 13px;
+}
+.sv-alert span {
+  color: var(--ink);
+}
+.sv-alert code {
+  margin-left: auto;
+  color: var(--muted);
+}
+
+/* ---------- Sections ---------- */
+.sv-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sv-section h2 {
+  font-size: 19px;
+  margin-top: 6px;
+}
+.sv-block h3 {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sv-icon {
+  display: flex;
+  color: var(--accent);
+}
+.sv-grid4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+.sv-grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.sv-split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.sv-stack {
+  flex: 3 1 420px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sv-events {
+  flex: 2 1 300px;
+}
+.sv-figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 13px;
+}
+.sv-axis {
+  white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font:
+    500 11px var(--font-mono),
+    monospace;
+  color: var(--muted);
+}
+.sv-note {
+  font-size: 12px;
+}
+
+/* ---------- Bars ---------- */
+.sv-bars {
+  display: grid;
+  gap: 2px;
+  align-items: end;
+  height: 70px;
+}
+.sv-bars.tall {
+  height: 120px;
+}
+.sv-bars i {
+  display: block;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+}
+.sv-bars i.warn {
+  background: var(--accent2);
+}
+.sv-bars i.muted {
+  background: color-mix(in srgb, var(--muted) 40%, transparent);
+}
+.sv-bars.stacked span {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 1px;
+}
+.sv-legend {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.sv-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 4px;
+  background: var(--accent);
+}
+.sv-legend i.muted {
+  background: color-mix(in srgb, var(--muted) 40%, transparent);
+}
+
+/* ---------- Gauges, rows, events, rankings ---------- */
+.sv-share {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr) 54px;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+.sv-share.wide {
+  grid-template-columns: 110px minmax(0, 1fr) 64px;
+}
+.sv-share > :last-child {
+  text-align: right;
+}
+.sv-gauge {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.sv-gauge i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.sv-gauge i.warn {
+  background: var(--accent2);
+}
+.sv-gauge i.ok {
+  background: var(--success);
+}
+.sv-row,
+.sv-event,
+.sv-rank {
+  border-top: 1px solid var(--line);
+  padding-top: 5px;
+  font-size: 13px;
+}
+.sv-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.sv-event {
+  display: grid;
+  grid-template-columns: 92px 10px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+.sv-event .mono {
+  white-space: nowrap;
+  font-size: 11px;
+}
+.sv-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.sv-dot.info {
+  background: var(--accent);
+}
+.sv-dot.ok {
+  background: var(--success);
+}
+.sv-rank {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+.sv-rank > :nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sv-rank a {
+  color: var(--link);
+}
+.sv-rank .mono,
+.sv-row .mono {
+  font-size: 12px;
+}

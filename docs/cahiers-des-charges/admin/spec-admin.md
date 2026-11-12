@@ -159,6 +159,34 @@ S'ouvre à droite (en bas sur mobile).
 
 **Résultat** : le code, sa date d'expiration (14 jours) et le lien d'inscription (`http://localhost:3001/fr/signup?code=…`), avec un bouton **Copier**. Aucun e-mail n'est envoyé : Greg transmet le lien lui-même, comme avec `pnpm invite`. Boutons **En créer un autre** et **Terminé**.
 
+## Page Supervision (12/11/2026)
+
+**But** : la page d'accueil de la console (adresse `/`, premier lien de la barre latérale). En un coup d'œil : ce qui grandit, ce qui casse, ce qui se passe. Maquette validée par Greg (proposition B, tuiles avec tendance) : `/mnt/project-files/admin/supervision/`.
+
+**Accès** : comme la page Comptes (session d'un administrateur, connexion automatique en local, fiche 012) ; une seule route, `GET /v1/admin/supervision`, relue toutes les 10 secondes.
+
+**Réel et simulé** : un vol simulé (`simulator = replay`) ou d'un compte fictif n'est jamais compté comme réel ; il est montré à part (« + N simulés »). Les jours sont coupés à minuit, heure de Paris.
+
+```mermaid
+flowchart LR
+  P[Page Supervision] -->|toutes les 10 s| R[GET /v1/admin/supervision]
+  R --> B[(PostgreSQL : comptes, vols, profils, taille)]
+  R --> M[Mesures en mémoire : temps de réponse, positions]
+  R --> L[Carte en direct : vols en l'air]
+```
+
+| Section | Contenu |
+| --- | --- |
+| Sous-titre | Pastilles Base, API, Site ; migrations appliquées ou en retard ; heure de la dernière lecture. |
+| Tuiles | Comptes réels, Vols réels, En l'air, Profils publics : nombre, barres des 7 derniers jours, nouveaux sur 7 jours. Bandeau orange « vols suspects » (ouverts depuis plus de 24 h, clos sans trajectoire) seulement s'il y en a. |
+| Surveillance | API sur 24 h (p95 par heure, erreurs 5xx, heure lente en orange à partir de 500 ms) ; positions reçues par minute sur 30 min ; versions du tracker (vols réels des 30 derniers jours, la plus récente en bleu) ; taille de la base et ses 3 plus grosses tables. |
+| Activité | Vols sur 14 jours (réels et simulés empilés) ; critère de sortie de l'alpha J3 (même calcul que `pnpm alpha-report`) ; 10 derniers événements réels. |
+| Communauté | 8 nouveaux comptes ; 8 plus actifs (vols des 30 derniers jours) ; 8 avec le plus d'heures de vol, en attendant les médailles (choix de Greg). |
+
+**Mesures en mémoire** : temps de réponse et positions reçues sont comptés par l'API elle-même depuis son démarrage (« mesuré depuis HH:MM »), sans table ni outil externe ; ils repartent de zéro à chaque redémarrage. Le flux `/v1/live/stream` n'est pas compté (connexion longue).
+
+**Reporté** : visites de la carte en direct (en cours et cumul), à reprendre plus tard (choix de Greg).
+
 ## Corrections par rapport à la première maquette
 
 - Il n'existe pas encore de « comptes simulés » : tous les vols simulés appartiennent au pilote de développement. Le filtre « Simulés » disparaît de cette version ; il reviendra avec les comptes simulés (voir hors périmètre).

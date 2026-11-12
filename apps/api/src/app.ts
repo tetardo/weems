@@ -2,7 +2,7 @@ import rateLimit from "@fastify/rate-limit";
 import Fastify, { type FastifyInstance } from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import type { Config } from "./config.ts";
-import type { DatabaseHandle } from "./db/client.ts";
+import { countMigrationFiles, type DatabaseHandle } from "./db/client.ts";
 import { registerAdminAccountRoutes } from "./modules/accounts/admin-routes.ts";
 import { AdminAccountsService } from "./modules/accounts/admin-service.ts";
 import { createAuth } from "./modules/accounts/auth.ts";
@@ -49,6 +49,13 @@ import { registerSiteRoutes } from "./modules/site/routes.ts";
 import { SiteService } from "./modules/site/service.ts";
 import { registerStatsRoutes } from "./modules/stats/routes.ts";
 import { StatsService, type StatsSources } from "./modules/stats/service.ts";
+import { SupervisionRepository } from "./modules/supervision/repository.ts";
+import { SupervisionListsRepository } from "./modules/supervision/repository-lists.ts";
+import { SupervisionSystemRepository } from "./modules/supervision/repository-system.ts";
+import { registerSupervisionRoutes } from "./modules/supervision/routes.ts";
+import { SupervisionService } from "./modules/supervision/service.ts";
+import { registerTrafficHooks } from "./modules/supervision/traffic-hooks.ts";
+import { TrafficMetrics } from "./modules/supervision/traffic-metrics.ts";
 import { type Guards, registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
@@ -80,6 +87,23 @@ function registerHomePage(
   const site = new SiteService(new SiteRepository(database.db));
   registerSiteRoutes(app, site);
   registerAdminSiteRoutes(app, site, guards);
+}
+
+/** Page Supervision of the admin console: read-only counts, health, activity, community. */
+function registerSupervision(
+  app: FastifyInstance,
+  deps: { database: DatabaseHandle; guards: Guards; board: LiveBoard; metrics: TrafficMetrics },
+): void {
+  const { db } = deps.database;
+  const service = new SupervisionService({
+    counts: new SupervisionRepository(db),
+    lists: new SupervisionListsRepository(db),
+    system: new SupervisionSystemRepository(db),
+    live: deps.board,
+    metrics: deps.metrics,
+    expectedMigrations: countMigrationFiles(),
+  });
+  registerSupervisionRoutes(app, service, deps.guards);
 }
 
 /** Fastify with its plugins: validation, errors, documentation, rate limits. */
@@ -145,6 +169,8 @@ export async function buildApp({
   logger = true,
 }: AppDependencies): Promise<FastifyInstance> {
   const app = await createServer(config, logger);
+  const metrics = new TrafficMetrics();
+  registerTrafficHooks(app, metrics);
   registerHealthRoutes(app, database.ping);
   const board = new LiveBoard();
   const stream = new LiveStream(board, (err) => app.log.error({ err }, "Live pilots not read"));
@@ -174,6 +200,7 @@ export async function buildApp({
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));
+  registerSupervision(app, { database, guards, board, metrics });
   if (config.env !== "production") {
     registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }
