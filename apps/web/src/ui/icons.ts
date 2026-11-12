@@ -45,6 +45,7 @@ export {
   Share2 as ShareIcon,
   ShieldCheck as NoCommitmentIcon,
   Sparkles as SimpleIcon,
+  Sparkles as ProIcon,
   Sun as ThemeLightIcon,
   Sunset as NightIcon,
   Tag as PlansIcon,

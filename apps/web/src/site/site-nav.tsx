@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "../i18n/navigation.ts";
 import { isCurrentPage } from "./current-page.ts";
-import { menuFor } from "./menu-items.ts";
+import { navFor } from "./menu-items.ts";
 
 /** Group of links after the logo, current page raised (phones: the menu, site-menu.tsx). */
 export function SiteNav({ loggedIn }: { loggedIn: boolean }) {
@@ -12,7 +12,7 @@ export function SiteNav({ loggedIn }: { loggedIn: boolean }) {
   return (
     <nav aria-label={t("mainNav")} className="mr-auto ml-2 max-md:hidden">
       <ul className="flex gap-0.5 rounded-box border border-line bg-bg/60 p-1">
-        {menuFor(loggedIn).map((item) => {
+        {navFor(loggedIn).map((item) => {
           const current = isCurrentPage(pathname, item.href);
           return (
             <li key={item.href}>

@@ -19,7 +19,8 @@
       "signup": "Create an account",
       "login": "Log in",
       "menu": "Open the menu",
-      "closeMenu": "Close the menu"
+      "closeMenu": "Close the menu",
+      "pilotPro": "Pilot Pro"
     },
     "busy": "Too many visits right now. Please try again in a minute.",
     "error": {
@@ -988,9 +989,17 @@
     },
     "banner": {
       "eyebrow": "Discover Weems",
-      "title": "Fly, understand, improve.",
+      "title": "Fly, understand,",
       "slogan": "A tracker records every flight you make in the simulator. The site tells their story, the community sees them go by, and you improve flight after flight.",
-      "plans": "See the plans"
+      "plans": "See the plans",
+      "highlight": "improve.",
+      "live": "Live flights",
+      "chips": {
+        "tracker": "MSFS tracker",
+        "logbook": "Logbook",
+        "live": "Live map",
+        "community": "Community"
+      }
     },
     "stepNumber": "Step {number}",
     "steps": {
@@ -1220,6 +1229,17 @@
         "title": "Group statistics",
         "text": "The figures of all your airlines together in one table."
       }
+    },
+    "banner": {
+      "eyebrow": "Features",
+      "title": "Everything",
+      "highlight": "Weems does.",
+      "lead": "From your first recorded flight to running an airline: every feature, what it brings you and the plan that includes it.",
+      "offers": "See the plans",
+      "compare": "Compare the plans",
+      "available": "{count, plural, one {# feature available} other {# features available}}",
+      "soon": "{count} coming soon",
+      "plans": "{count} plans"
     }
   }
 }
