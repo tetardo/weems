@@ -103,6 +103,13 @@ export const PlanCatalog = z.object({
 });
 export type PlanCatalog = z.infer<typeof PlanCatalog>;
 
-/** GET /v1/me/plan: the plan of the pilot calling. */
-export const MyPlan = z.object({ plan: PlanId });
+/**
+ * GET /v1/me/plan: the plan of the pilot calling. testSwitch: the Free/Pro test switch of the
+ * site bar is offered (outside production only, removed before the 1.0).
+ */
+export const MyPlan = z.object({ plan: PlanId, testSwitch: z.boolean() });
 export type MyPlan = z.infer<typeof MyPlan>;
+
+/** PUT /v1/dev/me/plan: plan chosen with the test switch. */
+export const TestPlanChange = z.object({ plan: PlanId });
+export type TestPlanChange = z.infer<typeof TestPlanChange>;

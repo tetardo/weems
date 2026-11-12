@@ -64,6 +64,7 @@ export {
   FeatureKey,
   FeatureValue,
   MyPlan,
+  TestPlanChange,
   PlanAudience,
   PlanCatalog,
   PlanFeature,

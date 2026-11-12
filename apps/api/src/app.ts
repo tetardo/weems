@@ -51,6 +51,8 @@ import { SiteRepository } from "./modules/site/repository.ts";
 import { registerSiteRoutes } from "./modules/site/routes.ts";
 import { SiteService } from "./modules/site/service.ts";
 import { registerPlanRoutes } from "./modules/plans/routes.ts";
+import { registerDevPlanRoutes } from "./modules/plans/dev-routes.ts";
+import { TestPlansRepository } from "./modules/plans/repository.ts";
 import { PlansService } from "./modules/plans/service.ts";
 import { registerStatsRoutes } from "./modules/stats/routes.ts";
 import { StatsService, type StatsSources } from "./modules/stats/service.ts";
@@ -87,7 +89,7 @@ function statsSources(accounts: AccountsService, flights: FlightsService, board:
   };
 }
 
-/** What the public pages read: home page (spec J4 accueil, images set from the console) and page Offres (plans). */
+/** What the home page reads (spec J4 accueil): counters and images set from the console. */
 function registerHomePage(
   app: FastifyInstance,
   database: DatabaseHandle,
@@ -95,7 +97,6 @@ function registerHomePage(
   sources: StatsSources,
 ): void {
   registerStatsRoutes(app, new StatsService(sources));
-  registerPlanRoutes(app, new PlansService(), guards);
   const site = new SiteService(new SiteRepository(database.db));
   registerSiteRoutes(app, site);
   registerAdminSiteRoutes(app, site, guards);
@@ -167,6 +168,18 @@ function registerProfilePages(
   return pages;
 }
 
+/** Plans (page Offres, caller's plan) and, outside production, the Free | Pro test switch. */
+function registerPlans(
+  app: FastifyInstance,
+  database: DatabaseHandle,
+  guards: Guards,
+  testSwitch: boolean,
+): void {
+  const plans = new PlansService(testSwitch ? new TestPlansRepository(database.db) : null);
+  registerPlanRoutes(app, plans, guards);
+  if (testSwitch) registerDevPlanRoutes(app, plans, guards);
+}
+
 /** Routes that exist outside production only (simulation, measures, fictitious pilots). */
 function registerDevRoutes(
   app: FastifyInstance,
@@ -229,6 +242,7 @@ export async function buildApp({
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));
   registerSupervision(app, { database, guards, board, metrics });
   registerDatabaseRoutes(app, createDatabaseService(database.db, board), guards);
+  registerPlans(app, database, guards, config.env !== "production");
   if (config.env !== "production") {
     registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }
