@@ -72,7 +72,7 @@ function useUnsaved(form: React.RefObject<HTMLFormElement | null>, state: SaveSt
   return changes > 0 ? t("unsaved", { count: changes }) : null;
 }
 
-/** The four cards of the form: publication, identity, networks and what stays private. */
+/** The four cards of the form: identity, networks, what stays private, then publication. */
 function ProfileSections({
   profile,
   countries,
@@ -87,9 +87,6 @@ function ProfileSections({
   const t = useTranslations("Settings.sections");
   return (
     <>
-      <FormSection title={t("publication.title")} about={t("publication.about")}>
-        <PublicationFields profile={profile} siteHost={siteHost} />
-      </FormSection>
       <FormSection title={t("identity.title")} about={t("identity.about")}>
         {photo}
         <IdentityFields profile={profile} countries={countries} />
@@ -99,6 +96,9 @@ function ProfileSections({
       </FormSection>
       <FormSection title={t("private.title")} about={t("private.about")} icon={PrivateIcon} dashed>
         <PrivateFields profile={profile} />
+      </FormSection>
+      <FormSection title={t("publication.title")} about={t("publication.about")}>
+        <PublicationFields profile={profile} siteHost={siteHost} />
       </FormSection>
     </>
   );
