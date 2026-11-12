@@ -17,6 +17,7 @@ const TITLES = {
   "/accounts": "Comptes",
   "/customize": "Personnalisation",
   "/libraries": "Librairies",
+  "/database": "Base de données",
 };
 const titleOf = (pathname: string) =>
   pathname === "/"

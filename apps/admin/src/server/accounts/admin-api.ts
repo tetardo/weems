@@ -1,10 +1,13 @@
 import {
   type AccountUpdate,
+  AdminDatabase,
   AdminAccount,
   AdminAccountList,
   AdminInvitation,
   AdminMe,
   AdminSupervision,
+  DatabaseCleanupResult,
+  type DatabaseCleanupRequest,
   type InvitationRequest,
   Problem,
 } from "@weems/contrats";
@@ -41,6 +44,7 @@ export class AdminApi {
     schema: z.ZodType<T> | null,
     path: string,
     init: RequestInit = {},
+    timeoutMs = 5_000,
   ): Promise<T> {
     const response = await fetch(new URL(path, this.config.apiUrl), {
       ...init,
@@ -48,7 +52,7 @@ export class AdminApi {
         cookie: this.cookie,
         ...(init.body ? { "content-type": "application/json" } : {}),
       },
-      signal: AbortSignal.timeout(5_000),
+      signal: AbortSignal.timeout(timeoutMs),
       cache: "no-store",
     });
     if (!response.ok) throw await problemOf(response);
@@ -66,6 +70,17 @@ export class AdminApi {
   /** Every figure of the page Supervision, in one read. */
   supervision() {
     return this.call(AdminSupervision, "/v1/admin/supervision");
+  }
+
+  /** Page Base de données: sizes, migrations, what the cleanup would delete. */
+  database() {
+    return this.call(AdminDatabase, "/v1/admin/database", {}, 15_000);
+  }
+
+  /** Deletes what is asked; a large cleanup can take a while. */
+  cleanup(request: DatabaseCleanupRequest) {
+    const init = { method: "POST", body: JSON.stringify(request) };
+    return this.call(DatabaseCleanupResult, "/v1/admin/database/cleanup", init, 120_000);
   }
 
   invite(request: InvitationRequest) {

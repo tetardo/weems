@@ -218,6 +218,52 @@ flowchart LR
 - Date de sortie : lue dans la fiche complète du registre. L'index de recherche, plus léger, refuse les rafales de requêtes et laissait des dates vides.
 - Paquets internes `@weems/*` non listés ; Swift (iPad) et Python hors périmètre pour l'instant.
 
+## Page Base de données (12/11/2026)
+
+**But** : voir ce qui grossit dans la base, vérifier les migrations, sauvegarder, et faire le ménage de ce qui ne sert plus. Groupe « Maintenance » de la barre latérale, adresse `/database`. Maquette validée par Greg : https://claude.ai/artifact/7r2UKxMfheVUJixQ2udnjj, captures du code dans `/mnt/project-files/admin/base-de-donnees/code/`.
+
+**Constats qui ont orienté la page** : il n'existe pas de table de positions (le direct reste en mémoire dans l'API) ; ce qui grossit, c'est `flight_tracks`, la trajectoire complète de chaque vol. Les vols réels ne sont jamais supprimés (EF-14). Aucune sauvegarde n'existait.
+
+**Qui fait quoi** : l'API lit la base et supprime (session d'un administrateur, comme Supervision) ; la console garde elle-même les relevés de taille, lance les sauvegardes et la commande des migrations. La console n'écrit toujours jamais dans la base.
+
+```mermaid
+flowchart LR
+  P[Page Base de données] -->|toutes les 30 s| R[GET /v1/admin/database]
+  P -->|Nettoyer, après confirmation| N[POST /v1/admin/database/cleanup]
+  R --> B[(PostgreSQL : catalogue, drizzle.__drizzle_migrations)]
+  N --> F[Services flights et accounts]
+  P --> H[(.data/database-sizes.json : un relevé par jour)]
+  P -->|Sauvegarder maintenant| D[pg_dump dans le conteneur db]
+  D --> S[(.data/backups : 7 gardées)]
+  P -->|Appliquer les migrations| M[pnpm --filter @weems/api db:migrate]
+```
+
+| Partie | Contenu |
+| --- | --- |
+| En-tête | Heure de la lecture, nom de la base et version de PostgreSQL à gauche, bouton « Actualiser » à droite. |
+| Tuiles | Taille totale (évolution sur 7 jours, part de la plus grosse table) ; migrations appliquées sur celles du code ; dernière sauvegarde (orange si aucune ou plus de 7 jours) ; part simulée des tables des vols. |
+| Bandeau | « Aucune sauvegarde » ou « Dernière sauvegarde il y a N jours », avec le bouton « Sauvegarder maintenant ». |
+| Tables | Chaque table, la plus grosse d'abord : lignes (estimation de PostgreSQL), données, index, total, barre réel / simulé, part simulée (tables des vols seulement), évolution sur 7 jours. Sur téléphone : table, total et barre. |
+| Migrations | Chaque migration avec sa date et son état ; bouton « Appliquer les migrations » actif seulement s'il y en a en attente. |
+| Sauvegardes | Les 7 dernières (date, taille), la commande de restauration de la plus récente, bouton « Sauvegarder maintenant ». |
+| Nettoyage | Trois cases : vols simulés de plus de 7 jours, sessions expirées, invitations expirées, chacune avec ce qu'elle supprimerait maintenant. « Nettoyer… » ouvre une confirmation qui liste tout ; le résultat s'affiche ensuite. |
+
+**États des migrations** (comparaison du dossier `migrations/` avec `drizzle.__drizzle_migrations`, qui ne garde que la date de création et l'empreinte du fichier) :
+- **appliquée** ; **en attente** : plus récente que la dernière appliquée, `db:migrate` l'appliquera ;
+- **sautée** : absente de la base mais plus ancienne que la dernière appliquée : Drizzle ne l'appliquera jamais ;
+- **modifiée** : appliquée, mais son fichier a changé depuis ;
+- **en double** : enregistrée deux fois (le cas des 0006 et 0007 réparé à la main le 12/11) ;
+- **inconnue du dépôt** : enregistrée en base, absente du code (une autre branche).
+Les trois derniers états et « sautée » se corrigent à la main ; la page le dit.
+
+**Règles** :
+- Simulé, pour la taille : vol rejoué (`simulator = replay`) ou d'un compte fictif, comme sur Supervision ; trajectoires pesées par leur taille stockée.
+- Nettoyage des vols : seulement `simulator = replay` ouverts depuis plus de 7 jours (`CLEANUP_SIMULATED_AFTER_DAYS`). Les vols des comptes fictifs restent : `pnpm populate` date leur historique dans le passé exprès, les supprimer viderait leurs profils. Ils se suppriment avec les comptes fictifs (page Activité simulée). Écart avec la maquette, qui les incluait.
+- Sessions : celles dont la date d'expiration est passée. Invitations : jamais utilisées et expirées (14 jours).
+- PostgreSQL ne rend pas l'espace au disque après une suppression : il le réutilise. La taille totale ne baisse donc pas forcément tout de suite.
+- Sauvegarde : `docker compose exec -T db pg_dump -U weems -Fc weems`, écrite d'abord dans un fichier `.part` puis renommée ; une seule à la fois ; au-delà de 7, les plus anciennes sont supprimées. La restauration remplace toute la base : jamais de bouton, la commande est affichée.
+- Évolution sur 7 jours : un relevé par jour (le dernier de la journée gagne), 31 jours gardés ; sans relevé de 7 jours, comparaison avec le plus ancien, et la page dit depuis quand.
+
 ## Corrections par rapport à la première maquette
 
 - Il n'existe pas encore de « comptes simulés » : tous les vols simulés appartiennent au pilote de développement. Le filtre « Simulés » disparaît de cette version ; il reviendra avec les comptes simulés (voir hors périmètre).

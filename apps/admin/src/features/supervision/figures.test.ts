@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   apiSummary,
   barHeights,
-  bytes,
   eventText,
   hours,
   migrationsText,
@@ -12,10 +11,7 @@ import {
 } from "./figures.ts";
 
 describe("figures of the page Supervision", () => {
-  it("writes sizes, hours and weekly changes in French", () => {
-    expect(bytes(412_000_000)).toBe("412 Mo");
-    expect(bytes(1_234_000_000)).toBe("1,2 Go");
-    expect(bytes(820_000)).toBe("820 ko");
+  it("writes hours and weekly changes in French", () => {
     expect(hours(1.46)).toBe("1,5 h");
     expect(hours(22.4)).toBe("22 h");
     expect(weekDelta(3)).toBe("+3 sur 7 j");

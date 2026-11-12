@@ -1,7 +1,7 @@
 import type { AdminSupervision } from "@weems/contrats";
 import type { FastifyInstance } from "fastify";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { countMigrationFiles } from "../../db/client.ts";
+import { countMigrationFiles } from "../../db/migration-journal.ts";
 import { newPilot, newTrackerPilot, uniqueEmail } from "../../testing/pilots.ts";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
 import { startTestApp } from "../../testing/test-app.ts";

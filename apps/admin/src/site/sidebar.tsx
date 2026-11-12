@@ -7,6 +7,7 @@ import {
   AccountsIcon,
   ActivityIcon,
   CustomizeIcon,
+  DatabaseIcon,
   DocsIcon,
   ExternalIcon,
   LibrariesIcon,
@@ -70,6 +71,9 @@ function SiteAndMaintenance({ on }: { on: (href: string) => string }) {
         <div className="t">Maintenance</div>
         <Link href="/libraries" className={on("/libraries")}>
           <LibrariesIcon /> Librairies
+        </Link>
+        <Link href="/database" className={on("/database")}>
+          <DatabaseIcon /> Base de données
         </Link>
       </nav>
     </>

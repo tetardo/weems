@@ -2,9 +2,12 @@ import rateLimit from "@fastify/rate-limit";
 import Fastify, { type FastifyInstance } from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import type { Config } from "./config.ts";
-import { countMigrationFiles, type DatabaseHandle } from "./db/client.ts";
+import type { Database, DatabaseHandle } from "./db/client.ts";
+import { countMigrationFiles, readMigrationFiles } from "./db/migration-journal.ts";
 import { registerAdminAccountRoutes } from "./modules/accounts/admin-routes.ts";
 import { AdminAccountsService } from "./modules/accounts/admin-service.ts";
+import { AccountsCleanupService } from "./modules/accounts/cleanup-service.ts";
+import { AccountsCleanupRepository } from "./modules/accounts/repository-cleanup.ts";
 import { createAuth } from "./modules/accounts/auth.ts";
 import { ensureDevPilot } from "./modules/accounts/dev-pilot.ts";
 import { registerFictitiousPilotRoutes } from "./modules/accounts/fictitious-routes.ts";
@@ -52,6 +55,12 @@ import { StatsService, type StatsSources } from "./modules/stats/service.ts";
 import { SupervisionRepository } from "./modules/supervision/repository.ts";
 import { SupervisionListsRepository } from "./modules/supervision/repository-lists.ts";
 import { SupervisionSystemRepository } from "./modules/supervision/repository-system.ts";
+import { DatabaseRepository } from "./modules/database/repository.ts";
+import { registerDatabaseRoutes } from "./modules/database/routes.ts";
+import { DatabaseService } from "./modules/database/service.ts";
+import { FlightsCleanupService } from "./modules/flights/cleanup-service.ts";
+import type { LiveFeed } from "./modules/flights/live-feed.ts";
+import { FlightsCleanupRepository } from "./modules/flights/repository-cleanup.ts";
 import { registerSupervisionRoutes } from "./modules/supervision/routes.ts";
 import { SupervisionService } from "./modules/supervision/service.ts";
 import { registerTrafficHooks } from "./modules/supervision/traffic-hooks.ts";
@@ -104,6 +113,21 @@ function registerSupervision(
     expectedMigrations: countMigrationFiles(),
   });
   registerSupervisionRoutes(app, service, deps.guards);
+}
+
+/** Page Base de données of the admin console: sizes, migrations, cleanup of what is no longer needed. */
+export function createDatabaseService(
+  db: Database,
+  live: Pick<LiveFeed, "closed">,
+  now?: () => Date,
+): DatabaseService {
+  return new DatabaseService({
+    repository: new DatabaseRepository(db),
+    flights: new FlightsCleanupService(new FlightsCleanupRepository(db), live),
+    accounts: new AccountsCleanupService(new AccountsCleanupRepository(db)),
+    migrationFiles: readMigrationFiles(),
+    ...(now ? { now } : {}),
+  });
 }
 
 /** Fastify with its plugins: validation, errors, documentation, rate limits. */
@@ -201,6 +225,7 @@ export async function buildApp({
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));
   registerSupervision(app, { database, guards, board, metrics });
+  registerDatabaseRoutes(app, createDatabaseService(database.db, board), guards);
   if (config.env !== "production") {
     registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }

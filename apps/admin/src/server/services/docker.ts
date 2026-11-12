@@ -60,13 +60,16 @@ export async function containerPublishing(port: number): Promise<string | null> 
   }
 }
 
+/** The API's compose file: the database is its service "db". */
+export const composeFile = (repoRoot: string) => join(repoRoot, "apps/api/docker-compose.yml");
+
 export class DockerCompose {
   private readonly file: string;
   private readonly cwd: string;
 
   constructor(repoRoot: string) {
     this.cwd = join(repoRoot, "apps/api");
-    this.file = join(this.cwd, "docker-compose.yml");
+    this.file = composeFile(repoRoot);
   }
 
   private compose(args: readonly string[], timeout = 120_000) {
