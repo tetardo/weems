@@ -76,13 +76,13 @@ export class PublicProfilesService {
    */
   async livePilots(pilotIds: string[]): Promise<Map<string, LivePilot>> {
     const profiles = await this.repository.publicOf(pilotIds);
-    const pilots = await Promise.all(
-      profiles.map(async ({ pilotId, ...profile }) => {
-        const identity = await this.accounts.pilot(pilotId);
-        return identity ? ([[pilotId, { ...profile, name: identity.name }]] as const) : [];
+    const names = await this.accounts.namesOf(profiles.map((profile) => profile.pilotId));
+    return new Map(
+      profiles.flatMap(({ pilotId, ...profile }) => {
+        const name = names.get(pilotId);
+        return name === undefined ? [] : [[pilotId, { ...profile, name }] as const];
       }),
     );
-    return new Map(pilots.flat());
   }
 
   async flightList(

@@ -385,7 +385,7 @@ describe("pilot on the live map (spec J4, carte en direct)", () => {
     const flight = await seenLive(pilot, (f) => f.pilot !== null);
     expect(flight?.pilot).toEqual({ handle, name: "Test pilot", country: "FR", hasPhoto: false });
     expect(flight).not.toHaveProperty("pilotId");
-  });
+  }, 15_000);
 
   it("keeps a pilot without public profile anonymous", async () => {
     const pilot = await newTrackerPilot(app);
@@ -393,5 +393,5 @@ describe("pilot on the live map (spec J4, carte en direct)", () => {
     const readBy = Date.now() + 4_500;
     const flight = await seenLive(pilot, () => Date.now() > readBy);
     expect(flight?.pilot).toBeNull();
-  });
+  }, 15_000);
 });

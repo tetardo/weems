@@ -35,17 +35,36 @@ export interface Hover {
   point: MapPoint;
 }
 
-/** Calls `onHover` as the mouse moves over the aircraft, and shows the pointer cursor. */
-function watchHover(map: MapLibreMap, onHover: { current: Props["onHover"] }): void {
+/** Farther than this from the mouse, the aircraft is no longer under it. */
+const HOVER_RADIUS_PX = 20;
+
+/**
+ * Calls `onHover` as the mouse moves over the aircraft, and shows the pointer cursor. Returns
+ * the check to run at each frame: an aircraft gliding away from a still mouse drops its card.
+ */
+function watchHover(
+  map: MapLibreMap,
+  tracks: { current: Tracks },
+  onHover: { current: Props["onHover"] },
+): (nowMs: number) => void {
+  let hovered: Hover | null = null;
+  const show = (next: Hover | null) => {
+    hovered = next;
+    map.getCanvas().style.cursor = next ? "pointer" : "";
+    onHover.current(next);
+  };
   map.on("mousemove", SOURCE, (event) => {
     const flightId = event.features?.[0]?.properties["flightId"] as string | undefined;
-    map.getCanvas().style.cursor = flightId ? "pointer" : "";
-    onHover.current(flightId ? { flightId, point: event.point } : null);
+    show(flightId ? { flightId, point: event.point } : null);
   });
-  map.on("mouseleave", SOURCE, () => {
-    map.getCanvas().style.cursor = "";
-    onHover.current(null);
-  });
+  map.on("mouseleave", SOURCE, () => show(null));
+  return (nowMs) => {
+    if (!hovered) return;
+    const at = tracks.current.positionOf(hovered.flightId, nowMs);
+    const drawn = at && map.project([at.lon, at.lat]);
+    const { x, y } = hovered.point;
+    if (!drawn || Math.hypot(drawn.x - x, drawn.y - y) > HOVER_RADIUS_PX) show(null);
+  };
 }
 
 function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
@@ -141,9 +160,11 @@ export function LiveMap(props: Props) {
     };
     const instance = createBaseMap(container.current, { center: [5, 47], zoom: 4.3 }, addLayers);
     map.current = instance;
+    const checkHover = watchHover(instance, tracks, hover);
     let frame = 0;
     const draw = () => {
       const now = performance.now();
+      checkHover(now);
       const source = instance.getSource<GeoJSONSource>(SOURCE);
       source?.setData(tracks.current.features(now, selected.current));
       if (shownRoute.current && selected.current) {
@@ -157,7 +178,6 @@ export function LiveMap(props: Props) {
       const [feature] = instance.queryRenderedFeatures(event.point, { layers: [SOURCE] });
       select.current((feature?.properties["flightId"] as string | undefined) ?? null);
     });
-    watchHover(instance, hover);
     return () => {
       cancelAnimationFrame(frame);
       instance.remove();

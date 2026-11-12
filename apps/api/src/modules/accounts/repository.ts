@@ -1,5 +1,5 @@
 import { uuidV7 } from "@weems/contrats";
-import { and, count, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, count, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import type { Database } from "../../db/client.ts";
 import {
   accounts,
@@ -208,5 +208,15 @@ export class AccountsRepository {
       .from(users)
       .where(eq(users.id, pilotId));
     return row ?? null;
+  }
+
+  /** Names of these accounts, by id (one query for the pilots of the live map). */
+  async namesOf(pilotIds: string[]): Promise<Map<string, string>> {
+    if (pilotIds.length === 0) return new Map();
+    const rows = await this.db
+      .select({ id: users.id, name: users.name })
+      .from(users)
+      .where(inArray(users.id, pilotIds));
+    return new Map(rows.map((row) => [row.id, row.name]));
   }
 }

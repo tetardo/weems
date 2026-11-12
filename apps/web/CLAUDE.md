@@ -103,7 +103,6 @@ src/
     flight-hover-card.tsx, card-position.ts   bulle au survol (souris seulement) et sa place (testé)
     flight-panel.tsx      vol suivi : panneau à droite, feuille en bas sur téléphone, Profil, Partager, Recentrer
     use-selected-flight.ts   vol suivi gardé dans l'adresse (/live?flight=<id>)
-    live-view.tsx         assemblage de la page
     testing/              données de test
 scripts/
   copy-map-worker.ts   copie le « worker » de MapLibre dans public/ avant dev et build

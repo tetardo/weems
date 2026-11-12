@@ -26,7 +26,10 @@ function useHoveredFlight(flights: LiveFlights, selected: LiveFlight | undefined
 }
 
 /** Each new value centres the map on the followed flight: the button, and a shared link once. */
-function useRecenter(selectedId: string | null, hasSelected: boolean): [number, () => void] {
+function useRecenterRequests(
+  selectedId: string | null,
+  hasSelected: boolean,
+): [number, () => void] {
   const [request, setRequest] = useState(0);
   const recenter = () => setRequest((n) => n + 1);
   const openedOn = useRef(selectedId);
@@ -38,6 +41,18 @@ function useRecenter(selectedId: string | null, hasSelected: boolean): [number, 
   return [request, recenter];
 }
 
+/** A followed flight that leaves the map (landed, silent) is no longer followed, nor in the address. */
+function useUnfollowGone(selected: LiveFlight | undefined, unfollow: () => void): void {
+  const seen = useRef(false);
+  useEffect(() => {
+    if (selected) seen.current = true;
+    else if (seen.current) {
+      seen.current = false;
+      unfollow();
+    }
+  }, [selected, unfollow]);
+}
+
 /**
  * The /live page: map, flight counter, routes switch, card of the hovered flight and panel of
  * the followed one (spec J4, carte en direct). The map goes up under the floating bar and down
@@ -46,12 +61,13 @@ function useRecenter(selectedId: string | null, hasSelected: boolean): [number, 
  */
 export function LiveView({ apiUrl }: { apiUrl: string }) {
   const { flights, connection } = useLiveFlights(apiUrl);
-  const [selectedId, setSelectedId] = useSelectedFlight();
+  const [selectedId, setSelectedId, unfollow] = useSelectedFlight();
   const [showRoutes, setShowRoutes] = useShowRoutes();
   const mapBox = useRef<HTMLElement>(null);
   const selected = selectedId ? flights.get(selectedId) : undefined;
   const { hovered, setHover } = useHoveredFlight(flights, selected);
-  const [recenterRequest, recenter] = useRecenter(selectedId, selected !== undefined);
+  useUnfollowGone(selected, unfollow);
+  const [recenterRequest, recenter] = useRecenterRequests(selectedId, selected !== undefined);
   const route = useLiveRoute(apiUrl, selected ? selectedId : null);
   const airports = useAirports(apiUrl, flights);
   const allRoutes = useLiveRoutes(flights, airports, { showRoutes, selected, hovered });
@@ -85,7 +101,7 @@ export function LiveView({ apiUrl }: { apiUrl: string }) {
         <FlightPanel
           flight={selected}
           airports={airports}
-          onClose={() => setSelectedId(null)}
+          onClose={unfollow}
           onRecenter={recenter}
         />
       )}

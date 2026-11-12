@@ -118,6 +118,11 @@ export class AccountsService {
     return this.repository.countActive();
   }
 
+  /** Public names of these accounts, by id; never their e-mail. */
+  namesOf(pilotIds: string[]): Promise<Map<string, string>> {
+    return this.repository.namesOf(pilotIds);
+  }
+
   /** Public name and creation date of an account; never its e-mail. */
   async pilot(pilotId: string): Promise<PilotIdentity | null> {
     return this.repository.findPilot(pilotId);

@@ -23,16 +23,20 @@ export class LiveBoard implements LiveFeed {
   private changed = new Set<string>();
   private removed = new Set<string>();
   private readonly now: () => number;
-  private readonly pilots: LivePilots;
+  /** Anonymous pilots until the profiles are plugged in (showPilots). */
+  private pilots = new LivePilots(() => Promise.resolve(new Map()));
   /** Where each flight has been, for the route of the selected flight. */
   readonly trails = new LiveTrails();
 
-  /** Without `pilots`, every pilot stays anonymous. */
-  constructor(
-    now: () => number = Date.now,
-    pilots: LivePilots = new LivePilots(() => Promise.resolve(new Map())),
-  ) {
+  constructor(now: () => number = Date.now) {
     this.now = now;
+  }
+
+  /**
+   * Shows the pilots whose profile is public. Plugged in after construction: the profiles need
+   * the flights, which need this board.
+   */
+  showPilots(pilots: LivePilots): void {
     this.pilots = pilots;
   }
 

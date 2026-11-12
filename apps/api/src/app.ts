@@ -25,7 +25,7 @@ import { registerFlightRoutes } from "./modules/flights/routes.ts";
 import { FlightsService } from "./modules/flights/service.ts";
 import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
-import { type LoadPilots, LivePilots } from "./modules/live/live-pilots.ts";
+import { LivePilots } from "./modules/live/live-pilots.ts";
 import { registerDevLiveRoutes } from "./modules/live/dev-routes.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
 import { LiveService } from "./modules/live/service.ts";
@@ -87,11 +87,8 @@ export async function buildApp({
 }: AppDependencies): Promise<FastifyInstance> {
   const app = await createServer(config, logger);
   registerHealthRoutes(app, database.ping);
-  // Pilots of the live map come from the public profiles, built further down (they need the
-  // flights, which feed the board): only read once the API runs.
-  const loadPilots: LoadPilots = (ids) => publicProfiles.livePilots(ids);
-  const board = new LiveBoard(Date.now, new LivePilots(loadPilots));
-  const stream = new LiveStream(board);
+  const board = new LiveBoard();
+  const stream = new LiveStream(board, (err) => app.log.error({ err }, "Live pilots not read"));
   const flights = new FlightsService(new FlightsRepository(database.db), board);
   const accountsRepository = new AccountsRepository(database.db);
   const accounts = new AccountsService(accountsRepository);
@@ -114,6 +111,7 @@ export async function buildApp({
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = new PublicProfilesService(profiles, flights, tracks, accounts);
   registerPublicProfileRoutes(app, publicProfiles);
+  board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));
   const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));

@@ -95,7 +95,7 @@ describe("live board", () => {
       () => Promise.resolve(publicPilots),
       () => now,
     );
-    board = new LiveBoard(() => now, pilots);
+    board.showPilots(pilots);
     board.position(info, report(1));
     board.takeUpdate();
     await board.refreshPilots();

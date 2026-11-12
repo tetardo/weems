@@ -12,7 +12,11 @@ const fromAddress = () =>
  * The followed flight, kept in the address so that the page can be shared and reloaded: read
  * once when the page opens, written (without a new history entry) at each change.
  */
-export function useSelectedFlight(): [string | null, (flightId: string | null) => void] {
+export function useSelectedFlight(): [
+  selectedId: string | null,
+  select: (flightId: string | null) => void,
+  unfollow: () => void,
+] {
   const [selectedId, setSelectedId] = useState(fromAddress);
   const select = useCallback((flightId: string | null) => {
     setSelectedId(flightId);
@@ -21,5 +25,6 @@ export function useSelectedFlight(): [string | null, (flightId: string | null) =
     else url.searchParams.delete(PARAM);
     window.history.replaceState(window.history.state, "", url);
   }, []);
-  return [selectedId, select];
+  const unfollow = useCallback(() => select(null), [select]);
+  return [selectedId, select, unfollow];
 }

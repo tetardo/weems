@@ -21,9 +21,12 @@ export class LiveStream {
   private readonly clients = new Set<ServerResponse>();
   private readonly timers: ReturnType<typeof setInterval>[] = [];
   private readonly board: LiveBoard;
+  private readonly onError: (error: unknown) => void;
 
-  constructor(board: LiveBoard) {
+  /** `onError`: a failed read of the pilots (the batch still leaves, with the pilots known). */
+  constructor(board: LiveBoard, onError: (error: unknown) => void = () => undefined) {
     this.board = board;
+    this.onError = onError;
   }
 
   get clientCount(): number {
@@ -58,8 +61,9 @@ export class LiveStream {
   async tick(): Promise<void> {
     try {
       await this.board.refreshPilots();
-    } catch {
-      // Database unavailable: the batch leaves without fresh pilots; next tick tries again.
+    } catch (error) {
+      // Database unavailable: the batch leaves without fresh pilots; the next tick tries again.
+      this.onError(error);
     }
     this.broadcastUpdate();
   }

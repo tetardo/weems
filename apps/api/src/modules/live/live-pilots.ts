@@ -2,7 +2,7 @@ import { isDeepStrictEqual } from "node:util";
 import type { LivePilot } from "@weems/contrats";
 
 /** Public pilots among these ids, by pilot id (implemented by the profiles module). */
-export type LoadPilots = (pilotIds: string[]) => Promise<ReadonlyMap<string, LivePilot>>;
+type LoadPilots = (pilotIds: string[]) => Promise<ReadonlyMap<string, LivePilot>>;
 
 /**
  * Every known pilot is read again this often: a pilot who turns their profile off disappears
@@ -19,7 +19,10 @@ export class LivePilots {
   private readonly now: () => number;
   private readonly known = new Map<string, LivePilot | null>();
   private loadedAt = -Infinity;
-  /** A slow database must not pile up reads: one at a time, the next tick tries again. */
+  /**
+   * A slow database must not pile up reads: one at a time; a pilot who appears meanwhile is read
+   * by the next tick after it.
+   */
   private reading = false;
 
   constructor(load: LoadPilots, now: () => number = Date.now) {
@@ -40,16 +43,16 @@ export class LivePilots {
     if (this.reading) return new Set();
     this.reading = true;
     try {
-      return await this.read([...new Set(pilotIds)]);
+      return await this.read(new Set(pilotIds));
     } finally {
       this.reading = false;
     }
   }
 
-  private async read(ids: string[]): Promise<Set<string>> {
+  private async read(ids: ReadonlySet<string>): Promise<Set<string>> {
     const due = this.now() - this.loadedAt >= REFRESH_EVERY_MS;
-    if (due) for (const id of this.known.keys()) if (!ids.includes(id)) this.known.delete(id);
-    const wanted = due ? ids : ids.filter((id) => !this.known.has(id));
+    if (due) for (const id of this.known.keys()) if (!ids.has(id)) this.known.delete(id);
+    const wanted = [...ids].filter((id) => due || !this.known.has(id));
     if (wanted.length === 0) return new Set();
     const loaded = await this.load(wanted);
     if (due) this.loadedAt = this.now();
