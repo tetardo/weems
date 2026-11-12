@@ -8,22 +8,16 @@ import {
 } from "@weems/contrats";
 import { cookies } from "next/headers";
 import { AdminApi, AdminApiError } from "../server/accounts/admin-api.ts";
+import { SESSION_COOKIE, keepSession, savedSession } from "../server/accounts/admin-session.ts";
 import { devLogin } from "../server/accounts/dev-login.ts";
 import { signIn } from "../server/accounts/sign-in.ts";
 import { config } from "../server/console.ts";
 import { type ActionResult, attempt } from "./result.ts";
 
-/** The console's own cookie, holding the API session of the administrator. */
-const SESSION_COOKIE = "weems-admin-session";
-
 async function api(): Promise<AdminApi> {
-  const cookie = (await cookies()).get(SESSION_COOKIE)?.value;
+  const cookie = await savedSession();
   if (!cookie) throw new AdminApiError(401, "Connectez-vous.");
   return new AdminApi(config(), cookie);
-}
-
-async function keepSession(session: string): Promise<void> {
-  (await cookies()).set(SESSION_COOKIE, session, { httpOnly: true, sameSite: "strict", path: "/" });
 }
 
 export type AccountsPage =
@@ -52,7 +46,7 @@ function loginPage(error: unknown): AccountsPage {
  */
 export async function readAccounts(): Promise<ActionResult<AccountsPage>> {
   return attempt(async () => {
-    const saved = (await cookies()).get(SESSION_COOKIE)?.value;
+    const saved = await savedSession();
     if (saved) {
       try {
         return await readWith(saved);

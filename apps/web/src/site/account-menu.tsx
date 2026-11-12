@@ -31,7 +31,7 @@ export function AccountMenu({ name, children }: { name: string; children: ReactN
         </span>
       </button>
       {open && (
-        <div className="absolute top-[calc(100%+10px)] right-0 flex w-60 flex-col rounded-2xl border border-line bg-surface p-1.5 shadow-floating [&>*]:w-full [&>*]:justify-start">
+        <div className="absolute top-[calc(100%+10px)] right-0 flex w-60 flex-col max-md:fixed max-md:inset-x-3 max-md:top-[76px] max-md:w-auto rounded-2xl border border-line bg-surface p-1.5 shadow-floating [&>*]:w-full [&>*]:justify-start">
           <p className="truncate px-3 pt-2 pb-2.5 text-sm font-semibold" title={name}>
             {name}
           </p>

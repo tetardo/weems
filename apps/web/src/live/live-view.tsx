@@ -16,8 +16,7 @@ const NO_FLIGHTS: LiveFlights = new Map();
 
 /**
  * The /live page: map, flight counter, routes switch, panel of the selected flight. The map goes
- * up under the floating bar and down under the dock (decision 003): -mt-18 is the bar and its
- * top margin.
+ * up under the floating bar (decision 003): -mt-18 is the bar and its top margin.
  */
 export function LiveView({ apiUrl }: { apiUrl: string }) {
   const t = useTranslations("Live");
@@ -36,7 +35,7 @@ export function LiveView({ apiUrl }: { apiUrl: string }) {
   );
 
   return (
-    <main className="relative -mt-18 flex-1 max-md:-mb-24">
+    <main className="relative -mt-18 flex-1">
       <LiveMap
         flights={flights}
         selectedId={selectedId}

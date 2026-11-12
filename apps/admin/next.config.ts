@@ -8,6 +8,11 @@ const config: NextConfig = {
   devIndicators: false,
   // Agent context lives in CLAUDE.md, not in a generated AGENTS.md.
   agentRules: false,
+  // Home page images (page Personnalisation) go through a server action: 15 MB at most, plus the form.
+  experimental: {
+    serverActions: { bodySizeLimit: "16mb" },
+    proxyClientMaxBodySize: "16mb",
+  },
 };
 
 export default config;

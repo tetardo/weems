@@ -6,6 +6,7 @@ import type { ServiceView } from "../server/services/service-view.ts";
 import {
   AccountsIcon,
   ActivityIcon,
+  CustomizeIcon,
   DocsIcon,
   ExternalIcon,
   ServicesIcon,
@@ -66,6 +67,12 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
         <div className="t">Utilisateurs</div>
         <Link href="/accounts" className={on("/accounts")}>
           <AccountsIcon /> Comptes
+        </Link>
+      </nav>
+      <nav className="grp">
+        <div className="t">Site</div>
+        <Link href="/customize" className={on("/customize")}>
+          <CustomizeIcon /> Personnalisation
         </Link>
       </nav>
       <nav className="grp">

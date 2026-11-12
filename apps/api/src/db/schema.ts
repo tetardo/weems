@@ -138,4 +138,19 @@ export const pilotPhotos = pgTable("pilot_photos", {
   updatedAt: utc("updated_at").notNull(),
 });
 
+/** Home page background of each theme (spec J4 personnalisation): WebP, 2 560 px wide at most. */
+export const siteHomeImages = pgTable("site_home_images", {
+  /** "light" or "dark". */
+  theme: text("theme").primaryKey(),
+  webp: bytea("webp").notNull(),
+  width: integer("width").notNull(),
+  height: integer("height").notNull(),
+  /** "left", "center" or "right": what the crop keeps. */
+  focus: text("focus").notNull(),
+  credit: text("credit").notNull(),
+  licence: text("licence").notNull(),
+  updatedAt: utc("updated_at").notNull(),
+  updatedBy: uuid("updated_by").references(() => users.id, { onDelete: "set null" }),
+});
+
 export * from "./auth-schema.ts";

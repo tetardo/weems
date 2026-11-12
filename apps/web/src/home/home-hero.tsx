@@ -1,28 +1,25 @@
-import type { SiteStats } from "@weems/contrats";
+import type { HomeTheme, SiteStats } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { buttonClass } from "@weems/ui";
 import { Link } from "../i18n/navigation.ts";
 import { BrandMark } from "../site/brand.tsx";
 import { FlightsIcon, LiveIcon } from "../ui/icons.ts";
 import { DeparturesBoard } from "./departures-board.tsx";
-import { HOME_IMAGES } from "./home-image.ts";
+import type { HomeBackground } from "./home-image.ts";
 
 /** The image of each theme; CSS shows the one of the current theme (no mismatch with the server). */
-function Background() {
-  const { light, dark } = HOME_IMAGES;
-  const photo = "absolute inset-0 bg-cover bg-[70%_center] max-md:bg-[28%_center]";
+function Background({ backgrounds }: { backgrounds: Record<HomeTheme, HomeBackground> }) {
+  const { light, dark } = backgrounds;
+  const photo = "absolute inset-0 bg-cover";
+  const style = ({ src, position }: HomeBackground) => ({
+    backgroundImage: `url(${src})`,
+    backgroundPosition: position,
+  });
   return (
     <div aria-hidden="true" className="absolute inset-0">
       <div className="hero-sky absolute inset-0" />
-      {dark && (
-        <div className={`${photo} light:hidden`} style={{ backgroundImage: `url(${dark})` }} />
-      )}
-      {light && (
-        <div
-          className={`${photo} hidden light:block`}
-          style={{ backgroundImage: `url(${light})` }}
-        />
-      )}
+      <div className={`${photo} light:hidden`} style={style(dark)} />
+      <div className={`${photo} hidden light:block`} style={style(light)} />
       <div className="hero-veil absolute inset-0" />
     </div>
   );
@@ -55,15 +52,16 @@ interface Props {
   loggedIn: boolean;
   stats: SiteStats | null;
   apiUrl: string;
+  backgrounds: Record<HomeTheme, HomeBackground>;
 }
 
 /** Full-screen home (spec J4 accueil, piste F): logo, slogan, calls to action, departures board. */
-export function HomeHero({ loggedIn, stats, apiUrl }: Props) {
+export function HomeHero({ loggedIn, stats, apiUrl, backgrounds }: Props) {
   const t = useTranslations("Home");
   const site = useTranslations("Site");
   return (
     <section className="relative flex min-h-screen flex-col overflow-hidden text-hero-ink">
-      <Background />
+      <Background backgrounds={backgrounds} />
       <div className="relative mx-auto flex w-full max-w-[1152px] flex-1 flex-col px-6 pt-[18vh] pb-7 max-md:px-4 max-md:pt-24 max-md:pb-4">
         <div className="flex max-w-[620px] flex-col gap-5 max-md:gap-3.5">
           <p className="flex items-center gap-3.5">
