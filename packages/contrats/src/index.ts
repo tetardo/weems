@@ -70,6 +70,8 @@ export {
   MyProfile,
   PilotCharts,
   PilotHandle,
+  PilotLogbook,
+  PilotPage,
   PilotLevel,
   PilotRoutes,
   PilotStats,

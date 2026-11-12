@@ -28,6 +28,8 @@ import { LiveBoard } from "./modules/live/live-board.ts";
 import { registerDevLiveRoutes } from "./modules/live/dev-routes.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
 import { LiveService } from "./modules/live/service.ts";
+import { LogbookService } from "./modules/profiles/logbook-service.ts";
+import { registerLogbookRoutes } from "./modules/profiles/logbook-routes.ts";
 import { ProfilesRepository } from "./modules/profiles/repository.ts";
 import { PublicProfilesService } from "./modules/profiles/public-service.ts";
 import { registerPublicProfileRoutes } from "./modules/profiles/public-routes.ts";
@@ -95,6 +97,23 @@ async function createServer(config: Config, logger: boolean): Promise<FastifyIns
   return app;
 }
 
+/** Profile pages: public ones (by handle, without account) and the pilot's own logbook. */
+function registerProfilePages(
+  app: FastifyInstance,
+  guards: Guards,
+  sources: {
+    profiles: ProfilesRepository;
+    flights: FlightsService;
+    tracks: TracksService;
+    accounts: AccountsService;
+  },
+): void {
+  const { profiles, flights, tracks, accounts } = sources;
+  const pages = new PublicProfilesService(profiles, flights, tracks, accounts);
+  registerPublicProfileRoutes(app, pages);
+  registerLogbookRoutes(app, new LogbookService(profiles, pages), guards);
+}
+
 /** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
 export async function buildApp({
   config,
@@ -125,7 +144,7 @@ export async function buildApp({
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
   registerProfileRoutes(app, profileSettings, guards);
-  registerPublicProfileRoutes(app, new PublicProfilesService(profiles, flights, tracks, accounts));
+  registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));

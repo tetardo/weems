@@ -1,10 +1,10 @@
-import type { PublicPilot } from "@weems/contrats";
+import type { PilotPage } from "@weems/contrats";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { countryName } from "../format/countries.ts";
-import { pilotPhotoUrl } from "../site/api-relay.ts";
 import { CountryFlag } from "../ui/country-flag.tsx";
 import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
 import { InfoTip } from "../ui/info-tip.tsx";
+import type { ProfileLinks } from "./profile-links.ts";
 import { ShareButton } from "./share-button.tsx";
 
 /** Circumference of the Earth at the equator, nautical miles. */
@@ -35,12 +35,12 @@ const ACCOUNTS = {
 };
 type Account = keyof typeof ACCOUNTS;
 
-function Photo({ pilot }: { pilot: PublicPilot }) {
+function Photo({ pilot, src }: { pilot: PilotPage; src: string }) {
   return (
     <span className="grid size-26 flex-none place-items-center overflow-hidden rounded-full border-3 border-line bg-accent font-title text-[38px] text-on-accent max-md:size-20">
       {pilot.hasPhoto ? (
         // Plain img: served by the API through the site, already 256 px.
-        <img src={pilotPhotoUrl(pilot.handle)} alt="" className="size-full object-cover" />
+        <img src={src} alt="" className="size-full object-cover" />
       ) : (
         pilot.name.slice(0, 1).toUpperCase()
       )}
@@ -48,7 +48,7 @@ function Photo({ pilot }: { pilot: PublicPilot }) {
   );
 }
 
-function Networks({ pilot }: { pilot: PublicPilot }) {
+function Networks({ pilot }: { pilot: PilotPage }) {
   const ids: Record<Account, string | null> = {
     VATSIM: pilot.vatsimId,
     IVAO: pilot.ivaoId,
@@ -76,7 +76,7 @@ function Networks({ pilot }: { pilot: PublicPilot }) {
 }
 
 /** Name, flag, level, then the facts line and the network links. */
-function Identity({ pilot, country }: { pilot: PublicPilot; country: string | null }) {
+function Identity({ pilot, country }: { pilot: PilotPage; country: string | null }) {
   const t = useTranslations("Profile.header");
   const help = useTranslations("Profile.help");
   const levels = useTranslations("Profile.levels");
@@ -112,7 +112,7 @@ function Identity({ pilot, country }: { pilot: PublicPilot; country: string | nu
 }
 
 /** Distance flown, with its Earth-lap equivalent, and the share button. */
-function DistanceAndShare({ pilot }: { pilot: PublicPilot }) {
+function DistanceAndShare({ pilot, share }: { pilot: PilotPage; share: string | null }) {
   const t = useTranslations("Profile.header");
   const help = useTranslations("Profile.help");
   const format = useFormatter();
@@ -128,24 +128,27 @@ function DistanceAndShare({ pilot }: { pilot: PublicPilot }) {
         </span>
         <InfoTip text={help("distance")} label={help("label")} />
       </div>
-      <ShareButton
-        label={t("share")}
-        copied={t("copied")}
-        title={t("shareTitle", { name: pilot.name })}
-      />
+      {share && (
+        <ShareButton
+          path={share}
+          label={t("share")}
+          copied={t("copied")}
+          title={t("shareTitle", { name: pilot.name })}
+        />
+      )}
     </div>
   );
 }
 
 /** Head of a public profile (spec J4): photo, name, country, level, facts, networks, distance. */
-export function ProfileHeader({ pilot }: { pilot: PublicPilot }) {
+export function ProfileHeader({ pilot, links }: { pilot: PilotPage; links: ProfileLinks }) {
   const locale = useLocale();
   const country = pilot.country ? countryName(pilot.country, locale) : null;
   return (
     <section className="grid items-center gap-6 rounded-2xl border border-line bg-surface px-6 py-5 md:grid-cols-[auto_1fr_auto]">
-      <Photo pilot={pilot} />
+      <Photo pilot={pilot} src={links.photo} />
       <Identity pilot={pilot} country={country} />
-      <DistanceAndShare pilot={pilot} />
+      <DistanceAndShare pilot={pilot} share={links.share} />
     </section>
   );
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getPilotRoutes, getPublicFlights, getPublicPilot } from "../../../../../api/public-api.ts";
 import { publicPageMetadata } from "../../../../../profile/page-metadata.ts";
+import { publicProfileLinks } from "../../../../../profile/profile-links.ts";
 import { ProfilePage } from "../../../../../profile/profile-page.tsx";
 import { apiFallback } from "../../../../../site/api-fallback.tsx";
 
@@ -42,7 +43,15 @@ export default async function PilotRoute({ params, searchParams }: Props) {
       getPublicFlights(handle, page),
     ]);
     if (!pilot || !routes || !flights) notFound();
-    return <ProfilePage pilot={pilot} routes={routes} flights={flights} cursor={page} />;
+    return (
+      <ProfilePage
+        pilot={pilot}
+        links={publicProfileLinks(pilot.handle)}
+        routes={routes}
+        flights={flights}
+        cursor={page}
+      />
+    );
   } catch (error) {
     return apiFallback(error);
   }

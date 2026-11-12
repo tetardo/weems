@@ -3,6 +3,7 @@
     "name": "Weems",
     "description": "Flight tracking for simulator pilots",
     "nav": {
+      "logbook": "My logbook",
       "flights": "My flights",
       "live": "Live flights",
       "profile": "My public profile"
@@ -383,6 +384,16 @@
       "count": "{count, plural, =0 {none} one {# flight} other {# flights}}",
       "help": "Hide a flight from its page (“Hide from my profile”). It stays in your logbook.",
       "show": "Show again"
+    }
+  },
+  "Logbook": {
+    "title": "My logbook",
+    "notice": {
+      "private": "Preview: your logbook is not public, only you can see it.",
+      "public": "Your logbook is public: this is what visitors see.",
+      "publish": "Make it public",
+      "open": "Open the public page",
+      "settings": "Profile settings"
     }
   },
   "Profile": {

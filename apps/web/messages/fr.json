@@ -3,6 +3,7 @@
     "name": "Weems",
     "description": "Suivi des vols en simulation",
     "nav": {
+      "logbook": "Mon carnet de bord",
       "flights": "Mes vols",
       "live": "Vols en direct",
       "profile": "Mon profil public"
@@ -383,6 +384,16 @@
       "count": "{count, plural, =0 {aucun} one {# vol} other {# vols}}",
       "help": "Masquez un vol depuis sa page (« Masquer de mon profil »). Il reste dans votre carnet.",
       "show": "Remontrer"
+    }
+  },
+  "Logbook": {
+    "title": "Mon carnet de bord",
+    "notice": {
+      "private": "Aperçu : votre carnet n'est pas public, vous seul le voyez.",
+      "public": "Votre carnet est public : voici ce que voient les visiteurs.",
+      "publish": "Le rendre public",
+      "open": "Voir la page publique",
+      "settings": "Réglages du profil"
     }
   },
   "Profile": {

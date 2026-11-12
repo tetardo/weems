@@ -29,6 +29,11 @@ const EMPTY_FIELDS = {
   unpublishedAt: null,
 };
 
+/** The profile of a pilot who never saved one: private, without handle. */
+export function blankProfile(pilotId: string): ProfileRecord {
+  return { ...EMPTY_FIELDS, pilotId, updatedAt: new Date(0) };
+}
+
 /** Consent trace: when the profile was last made public, and last taken down. */
 function consentDates(before: ProfileRecord | null, isPublic: boolean, now: Date) {
   const previous = before ?? { isPublic: false, publishedAt: null, unpublishedAt: null };
@@ -146,7 +151,7 @@ export class ProfilesService {
   }
 
   private async view(pilotId: string, stored: ProfileRecord | null): Promise<MyProfile> {
-    const profile = stored ?? { ...EMPTY_FIELDS, pilotId };
+    const profile = stored ?? blankProfile(pilotId);
     const { pilotId: _pilot, unpublishedAt: _down, publishedAt, ...fields } = profile;
     return {
       ...fields,

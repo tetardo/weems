@@ -176,9 +176,8 @@ export const PilotCharts = z.object({
 });
 export type PilotCharts = z.infer<typeof PilotCharts>;
 
-/** GET /v1/pilots/{handle} */
-export const PublicPilot = z.object({
-  handle: PilotHandle,
+/** What a profile page shows of a pilot, whoever reads it: PublicPilot and PilotLogbook. */
+export const PilotPage = z.object({
   name: z.string(),
   country: CountryCode.nullable(),
   homeIcao: IcaoCode.nullable(),
@@ -188,14 +187,29 @@ export const PublicPilot = z.object({
   instagram: InstagramName.nullable(),
   facebook: FacebookName.nullable(),
   memberSince: UtcTimestamp,
-  /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
+  /** Photo at GET /v1/pilots/{handle}/photo (logbook: /v1/me/profile/photo); initials otherwise. */
   hasPhoto: z.boolean(),
   /** Fictitious account of the simulated activity: the site shows a badge (development only). */
   fictitious: z.boolean(),
   stats: PilotStats,
   charts: PilotCharts,
 });
+export type PilotPage = z.infer<typeof PilotPage>;
+
+/** GET /v1/pilots/{handle} */
+export const PublicPilot = PilotPage.extend({ handle: PilotHandle });
 export type PublicPilot = z.infer<typeof PublicPilot>;
+
+/**
+ * GET /v1/me/logbook: the pilot's own logbook, the public page as visitors see it (closed flights
+ * not hidden), even while the profile is not public. Flights: /v1/me/logbook/flights and /routes.
+ */
+export const PilotLogbook = PilotPage.extend({
+  /** Address of the public page; null until the pilot chooses one. */
+  handle: PilotHandle.nullable(),
+  isPublic: z.boolean(),
+});
+export type PilotLogbook = z.infer<typeof PilotLogbook>;
 
 /** One line of a public flight list. */
 export const PublicFlightSummary = FlightSummary.pick({

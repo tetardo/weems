@@ -38,3 +38,7 @@ Demande de Greg (« la nouvelle barre de menu qui est sur l'accueil doit être l
 - À droite : « Créer un compte » et l'icône de connexion pour un visiteur ; l'initiale du pilote et son menu (« Mon profil public », déconnexion) une fois connecté ; puis thème et FR | EN pour tous. La langue sort du menu du pilote (FR | EN est toujours visible).
 - Sous 768 px : bouton menu avec les mêmes liens, partout. **Le dock flottant du bas est supprimé** (une seule navigation au lieu de deux selon la page) ; le menu du pilote s'ouvre sur toute la largeur.
 - Pied de page P2 sur l'accueil et les profils publics, pas sur les pages du pilote ni la carte en direct.
+
+## Mise à jour du 12/11/2026 : « Mon carnet de bord »
+
+Demande de Greg : un bouton « Mon carnet de bord » avant « Mes vols » (pilote connecté), qui montre sa page publique ; c'est la page d'arrivée après connexion. La barre compte maintenant 3 entrées sur 5 (carnet, mes vols, direct). Détails dans la spec J4 profil public, section 7.
