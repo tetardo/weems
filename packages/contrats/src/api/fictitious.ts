@@ -46,6 +46,8 @@ export const FictitiousPopulation = z.object({
   accounts: z.number().int().nonnegative(),
   publicProfiles: z.number().int().nonnegative(),
   flights: z.number().int().nonnegative(),
+  /** Address of the public profile with the most flights (link of the console); null if none. */
+  busiestHandle: z.string().nullable(),
   /** The fictitious accounts, for the live activity to fly as them. */
   pilotIds: z.array(z.uuid()),
 });

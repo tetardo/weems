@@ -109,7 +109,7 @@ function weighted<T>(random: () => number, choices: readonly (readonly [T, numbe
 }
 
 /** "Léa Fontaine", index 3 → "lea-fontaine-3": valid profile address (PilotHandle). */
-export function handleOf(name: string, index: number): string {
+function handleOf(name: string, index: number): string {
   const ascii = name
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")

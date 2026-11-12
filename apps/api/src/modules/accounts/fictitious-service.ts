@@ -33,6 +33,18 @@ function emailOf(name: string, id: string): string {
   return `${slug(name)}-${id.slice(-6)}@${FICTITIOUS_EMAIL_DOMAIN}`;
 }
 
+/** Public profile of the pilot with the most flights. */
+function busiest(
+  ids: readonly string[],
+  flights: Map<string, number>,
+  handles: Map<string, string>,
+) {
+  const ranked = ids
+    .filter((id) => handles.has(id))
+    .sort((a, b) => (flights.get(b) ?? 0) - (flights.get(a) ?? 0));
+  return ranked[0] ? (handles.get(ranked[0]) ?? null) : null;
+}
+
 const sumOf = (ids: readonly string[], counts: Map<string, number>) =>
   ids.reduce((total, id) => total + (counts.get(id) ?? 0), 0);
 
@@ -76,6 +88,7 @@ export class FictitiousPilotsService {
       accounts: ids.length,
       publicProfiles: ids.filter((id) => handles.has(id)).length,
       flights: sumOf(ids, flights),
+      busiestHandle: busiest(ids, flights, handles),
       pilotIds: ids,
     };
   }

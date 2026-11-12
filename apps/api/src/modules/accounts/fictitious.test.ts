@@ -128,6 +128,7 @@ describe("fictitious accounts (development only)", () => {
       accounts: 0,
       publicProfiles: 0,
       flights: 0,
+      busiestHandle: null,
       pilotIds: [],
     });
     expect(await fly(as(pilot?.pilotId ?? ""))).toBe(401);
