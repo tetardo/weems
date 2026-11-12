@@ -1,0 +1,9 @@
+flowchart LR
+  P[Page Comptes] --> C{Session gardée ?}
+  C -- oui, valide --> L[Liste des comptes]
+  C -- non ou expirée --> D{Console hors production ?}
+  D -- oui --> S[Connexion à l'API comme pilote de développement]
+  S -- acceptée et administrateur --> L
+  S -- refusée --> F[Formulaire de connexion]
+  S -- pas administrateur --> F
+  D -- non --> F

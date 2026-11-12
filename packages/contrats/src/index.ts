@@ -78,6 +78,7 @@ export {
   FacebookName,
 } from "./api/profiles.ts";
 export { DevFlightCounts, DevMetrics } from "./api/dev-metrics.ts";
+export { DEV_PILOT_LOGIN } from "./api/dev-pilot.ts";
 export {
   FICTITIOUS_EMAIL_DOMAIN,
   FICTITIOUS_PASSWORD,

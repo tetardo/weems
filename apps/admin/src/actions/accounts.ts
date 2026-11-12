@@ -8,6 +8,7 @@ import {
 } from "@weems/contrats";
 import { cookies } from "next/headers";
 import { AdminApi, AdminApiError } from "../server/accounts/admin-api.ts";
+import { devLogin } from "../server/accounts/dev-login.ts";
 import { signIn } from "../server/accounts/sign-in.ts";
 import { config } from "../server/console.ts";
 import { type ActionResult, attempt } from "./result.ts";
@@ -21,24 +22,48 @@ async function api(): Promise<AdminApi> {
   return new AdminApi(config(), cookie);
 }
 
+async function keepSession(session: string): Promise<void> {
+  (await cookies()).set(SESSION_COOKIE, session, { httpOnly: true, sameSite: "strict", path: "/" });
+}
+
 export type AccountsPage =
   | { status: "login"; reason: string | null }
   | { status: "ready"; me: AdminMe; list: AdminAccountList; siteUrl: string };
 
-/** The page Comptes: the list, or the login form when there is no administrator session. */
+async function readWith(session: string): Promise<AccountsPage> {
+  const admin = new AdminApi(config(), session);
+  const [me, list] = await Promise.all([admin.me(), admin.list()]);
+  return { status: "ready", me, list, siteUrl: config().siteUrl };
+}
+
+/** The login form, for a refusal of the API (401 no session, 403 not an administrator). */
+function loginPage(error: unknown): AccountsPage {
+  if (!(error instanceof AdminApiError) || (error.status !== 401 && error.status !== 403)) {
+    throw error;
+  }
+  const reason = error.status === 403 ? "Ce compte n'est pas administrateur." : null;
+  return { status: "login", reason };
+}
+
+/**
+ * The page Comptes: the list, or the login form when there is no administrator session.
+ * Without a session (or with an expired one), outside production, the console first logs in by
+ * itself as the development pilot (fiche 012).
+ */
 export async function readAccounts(): Promise<ActionResult<AccountsPage>> {
   return attempt(async () => {
-    try {
-      const admin = await api();
-      const [me, list] = await Promise.all([admin.me(), admin.list()]);
-      return { status: "ready", me, list, siteUrl: config().siteUrl };
-    } catch (error) {
-      if (!(error instanceof AdminApiError) || (error.status !== 401 && error.status !== 403)) {
-        throw error;
+    const saved = (await cookies()).get(SESSION_COOKIE)?.value;
+    if (saved) {
+      try {
+        return await readWith(saved);
+      } catch (error) {
+        if (!(error instanceof AdminApiError) || error.status !== 401) return loginPage(error);
       }
-      const reason = error.status === 403 ? "Ce compte n'est pas administrateur." : null;
-      return { status: "login", reason };
     }
+    const session = await devLogin(config());
+    if (!session) return { status: "login", reason: null };
+    await keepSession(session);
+    return readWith(session).catch(loginPage);
   });
 }
 
@@ -51,11 +76,7 @@ export async function logIn(email: string, password: string) {
       }
       throw error;
     });
-    (await cookies()).set(SESSION_COOKIE, session, {
-      httpOnly: true,
-      sameSite: "strict",
-      path: "/",
-    });
+    await keepSession(session);
     return null;
   });
 }
