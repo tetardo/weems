@@ -3,9 +3,17 @@
 import type { SiteStats } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
+import { Link } from "../i18n/navigation.ts";
 import { useLiveFlights } from "../live/use-live-flights.ts";
-import { DepartureIcon, PilotsIcon } from "../ui/icons.ts";
-import { type BoardRow, boardRows, type Level, type PhaseGroup } from "./departures.ts";
+import { DepartureIcon } from "../ui/icons.ts";
+import {
+  BOARD_ROWS_PHONE,
+  type BoardRow,
+  boardRows,
+  type Level,
+  moreFlights,
+  type PhaseGroup,
+} from "./departures.ts";
 import { SplitFlap } from "./split-flap.tsx";
 
 const PHASE_TONE: Record<PhaseGroup, string> = {
@@ -16,79 +24,79 @@ const PHASE_TONE: Record<PhaseGroup, string> = {
   approach: "bg-board-approach/15 text-board-approach",
 };
 
-function Counter({
-  label,
-  icon,
-  children,
-}: {
-  label: string;
-  icon: ReactNode;
-  children: ReactNode;
-}) {
+function Counter({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <span className="flex items-center gap-2.5 text-[11px] tracking-[.12em] text-board-muted uppercase">
-      {icon}
-      {label}
+    <div className="flex flex-col items-center gap-2 px-2 py-3 not-first:border-l not-first:border-board-edge">
+      <span className="text-[10.5px] tracking-[.16em] text-board-label uppercase">{label}</span>
       {children}
-    </span>
+    </div>
   );
 }
 
-function LevelCell({ level }: { level: Level }) {
+/** Level in the air (on the ground, the « Au sol » label already says it). */
+function LevelCell({ level }: { level: Exclude<Level, { kind: "ground" }> }) {
   const t = useTranslations("Home.board");
-  if (level.kind === "ground") return t("ground");
   if (level.kind === "flightLevel") return level.value;
   return t("feet", { value: level.value });
 }
 
-function Row({ row }: { row: BoardRow }) {
+/** One flight on one line; its level shows on hover only. A phone shows the first 4 lines. */
+function Row({ row, phone }: { row: BoardRow; phone: boolean }) {
   const t = useTranslations("Home.board");
   return (
-    <tr className="border-t border-board-line">
-      <td className="px-5 py-2 font-bold text-board-call max-sm:px-3">{row.callsign}</td>
-      <td className="px-5 py-2 max-sm:px-3">{row.from ?? "—"}</td>
-      <td className="px-5 py-2 max-sm:px-3">{row.to ?? "—"}</td>
-      <td className="px-5 py-2 max-sm:px-3">
+    <tr className={`group border-t border-board-line ${phone ? "" : "max-md:hidden"}`}>
+      <td className="py-2.5 pl-5 font-bold whitespace-nowrap text-board-call max-sm:pl-4">
+        {row.callsign}
+      </td>
+      <td className="px-3 py-2.5 whitespace-nowrap">
+        {row.from ?? "—"} <span className="text-board-muted">→</span> {row.to ?? "—"}
+      </td>
+      <td className="py-2.5 pr-5 text-right whitespace-nowrap max-sm:pr-4">
+        {row.level.kind !== "ground" && (
+          <span className="mr-2 text-xs text-board-muted opacity-0 transition-opacity group-hover:opacity-100">
+            <span className="sr-only">{t("level")} </span>
+            <LevelCell level={row.level} />
+          </span>
+        )}
         <span
           className={`rounded-[5px] px-2 py-0.5 text-xs font-bold tracking-[.06em] uppercase ${PHASE_TONE[row.phase]}`}
         >
           {t(`phases.${row.phase}`)}
         </span>
       </td>
-      <td className="px-5 py-2 max-sm:hidden">
-        <LevelCell level={row.level} />
-      </td>
     </tr>
   );
 }
 
-const HEADING =
-  "px-5 pt-2.5 pb-1 text-left text-[10.5px] font-semibold tracking-[.16em] text-board-label max-sm:px-3";
-
-/** Title and the three split-flap counters. */
+/** Title, « Direct » mark and the three split-flap counters. */
 function BoardHead({ stats, live }: { stats: SiteStats | null; live: number | null }) {
   const t = useTranslations("Home.board");
   return (
-    <div className="flex flex-wrap items-center gap-x-7 gap-y-3 border-b border-board-edge bg-board-head px-5 py-3.5 max-sm:px-3.5">
-      <h2 className="mr-auto flex items-center gap-2.5 text-base font-bold tracking-[.2em] text-board-title uppercase max-sm:w-full">
-        <DepartureIcon size={18} aria-hidden="true" />
-        {t("title")}
-      </h2>
-      <Counter label={t("pilots")} icon={<PilotsIcon size={14} aria-hidden="true" />}>
-        <SplitFlap value={stats?.pilots ?? null} width={4} size="sm" />
-        <span className="sr-only">{stats?.pilots}</span>
-      </Counter>
-      <Counter label={t("flights")} icon={<DepartureIcon size={14} aria-hidden="true" />}>
-        <SplitFlap value={stats?.flights ?? null} width={5} size="sm" />
-        <span className="sr-only">{stats?.flights}</span>
-      </Counter>
-      <Counter
-        label={t("live")}
-        icon={<span className="size-2.5 animate-pulse rounded-full bg-board-live" />}
-      >
-        <SplitFlap value={live} width={3} size="sm" />
-        <span className="sr-only">{live}</span>
-      </Counter>
+    <div className="border-b border-board-edge bg-board-head">
+      <div className="flex items-center gap-3 px-5 py-3.5 max-sm:px-4">
+        <h2 className="mr-auto flex items-center gap-2.5 text-base font-bold tracking-[.2em] text-board-title uppercase">
+          <DepartureIcon size={18} aria-hidden="true" />
+          {t("title")}
+        </h2>
+        <span className="flex items-center gap-2 text-[11px] tracking-[.16em] text-board-muted uppercase">
+          <span className="size-2 animate-pulse rounded-full bg-board-live" />
+          {t("direct")}
+        </span>
+      </div>
+      <div className="grid grid-cols-3 border-t border-board-edge">
+        <Counter label={t("pilots")}>
+          <SplitFlap value={stats?.pilots ?? null} width={4} size="sm" />
+          <span className="sr-only">{stats?.pilots}</span>
+        </Counter>
+        <Counter label={t("flights")}>
+          <SplitFlap value={stats?.flights ?? null} width={5} size="sm" />
+          <span className="sr-only">{stats?.flights}</span>
+        </Counter>
+        <Counter label={t("live")}>
+          <SplitFlap value={live} width={3} size="sm" />
+          <span className="sr-only">{live}</span>
+        </Counter>
+      </div>
     </div>
   );
 }
@@ -98,28 +106,43 @@ function BoardTable({ rows }: { rows: BoardRow[] }) {
   const t = useTranslations("Home.board");
   return (
     <table className="w-full border-collapse text-[15px] max-sm:text-[13px]">
-      <thead>
+      <thead className="sr-only">
         <tr>
-          <th className={HEADING}>{t("flight")}</th>
-          <th className={HEADING}>{t("from")}</th>
-          <th className={HEADING}>{t("to")}</th>
-          <th className={HEADING}>{t("phase")}</th>
-          <th className={`${HEADING} max-sm:hidden`}>{t("level")}</th>
+          <th>{t("flight")}</th>
+          <th>{t("route")}</th>
+          <th>{t("phase")}</th>
         </tr>
       </thead>
       <tbody>
-        {rows.map((row) => (
-          <Row key={row.flightId} row={row} />
+        {rows.map((row, index) => (
+          <Row key={row.flightId} row={row} phone={index < BOARD_ROWS_PHONE} />
         ))}
         {rows.length === 0 && (
           <tr className="border-t border-board-line">
-            <td colSpan={5} className="px-5 py-3 text-board-muted max-sm:px-3">
+            <td colSpan={3} className="px-5 py-3 text-board-muted max-sm:px-4">
               {t("none")}
             </td>
           </tr>
         )}
       </tbody>
     </table>
+  );
+}
+
+/** « + N vols · voir la carte en direct »: N counts the flights left out, 8 shown on a computer, 4 on a phone. */
+function MoreLink({ live, shown }: { live: number; shown: number }) {
+  const t = useTranslations("Home.board");
+  const more = (count: number, className: string) =>
+    count > 0 && <span className={className}>{t("more", { count })} · </span>;
+  return (
+    <Link
+      href="/live"
+      className="block border-t border-board-line px-5 py-3 text-xs tracking-[.14em] text-board-call max-sm:tracking-[.06em] uppercase hover:underline max-sm:px-4"
+    >
+      {more(moreFlights(live, shown), "max-md:hidden")}
+      {more(moreFlights(live, Math.min(shown, BOARD_ROWS_PHONE)), "md:hidden")}
+      {t("seeMap")} →
+    </Link>
   );
 }
 
@@ -131,13 +154,15 @@ export function DeparturesBoard({ stats, apiUrl }: { stats: SiteStats | null; ap
   const t = useTranslations("Home.board");
   const { flights, connection } = useLiveFlights(apiUrl);
   const live = connection === "open" ? flights.size : (stats?.liveFlights ?? null);
+  const rows = boardRows(flights);
   return (
     <section
       aria-label={t("title")}
       className="overflow-hidden rounded-2xl border border-board-edge bg-board font-mono text-board-ink shadow-floating"
     >
       <BoardHead stats={stats} live={live} />
-      <BoardTable rows={boardRows(flights)} />
+      <BoardTable rows={rows} />
+      <MoreLink live={flights.size} shown={rows.length} />
     </section>
   );
 }

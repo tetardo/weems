@@ -212,12 +212,10 @@ h3 {
 
 /*
  * Home page (spec J4 accueil): the photo of the theme (or the sunset sky when there is none)
- * under a veil, darker on the left where the text is and at the bottom where the board is.
+ * under a veil, darker on the left where the text is (the board on the right has its own background).
  */
 @utility hero-veil {
-  background:
-    linear-gradient(90deg, var(--wm-veil) 0%, var(--wm-veil-mid) 42%, transparent 68%),
-    linear-gradient(180deg, transparent 66%, var(--wm-veil) 100%);
+  background: linear-gradient(90deg, var(--wm-veil) 0%, var(--wm-veil-mid) 42%, transparent 68%);
   @media (width < 48rem) {
     background: linear-gradient(
       180deg,

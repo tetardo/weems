@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { liveFlight } from "../live/testing/live-flight.ts";
-import { boardRows, flapDigits, levelOf, phaseGroup } from "./departures.ts";
+import { boardRows, flapDigits, levelOf, moreFlights, phaseGroup } from "./departures.ts";
 
 describe("home departures board", () => {
   it("groups the 12 phases into 5 labels", () => {
@@ -25,22 +25,37 @@ describe("home departures board", () => {
     expect(levelOf({ altMsl: 420, onGround: true })).toEqual({ kind: "ground" });
   });
 
-  it("keeps the 5 flights heard from last, without lost signals", () => {
+  it("keeps the 8 flights heard from last, without lost signals", () => {
     const flights = new Map(
-      Array.from({ length: 7 }, (_, i) => {
+      Array.from({ length: 11 }, (_, i) => {
         const id = `f${i}`;
-        const receivedAt = `2026-11-11T08:00:0${i}.000Z`;
-        return [id, liveFlight(id, { receivedAt, signal: i === 6 ? "lost" : "ok" })] as const;
+        const receivedAt = `2026-11-11T08:00:${String(i).padStart(2, "0")}.000Z`;
+        return [id, liveFlight(id, { receivedAt, signal: i === 10 ? "lost" : "ok" })] as const;
       }),
     );
     const rows = boardRows(flights);
-    expect(rows.map((row) => row.flightId)).toEqual(["f5", "f4", "f3", "f2", "f1"]);
+    expect(rows.map((row) => row.flightId)).toEqual([
+      "f9",
+      "f8",
+      "f7",
+      "f6",
+      "f5",
+      "f4",
+      "f3",
+      "f2",
+    ]);
     expect(rows[0]).toMatchObject({
       callsign: "WMS101",
       from: "LFLL",
       to: "LFMN",
       phase: "cruise",
     });
+  });
+
+  it("counts the flights left out of the board", () => {
+    expect(moreFlights(23, 8)).toBe(15);
+    expect(moreFlights(23, 4)).toBe(19);
+    expect(moreFlights(3, 8)).toBe(0);
   });
 
   it("pads a counter with dimmed zeros", () => {
