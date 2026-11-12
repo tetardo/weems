@@ -184,6 +184,11 @@ export class FlightsService {
     return this.withEvents(found);
   }
 
+  /** Every closed flight of the pilot, hidden ones included, newest first: private logbook. */
+  async allClosed(pilotId: string): Promise<SummaryWithEvents[]> {
+    return this.allPublic(pilotId, []);
+  }
+
   /** Some of the caller's flights, newest first: the ones hidden from their profile (spec J4). */
   async summariesOf(caller: Caller, flightIds: readonly string[]): Promise<FlightSummary[]> {
     if (flightIds.length === 0) return [];

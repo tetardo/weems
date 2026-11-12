@@ -434,6 +434,110 @@
       "publish": "Make it public",
       "open": "Open the public page",
       "settings": "Profile settings"
+    },
+    "private": "Private logbook",
+    "public": {
+      "title": "My public page"
+    },
+    "settings": "Profile settings",
+    "nav": {
+      "summary": "Summary",
+      "flights": "Flights",
+      "stats": "Statistics",
+      "goals": "Goals",
+      "soon": "soon"
+    },
+    "plan": {
+      "label": "Plan",
+      "free": "Pilot Free",
+      "pro": "Pilot Pro",
+      "upgrade": "Upgrade to Pilot Pro"
+    },
+    "locked": {
+      "discover": "Discover Pilot Pro"
+    },
+    "summary": {
+      "title": "Summary",
+      "intro": "Your private logbook: progress, flights and points to work on. Every flight counts, even the ones hidden from your public page.",
+      "empty": "No finished flight yet. Start the tracker and make a first flight: it will show up here.",
+      "last": {
+        "title": "Last flight",
+        "open": "Open the flight",
+        "touchdown": "Touchdown (ft/min)",
+        "duration": "Duration",
+        "distance": "Distance",
+        "nm": "{nm} nm",
+        "fuel": "Fuel",
+        "bounces": "Bounces",
+        "alerts": "Alerts",
+        "noAlert": "None"
+      },
+      "stages": {
+        "label": "Altitude profile of the last flight, by phase",
+        "ground": "Taxi",
+        "climb": "Climb",
+        "cruise": "Cruise",
+        "descent": "Descent",
+        "approach": "Approach",
+        "minutes": "{minutes} min",
+        "top": "highest: {level}"
+      },
+      "kpis": {
+        "hours": {
+          "label": "Hours this month",
+          "sub": "{sign}{delta} compared with last month",
+          "same": "same as last month"
+        },
+        "touchdown": {
+          "label": "Average touchdown (last 10)",
+          "sub": "{delta} ft/min compared with the 10 before",
+          "first": "no comparison yet"
+        },
+        "clean": {
+          "label": "Clean landings",
+          "sub": "{delta} pts over 30 days",
+          "first": "over 30 days"
+        },
+        "streak": {
+          "label": "Current streak",
+          "value": "{days, plural, one {# day} other {# days}}",
+          "sub": "record: {days, plural, one {# day} other {# days}}"
+        }
+      },
+      "landings": {
+        "title": "Touchdown progress",
+        "aside": "moving average over 5 flights · green zone = soft",
+        "empty": "At least two measured landings are needed to draw the curve.",
+        "oldest": "oldest",
+        "newest": "last {count} flights →",
+        "average": "average over 5"
+      },
+      "regularity": {
+        "title": "Regularity",
+        "aside": "flying days, last {weeks} weeks",
+        "day": "{flights, plural, one {# flight} other {# flights}}, {time} airborne",
+        "less": "Less",
+        "more": "More",
+        "total": "{days, plural, =0 {no flying day} one {# flying day} other {# flying days}} in {weeks} weeks"
+      },
+      "workOn": {
+        "title": "To work on",
+        "aside": "{flights, plural, =0 {no flight} one {last flight} other {last # flights}}",
+        "empty": "No landing yet.",
+        "bounces": "{count, plural, =0 {No bounce} one {# bounce} other {# bounces}} in {flights, plural, one {# landing} other {# landings}}",
+        "alerts": "{count, plural, =0 {No flight with alerts} one {# flight with alerts} other {# flights with alerts}}",
+        "alertsHint": "flights marked non-compliant",
+        "goArounds": "{count, plural, =0 {No go-around} one {# go-around} other {# go-arounds}}",
+        "detailed": {
+          "title": "Detailed analysis of your approaches",
+          "text": "Flare, speed and slope at 1,000 and 500 ft, with advice on your last flights.",
+          "soon": "soon: the criteria are being set with a pilot."
+        }
+      },
+      "recent": {
+        "title": "Recent flights",
+        "all": "All flights"
+      }
     }
   },
   "Profile": {

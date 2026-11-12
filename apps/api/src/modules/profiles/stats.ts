@@ -32,7 +32,7 @@ function longestOf(flights: readonly SummaryWithEvents[]): PilotStats["longestFl
 }
 
 /** Length of a trajectory, nautical miles, point to point. */
-function lengthNm(points: readonly TrackPoint[]): number {
+export function lengthNm(points: readonly TrackPoint[]): number {
   let total = 0;
   for (let i = 1; i < points.length; i++) {
     const [a, b] = [points[i - 1], points[i]];
