@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startTestApp } from "../apps/api/src/testing/test-app.ts";
 import { invite, uniqueEmail } from "../apps/api/src/testing/pilots.ts";
+import { freePort } from "./net/free-port.ts";
 import { Account } from "../apps/tracker/src/account/account.ts";
 import { memoryStore } from "../apps/tracker/src/account/token-store.ts";
 import { httpApiClient } from "../apps/tracker/src/sender/api-client.ts";
@@ -14,7 +15,7 @@ let api: Awaited<ReturnType<typeof startTestApp>>;
 let apiUrl: string;
 
 beforeAll(async () => {
-  const port = 5_000 + Math.floor(Math.random() * 900);
+  const port = await freePort();
   apiUrl = `http://127.0.0.1:${port}`;
   api = await startTestApp({ WEEMS_SITE_URL: apiUrl, WEEMS_API_URL: apiUrl });
   await api.app.listen({ port, host: "127.0.0.1" });
