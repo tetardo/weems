@@ -31,7 +31,7 @@ Sous 768 px : logo, icône silhouette, thème, FR | EN, bouton menu qui ouvre «
 
 ## 3. Décisions de Greg (12/11/2026, 2 h 22)
 
-1. Image par défaut : une photo libre de droits (Unsplash) avec son crédit, remplaçable depuis la console. La photo d'exemple (iStock) n'entre jamais dans le dépôt.
+1. Image par défaut : une image libre de droits avec son crédit, remplaçable depuis la console. La photo d'exemple (iStock) n'entre jamais dans le dépôt. Retenue le 12/11 : image maison de la flotte Weems fournie par Greg, publiable (`apps/web/public/home/default.jpg`, même image pour les deux thèmes ; recadrage téléphone centré sur l'avion Weems). À remplacer par une version d'au moins 2 560 px de large, avion Weems seul à droite.
 2. Compteurs toujours affichés, sans seuil.
 3. L'accueil et la carte en direct deviennent publics. Le direct ne montre déjà aucun nom de pilote (format `LiveFlight`).
 

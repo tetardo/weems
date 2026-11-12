@@ -10,7 +10,7 @@ import { HOME_IMAGES } from "./home-image.ts";
 /** The image of each theme; CSS shows the one of the current theme (no mismatch with the server). */
 function Background() {
   const { light, dark } = HOME_IMAGES;
-  const photo = "absolute inset-0 bg-cover bg-[70%_center] max-md:bg-[75%_center]";
+  const photo = "absolute inset-0 bg-cover bg-[70%_center] max-md:bg-[28%_center]";
   return (
     <div aria-hidden="true" className="absolute inset-0">
       <div className="hero-sky absolute inset-0" />

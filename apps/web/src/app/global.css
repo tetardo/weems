@@ -74,6 +74,7 @@
   --wm-avatar-ink: #0e1320;
   /* Home page (spec J4 accueil): veil over the photo, text on it, glass button. */
   --wm-veil: rgb(14 19 32 / 0.92);
+  --wm-veil-mid: rgb(14 19 32 / 0.45);
   --wm-hero-ink: #f4f6fb;
   --wm-hero-muted: #c9d2e3;
   --wm-hero-card: rgb(14 19 32 / 0.55);
@@ -107,6 +108,7 @@
   --wm-glow: rgb(14 143 166 / 0.12);
   --wm-shadow: rgb(30 40 70 / 0.12);
   --wm-veil: rgb(255 248 240 / 0.92);
+  --wm-veil-mid: rgb(255 248 240 / 0.78);
   --wm-hero-ink: #1f2430;
   --wm-hero-muted: #4a5266;
   --wm-hero-card: rgb(255 255 255 / 0.72);
@@ -175,10 +177,16 @@ h3 {
  */
 @utility hero-veil {
   background:
-    linear-gradient(90deg, var(--wm-veil) 0%, transparent 58%),
+    linear-gradient(90deg, var(--wm-veil) 0%, var(--wm-veil-mid) 42%, transparent 68%),
     linear-gradient(180deg, transparent 66%, var(--wm-veil) 100%);
   @media (width < 48rem) {
-    background: linear-gradient(180deg, var(--wm-veil) 0%, transparent 55%, var(--wm-veil) 100%);
+    background: linear-gradient(
+      180deg,
+      var(--wm-veil) 0%,
+      var(--wm-veil-mid) 40%,
+      transparent 62%,
+      var(--wm-veil) 100%
+    );
   }
 }
 
