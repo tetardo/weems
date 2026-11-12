@@ -18,6 +18,9 @@ Liste tenue à jour au fil du projet. Cocher une ligne quand c'est réglé, et n
 - [ ] **Fondateurs de compagnies virtuelles** (ajouté le 10/11/2026)
   Peut-il présenter 5 à 10 fondateurs de compagnies virtuelles, pour valider le prix de l'offre compagnie avant le lot 2 ?
 
+- [ ] **Critères des repères à revoir sur les bandes de vol** (ajouté le 13/11/2026)
+  Le carnet (page Vols, Pilot Pro) encadre 3 moments à revoir, sur des critères provisoires : plus de 250 kt sous 10 000 ft (SERA.6001), une inclinaison de plus de 30°, plus de 1 000 ft/min de descente sous 1 000 ft au-dessus du sol (approche stabilisée FSF). Les faire valider ou corriger par un pilote, et compléter la liste (seuils par catégorie d'avion ?). Code : `apps/api/src/modules/logbook/bands.ts`.
+
 ## Réglé
 
 - [x] **Un PC Windows avec MSFS** (11/11/2026)
