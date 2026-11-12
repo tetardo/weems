@@ -33,11 +33,13 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 
 ```
 src/
-  app/                 routes Next.js : mise en page (barre latérale G), /services, /traffic, /activity, /accounts, styles
+  app/                 routes Next.js : mise en page (barre latérale G), /services, /traffic, /activity, /accounts, styles ;
+                       api/lifecycle (tout démarrer / arrêter, appelé par scripts/mac/)
   proxy.ts             refus des requêtes adressées à un autre nom que 127.0.0.1:3002 / localhost:3002
   actions/             actions serveur appelées par les pages (résultat { ok, value | error }, jamais d'exception)
   server/              côté serveur seulement
     console.ts           configuration et instances uniques (services, trafic)
+    lifecycle.ts         tout démarrer / tout arrêter pour les icônes du Mac (en-tête des scripts exigé)
     managed-process.ts   commande lancée dans son groupe de processus, journaux, arrêt SIGTERM puis SIGKILL
     services/            Docker (docker compose), sondes de santé, états des cartes, gestionnaire des services
     traffic/             lancement (formulaires → arguments pnpm), suivi, mesures de l'API, résultat, historique
@@ -54,5 +56,6 @@ src/
 | Commande | Rôle |
 | --- | --- |
 | `pnpm admin` (racine) | Console sur http://127.0.0.1:3002 |
+| Icônes Weems Start / Weems Stop (`scripts/mac/`) | Tout démarrer ou tout arrêter, via `POST /api/lifecycle` (`src/server/lifecycle.ts`, guide `../../docs/developpement/demarrage-mac.md`) |
 | `pnpm --filter @weems/api make-admin <e-mail>` | Nomme le premier administrateur (le compte doit exister) |
 | `pnpm check` (racine) | Types, style, structure et tests, console comprise |
