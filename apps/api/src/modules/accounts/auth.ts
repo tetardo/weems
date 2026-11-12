@@ -20,6 +20,8 @@ export interface AuthHooks {
   checkSignUp(body: unknown): Promise<void>;
   /** Called once the account exists. */
   signedUp(email: string): Promise<void>;
+  /** Called before a session opens (site or tracker login): throws 403 for a disabled account. */
+  checkLogin(userId: string): Promise<void>;
 }
 
 /** Our refusals become Better Auth errors, so the library answers them itself. */
@@ -46,7 +48,9 @@ export function createAuth(config: Config, db: Database, hooks: AuthHooks) {
     baseURL: config.siteUrl,
     basePath: AUTH_BASE_PATH,
     secret: config.authSecret,
-    trustedOrigins: [config.siteUrl],
+    // The admin console runs on the Mac only, never next to the production API.
+    trustedOrigins:
+      config.env === "production" ? [config.siteUrl] : [config.siteUrl, config.adminUrl],
     telemetry: { enabled: false },
     database: drizzleAdapter(db, { provider: "pg", schema: authTables }),
     advanced: { database: { generateId: () => uuidV7() } },
@@ -60,6 +64,9 @@ export function createAuth(config: Config, db: Database, hooks: AuthHooks) {
     },
     databaseHooks: {
       user: { create: { after: async (user) => hooks.signedUp(user.email) } },
+      session: {
+        create: { before: async (session) => asAuthError(() => hooks.checkLogin(session.userId)) },
+      },
     },
     plugins: [
       jwt({ disableSettingJwtHeader: true }),

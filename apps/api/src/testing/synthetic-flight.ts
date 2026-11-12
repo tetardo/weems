@@ -18,6 +18,9 @@ export function syntheticFlight() {
       registration: "F-WEMS",
       engineCount: 2,
       emptyWeightKg: 44300,
+      engineType: "jet",
+      airframe: "airplane",
+      maxGrossWeightKg: 79000,
     },
     departureIcao: "LFPG",
     plannedArrivalIcao: "LFBO",
@@ -35,7 +38,7 @@ export function syntheticFlight() {
     seq: 6,
     at: "2026-11-11T09:10:30.250Z",
     type: "touchdown",
-    context: { vsFpm: -142.5 },
+    context: { vs: -142.5 },
   });
   const position: PositionReport = {
     seq: 1,

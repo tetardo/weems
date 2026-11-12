@@ -41,10 +41,17 @@
           /></label>
           <div class="row">
             <label
-              ><span data-text="departure"></span><input name="departureIcao" maxlength="4"
+              ><span data-text="departure"></span
+              ><input
+                name="departureIcao"
+                minlength="4"
+                maxlength="4"
+                pattern="[A-Za-z]{4}"
+                required
             /></label>
             <label
-              ><span data-text="arrival"></span><input name="arrivalIcao" maxlength="4"
+              ><span data-text="arrival"></span
+              ><input name="arrivalIcao" minlength="4" maxlength="4" pattern="[A-Za-z]{4}" required
             /></label>
           </div>
           <button type="submit" data-text="save"></button>

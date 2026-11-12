@@ -1,6 +1,18 @@
 export { Heading, Latitude, Longitude, MonotonicMs, measured } from "./telemetry/common.ts";
+export {
+  angleDiffDeg,
+  bearingDeg,
+  crossTrackNm,
+  destinationPoint,
+  distanceBetweenNm,
+  distanceNm,
+  type LatLon,
+  normalizeDeg,
+  RAD,
+} from "./telemetry/geo.ts";
 export { Sample } from "./telemetry/sample.ts";
-export { AircraftInfo, Simulator } from "./telemetry/aircraft.ts";
+export { AircraftInfo, Airframe, EngineType, Simulator } from "./telemetry/aircraft.ts";
+export { AircraftCategory, AircraftClass } from "./api/aircraft-class.ts";
 export { Touchdown } from "./telemetry/touchdown.ts";
 export { SimEvent, SimEventType } from "./telemetry/sim-event.ts";
 export { CloseReason, FLIGHT_PHASES, FlightPhase } from "./flight/phase.ts";
@@ -30,6 +42,70 @@ export {
   FlightTimes,
 } from "./api/flight-list.ts";
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
-export { LiveFlight, LiveSnapshot, LiveUpdate } from "./api/live.ts";
+export { LiveFlight, LiveRoute, LiveSnapshot, LiveUpdate } from "./api/live.ts";
+export { Airport, AirportList, AirportsQuery, MAX_AIRPORT_CODES } from "./api/airports.ts";
 export { TrackerLogin } from "./api/tracker-login.ts";
 export { FlightReview, FlightReviewView } from "./api/flight-review.ts";
+export { landingSummary, type LandingSummary } from "./flight/landing-summary.ts";
+export {
+  CategoryExperience,
+  CountryCode,
+  DURATION_BUCKETS_H,
+  FlightVisibility,
+  HandleCheck,
+  HandleCheckQuery,
+  HiddenFlights,
+  IvaoId,
+  MyProfile,
+  PilotCharts,
+  PilotHandle,
+  PilotLevel,
+  PilotRoutes,
+  PilotStats,
+  ProfileUpdate,
+  PublicFlightList,
+  PublicFlightSummary,
+  PublicFlightView,
+  PublicPilot,
+  PublicPilotIndex,
+  RECENT_LANDINGS,
+  PHOTO_MAX_BYTES,
+  PHOTO_TYPES,
+  SimbriefId,
+  TOUCHDOWN_BUCKETS_FPM,
+  VatsimId,
+  InstagramName,
+  FacebookName,
+} from "./api/profiles.ts";
+export { DevFlightCounts, DevMetrics } from "./api/dev-metrics.ts";
+export {
+  FICTITIOUS_EMAIL_DOMAIN,
+  FICTITIOUS_PASSWORD,
+  FictitiousPilot,
+  FictitiousPilotRequest,
+  FictitiousPilotsCreated,
+  FictitiousPilotsRequest,
+  FictitiousPopulation,
+  MAX_FICTITIOUS_PILOTS,
+} from "./api/fictitious.ts";
+export { PilotProgress, SimulationLine, SimulationProgress } from "./tools/simulation-progress.ts";
+export {
+  LiveActivityLine,
+  LiveActivityProgress,
+  PopulationLine,
+  PopulationProgress,
+  PopulationResult,
+  PopulationStep,
+} from "./tools/activity-progress.ts";
+export {
+  AccountRole,
+  AccountUpdate,
+  AdminAccount,
+  AdminAccountList,
+  AdminInvitation,
+  AdminMe,
+  INVITATION_DAYS,
+  InvitationRequest,
+  SignupLanguage,
+  signupPath,
+} from "./api/admin.ts";

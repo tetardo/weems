@@ -5,7 +5,7 @@ import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { createBaseMap } from "../map/base-map.ts";
-import { currentMapTheme, type MapTheme } from "../map/map-theme.ts";
+import type { MapTheme } from "../map/map-theme.ts";
 import { nearestIndex } from "./profile-geometry.ts";
 import { bounds, endpoints, phaseLines } from "./track-geojson.ts";
 
@@ -83,14 +83,12 @@ export function TrackMap({ points, selected, onSelect }: Props) {
   useEffect(() => {
     const frame = bounds(points);
     if (!container.current || !frame) return;
-    const theme = currentMapTheme();
     const instance = createBaseMap(
       container.current,
       { bounds: frame, fitBoundsOptions: { padding: 40 } },
-      theme,
+      (target, theme) => addTrackLayers(target, points, theme),
     );
     map.current = instance;
-    instance.on("load", () => addTrackLayers(instance, points, theme));
     instance.on("mousemove", (event) => select.current(pointUnder(instance, points, event)));
     instance.on("mouseout", () => select.current(null));
     return () => instance.remove();

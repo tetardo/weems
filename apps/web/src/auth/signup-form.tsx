@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { AuthForm } from "./auth-form.tsx";
-import { FormField } from "../ui/form-field.tsx";
+import { FormField } from "@weems/ui";
 
 /** Closed alpha: the invitation code comes in the address sent to the pilot (?code=…). */
 export function SignupForm() {

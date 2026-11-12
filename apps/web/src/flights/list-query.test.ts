@@ -8,6 +8,7 @@ describe("flight list filters", () => {
         from: "2026-11-01",
         to: "2026-11-11",
         aircraft: " A320 ",
+        category: "wideBody",
         airport: "lfpg",
         cursor: "abc",
       }),
@@ -15,6 +16,7 @@ describe("flight list filters", () => {
       from: "2026-11-01",
       to: "2026-11-11",
       aircraft: "A320",
+      category: "wideBody",
       airport: "LFPG",
       cursor: "abc",
     });
@@ -22,16 +24,28 @@ describe("flight list filters", () => {
 
   it("ignores empty and malformed values instead of sending them", () => {
     expect(
-      readFilters({ from: "", to: "11/11/2026", airport: "PARIS", aircraft: ["", "x"] }),
+      readFilters({
+        from: "",
+        to: "11/11/2026",
+        airport: "PARIS",
+        aircraft: ["", "x"],
+        category: "spaceship",
+      }),
     ).toEqual({});
   });
 
   it("asks the API for whole UTC days, 50 flights per page", () => {
-    const query = toApiQuery({ from: "2026-11-01", to: "2026-11-11", airport: "LFBO" });
+    const query = toApiQuery({
+      from: "2026-11-01",
+      to: "2026-11-11",
+      category: "light",
+      airport: "LFBO",
+    });
     expect(Object.fromEntries(query)).toEqual({
       limit: "50",
       from: "2026-11-01T00:00:00.000Z",
       to: "2026-11-12T00:00:00.000Z",
+      category: "light",
       airport: "LFBO",
     });
   });

@@ -1,6 +1,6 @@
 import {
   bigint,
-  customType,
+  boolean,
   integer,
   doublePrecision,
   index,
@@ -12,6 +12,8 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { users } from "./auth-schema.ts";
+import { bytea } from "./bytea.ts";
 
 const utc = (name: string) => timestamp(name, { withTimezone: true, precision: 3, mode: "date" });
 
@@ -28,6 +30,12 @@ export const flights = pgTable(
     aircraftRegistration: text("aircraft_registration"),
     aircraftEngineCount: smallint("aircraft_engine_count").notNull(),
     aircraftEmptyWeightKg: doublePrecision("aircraft_empty_weight_kg"),
+    aircraftEngineType: text("aircraft_engine_type"),
+    aircraftAirframe: text("aircraft_airframe"),
+    aircraftMaxGrossWeightKg: doublePrecision("aircraft_max_gross_weight_kg"),
+    /** Category from the catalogue or estimated (modules/aircraft), stored for the filters. */
+    aircraftCategory: text("aircraft_category"),
+    aircraftCategoryEstimated: boolean("aircraft_category_estimated").notNull().default(false),
     departureIcao: text("departure_icao"),
     plannedArrivalIcao: text("planned_arrival_icao"),
     openedAt: utc("opened_at").notNull(),
@@ -35,7 +43,10 @@ export const flights = pgTable(
     closeReason: text("close_reason"),
     trackerVersion: text("tracker_version").notNull(),
   },
-  (table) => [index("flights_pilot_opened_idx").on(table.pilotId, table.openedAt)],
+  (table) => [
+    index("flights_pilot_opened_idx").on(table.pilotId, table.openedAt),
+    index("flights_pilot_category_idx").on(table.pilotId, table.aircraftCategory),
+  ],
 );
 
 /** Flight events. The primary key (flight, seq) is what makes re-sends harmless. */
@@ -52,8 +63,6 @@ export const flightEvents = pgTable(
   },
   (table) => [primaryKey({ columns: [table.flightId, table.seq] })],
 );
-
-const bytea = customType<{ data: Buffer }>({ dataType: () => "bytea" });
 
 /** Trajectory of a flight, received once after closing (spec J2). */
 export const flightTracks = pgTable("flight_tracks", {
@@ -78,6 +87,55 @@ export const flightReviews = pgTable("flight_reviews", {
   phases: text("phases").notNull(),
   note: text("note").notNull(),
   reviewedAt: utc("reviewed_at").notNull(),
+});
+
+/** Public profile of a pilot (spec J4 profil public). Off by default; one row once the pilot saves it. */
+export const pilotProfiles = pgTable(
+  "pilot_profiles",
+  {
+    pilotId: uuid("pilot_id")
+      .primaryKey()
+      .references(() => users.id, { onDelete: "cascade" }),
+    /** Address of the profile, /pilots/{handle}; unique, kept while the profile is off. */
+    handle: text("handle").unique(),
+    isPublic: boolean("is_public").notNull().default(false),
+    country: text("country"),
+    homeIcao: text("home_icao"),
+    level: text("level"),
+    vatsimId: text("vatsim_id"),
+    ivaoId: text("ivao_id"),
+    instagram: text("instagram"),
+    facebook: text("facebook"),
+    simbriefId: text("simbrief_id"),
+    /** Last time the profile was made public: proof of consent. */
+    publishedAt: utc("published_at"),
+    unpublishedAt: utc("unpublished_at"),
+    updatedAt: utc("updated_at").notNull(),
+  },
+  (table) => [index("pilot_profiles_public_idx").on(table.isPublic)],
+);
+
+/** Flights the pilot keeps off the public profile. */
+export const hiddenFlights = pgTable(
+  "profile_hidden_flights",
+  {
+    flightId: uuid("flight_id")
+      .primaryKey()
+      .references(() => flights.id, { onDelete: "cascade" }),
+    /** Copy of the flight's pilot: the profile module reads its own table only. */
+    pilotId: uuid("pilot_id").notNull(),
+    hiddenAt: utc("hidden_at").notNull(),
+  },
+  (table) => [index("profile_hidden_flights_pilot_idx").on(table.pilotId)],
+);
+
+/** Profile photo, already square, 256 px, WebP, without metadata. */
+export const pilotPhotos = pgTable("pilot_photos", {
+  pilotId: uuid("pilot_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  webp: bytea("webp").notNull(),
+  updatedAt: utc("updated_at").notNull(),
 });
 
 export * from "./auth-schema.ts";

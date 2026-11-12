@@ -65,11 +65,14 @@ export const AIRCRAFT_STRING_VARS = [
   ["title", "TITLE", "string"],
   ["model", "ATC MODEL", "string"],
   ["registration", "ATC ID", "string"],
+  ["airframe", "CATEGORY", "string"],
 ] as const;
 
 export const AIRCRAFT_NUMBER_VARS = [
   ["engineCount", "NUMBER OF ENGINES", "number"],
   ["emptyWeightLb", "EMPTY WEIGHT", "pounds"],
+  ["engineType", "ENGINE TYPE", "enum"],
+  ["maxGrossWeightLb", "MAX GROSS WEIGHT", "pounds"],
 ] as const;
 
 type Key<T extends readonly (readonly [string, string, string])[]> = T[number][0];

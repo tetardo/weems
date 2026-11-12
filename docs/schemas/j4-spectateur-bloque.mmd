@@ -1,0 +1,6 @@
+flowchart LR
+  B[Tableau du direct] -->|toutes les 2 s| L[Lot converti en texte<br/>une seule fois]
+  L --> T{Spectateur :<br/>plus de 1 Mo<br/>en attente ?}
+  T -->|non| W[Envoi du lot]
+  T -->|oui| C[Connexion coupée]
+  C -.->|le navigateur se reconnecte seul| S[Instantané complet]
