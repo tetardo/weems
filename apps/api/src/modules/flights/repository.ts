@@ -183,6 +183,12 @@ export class FlightsRepository {
     return inserted.length > 0;
   }
 
+  /** Every recorded flight (home page counter). */
+  async countAll(): Promise<number> {
+    const [row] = await this.db.select({ n: count() }).from(flights);
+    return row?.n ?? 0;
+  }
+
   /** Number of flights of each pilot (admin console). */
   async countByPilot(): Promise<Map<string, number>> {
     const rows = await this.db

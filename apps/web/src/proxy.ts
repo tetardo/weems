@@ -8,10 +8,10 @@ import { serverApiUrl } from "./site/api-url.ts";
 const intl = createMiddleware(routing);
 
 /**
- * Pages open without an account: login, sign-up and the public profiles (spec J4); everything
- * else needs a session (closed alpha, spec J3).
+ * Pages open without an account: the home page ("") and the live map (spec J4 accueil), login,
+ * sign-up and the public profiles (spec J4); everything else needs a session (closed alpha, J3).
  */
-const PUBLIC_PAGES = new Set(["login", "signup", "pilots"]);
+const PUBLIC_PAGES = new Set(["", "live", "login", "signup", "pilots"]);
 
 function localeAndPage(pathname: string): { locale: string; page: string } {
   const [first = "", second = ""] = pathname.split("/").filter(Boolean);

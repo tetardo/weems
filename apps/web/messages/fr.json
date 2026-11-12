@@ -13,14 +13,58 @@
     "accountMenu": "Menu de {name}",
     "toggleTheme": "Passer en thème clair ou sombre",
     "public": {
-      "logbook": "Mon carnet",
+      "nav": "Découvrir",
+      "discover": "Découvrir Weems",
+      "live": "Vols en direct",
+      "signup": "Créer un compte",
       "login": "Se connecter",
-      "signup": "Créer mon carnet"
+      "account": "Mon compte",
+      "flights": "Mes vols",
+      "menu": "Ouvrir le menu",
+      "closeMenu": "Fermer le menu"
     },
     "busy": "Trop de visites en ce moment. Réessayez dans une minute.",
     "error": {
       "text": "Cette page n'a pas pu s'afficher : le serveur du site a rencontré une erreur. Le détail est dans le terminal où tourne le site.",
       "retry": "Réessayer"
+    },
+    "languages": "Langue",
+    "footer": {
+      "copyright": "© {year} Weems",
+      "legal": "Mentions légales",
+      "terms": "Conditions d'utilisation",
+      "privacy": "Confidentialité",
+      "contact": "Contact"
+    }
+  },
+  "Home": {
+    "title": "Weems · Carnet de vol automatique pour MSFS",
+    "sloganTop": "Décollez.",
+    "sloganBottom": "Weems s'occupe du carnet.",
+    "lead": "Vols MSFS enregistrés automatiquement, phases détectées, atterrissage noté. Gratuit pour tous les pilotes.",
+    "signup": "Créer mon compte gratuit",
+    "myFlights": "Mes vols",
+    "seeLive": "Voir les vols en direct",
+    "board": {
+      "title": "En vol · In flight",
+      "pilots": "Pilotes",
+      "flights": "Vols",
+      "live": "En vol",
+      "flight": "Vol",
+      "from": "De",
+      "to": "Vers",
+      "phase": "Phase",
+      "level": "Niveau",
+      "ground": "Sol",
+      "feet": "{value, number} ft",
+      "none": "Aucun vol en ce moment.",
+      "phases": {
+        "ground": "Au sol",
+        "climb": "Montée",
+        "cruise": "Croisière",
+        "descent": "Descente",
+        "approach": "Approche"
+      }
     }
   },
   "Live": {

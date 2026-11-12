@@ -4,6 +4,7 @@ import {
   PublicFlightView,
   PublicPilot,
   PublicPilotIndex,
+  SiteStats,
   TrackView,
 } from "@weems/contrats";
 import { cache } from "react";
@@ -47,4 +48,9 @@ export function getPublicTrack(handle: string, flightId: string): Promise<TrackV
 /** Public profiles, for the site map. */
 export async function getPilotIndex(): Promise<PublicPilotIndex> {
   return (await get("/v1/pilots", PublicPilotIndex)) ?? { pilots: [] };
+}
+
+/** Counters of the home page; null when the API does not answer (the board shows dashes). */
+export function getSiteStats(): Promise<SiteStats | null> {
+  return get("/v1/stats", SiteStats);
 }

@@ -1,0 +1,9 @@
+flowchart LR
+  V["Visiteur<br/>(sans compte)"] --> H["Site : accueil /fr"]
+  P["Pilote connecté"] --> H
+  H -- "compteurs (serveur)" --> S["API : GET /v1/stats"]
+  H -- "vols en cours (navigateur)" --> L["API : flux /v1/live/stream"]
+  H -- "image du thème" --> I["Image de fond<br/>(défaut ou console)"]
+  C["Console sur le Mac<br/>Personnalisation"] -. "2e demande de fusion" .-> I
+  S --> DB[("PostgreSQL")]
+  L --> B["Carte en direct<br/>en mémoire"]

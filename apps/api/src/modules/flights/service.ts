@@ -231,6 +231,11 @@ export class FlightsService {
     return { simulated, real };
   }
 
+  /** Every recorded flight (home page counter). */
+  countAll(): Promise<number> {
+    return this.repository.countAll();
+  }
+
   /** Number of flights of each pilot (admin console, FlightCounter of the accounts module). */
   countByPilot(): Promise<Map<string, number>> {
     return this.repository.countByPilot();

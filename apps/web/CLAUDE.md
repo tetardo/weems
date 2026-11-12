@@ -3,7 +3,7 @@
 Site Next.js de Weems. Client de l'API comme les autres programmes : il ne parle jamais à la base.
 
 J1 : page `/live`, carte des vols en cours alimentée par le flux SSE `/v1/live/stream` de l'API.
-J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public ») ; sur la carte en direct, tous les avions montrent leur trajet (bouton « Trajets » pour les masquer) et le vol sélectionné sa trace, l'orthodromie restante, ses aéroports et sa progression.
+J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/flights` et page de vol `/flights/{id}` (carte colorée par phase, profil vertical, phases, atterrissage, journal). J3 : tout le site derrière connexion (pages `/login` et `/signup` avec code d'invitation), nom du pilote et déconnexion dans la barre du haut, look GameLab ; la page de connexion sert aussi au tracker (OAuth). J4 : navigation en barre flottante (fiche 003) ; profil public du pilote `/pilots/{pseudo}` et ses vols, ouverts sans compte et référencés (titre, adresse canonique fr/en, image de partage, `sitemap.xml`, `robots.txt`), réglages `/settings/profile` (menu du pilote, « Mon profil public ») ; sur la carte en direct, tous les avions montrent leur trajet (bouton « Trajets » pour les masquer) et le vol sélectionné sa trace, l'orthodromie restante, ses aéroports et sa progression. Accueil public `/` (spec J4 accueil) : image plein écran par thème, slogan, tableau des départs à palettes (compteurs de `GET /v1/stats`, vols du flux en direct) ; la carte en direct `/live` s'ouvre aussi sans compte ; barre publique v2 (liens « Découvrir Weems » et « Vols en direct », « Créer un compte » et icône de connexion ou « Mon compte », thème, FR | EN, menu sous 768 px) et pied de page sur une ligne.
 
 ## Où trouver quoi
 
@@ -15,6 +15,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 | Trajectoire et progression en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md` |
 | Comptes et connexion (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
+| Page d'accueil (J4) | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md` |
 | Catégories d'avion (J4) | `../../docs/cahiers-des-charges/spec-J4-categories-avion.md` |
 | Formats reçus de l'API | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 
@@ -27,7 +28,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 - Carte : MapLibre, fond OpenFreeMap (gratuit, sans clé) : « dark » en thème sombre, « positron » en clair ; couleurs des calques de la carte dans `src/map/map-theme.ts` ; une carte ouverte suit le bouton thème sans rechargement (`src/map/base-map.ts` remplace le fond et redessine les calques).
 - Tests : Vitest sur la logique pure (`*.test.ts`) ; les composants React restent minces.
 - Les pages de vol sont rendues côté serveur : le serveur du site appelle l'API (`WEEMS_API_URL`) en lui transmettant le cookie de session du pilote ; seule la carte en direct appelle l'API depuis le navigateur.
-- Connexion (J3) : `src/proxy.ts` relaie vers l'API `/api/auth/*` (Better Auth), et en J4 la photo et la vérification du pseudo (`src/site/api-relay.ts`), pour que le cookie de session soit celui du site. Sans ce cookie, toute page renvoie vers `/login?next=…`, sauf la connexion, l'inscription et `/pilots/*`. Les pages publiques n'envoient jamais le cookie du visiteur à l'API. L'API vérifie le cookie à chaque appel : le proxy ne fait que regarder s'il est présent.
+- Connexion (J3) : `src/proxy.ts` relaie vers l'API `/api/auth/*` (Better Auth), et en J4 la photo et la vérification du pseudo (`src/site/api-relay.ts`), pour que le cookie de session soit celui du site. Sans ce cookie, toute page renvoie vers `/login?next=…`, sauf l'accueil, `/live`, la connexion, l'inscription et `/pilots/*` (liste `PUBLIC_PAGES`). Les pages publiques n'envoient jamais le cookie du visiteur à l'API. L'API vérifie le cookie à chaque appel : le proxy ne fait que regarder s'il est présent.
 - En développement : `pilote@weems.local` / `weems-dev-password` (propriétaire des vols de `pnpm simulate`). Sous `pnpm dev` seulement, « Mes vols » montre un bouton « Supprimer tous mes vols » (`flights/delete-all-button.tsx`) pour vider les vols de test ; il n'existe pas dans la version construite.
 
 ## Organisation
@@ -36,7 +37,8 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 messages/              textes en français et en anglais
 src/
   app/[locale]/        routes Next.js (pages et mise en page), sans logique
-    (app)/               pages du pilote connecté : barre flottante + dock mobile
+    (home)/              accueil public : barre v2 posée sur l'image, pied de page
+    (app)/               pages du pilote connecté : barre flottante + dock mobile (sans session, /live prend la barre publique)
     (auth)/              connexion et inscription, panneau centré
     (public)/            pages ouvertes à tous (profils publics) : même barre flottante, sans onglets ni dock
   app/sitemap.ts, app/robots.ts   plan du site (profils activés) et règles des moteurs de recherche
@@ -47,7 +49,9 @@ src/
   api/profile-api.ts   réglages du profil du pilote connecté
   api/public-api.ts    pages publiques : toujours sans cookie
   auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion
-  site/                cadre des pages (app-shell, barre flottante, onglets, dock mobile, menu du pilote, page active), choix de la langue, adresse de l'API, API injoignable
+  home/                accueil : héros et image par thème (home-hero.tsx, home-image.ts), compteurs lus par le serveur (home-stats.ts),
+                       tableau des départs (departures.ts testé : phases regroupées, niveau, lignes ; departures-board.tsx, split-flap.tsx)
+  site/                cadre public (public-shell, public-nav, public-account, public-menu, language-choice, site-footer) ; cadre des pages (app-shell, barre flottante, onglets, dock mobile, menu du pilote, page active), choix de la langue, adresse de l'API, API injoignable
   ui/                  composants visuels propres au site : icônes, panneau, titre de section (les formulaires et le bouton viennent de `@weems/ui`), fermeture des menus (use-dismiss) ;
                        formulaires (fiche 008) : carte de formulaire, champ, saisie, liste courte, barre de choix,
                        liste avec recherche, barre d'enregistrement, compteur de modifications (form-changes.ts, testé)

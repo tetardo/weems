@@ -21,6 +21,25 @@
   --color-accent-2: var(--wm-accent-2);
   --color-danger: var(--wm-danger);
   --color-success: var(--wm-success);
+  /* Departures board of the home page: dark in both themes, like an airport board. */
+  --color-board: #0b0f18;
+  --color-board-head: #151b28;
+  --color-board-line: #1a2130;
+  --color-board-edge: #222a3b;
+  --color-board-ink: #ffd27a;
+  --color-board-title: #ffffff;
+  --color-board-muted: #9aa6bf;
+  --color-board-label: #7d879c;
+  --color-board-call: #4fd1e8;
+  --color-board-off: #4b5468;
+  --color-board-live: #ff5d5d;
+  --color-board-ground: #adb5bd;
+  --color-board-climb: #6ee7a8;
+  --color-board-cruise: #4fd1e8;
+  --color-board-descent: #ffb454;
+  --color-board-approach: #da77f2;
+  --color-hero-ink: var(--wm-hero-ink);
+  --color-hero-muted: var(--wm-hero-muted);
   --color-cat-light: var(--wm-cat-light);
   --color-cat-turboprop: var(--wm-cat-turboprop);
   --color-cat-business-jet: var(--wm-cat-business-jet);
@@ -53,6 +72,12 @@
   --wm-shadow: rgb(0 0 0 / 0.35);
   --wm-avatar: linear-gradient(135deg, #2b6cb0, #4fd1e8);
   --wm-avatar-ink: #0e1320;
+  /* Home page (spec J4 accueil): veil over the photo, text on it, glass button. */
+  --wm-veil: rgb(14 19 32 / 0.92);
+  --wm-hero-ink: #f4f6fb;
+  --wm-hero-muted: #c9d2e3;
+  --wm-hero-card: rgb(14 19 32 / 0.55);
+  --wm-sky: linear-gradient(180deg, #2a2f4a 0%, #6b4a5e 45%, #e08a52 75%, #1a1d2b 100%);
   /* Aircraft categories (src/aircraft/category-tone.ts), readable on both themes. */
   --wm-cat-light: #69db7c;
   --wm-cat-turboprop: #ffa94d;
@@ -81,6 +106,11 @@
   --wm-glass: rgb(255 255 255 / 0.75);
   --wm-glow: rgb(14 143 166 / 0.12);
   --wm-shadow: rgb(30 40 70 / 0.12);
+  --wm-veil: rgb(255 248 240 / 0.92);
+  --wm-hero-ink: #1f2430;
+  --wm-hero-muted: #4a5266;
+  --wm-hero-card: rgb(255 255 255 / 0.72);
+  --wm-sky: linear-gradient(180deg, #f6e7da 0%, #f4c9a4 50%, #e9a06c 75%, #c9d2e3 100%);
   --wm-cat-light: #2b8a3e;
   --wm-cat-turboprop: #d9480f;
   --wm-cat-business-jet: #9c36b5;
@@ -137,4 +167,45 @@ h3 {
 @utility avatar {
   background: var(--wm-avatar);
   color: var(--wm-avatar-ink);
+}
+
+/*
+ * Home page (spec J4 accueil): the photo of the theme (or the sunset sky when there is none)
+ * under a veil, darker on the left where the text is and at the bottom where the board is.
+ */
+@utility hero-veil {
+  background:
+    linear-gradient(90deg, var(--wm-veil) 0%, transparent 58%),
+    linear-gradient(180deg, transparent 66%, var(--wm-veil) 100%);
+  @media (width < 48rem) {
+    background: linear-gradient(180deg, var(--wm-veil) 0%, transparent 55%, var(--wm-veil) 100%);
+  }
+}
+
+@utility hero-sky {
+  background: var(--wm-sky);
+}
+
+/* Glass button on the photo (« Voir les vols en direct »). */
+@utility hero-glass {
+  background: var(--wm-hero-card);
+  border: 1px solid rgb(127 127 127 / 0.25);
+  backdrop-filter: blur(10px);
+}
+
+/* One digit of the split-flap counters of the departures board (dark in both themes). */
+@utility flap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #232b3d 50%, #1b2232 50%);
+  color: var(--color-board-ink);
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1px;
+    background: rgb(0 0 0 / 0.55);
+  }
 }
