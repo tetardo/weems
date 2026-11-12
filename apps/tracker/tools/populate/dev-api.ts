@@ -1,6 +1,7 @@
 import {
   FictitiousPilotsCreated,
   FictitiousPopulation,
+  FlightList,
   type FictitiousPilot,
   type ProfileUpdate,
 } from "@weems/contrats";
@@ -15,6 +16,8 @@ export interface DevApi {
   deleteAll(): Promise<FictitiousPopulation>;
   /** Bearer token flying as this fictitious account. */
   tokenOf(pilotId: string): string;
+  /** Callsign of the account's latest flight (its pseudonym); null if it never flew. */
+  callsignOf(pilotId: string): Promise<string | null>;
 }
 
 const PATH = "/v1/dev/fictitious-pilots";
@@ -64,6 +67,10 @@ export function devApi(baseUrl: string, devToken: string): DevApi {
     },
     async saveProfile(pilotId, identity) {
       await call("PUT", "/v1/me/profile", tokenOf(pilotId), profileOf(identity));
+    },
+    async callsignOf(pilotId) {
+      const list = FlightList.parse(await call("GET", "/v1/flights?limit=1", tokenOf(pilotId)));
+      return list.flights[0]?.callsign ?? null;
     },
     async population() {
       return FictitiousPopulation.parse(await call("GET", PATH, devToken));

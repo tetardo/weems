@@ -8,8 +8,8 @@ import { Visitors } from "./visitors.ts";
 
 export interface LiveOptions {
   apiUrl: string;
-  /** Bearer token of each fictitious account (the live flights are theirs). */
-  tokens: readonly string[];
+  /** The fictitious accounts (the live flights are theirs), each with its own callsign. */
+  pilots: readonly LivePilot[];
   /** Flights in the air at the same time. */
   airborne: number;
   visitors: number;
@@ -20,6 +20,12 @@ export interface LiveOptions {
   trackerVersion: string;
   signal?: AbortSignal;
   onProgress?: (progress: LiveActivityProgress) => void;
+}
+
+/** A fictitious account flying live: its bearer token and its pseudonym, used as callsign. */
+interface LivePilot {
+  token: string;
+  callsign: string;
 }
 
 export interface LiveResult {
@@ -34,7 +40,6 @@ type Tracker = ReturnType<typeof liveTracker>["tracker"];
 /** Real time over which the first departures and the visitors arrive. */
 const RAMP_MS = 60_000;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-const callsignOf = (index: number) => `WMS${String(800 + (index % 200)).padStart(3, "0")}`;
 
 /**
  * Live activity (page Activité simulée): `airborne` fictitious accounts in the air at once,
@@ -86,12 +91,13 @@ class LiveActivity {
 
   private async flyOne(): Promise<void> {
     const { options } = this;
+    const pilot = pick(options.random, options.pilots);
     const api = httpApiClient({
       baseUrl: options.apiUrl,
-      token: pick(options.random, options.tokens),
+      token: pilot.token,
       trackerVersion: options.trackerVersion,
     });
-    const run = liveTracker(liveScenario(callsignOf(this.counts.departed), options.random), {
+    const run = liveTracker(liveScenario(pilot.callsign, options.random), {
       api,
       speed: options.speed,
       workDir: options.workDir,

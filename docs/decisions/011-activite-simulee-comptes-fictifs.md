@@ -27,6 +27,7 @@ Règles :
 - **Connexion** : les comptes fictifs se connectent avec un mot de passe commun (`weems-fictif`), affiché dans la console. Local seulement : les routes de création n'existent pas en production.
 - **Jeton** : `dev-token:<id du pilote>` vole au nom d'un compte fictif actif. Tout autre identifiant est refusé (401) : le jeton de développement ne peut pas voler au nom d'un vrai compte.
 - **Vols** : simulateur `replay`, rejoués par le vrai tracker. Un vol passé part avec l'horloge du tracker figée à sa date de départ et rejoue ses échantillons d'un coup. Heures réalistes (matin, midi, soir, week-end plus chargé), trajets enchaînés depuis la base du pilote, avion favori dans 60 % des vols, quelques rebonds et remises des gaz.
+- **Pseudos** (ajout du 12/11/2026, demandé par Greg) : chaque compte fictif vole sous un pseudo crédible, utilisé comme indicatif sur tous ses vols, passés et en direct. Moitié style simulateur (« Skyhawk72 », « KiloEcho », « VFR_Alpes », « Cruise350 »), moitié prénom + suffixe tiré du pilote (avion, aéroport de base, pays, initiale, année, département : « Hugo31 », « Daan_EHAM », « Lea_A320 »). 10 caractères au plus (limite de l'indicatif dans l'API), uniques, déterministes (même graine, mêmes pseudos). Jamais de code de compagnie réelle, d'immatriculation ni de personnage connu. Code : `apps/tracker/tools/populate/pseudonyms.ts`.
 - **Suppression** : « Tout supprimer » efface les comptes fictifs, leurs vols, profils et photos. Ni les comptes réels ni le pilote de développement.
 - **Un seul lancement à la fois**, partagé avec la page Trafic simulé.
 
@@ -37,4 +38,5 @@ Règles :
 - Les visiteurs ne se voient nulle part sur le site : ils chargent l'API (flux du direct), comme les spectateurs de `pnpm load`.
 - Les trajets se ressemblent d'un profil à l'autre : le générateur ne connaît que 20 aéroports.
 - 50 comptes à 5–40 vols : environ 1 100 vols, 7 à 8 minutes sur le conteneur de développement.
+- Une population créée avant les pseudos garde ses indicatifs « WMS… » : l'indicatif est enregistré dans chaque vol. Pour en changer, recréer la population (console, page Activité simulée, « Créer la population » ; ou `pnpm --filter @weems/tracker populate create`), qui supprime d'abord l'ancienne. Le direct (`populate live`) reprend l'indicatif du dernier vol de chaque compte.
 - La première maquette de la console mettait les comptes simulés hors périmètre ; cette fiche les fait entrer.

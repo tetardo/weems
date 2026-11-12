@@ -79,8 +79,9 @@ function departures(count: number, random: () => number, options: ScheduleOption
   for (let i = 1; i < times.length; i++) {
     times[i] = Math.max(times[i] ?? 0, (times[i - 1] ?? 0) + 4 * HOUR_MS);
   }
-  // Pushed past the end by the spacing: kept in the history, before now.
-  return times.filter((at) => at < options.nowMs - 4 * HOUR_MS);
+  // Kept in the history: the first day starts at midnight, maybe before `fromMs`, and the
+  // spacing may push the last ones past now.
+  return times.filter((at) => at >= options.fromMs && at < options.nowMs - 4 * HOUR_MS);
 }
 
 /** Next leg: home when away more often than not, otherwise anywhere else in the fleet. */
