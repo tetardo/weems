@@ -32,7 +32,7 @@ function ProfileLink() {
   );
 }
 
-/** Account side of the bar: the way in for a visitor, the pilot's menu (initial) once logged in. */
+/** Account side of the bar: the way in for a visitor, the pilot's menu (photo, or initial) once logged in. */
 export function SiteAccount({ loggedIn }: { loggedIn: boolean }) {
   return loggedIn ? <PilotMenu before={<ProfileLink />} /> : <VisitorAccess />;
 }

@@ -4,7 +4,7 @@ import { PHOTO_MAX_BYTES, PHOTO_TYPES } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { OWN_PHOTO_URL } from "../site/api-relay.ts";
+import { OWN_PHOTO_URL, ownPhotoSrc } from "../site/api-relay.ts";
 import { Button } from "@weems/ui";
 import { removePhotoAction } from "./profile-actions.ts";
 
@@ -16,10 +16,12 @@ type Problem = "tooBig" | "wrongType" | "failed" | null;
 const problemOf = (status: number): Problem =>
   status === 413 ? "tooBig" : status === 415 || status === 422 ? "wrongType" : "failed";
 
-/** Sends the photo; `version` changes after each upload so that the preview reloads. */
+/**
+ * Sends the photo, then reloads the page's data: the new `photoUpdatedAt` changes the photo's
+ * address here and in the bar.
+ */
 function usePhotoUpload() {
   const router = useRouter();
-  const [version, setVersion] = useState(0);
   const [problem, setProblem] = useState<Problem>(null);
   const [busy, setBusy] = useState(false);
 
@@ -35,10 +37,9 @@ function usePhotoUpload() {
     setBusy(false);
     if (!response?.ok) return setProblem(response ? problemOf(response.status) : "failed");
     setProblem(null);
-    setVersion((v) => v + 1);
     router.refresh();
   }
-  return { upload, version, problem, busy };
+  return { upload, problem, busy };
 }
 
 function Preview({ src, initials }: { src: string | null; initials: string }) {
@@ -54,13 +55,20 @@ function Preview({ src, initials }: { src: string | null; initials: string }) {
  * Photo of the profile: sent as is to the API through the site's address (raw image body), which
  * crops it to a square, reduces it to 256 px and strips its metadata.
  */
-export function PhotoField({ hasPhoto, initials }: { hasPhoto: boolean; initials: string }) {
+export function PhotoField({
+  photoUpdatedAt,
+  initials,
+}: {
+  photoUpdatedAt: string | null;
+  initials: string;
+}) {
   const t = useTranslations("Settings.photo");
   const input = useRef<HTMLInputElement>(null);
-  const { upload, version, problem, busy } = usePhotoUpload();
+  const { upload, problem, busy } = usePhotoUpload();
+  const hasPhoto = photoUpdatedAt !== null;
   return (
     <div className="mt-1.5 flex items-center gap-4">
-      <Preview src={hasPhoto ? `${OWN_PHOTO_URL}?v=${version}` : null} initials={initials} />
+      <Preview src={ownPhotoSrc(photoUpdatedAt)} initials={initials} />
       <div>
         <p className="m-0 font-semibold">{t("label")}</p>
         <p className="m-0 text-sm text-muted">{t("help")}</p>

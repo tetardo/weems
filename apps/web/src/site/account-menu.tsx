@@ -5,9 +5,19 @@ import { type ReactNode, useCallback, useRef, useState } from "react";
 import { useDismiss } from "../ui/use-dismiss.ts";
 
 /**
- * Pilot's initial at the right of the floating bar, opening a small menu (name first): `children` are its entries (language, sign out).
+ * Pilot's photo (or initial without photo) at the right of the floating bar, opening a small menu
+ * (name first): `children` are its entries (language, sign out).
  */
-export function AccountMenu({ name, children }: { name: string; children: ReactNode }) {
+export function AccountMenu({
+  name,
+  photo,
+  children,
+}: {
+  name: string;
+  /** Address of the photo, versioned (ownPhotoSrc); null shows the initial. */
+  photo: string | null;
+  children: ReactNode;
+}) {
   const t = useTranslations("Site");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -25,9 +35,14 @@ export function AccountMenu({ name, children }: { name: string; children: ReactN
       >
         <span
           aria-hidden="true"
-          className="avatar grid size-9 place-items-center rounded-full font-title text-sm font-bold"
+          className="avatar grid size-9 place-items-center overflow-hidden rounded-full font-title text-sm font-bold"
         >
-          {name.slice(0, 1).toUpperCase()}
+          {/* Plain img: served by the API, already 256 px. */}
+          {photo ? (
+            <img src={photo} alt="" className="size-full object-cover" />
+          ) : (
+            name.slice(0, 1).toUpperCase()
+          )}
         </span>
       </button>
       {open && (
