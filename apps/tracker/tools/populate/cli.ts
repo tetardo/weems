@@ -78,13 +78,26 @@ async function create(): Promise<void> {
   write({ type: "result", ...result });
 }
 
+/**
+ * Each account flies live under the pseudonym of its past flights. A population created
+ * before the pseudonyms keeps its old "WMS…" callsigns until `create` is run again.
+ */
+function livePilotsOf(pilotIds: readonly string[]) {
+  return Promise.all(
+    pilotIds.map(async (pilotId, index) => ({
+      token: api.tokenOf(pilotId),
+      callsign: (await api.callsignOf(pilotId)) ?? `Pilot${index + 1}`,
+    })),
+  );
+}
+
 async function live(): Promise<void> {
   const { pilotIds } = await api.population();
   if (pilotIds.length === 0)
     throw new Error("No fictitious account: run `pnpm populate create` first.");
   const result = await runLive({
     apiUrl: values.api,
-    tokens: pilotIds.map(api.tokenOf),
+    pilots: await livePilotsOf(pilotIds),
     airborne: Number(values.flights ?? "12"),
     visitors: Number(values.visitors),
     durationS: Number(values.minutes) * 60,

@@ -1,4 +1,5 @@
 import type { PilotLevel } from "@weems/contrats";
+import { pseudonymsOf } from "./pseudonyms.ts";
 
 /** A fictitious pilot as the populate tool imagines it, before the API creates the account. */
 export interface Identity {
@@ -8,6 +9,7 @@ export interface Identity {
   country: string;
   homeIcao: string;
   level: PilotLevel;
+  /** Pseudonym flown as callsign on all the pilot's flights ("Skyhawk72", "Hugo31"). */
   callsign: string;
   isPublic: boolean;
 }
@@ -121,18 +123,27 @@ function handleOf(name: string, index: number): string {
 
 /** `count` fictitious pilots; `publicShare` of them (0 to 1) have a public profile. */
 export function identities(count: number, publicShare: number, random: () => number): Identity[] {
-  return Array.from({ length: count }, (_, index) => {
+  const people = Array.from({ length: count }, (_, index) => {
     const home = pick(random, HOMES);
     const names = NAMES[home.country] ?? { first: ["Alex"], last: ["Martin"] };
-    const name = `${pick(random, names.first)} ${pick(random, names.last)}`;
+    const firstName = pick(random, names.first);
+    const lastName = pick(random, names.last);
+    const name = `${firstName} ${lastName}`;
     return {
-      name,
-      handle: handleOf(name, index),
-      country: home.country,
-      homeIcao: home.icao,
-      level: weighted(random, LEVELS),
-      callsign: `WMS${String(200 + index).padStart(3, "0")}`,
-      isPublic: random() < publicShare,
+      source: { firstName, lastName, country: home.country, homeIcao: home.icao },
+      identity: {
+        name,
+        handle: handleOf(name, index),
+        country: home.country,
+        homeIcao: home.icao,
+        level: weighted(random, LEVELS),
+        isPublic: random() < publicShare,
+      },
     };
   });
+  const callsigns = pseudonymsOf(
+    people.map((p) => p.source),
+    random,
+  );
+  return people.map(({ identity }, index) => ({ ...identity, callsign: callsigns[index] ?? "" }));
 }
