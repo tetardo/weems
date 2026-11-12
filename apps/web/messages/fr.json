@@ -45,11 +45,8 @@
       "flights": "Vols",
       "live": "En vol",
       "flight": "Vol",
-      "from": "De",
-      "to": "Vers",
       "phase": "Phase",
       "level": "Niveau",
-      "ground": "Sol",
       "feet": "{value, number} ft",
       "none": "Aucun vol en ce moment.",
       "phases": {
@@ -58,7 +55,11 @@
         "cruise": "Croisière",
         "descent": "Descente",
         "approach": "Approche"
-      }
+      },
+      "route": "Trajet",
+      "direct": "Direct",
+      "more": "+ {count, plural, one {# vol} other {# vols}}",
+      "seeMap": "Voir la carte en direct"
     }
   },
   "Live": {

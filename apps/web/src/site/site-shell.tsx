@@ -9,8 +9,6 @@ import { ThemeToggle } from "./theme-toggle.tsx";
 
 interface Props {
   loggedIn: boolean;
-  /** Home page: the bar floats over the full-screen image. */
-  overlay?: boolean;
   /** Pilot pages and the live map: no footer. */
   footer?: boolean;
   children: ReactNode;
@@ -20,11 +18,10 @@ interface Props {
  * Frame of every page (decision 003, bar v2 of spec J4 accueil): the pages after the logo; on the
  * right the way in or the pilot's menu, the theme and FR | EN; footer P2 on public pages.
  */
-export function SiteShell({ loggedIn, overlay = false, footer = true, children }: Props) {
+export function SiteShell({ loggedIn, footer = true, children }: Props) {
   return (
     <div className="app-glow flex min-h-screen flex-col">
       <FloatingBar
-        overlay={overlay}
         nav={<SiteNav loggedIn={loggedIn} />}
         account={
           <>

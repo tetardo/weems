@@ -36,7 +36,6 @@ export {
   Sun as ThemeLightIcon,
   Trash2 as DeleteIcon,
   User as AccountIcon,
-  Users as PilotsIcon,
   X as CloseIcon,
   TriangleAlert as WarningIcon,
 } from "lucide-react";

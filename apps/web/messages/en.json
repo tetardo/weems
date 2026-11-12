@@ -45,11 +45,8 @@
       "flights": "Flights",
       "live": "Airborne",
       "flight": "Flight",
-      "from": "From",
-      "to": "To",
       "phase": "Phase",
       "level": "Level",
-      "ground": "GND",
       "feet": "{value, number} ft",
       "none": "No flight right now.",
       "phases": {
@@ -58,7 +55,11 @@
         "cruise": "Cruise",
         "descent": "Descent",
         "approach": "Approach"
-      }
+      },
+      "route": "Route",
+      "direct": "Live",
+      "more": "+ {count, plural, one {# flight} other {# flights}}",
+      "seeMap": "See the live map"
     }
   },
   "Live": {

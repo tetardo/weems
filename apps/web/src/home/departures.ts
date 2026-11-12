@@ -56,14 +56,21 @@ const toRow = (flight: LiveFlight): BoardRow => ({
   level: levelOf(flight.position),
 });
 
+/** Rows of the board on a computer; a phone shows the first `BOARD_ROWS_PHONE` only. */
+const BOARD_ROWS = 8;
+export const BOARD_ROWS_PHONE = 4;
+
 /** At most `max` flights, those heard from most recently; flights whose signal is lost are left out. */
-export function boardRows(flights: LiveFlights, max = 5): BoardRow[] {
+export function boardRows(flights: LiveFlights, max = BOARD_ROWS): BoardRow[] {
   return [...flights.values()]
     .filter((flight) => flight.signal === "ok")
     .sort((a, b) => b.receivedAt.localeCompare(a.receivedAt))
     .slice(0, max)
     .map(toRow);
 }
+
+/** Flights live but not on the board (« + N vols »): the map shows them all, lost signals included. */
+export const moreFlights = (live: number, shown: number): number => Math.max(0, live - shown);
 
 /** Digits of a counter, padded with dimmed zeros to `width` (split-flap look). */
 export function flapDigits(value: number, width: number): { digit: string; padding: boolean }[] {
