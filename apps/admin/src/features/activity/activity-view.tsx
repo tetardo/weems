@@ -23,7 +23,14 @@ function Title({ siteUrl }: { siteUrl: string }) {
     <PageTitle
       icon={<ActivityIcon />}
       title="Activité simulée"
-      subtitle="Remplir tout le site : comptes fictifs, leurs vols passés, des vols en direct et des visiteurs sur la carte. Tout est marqué « fictif » et se supprime d'un coup."
+      subtitle={
+        <>
+          Remplir tout le site : comptes fictifs, leurs vols passés, des vols en direct et des
+          visiteurs sur la carte.
+          <br />
+          Tout est marqué « fictif » et se supprime d&apos;un coup.
+        </>
+      }
       actions={
         <a className="btn ghost" href={`${siteUrl}/fr/live`} target="_blank" rel="noreferrer">
           <MapIcon size={16} /> Ouvrir la carte en direct
