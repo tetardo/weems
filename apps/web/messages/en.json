@@ -462,15 +462,7 @@
       "empty": "No finished flight yet. Start the tracker and make a first flight: it will show up here.",
       "last": {
         "title": "Last flight",
-        "open": "Open the flight",
-        "touchdown": "Touchdown (ft/min)",
-        "duration": "Duration",
-        "distance": "Distance",
-        "nm": "{nm} nm",
-        "fuel": "Fuel",
-        "bounces": "Bounces",
-        "alerts": "Alerts",
-        "noAlert": "None"
+        "open": "Open the flight"
       },
       "stages": {
         "label": "Altitude profile of the last flight, by phase",
@@ -538,6 +530,95 @@
         "title": "Recent flights",
         "all": "All flights"
       }
+    },
+    "minis": {
+      "touchdown": "Touchdown (ft/min)",
+      "duration": "Duration",
+      "distance": "Distance",
+      "nm": "{nm} nm",
+      "fuel": "Fuel",
+      "tonnes": "{tonnes, number, ::.0} t",
+      "bounces": "Bounces",
+      "alerts": "Alerts",
+      "noAlert": "None"
+    },
+    "flights": {
+      "title": "Flights",
+      "count": "{count, plural, =0 {no flight} one {# flight} other {# flights}}",
+      "empty": "No finished flight yet.",
+      "all": "All flights",
+      "fullPage": "Full flight page",
+      "bands": "Flight bands",
+      "bandsAside": "{minutes} min · {rows} parameters",
+      "noTrack": "This flight has no trajectory.",
+      "profile": "Altitude profile",
+      "intro": "{count, plural, =0 {No flight} one {# flight} other {# flights}} · all your flights, including the ones hidden from your public page.",
+      "filters": {
+        "all": "All",
+        "clean": "Clean",
+        "review": "To review"
+      },
+      "emptyFiltered": "No flight for this filter."
+    },
+    "verdicts": {
+      "clean": "Clean",
+      "firm": "Firm",
+      "bounce": "Bounce",
+      "nonCompliant": "Non-compliant",
+      "noLanding": "No landing"
+    },
+    "bands": {
+      "phase": "Phase",
+      "hover": "Hover a column to read every value of that minute. 1 cell = 1 minute.",
+      "groups": {
+        "trajectory": "Trajectory",
+        "controls": "Controls",
+        "cabin": "Cabin"
+      },
+      "rows": {
+        "altitude": "Altitude",
+        "speed": "Speed",
+        "verticalSpeed": "Vertical speed",
+        "bank": "Bank",
+        "gForce": "Load factor",
+        "n1": "Thrust (N1)",
+        "flaps": "Flaps",
+        "gear": "Gear",
+        "spoilers": "Spoilers",
+        "braking": "Braking",
+        "parkingBrake": "Parking brake",
+        "autopilot": "Autopilot",
+        "landingLight": "Landing lights",
+        "seatbelts": "Seat belt sign",
+        "cabinAltitude": "Cabin altitude"
+      },
+      "values": {
+        "altitude": "{value} ft",
+        "speed": "{value} kt",
+        "verticalSpeed": "{value} ft/min",
+        "bank": "{value}°",
+        "g": "{value} g",
+        "n1": "{value} %",
+        "flaps": "step {value}",
+        "gearDown": "down",
+        "gearUp": "up",
+        "percent": "{value} %",
+        "ktPerS": "{value} kt/s",
+        "on": "on",
+        "off": "off",
+        "share": "{value} % of the time",
+        "cabinAltitude": "{value} ft"
+      },
+      "marksLocked": "Pilot Pro marks on the bands the moments to work on (sink rate, bank, speed below FL100…).",
+      "noMarks": "Nothing to review on this flight.",
+      "provisional": "provisional criteria, to be checked with a pilot",
+      "reasons": {
+        "speed250": "over 250 kt below 10,000 ft",
+        "bank30": "bank over 30°",
+        "sinkRate": "sinking over 1,000 ft/min below 1,000 ft"
+      },
+      "marksTitle": "Points to review",
+      "discover": "Discover Pilot Pro"
     }
   },
   "Profile": {

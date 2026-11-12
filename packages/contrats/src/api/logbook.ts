@@ -19,6 +19,8 @@ export const LogbookLastFlight = z.object({
   goArounds: Count,
   /** Length of the trajectory, nautical miles; null without trajectory. */
   distanceNm: z.number().nonnegative().nullable(),
+  /** Fuel burnt over the trajectory, kg; null when not recorded (flights before 12/11/2026). */
+  fuelUsedKg: z.number().nonnegative().nullable(),
 });
 export type LogbookLastFlight = z.infer<typeof LogbookLastFlight>;
 

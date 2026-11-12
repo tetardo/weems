@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import type { IconComponent } from "../../ui/icons.ts";
+import type { IconComponent } from "../ui/icons.ts";
 
-/** A block of the Résumé: icon, title, a muted note or link on the right, then its content. */
-export function SummaryCard({
+/** A block of a logbook page: icon, title, a muted note or link on the right, then its content. */
+export function LogbookCard({
   icon: Icon,
   title,
   aside,

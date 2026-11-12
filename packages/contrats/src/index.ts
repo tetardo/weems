@@ -51,6 +51,15 @@ export {
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
 export { LogbookLastFlight, LogbookSummary } from "./api/logbook.ts";
 export {
+  BandMarkReason,
+  BandMinute,
+  BandRow,
+  FlightBands,
+  LandingVerdict,
+  LogbookEntries,
+  LogbookEntry,
+} from "./api/logbook-flights.ts";
+export {
   LiveEvent,
   LiveFlight,
   LivePilot,

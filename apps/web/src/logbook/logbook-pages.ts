@@ -17,7 +17,7 @@ export interface LogbookPage {
 /** Pages of the private logbook, in the order of the menu (spec carnet privé). */
 export const LOGBOOK_PAGES: readonly LogbookPage[] = [
   { href: "/logbook", label: "summary", icon: LogbookIcon, soon: false },
-  { href: "/logbook/flights", label: "flights", icon: FlightsIcon, soon: true },
+  { href: "/logbook/flights", label: "flights", icon: FlightsIcon, soon: false },
   { href: "/logbook/stats", label: "stats", icon: StatsIcon, soon: true },
   { href: "/logbook/goals", label: "goals", icon: TargetIcon, soon: true },
 ];

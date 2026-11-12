@@ -78,7 +78,7 @@ Liste des objectifs en cours (anneau de progression, barre avec le repère « o�
 | --- | --- |
 | #77 | Bouton de test Free \| Pro |
 | 2 | Cadre du carnet (menu, onglets, `/logbook/public`) et Résumé (sans Prochain vol ni communauté réelle : cartes verrouillées ou « bientôt ») |
-| 3 | Vols : liste + fiche, trajectoire enrichie, bandes de vol |
+| 3 | Vols : liste + fiche, trajectoire enrichie, bandes de vol (repères à revoir sur critères provisoires : 250 kt sous 10 000 ft, inclinaison > 30°, plus de 1 000 ft/min de descente sous 1 000 ft) ; dernière approche, analyse, note, chronologie et comparaison plus tard |
 | 4 | Statistiques par thème |
 | 5 | Objectifs (table, routes, page) |
 | plus tard | Prochain vol SimBrief, communauté, analyse d'approche (critères à fixer avec un pilote) |

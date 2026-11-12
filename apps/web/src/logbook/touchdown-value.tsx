@@ -1,4 +1,4 @@
-import { TOUCHDOWN_COLORS, touchdownBucket } from "../../profile/chart-geometry.ts";
+import { TOUCHDOWN_COLORS, touchdownBucket } from "../profile/chart-geometry.ts";
 
 /** A touchdown vertical speed in the colour of its bucket (soft, normal, firm, hard). */
 export function TouchdownValue({ vs, className = "" }: { vs: number; className?: string }) {
