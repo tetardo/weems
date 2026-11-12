@@ -43,7 +43,7 @@ export function SettingsPage({
           siteHost={siteHost}
           photo={
             <PhotoField
-              hasPhoto={profile.hasPhoto}
+              photoUpdatedAt={profile.photoUpdatedAt}
               initials={pilotName.slice(0, 1).toUpperCase()}
             />
           }

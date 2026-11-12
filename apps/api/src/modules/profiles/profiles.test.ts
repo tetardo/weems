@@ -76,7 +76,7 @@ describe("own profile settings (spec J4)", () => {
       headers: { cookie: pilot.cookie },
     });
     expect(profile.statusCode).toBe(200);
-    expect(profile.json()).toMatchObject({ isPublic: false, handle: null, hasPhoto: false });
+    expect(profile.json()).toMatchObject({ isPublic: false, handle: null, photoUpdatedAt: null });
     expect(profile.json().suggestedHandle).toMatch(/^test-pilot/);
   });
 
@@ -305,6 +305,31 @@ describe("profile photo (spec J4)", () => {
       headers: { cookie: pilot.cookie, "content-type": type },
       payload: body,
     });
+  const photoUpdatedAt = async (pilot: Pilot): Promise<string | null> =>
+    (
+      await app.inject({ method: "GET", url: "/v1/me/profile", headers: { cookie: pilot.cookie } })
+    ).json().photoUpdatedAt;
+
+  it("dates each photo change, so that the site changes the photo's address", async () => {
+    const pilot = await newTrackerPilot(app);
+    const png = (background: string) =>
+      sharp({ create: { width: 4, height: 4, channels: 3, background } })
+        .png()
+        .toBuffer();
+    await upload(pilot, await png("red"));
+    const first = await photoUpdatedAt(pilot);
+    expect(first).not.toBeNull();
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    await upload(pilot, await png("blue"));
+    const second = await photoUpdatedAt(pilot);
+    expect(Date.parse(second ?? "")).toBeGreaterThan(Date.parse(first ?? ""));
+    await app.inject({
+      method: "DELETE",
+      url: "/v1/me/profile/photo",
+      headers: { cookie: pilot.cookie },
+    });
+    expect(await photoUpdatedAt(pilot)).toBeNull();
+  });
 
   it("stores a square 256 px WebP without metadata, public only with the profile", async () => {
     const { pilot, handle } = await publicPilot();

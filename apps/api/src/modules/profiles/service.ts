@@ -152,7 +152,7 @@ export class ProfilesService {
       ...fields,
       publishedAt: publishedAt?.toISOString() ?? null,
       suggestedHandle: profile.handle ?? (await this.suggestion(pilotId)),
-      hasPhoto: await this.repository.hasPhoto(pilotId),
+      photoUpdatedAt: (await this.repository.photoUpdatedAt(pilotId))?.toISOString() ?? null,
     };
   }
 

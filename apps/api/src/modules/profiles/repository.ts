@@ -162,6 +162,15 @@ export class ProfilesRepository {
     return row?.webp ?? null;
   }
 
+  /** When the photo was last changed, null without photo: version of its address for the site. */
+  async photoUpdatedAt(pilotId: string): Promise<Date | null> {
+    const [row] = await this.db
+      .select({ updatedAt: pilotPhotos.updatedAt })
+      .from(pilotPhotos)
+      .where(eq(pilotPhotos.pilotId, pilotId));
+    return row?.updatedAt ?? null;
+  }
+
   async hasPhoto(pilotId: string): Promise<boolean> {
     const [row] = await this.db
       .select({ pilotId: pilotPhotos.pilotId })
