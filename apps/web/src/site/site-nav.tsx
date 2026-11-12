@@ -3,16 +3,16 @@
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "../i18n/navigation.ts";
 import { isCurrentPage } from "./current-page.ts";
-import { MENU } from "./menu-items.ts";
+import { menuFor } from "./menu-items.ts";
 
-/** Tabs of the floating bar on large screens (segmented control, current page raised). */
-export function MainNav() {
+/** Group of links after the logo, current page raised (phones: the menu, site-menu.tsx). */
+export function SiteNav({ loggedIn }: { loggedIn: boolean }) {
   const t = useTranslations("Site");
   const pathname = usePathname();
   return (
-    <nav aria-label={t("mainNav")} className="mx-auto max-md:hidden">
+    <nav aria-label={t("mainNav")} className="mr-auto ml-2 max-md:hidden">
       <ul className="flex gap-0.5 rounded-xl border border-line bg-bg/60 p-1">
-        {MENU.map((item) => {
+        {menuFor(loggedIn).map((item) => {
           const current = isCurrentPage(pathname, item.href);
           return (
             <li key={item.href}>

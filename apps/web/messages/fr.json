@@ -4,22 +4,16 @@
     "description": "Suivi des vols en simulation",
     "nav": {
       "flights": "Mes vols",
-      "live": "Direct",
+      "live": "Vols en direct",
       "profile": "Mon profil public"
     },
-    "language": "English",
     "notMeasured": "non mesuré",
     "mainNav": "Navigation principale",
     "accountMenu": "Menu de {name}",
     "toggleTheme": "Passer en thème clair ou sombre",
     "public": {
-      "nav": "Découvrir",
-      "discover": "Découvrir Weems",
-      "live": "Vols en direct",
       "signup": "Créer un compte",
       "login": "Se connecter",
-      "account": "Mon compte",
-      "flights": "Mes vols",
       "menu": "Ouvrir le menu",
       "closeMenu": "Fermer le menu"
     },

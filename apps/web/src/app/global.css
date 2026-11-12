@@ -21,23 +21,23 @@
   --color-accent-2: var(--wm-accent-2);
   --color-danger: var(--wm-danger);
   --color-success: var(--wm-success);
-  /* Departures board of the home page: dark in both themes, like an airport board. */
-  --color-board: #0b0f18;
-  --color-board-head: #151b28;
-  --color-board-line: #1a2130;
-  --color-board-edge: #222a3b;
-  --color-board-ink: #ffd27a;
-  --color-board-title: #ffffff;
-  --color-board-muted: #9aa6bf;
-  --color-board-label: #7d879c;
-  --color-board-call: #4fd1e8;
-  --color-board-off: #4b5468;
-  --color-board-live: #ff5d5d;
-  --color-board-ground: #adb5bd;
-  --color-board-climb: #6ee7a8;
-  --color-board-cruise: #4fd1e8;
-  --color-board-descent: #ffb454;
-  --color-board-approach: #da77f2;
+  /* Departures board of the home page (spec J4 accueil): dark like an airport board, light in the light theme. */
+  --color-board: var(--wm-board);
+  --color-board-head: var(--wm-board-head);
+  --color-board-line: var(--wm-board-line);
+  --color-board-edge: var(--wm-board-edge);
+  --color-board-ink: var(--wm-board-ink);
+  --color-board-title: var(--wm-board-title);
+  --color-board-muted: var(--wm-board-muted);
+  --color-board-label: var(--wm-board-label);
+  --color-board-call: var(--wm-board-call);
+  --color-board-off: var(--wm-board-off);
+  --color-board-live: var(--wm-board-live);
+  --color-board-ground: var(--wm-board-ground);
+  --color-board-climb: var(--wm-board-climb);
+  --color-board-cruise: var(--wm-board-cruise);
+  --color-board-descent: var(--wm-board-descent);
+  --color-board-approach: var(--wm-board-approach);
   --color-hero-ink: var(--wm-hero-ink);
   --color-hero-muted: var(--wm-hero-muted);
   --color-cat-light: var(--wm-cat-light);
@@ -79,6 +79,26 @@
   --wm-hero-muted: #c9d2e3;
   --wm-hero-card: rgb(14 19 32 / 0.55);
   --wm-sky: linear-gradient(180deg, #2a2f4a 0%, #6b4a5e 45%, #e08a52 75%, #1a1d2b 100%);
+  /* Departures board of the home page and its split-flap digits. */
+  --wm-board: #0b0f18;
+  --wm-board-head: #151b28;
+  --wm-board-line: #1a2130;
+  --wm-board-edge: #222a3b;
+  --wm-board-ink: #ffd27a;
+  --wm-board-title: #ffffff;
+  --wm-board-muted: #9aa6bf;
+  --wm-board-label: #7d879c;
+  --wm-board-call: #4fd1e8;
+  --wm-board-off: #4b5468;
+  --wm-board-live: #ff5d5d;
+  --wm-board-ground: #adb5bd;
+  --wm-board-climb: #6ee7a8;
+  --wm-board-cruise: #4fd1e8;
+  --wm-board-descent: #ffb454;
+  --wm-board-approach: #da77f2;
+  --wm-flap-top: #232b3d;
+  --wm-flap-bottom: #1b2232;
+  --wm-flap-fold: rgb(0 0 0 / 0.55);
   /* Aircraft categories (src/aircraft/category-tone.ts), readable on both themes. */
   --wm-cat-light: #69db7c;
   --wm-cat-turboprop: #ffa94d;
@@ -113,6 +133,25 @@
   --wm-hero-muted: #4a5266;
   --wm-hero-card: rgb(255 255 255 / 0.72);
   --wm-sky: linear-gradient(180deg, #f6e7da 0%, #f4c9a4 50%, #e9a06c 75%, #c9d2e3 100%);
+  --wm-board: #ffffff;
+  --wm-board-head: #f3f5fa;
+  --wm-board-line: #e9ecf3;
+  --wm-board-edge: #dde1ee;
+  --wm-board-ink: #1f2430;
+  --wm-board-title: #1f2430;
+  --wm-board-muted: #5a6378;
+  --wm-board-label: #7a8398;
+  --wm-board-call: #0b7285;
+  --wm-board-off: #b5bccb;
+  --wm-board-live: #e03131;
+  --wm-board-ground: #6c757d;
+  --wm-board-climb: #2b8a3e;
+  --wm-board-cruise: #0b7285;
+  --wm-board-descent: #b86a00;
+  --wm-board-approach: #9c36b5;
+  --wm-flap-top: #f1f3f8;
+  --wm-flap-bottom: #e6e9f1;
+  --wm-flap-fold: rgb(31 36 48 / 0.18);
   --wm-cat-light: #2b8a3e;
   --wm-cat-turboprop: #d9480f;
   --wm-cat-business-jet: #9c36b5;
@@ -201,19 +240,19 @@ h3 {
   backdrop-filter: blur(10px);
 }
 
-/* One digit of the split-flap counters of the departures board (dark in both themes). */
+/* One digit of the split-flap counters of the departures board. */
 @utility flap {
   position: relative;
   display: grid;
   place-items: center;
   border-radius: 6px;
-  background: linear-gradient(180deg, #232b3d 50%, #1b2232 50%);
+  background: linear-gradient(180deg, var(--wm-flap-top) 50%, var(--wm-flap-bottom) 50%);
   color: var(--color-board-ink);
   &::after {
     content: "";
     position: absolute;
     inset: 50% 0 auto;
     height: 1px;
-    background: rgb(0 0 0 / 0.55);
+    background: var(--wm-flap-fold);
   }
 }
