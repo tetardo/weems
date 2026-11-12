@@ -1,0 +1,225 @@
+/* Page Base de données (spec admin). Tiles, sections, blocks and alert band come from supervision.css (sv-*). */
+
+.db-ok {
+  color: var(--success);
+  font-size: 12px;
+}
+.db-warn {
+  color: var(--accent2);
+  font-size: 12px;
+}
+.db-bad {
+  color: var(--danger);
+  font-size: 12px;
+}
+.sv-big.db-warn,
+.sv-big.db-bad {
+  font-size: 28px;
+}
+.sv-tile.db-tile-warn {
+  border-color: color-mix(in srgb, var(--accent2) 50%, transparent);
+}
+.sv-tile.db-tile-bad {
+  border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+}
+.sv-alert .btn.db-push {
+  margin-left: auto;
+}
+
+/* ---------- Tables ---------- */
+.db-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.db-scroll {
+  overflow-x: auto;
+}
+.db-scroll table {
+  font-variant-numeric: tabular-nums;
+}
+.db-n {
+  text-align: right;
+}
+th.db-n {
+  text-align: right;
+}
+.db-name {
+  font-size: 13px;
+}
+.db-bar {
+  display: flex;
+  width: 120px;
+  height: 6px;
+  border-radius: var(--radius-inner);
+  background: var(--surface2);
+  overflow: hidden;
+}
+.db-bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.db-bar i.sim {
+  background: color-mix(in srgb, var(--muted) 60%, transparent);
+}
+.db-hint {
+  margin: 0;
+  padding: 10px 14px 12px;
+  font-size: 12.5px;
+  white-space: normal;
+}
+.sv-block .db-hint {
+  padding: 0;
+}
+.db-hint code,
+.db-cmd {
+  font:
+    500 12px var(--font-mono),
+    monospace;
+}
+.db-cmd {
+  display: block;
+  padding: 8px 10px;
+  border-radius: var(--radius-inner);
+  background: var(--surface2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+  user-select: all;
+}
+
+/* ---------- Migrations and backups ---------- */
+.db-pair {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: start;
+}
+.db-list {
+  display: flex;
+  flex-direction: column;
+}
+.db-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+}
+.db-line:last-child {
+  border-bottom: 0;
+}
+.db-tag {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.db-date {
+  font-size: 12.5px;
+}
+.db-pill {
+  padding: 1px 8px;
+  border-radius: var(--radius-tag);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.db-pill.ok {
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+}
+.db-pill.warn {
+  color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 14%, transparent);
+}
+.db-pill.bad {
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+}
+.db-empty {
+  margin: 0;
+  padding: 14px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-box);
+  text-align: center;
+  font-size: 13.5px;
+}
+.db-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 13.5px;
+}
+
+/* ---------- Cleanup ---------- */
+.db-clean {
+  padding: 6px 16px 14px;
+  display: flex;
+  flex-direction: column;
+}
+.db-choice {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  font-size: 14px;
+}
+.db-choice input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+.db-choice small {
+  display: block;
+  font-size: 12.5px;
+}
+.db-count {
+  text-align: right;
+  font-size: 13px;
+}
+.db-lock {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 10px 0 6px;
+  padding: 10px 12px;
+  border-radius: var(--radius-box);
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 13px;
+}
+.db-lock svg {
+  flex: none;
+  color: var(--success);
+  margin-top: 1px;
+}
+.db-confirm {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .db-wide {
+    display: none;
+  }
+  .db-bar {
+    width: 64px;
+  }
+  .db-foot .btn,
+  .sv-alert .btn.db-push {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+}

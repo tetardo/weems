@@ -3,7 +3,7 @@ import { ago } from "../../format/time.ts";
 import { AlphaIcon, ChartIcon, EventsIcon } from "../../ui/icons.ts";
 import { StackedBars } from "./bars.tsx";
 import { eventText } from "./figures.ts";
-import { Block } from "./section.tsx";
+import { Block } from "../../ui/block.tsx";
 
 const DOT: Record<SupervisionEventKind, string> = {
   accountCreated: "info",

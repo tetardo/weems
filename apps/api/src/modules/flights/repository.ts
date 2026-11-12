@@ -27,7 +27,8 @@ import {
   Simulator,
 } from "@weems/contrats";
 import type { Database } from "../../db/client.ts";
-import { flightEvents, flightReviews, flights, flightTracks } from "../../db/schema.ts";
+import { deleteFlightsWithChildren } from "./repository-cleanup.ts";
+import { flightEvents, flights } from "../../db/schema.ts";
 import type { ListPosition } from "./list-cursor.ts";
 
 /** A stored flight, in the shared formats. */
@@ -221,11 +222,7 @@ export class FlightsRepository {
       // is left alone, instead of failing the delete on its trajectory's foreign key.
       const rows = await tx.select({ id: flights.id }).from(flights).where(mine);
       const owned = rows.map((row) => row.id);
-      if (owned.length === 0) return [];
-      await tx.delete(flightEvents).where(inArray(flightEvents.flightId, owned));
-      await tx.delete(flightTracks).where(inArray(flightTracks.flightId, owned));
-      await tx.delete(flightReviews).where(inArray(flightReviews.flightId, owned));
-      await tx.delete(flights).where(inArray(flights.id, owned));
+      await deleteFlightsWithChildren(tx, owned);
       return owned;
     });
   }

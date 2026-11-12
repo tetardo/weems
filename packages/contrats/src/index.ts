@@ -60,6 +60,16 @@ export {
 } from "./api/live.ts";
 export { SiteStats } from "./api/stats.ts";
 export {
+  AdminDatabase,
+  CLEANUP_SIMULATED_AFTER_DAYS,
+  DatabaseCleanupPreview,
+  DatabaseCleanupRequest,
+  DatabaseCleanupResult,
+  DatabaseMigration,
+  DatabaseTable,
+  MigrationState,
+} from "./api/database.ts";
+export {
   AdminSupervision,
   SupervisionActivity,
   SupervisionCommunity,

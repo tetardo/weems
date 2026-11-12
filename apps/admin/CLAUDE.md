@@ -1,6 +1,6 @@
 # Weems — console d'administration
 
-Console **locale** de Greg, sur son Mac : page d'accueil Supervision (tuiles, surveillance, activité, communauté), démarrer et arrêter les services, lancer du trafic simulé ou de l'activité simulée (comptes fictifs), gérer les comptes, choisir l'image de fond de l'accueil du site (page Personnalisation), suivre les mises à jour des librairies (page Librairies, lecture seule). Jamais déployée (fiche `../../docs/decisions/009-console-admin-locale.md`).
+Console **locale** de Greg, sur son Mac : page d'accueil Supervision (tuiles, surveillance, activité, communauté), démarrer et arrêter les services, lancer du trafic simulé ou de l'activité simulée (comptes fictifs), gérer les comptes, choisir l'image de fond de l'accueil du site (page Personnalisation), suivre les mises à jour des librairies (page Librairies, lecture seule), surveiller, sauvegarder et nettoyer la base (page Base de données). Jamais déployée (fiche `../../docs/decisions/009-console-admin-locale.md`).
 
 Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 
@@ -15,8 +15,9 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 | Personnalisation (images de l'accueil) | `../../docs/cahiers-des-charges/web/spec-J4-personnalisation.md` |
 | Comptes fictifs et activité simulée | `../../docs/decisions/011-activite-simulee-comptes-fictifs.md`, `../tracker/tools/populate/` |
 | Librairies (versions, alertes de sécurité) | spec admin, section « Page Librairies » ; `src/server/libraries/` |
+| Base de données (tailles, migrations, sauvegardes, nettoyage) | spec admin, section « Page Base de données » ; `src/server/database/` ; routes `../api/src/modules/database/routes.ts` |
 | Routes `/v1/admin/*` de l'API | `../api/src/modules/accounts/admin-routes.ts` |
-| Formats échangés | `../../packages/contrats` (`api/admin.ts`, `api/supervision.ts`, `api/dev-metrics.ts`, `tools/simulation-progress.ts`, `tools/activity-progress.ts`, `api/fictitious.ts`) |
+| Formats échangés | `../../packages/contrats` (`api/admin.ts`, `api/supervision.ts`, `api/database.ts`, `api/dev-metrics.ts`, `tools/simulation-progress.ts`, `tools/activity-progress.ts`, `api/fictitious.ts`) |
 
 ![Console d'administration : ce qu'elle pilote](../../docs/schemas/img/admin-console.png)
 
@@ -33,13 +34,14 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 - Les processus lancés (pnpm dev, simulate, load, populate) sont gardés dans `globalThis` (`server/singleton.ts`) : un rechargement de Next.js ne les perd pas. Ils reçoivent l'environnement de la console sans `PORT` ni `NODE_ENV` (`childEnv`), sinon l'API prendrait le port 3002.
 - Personnalisation : lecture sans connexion (route publique), enregistrement avec la session de la page Comptes ; l'image passe par une action serveur, d'où la limite de 16 Mo de `next.config.ts` (actions serveur et `proxy.ts`).
 - Librairies : lecture seule, jamais d'installation ni d'écriture dans le dépôt ; `pnpm ls` et `pnpm audit` lancés à la racine, registre npm interrogé directement ; liens externes filtrés par `server/libraries/web-url.ts` (http ou https seulement).
-- Fichiers locaux (historique des lancements, rapports de `pnpm load`, dernier résultat de la page Librairies) dans `apps/admin/.data/`, jamais versionnés.
+- Base de données : lecture et suppressions par l'API (`/v1/admin/database`) ; la console lance seulement `pg_dump` dans le conteneur (sauvegardes) et `pnpm --filter @weems/api db:migrate`. Jamais de restauration par un bouton : la commande est affichée. Les vols réels ne sont jamais supprimés.
+- Fichiers locaux (historique des lancements, rapports de `pnpm load`, dernier résultat de la page Librairies, relevés de taille et sauvegardes de la base) dans `apps/admin/.data/`, jamais versionnés.
 
 ## Organisation
 
 ```
 src/
-  app/                 routes Next.js : mise en page (barre latérale G), / (Supervision), /services, /traffic, /activity, /accounts, /customize, /libraries, styles ;
+  app/                 routes Next.js : mise en page (barre latérale G), / (Supervision), /services, /traffic, /activity, /accounts, /customize, /libraries, /database, styles ;
                        api/lifecycle (tout démarrer / arrêter, appelé par scripts/mac/)
   proxy.ts             refus des requêtes adressées à un autre nom que 127.0.0.1:3002 / localhost:3002
   actions/             actions serveur appelées par les pages (résultat { ok, value | error }, jamais d'exception)
@@ -53,10 +55,11 @@ src/
     accounts/            connexion à l'API, session gardée (admin-session.ts), appels /v1/admin/*
     site/                images de l'accueil (site-api.ts : /v1/site/home-images et /v1/admin/site/*)
     libraries/           page Librairies : pnpm ls, registre npm, pnpm audit, écarts de version, rapport gardé en cache
+    database/            page Base de données : relevés de taille par jour, sauvegardes pg_dump, commande des migrations
   site/                barre latérale, barre du haut, onglets mobiles
-  features/            composants des pages : supervision/, services/, traffic/, activity/, accounts/, customize/, libraries/ (logique pure à part, testée)
-  ui/                  icônes, champ numérique, état d'un lancement, pastilles d'état, titre de page, confirmation, sondage périodique
-  format/              heures, durées, noms des phases
+  features/            composants des pages : supervision/, services/, traffic/, activity/, accounts/, customize/, libraries/, database/ (logique pure à part, testée)
+  ui/                  icônes, bloc à titre, champ numérique, état d'un lancement, pastilles d'état, titre de page, confirmation, sondage périodique
+  format/              heures, durées, tailles, noms des phases
 ```
 
 ## Commandes

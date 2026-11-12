@@ -60,4 +60,10 @@ export {
   Clock as HoursIcon,
   Package as LibrariesIcon,
   ShieldAlert as SecurityIcon,
+  HardDrive as DiskIcon,
+  GitBranch as MigrationsIcon,
+  Archive as BackupIcon,
+  Layers as SimulatedIcon,
+  Eraser as CleanupIcon,
+  Lock as LockIcon,
 } from "lucide-react";

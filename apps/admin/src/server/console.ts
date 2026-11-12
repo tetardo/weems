@@ -1,4 +1,5 @@
 import { consoleConfig } from "./console-config.ts";
+import { DatabasePage } from "./database/database-page.ts";
 import { LibraryChecker } from "./libraries/library-checker.ts";
 import { ServicesManager } from "./services/services-manager.ts";
 import { singleton } from "./singleton.ts";
@@ -15,3 +16,5 @@ export const activity = (): ActivityRunner =>
   singleton("activity", () => new ActivityRunner(config(), () => traffic().isBusy()));
 /** Page Librairies: the last check of the repository's libraries. */
 export const libraries = () => singleton("libraries", () => new LibraryChecker(config()));
+/** Page Base de données: size readings, backups and migrations run by the console. */
+export const database = () => singleton("database", () => new DatabasePage(config()));

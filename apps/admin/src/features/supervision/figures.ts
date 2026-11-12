@@ -10,13 +10,6 @@ export const plural = (n: number, word: string) => `${fr(n)} ${word}${n > 1 ? "s
 /** « +3 sur 7 j », or « = sur 7 j » when nothing changed. */
 export const weekDelta = (n: number) => (n > 0 ? `+${fr(n)} sur 7 j` : "= sur 7 j");
 
-/** « 412 Mo », « 1,2 Go », « 820 ko ». */
-export function bytes(value: number): string {
-  if (value >= 1e9) return `${fr(value / 1e9, 1)} Go`;
-  if (value >= 1e6) return `${fr(value / 1e6)} Mo`;
-  return `${fr(value / 1e3)} ko`;
-}
-
 /** « 22 h », « 1,5 h ». */
 export const hours = (value: number) => `${fr(value, value < 10 ? 1 : 0)} h`;
 

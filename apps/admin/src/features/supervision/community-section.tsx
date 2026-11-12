@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { ago } from "../../format/time.ts";
 import { HoursIcon, MostActiveIcon, NewPilotsIcon } from "../../ui/icons.ts";
 import { hours, plural } from "./figures.ts";
-import { Block } from "./section.tsx";
+import { Block } from "../../ui/block.tsx";
 
 interface Row {
   id: string;
