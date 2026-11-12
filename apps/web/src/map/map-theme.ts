@@ -1,10 +1,15 @@
+import type { BasemapPaint } from "./basemap-paint.ts";
+import { DARK_BASEMAP_PAINT } from "./dark-basemap.ts";
+
 /**
  * Colours of the maps for the site's two themes (GameLab look, src/app/global.css): OpenFreeMap
- * « dark » basemap in the dark theme, « positron » in the light one, and our own layers drawn
+ * « dark » basemap in the dark theme (lightened, dark-basemap.ts), « positron » in the light one, and our own layers drawn
  * in colours readable on each.
  */
 export interface MapTheme {
   readonly styleUrl: string;
+  /** Colours set on the basemap's own layers once loaded (none: the basemap as published). */
+  readonly basemapPaint: BasemapPaint;
   /** Background of the fallback map when the basemap cannot be loaded. */
   readonly fallback: string;
   /** Labels and the selected point. */
@@ -24,7 +29,8 @@ const STYLES = "https://tiles.openfreemap.org/styles";
 
 const DARK: MapTheme = {
   styleUrl: `${STYLES}/dark`,
-  fallback: "#171e2e",
+  basemapPaint: DARK_BASEMAP_PAINT,
+  fallback: "#222b3f",
   ink: "#e8ecf5",
   halo: "#0e1320",
   aircraft: "#4fd1e8",
@@ -35,6 +41,7 @@ const DARK: MapTheme = {
 
 const LIGHT: MapTheme = {
   styleUrl: `${STYLES}/positron`,
+  basemapPaint: {},
   fallback: "#eef2f6",
   ink: "#1f2430",
   halo: "#ffffff",

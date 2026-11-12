@@ -4,6 +4,7 @@ import {
   setWorkerUrl,
   type StyleSpecification,
 } from "maplibre-gl";
+import { withBasemapPaint } from "./basemap-paint.ts";
 import { currentMapTheme, type MapTheme } from "./map-theme.ts";
 
 /** Copied into public/ by scripts/copy-map-worker.ts. */
@@ -14,6 +15,13 @@ const fallbackStyle = (color: string): StyleSpecification => ({
   version: 8,
   sources: {},
   layers: [{ id: "background", type: "background", paint: { "background-color": color } }],
+});
+
+/** The basemap of `theme` with its colours (MapLibre applies it to the fetched style). */
+const styleOf = (theme: MapTheme) => ({
+  style: theme.styleUrl,
+  transformStyle: (_previous: StyleSpecification | undefined, next: StyleSpecification) =>
+    withBasemapPaint(next, theme.basemapPaint),
 });
 
 /** Our layers, added again on every new basemap (style changes erase them). */
@@ -33,7 +41,7 @@ export function createBaseMap(
 ): MapLibreMap {
   setWorkerUrl(WORKER_URL);
   let theme = currentMapTheme();
-  const map = new MapLibreMap({ container, style: theme.styleUrl, ...view });
+  const map = new MapLibreMap({ container, ...styleOf(theme), ...view });
   // Our own flag: during a theme change MapLibre still reports the old style as loaded.
   let styleLoaded = false;
   map.on("style.load", () => {
@@ -50,7 +58,8 @@ export function createBaseMap(
     if (next === theme) return;
     theme = next;
     styleLoaded = false;
-    map.setStyle(theme.styleUrl, { diff: false });
+    const { style, transformStyle } = styleOf(theme);
+    map.setStyle(style, { diff: false, transformStyle });
   });
   themeWatch.observe(document.documentElement, { attributeFilter: ["data-theme"] });
   const resize = new ResizeObserver(() => map.resize());
