@@ -1,11 +1,8 @@
 import type { HomeFocus, HomeImages, HomeTheme } from "@weems/contrats";
+import type { BannerPhoto } from "../ui/photo-background.tsx";
 
-/** A background of the home page: the image and what its crop keeps. */
-export interface HomeBackground {
-  src: string;
-  /** CSS background-position. */
-  position: string;
-}
+/** A background of the home page (and of the Découvrir banner). */
+export type HomeBackground = BannerPhoto;
 
 /**
  * Image shipped with the site (spec J4 accueil, decision 1): home-made image of the Weems fleet,
