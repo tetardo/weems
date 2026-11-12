@@ -884,19 +884,9 @@
       "from": "Aug",
       "to": "Nov"
     },
-    "next": {
-      "features": {
-        "eyebrow": "In detail",
-        "title": "All the features",
-        "text": "Every Weems feature, plan by plan.",
-        "link": "See the features"
-      },
-      "plans": {
-        "eyebrow": "Plans",
-        "title": "Free to fly",
-        "text": "Pilot Free for everyone; Pilot Pro for analysis, Company and Holding for airlines.",
-        "link": "See the plans"
-      }
+    "closing": {
+      "title": "Every flight counts.",
+      "text": "Make each one a step closer to the pilot you want to become."
     }
   }
 }

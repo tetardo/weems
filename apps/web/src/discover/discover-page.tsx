@@ -1,14 +1,14 @@
 import type { ThemePhotos } from "../ui/photo-background.tsx";
 import { SectionMain } from "../ui/section-main.tsx";
 import { DiscoverBanner } from "./discover-banner.tsx";
-import { DiscoverNext } from "./discover-next.tsx";
+import { DiscoverClosing } from "./discover-closing.tsx";
 import { DiscoverStepRow } from "./discover-step.tsx";
 import { DISCOVER_STEPS } from "./discover-steps.ts";
 
 /**
  * Page /discover (« Découvrir »): the principle of Weems for a visitor. The photo banner, then the
  * six steps along a dashed route (tracker, follow-up, community, simplicity, flying like a crew,
- * progress), then the way to the features and the plans.
+ * progress), then a closing slogan.
  */
 export function DiscoverPage({ photos }: { photos: ThemePhotos }) {
   return (
@@ -19,7 +19,7 @@ export function DiscoverPage({ photos }: { photos: ThemePhotos }) {
           <DiscoverStepRow key={step.id} step={step} index={index} />
         ))}
       </ol>
-      <DiscoverNext />
+      <DiscoverClosing />
     </SectionMain>
   );
 }

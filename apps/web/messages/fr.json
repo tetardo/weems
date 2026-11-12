@@ -884,19 +884,9 @@
       "from": "août",
       "to": "nov."
     },
-    "next": {
-      "features": {
-        "eyebrow": "En détail",
-        "title": "Toutes les fonctionnalités",
-        "text": "Chaque fonction de Weems, formule par formule.",
-        "link": "Voir les fonctionnalités"
-      },
-      "plans": {
-        "eyebrow": "Formules",
-        "title": "Gratuit pour voler",
-        "text": "Pilot Free pour tous ; Pilot Pro pour l'analyse, Company et Holding pour les compagnies.",
-        "link": "Voir les offres"
-      }
+    "closing": {
+      "title": "Chaque vol compte.",
+      "text": "Faites de chacun un pas de plus vers le pilote que vous voulez devenir."
     }
   }
 }
