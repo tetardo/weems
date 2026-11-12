@@ -113,6 +113,11 @@ export class AccountsService {
     }
   }
 
+  /** Accounts that are not disabled (home page counter). */
+  countActive(): Promise<number> {
+    return this.repository.countActive();
+  }
+
   /** Public name and creation date of an account; never its e-mail. */
   async pilot(pilotId: string): Promise<PilotIdentity | null> {
     return this.repository.findPilot(pilotId);

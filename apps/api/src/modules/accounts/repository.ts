@@ -1,5 +1,5 @@
 import { uuidV7 } from "@weems/contrats";
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, count, desc, eq, isNull, sql } from "drizzle-orm";
 import type { Database } from "../../db/client.ts";
 import {
   accounts,
@@ -194,6 +194,12 @@ export class AccountsRepository {
       .from(users)
       .where(eq(users.id, userId));
     return row ?? null;
+  }
+
+  /** Accounts that are not disabled (counter of the home page). */
+  async countActive(): Promise<number> {
+    const [row] = await this.db.select({ n: count() }).from(users).where(isNull(users.disabledAt));
+    return row?.n ?? 0;
   }
 
   async findPilot(pilotId: string): Promise<PilotIdentity | null> {

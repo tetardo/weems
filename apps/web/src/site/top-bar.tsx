@@ -6,8 +6,8 @@ import { buttonClass } from "@weems/ui";
 import { ProfileIcon } from "../ui/icons.ts";
 import { LanguageSwitch } from "./language-switch.tsx";
 
-/** Button to the same page in the other language (pilot's menu, public bar). */
-export function OtherLanguage() {
+/** Button to the same page in the other language (pilot's menu). */
+function OtherLanguage() {
   const t = useTranslations("Site");
   const locale = useLocale();
   return (

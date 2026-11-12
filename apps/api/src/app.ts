@@ -40,6 +40,8 @@ import { PostgresTrackStore } from "./modules/tracks/repository.ts";
 import { registerTrackRoutes } from "./modules/tracks/routes.ts";
 import { TracksService } from "./modules/tracks/service.ts";
 import { LiveStream } from "./modules/live/stream.ts";
+import { registerStatsRoutes } from "./modules/stats/routes.ts";
+import { StatsService } from "./modules/stats/service.ts";
 import { registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
@@ -49,6 +51,15 @@ export interface AppDependencies {
   database: DatabaseHandle;
   /** Log requests (off in tests). */
   logger?: boolean;
+}
+
+/** The counters of the home page, read from the services of their modules. */
+function statsSources(accounts: AccountsService, flights: FlightsService, board: LiveBoard) {
+  return {
+    countPilots: () => accounts.countActive(),
+    countFlights: () => flights.countAll(),
+    countLiveFlights: () => board.flightCount,
+  };
 }
 
 /** Fastify with its plugins: validation, errors, documentation, rate limits. */
@@ -101,6 +112,7 @@ export async function buildApp({
   const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
+  registerStatsRoutes(app, new StatsService(statsSources(accounts, flights, board)));
   if (config.env !== "production") {
     registerDevFlightRoutes(app, flights, guards);
     registerDevLiveRoutes(app, board, stream);

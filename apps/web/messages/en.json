@@ -13,14 +13,58 @@
     "accountMenu": "{name}'s menu",
     "toggleTheme": "Switch between light and dark theme",
     "public": {
-      "logbook": "My logbook",
+      "nav": "Explore",
+      "discover": "Discover Weems",
+      "live": "Live flights",
+      "signup": "Create an account",
       "login": "Log in",
-      "signup": "Create my logbook"
+      "account": "My account",
+      "flights": "My flights",
+      "menu": "Open the menu",
+      "closeMenu": "Close the menu"
     },
     "busy": "Too many visits right now. Please try again in a minute.",
     "error": {
       "text": "This page could not be shown: the site's server ran into an error. The details are in the terminal running the site.",
       "retry": "Try again"
+    },
+    "languages": "Language",
+    "footer": {
+      "copyright": "© {year} Weems",
+      "legal": "Legal notice",
+      "terms": "Terms of use",
+      "privacy": "Privacy",
+      "contact": "Contact"
+    }
+  },
+  "Home": {
+    "title": "Weems · Automatic logbook for MSFS",
+    "sloganTop": "Take off.",
+    "sloganBottom": "Weems keeps the logbook.",
+    "lead": "MSFS flights recorded automatically, phases detected, landing scored. Free for every pilot.",
+    "signup": "Create my free account",
+    "myFlights": "My flights",
+    "seeLive": "See live flights",
+    "board": {
+      "title": "In flight · En vol",
+      "pilots": "Pilots",
+      "flights": "Flights",
+      "live": "Airborne",
+      "flight": "Flight",
+      "from": "From",
+      "to": "To",
+      "phase": "Phase",
+      "level": "Level",
+      "ground": "GND",
+      "feet": "{value, number} ft",
+      "none": "No flight right now.",
+      "phases": {
+        "ground": "Ground",
+        "climb": "Climb",
+        "cruise": "Cruise",
+        "descent": "Descent",
+        "approach": "Approach"
+      }
     }
   },
   "Live": {

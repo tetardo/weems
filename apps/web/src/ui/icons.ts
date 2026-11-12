@@ -11,7 +11,9 @@ export {
   EyeOff as HideIcon,
   Eye as ShowIcon,
   Map as MapIcon,
+  Menu as MenuIcon,
   Plane as AircraftIcon,
+  PlaneTakeoff as DepartureIcon,
   ChartLine as StatsIcon,
   Save as SaveIcon,
   Share2 as ShareIcon,
@@ -26,5 +28,8 @@ export {
   Route as RoutesIcon,
   Sun as ThemeLightIcon,
   Trash2 as DeleteIcon,
+  User as AccountIcon,
+  Users as PilotsIcon,
+  X as CloseIcon,
   TriangleAlert as WarningIcon,
 } from "lucide-react";
