@@ -6,7 +6,8 @@
       "logbook": "My logbook",
       "flights": "My flights",
       "live": "Live flights",
-      "profile": "My public profile"
+      "profile": "My public profile",
+      "plans": "Plans"
     },
     "notMeasured": "not measured",
     "mainNav": "Main navigation",
@@ -599,5 +600,191 @@
   "Fictitious": {
     "badge": "Fictitious account",
     "help": "Account created by the activity simulator to test the site. Not a real pilot."
+  },
+  "Plans": {
+    "meta": {
+      "title": "Plans",
+      "description": "Pilot Free, Pilot Pro, Company and Holding: what each Weems plan includes."
+    },
+    "title": "Choose your plan",
+    "lead": "Free to fly, Pro to improve, Company to run an airline.",
+    "billing": {
+      "label": "Billing period",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyBonus": "2 months free"
+    },
+    "price": {
+      "forever": "forever",
+      "perMonth": "per month",
+      "perYear": "per year",
+      "orPerYear": "or {price} per year",
+      "orPerMonth": "or {price} per month",
+      "noCard": "no credit card"
+    },
+    "names": {
+      "pilot_free": "Pilot Free",
+      "pilot_pro": "Pilot Pro",
+      "company": "Company",
+      "holding": "Holding"
+    },
+    "descriptions": {
+      "pilot_free": "Everything to fly and keep track of every flight, without limit.",
+      "pilot_pro": "Every flight analysed, to improve like a real crew.",
+      "company": "Create and run your virtual airline.",
+      "holding": "A group of airlines under one management."
+    },
+    "audience": {
+      "pilot": "For pilots",
+      "company": "For airlines"
+    },
+    "recommended": "Recommended",
+    "current": "Your plan",
+    "cta": {
+      "signup": "Create an account",
+      "upgrade": "Upgrade to {plan}",
+      "choose": "Choose {plan}",
+      "soon": "Payment coming soon"
+    },
+    "includes": {
+      "pilot": "Everything in {plan}, plus:",
+      "company": "{plan} for you, plus:",
+      "holding": "Everything in {plan}, plus:"
+    },
+    "compareLink": "Compare every feature of the plans",
+    "compare": {
+      "title": "Compare the plans",
+      "lead": "Every feature, row by row.",
+      "back": "Back to plans",
+      "feature": "Feature"
+    },
+    "groups": {
+      "fly": "Fly and follow",
+      "logbook": "Logbook",
+      "analysis": "Analyse your flights",
+      "company": "Run an airline"
+    },
+    "values": {
+      "included": "Included",
+      "excluded": "Not included",
+      "unlimited": "Unlimited"
+    },
+    "features": {
+      "tracker": {
+        "label": "MSFS 2020 and 2024 tracker"
+      },
+      "liveMap": {
+        "label": "Live flights map"
+      },
+      "publicProfile": {
+        "label": "Public profile"
+      },
+      "flightHistory": {
+        "label": "Every flight and the full history"
+      },
+      "simbriefNextFlight": {
+        "label": "Next SimBrief flight and tracker launch"
+      },
+      "logbookSummary": {
+        "label": "Logbook summary: last flight, hours this month, average touchdown, regularity"
+      },
+      "flightDetail": {
+        "label": "Flight sheet: route, altitude profile, last approach, timeline"
+      },
+      "flightBands": {
+        "label": "Flight strips: altitude, speed, vertical speed, bank, g, thrust, flaps, gear, autopilot… over the whole flight"
+      },
+      "flightNotes": {
+        "label": "Private note and tags on each flight"
+      },
+      "basicStats": {
+        "label": "Basic statistics: hours, categories, airports"
+      },
+      "statsPeriod": {
+        "label": "Statistics period",
+        "limited": "Statistics over the last {count} months",
+        "unlimited": "Statistics over the whole period",
+        "cell": "{count} months",
+        "cellUnlimited": "Whole period"
+      },
+      "workOnBasic": {
+        "label": "« To work on »: bounces, alerts, go-arounds"
+      },
+      "goals": {
+        "label": "Goals",
+        "limited": "{count, plural, one {# goal} other {# goals}}",
+        "unlimited": "Unlimited goals",
+        "cell": "{count}",
+        "cellUnlimited": "Unlimited"
+      },
+      "approachAnalysis": {
+        "label": "Approach analysis: speed, vertical speed, alignment at 1,000 and 500 ft, flare, touchdown zone"
+      },
+      "workOnDetailed": {
+        "label": "Detailed « to work on »: flare, speed at 500 ft"
+      },
+      "flightBandsMarks": {
+        "label": "Points to review on the flight strips: excessive vertical speed, bank, speed below FL100…"
+      },
+      "plannedVsActual": {
+        "label": "Planned and actual fuel and times (SimBrief)"
+      },
+      "community": {
+        "label": "You and the community: percentiles by aircraft category"
+      },
+      "compareFlights": {
+        "label": "Compare two flights"
+      },
+      "sameAircraftComparison": {
+        "label": "Comparison with your other flights on the same aircraft"
+      },
+      "categoryTrends": {
+        "label": "Trends by aircraft category"
+      },
+      "phaseTime": {
+        "label": "Time spent in each phase"
+      },
+      "export": {
+        "label": "CSV and PDF export"
+      },
+      "companies": {
+        "label": "Airlines",
+        "limited": "{count, plural, one {# airline} other {# airlines}}",
+        "unlimited": "Unlimited airlines",
+        "cell": "{count}",
+        "cellUnlimited": "Unlimited"
+      },
+      "activePilots": {
+        "label": "Active pilots",
+        "limited": "{count} active pilots",
+        "unlimited": "Unlimited active pilots*",
+        "cell": "{count, number}",
+        "cellUnlimited": "Unlimited*"
+      },
+      "fleetAndRoutes": {
+        "label": "Fleet, routes and schedules"
+      },
+      "flightValidation": {
+        "label": "Validation of the pilots' flights"
+      },
+      "rankings": {
+        "label": "Rankings and public airline page"
+      },
+      "sharedManagement": {
+        "label": "Shared management team"
+      },
+      "groupStats": {
+        "label": "Consolidated group statistics"
+      }
+    },
+    "reassure": {
+      "dataTitle": "Your data, always",
+      "dataText": "Every flight is recorded, even on the free plan. Pro unlocks the analysis of your whole history.",
+      "freeTitle": "No commitment",
+      "freeText": "Cancel any time. Nothing is deleted when the subscription ends.",
+      "membersTitle": "Airline pilots fly free",
+      "membersText": "Members of an airline fly with Pilot Free. Only the airline pays."
+    },
+    "fairUse": "* Fair use: above {count, number} active pilots per airline, contact us."
   }
 }

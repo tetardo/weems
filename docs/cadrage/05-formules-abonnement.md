@@ -46,7 +46,7 @@ Un groupe de compagnies virtuelles (plusieurs marques sous un même fondateur) e
 
 ### 2.5 Pas de compagnie gratuite : point à trancher `[Confiance moyenne]`
 
-Le document 01 prévoyait une « petite compagnie plafonnée » gratuite pour attirer les fondateurs. La base du 12/11 n'en a plus. Les concurrents gratuits (FSHub) occupent ce créneau. Deux options : une mini-compagnie gratuite (par exemple 5 pilotes, sans validation automatique), ou un essai de Company limité dans le temps. Ma recommandation : **essai de 30 jours**, parce qu'une compagnie gratuite permanente coûte en support sans convertir.
+Le document 01 prévoyait une « petite compagnie plafonnée » gratuite pour attirer les fondateurs. La base du 12/11 n'en a plus. Les concurrents gratuits (FSHub) occupent ce créneau. Deux options : une mini-compagnie gratuite (par exemple 5 pilotes, sans validation automatique), ou un essai de Company limité dans le temps. Ma recommandation : **essai de 30 jours**, parce qu'une compagnie gratuite permanente coûte en support sans convertir. **12/11 : Greg a retiré l'essai de 30 jours de la page Offres** ; la question d'une compagnie gratuite reste ouverte.
 
 ### 2.6 Rôle et droit sont deux choses
 
@@ -89,13 +89,17 @@ Les noms de droits suivent un format `domaine.action`, en anglais (identifiants 
 | Fin d'abonnement Company | Compagnie gelée en lecture seule pendant 90 jours, puis archivée. Les vols restent dans le carnet de chaque pilote. |
 | Changement de prix ou de contenu | Les abonnés gardent leurs conditions jusqu'à la fin de leur période (version du catalogue enregistrée sur l'abonnement). |
 | Testeurs alpha et bêta | Pilot Pro offert par ajustement admin, avec date de fin. |
-| Essai | 30 jours de Pilot Pro ou de Company, une fois par personne ou par compagnie. |
+| Essai | Retiré de la page Offres par Greg le 12/11 ; à rediscuter avec le paiement (lot 2). |
 
 ## 5. Mise en place par étapes
 
 1. **Maintenant (lot 1, sans paiement)** : module `entitlements` dans l'API avec Pilot Free et Pilot Pro, catalogue en code, ajustement manuel depuis la console admin. Le carnet l'utilise pour ses cartes verrouillées. Coût faible, et évite de coder `plan === "pro"` partout entre-temps.
 2. **Lot 2 (abonnement pilote)** : table des abonnements, service de paiement, essai, pages tarifs et compte.
 3. **Lot 3 (VACommunity)** : entité compagnie, rôles dans la compagnie, formules Company et Holding, comptage des pilotes actifs.
+
+## 5 bis. Page Offres et catalogue (12/11/2026)
+
+Greg a choisi la mise en page « 4 cartes » (maquettes `offres/v1` et `v2`) avec un lien vers un tableau comparatif, une bannière dessinée par formule, le prix annuel sous le prix mensuel, des boutons alignés, sans essai. Il a demandé une vraie page, prix fictifs, **entièrement alimentée par l'API** et tenue à jour à chaque nouvelle page du site. Réalisé selon la fiche [015 — Catalogue des formules](../decisions/015-catalogue-des-formules.md) : `GET /v1/plans`, pages `/plans` et `/plans/compare`. L'étape 1 de la section 5 est ainsi commencée (catalogue en code, `GET /v1/me/plan`), sans encore de vérification de droits sur les routes.
 
 ## 6. Questions ouvertes pour Greg
 

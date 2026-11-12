@@ -6,7 +6,8 @@
       "logbook": "Mon carnet de bord",
       "flights": "Mes vols",
       "live": "Vols en direct",
-      "profile": "Mon profil public"
+      "profile": "Mon profil public",
+      "plans": "Offres"
     },
     "notMeasured": "non mesuré",
     "mainNav": "Navigation principale",
@@ -599,5 +600,191 @@
   "Fictitious": {
     "badge": "Compte fictif",
     "help": "Compte créé par le simulateur d'activité, pour tester le site. Ce n'est pas un vrai pilote."
+  },
+  "Plans": {
+    "meta": {
+      "title": "Offres",
+      "description": "Pilot Free, Pilot Pro, Company et Holding : ce que contient chaque formule Weems."
+    },
+    "title": "Choisissez votre formule",
+    "lead": "Gratuit pour voler, Pro pour progresser, Company pour faire vivre une compagnie.",
+    "billing": {
+      "label": "Rythme de paiement",
+      "monthly": "Mensuel",
+      "yearly": "Annuel",
+      "yearlyBonus": "2 mois offerts"
+    },
+    "price": {
+      "forever": "pour toujours",
+      "perMonth": "par mois",
+      "perYear": "par an",
+      "orPerYear": "ou {price} par an",
+      "orPerMonth": "ou {price} par mois",
+      "noCard": "sans carte bancaire"
+    },
+    "names": {
+      "pilot_free": "Pilot Free",
+      "pilot_pro": "Pilot Pro",
+      "company": "Company",
+      "holding": "Holding"
+    },
+    "descriptions": {
+      "pilot_free": "Tout pour voler et garder la trace de chaque vol, sans limite.",
+      "pilot_pro": "L'analyse de chaque vol pour progresser comme un vrai équipage.",
+      "company": "Créez et faites vivre votre compagnie virtuelle.",
+      "holding": "Un groupe de plusieurs compagnies sous une même direction."
+    },
+    "audience": {
+      "pilot": "Pour les pilotes",
+      "company": "Pour les compagnies"
+    },
+    "recommended": "Recommandé",
+    "current": "Votre formule",
+    "cta": {
+      "signup": "Créer un compte",
+      "upgrade": "Passer à {plan}",
+      "choose": "Choisir {plan}",
+      "soon": "Paiement bientôt disponible"
+    },
+    "includes": {
+      "pilot": "Tout {plan}, plus :",
+      "company": "{plan} pour vous, plus :",
+      "holding": "Tout {plan}, plus :"
+    },
+    "compareLink": "Comparer toutes les fonctions des formules",
+    "compare": {
+      "title": "Comparer les formules",
+      "lead": "Toutes les fonctions, ligne par ligne.",
+      "back": "Retour aux offres",
+      "feature": "Fonction"
+    },
+    "groups": {
+      "fly": "Voler et suivre",
+      "logbook": "Carnet de vol",
+      "analysis": "Analyser ses vols",
+      "company": "Diriger une compagnie"
+    },
+    "values": {
+      "included": "Inclus",
+      "excluded": "Non inclus",
+      "unlimited": "Illimité"
+    },
+    "features": {
+      "tracker": {
+        "label": "Tracker MSFS 2020 et 2024"
+      },
+      "liveMap": {
+        "label": "Carte des vols en direct"
+      },
+      "publicProfile": {
+        "label": "Profil public"
+      },
+      "flightHistory": {
+        "label": "Tous les vols et l'historique complet"
+      },
+      "simbriefNextFlight": {
+        "label": "Prochain vol SimBrief et lancement du traqueur"
+      },
+      "logbookSummary": {
+        "label": "Résumé du carnet : dernier vol, heures du mois, toucher moyen, régularité"
+      },
+      "flightDetail": {
+        "label": "Fiche de vol : trajet, profil d'altitude, dernière approche, chronologie"
+      },
+      "flightBands": {
+        "label": "Bandes de vol : altitude, vitesse, vario, inclinaison, g, poussée, volets, train, pilote auto… sur tout le vol"
+      },
+      "flightNotes": {
+        "label": "Note privée et étiquettes sur chaque vol"
+      },
+      "basicStats": {
+        "label": "Statistiques de base : heures, catégories, aéroports"
+      },
+      "statsPeriod": {
+        "label": "Période des statistiques",
+        "limited": "Statistiques sur les {count} derniers mois",
+        "unlimited": "Statistiques sur toute la période",
+        "cell": "{count} mois",
+        "cellUnlimited": "Toute la période"
+      },
+      "workOnBasic": {
+        "label": "« À travailler » : rebonds, alertes, remises de gaz"
+      },
+      "goals": {
+        "label": "Objectifs",
+        "limited": "{count, plural, one {# objectif} other {# objectifs}}",
+        "unlimited": "Objectifs illimités",
+        "cell": "{count}",
+        "cellUnlimited": "Illimités"
+      },
+      "approachAnalysis": {
+        "label": "Analyse de l'approche : vitesse, vario, axe à 1 000 et 500 ft, arrondi, zone de toucher"
+      },
+      "workOnDetailed": {
+        "label": "« À travailler » détaillé : arrondi, vitesse à 500 ft"
+      },
+      "flightBandsMarks": {
+        "label": "Repères à revoir sur les bandes de vol : vario trop fort, inclinaison, vitesse sous FL100…"
+      },
+      "plannedVsActual": {
+        "label": "Carburant et horaire prévus et réels (SimBrief)"
+      },
+      "community": {
+        "label": "Vous et la communauté : percentiles par catégorie d'avion"
+      },
+      "compareFlights": {
+        "label": "Comparer deux vols"
+      },
+      "sameAircraftComparison": {
+        "label": "Comparaison avec vos autres vols sur le même avion"
+      },
+      "categoryTrends": {
+        "label": "Tendances par catégorie d'avion"
+      },
+      "phaseTime": {
+        "label": "Analyse du temps passé dans chaque phase"
+      },
+      "export": {
+        "label": "Export CSV et PDF"
+      },
+      "companies": {
+        "label": "Compagnies",
+        "limited": "{count, plural, one {# compagnie} other {# compagnies}}",
+        "unlimited": "Compagnies illimitées",
+        "cell": "{count}",
+        "cellUnlimited": "Illimitées"
+      },
+      "activePilots": {
+        "label": "Pilotes actifs",
+        "limited": "{count} pilotes actifs",
+        "unlimited": "Pilotes actifs illimités*",
+        "cell": "{count, number}",
+        "cellUnlimited": "Illimités*"
+      },
+      "fleetAndRoutes": {
+        "label": "Flotte, routes et horaires"
+      },
+      "flightValidation": {
+        "label": "Validation des vols des pilotes"
+      },
+      "rankings": {
+        "label": "Classements et page publique de la compagnie"
+      },
+      "sharedManagement": {
+        "label": "Équipe de direction partagée"
+      },
+      "groupStats": {
+        "label": "Statistiques consolidées du groupe"
+      }
+    },
+    "reassure": {
+      "dataTitle": "Vos données, toujours",
+      "dataText": "Tous vos vols sont enregistrés, même en gratuit. Passer à Pro débloque l'analyse de tout l'historique.",
+      "freeTitle": "Sans engagement",
+      "freeText": "Résiliable à tout moment. Rien n'est supprimé à la fin de l'abonnement.",
+      "membersTitle": "Pilotes de compagnie gratuits",
+      "membersText": "Les membres d'une compagnie volent avec Pilot Free. Seule la compagnie paie."
+    },
+    "fairUse": "* Usage raisonnable : au-delà de {count, number} pilotes actifs par compagnie, nous contacter."
   }
 }

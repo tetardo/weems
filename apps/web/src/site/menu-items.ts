@@ -1,4 +1,4 @@
-import { FlightsIcon, type IconComponent, LiveIcon, LogbookIcon } from "../ui/icons.ts";
+import { FlightsIcon, type IconComponent, LiveIcon, LogbookIcon, PlansIcon } from "../ui/icons.ts";
 
 /** One entry of the main navigation: a page of the site. */
 export interface MenuItem {
@@ -18,6 +18,7 @@ const MENU: readonly MenuItem[] = [
   { href: "/logbook", label: "logbook", icon: LogbookIcon, open: false },
   { href: "/flights", label: "flights", icon: FlightsIcon, open: false },
   { href: "/live", label: "live", icon: LiveIcon, open: true },
+  { href: "/plans", label: "plans", icon: PlansIcon, open: true },
 ];
 
 /** Entries a pilot sees: all of them when logged in, the open pages otherwise. */

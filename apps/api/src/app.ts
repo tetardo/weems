@@ -50,6 +50,8 @@ import { registerAdminSiteRoutes } from "./modules/site/admin-routes.ts";
 import { SiteRepository } from "./modules/site/repository.ts";
 import { registerSiteRoutes } from "./modules/site/routes.ts";
 import { SiteService } from "./modules/site/service.ts";
+import { registerPlanRoutes } from "./modules/plans/routes.ts";
+import { PlansService } from "./modules/plans/service.ts";
 import { registerStatsRoutes } from "./modules/stats/routes.ts";
 import { StatsService, type StatsSources } from "./modules/stats/service.ts";
 import { SupervisionRepository } from "./modules/supervision/repository.ts";
@@ -85,7 +87,7 @@ function statsSources(accounts: AccountsService, flights: FlightsService, board:
   };
 }
 
-/** What the home page reads (spec J4 accueil) and its images, set from the console. */
+/** What the public pages read: home page (spec J4 accueil, images set from the console) and page Offres (plans). */
 function registerHomePage(
   app: FastifyInstance,
   database: DatabaseHandle,
@@ -93,6 +95,7 @@ function registerHomePage(
   sources: StatsSources,
 ): void {
   registerStatsRoutes(app, new StatsService(sources));
+  registerPlanRoutes(app, new PlansService(), guards);
   const site = new SiteService(new SiteRepository(database.db));
   registerSiteRoutes(app, site);
   registerAdminSiteRoutes(app, site, guards);
