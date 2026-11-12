@@ -64,6 +64,13 @@
       "when": 1794439816248,
       "tag": "0008_fictitious_accounts",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794449106705,
+      "tag": "0009_site_home_images",
+      "breakpoints": true
     }
   ]
 }

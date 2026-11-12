@@ -1,0 +1,7 @@
+flowchart LR
+  G["Greg<br/>console sur le Mac"] -- "image, point important,<br/>crédit, licence" --> A["API<br/>/v1/admin/site/home-images"]
+  A -- "réduite en WebP,<br/>sans métadonnées" --> DB[("PostgreSQL<br/>site_home_images")]
+  S["Site : accueil"] -- "réglages (cache 60 s)" --> P["API<br/>/v1/site/home-images"]
+  P --> DB
+  V["Navigateur du visiteur"] -- "image (cache 1 an)" --> P
+  S -. "sans image envoyée" .-> D["default.jpg<br/>livrée avec le site"]

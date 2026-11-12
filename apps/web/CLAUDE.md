@@ -15,7 +15,7 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 | Trajectoire et progression en direct (J4) | `../../docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md` |
 | Comptes et connexion (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
-| Page d'accueil (J4) | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md` |
+| Page d'accueil (J4) | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md`, images choisies dans la console : `spec-J4-personnalisation.md` |
 | Catégories d'avion (J4) | `../../docs/cahiers-des-charges/spec-J4-categories-avion.md` |
 | Formats reçus de l'API | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 
@@ -49,7 +49,7 @@ src/
   api/profile-api.ts   réglages du profil du pilote connecté
   api/public-api.ts    pages publiques : toujours sans cookie
   auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion
-  home/                accueil : héros et image par thème (home-hero.tsx, home-image.ts), compteurs lus par le serveur (home-stats.ts),
+  home/                accueil : héros (home-hero.tsx), image de chaque thème lue sur l'API ou `public/home/default.jpg` (home-image.ts, testé), compteurs et images lus par le serveur (home-data.ts),
                        tableau des départs (departures.ts testé : phases regroupées, niveau, lignes ; departures-board.tsx, split-flap.tsx)
   site/                cadre public (public-shell, public-nav, public-account, public-menu, language-choice, site-footer) ; cadre des pages (app-shell, barre flottante, onglets, dock mobile, menu du pilote, page active), choix de la langue, adresse de l'API, API injoignable
   ui/                  composants visuels propres au site : icônes, panneau, titre de section (les formulaires et le bouton viennent de `@weems/ui`), fermeture des menus (use-dismiss) ;

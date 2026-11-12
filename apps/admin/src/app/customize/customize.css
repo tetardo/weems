@@ -1,0 +1,159 @@
+/* Page Personnalisation (spec J4 personnalisation, validated mock-up). */
+.hform {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.hcols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.hcol {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.hcol + .hcol {
+  border-left: 1px solid var(--line);
+}
+.hhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.hhead .badge {
+  margin-left: auto;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 99px;
+  background: var(--surface2);
+  color: var(--muted);
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hhead .badge.ok {
+  background: rgb(110 231 168 / 0.15);
+  color: var(--success);
+}
+.hhead .badge.warn,
+.hhead .badge.new {
+  background: rgb(255 180 84 / 0.15);
+  color: var(--accent2);
+}
+.hrow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hsame {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+}
+.hsame input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--link);
+}
+
+/* Small home page: same veil and layout as the site's home. */
+.hprev {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background-size: cover;
+}
+.hprev .veil {
+  position: absolute;
+  inset: 0;
+}
+.hprev.light .veil {
+  background:
+    linear-gradient(90deg, rgb(255 248 240 / 0.92), rgb(255 248 240 / 0.78) 42%, transparent 68%),
+    linear-gradient(180deg, transparent 66%, rgb(255 248 240 / 0.92));
+}
+.hprev.dark .veil {
+  background:
+    linear-gradient(90deg, rgb(14 19 32 / 0.92), rgb(14 19 32 / 0.45) 42%, transparent 68%),
+    linear-gradient(180deg, transparent 66%, rgb(14 19 32 / 0.92));
+}
+.hprev .bar {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 5%;
+  height: 9%;
+  border-radius: 6px;
+}
+.hprev.light .bar {
+  background: rgb(255 255 255 / 0.8);
+}
+.hprev.dark .bar {
+  background: rgb(23 30 46 / 0.8);
+}
+.hprev .slogan {
+  position: absolute;
+  left: 7%;
+  top: 28%;
+  font:
+    700 15px/1.1 var(--font-title, "Space Grotesk"),
+    sans-serif;
+}
+.hprev.light .slogan {
+  color: #1f2430;
+}
+.hprev.dark .slogan {
+  color: #fff;
+}
+.hprev .board {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 6%;
+  height: 20%;
+  border-radius: 6px;
+  background: #0b0f18;
+  opacity: 0.92;
+}
+.hprev .focal {
+  position: absolute;
+  top: 45%;
+  width: 22px;
+  height: 22px;
+  margin: -11px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.35);
+}
+.hprev .phone {
+  position: absolute;
+  right: 3%;
+  bottom: 6%;
+  width: 15%;
+  aspect-ratio: 9 / 19;
+  border-radius: 7px;
+  border: 2px solid #fff;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.4);
+  background-size: cover;
+}
+
+@media (max-width: 767px) {
+  .hcols {
+    grid-template-columns: 1fr;
+  }
+  .hcol + .hcol {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
