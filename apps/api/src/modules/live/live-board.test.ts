@@ -2,6 +2,7 @@ import type { PositionReport } from "@weems/contrats";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { LiveFlightInfo } from "../flights/live-feed.ts";
 import { LiveBoard } from "./live-board.ts";
+import { LivePilots } from "./live-pilots.ts";
 
 const info: LiveFlightInfo = {
   flightId: "0197a000-0000-7000-8000-000000000001",
@@ -12,6 +13,7 @@ const info: LiveFlightInfo = {
   departureIcao: "LFLL",
   plannedArrivalIcao: "LFMN",
   fictitious: false,
+  pilotId: "01970000-0000-7000-8000-000000000001",
 };
 const report = (seq: number): PositionReport => ({
   seq,
@@ -26,6 +28,9 @@ const report = (seq: number): PositionReport => ({
   onGround: false,
 });
 
+const { pilotId: _pilotId, ...shown } = info;
+const camille = { handle: "camille-r", name: "Camille Roux", country: "FR", hasPhoto: false };
+
 let now: number;
 let board: LiveBoard;
 beforeEach(() => {
@@ -38,7 +43,13 @@ describe("live board", () => {
     board.position(info, report(1));
     expect(board.takeUpdate()).toEqual({
       flights: [
-        { ...info, position: report(1), receivedAt: "2026-11-11T08:00:00.000Z", signal: "ok" },
+        {
+          ...shown,
+          pilot: null,
+          position: report(1),
+          receivedAt: "2026-11-11T08:00:00.000Z",
+          signal: "ok",
+        },
       ],
       removed: [],
     });
@@ -76,5 +87,25 @@ describe("live board", () => {
   it("lists every flight on the map in the snapshot", () => {
     board.position(info, report(3));
     expect(board.snapshot().flights.map((f) => f.callsign)).toEqual(["WMS101"]);
+  });
+
+  it("shows the pilot once read, and sends the flight again when the profile changes", async () => {
+    let publicPilots = new Map([[info.pilotId, camille]]);
+    const pilots = new LivePilots(
+      () => Promise.resolve(publicPilots),
+      () => now,
+    );
+    board = new LiveBoard(() => now, pilots);
+    board.position(info, report(1));
+    board.takeUpdate();
+    await board.refreshPilots();
+    const update = board.takeUpdate();
+    expect(update?.flights[0]?.pilot).toEqual(camille);
+    expect(update?.flights[0]).not.toHaveProperty("pilotId");
+
+    publicPilots = new Map();
+    now += 30_000;
+    await board.refreshPilots();
+    expect(board.takeUpdate()?.flights[0]?.pilot).toBeNull();
   });
 });

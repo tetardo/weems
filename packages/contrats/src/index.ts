@@ -42,7 +42,7 @@ export {
   FlightTimes,
 } from "./api/flight-list.ts";
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
-export { LiveFlight, LiveRoute, LiveSnapshot, LiveUpdate } from "./api/live.ts";
+export { LiveFlight, LivePilot, LiveRoute, LiveSnapshot, LiveUpdate } from "./api/live.ts";
 export { SiteStats } from "./api/stats.ts";
 export { Airport, AirportList, AirportsQuery, MAX_AIRPORT_CODES } from "./api/airports.ts";
 export { TrackerLogin } from "./api/tracker-login.ts";

@@ -4,6 +4,20 @@ import { Airport } from "./airports.ts";
 import { AircraftClass } from "./aircraft-class.ts";
 import { FlightId, IcaoCode, UtcTimestamp } from "./common.ts";
 import { PositionReport } from "./flights.ts";
+import { CountryCode, PilotHandle } from "./profiles.ts";
+
+/**
+ * Pilot of a live flight, only while their public profile is on (spec J4, carte en direct):
+ * the map links to the profile. null otherwise, so a private pilot stays anonymous.
+ */
+export const LivePilot = z.object({
+  handle: PilotHandle,
+  name: z.string(),
+  country: CountryCode.nullable(),
+  /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
+  hasPhoto: z.boolean(),
+});
+export type LivePilot = z.infer<typeof LivePilot>;
 
 /** One flight on the live map (spec J1, part 3). */
 export const LiveFlight = z.object({
@@ -20,6 +34,7 @@ export const LiveFlight = z.object({
   receivedAt: UtcTimestamp,
   /** "lost": no position for 60 s; shown greyed. */
   signal: z.enum(["ok", "lost"]),
+  pilot: LivePilot.nullable(),
   /** Flown by a fictitious account of the simulated activity: the map shows a badge. */
   fictitious: z.boolean(),
 });

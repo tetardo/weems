@@ -1,7 +1,10 @@
+import type { AddressInfo } from "node:net";
+import type { LiveFlight, LiveUpdate } from "@weems/contrats";
 import type { FastifyInstance } from "fastify";
 import sharp from "sharp";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { newTrackerPilot } from "../../testing/pilots.ts";
+import { openSse } from "../../testing/sse-client.ts";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
 import { syntheticTrack } from "../../testing/synthetic-track.ts";
 import { startTestApp } from "../../testing/test-app.ts";
@@ -349,5 +352,46 @@ describe("profile photo (spec J4)", () => {
       headers: { cookie: pilot.cookie },
     });
     expect((await visit(`/v1/pilots/${handle}/photo`)).statusCode).toBe(404);
+  });
+});
+
+describe("pilot on the live map (spec J4, carte en direct)", () => {
+  /** The flight as the live stream sends it, once its pilot has been read. */
+  async function seenLive(pilot: Pilot, expected: (flight: LiveFlight) => boolean) {
+    if (!app.server.listening) await app.listen({ port: 0, host: "127.0.0.1" });
+    const { port } = app.server.address() as AddressInfo;
+    const sse = openSse(`http://127.0.0.1:${port}/v1/live/stream`);
+    const flight = syntheticFlight();
+    const { flightId } = flight.open;
+    const send = (url: string, payload: object) =>
+      app.inject({ method: "POST", url, headers: pilot.tracker, payload });
+    await send("/v1/flights", flight.open);
+    await send(`/v1/flights/${flightId}/positions`, flight.position);
+    const live = () =>
+      sse.events
+        .filter((e) => e.event === "update")
+        .flatMap((e) => (e.data as LiveUpdate).flights)
+        .findLast((f) => f.flightId === flightId);
+    const end = Date.now() + 8_000;
+    while (!(live() && expected(live() as LiveFlight)) && Date.now() < end) {
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    await sse.close();
+    return live();
+  }
+
+  it("names a pilot whose profile is public, with a link to the profile", async () => {
+    const { pilot, handle } = await publicPilot({ country: "FR" });
+    const flight = await seenLive(pilot, (f) => f.pilot !== null);
+    expect(flight?.pilot).toEqual({ handle, name: "Test pilot", country: "FR", hasPhoto: false });
+    expect(flight).not.toHaveProperty("pilotId");
+  });
+
+  it("keeps a pilot without public profile anonymous", async () => {
+    const pilot = await newTrackerPilot(app);
+    // Past one batch after the pilots are read: a named pilot would have been sent by then.
+    const readBy = Date.now() + 4_500;
+    const flight = await seenLive(pilot, () => Date.now() > readBy);
+    expect(flight?.pilot).toBeNull();
   });
 });

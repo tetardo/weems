@@ -31,6 +31,7 @@ const info: LiveFlightInfo = {
   departureIcao: "LFLL",
   plannedArrivalIcao: "LFMN",
   fictitious: false,
+  pilotId: "01970000-0000-7000-8000-000000000001",
 };
 const report = (seq: number): PositionReport => ({
   seq,

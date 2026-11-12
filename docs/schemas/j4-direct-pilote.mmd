@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant T as Tracker
+    participant A as API (live)
+    participant P as API (profils)
+    participant S as Site (carte en direct)
+    T->>A: POST position (identifiant du pilote connu de l'API)
+    loop toutes les 2 s
+        A->>P: pilotes nouveaux (et tous toutes les 30 s)
+        P-->>A: pseudo, nom, pays, photo si profil public
+        A-->>S: flux SSE : vols, pilot = null si profil non public
+    end
+    Note over S: survol : bulle + aperçu du trajet
+    Note over S: clic : vol suivi, bouton Profil
+    S->>S: /live?flight=id (lien à partager)

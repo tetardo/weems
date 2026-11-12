@@ -44,7 +44,7 @@ export class LiveStream {
   }
 
   start(): void {
-    this.timers.push(setInterval(() => this.broadcastUpdate(), BATCH_EVERY_MS));
+    this.timers.push(setInterval(() => void this.tick(), BATCH_EVERY_MS));
     this.timers.push(setInterval(() => this.heartbeat(), HEARTBEAT_EVERY_MS));
   }
 
@@ -52,6 +52,16 @@ export class LiveStream {
     this.timers.forEach(clearInterval);
     this.clients.forEach((client) => client.end());
     this.clients.clear();
+  }
+
+  /** Pilots first, so that a batch already carries a pilot who just appeared or left. */
+  async tick(): Promise<void> {
+    try {
+      await this.board.refreshPilots();
+    } catch {
+      // Database unavailable: the batch leaves without fresh pilots; next tick tries again.
+    }
+    this.broadcastUpdate();
   }
 
   broadcastUpdate(): void {
