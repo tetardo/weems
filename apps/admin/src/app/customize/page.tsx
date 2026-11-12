@@ -3,7 +3,7 @@ import { CustomizeView } from "../../features/customize/customize-view.tsx";
 import { ErrorBox } from "../../ui/error-box.tsx";
 import "./customize.css";
 
-export const metadata = { title: "Accueil · Weems Admin" };
+export const metadata = { title: "Personnalisation · Weems Admin" };
 /** Read at each visit: the images change from this page. */
 export const dynamic = "force-dynamic";
 

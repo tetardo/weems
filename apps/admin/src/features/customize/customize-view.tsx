@@ -41,7 +41,7 @@ function Title({ siteUrl }: { siteUrl: string }) {
   return (
     <PageTitle
       icon={<CustomizeIcon />}
-      title="Accueil"
+      title="Personnalisation"
       subtitle="L'image de fond de la page d'accueil, une par thème. Elle est envoyée à l'API : elle vaut pour le site qui lit cette API."
       actions={
         <a className="btn ghost" href={`${siteUrl}/fr`} target="_blank" rel="noreferrer">
