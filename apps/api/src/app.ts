@@ -25,6 +25,7 @@ import { registerFlightRoutes } from "./modules/flights/routes.ts";
 import { FlightsService } from "./modules/flights/service.ts";
 import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
+import { LivePilots } from "./modules/live/live-pilots.ts";
 import { registerDevLiveRoutes } from "./modules/live/dev-routes.ts";
 import { registerLiveRoutes } from "./modules/live/routes.ts";
 import { LiveService } from "./modules/live/service.ts";
@@ -95,6 +96,28 @@ async function createServer(config: Config, logger: boolean): Promise<FastifyIns
   return app;
 }
 
+/** Routes that exist outside production only (simulation, measures, fictitious pilots). */
+function registerDevRoutes(
+  app: FastifyInstance,
+  deps: {
+    database: DatabaseHandle;
+    flights: FlightsService;
+    profileSettings: ProfilesService;
+    guards: Guards;
+    board: LiveBoard;
+    stream: LiveStream;
+  },
+): void {
+  registerDevFlightRoutes(app, deps.flights, deps.guards);
+  registerDevLiveRoutes(app, deps.board, deps.stream);
+  const fictitious = new FictitiousPilotsService(
+    new FictitiousAccountsRepository(deps.database.db),
+    deps.flights,
+    deps.profileSettings,
+  );
+  registerFictitiousPilotRoutes(app, fictitious, deps.guards);
+}
+
 /** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
 export async function buildApp({
   config,
@@ -104,7 +127,7 @@ export async function buildApp({
   const app = await createServer(config, logger);
   registerHealthRoutes(app, database.ping);
   const board = new LiveBoard();
-  const stream = new LiveStream(board);
+  const stream = new LiveStream(board, (err) => app.log.error({ err }, "Live pilots not read"));
   const flights = new FlightsService(new FlightsRepository(database.db), board);
   const accountsRepository = new AccountsRepository(database.db);
   const accounts = new AccountsService(accountsRepository);
@@ -125,20 +148,15 @@ export async function buildApp({
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
   registerProfileRoutes(app, profileSettings, guards);
-  registerPublicProfileRoutes(app, new PublicProfilesService(profiles, flights, tracks, accounts));
+  const publicProfiles = new PublicProfilesService(profiles, flights, tracks, accounts);
+  registerPublicProfileRoutes(app, publicProfiles);
+  board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));
   const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));
   if (config.env !== "production") {
-    registerDevFlightRoutes(app, flights, guards);
-    registerDevLiveRoutes(app, board, stream);
-    const fictitious = new FictitiousPilotsService(
-      new FictitiousAccountsRepository(database.db),
-      flights,
-      profileSettings,
-    );
-    registerFictitiousPilotRoutes(app, fictitious, guards);
+    registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());

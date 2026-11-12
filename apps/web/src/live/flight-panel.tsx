@@ -1,48 +1,68 @@
-import type { LiveFlight, LiveRoute } from "@weems/contrats";
-import { useFormatter, useTranslations } from "next-intl";
-import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
-import { RouteSummary } from "./route-summary.tsx";
+import type { LiveFlight } from "@weems/contrats";
+import { useTranslations } from "next-intl";
+import { buttonClass } from "@weems/ui";
+import { Link } from "../i18n/navigation.ts";
+import { CloseIcon, OpenProfileIcon, RecenterIcon } from "../ui/icons.ts";
+import { ShareButton } from "../ui/share-button.tsx";
+import type { Airports } from "./airport-book.ts";
+import { FlightFacts } from "./flight-facts.tsx";
+import { PilotLine } from "./pilot-line.tsx";
 
 interface Props {
   flight: LiveFlight;
-  route: LiveRoute | null;
+  airports: Airports;
   onClose: () => void;
+  onRecenter: () => void;
 }
 
-/** Details of the selected flight (spec J1, part 4) and its progress along the route. */
-export function FlightPanel({ flight, route, onClose }: Props) {
-  const t = useTranslations("Live");
-  const phases = useTranslations("Phases");
-  const format = useFormatter();
-  const number = (value: number) => format.number(value, { maximumFractionDigits: 0 });
-  const { position } = flight;
-  const rows: [string, string][] = [
-    [t("fields.aircraft"), flight.aircraftTitle],
-    [t("fields.departure"), flight.departureIcao ?? "—"],
-    [t("fields.arrival"), flight.plannedArrivalIcao ?? "—"],
-    [t("fields.phase"), phases(position.phase)],
-    [t("fields.altitude"), `${number(position.altMsl)} ft`],
-    [t("fields.groundSpeed"), `${number(position.gs)} kt`],
-  ];
+/**
+ * The followed flight (spec J4, carte en direct, variant B): its facts, its pilot with a link
+ * to the public profile when there is one, and the actions. A card on the right on a computer,
+ * a sheet at the bottom of a phone screen, leaving the route visible above it.
+ */
+export function FlightPanel({ flight, airports, onClose, onRecenter }: Props) {
+  const t = useTranslations("Live.panel");
+  const { pilot } = flight;
   return (
-    <aside className="absolute top-21 right-3 w-60 sm:right-6 rounded-2xl border border-line bg-surface p-3 shadow-[0_8px_24px_rgb(0_0_0/.18)]">
-      <div className="flex items-baseline justify-between">
-        <strong className="text-lg">{flight.callsign}</strong>
-        <button type="button" onClick={onClose} aria-label={t("close")}>
-          ×
+    <aside className="absolute top-21 right-3 z-20 w-80 rounded-2xl border border-line bg-surface px-4 py-3.5 shadow-[0_14px_36px_rgb(0_0_0/.25)] sm:right-6 max-md:fixed max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:z-40 max-md:w-auto max-md:rounded-b-none max-md:pb-6">
+      <div className="flex items-center justify-between">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-accent px-2 py-0.5 text-[12px] font-semibold text-accent">
+          <RecenterIcon size={13} aria-hidden="true" />
+          {t("followed")}
+        </span>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t("close")}
+          className="grid size-11 place-items-center text-muted -mr-2"
+        >
+          <CloseIcon size={20} aria-hidden="true" />
         </button>
       </div>
-      {flight.fictitious && <FictitiousBadge />}
-      {flight.signal === "lost" && <p className="my-1 text-accent-2">{t("signalLost")}</p>}
-      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
-        {rows.map(([label, value]) => (
-          <div key={label} className="contents">
-            <dt className="text-muted">{label}</dt>
-            <dd className="m-0">{value}</dd>
-          </div>
-        ))}
-      </dl>
-      <RouteSummary flight={flight} route={route} />
+      <FlightFacts flight={flight} airports={airports} />
+      <div className="mt-3 flex items-center gap-2.5 rounded-[14px] border border-line p-2.5">
+        <PilotLine pilot={pilot} />
+        {pilot && (
+          <Link
+            href={`/pilots/${pilot.handle}`}
+            className={`${buttonClass("primary")} ml-auto flex-none`}
+          >
+            {t("profile")}
+            <OpenProfileIcon size={16} aria-hidden="true" />
+          </Link>
+        )}
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <ShareButton
+          label={t("share")}
+          copied={t("copied")}
+          title={t("shareTitle", { callsign: flight.callsign })}
+        />
+        <button type="button" onClick={onRecenter} className={buttonClass("outline")}>
+          <RecenterIcon size={16} aria-hidden="true" />
+          {t("recenter")}
+        </button>
+      </div>
     </aside>
   );
 }

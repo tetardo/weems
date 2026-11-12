@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { buttonClass } from "@weems/ui";
-import { ShareIcon } from "../ui/icons.ts";
+import { ShareIcon } from "./icons.ts";
 
 /** « Share »: the phone's share sheet when there is one, else the address copied to the clipboard. */
 export function ShareButton({

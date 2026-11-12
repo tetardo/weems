@@ -1,4 +1,5 @@
 import type {
+  LivePilot,
   PilotRoutes,
   PublicFlightList,
   PublicFlightView,
@@ -67,6 +68,21 @@ export class PublicProfilesService {
       stats: pilotStats(flights, tracks, now),
       charts: pilotCharts(flights, tracks, now),
     };
+  }
+
+  /**
+   * Pilots of the live map whose public profile is on, by pilot id; the others are left out and
+   * stay anonymous on the map (spec J4, carte en direct).
+   */
+  async livePilots(pilotIds: string[]): Promise<Map<string, LivePilot>> {
+    const profiles = await this.repository.publicOf(pilotIds);
+    const names = await this.accounts.namesOf(profiles.map((profile) => profile.pilotId));
+    return new Map(
+      profiles.flatMap(({ pilotId, ...profile }) => {
+        const name = names.get(pilotId);
+        return name === undefined ? [] : [[pilotId, { ...profile, name }] as const];
+      }),
+    );
   }
 
   async flightList(
