@@ -1,14 +1,14 @@
-import { pilotPhotoUrl } from "../site/api-relay.ts";
-
 /**
- * Photo of a pilot with a public profile, or the first letter of the name when there is none.
+ * Photo of a pilot (at `src`), or the first letter of the name when there is none.
  * `className` sets the size and the letter's font size.
  */
 export function PilotAvatar({
   pilot,
+  src,
   className,
 }: {
-  pilot: { handle: string; name: string; hasPhoto: boolean };
+  pilot: { name: string; hasPhoto: boolean };
+  src: string;
   className: string;
 }) {
   return (
@@ -17,7 +17,7 @@ export function PilotAvatar({
     >
       {pilot.hasPhoto ? (
         // Plain img: served by the API through the site, already 256 px.
-        <img src={pilotPhotoUrl(pilot.handle)} alt="" className="size-full object-cover" />
+        <img src={src} alt="" className="size-full object-cover" />
       ) : (
         pilot.name.slice(0, 1).toUpperCase()
       )}

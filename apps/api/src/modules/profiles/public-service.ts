@@ -1,5 +1,6 @@
 import type {
   LivePilot,
+  PilotPage,
   PilotRoutes,
   PublicFlightList,
   PublicFlightView,
@@ -20,6 +21,12 @@ import { pilotStats } from "./stats.ts";
 /** Same answer for an unknown, private or deleted profile: nobody learns that a handle exists. */
 const noProfile = () => notFound("No public profile at this address.");
 const noFlight = () => notFound("No public flight at this address.");
+
+/** A page of a flight list: cursor of the previous page's end, flights per page. */
+export interface ListQuery {
+  cursor?: string | undefined;
+  limit: number;
+}
 
 function publicLine({ summary, events }: SummaryWithEvents): PublicFlightList["flights"][number] {
   const { closeReason: _reason, ...line } = summary;
@@ -46,14 +53,24 @@ export class PublicProfilesService {
   }
 
   async pilot(handle: string): Promise<PublicPilot> {
-    const profile = await this.publicProfile(handle);
+    return { handle, ...(await this.pageOf(await this.publicProfile(handle))) };
+  }
+
+  async flightList(handle: string, query: ListQuery): Promise<PublicFlightList> {
+    return this.flightListOf(await this.publicProfile(handle), query);
+  }
+
+  /**
+   * The page of a profile, public or not: the caller decides who may read it (public routes by
+   * handle, or the pilot's own logbook).
+   */
+  async pageOf(profile: ProfileRecord): Promise<PilotPage> {
     const identity = await this.accounts.pilot(profile.pilotId);
     if (!identity) throw noProfile();
     const flights = await this.flights.allPublic(profile.pilotId, await this.hidden(profile));
     const tracks = await this.tracks.simplifiedOf(flights.map((f) => f.summary.flightId));
     const now = new Date();
     return {
-      handle,
       name: identity.name,
       country: profile.country,
       homeIcao: profile.homeIcao,
@@ -85,13 +102,16 @@ export class PublicProfilesService {
     );
   }
 
-  async flightList(
-    handle: string,
-    query: { cursor?: string | undefined; limit: number },
-  ): Promise<PublicFlightList> {
-    const profile = await this.publicProfile(handle);
+  async flightListOf(profile: ProfileRecord, query: ListQuery): Promise<PublicFlightList> {
     const page = await this.flights.listPublic(profile.pilotId, await this.hidden(profile), query);
     return { flights: page.flights.map(publicLine), nextCursor: page.nextCursor };
+  }
+
+  async routeMapOf(profile: ProfileRecord): Promise<PilotRoutes> {
+    const flights = await this.flights.allPublic(profile.pilotId, await this.hidden(profile));
+    const summaries = flights.map((f) => f.summary);
+    const endpoints = await this.tracks.endpoints(summaries.map((f) => f.flightId));
+    return { routes: routesOf(summaries, endpoints) };
   }
 
   async flight(handle: string, flightId: string): Promise<PublicFlightView> {
@@ -104,11 +124,7 @@ export class PublicProfilesService {
   }
 
   async routes(handle: string): Promise<PilotRoutes> {
-    const profile = await this.publicProfile(handle);
-    const flights = await this.flights.allPublic(profile.pilotId, await this.hidden(profile));
-    const summaries = flights.map((f) => f.summary);
-    const endpoints = await this.tracks.endpoints(summaries.map((f) => f.flightId));
-    return { routes: routesOf(summaries, endpoints) };
+    return this.routeMapOf(await this.publicProfile(handle));
   }
 
   async photo(handle: string): Promise<Buffer> {

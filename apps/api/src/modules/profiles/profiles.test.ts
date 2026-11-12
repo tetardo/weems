@@ -4,9 +4,14 @@ import type { FastifyInstance } from "fastify";
 import sharp from "sharp";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { newTrackerPilot } from "../../testing/pilots.ts";
+import {
+  fly as flyAs,
+  type Pilot,
+  saveProfile as save,
+  uniqueHandle,
+} from "../../testing/profiles.ts";
 import { openSse } from "../../testing/sse-client.ts";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
-import { syntheticTrack } from "../../testing/synthetic-track.ts";
 import { startTestApp } from "../../testing/test-app.ts";
 
 let app: FastifyInstance;
@@ -17,45 +22,8 @@ beforeAll(async () => {
 });
 afterAll(() => stop());
 
-type Pilot = Awaited<ReturnType<typeof newTrackerPilot>>;
-const EMPTY = {
-  country: null,
-  homeIcao: null,
-  level: null,
-  vatsimId: null,
-  ivaoId: null,
-  instagram: null,
-  facebook: null,
-  simbriefId: null,
-};
-let counter = 0;
-const uniqueHandle = () => `pilot-${Date.now().toString(36)}-${++counter}`;
-
-/** A flight sent by the pilot's tracker; closed with a trajectory unless told otherwise. */
-async function fly(pilot: Pilot, { closed = true, touchdownVs = -120 } = {}): Promise<string> {
-  const flight = syntheticFlight();
-  const { flightId } = flight.open;
-  const send = (url: string, payload: unknown, method: "POST" | "PUT" = "POST") =>
-    app.inject({ method, url, headers: pilot.tracker, payload: payload as object });
-  await send("/v1/flights", flight.open);
-  const events = flight.events.map((e) =>
-    e.type === "touchdown" ? { ...e, context: { vs: touchdownVs } } : e,
-  );
-  await send(`/v1/flights/${flightId}/events`, { events });
-  if (closed) {
-    await send(`/v1/flights/${flightId}/close`, flight.close);
-    await send(`/v1/flights/${flightId}/track`, { points: syntheticTrack(600) });
-  }
-  return flightId;
-}
-
-const saveProfile = (pilot: Pilot, body: Record<string, unknown>) =>
-  app.inject({
-    method: "PUT",
-    url: "/v1/me/profile",
-    headers: { cookie: pilot.cookie },
-    payload: { ...EMPTY, isPublic: false, handle: null, ...body },
-  });
+const fly = (pilot: Pilot, options?: Parameters<typeof flyAs>[2]) => flyAs(app, pilot, options);
+const saveProfile = (pilot: Pilot, body: Record<string, unknown>) => save(app, pilot, body);
 
 async function publicPilot(fields: Record<string, unknown> = {}) {
   const pilot = await newTrackerPilot(app);

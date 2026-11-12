@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { type AuthError, authRequest } from "./auth-request.ts";
 import { Button } from "@weems/ui";
-import { safeNext } from "./session-cookie.ts";
+import { LANDING_PAGE, safeNext } from "./session-cookie.ts";
 
 interface Props {
   path: "/sign-in/email" | "/sign-up/email";
@@ -15,7 +15,7 @@ interface Props {
 
 /**
  * Login or sign-up form: sends the fields to the API, then goes back to the tracker
- * (OAuth), to the page asked before login (`next`), or to the pilot's flights.
+ * (OAuth), to the page asked before login (`next`), or to the pilot's logbook.
  * Full page loads, so that every page is rendered again with the new session.
  */
 export function AuthForm({ path, submitLabel, children }: Props) {
@@ -35,7 +35,9 @@ export function AuthForm({ path, submitLabel, children }: Props) {
       setBusy(false);
       return;
     }
-    window.location.assign(result.redirectTo ?? safeNext(search.get("next"), `/${locale}/flights`));
+    window.location.assign(
+      result.redirectTo ?? safeNext(search.get("next"), `/${locale}${LANDING_PAGE}`),
+    );
   }
 
   return (

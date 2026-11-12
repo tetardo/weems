@@ -14,3 +14,6 @@ export function hasSessionCookie(names: Iterable<string>): boolean {
 export function safeNext(next: string | null | undefined, fallback: string): string {
   return next?.startsWith("/") && !next.startsWith("//") ? next : fallback;
 }
+
+/** Page a pilot lands on after login or sign-up (without the language): their logbook. */
+export const LANDING_PAGE = "/logbook";

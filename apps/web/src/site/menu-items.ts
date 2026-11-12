@@ -1,4 +1,4 @@
-import { FlightsIcon, type IconComponent, LiveIcon } from "../ui/icons.ts";
+import { FlightsIcon, type IconComponent, LiveIcon, LogbookIcon } from "../ui/icons.ts";
 
 /** One entry of the main navigation: a page of the site. */
 export interface MenuItem {
@@ -15,6 +15,7 @@ export interface MenuItem {
  * Decision 003: at most 5 entries here; later groups (« Ma compagnie », lot 3) open a menu.
  */
 const MENU: readonly MenuItem[] = [
+  { href: "/logbook", label: "logbook", icon: LogbookIcon, open: false },
   { href: "/flights", label: "flights", icon: FlightsIcon, open: false },
   { href: "/live", label: "live", icon: LiveIcon, open: true },
 ];

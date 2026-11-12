@@ -148,6 +148,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | `GET /v1/flights/{id}/visibility` | Propriétaire du vol | Savoir si le vol est masqué |
 | `GET /v1/pilots/{handle}/photo` | Public | Photo en WebP 256 × 256 |
 | `GET /v1/pilots` | Public | Profils activés et date de mise à jour, pour le plan du site |
+| `GET /v1/me/logbook`, `…/flights` et `…/routes` | Pilote connecté | Son carnet de bord (ajout du 12/11/2026) : la page publique telle que la voient les visiteurs (vols terminés non masqués), même quand le profil n'est pas public ; adresse (`handle`, nulle tant qu'elle n'est pas choisie) et `isPublic` en plus |
 
 - Base : nouvelle table `pilot_profiles` (compte, pseudo d'adresse unique, activé oui ou non, pays, aéroport de base, niveau, identifiants VATSIM, IVAO et SimBrief, comptes Instagram et Facebook, dates d'activation, de désactivation et de mise à jour), une table `profile_hidden_flights` (vols masqués, avec le pilote) et une table `pilot_photos`. Ni la table `flights` ni celles de Better Auth ne changent : le module `profiles` n'écrit que dans ses tables, et lit les vols par le service du module `flights`.
 - Formats des réponses publiques dans `packages/contrats`, **distincts** des formats privés : un format public ne contient que les champs de la colonne « public » ci-dessus. C'est ce qui empêche une fuite si on ajoute plus tard un champ privé à un vol.
@@ -159,6 +160,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 - `proxy.ts` : `/pilots/*`, `sitemap.xml` et `robots.txt` ouverts sans compte ; le reste du site reste derrière la connexion.
 - Les composants de la page de vol sont réutilisés tels quels (`src/flight/`) ; la page publique ne fait que changer la source des données (routes publiques, sans cookie).
 - Nouveau dossier `src/profile/` : statistiques, en-tête, réglages.
+- Carnet de bord (ajout du 12/11/2026, demande de Greg) : bouton « Mon carnet de bord » en premier dans la barre, page `/logbook` réservée au pilote connecté et page d'arrivée après connexion ou inscription. Elle montre la même page que le profil public (mêmes composants, `src/profile/profile-page.tsx`), avec un bandeau au-dessus : « Aperçu, vous seul le voyez » et un lien vers les réglages tant que le profil n'est pas public, sinon un lien vers la page publique. La photo est celle du pilote (`/api/me/profile/photo`), les vols ouvrent sa page de vol privée (`/flights/{id}`), et le bouton « Partager » n'apparaît qu'une fois le profil public (il partage alors l'adresse publique, jamais `/logbook`). Liens des deux pages : `src/profile/profile-links.ts`.
 
 ## 8. Tests
 

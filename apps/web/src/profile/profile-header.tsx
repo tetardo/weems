@@ -1,4 +1,4 @@
-import type { PublicPilot } from "@weems/contrats";
+import type { PilotPage } from "@weems/contrats";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { countryName } from "../format/countries.ts";
 import { CountryFlag } from "../ui/country-flag.tsx";
@@ -6,6 +6,7 @@ import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
 import { InfoTip } from "../ui/info-tip.tsx";
 import { PilotAvatar } from "../ui/pilot-avatar.tsx";
 import { ShareButton } from "../ui/share-button.tsx";
+import type { ProfileLinks } from "./profile-links.ts";
 
 /** Circumference of the Earth at the equator, nautical miles. */
 const EARTH_NM = 21_600;
@@ -35,7 +36,7 @@ const ACCOUNTS = {
 };
 type Account = keyof typeof ACCOUNTS;
 
-function Networks({ pilot }: { pilot: PublicPilot }) {
+function Networks({ pilot }: { pilot: PilotPage }) {
   const ids: Record<Account, string | null> = {
     VATSIM: pilot.vatsimId,
     IVAO: pilot.ivaoId,
@@ -63,7 +64,7 @@ function Networks({ pilot }: { pilot: PublicPilot }) {
 }
 
 /** Name, flag, level, then the facts line and the network links. */
-function Identity({ pilot, country }: { pilot: PublicPilot; country: string | null }) {
+function Identity({ pilot, country }: { pilot: PilotPage; country: string | null }) {
   const t = useTranslations("Profile.header");
   const help = useTranslations("Profile.help");
   const levels = useTranslations("Profile.levels");
@@ -99,7 +100,7 @@ function Identity({ pilot, country }: { pilot: PublicPilot; country: string | nu
 }
 
 /** Distance flown, with its Earth-lap equivalent, and the share button. */
-function DistanceAndShare({ pilot }: { pilot: PublicPilot }) {
+function DistanceAndShare({ pilot, share }: { pilot: PilotPage; share: string | null }) {
   const t = useTranslations("Profile.header");
   const help = useTranslations("Profile.help");
   const format = useFormatter();
@@ -115,27 +116,31 @@ function DistanceAndShare({ pilot }: { pilot: PublicPilot }) {
         </span>
         <InfoTip text={help("distance")} label={help("label")} />
       </div>
-      <ShareButton
-        label={t("share")}
-        copied={t("copied")}
-        title={t("shareTitle", { name: pilot.name })}
-      />
+      {share && (
+        <ShareButton
+          path={share}
+          label={t("share")}
+          copied={t("copied")}
+          title={t("shareTitle", { name: pilot.name })}
+        />
+      )}
     </div>
   );
 }
 
 /** Head of a public profile (spec J4): photo, name, country, level, facts, networks, distance. */
-export function ProfileHeader({ pilot }: { pilot: PublicPilot }) {
+export function ProfileHeader({ pilot, links }: { pilot: PilotPage; links: ProfileLinks }) {
   const locale = useLocale();
   const country = pilot.country ? countryName(pilot.country, locale) : null;
   return (
     <section className="grid items-center gap-6 rounded-2xl border border-line bg-surface px-6 py-5 md:grid-cols-[auto_1fr_auto]">
       <PilotAvatar
         pilot={pilot}
+        src={links.photo}
         className="size-26 border-3 border-line text-[38px] max-md:size-20"
       />
       <Identity pilot={pilot} country={country} />
-      <DistanceAndShare pilot={pilot} />
+      <DistanceAndShare pilot={pilot} share={links.share} />
     </section>
   );
 }

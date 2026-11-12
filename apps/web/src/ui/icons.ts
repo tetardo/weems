@@ -30,6 +30,7 @@ export {
   LogOut as SignOutIcon,
   type LucideIcon as IconComponent,
   Moon as ThemeDarkIcon,
+  NotebookPen as LogbookIcon,
   Radar as LiveIcon,
   Radio as NetworkIcon,
   Route as RoutesIcon,

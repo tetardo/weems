@@ -17,7 +17,7 @@ export async function loggedInContext(browser: Browser, siteUrl: string): Promis
   const page = await context.newPage();
   await page.goto(`${siteUrl}/fr/login`);
   await fillLogin(page);
-  await page.waitForURL("**/fr/flights");
+  await page.waitForURL("**/fr/logbook");
   await page.close();
   return context;
 }

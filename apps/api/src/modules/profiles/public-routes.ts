@@ -18,7 +18,8 @@ const tags = ["public profiles"];
 const errors = { 400: Problem, 404: Problem, 429: Problem };
 const handle = z.object({ handle: PilotHandle });
 const handleAndFlight = handle.extend({ flightId: FlightId });
-const listQuery = z.object({
+/** Paging of a public flight list (public pages and the pilot's own logbook). */
+export const listQuery = z.object({
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(20),
 });

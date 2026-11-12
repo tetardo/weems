@@ -3,19 +3,20 @@ import { useTranslations } from "next-intl";
 import { FlightTable, PUBLIC_COLUMNS } from "../flights/flight-table.tsx";
 import { Link } from "../i18n/navigation.ts";
 import { CardBox } from "../ui/card-box.tsx";
+import type { ProfileLinks } from "./profile-links.ts";
 
 /** Flights of a public profile, newest first, 20 per page (spec J4): same table as « My flights ». */
 export function PublicFlights({
-  handle,
+  links,
   list,
   cursor,
 }: {
-  handle: string;
+  links: ProfileLinks;
   list: PublicFlightList;
   cursor: string | undefined;
 }) {
   const t = useTranslations("Profile.flights");
-  const base = `/pilots/${handle}`;
+  const base = links.page;
   if (list.flights.length === 0) {
     return (
       <CardBox>
@@ -26,11 +27,7 @@ export function PublicFlights({
   return (
     <>
       <CardBox flush>
-        <FlightTable
-          flights={list.flights}
-          columns={PUBLIC_COLUMNS}
-          hrefOf={(id) => `${base}/flights/${id}`}
-        />
+        <FlightTable flights={list.flights} columns={PUBLIC_COLUMNS} hrefOf={links.flight} />
       </CardBox>
       <nav className="mt-4 flex gap-4 text-sm">
         {cursor && (

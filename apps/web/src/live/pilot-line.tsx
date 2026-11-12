@@ -2,6 +2,7 @@ import type { LivePilot } from "@weems/contrats";
 import { useLocale, useTranslations } from "next-intl";
 import { countryName } from "../format/countries.ts";
 import { PrivateIcon, AccountIcon } from "../ui/icons.ts";
+import { pilotPhotoUrl } from "../site/api-relay.ts";
 import { PilotAvatar } from "../ui/pilot-avatar.tsx";
 
 /**
@@ -30,7 +31,11 @@ export function PilotLine({ pilot }: { pilot: LivePilot | null }) {
   const country = pilot.country ? ` · ${countryName(pilot.country, locale)}` : "";
   return (
     <div className="flex min-w-0 items-center gap-2.5">
-      <PilotAvatar pilot={pilot} className="size-9.5 text-[15px]" />
+      <PilotAvatar
+        pilot={pilot}
+        src={pilotPhotoUrl(pilot.handle)}
+        className="size-9.5 text-[15px]"
+      />
       <div className="min-w-0 leading-tight">
         <div className="truncate font-semibold">{pilot.name}</div>
         <div className="truncate text-[13px] text-muted">
