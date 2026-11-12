@@ -438,6 +438,110 @@
       "publish": "Le rendre public",
       "open": "Voir la page publique",
       "settings": "Réglages du profil"
+    },
+    "private": "Carnet privé",
+    "public": {
+      "title": "Ma page publique"
+    },
+    "settings": "Réglages du profil",
+    "nav": {
+      "summary": "Résumé",
+      "flights": "Vols",
+      "stats": "Statistiques",
+      "goals": "Objectifs",
+      "soon": "bientôt"
+    },
+    "plan": {
+      "label": "Formule",
+      "free": "Pilot Free",
+      "pro": "Pilot Pro",
+      "upgrade": "Passer à Pilot Pro"
+    },
+    "locked": {
+      "discover": "Découvrir Pilot Pro"
+    },
+    "summary": {
+      "title": "Résumé",
+      "intro": "Votre carnet privé : progression, vols et points à travailler. Tous vos vols comptent, même ceux masqués sur votre page publique.",
+      "empty": "Aucun vol terminé pour l'instant. Lancez le traqueur et faites un premier vol : il apparaîtra ici.",
+      "last": {
+        "title": "Dernier vol",
+        "open": "Voir le vol",
+        "touchdown": "Toucher (ft/min)",
+        "duration": "Durée",
+        "distance": "Distance",
+        "nm": "{nm} nm",
+        "fuel": "Carburant",
+        "bounces": "Rebonds",
+        "alerts": "Alertes",
+        "noAlert": "Aucune"
+      },
+      "stages": {
+        "label": "Profil d'altitude du dernier vol, par phase",
+        "ground": "Roulage",
+        "climb": "Montée",
+        "cruise": "Croisière",
+        "descent": "Descente",
+        "approach": "Approche",
+        "minutes": "{minutes} min",
+        "top": "plus haut : {level}"
+      },
+      "kpis": {
+        "hours": {
+          "label": "Heures ce mois",
+          "sub": "{sign}{delta} par rapport au mois dernier",
+          "same": "autant que le mois dernier"
+        },
+        "touchdown": {
+          "label": "Toucher moyen (10 derniers)",
+          "sub": "{delta} ft/min par rapport aux 10 d'avant",
+          "first": "pas encore de comparaison"
+        },
+        "clean": {
+          "label": "Atterrissages propres",
+          "sub": "{delta} pts sur 30 jours",
+          "first": "sur 30 jours"
+        },
+        "streak": {
+          "label": "Série en cours",
+          "value": "{days, plural, =0 {0 jour} one {# jour} other {# jours}}",
+          "sub": "record : {days, plural, =0 {0 jour} one {# jour} other {# jours}}"
+        }
+      },
+      "landings": {
+        "title": "Progression des touchers",
+        "aside": "moyenne glissante sur 5 vols · zone verte = doux",
+        "empty": "Il faut au moins deux atterrissages mesurés pour tracer la courbe.",
+        "oldest": "plus ancien",
+        "newest": "{count} derniers vols →",
+        "average": "moyenne sur 5"
+      },
+      "regularity": {
+        "title": "Régularité",
+        "aside": "jours de vol, {weeks} dernières semaines",
+        "day": "{flights, plural, one {# vol} other {# vols}}, {time} en l'air",
+        "less": "Moins",
+        "more": "Plus",
+        "total": "{days, plural, =0 {aucun jour de vol} one {# jour de vol} other {# jours de vol}} sur {weeks} semaines"
+      },
+      "workOn": {
+        "title": "À travailler",
+        "aside": "{flights, plural, =0 {aucun vol} one {dernier vol} other {# derniers vols}}",
+        "empty": "Aucun atterrissage pour l'instant.",
+        "bounces": "{count, plural, =0 {Aucun rebond} one {# rebond} other {# rebonds}} sur {flights, plural, one {# atterrissage} other {# atterrissages}}",
+        "alerts": "{count, plural, =0 {Aucun vol avec alerte} one {# vol avec alerte} other {# vols avec alertes}}",
+        "alertsHint": "vols marqués non conformes",
+        "goArounds": "{count, plural, =0 {Aucune remise de gaz} one {# remise de gaz} other {# remises de gaz}}",
+        "detailed": {
+          "title": "Analyse détaillée de vos approches",
+          "text": "Arrondi, vitesse et pente à 1 000 et 500 ft, avec des conseils sur vos derniers vols.",
+          "soon": "bientôt : les critères sont en cours de définition avec un pilote."
+        }
+      },
+      "recent": {
+        "title": "Vols récents",
+        "all": "Tous les vols"
+      }
     }
   },
   "Profile": {

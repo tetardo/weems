@@ -49,6 +49,7 @@ export {
   FlightTimes,
 } from "./api/flight-list.ts";
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
+export { LogbookLastFlight, LogbookSummary } from "./api/logbook.ts";
 export {
   LiveEvent,
   LiveFlight,

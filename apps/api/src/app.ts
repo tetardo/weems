@@ -50,6 +50,8 @@ import { registerAdminSiteRoutes } from "./modules/site/admin-routes.ts";
 import { SiteRepository } from "./modules/site/repository.ts";
 import { registerSiteRoutes } from "./modules/site/routes.ts";
 import { SiteService } from "./modules/site/service.ts";
+import { registerPrivateLogbookRoutes } from "./modules/logbook/routes.ts";
+import { PrivateLogbookService } from "./modules/logbook/service.ts";
 import { registerPlanRoutes } from "./modules/plans/routes.ts";
 import { registerDevPlanRoutes } from "./modules/plans/dev-routes.ts";
 import { TestPlansRepository } from "./modules/plans/repository.ts";
@@ -233,6 +235,7 @@ export async function buildApp({
   registerTrackRoutes(app, tracks, guards);
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
+  registerPrivateLogbookRoutes(app, new PrivateLogbookService(flights, tracks), guards);
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));
