@@ -35,6 +35,9 @@ describe("translations (spec J2, criterion 5)", () => {
     ["Plans.names", PlanId.options],
     ["Plans.descriptions", PlanId.options],
     ["Plans.groups", FeatureGroup.options],
+    // Page Fonctionnalités: every feature of the catalogue is explained, every group introduced.
+    ["Features.items", FeatureKey.options.flatMap((key) => [`${key}.title`, `${key}.text`])],
+    ["Features.groups", FeatureGroup.options],
   ] as const)("translates every value shown under %s", (namespace, values) => {
     for (const value of values) expect(keys(fr)).toContain(`${namespace}.${value}`);
   });

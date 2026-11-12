@@ -2,6 +2,7 @@ import type { FeatureKey, FeatureValue, PlanCatalog, PlanOffer } from "@weems/co
 import { useLocale, useTranslations } from "next-intl";
 import { CardBox } from "../ui/card-box.tsx";
 import { DoneIcon, ExcludedIcon } from "../ui/icons.ts";
+import { FeatureLimit } from "./feature-text.tsx";
 import { featureGroups, formatPrice } from "./plan-display.ts";
 
 /** A cell of the table: tick, dash, or the limit as the feature words it (« 12 mois », « Illimités* »). */
@@ -17,9 +18,11 @@ function ValueCell({ feature, value }: { feature: FeatureKey; value: FeatureValu
       <ExcludedIcon size={17} className="mx-auto text-muted/60" aria-label={t("values.excluded")} />
     );
   }
-  const own = `features.${feature}.${value === "unlimited" ? "cellUnlimited" : "cell"}` as const;
-  if (!t.has(own)) return <b>{value === "unlimited" ? t("values.unlimited") : value}</b>;
-  return <b>{t(own, { count: value === "unlimited" ? 0 : value })}</b>;
+  return (
+    <b>
+      <FeatureLimit feature={feature} value={value} />
+    </b>
+  );
 }
 
 function PlanHeader({ plan }: { plan: PlanOffer }) {

@@ -8,7 +8,8 @@
       "flights": "Mes vols",
       "live": "Vols en direct",
       "profile": "Mon profil public",
-      "plans": "Offres"
+      "plans": "Offres",
+      "features": "Fonctionnalités"
     },
     "notMeasured": "non mesuré",
     "mainNav": "Navigation principale",
@@ -34,7 +35,8 @@
       "legal": "Mentions légales",
       "terms": "Conditions d'utilisation",
       "privacy": "Confidentialité",
-      "contact": "Contact"
+      "contact": "Contact",
+      "features": "Fonctionnalités"
     }
   },
   "Home": {
@@ -889,6 +891,150 @@
     "closing": {
       "title": "Chaque vol compte.",
       "text": "Faites de chacun un pas de plus vers le pilote que vous voulez devenir."
+    }
+  },
+  "Features": {
+    "meta": {
+      "title": "Fonctionnalités",
+      "description": "Toutes les fonctions de Weems, du tracker MSFS à la direction d'une compagnie virtuelle, et la formule qui contient chacune."
+    },
+    "title": "Tout ce que fait Weems",
+    "lead": "Du premier vol enregistré à la direction d'une compagnie : chaque fonction, ce qu'elle vous apporte et la formule qui la contient.",
+    "toc": "Sommaire des fonctionnalités",
+    "free": "Gratuit",
+    "fromPlan": "Dès {plan}",
+    "soon": "Bientôt",
+    "groups": {
+      "fly": "Installez le tracker et volez dans MSFS : chaque vol est enregistré et visible en direct, sans rien saisir.",
+      "logbook": "Votre carnet de bord personnel, rempli tout seul, avec toutes les données de chaque vol.",
+      "analysis": "Comprendre ce qui s'est passé et progresser, vol après vol, avec des repères tirés de la réglementation.",
+      "company": "Créez une compagnie virtuelle, recrutez des pilotes, validez leurs vols et animez vos classements."
+    },
+    "items": {
+      "tracker": {
+        "title": "Tracker MSFS 2020 et 2024",
+        "text": "Une petite application Windows qui se connecte au simulateur, détecte le départ et l'arrivée et envoie le vol, même si la connexion coupe en route."
+      },
+      "liveMap": {
+        "title": "Carte des vols en direct",
+        "text": "Tous les pilotes en vol sur une carte mise à jour en temps réel : trajet parcouru, progression, aéroports actifs, recherche."
+      },
+      "publicProfile": {
+        "title": "Profil public",
+        "text": "Une page à votre nom à partager : heures, distance, avions, derniers vols. Vous choisissez ce qui est public."
+      },
+      "flightHistory": {
+        "title": "Historique complet",
+        "text": "Tous vos vols sont gardés, sans limite de nombre ni de durée, y compris en gratuit."
+      },
+      "simbriefNextFlight": {
+        "title": "Prochain vol SimBrief",
+        "text": "Votre plan de vol SimBrief apparaît dans le carnet ; un bouton lance le tracker prêt à partir."
+      },
+      "logbookSummary": {
+        "title": "Résumé du carnet",
+        "text": "En un coup d'œil : dernier vol, heures du mois, toucher moyen et calendrier de régularité."
+      },
+      "flightDetail": {
+        "title": "Fiche de vol",
+        "text": "Pour chaque vol : trajet sur la carte, profil d'altitude, atterrissage et chronologie des phases."
+      },
+      "flightBands": {
+        "title": "Bandes de vol",
+        "text": "Altitude, vitesse, vario, inclinaison, g, poussée, volets, train, pilote auto… tracés sur toute la durée du vol."
+      },
+      "flightNotes": {
+        "title": "Notes et étiquettes",
+        "text": "Une note privée et des étiquettes sur chaque vol, pour retrouver un exercice ou une ligne."
+      },
+      "basicStats": {
+        "title": "Statistiques de base",
+        "text": "Heures, touchers, jours et heures de vol, routes, avions, aéroports et distance parcourue."
+      },
+      "statsPeriod": {
+        "title": "Période des statistiques",
+        "text": "Les statistiques portent sur les derniers mois en gratuit, sur toute votre carrière avec Pilot Pro."
+      },
+      "workOnBasic": {
+        "title": "« À travailler »",
+        "text": "Les rebonds, alertes et remises de gaz relevés sur vos derniers vols, pour savoir quoi revoir."
+      },
+      "goals": {
+        "title": "Objectifs",
+        "text": "Fixez-vous un objectif (heures, touchers doux, régularité) et suivez sa progression."
+      },
+      "approachAnalysis": {
+        "title": "Analyse de l'approche",
+        "text": "Vitesse, vario et axe à 1 000 et 500 ft, arrondi, zone de toucher : votre approche était-elle stabilisée ?"
+      },
+      "workOnDetailed": {
+        "title": "« À travailler » détaillé",
+        "text": "Le détail de chaque point faible : arrondi trop long, vitesse à 500 ft hors tolérance…"
+      },
+      "flightBandsMarks": {
+        "title": "Repères sur les bandes",
+        "text": "Les moments à revoir sont marqués sur les bandes : vario trop fort, inclinaison, plus de 250 kt sous le FL100."
+      },
+      "plannedVsActual": {
+        "title": "Prévu et réel",
+        "text": "Carburant et horaires prévus par SimBrief comparés à ce que vous avez réellement fait."
+      },
+      "community": {
+        "title": "Vous et la communauté",
+        "text": "Où vous situez-vous ? Percentiles par catégorie d'avion, sur les vols de tous les pilotes."
+      },
+      "compareFlights": {
+        "title": "Comparer deux vols",
+        "text": "Deux vols côte à côte : approche, toucher, carburant, temps par phase."
+      },
+      "sameAircraftComparison": {
+        "title": "Même avion",
+        "text": "Un vol face à vos autres vols sur le même avion."
+      },
+      "categoryTrends": {
+        "title": "Tendances par catégorie",
+        "text": "Votre progression mois après mois, en avion de ligne, en turbopropulseur ou en aviation légère."
+      },
+      "phaseTime": {
+        "title": "Temps par phase",
+        "text": "Le temps passé au roulage, en montée, en croisière et en approche, et son évolution."
+      },
+      "goodPractices": {
+        "title": "Bonnes pratiques",
+        "text": "Vols sans alerte, 250 kt sous le FL100, approches stabilisées, inclinaison en approche : vos taux."
+      },
+      "export": {
+        "title": "Export CSV et PDF",
+        "text": "Vos vols et vos analyses dans un tableur ou un rapport à imprimer."
+      },
+      "companies": {
+        "title": "Compagnies",
+        "text": "Créez votre compagnie virtuelle avec sa page publique ; plusieurs compagnies avec Holding."
+      },
+      "activePilots": {
+        "title": "Pilotes actifs",
+        "text": "Le nombre de pilotes qui volent pour votre compagnie sur 30 jours glissants."
+      },
+      "fleetAndRoutes": {
+        "title": "Flotte, routes et horaires",
+        "text": "Déclarez vos avions et votre réseau ; vos pilotes choisissent leurs vols dedans."
+      },
+      "flightValidation": {
+        "title": "Validation des vols",
+        "text": "Chaque vol est contrôlé (route, avion, règles) puis validé automatiquement ou par l'encadrement."
+      },
+      "rankings": {
+        "title": "Classements",
+        "text": "Heures, touchers, régularité : des classements pour animer la compagnie et sa page publique."
+      },
+      "sharedManagement": {
+        "title": "Direction partagée",
+        "text": "Une même équipe de direction pour toutes les compagnies du groupe."
+      },
+      "groupStats": {
+        "title": "Statistiques du groupe",
+        "text": "Les chiffres de toutes vos compagnies réunis dans un même tableau."
+      }
     }
   }
 }

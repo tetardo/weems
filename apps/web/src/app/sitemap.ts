@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...inEveryLanguage(""),
     ...inEveryLanguage("/discover"),
+    ...inEveryLanguage("/features"),
     ...inEveryLanguage("/plans"),
     ...inEveryLanguage("/plans/compare"),
     ...pilots.flatMap(({ handle, updatedAt }) => inEveryLanguage(`/pilots/${handle}`, updatedAt)),
