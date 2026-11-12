@@ -15,7 +15,7 @@ const TITLES = {
   "/traffic": "Trafic simulé",
   "/activity": "Activité simulée",
   "/accounts": "Comptes",
-  "/customize": "Personnalisation",
+  "/customize": "Accueil",
   "/libraries": "Librairies",
   "/database": "Base de données",
 };

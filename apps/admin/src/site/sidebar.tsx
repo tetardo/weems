@@ -51,32 +51,46 @@ function Shortcuts({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }) {
         <SiteIcon /> Site <ExternalIcon className="c" size={16} />
       </a>
       <a href={`${apiUrl}/docs`} target="_blank" rel="noreferrer">
-        <DocsIcon /> Documentation API <ExternalIcon className="c" size={16} />
+        <DocsIcon /> Doc API <ExternalIcon className="c" size={16} />
       </a>
     </nav>
   );
 }
 
-/** Groups Site and Maintenance of the menu. */
-function SiteAndMaintenance({ on }: { on: (href: string) => string }) {
+type On = (href: string) => string;
+
+/** Group Simulation: the simulated activity, then the simulated traffic. */
+function Simulation({ on, status }: { on: On; status: ReturnType<typeof useConsoleStatus> }) {
   return (
-    <>
-      <nav className="grp">
-        <div className="t">Site</div>
-        <Link href="/customize" className={on("/customize")}>
-          <CustomizeIcon /> Personnalisation
-        </Link>
-      </nav>
-      <nav className="grp">
-        <div className="t">Maintenance</div>
-        <Link href="/libraries" className={on("/libraries")}>
-          <LibrariesIcon /> Librairies
-        </Link>
-        <Link href="/database" className={on("/database")}>
-          <DatabaseIcon /> Base de données
-        </Link>
-      </nav>
-    </>
+    <nav className="grp">
+      <div className="t">Simulation</div>
+      <Link href="/activity" className={on("/activity")}>
+        <ActivityIcon /> Activité simulée
+        {status.activityRunning && <span className="st live">en cours</span>}
+      </Link>
+      <Link href="/traffic" className={on("/traffic")}>
+        <TrafficIcon /> Trafic simulé
+        {status.trafficRunning && <span className="st live">en cours</span>}
+      </Link>
+    </nav>
+  );
+}
+
+/** Group Maintenance: libraries, database and the home page image. */
+function Maintenance({ on }: { on: On }) {
+  return (
+    <nav className="grp">
+      <div className="t">Maintenance</div>
+      <Link href="/libraries" className={on("/libraries")}>
+        <LibrariesIcon /> Librairies
+      </Link>
+      <Link href="/database" className={on("/database")}>
+        <DatabaseIcon /> Base de données
+      </Link>
+      <Link href="/customize" className={on("/customize")}>
+        <CustomizeIcon /> Accueil
+      </Link>
+    </nav>
   );
 }
 
@@ -100,22 +114,15 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
         <Link href="/services" className={on("/services")}>
           <ServicesIcon /> Services <span className="c">{status.running} / 3</span>
         </Link>
-        <Link href="/traffic" className={on("/traffic")}>
-          <TrafficIcon /> Trafic simulé
-          {status.trafficRunning && <span className="st live">en cours</span>}
-        </Link>
-        <Link href="/activity" className={on("/activity")}>
-          <ActivityIcon /> Activité simulée
-          {status.activityRunning && <span className="st live">en cours</span>}
-        </Link>
       </nav>
+      <Simulation on={on} status={status} />
       <nav className="grp">
-        <div className="t">Utilisateurs</div>
+        <div className="t">Administration</div>
         <Link href="/accounts" className={on("/accounts")}>
           <AccountsIcon /> Comptes
         </Link>
       </nav>
-      <SiteAndMaintenance on={on} />
+      <Maintenance on={on} />
       <Shortcuts apiUrl={apiUrl} siteUrl={siteUrl} />
       <LocalState services={status.services} />
     </aside>
