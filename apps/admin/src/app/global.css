@@ -280,15 +280,16 @@ svg.s {
     --line: #dde1ee;
     --ink: #1f2430;
     --muted: #5a6378;
-    --accent: #0e8fa6;
+    /* Same light accent as the site: white text on it stays at WCAG AA (4.7:1). */
+    --accent: #0c7f94;
     --on-accent: #fff;
     --link: #0b7285;
     --accent2: #b86a00;
     --success: #1b7f4b;
     --danger: #c0283d;
-    --soft: rgba(14, 143, 166, 0.1);
+    --soft: rgba(12, 127, 148, 0.1);
     --glass: rgba(255, 255, 255, 0.75);
-    --glow: rgba(14, 143, 166, 0.12);
+    --glow: rgba(12, 127, 148, 0.12);
     --shadow: 0 10px 30px rgba(30, 40, 70, 0.12);
     --term: #141a28;
   }
