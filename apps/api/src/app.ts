@@ -43,7 +43,7 @@ import { TracksService } from "./modules/tracks/service.ts";
 import { LiveStream } from "./modules/live/stream.ts";
 import { registerStatsRoutes } from "./modules/stats/routes.ts";
 import { StatsService } from "./modules/stats/service.ts";
-import { registerAuth } from "./plugins/auth.ts";
+import { type Guards, registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
 
@@ -77,6 +77,28 @@ async function createServer(config: Config, logger: boolean): Promise<FastifyIns
   // Only on the routes that ask for it (public pages): the tracker and the site are not limited.
   await app.register(rateLimit, { global: false });
   return app;
+}
+
+/** Routes that exist outside production only (simulation, measures, fictitious pilots). */
+function registerDevRoutes(
+  app: FastifyInstance,
+  deps: {
+    database: DatabaseHandle;
+    flights: FlightsService;
+    profileSettings: ProfilesService;
+    guards: Guards;
+    board: LiveBoard;
+    stream: LiveStream;
+  },
+): void {
+  registerDevFlightRoutes(app, deps.flights, deps.guards);
+  registerDevLiveRoutes(app, deps.board, deps.stream);
+  const fictitious = new FictitiousPilotsService(
+    new FictitiousAccountsRepository(deps.database.db),
+    deps.flights,
+    deps.profileSettings,
+  );
+  registerFictitiousPilotRoutes(app, fictitious, deps.guards);
 }
 
 /** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
@@ -117,14 +139,7 @@ export async function buildApp({
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerStatsRoutes(app, new StatsService(statsSources(accounts, flights, board)));
   if (config.env !== "production") {
-    registerDevFlightRoutes(app, flights, guards);
-    registerDevLiveRoutes(app, board, stream);
-    const fictitious = new FictitiousPilotsService(
-      new FictitiousAccountsRepository(database.db),
-      flights,
-      profileSettings,
-    );
-    registerFictitiousPilotRoutes(app, fictitious, guards);
+    registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }
   app.addHook("onReady", async () => stream.start());
   app.addHook("preClose", async () => stream.stop());
