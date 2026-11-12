@@ -1,4 +1,5 @@
 import { consoleConfig } from "./console-config.ts";
+import { LibraryChecker } from "./libraries/library-checker.ts";
 import { ServicesManager } from "./services/services-manager.ts";
 import { singleton } from "./singleton.ts";
 import { ActivityRunner } from "./activity/activity-runner.ts";
@@ -12,3 +13,5 @@ export const traffic = (): TrafficRunner =>
   singleton("traffic", () => new TrafficRunner(config(), () => activity().isBusy()));
 export const activity = (): ActivityRunner =>
   singleton("activity", () => new ActivityRunner(config(), () => traffic().isBusy()));
+/** Page Librairies: the last check of the repository's libraries. */
+export const libraries = () => singleton("libraries", () => new LibraryChecker(config()));

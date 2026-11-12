@@ -187,6 +187,37 @@ flowchart LR
 
 **Reporté** : visites de la carte en direct (en cours et cumul), à reprendre plus tard (choix de Greg).
 
+## Page Librairies (12/11/2026)
+
+**But** : suivre les mises à jour des librairies npm du dépôt. Groupe « Maintenance » de la barre latérale, adresse `/libraries`. Maquette validée par Greg : https://claude.ai/artifact/6DiyB6NDHeYb2Lbe56mEsX, captures du code dans `/mnt/project-files/admin/librairies/`.
+
+**Lecture seule** (exigence de Greg) : la page vérifie et renvoie vers la page officielle de chaque librairie. Elle n'installe rien et ne modifie aucun fichier du dépôt. Les mises à jour se font à la main, sur une branche, comme toute modification.
+
+**Sans connexion ni API** : la console lit elle-même, sur le Mac. Une vérification prend 5 à 10 secondes. Elle est lancée par le bouton « Vérifier maintenant » et à la première ouverture quand aucun résultat n'est gardé. Le dernier résultat est gardé dans `apps/admin/.data/libraries.json`.
+
+```mermaid
+flowchart LR
+  P[Page Librairies] -->|Vérifier maintenant| C[Console : LibraryChecker]
+  C -->|pnpm ls -r --depth 0| I[Versions installées, paquets qui les utilisent]
+  C -->|pnpm audit| A[Alertes de sécurité]
+  C -->|registre npm, une fiche par librairie| N[Dernière version, date, page officielle]
+  C --> F[(.data/libraries.json)]
+```
+
+| Partie | Contenu |
+| --- | --- |
+| En-tête | « Lecture seule… », heure de la dernière vérification à gauche, bouton « Vérifier maintenant » à droite. |
+| Tuiles | Librairies directes (et nombre de paquets du dépôt) ; à jour ; mises à jour disponibles (majeures, mineures, correctifs) ; alertes de sécurité par gravité. |
+| À corriger en priorité | Une carte par librairie vulnérable : gravité, directe ou indirecte, chaque alerte avec son lien, chemin de dépendance et version qui corrige tout. Absent quand l'audit ne trouve rien ; bandeau orange quand l'audit n'a pas pu tourner. |
+| Tableau | Librairie (dev, sécurité), paquets qui l'utilisent, installée, dernière, écart, date de sortie de la dernière, icône vers la page officielle. Filtres : à mettre à jour (par défaut), majeures, mineures, correctifs, sécurité, toutes. Regroupement par librairie ou par application. Sur téléphone, une carte par librairie. |
+
+**Règles** :
+- Écart selon la gestion sémantique des versions ; en dessous de 1.0, un changement du deuxième chiffre (0.34 → 0.35) compte comme majeur, affiché « majeure (0.x) ».
+- Mise à jour **retenue** : une librairie gardée volontairement en arrière porte sa raison (liste dans `apps/admin/src/server/libraries/held.ts`, aujourd'hui `@types/node` qui suit Node 24).
+- Page officielle : l'adresse `homepage` déclarée sur npm, gardée seulement si c'est une adresse web (http ou https), sinon la page npm de la librairie. Même contrôle pour les liens des alertes.
+- Date de sortie : lue dans la fiche complète du registre. L'index de recherche, plus léger, refuse les rafales de requêtes et laissait des dates vides.
+- Paquets internes `@weems/*` non listés ; Swift (iPad) et Python hors périmètre pour l'instant.
+
 ## Corrections par rapport à la première maquette
 
 - Il n'existe pas encore de « comptes simulés » : tous les vols simulés appartiennent au pilote de développement. Le filtre « Simulés » disparaît de cette version ; il reviendra avec les comptes simulés (voir hors périmètre).

@@ -9,6 +9,7 @@ import {
   CustomizeIcon,
   DocsIcon,
   ExternalIcon,
+  LibrariesIcon,
   ServicesIcon,
   SiteIcon,
   SupervisionIcon,
@@ -55,6 +56,26 @@ function Shortcuts({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }) {
   );
 }
 
+/** Groups Site and Maintenance of the menu. */
+function SiteAndMaintenance({ on }: { on: (href: string) => string }) {
+  return (
+    <>
+      <nav className="grp">
+        <div className="t">Site</div>
+        <Link href="/customize" className={on("/customize")}>
+          <CustomizeIcon /> Personnalisation
+        </Link>
+      </nav>
+      <nav className="grp">
+        <div className="t">Maintenance</div>
+        <Link href="/libraries" className={on("/libraries")}>
+          <LibrariesIcon /> Librairies
+        </Link>
+      </nav>
+    </>
+  );
+}
+
 export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }) {
   const pathname = usePathname();
   const status = useConsoleStatus();
@@ -90,12 +111,7 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
           <AccountsIcon /> Comptes
         </Link>
       </nav>
-      <nav className="grp">
-        <div className="t">Site</div>
-        <Link href="/customize" className={on("/customize")}>
-          <CustomizeIcon /> Personnalisation
-        </Link>
-      </nav>
+      <SiteAndMaintenance on={on} />
       <Shortcuts apiUrl={apiUrl} siteUrl={siteUrl} />
       <LocalState services={status.services} />
     </aside>
