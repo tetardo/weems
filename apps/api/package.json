@@ -29,7 +29,7 @@
     "fastify-type-provider-zod": "7.0.0",
     "jose": "6.2.17",
     "pg": "8.23.1",
-    "sharp": "0.34.5",
+    "sharp": "0.35.5",
     "zod": "4.6.7"
   },
   "devDependencies": {

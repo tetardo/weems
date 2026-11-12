@@ -1,5 +1,5 @@
 import { HOME_IMAGE_MAX_WIDTH, HOME_IMAGE_MIN_WIDTH } from "@weems/contrats";
-import sharp from "sharp";
+import sharp, { type Sharp } from "sharp";
 import { unprocessable } from "../../plugins/problem.ts";
 
 /** Formats accepted on upload, read from the file content, not from its name or header. */
@@ -14,7 +14,7 @@ export interface NormalizedImage {
   height: number;
 }
 
-async function formatOf(image: sharp.Sharp): Promise<{ format?: string; width?: number }> {
+async function formatOf(image: Sharp): Promise<{ format?: string; width?: number }> {
   try {
     return await image.metadata();
   } catch {
