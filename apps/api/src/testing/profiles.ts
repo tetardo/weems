@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { FastifyInstance } from "fastify";
 import type { newTrackerPilot } from "./pilots.ts";
 import { syntheticFlight } from "./synthetic-flight.ts";
@@ -19,8 +20,8 @@ const EMPTY_PROFILE = {
   simbriefId: null,
 };
 
-let counter = 0;
-export const uniqueHandle = () => `pilot-${Date.now().toString(36)}-${++counter}`;
+/** Unique across the test files, which run in parallel (a counter alone repeats in each file). */
+export const uniqueHandle = () => `pilot-${randomUUID().replaceAll("-", "").slice(0, 16)}`;
 
 /** A flight sent by the pilot's tracker; closed with a trajectory unless told otherwise. */
 export async function fly(
