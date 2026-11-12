@@ -51,7 +51,7 @@ function Shortcuts({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }) {
         <SiteIcon /> Site <ExternalIcon className="c" size={16} />
       </a>
       <a href={`${apiUrl}/docs`} target="_blank" rel="noreferrer">
-        <DocsIcon /> Documentation API <ExternalIcon className="c" size={16} />
+        <DocsIcon /> Doc API <ExternalIcon className="c" size={16} />
       </a>
     </nav>
   );
