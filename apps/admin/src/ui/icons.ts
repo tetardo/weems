@@ -58,4 +58,6 @@ export {
   UserPlus as NewPilotsIcon,
   Flame as MostActiveIcon,
   Clock as HoursIcon,
+  Package as LibrariesIcon,
+  ShieldAlert as SecurityIcon,
 } from "lucide-react";
