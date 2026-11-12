@@ -3,6 +3,7 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { countryName } from "../format/countries.ts";
 import { pilotPhotoUrl } from "../site/api-relay.ts";
 import { CountryFlag } from "../ui/country-flag.tsx";
+import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
 import { InfoTip } from "../ui/info-tip.tsx";
 import { ShareButton } from "./share-button.tsx";
 
@@ -89,6 +90,7 @@ function Identity({ pilot, country }: { pilot: PublicPilot; country: string | nu
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="m-0 text-[2em]">{pilot.name}</h1>
         {pilot.country && country && <CountryFlag code={pilot.country} name={country} />}
+        {pilot.fictitious && <FictitiousBadge />}
         {pilot.level && (
           <span className="rounded-full bg-accent/12 px-3 py-1 text-[13px] font-semibold text-link">
             {t("level", { level: levels(pilot.level) })}

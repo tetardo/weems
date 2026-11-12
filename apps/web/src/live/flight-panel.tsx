@@ -1,5 +1,6 @@
 import type { LiveFlight, LiveRoute } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
+import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
 import { RouteSummary } from "./route-summary.tsx";
 
 interface Props {
@@ -31,6 +32,7 @@ export function FlightPanel({ flight, route, onClose }: Props) {
           ×
         </button>
       </div>
+      {flight.fictitious && <FictitiousBadge />}
       {flight.signal === "lost" && <p className="my-1 text-accent-2">{t("signalLost")}</p>}
       <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
         {rows.map(([label, value]) => (

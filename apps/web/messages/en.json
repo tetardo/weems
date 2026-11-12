@@ -504,5 +504,9 @@
     },
     "estimated": "{category} · estimated",
     "estimatedHint": "Type missing from the Weems catalogue: category estimated from the engines and weight given by the simulator."
+  },
+  "Fictitious": {
+    "badge": "Fictitious account",
+    "help": "Account created by the activity simulator to test the site. Not a real pilot."
   }
 }
