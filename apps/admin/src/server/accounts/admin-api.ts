@@ -20,7 +20,7 @@ export class AdminApiError extends Error {
   }
 }
 
-async function problemOf(response: Response): Promise<AdminApiError> {
+export async function problemOf(response: Response): Promise<AdminApiError> {
   const body = Problem.safeParse(await response.json().catch(() => null));
   const detail = body.success ? (body.data.detail ?? body.data.title) : `HTTP ${response.status}`;
   return new AdminApiError(response.status, detail);

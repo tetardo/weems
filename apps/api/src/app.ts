@@ -41,8 +41,12 @@ import { PostgresTrackStore } from "./modules/tracks/repository.ts";
 import { registerTrackRoutes } from "./modules/tracks/routes.ts";
 import { TracksService } from "./modules/tracks/service.ts";
 import { LiveStream } from "./modules/live/stream.ts";
+import { registerAdminSiteRoutes } from "./modules/site/admin-routes.ts";
+import { SiteRepository } from "./modules/site/repository.ts";
+import { registerSiteRoutes } from "./modules/site/routes.ts";
+import { SiteService } from "./modules/site/service.ts";
 import { registerStatsRoutes } from "./modules/stats/routes.ts";
-import { StatsService } from "./modules/stats/service.ts";
+import { StatsService, type StatsSources } from "./modules/stats/service.ts";
 import { type Guards, registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
@@ -61,6 +65,19 @@ function statsSources(accounts: AccountsService, flights: FlightsService, board:
     countFlights: () => flights.countAll(),
     countLiveFlights: () => board.flightCount,
   };
+}
+
+/** What the home page reads (spec J4 accueil) and its images, set from the console. */
+function registerHomePage(
+  app: FastifyInstance,
+  database: DatabaseHandle,
+  guards: Guards,
+  sources: StatsSources,
+): void {
+  registerStatsRoutes(app, new StatsService(sources));
+  const site = new SiteService(new SiteRepository(database.db));
+  registerSiteRoutes(app, site);
+  registerAdminSiteRoutes(app, site, guards);
 }
 
 /** Fastify with its plugins: validation, errors, documentation, rate limits. */
@@ -137,7 +154,7 @@ export async function buildApp({
   const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
-  registerStatsRoutes(app, new StatsService(statsSources(accounts, flights, board)));
+  registerHomePage(app, database, guards, statsSources(accounts, flights, board));
   if (config.env !== "production") {
     registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }

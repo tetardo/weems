@@ -3,12 +3,9 @@ import type { ReactNode } from "react";
 import { Brand } from "./brand.tsx";
 
 interface Props {
-  /**
-   * Pilot pages: the tabs, centred (mx-auto). Public pages: the links group after the logo
-   * (mr-auto). Either way it takes the free space: the right side stays at the end.
-   */
-  nav?: ReactNode;
-  /** Right side: the pilot's menu, or the way in and the settings of public pages. */
+  /** The links group after the logo (mr-auto: the right side stays at the end). */
+  nav: ReactNode;
+  /** Right side: the way in or the pilot's menu, the theme, the language, the phone menu. */
   account: ReactNode;
   /** Home page: the bar floats over the full-screen image instead of pushing it down. */
   overlay?: boolean;
@@ -24,7 +21,7 @@ export function FloatingBar({ nav, account, overlay = false }: Props) {
     >
       <Brand name={t("name")} />
       {nav}
-      <div className={`ml-auto flex items-center gap-1 ${nav ? "md:ml-0" : ""}`}>{account}</div>
+      <div className="ml-auto flex items-center gap-1 md:ml-0">{account}</div>
     </header>
   );
 }

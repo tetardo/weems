@@ -14,6 +14,7 @@ const TITLES = {
   "/traffic": "Trafic simulé",
   "/activity": "Activité simulée",
   "/accounts": "Comptes",
+  "/customize": "Personnalisation",
 };
 const titleOf = (pathname: string) =>
   Object.entries(TITLES).find(([href]) => pathname.startsWith(href))?.[1] ?? "Admin";

@@ -19,15 +19,17 @@ Sur téléphone : texte en haut, tableau en bas (sans la colonne Niveau), pied d
 
 ## 2. Barre du haut des pages publiques (barre v2)
 
-Elle remplace la barre publique de J4 sur toutes les pages publiques (accueil, carte en direct sans compte, profils publics). Les pages du pilote connecté gardent leur barre (fiche 003).
+Elle remplace la barre publique de J4. Depuis le 12/11/2026 (demande de Greg), c'est la barre de **toutes** les pages, pilote connecté compris (fiche 003, mise à jour du 12/11).
 
 | Position | Visiteur | Pilote connecté |
 | --- | --- | --- |
-| À gauche après le logo, groupe à part | « Découvrir Weems » (renvoie à l'accueil pour l'instant), « Vols en direct » | idem |
-| À droite | « Créer un compte », icône silhouette « Se connecter » | bouton silhouette « Mon compte » (vers Mes vols) |
+| À gauche après le logo, groupe à part (page active en relief) | « Vols en direct » | « Mes vols », « Vols en direct » |
+| À droite | « Créer un compte », icône silhouette « Se connecter » | initiale du pilote : menu « Mon profil public », « Se déconnecter » |
 | Tout à droite | bouton thème (soleil / lune), choix de langue FR \| EN | idem |
 
-Sous 768 px : logo, icône silhouette, thème, FR | EN, bouton menu qui ouvre « Découvrir Weems », « Vols en direct » et « Créer un compte » (ou « Mes vols »).
+Sous 768 px : logo, icône silhouette (ou initiale du pilote), thème, FR | EN, bouton menu qui ouvre les liens de la barre et, pour un visiteur, « Créer un compte ». Plus de dock en bas.
+
+« Découvrir Weems » a été retiré le 12/11 (il menait à l'accueil, comme le logo).
 
 ## 3. Décisions de Greg (12/11/2026, 2 h 22)
 
@@ -61,7 +63,7 @@ Page « Personnalisation » de la console (groupe Site) : une image par thème, 
 
 ## 7. Critères d'acceptation
 
-1. `/fr` et `/en` s'ouvrent sans compte et montrent l'accueil ; un pilote connecté y voit « Mon compte » et « Mes vols ».
+1. `/fr` et `/en` s'ouvrent sans compte et montrent l'accueil ; un pilote connecté y voit « Mes vols » et son initiale.
 2. Les compteurs montrent les nombres de `GET /v1/stats` ; le nombre « en vol » et les lignes suivent le direct sans recharger.
 3. `/live` s'ouvre sans compte, avec la barre publique ; connecté, avec la barre du pilote.
 4. La barre v2 et le pied de page P2 apparaissent sur l'accueil et les profils publics, en clair et en sombre, sur bureau et téléphone.

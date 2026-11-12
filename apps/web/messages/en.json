@@ -4,22 +4,16 @@
     "description": "Flight tracking for simulator pilots",
     "nav": {
       "flights": "My flights",
-      "live": "Live",
+      "live": "Live flights",
       "profile": "My public profile"
     },
-    "language": "Français",
     "notMeasured": "not measured",
     "mainNav": "Main navigation",
     "accountMenu": "{name}'s menu",
     "toggleTheme": "Switch between light and dark theme",
     "public": {
-      "nav": "Explore",
-      "discover": "Discover Weems",
-      "live": "Live flights",
       "signup": "Create an account",
       "login": "Log in",
-      "account": "My account",
-      "flights": "My flights",
       "menu": "Open the menu",
       "closeMenu": "Close the menu"
     },

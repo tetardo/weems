@@ -6,13 +6,20 @@ export interface MenuItem {
   /** Key of the label in Site.nav. */
   readonly label: string;
   readonly icon: IconComponent;
+  /** Shown to visitors too (page open without an account). */
+  readonly open: boolean;
 }
 
 /**
- * Pages of the floating bar (tabs on large screens) and of the dock at the bottom on phones.
+ * Pages of the bar (links after the logo; menu button on phones), the same on every page.
  * Decision 003: at most 5 entries here; later groups (« Ma compagnie », lot 3) open a menu.
  */
-export const MENU: readonly MenuItem[] = [
-  { href: "/flights", label: "flights", icon: FlightsIcon },
-  { href: "/live", label: "live", icon: LiveIcon },
+const MENU: readonly MenuItem[] = [
+  { href: "/flights", label: "flights", icon: FlightsIcon, open: false },
+  { href: "/live", label: "live", icon: LiveIcon, open: true },
 ];
+
+/** Entries a pilot sees: all of them when logged in, the open pages otherwise. */
+export function menuFor(loggedIn: boolean): readonly MenuItem[] {
+  return loggedIn ? MENU : MENU.filter((item) => item.open);
+}

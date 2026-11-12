@@ -1,38 +1,38 @@
 import type { ReactNode } from "react";
 import { FloatingBar } from "./floating-bar.tsx";
 import { LanguageChoice } from "./language-choice.tsx";
-import { PublicAccount } from "./public-account.tsx";
-import { PublicMenu } from "./public-menu.tsx";
-import { PublicNav } from "./public-nav.tsx";
+import { SiteAccount } from "./site-account.tsx";
 import { SiteFooter } from "./site-footer.tsx";
+import { SiteMenu } from "./site-menu.tsx";
+import { SiteNav } from "./site-nav.tsx";
 import { ThemeToggle } from "./theme-toggle.tsx";
 
 interface Props {
   loggedIn: boolean;
   /** Home page: the bar floats over the full-screen image. */
   overlay?: boolean;
-  /** The live map fills the screen: no footer under it. */
+  /** Pilot pages and the live map: no footer. */
   footer?: boolean;
   children: ReactNode;
 }
 
 /**
- * Frame of the public pages (spec J4 accueil, bar v2): links after the logo; on the right the way
- * in, the theme and FR | EN; footer P2 at the bottom.
+ * Frame of every page (decision 003, bar v2 of spec J4 accueil): the pages after the logo; on the
+ * right the way in or the pilot's menu, the theme and FR | EN; footer P2 on public pages.
  */
-export function PublicShell({ loggedIn, overlay = false, footer = true, children }: Props) {
+export function SiteShell({ loggedIn, overlay = false, footer = true, children }: Props) {
   return (
     <div className="app-glow flex min-h-screen flex-col">
       <FloatingBar
         overlay={overlay}
-        nav={<PublicNav />}
+        nav={<SiteNav loggedIn={loggedIn} />}
         account={
           <>
-            <PublicAccount loggedIn={loggedIn} />
+            <SiteAccount loggedIn={loggedIn} />
             <span aria-hidden="true" className="mx-1 h-7 w-px bg-line max-md:hidden" />
             <ThemeToggle />
             <LanguageChoice />
-            <PublicMenu loggedIn={loggedIn} />
+            <SiteMenu loggedIn={loggedIn} />
           </>
         }
       />

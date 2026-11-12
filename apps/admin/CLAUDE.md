@@ -1,6 +1,6 @@
 # Weems — console d'administration
 
-Console **locale** de Greg, sur son Mac : démarrer et arrêter les services, lancer du trafic simulé ou de l'activité simulée (comptes fictifs), gérer les comptes. Jamais déployée (fiche `../../docs/decisions/009-console-admin-locale.md`).
+Console **locale** de Greg, sur son Mac : démarrer et arrêter les services, lancer du trafic simulé ou de l'activité simulée (comptes fictifs), gérer les comptes, choisir l'image de fond de l'accueil du site (page Personnalisation). Jamais déployée (fiche `../../docs/decisions/009-console-admin-locale.md`).
 
 Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 
@@ -11,6 +11,7 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 | Contenu des pages, décisions, critère de sortie | `../../docs/cahiers-des-charges/admin/spec-admin.md` |
 | Pourquoi une console locale, règles d'accès | `../../docs/decisions/009-console-admin-locale.md`, connexion automatique en local : `012-console-connexion-automatique-en-local.md` |
 | Maquettes validées | `/mnt/project-files/admin/` (services-v2, trafic-v2, comptes-v2, activite/ proposition A) |
+| Personnalisation (images de l'accueil) | `../../docs/cahiers-des-charges/web/spec-J4-personnalisation.md` |
 | Comptes fictifs et activité simulée | `../../docs/decisions/011-activite-simulee-comptes-fictifs.md`, `../tracker/tools/populate/` |
 | Routes `/v1/admin/*` de l'API | `../api/src/modules/accounts/admin-routes.ts` |
 | Formats échangés | `../../packages/contrats` (`api/admin.ts`, `api/dev-metrics.ts`, `tools/simulation-progress.ts`, `tools/activity-progress.ts`, `api/fictitious.ts`) |
@@ -28,13 +29,14 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 - Icônes : Lucide, importé seulement dans `src/ui/icons.ts`.
 - Un seul lancement à la fois entre Trafic et Activité : chaque gestionnaire reçoit l'occupation de l'autre (`server/console.ts`).
 - Les processus lancés (pnpm dev, simulate, load, populate) sont gardés dans `globalThis` (`server/singleton.ts`) : un rechargement de Next.js ne les perd pas. Ils reçoivent l'environnement de la console sans `PORT` ni `NODE_ENV` (`childEnv`), sinon l'API prendrait le port 3002.
+- Personnalisation : lecture sans connexion (route publique), enregistrement avec la session de la page Comptes ; l'image passe par une action serveur, d'où la limite de 16 Mo de `next.config.ts` (actions serveur et `proxy.ts`).
 - Fichiers locaux (historique des lancements, rapports de `pnpm load`) dans `apps/admin/.data/`, jamais versionnés.
 
 ## Organisation
 
 ```
 src/
-  app/                 routes Next.js : mise en page (barre latérale G), /services, /traffic, /activity, /accounts, styles ;
+  app/                 routes Next.js : mise en page (barre latérale G), /services, /traffic, /activity, /accounts, /customize, styles ;
                        api/lifecycle (tout démarrer / arrêter, appelé par scripts/mac/)
   proxy.ts             refus des requêtes adressées à un autre nom que 127.0.0.1:3002 / localhost:3002
   actions/             actions serveur appelées par les pages (résultat { ok, value | error }, jamais d'exception)
@@ -45,9 +47,10 @@ src/
     services/            Docker (docker compose), sondes de santé, états des cartes, gestionnaire des services
     traffic/             lancement (formulaires → arguments pnpm), suivi, mesures de l'API, résultat, historique
     activity/            lancement de pnpm populate, suivi, résultat, population fictive (/v1/dev/fictitious-pilots)
-    accounts/            connexion à l'API, appels /v1/admin/*
+    accounts/            connexion à l'API, session gardée (admin-session.ts), appels /v1/admin/*
+    site/                images de l'accueil (site-api.ts : /v1/site/home-images et /v1/admin/site/*)
   site/                barre latérale, barre du haut, onglets mobiles
-  features/            composants des pages : services/, traffic/, activity/, accounts/ (logique pure à part, testée)
+  features/            composants des pages : services/, traffic/, activity/, accounts/, customize/ (logique pure à part, testée)
   ui/                  icônes, champ numérique, état d'un lancement, pastilles d'état, titre de page, confirmation, sondage périodique
   format/              heures, durées, noms des phases
 ```

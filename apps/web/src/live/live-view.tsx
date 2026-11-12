@@ -55,8 +55,8 @@ function useUnfollowGone(selected: LiveFlight | undefined, unfollow: () => void)
 
 /**
  * The /live page: map, flight counter, routes switch, card of the hovered flight and panel of
- * the followed one (spec J4, carte en direct). The map goes up under the floating bar and down
- * under the dock (decision 003): -mt-18 is the bar and its top margin. Airports are always
+ * the followed one (spec J4, carte en direct). The map goes up under the floating bar (decision
+ * 003): -mt-18 is the bar and its top margin. Airports are always
  * loaded: the card and the panel show the progress even with the routes hidden.
  */
 export function LiveView({ apiUrl }: { apiUrl: string }) {
@@ -73,7 +73,7 @@ export function LiveView({ apiUrl }: { apiUrl: string }) {
   const allRoutes = useLiveRoutes(flights, airports, { showRoutes, selected, hovered });
 
   return (
-    <main ref={mapBox} className="relative -mt-18 flex-1 max-md:-mb-24">
+    <main ref={mapBox} className="relative -mt-18 flex-1">
       <LiveMap
         flights={flights}
         selectedId={selectedId}

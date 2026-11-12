@@ -19,7 +19,6 @@ export {
   Save as SaveIcon,
   Share2 as ShareIcon,
   CircleUserRound as ProfileIcon,
-  Globe as LanguageIcon,
   Lock as PrivateIcon,
   LocateFixed as RecenterIcon,
   MousePointerClick as ClickIcon,
