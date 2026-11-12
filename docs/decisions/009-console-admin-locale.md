@@ -1,6 +1,6 @@
 # 009 — Console d'administration locale, sans connexion sauf pour les comptes
 
-Date : 11/11/2026. Proposé par Claude, validé par Greg avec la spec et les maquettes (`docs/cahiers-des-charges/admin/spec-admin.md`).
+Date : 11/11/2026. Proposé par Claude, validé par Greg avec la spec et les maquettes (`docs/cahiers-des-charges/admin/spec-admin.md`). Complétée par la fiche 012 (connexion automatique en local).
 
 ## Contexte
 

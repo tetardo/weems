@@ -87,7 +87,7 @@ flowchart LR
 | 1. Base et API | `docker compose -f apps/api/docker-compose.yml up -d db` puis `pnpm --filter @weems/api dev` | http://localhost:3000/v1/health ; documentation sur http://localhost:3000/docs |
 | 2. Site | `pnpm --filter @weems/web dev` | http://localhost:3001, carte en direct sur http://localhost:3001/live |
 | 3. Console d'administration | `pnpm admin` | http://127.0.0.1:3002 ; l'API et le site y apparaissent « Lancés hors console », c'est normal |
-| 4. Premier administrateur (une seule fois, API lancée) | `pnpm --filter @weems/api make-admin pilote@weems.local` | Connexion à la console avec le compte de développement `pilote@weems.local` / `weems-dev-password` (accepté hors production seulement) |
+| 4. Premier administrateur (une seule fois, API lancée) | `pnpm --filter @weems/api make-admin pilote@weems.local` | La page Comptes de la console s'ouvre ensuite sans connexion : elle se connecte seule avec le compte de développement `pilote@weems.local` (hors production seulement) |
 
 Les migrations de la base sont appliquées au démarrage de l'API. La console peut aussi démarrer elle-même la base, l'API et le site depuis sa page Services.
 

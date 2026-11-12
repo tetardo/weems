@@ -9,7 +9,7 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 | Besoin | Fichier |
 | --- | --- |
 | Contenu des pages, décisions, critère de sortie | `../../docs/cahiers-des-charges/admin/spec-admin.md` |
-| Pourquoi une console locale, règles d'accès | `../../docs/decisions/009-console-admin-locale.md` |
+| Pourquoi une console locale, règles d'accès | `../../docs/decisions/009-console-admin-locale.md`, connexion automatique en local : `012-console-connexion-automatique-en-local.md` |
 | Maquettes validées | `/mnt/project-files/admin/` (services-v2, trafic-v2, comptes-v2, activite/ proposition A) |
 | Comptes fictifs et activité simulée | `../../docs/decisions/011-activite-simulee-comptes-fictifs.md`, `../tracker/tools/populate/` |
 | Routes `/v1/admin/*` de l'API | `../api/src/modules/accounts/admin-routes.ts` |
@@ -21,6 +21,7 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 
 - La console **n'écrit jamais dans la base** : les comptes passent par l'API (`/v1/admin/*`, session d'un administrateur), les vols simulés et les comptes fictifs par les routes de développement de l'API (jeton de développement).
 - Services et Trafic sans connexion, Comptes avec connexion : ne pas changer sans relire la fiche 009.
+- Comptes : hors production, la console se connecte seule avec le pilote de développement (`server/accounts/dev-login.ts`, fiche 012) ; son rôle d'administrateur reste donné à la main (`make-admin`). Ne jamais ouvrir `/v1/admin/*` au jeton de développement.
 - Écoute sur `127.0.0.1` seulement (`--hostname` du script `dev`) ; `src/proxy.ts` refuse toute autre adresse (test `server/allowed-hosts.test.ts`).
 - Français seulement (exception à la règle des deux langues, spec admin question 2) : textes écrits dans les composants.
 - Formulaires : modèle C (fiche 008), composants du paquet `@weems/ui` (`Field`, `FormField`, `TextInput`, `Segmented`…), jamais de champ écrit à la main. Tailwind ne sert qu'à eux : `src/app/global.css` importe son thème et ses utilitaires sans remise à zéro, génère seulement les classes de `packages/ui` et relie leurs couleurs aux variables de la console.
@@ -57,5 +58,5 @@ src/
 | --- | --- |
 | `pnpm admin` (racine) | Console sur http://127.0.0.1:3002 |
 | Icônes Weems Start / Weems Stop (`scripts/mac/`) | Tout démarrer ou tout arrêter, via `POST /api/lifecycle` (`src/server/lifecycle.ts`, guide `../../docs/developpement/demarrage-mac.md`) |
-| `pnpm --filter @weems/api make-admin <e-mail>` | Nomme le premier administrateur (le compte doit exister) |
+| `pnpm --filter @weems/api make-admin <e-mail>` | Nomme un administrateur (le compte doit exister) ; avec `pilote@weems.local`, la page Comptes s'ouvre ensuite sans connexion |
 | `pnpm check` (racine) | Types, style, structure et tests, console comprise |
