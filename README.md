@@ -56,6 +56,7 @@ flowchart LR
 - [Guide PC Windows (J2)](docs/developpement/guide-pc-windows-j2.md) : installer le PC, lancer `pnpm fly`, les 10 vols de référence
 - [Guide d'entretien pilotes](docs/suivi/guide-entretien-pilotes.md) : valider le produit avec 5 pilotes avant l'alpha
 - [Alpha fermée : guide du testeur](docs/alpha/guide-testeur.md) (à envoyer aux pilotes) et [guide de l'organisateur](docs/alpha/guide-organisateur.md) : invitations, publier une version du tracker
+- [Reste à faire pour le traqueur](docs/suivi/reste-a-faire-tracker.md) : travaux décidés, pas encore faits
 - [À voir avec Houssine](docs/suivi/a-voir-avec-houssine.md) : questions en attente pour la communauté
 - [À voir avec Thibault](docs/suivi/a-voir-avec-thibault.md) : questions techniques en attente
 - [Référence MSFS du tracker](apps/tracker/CLAUDE.md) : quelles données lire et comment
