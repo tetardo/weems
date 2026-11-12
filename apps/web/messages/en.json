@@ -3,6 +3,7 @@
     "name": "Weems",
     "description": "Flight tracking for simulator pilots",
     "nav": {
+      "discover": "Discover",
       "logbook": "My logbook",
       "flights": "My flights",
       "live": "Live flights",
@@ -29,6 +30,7 @@
     "testPlanHint": "Test tool, outside production: changes your account's plan to try the Pilot Free and Pilot Pro pages. It will be removed before version 1.0.",
     "footer": {
       "copyright": "© {year} Weems",
+      "discover": "Discover Weems",
       "legal": "Legal notice",
       "terms": "Terms of use",
       "privacy": "Privacy",
@@ -895,5 +897,102 @@
       "membersText": "Members of an airline fly with Pilot Free. Only the airline pays."
     },
     "fairUse": "* Fair use: above {count, number} active pilots per airline, contact us."
+  },
+  "Discover": {
+    "meta": {
+      "title": "Discover Weems · How it works",
+      "description": "A tracker records your MSFS flights, the site tells their story, the community sees them go by, and you improve flight after flight."
+    },
+    "banner": {
+      "eyebrow": "Discover Weems",
+      "title": "Fly, understand, improve.",
+      "slogan": "A tracker records every flight you make in the simulator. The site tells their story, the community sees them go by, and you improve flight after flight.",
+      "plans": "See the plans"
+    },
+    "stepNumber": "Step {number}",
+    "steps": {
+      "tracker": {
+        "title": "A tracker you forget about",
+        "text": "Install it once. It recognises MSFS 2020 and 2024, records your flight from engine start and splits it into 12 phases, from taxi to parking.",
+        "point1": "Nothing to fill in, nothing to start in flight",
+        "point2": "The flight is kept if the connection drops, and sent when it is back",
+        "point3": "A window shows the state of the simulator and the flight"
+      },
+      "followUp": {
+        "title": "Every flight, told",
+        "text": "As soon as you land, your flight is in your logbook: route on the map, altitude profile, phases, landing and flight log.",
+        "point1": "Touchdown rate, bounces, go-arounds",
+        "point2": "Your friends follow your flight live",
+        "point3": "Full history, no flight limit"
+      },
+      "community": {
+        "title": "Fly alone, never isolated",
+        "text": "Your flight shows on the live map, next to the other pilots' flights. Your public profile shows your hours, routes and aircraft, to share wherever you like.",
+        "point1": "Live map open to everyone",
+        "point2": "Public profile to share, private until you publish it",
+        "point3": "Coming soon: virtual airlines and their pilots"
+      },
+      "simplicity": {
+        "title": "Simple from the first flight",
+        "text": "An account, the tracker, and you fly. No flight plan to file, no setting to figure out.",
+        "point1": "Free to fly, no flight limit",
+        "point2": "One account for the site and the tracker",
+        "point3": "In French and English, light or dark"
+      },
+      "training": {
+        "title": "Fly like a real crew",
+        "text": "Weems reviews each flight with airline pilots' benchmarks: stabilised approach, 250 kt below FL100, passenger comfort. It shows you what went well and what to work on.",
+        "point1": "Stabilised approach at 1,000 and 500 ft",
+        "point2": "Speed below FL100 (European SERA rules)",
+        "point3": "Bank angle and g-load felt in the cabin"
+      },
+      "progress": {
+        "title": "See how far you have come",
+        "text": "Hours by aircraft category, average touchdown, regularity: you see your progress flight after flight, and set yourself goals.",
+        "point1": "Basic statistics for everyone",
+        "point2": "Goals and trends over time",
+        "point3": "You and the community, by aircraft category"
+      }
+    },
+    "tags": {
+      "free": "Free",
+      "freeBase": "Free basics",
+      "soonCompanies": "Airlines: coming soon",
+      "proAnalysis": "Detailed analysis: Pilot Pro",
+      "proTrends": "Trends and community: Pilot Pro"
+    },
+    "notice": {
+      "title": "For simulation only.",
+      "text": "Weems does not replace aviation training and is never used for a real flight."
+    },
+    "illustration": {
+      "connected": "MSFS 2024 connected",
+      "aircraft": "A320neo",
+      "cruise": "Cruise FL360",
+      "phase": "Phase 6 of 12",
+      "duration": "1 h 46",
+      "touchdown": "Touchdown",
+      "touchdownValue": "−142 ft/min",
+      "bounces": "0 bounces",
+      "fuel": "Fuel 4.1 t",
+      "live": "27 flights live",
+      "signup": "Create an account",
+      "install": "Install the tracker",
+      "fly": "Fly",
+      "done": "That's all",
+      "approach": "Approach LEBL 25R",
+      "stable": "Stabilised at 1,000 ft",
+      "speed": "On speed at 500 ft",
+      "sinkRate": "Sink rate 1,150 ft/min at 800 ft",
+      "zone": "Touchdown in the zone",
+      "average": "Average touchdown",
+      "trend": "−38% in 3 months",
+      "from": "Aug",
+      "to": "Nov"
+    },
+    "closing": {
+      "title": "Every flight counts.",
+      "text": "Make each one a step closer to the pilot you want to become."
+    }
   }
 }

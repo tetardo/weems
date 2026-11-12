@@ -1,4 +1,14 @@
-import { FlightsIcon, type IconComponent, LiveIcon, LogbookIcon, PlansIcon } from "../ui/icons.ts";
+import {
+  DiscoverIcon,
+  FlightsIcon,
+  type IconComponent,
+  LiveIcon,
+  LogbookIcon,
+  PlansIcon,
+} from "../ui/icons.ts";
+
+/** Who sees an entry: the logged-in pilot, the visitor without an account, or both. */
+type MenuAudience = "pilot" | "visitor" | "everyone";
 
 /** One entry of the main navigation: a page of the site. */
 export interface MenuItem {
@@ -6,22 +16,24 @@ export interface MenuItem {
   /** Key of the label in Site.nav. */
   readonly label: string;
   readonly icon: IconComponent;
-  /** Shown to visitors too (page open without an account). */
-  readonly open: boolean;
+  readonly audience: MenuAudience;
 }
 
 /**
  * Pages of the bar (links after the logo; menu button on phones), the same on every page.
- * Decision 003: at most 5 entries here; later groups (« Ma compagnie », lot 3) open a menu.
+ * Decision 003: at most 5 entries for each audience; later groups (« Ma compagnie », lot 3) open a
+ * menu. « Découvrir » is for visitors only: a pilot already knows Weems (it stays in the footer).
  */
 const MENU: readonly MenuItem[] = [
-  { href: "/logbook", label: "logbook", icon: LogbookIcon, open: false },
-  { href: "/flights", label: "flights", icon: FlightsIcon, open: false },
-  { href: "/live", label: "live", icon: LiveIcon, open: true },
-  { href: "/plans", label: "plans", icon: PlansIcon, open: true },
+  { href: "/discover", label: "discover", icon: DiscoverIcon, audience: "visitor" },
+  { href: "/logbook", label: "logbook", icon: LogbookIcon, audience: "pilot" },
+  { href: "/flights", label: "flights", icon: FlightsIcon, audience: "pilot" },
+  { href: "/live", label: "live", icon: LiveIcon, audience: "everyone" },
+  { href: "/plans", label: "plans", icon: PlansIcon, audience: "everyone" },
 ];
 
-/** Entries a pilot sees: all of them when logged in, the open pages otherwise. */
+/** Entries of the bar for a logged-in pilot or for a visitor. */
 export function menuFor(loggedIn: boolean): readonly MenuItem[] {
-  return loggedIn ? MENU : MENU.filter((item) => item.open);
+  const shown: MenuAudience = loggedIn ? "pilot" : "visitor";
+  return MENU.filter((item) => item.audience === "everyone" || item.audience === shown);
 }
