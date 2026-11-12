@@ -6,6 +6,7 @@ import {
   AccountsIcon,
   ActivityIcon,
   ServicesIcon,
+  SupervisionIcon,
   TerminalIcon,
   TrafficIcon,
 } from "../ui/icons.ts";
@@ -17,7 +18,9 @@ const TITLES = {
   "/customize": "Personnalisation",
 };
 const titleOf = (pathname: string) =>
-  Object.entries(TITLES).find(([href]) => pathname.startsWith(href))?.[1] ?? "Admin";
+  pathname === "/"
+    ? "Supervision"
+    : (Object.entries(TITLES).find(([href]) => pathname.startsWith(href))?.[1] ?? "Admin");
 
 export function TopBar() {
   const pathname = usePathname();
@@ -39,9 +42,13 @@ export function TopBar() {
 /** Bottom tab bar under 640 px. */
 export function MobileTabs() {
   const pathname = usePathname();
-  const on = (href: string) => (pathname.startsWith(href) ? "on" : "");
+  const on = (href: string) =>
+    (href === "/" ? pathname === "/" : pathname.startsWith(href)) ? "on" : "";
   return (
     <nav className="mtabs">
+      <Link href="/" className={on("/")}>
+        <SupervisionIcon size={22} /> Supervision
+      </Link>
       <Link href="/services" className={on("/services")}>
         <ServicesIcon size={22} /> Services
       </Link>

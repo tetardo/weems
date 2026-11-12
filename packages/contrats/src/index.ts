@@ -60,6 +60,15 @@ export {
 } from "./api/live.ts";
 export { SiteStats } from "./api/stats.ts";
 export {
+  AdminSupervision,
+  SupervisionActivity,
+  SupervisionCommunity,
+  SupervisionEvent,
+  SupervisionEventKind,
+  SupervisionHealth,
+  SupervisionTiles,
+} from "./api/supervision.ts";
+export {
   HOME_IMAGE_MAX_BYTES,
   HOME_IMAGE_MAX_WIDTH,
   HOME_IMAGE_MIN_WIDTH,

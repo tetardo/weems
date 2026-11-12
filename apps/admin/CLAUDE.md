@@ -1,6 +1,6 @@
 # Weems — console d'administration
 
-Console **locale** de Greg, sur son Mac : démarrer et arrêter les services, lancer du trafic simulé ou de l'activité simulée (comptes fictifs), gérer les comptes, choisir l'image de fond de l'accueil du site (page Personnalisation). Jamais déployée (fiche `../../docs/decisions/009-console-admin-locale.md`).
+Console **locale** de Greg, sur son Mac : page d'accueil Supervision (tuiles, surveillance, activité, communauté), démarrer et arrêter les services, lancer du trafic simulé ou de l'activité simulée (comptes fictifs), gérer les comptes, choisir l'image de fond de l'accueil du site (page Personnalisation). Jamais déployée (fiche `../../docs/decisions/009-console-admin-locale.md`).
 
 Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 
@@ -11,10 +11,11 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 | Contenu des pages, décisions, critère de sortie | `../../docs/cahiers-des-charges/admin/spec-admin.md` |
 | Pourquoi une console locale, règles d'accès | `../../docs/decisions/009-console-admin-locale.md`, connexion automatique en local : `012-console-connexion-automatique-en-local.md` |
 | Maquettes validées | `/mnt/project-files/admin/` (services-v2, trafic-v2, comptes-v2, activite/ proposition A) |
+| Page Supervision (accueil `/`) | spec admin, section « Page Supervision » ; route `../api/src/modules/supervision/routes.ts` |
 | Personnalisation (images de l'accueil) | `../../docs/cahiers-des-charges/web/spec-J4-personnalisation.md` |
 | Comptes fictifs et activité simulée | `../../docs/decisions/011-activite-simulee-comptes-fictifs.md`, `../tracker/tools/populate/` |
 | Routes `/v1/admin/*` de l'API | `../api/src/modules/accounts/admin-routes.ts` |
-| Formats échangés | `../../packages/contrats` (`api/admin.ts`, `api/dev-metrics.ts`, `tools/simulation-progress.ts`, `tools/activity-progress.ts`, `api/fictitious.ts`) |
+| Formats échangés | `../../packages/contrats` (`api/admin.ts`, `api/supervision.ts`, `api/dev-metrics.ts`, `tools/simulation-progress.ts`, `tools/activity-progress.ts`, `api/fictitious.ts`) |
 
 ![Console d'administration : ce qu'elle pilote](../../docs/schemas/img/admin-console.png)
 
@@ -36,7 +37,7 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 
 ```
 src/
-  app/                 routes Next.js : mise en page (barre latérale G), /services, /traffic, /activity, /accounts, /customize, styles ;
+  app/                 routes Next.js : mise en page (barre latérale G), / (Supervision), /services, /traffic, /activity, /accounts, /customize, styles ;
                        api/lifecycle (tout démarrer / arrêter, appelé par scripts/mac/)
   proxy.ts             refus des requêtes adressées à un autre nom que 127.0.0.1:3002 / localhost:3002
   actions/             actions serveur appelées par les pages (résultat { ok, value | error }, jamais d'exception)
@@ -50,7 +51,7 @@ src/
     accounts/            connexion à l'API, session gardée (admin-session.ts), appels /v1/admin/*
     site/                images de l'accueil (site-api.ts : /v1/site/home-images et /v1/admin/site/*)
   site/                barre latérale, barre du haut, onglets mobiles
-  features/            composants des pages : services/, traffic/, activity/, accounts/, customize/ (logique pure à part, testée)
+  features/            composants des pages : supervision/, services/, traffic/, activity/, accounts/, customize/ (logique pure à part, testée)
   ui/                  icônes, champ numérique, état d'un lancement, pastilles d'état, titre de page, confirmation, sondage périodique
   format/              heures, durées, noms des phases
 ```

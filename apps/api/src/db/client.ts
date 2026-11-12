@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
@@ -29,4 +30,12 @@ export function connectDatabase(url: string): DatabaseHandle {
 /** Applies the versioned migrations of migrations/ that are not applied yet. */
 export async function migrateDatabase(handle: DatabaseHandle): Promise<void> {
   await migrate(handle.db, { migrationsFolder: MIGRATIONS_FOLDER });
+}
+
+/** Number of migrations this code brings (migrations/meta/_journal.json), to compare with the database. */
+export function countMigrationFiles(): number {
+  const journal = JSON.parse(readFileSync(`${MIGRATIONS_FOLDER}/meta/_journal.json`, "utf8")) as {
+    entries: unknown[];
+  };
+  return journal.entries.length;
 }

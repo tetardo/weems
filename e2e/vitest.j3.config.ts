@@ -9,5 +9,9 @@ export default defineConfig({
     globalSetup: ["../apps/api/src/testing/global-setup.ts"],
     testTimeout: 60_000,
     hookTimeout: 120_000,
+    // One file at a time: each file picks free ports for its API and site, then releases them
+    // before listening; a file running alongside could take the same port in between
+    // (EADDRINUSE seen on PR #68).
+    fileParallelism: false,
   },
 });
