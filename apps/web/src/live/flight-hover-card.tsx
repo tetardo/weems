@@ -26,7 +26,7 @@ export function FlightHoverCard({
   return (
     <div
       role="tooltip"
-      className="pointer-events-none absolute z-20 rounded-2xl border border-line bg-surface px-3.5 pt-3 pb-2.5 shadow-[0_14px_36px_rgb(0_0_0/.25)]"
+      className="pointer-events-none absolute z-20 rounded-panel border border-line bg-surface px-3.5 pt-3 pb-2.5 shadow-[0_14px_36px_rgb(0_0_0/.25)]"
       style={{ ...cardPosition(point, mapWidth), width: CARD_WIDTH }}
     >
       <PilotLine pilot={flight.pilot} />

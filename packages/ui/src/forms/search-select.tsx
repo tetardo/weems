@@ -51,7 +51,7 @@ function OptionList({
     <Popover
       triggerRef={frame}
       offset={6}
-      className="max-h-72 w-(--trigger-width) overflow-auto rounded-xl border border-line bg-surface p-1.5 shadow-floating"
+      className="max-h-72 w-(--trigger-width) overflow-auto rounded-box border border-line bg-surface p-1.5 shadow-floating"
     >
       <ListBox
         items={items}
@@ -62,7 +62,7 @@ function OptionList({
           <ListBoxItem
             id={item.value}
             textValue={item.label}
-            className="flex min-h-9.5 cursor-pointer items-center gap-2.5 rounded-[8px] px-2.5 text-sm outline-none data-focused:bg-ink/9 data-selected:font-semibold data-selected:text-link"
+            className="flex min-h-9.5 cursor-pointer items-center gap-2.5 rounded-inner px-2.5 text-sm outline-none data-focused:bg-ink/9 data-selected:font-semibold data-selected:text-link"
           >
             {({ isSelected }) => (
               <>
@@ -117,7 +117,7 @@ export function SearchSelect({
         <div ref={frame} className={`${CONTROL_CLASS} border-line pr-1`}>
           {icon}
           <Input className={BARE_INPUT_CLASS} />
-          <Button className="grid size-9 place-items-center rounded-[8px] text-muted hover:text-ink">
+          <Button className="grid size-9 place-items-center rounded-inner text-muted hover:text-ink">
             <ChevronIcon size={16} aria-hidden="true" />
           </Button>
         </div>

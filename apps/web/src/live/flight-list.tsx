@@ -106,7 +106,7 @@ export function FlightList({
   const [sort, setSort] = useState<SortKey>("arrival");
   const sorted = useMemo(() => sortFlights(flights, airports, sort), [flights, airports, sort]);
   return (
-    <section className="w-full overflow-hidden rounded-[10px] border border-line bg-surface max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:rounded-b-none">
+    <section className="w-full overflow-hidden rounded-control border border-line bg-surface max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:rounded-b-none">
       <ListHeader count={flights.size} open={open} onOpen={setOpen} sort={sort} onSort={setSort} />
       {open && (
         <ul className="max-h-[38vh] overflow-y-auto">

@@ -28,7 +28,7 @@ export function HandleChangeDialog({
       role="alertdialog"
       aria-labelledby="handle-change-title"
       onCancel={onCancel}
-      className="m-auto w-[min(440px,calc(100%-32px))] rounded-[18px] border border-line bg-surface px-6 py-5.5 text-ink shadow-2xl backdrop:bg-black/55"
+      className="m-auto w-[min(440px,calc(100%-32px))] rounded-panel border border-line bg-surface px-6 py-5.5 text-ink shadow-2xl backdrop:bg-black/55"
     >
       <h2 id="handle-change-title" className="m-0 text-[1.15em]">
         {t("title")}

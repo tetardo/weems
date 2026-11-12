@@ -45,7 +45,7 @@ function StatTile({ tile }: { tile: Tile }) {
   const help = useTranslations("Profile.help");
   const good = tile.good ?? false;
   return (
-    <div className="relative rounded-2xl border border-line bg-surface px-4.5 py-4">
+    <div className="relative rounded-panel border border-line bg-surface px-4.5 py-4">
       <div className="pr-6 text-[13px] text-muted">{t(`${tile.key}.label`)}</div>
       {tile.value !== undefined && (
         <div className={`mt-0.5 font-title text-[28px] ${good ? "text-success" : ""}`}>

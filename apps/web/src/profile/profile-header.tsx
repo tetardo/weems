@@ -129,7 +129,7 @@ export function ProfileHeader({ pilot }: { pilot: PublicPilot }) {
   const locale = useLocale();
   const country = pilot.country ? countryName(pilot.country, locale) : null;
   return (
-    <section className="grid items-center gap-6 rounded-2xl border border-line bg-surface px-6 py-5 md:grid-cols-[auto_1fr_auto]">
+    <section className="grid items-center gap-6 rounded-panel border border-line bg-surface px-6 py-5 md:grid-cols-[auto_1fr_auto]">
       <PilotAvatar
         pilot={pilot}
         className="size-26 border-3 border-line text-[38px] max-md:size-20"

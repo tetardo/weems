@@ -11,7 +11,7 @@ export function SiteNav({ loggedIn }: { loggedIn: boolean }) {
   const pathname = usePathname();
   return (
     <nav aria-label={t("mainNav")} className="mr-auto ml-2 max-md:hidden">
-      <ul className="flex gap-0.5 rounded-xl border border-line bg-bg/60 p-1">
+      <ul className="flex gap-0.5 rounded-box border border-line bg-bg/60 p-1">
         {menuFor(loggedIn).map((item) => {
           const current = isCurrentPage(pathname, item.href);
           return (
@@ -19,7 +19,7 @@ export function SiteNav({ loggedIn }: { loggedIn: boolean }) {
               <Link
                 href={item.href}
                 aria-current={current ? "page" : undefined}
-                className={`flex h-9 items-center gap-2 rounded-[9px] px-3.5 text-sm font-medium transition-colors ${
+                className={`flex h-9 items-center gap-2 rounded-inner px-3.5 text-sm font-medium transition-colors ${
                   current ? "bg-surface text-ink shadow-raised" : "text-muted hover:text-ink"
                 }`}
               >

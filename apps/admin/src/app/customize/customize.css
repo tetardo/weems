@@ -69,7 +69,7 @@
 .hprev {
   position: relative;
   aspect-ratio: 16 / 9;
-  border-radius: 12px;
+  border-radius: var(--radius-box);
   overflow: hidden;
   border: 1px solid var(--line);
   background-size: cover;
@@ -94,7 +94,7 @@
   right: 5%;
   top: 5%;
   height: 9%;
-  border-radius: 6px;
+  border-radius: var(--radius-tag);
 }
 .hprev.light .bar {
   background: rgb(255 255 255 / 0.8);
@@ -122,7 +122,7 @@
   right: 5%;
   bottom: 6%;
   height: 20%;
-  border-radius: 6px;
+  border-radius: var(--radius-tag);
   background: #0b0f18;
   opacity: 0.92;
 }
@@ -142,7 +142,7 @@
   bottom: 6%;
   width: 15%;
   aspect-ratio: 9 / 19;
-  border-radius: 7px;
+  border-radius: var(--radius-inner);
   border: 2px solid #fff;
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.4);
   background-size: cover;

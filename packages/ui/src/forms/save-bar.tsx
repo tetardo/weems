@@ -19,7 +19,7 @@ export function SaveBar({
 }) {
   return (
     <div
-      className={`z-20 flex items-center justify-end gap-3 rounded-2xl ${unsaved ? "sticky bottom-24 bg-surface border border-line px-4 py-3 shadow-floating md:bottom-4" : ""}`}
+      className={`z-20 flex items-center justify-end gap-3 rounded-panel ${unsaved ? "sticky bottom-24 bg-surface border border-line px-4 py-3 shadow-floating md:bottom-4" : ""}`}
     >
       {unsaved && (
         <span className="mr-auto flex min-w-0 items-center gap-2 text-sm">

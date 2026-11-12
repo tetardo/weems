@@ -24,7 +24,7 @@ export function FlightPanel({ flight, airports, onClose, onRecenter }: Props) {
   const t = useTranslations("Live.panel");
   const { pilot } = flight;
   return (
-    <aside className="absolute top-21 right-3 z-20 w-80 rounded-2xl border border-line bg-surface px-4 py-3.5 shadow-[0_14px_36px_rgb(0_0_0/.25)] sm:right-6 max-md:fixed max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:z-40 max-md:w-auto max-md:rounded-b-none max-md:pb-6">
+    <aside className="absolute top-21 right-3 z-20 w-80 rounded-panel border border-line bg-surface px-4 py-3.5 shadow-[0_14px_36px_rgb(0_0_0/.25)] sm:right-6 max-md:fixed max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:z-40 max-md:w-auto max-md:rounded-b-none max-md:pb-6">
       <div className="flex items-center justify-between">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-accent px-2 py-0.5 text-[12px] font-semibold text-accent">
           <RecenterIcon size={13} aria-hidden="true" />
@@ -40,7 +40,7 @@ export function FlightPanel({ flight, airports, onClose, onRecenter }: Props) {
         </button>
       </div>
       <FlightFacts flight={flight} airports={airports} />
-      <div className="mt-3 flex items-center gap-2.5 rounded-[14px] border border-line p-2.5">
+      <div className="mt-3 flex items-center gap-2.5 rounded-box border border-line p-2.5">
         <PilotLine pilot={pilot} />
         {pilot && (
           <Link

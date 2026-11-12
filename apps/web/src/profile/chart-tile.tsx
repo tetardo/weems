@@ -17,7 +17,7 @@ export function ChartTile({
 }) {
   return (
     <figure
-      className={`relative m-0 rounded-2xl border border-line bg-surface px-4.5 py-4 ${className}`}
+      className={`relative m-0 rounded-panel border border-line bg-surface px-4.5 py-4 ${className}`}
     >
       <figcaption>
         <span className="block text-[13px] text-muted">{title}</span>

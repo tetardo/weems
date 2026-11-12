@@ -7,7 +7,7 @@ function TooManyRequests() {
   const t = useTranslations("Site");
   return (
     <main className="p-4">
-      <p className="rounded-md border-l-4 border-accent-2 bg-accent-2/14 px-3 py-2">{t("busy")}</p>
+      <p className="rounded-tag border-l-4 border-accent-2 bg-accent-2/14 px-3 py-2">{t("busy")}</p>
     </main>
   );
 }

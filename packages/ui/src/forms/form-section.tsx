@@ -21,7 +21,7 @@ export function FormSection({
 }) {
   return (
     <section
-      className={`@container rounded-2xl border border-line bg-surface px-6 py-5 ${dashed ? "border-dashed" : ""}`}
+      className={`@container rounded-panel border border-line bg-surface px-6 py-5 ${dashed ? "border-dashed" : ""}`}
     >
       <div className="grid gap-4 @3xl:grid-cols-[15rem_minmax(0,1fr)] @3xl:gap-8">
         <header>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../../../../packages/ui/src/radius.css";
 /* Shared form components (packages/ui): their classes are generated here too. */
 @source "../../../../packages/ui/src";
 
@@ -243,7 +244,7 @@ h3 {
   position: relative;
   display: grid;
   place-items: center;
-  border-radius: 6px;
+  border-radius: var(--radius-tag);
   background: linear-gradient(180deg, var(--wm-flap-top) 50%, var(--wm-flap-bottom) 50%);
   color: var(--color-board-ink);
   &::after {

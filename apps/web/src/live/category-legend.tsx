@@ -33,7 +33,7 @@ export function CategoryLegend({
           type="button"
           aria-pressed={!hidden.has(category)}
           onClick={() => onToggle(category)}
-          className="flex min-h-11 flex-none items-center gap-2 rounded-[10px] border border-line bg-surface px-3 text-sm aria-[pressed=false]:text-muted aria-[pressed=false]:line-through aria-[pressed=false]:opacity-60"
+          className="flex min-h-11 flex-none items-center gap-2 rounded-control border border-line bg-surface px-3 text-sm aria-[pressed=false]:text-muted aria-[pressed=false]:line-through aria-[pressed=false]:opacity-60"
         >
           <CategoryDot category={category} />
           {names(category)}

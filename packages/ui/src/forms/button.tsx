@@ -16,7 +16,7 @@ type Variant = keyof typeof VARIANTS;
 
 /** Classes of a button, also used by the links and buttons of the top bar. */
 export function buttonClass(variant: Variant = "primary"): string {
-  return `inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] px-3 font-medium transition-colors duration-150 disabled:cursor-default disabled:opacity-55 ${VARIANTS[variant]}`;
+  return `inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-control px-3 font-medium transition-colors duration-150 disabled:cursor-default disabled:opacity-55 ${VARIANTS[variant]}`;
 }
 
 export function Button({

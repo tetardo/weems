@@ -24,7 +24,7 @@ export function InfoTip({
       </button>
       <span
         role="tooltip"
-        className="pointer-events-none invisible absolute top-7 right-[-6px] z-20 w-64 rounded-[10px] bg-ink px-3 py-2.5 text-left text-[12.5px] leading-snug font-normal text-bg opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
+        className="pointer-events-none invisible absolute top-7 right-[-6px] z-20 w-64 rounded-control bg-ink px-3 py-2.5 text-left text-[12.5px] leading-snug font-normal text-bg opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
       >
         {text}
       </span>

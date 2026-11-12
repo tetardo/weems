@@ -33,7 +33,7 @@ export function FlightFacts({ flight, airports }: { flight: LiveFlight; airports
       <RouteSummary flight={flight} airports={airports} />
       <dl className="mt-2.5 grid grid-cols-3 gap-1.5">
         {tiles.map(([label, value]) => (
-          <div key={label} className="rounded-[10px] bg-muted/10 px-2 py-1.5">
+          <div key={label} className="rounded-control bg-muted/10 px-2 py-1.5">
             <dt className="text-[11.5px] text-muted">{label}</dt>
             <dd className="m-0 text-sm font-semibold">{value}</dd>
           </div>

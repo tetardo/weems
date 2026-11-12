@@ -9,7 +9,7 @@ import { useDismiss } from "../ui/use-dismiss.ts";
 import { isCurrentPage } from "./current-page.ts";
 import { menuFor } from "./menu-items.ts";
 
-const ROW = "flex h-12 items-center gap-3 rounded-xl px-3.5 font-medium hover:bg-surface";
+const ROW = "flex h-12 items-center gap-3 rounded-box px-3.5 font-medium hover:bg-surface";
 
 /** Menu button of the bar under 768 px: the links of the bar, then « Créer un compte » for a visitor. */
 export function SiteMenu({ loggedIn }: { loggedIn: boolean }) {
@@ -34,7 +34,7 @@ export function SiteMenu({ loggedIn }: { loggedIn: boolean }) {
       {open && (
         <nav
           aria-label={t("mainNav")}
-          className="fixed inset-x-3 top-[76px] z-30 flex flex-col gap-0.5 rounded-[18px] border border-line bg-surface p-2 shadow-floating sm:inset-x-6"
+          className="fixed inset-x-3 top-[76px] z-30 flex flex-col gap-0.5 rounded-panel border border-line bg-surface p-2 shadow-floating sm:inset-x-6"
         >
           {menuFor(loggedIn).map((item) => {
             const current = isCurrentPage(pathname, item.href);

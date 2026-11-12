@@ -27,7 +27,7 @@ function Background({ backgrounds }: { backgrounds: Record<HomeTheme, HomeBackgr
 
 function Calls({ loggedIn }: { loggedIn: boolean }) {
   const t = useTranslations("Home");
-  const big = "min-h-[52px] rounded-[14px] px-5 text-base";
+  const big = "min-h-[52px] rounded-box px-5 text-base";
   return (
     <div className="flex flex-wrap gap-3">
       {loggedIn ? (
@@ -64,7 +64,7 @@ export function HomeHero({ loggedIn, stats, apiUrl, backgrounds }: Props) {
   const site = useTranslations("Site");
   return (
     <section className="mx-3 mt-6 mb-10 sm:mx-6 xl:mx-auto xl:w-[1152px] max-md:mt-4 max-md:mb-6">
-      <div className="relative overflow-hidden rounded-[28px] text-hero-ink shadow-floating max-md:rounded-[22px]">
+      <div className="relative overflow-hidden rounded-hero text-hero-ink shadow-floating">
         <Background backgrounds={backgrounds} />
         <div className="relative flex items-center gap-10 px-12 py-14 max-lg:flex-col max-lg:items-stretch max-md:gap-8 max-md:px-4 max-md:py-8">
           <div className="flex min-w-0 flex-1 flex-col gap-5 max-md:gap-3.5">
