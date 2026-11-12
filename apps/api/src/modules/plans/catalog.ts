@@ -84,6 +84,7 @@ const ROWS: readonly Row[] = [
   ["sameAircraftComparison", "analysis", false, PRO],
   ["categoryTrends", "analysis", false, PRO],
   ["phaseTime", "analysis", false, PRO],
+  ["goodPractices", "analysis", true, PRO],
   ["export", "analysis", true, PRO],
   ["companies", "company", true, [false, false, 1, 5]],
   ["activePilots", "company", true, [false, false, 50, "unlimited"]],

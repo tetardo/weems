@@ -47,6 +47,7 @@ export const FeatureKey = z.enum([
   "sameAircraftComparison",
   "categoryTrends",
   "phaseTime",
+  "goodPractices",
   "export",
   // Compagnie
   "companies",

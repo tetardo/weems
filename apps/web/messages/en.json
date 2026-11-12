@@ -698,7 +698,7 @@
         "label": "Private note and tags on each flight"
       },
       "basicStats": {
-        "label": "Basic statistics: hours, categories, airports"
+        "label": "Basic statistics: hours, touchdowns, flying days and times, routes, aircraft, airports, distance"
       },
       "statsPeriod": {
         "label": "Statistics period",
@@ -743,6 +743,9 @@
       },
       "phaseTime": {
         "label": "Time spent in each phase"
+      },
+      "goodPractices": {
+        "label": "Good practices: flights without alerts, 250 kt below FL100, stabilised approaches, bank on approach"
       },
       "export": {
         "label": "CSV and PDF export"

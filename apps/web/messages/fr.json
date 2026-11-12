@@ -698,7 +698,7 @@
         "label": "Note privée et étiquettes sur chaque vol"
       },
       "basicStats": {
-        "label": "Statistiques de base : heures, catégories, aéroports"
+        "label": "Statistiques de base : heures, touchers, jours et heures de vol, routes, avions, aéroports, distance"
       },
       "statsPeriod": {
         "label": "Période des statistiques",
@@ -743,6 +743,9 @@
       },
       "phaseTime": {
         "label": "Analyse du temps passé dans chaque phase"
+      },
+      "goodPractices": {
+        "label": "Bonnes pratiques : vols sans alerte, 250 kt sous FL100, approches stabilisées, inclinaison en approche"
       },
       "export": {
         "label": "Export CSV et PDF"
