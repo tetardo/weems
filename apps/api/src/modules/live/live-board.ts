@@ -1,11 +1,24 @@
-import type { LiveFlight, LiveSnapshot, LiveUpdate, PositionReport } from "@weems/contrats";
+import type {
+  FlightEvent,
+  FlightPhase,
+  LiveFlight,
+  LiveSnapshot,
+  LiveUpdate,
+  PositionReport,
+} from "@weems/contrats";
 import type { LiveFeed, LiveFlightInfo } from "../flights/live-feed.ts";
+import { LiveEvents, liveEventOf } from "./live-events.ts";
 import { LivePilots } from "./live-pilots.ts";
 import { LiveTrails } from "./live-trails.ts";
 
 /** Spec J1, part 3: "signal perdu" after 60 s, off the map after 10 min without news. */
 const LOST_AFTER_MS = 60_000;
 const REMOVED_AFTER_MS = 10 * 60_000;
+/**
+ * A flight is announced as started only when it appears before take-off: flights seen again in
+ * the air after a restart of the API, or opened in the air, are not new starts.
+ */
+const STARTING_PHASES: ReadonlySet<FlightPhase> = new Set(["BOARDING", "PUSHBACK", "TAXI_OUT"]);
 
 interface Entry {
   info: LiveFlightInfo;
@@ -27,6 +40,7 @@ export class LiveBoard implements LiveFeed {
   private pilots = new LivePilots(() => Promise.resolve(new Map()));
   /** Where each flight has been, for the route of the selected flight. */
   readonly trails = new LiveTrails();
+  private readonly news = new LiveEvents();
 
   constructor(now: () => number = Date.now) {
     this.now = now;
@@ -56,6 +70,9 @@ export class LiveBoard implements LiveFeed {
   }
 
   position(info: LiveFlightInfo, report: PositionReport): void {
+    if (!this.entries.has(info.flightId) && STARTING_PHASES.has(report.phase)) {
+      this.news.add(info, { at: report.at, kind: "started", touchdownVs: null });
+    }
     this.entries.set(info.flightId, {
       info,
       position: report,
@@ -71,19 +88,36 @@ export class LiveBoard implements LiveFeed {
     if (this.entries.delete(flightId)) this.markRemoved(flightId);
   }
 
-  snapshot(): LiveSnapshot {
-    return { flights: [...this.entries.values()].map((entry) => this.toLiveFlight(entry)) };
+  /** Take-offs and landings of a flight on the map; a flight not on it shows nothing. */
+  events(flightId: string, events: readonly FlightEvent[]): void {
+    const entry = this.entries.get(flightId);
+    if (!entry) return;
+    for (const event of events) {
+      const shown = liveEventOf(event);
+      if (shown) this.news.add(entry.info, shown);
+    }
   }
 
-  /** Changes since the last call, after applying the silence rules. null when nothing changed. */
+  snapshot(): LiveSnapshot {
+    return {
+      flights: [...this.entries.values()].map((entry) => this.toLiveFlight(entry)),
+      events: this.news.latest(),
+    };
+  }
+
+  /**
+   * Changes and events since the last call, after applying the silence rules. null when nothing
+   * happened.
+   */
   takeUpdate(): LiveUpdate | null {
     this.sweep();
-    if (this.changed.size === 0 && this.removed.size === 0) return null;
+    const events = this.news.take((pilotId) => this.pilots.of(pilotId));
+    if (this.changed.size === 0 && this.removed.size === 0 && events.length === 0) return null;
     const flights = [...this.changed].flatMap((id) => {
       const entry = this.entries.get(id);
       return entry ? [this.toLiveFlight(entry)] : [];
     });
-    const update = { flights, removed: [...this.removed] };
+    const update = { flights, removed: [...this.removed], events };
     this.changed = new Set();
     this.removed = new Set();
     return update;

@@ -1,4 +1,4 @@
-# Spécification J4 — Pilote sur la carte en direct (survol, vol suivi)
+# Spécification J4 — Pilote sur la carte en direct (survol, vol suivi, enrichissements)
 
 Date : 12/11/2026. Demande de Greg : « sur la carte en direct, affiche la bulle info au survol de la souris sur un avion, un clic sur la page publique de l'utilisateur ». Maquettes dans le dossier du projet `j4-direct-survol/` ; Greg a choisi la variante B le 12/11/2026 à 3 h 25 : **le clic suit le vol**, le panneau donne le lien vers le profil.
 
@@ -35,3 +35,34 @@ Niveau : « FL300 » à partir de 10 000 ft, sinon en pieds (`4 500 ft`).
 4. Le bouton « Profil » n'existe que pour un profil public et ouvre `/pilots/{pseudo}`.
 5. `/live?flight=<id>` ouvre le vol suivi ; fermer le panneau retire `flight` de l'adresse.
 6. Textes en français et en anglais.
+
+## 4. Enrichissements de la page (idées 1 à 6)
+
+Demande de Greg du 12/11/2026 (« celle ci plutôt » sur la maquette des idées) : toutes les idées de `j4-direct-survol/proposition-direct.md`, en plus de la bulle et du vol suivi.
+
+![Données des enrichissements](../../schemas/img/j4-direct-enrichi.png)
+
+![Page enrichie](../img/j4-direct-enrichi.png)
+
+| N° | Fonction | Règle |
+| --- | --- | --- |
+| 1 | Recherche | Indicatif, nom ou pseudo d'un pilote au profil public (sans accents ni majuscules), code OACI du départ ou de l'arrivée ; 8 réponses au plus ; un choix suit le vol et centre la carte ; touche « / » pour y aller, Entrée prend la première réponse |
+| 2 | Jour / nuit | Zone où le soleil est sous −6° (même règle que les heures de nuit du profil, calcul du soleil commun dans `packages/contrats`), redessinée chaque minute ; bouton « Jour / nuit », choix gardé dans le navigateur, affichée par défaut |
+| 3 | Liste « En vol » | Tous les vols affichés ; tri par arrivée la plus proche (distance directe restante, route inconnue en dernier), indicatif ou phase ; un clic suit le vol ; repliée par défaut sur téléphone, en feuille en bas |
+| 4 | Filtres par catégorie | La légende compte les vols de chaque catégorie ; un clic masque ou réaffiche la catégorie sur la carte, dans la liste et dans la recherche ; non gardé (tout revient à l'ouverture) |
+| 5 | Aéroports actifs | Anneau et « EHAM 4 » : départs et arrivées des vols en cours ; les plus actifs gardent leur étiquette quand elles se chevauchent |
+| 6 | Derniers événements | Décollage (passage de la phase Décollage à Montée), atterrissage (événement « toucher », avec sa vitesse verticale), début de vol d'un pilote au profil public ; 4 affichés, en bas à droite, ordinateur seulement, masqués quand un vol est suivi |
+
+Règles des événements (API, `modules/live/live-events.ts`) :
+
+- Chaque événement n'est annoncé qu'une fois : un renvoi du tracker n'en crée pas de nouveau.
+- Un pilote au profil non public n'est jamais nommé ; son début de vol n'est pas annoncé (seuls ses décollages et atterrissages, sous l'indicatif, comme sur la carte).
+- « A commencé un vol » seulement si le vol apparaît avant le décollage (embarquement, repoussage, roulage) : un redémarrage de l'API ne réannonce pas les vols déjà en l'air.
+- Les 10 derniers sont gardés en mémoire pour le spectateur qui arrive (`snapshot.events`) ; ils sont perdus au redémarrage de l'API.
+- L'aéroport d'un atterrissage est l'arrivée prévue : un déroutement s'affiche donc avec l'aéroport prévu (limite connue).
+
+Critères d'acceptation :
+
+7. Recherche, tri de la liste, comptes des catégories, aéroports actifs et zone de nuit sont des fonctions pures testées (`flight-finder`, `category-filter`, `airport-activity`, `night-area`).
+8. Un décollage et un atterrissage reçus, puis renvoyés, n'apparaissent qu'une fois dans le flux (test `stream.test.ts`).
+9. Aucun début de vol annoncé pour un profil non public ni pour un vol vu d'abord en l'air (test `live-board.test.ts`).
