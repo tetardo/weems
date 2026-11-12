@@ -1,6 +1,13 @@
 import type { Sample, TrackPoint } from "@weems/contrats";
 
-/** A recorded sample, reduced to what the flight page draws (spec J2). */
+/** Mean N1 of the running engines; null when none gives one (piston engines). */
+function meanN1(engines: Sample["engines"]): number | null {
+  const values = engines.flatMap((e) => (e.running && e.n1 !== null ? [e.n1] : []));
+  if (values.length === 0) return engines.some((e) => e.running) ? null : 0;
+  return values.reduce((sum, v) => sum + v, 0) / values.length;
+}
+
+/** A recorded sample, reduced to what the flight page and its bands draw (spec J2, carnet privé). */
 export function toTrackPoint(sample: Sample, at: string): TrackPoint {
   return {
     at,
@@ -13,6 +20,18 @@ export function toTrackPoint(sample: Sample, at: string): TrackPoint {
     vs: sample.vs,
     heading: sample.heading,
     onGround: sample.onGround,
+    bank: sample.bank,
+    gForce: sample.gForce,
+    n1: meanN1(sample.engines),
+    flapsIndex: sample.flapsIndex,
+    gearHandle: sample.gearHandle,
+    spoilers: sample.spoilers,
+    parkingBrake: sample.parkingBrake,
+    autopilot: sample.autopilot,
+    landingLight: sample.lights.landing,
+    seatbelts: sample.seatbelts,
+    cabinAlt: sample.cabinAlt,
+    fuelKg: sample.fuelKg,
   };
 }
 

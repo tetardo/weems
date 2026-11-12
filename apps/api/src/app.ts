@@ -50,6 +50,12 @@ import { registerAdminSiteRoutes } from "./modules/site/admin-routes.ts";
 import { SiteRepository } from "./modules/site/repository.ts";
 import { registerSiteRoutes } from "./modules/site/routes.ts";
 import { SiteService } from "./modules/site/service.ts";
+import { registerPrivateLogbookRoutes } from "./modules/logbook/routes.ts";
+import { PrivateLogbookService } from "./modules/logbook/service.ts";
+import { registerPlanRoutes } from "./modules/plans/routes.ts";
+import { registerDevPlanRoutes } from "./modules/plans/dev-routes.ts";
+import { TestPlansRepository } from "./modules/plans/repository.ts";
+import { PlansService } from "./modules/plans/service.ts";
 import { registerStatsRoutes } from "./modules/stats/routes.ts";
 import { StatsService, type StatsSources } from "./modules/stats/service.ts";
 import { SupervisionRepository } from "./modules/supervision/repository.ts";
@@ -85,7 +91,7 @@ function statsSources(accounts: AccountsService, flights: FlightsService, board:
   };
 }
 
-/** What the home page reads (spec J4 accueil) and its images, set from the console. */
+/** What the home page reads (spec J4 accueil): counters and images set from the console. */
 function registerHomePage(
   app: FastifyInstance,
   database: DatabaseHandle,
@@ -164,6 +170,19 @@ function registerProfilePages(
   return pages;
 }
 
+/** Plans (page Offres, caller's plan) and, outside production, the Free | Pro test switch. */
+function registerPlans(
+  app: FastifyInstance,
+  database: DatabaseHandle,
+  guards: Guards,
+  testSwitch: boolean,
+): PlansService {
+  const plans = new PlansService(testSwitch ? new TestPlansRepository(database.db) : null);
+  registerPlanRoutes(app, plans, guards);
+  if (testSwitch) registerDevPlanRoutes(app, plans, guards);
+  return plans;
+}
+
 /** Routes that exist outside production only (simulation, measures, fictitious pilots). */
 function registerDevRoutes(
   app: FastifyInstance,
@@ -217,6 +236,8 @@ export async function buildApp({
   registerTrackRoutes(app, tracks, guards);
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
+  const plans = registerPlans(app, database, guards, config.env !== "production");
+  registerPrivateLogbookRoutes(app, new PrivateLogbookService(flights, tracks, plans), guards);
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));

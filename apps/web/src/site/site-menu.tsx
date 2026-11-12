@@ -1,18 +1,35 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useCallback, useRef, useState } from "react";
+import { type ReactNode, useCallback, useRef, useState } from "react";
 import { buttonClass } from "@weems/ui";
 import { Link, usePathname } from "../i18n/navigation.ts";
-import { CloseIcon, MenuIcon } from "../ui/icons.ts";
+import { CloseIcon, MenuIcon, ProIcon } from "../ui/icons.ts";
 import { useDismiss } from "../ui/use-dismiss.ts";
 import { isCurrentPage } from "./current-page.ts";
 import { menuFor } from "./menu-items.ts";
+import { promoClass } from "./promo-button.ts";
 
 const ROW = "flex h-12 items-center gap-3 rounded-box px-3.5 font-medium hover:bg-surface";
 
-/** Menu button of the bar under 768 px: the links of the bar, then « Créer un compte » for a visitor. */
-export function SiteMenu({ loggedIn }: { loggedIn: boolean }) {
+/** Pilot Pro offer at the bottom of the phone menu, for a visitor. */
+function PromoRow({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <Link href="/plans" onClick={onClick} className={`${promoClass} m-1 mt-2`}>
+      <ProIcon size={18} aria-hidden="true" />
+      {label}
+    </Link>
+  );
+}
+
+interface Props {
+  loggedIn: boolean;
+  /** Bottom of the menu: the Free | Pro test switch, which has no room in the phone bar. */
+  footer?: ReactNode;
+}
+
+/** Menu button of the bar under 768 px: the links of the bar, then the Pilot Pro offer for a visitor. */
+export function SiteMenu({ loggedIn, footer }: Props) {
   const t = useTranslations("Site");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -51,11 +68,8 @@ export function SiteMenu({ loggedIn }: { loggedIn: boolean }) {
               </Link>
             );
           })}
-          {!loggedIn && (
-            <Link href="/signup" onClick={close} className={`${buttonClass("primary")} m-1 mt-2`}>
-              {t("public.signup")}
-            </Link>
-          )}
+          {!loggedIn && <PromoRow label={t("public.pilotPro")} onClick={close} />}
+          {footer}
         </nav>
       )}
     </div>

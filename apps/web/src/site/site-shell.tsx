@@ -5,6 +5,7 @@ import { SiteAccount } from "./site-account.tsx";
 import { SiteFooter } from "./site-footer.tsx";
 import { SiteMenu } from "./site-menu.tsx";
 import { SiteNav } from "./site-nav.tsx";
+import { TestPlanSlot } from "./test-plan-slot.tsx";
 import { ThemeToggle } from "./theme-toggle.tsx";
 
 interface Props {
@@ -16,7 +17,8 @@ interface Props {
 
 /**
  * Frame of every page (decision 003, bar v2 of spec J4 accueil): the pages after the logo; on the
- * right the way in or the pilot's menu, the theme and FR | EN; footer P2 on public pages.
+ * right the way in or the pilot's menu, the theme, FR | EN and, outside production, the Free | Pro
+ * test switch of a logged-in pilot; footer P2 on public pages.
  */
 export function SiteShell({ loggedIn, footer = true, children }: Props) {
   return (
@@ -29,7 +31,11 @@ export function SiteShell({ loggedIn, footer = true, children }: Props) {
             <span aria-hidden="true" className="mx-1 h-7 w-px bg-line max-md:hidden" />
             <ThemeToggle />
             <LanguageChoice />
-            <SiteMenu loggedIn={loggedIn} />
+            {loggedIn && <TestPlanSlot className="max-md:hidden" />}
+            <SiteMenu
+              loggedIn={loggedIn}
+              footer={loggedIn ? <TestPlanSlot className="m-1 mt-2 flex" /> : undefined}
+            />
           </>
         }
       />

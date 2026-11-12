@@ -51,7 +51,7 @@ function Shortcuts({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }) {
         <SiteIcon /> Site <ExternalIcon className="c" size={16} />
       </a>
       <a href={`${apiUrl}/docs`} target="_blank" rel="noreferrer">
-        <DocsIcon /> Documentation API <ExternalIcon className="c" size={16} />
+        <DocsIcon /> Doc API <ExternalIcon className="c" size={16} />
       </a>
     </nav>
   );
@@ -91,12 +91,10 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
         Weems <span className="tag">Admin</span>
       </div>
       <nav className="grp">
+        <div className="t">Exploitation</div>
         <Link href="/" className={on("/")}>
           <SupervisionIcon /> Supervision
         </Link>
-      </nav>
-      <nav className="grp">
-        <div className="t">Exploitation</div>
         <Link href="/services" className={on("/services")}>
           <ServicesIcon /> Services <span className="c">{status.running} / 3</span>
         </Link>

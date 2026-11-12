@@ -1,0 +1,16 @@
+flowchart LR
+  NEW["Nouvelle fonction<br/>sur une page du site"] --> KEY["packages/contrats<br/>FeatureKey (liste unique)"]
+  KEY --> CAT["API : modules/plans/catalog.ts<br/>valeur par formule, carte ou non,<br/>disponible ou bientôt"]
+  KEY --> TXT["Site : messages fr / en<br/>Plans.features.&lt;clé&gt; (libellé)<br/>Features.items.&lt;clé&gt; (explication)"]
+  CAT --> API["GET /v1/plans<br/>(public, sans compte)"]
+  API --> CARDS["/plans : 4 cartes<br/>ce que chaque formule ajoute"]
+  API --> TABLE["/plans/compare<br/>tableau complet"]
+  API --> FEAT["/features : Fonctionnalités<br/>explication, formule, « Bientôt »"]
+  KEY --> ICON["Site : features/illustrations<br/>un dessin par clé"]
+  ICON --> FEAT
+  TXT --> FEAT
+  TXT --> CARDS
+  TXT --> TABLE
+  T1["Test API : chaque clé décrite une fois,<br/>une formule ne perd rien de la précédente"] -.-> CAT
+  T2["Test site : chaque clé a son libellé<br/>et son explication"] -.-> TXT
+  T3["Compilation : une clé sans dessin<br/>est refusée"] -.-> ICON

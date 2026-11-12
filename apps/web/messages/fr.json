@@ -3,10 +3,13 @@
     "name": "Weems",
     "description": "Suivi des vols en simulation",
     "nav": {
+      "discover": "Découvrir",
       "logbook": "Mon carnet de bord",
       "flights": "Mes vols",
       "live": "Vols en direct",
-      "profile": "Mon profil public"
+      "profile": "Mon profil public",
+      "plans": "Offres",
+      "features": "Fonctionnalités"
     },
     "notMeasured": "non mesuré",
     "mainNav": "Navigation principale",
@@ -16,7 +19,8 @@
       "signup": "Créer un compte",
       "login": "Se connecter",
       "menu": "Ouvrir le menu",
-      "closeMenu": "Fermer le menu"
+      "closeMenu": "Fermer le menu",
+      "pilotPro": "Pilot Pro"
     },
     "busy": "Trop de visites en ce moment. Réessayez dans une minute.",
     "error": {
@@ -24,12 +28,16 @@
       "retry": "Réessayer"
     },
     "languages": "Langue",
+    "testPlan": "Formule de test",
+    "testPlanHint": "Outil de test, hors production : change la formule de votre compte pour essayer les pages Pilot Free et Pilot Pro. Il sera retiré avant la version 1.0.",
     "footer": {
       "copyright": "© {year} Weems",
+      "discover": "Découvrir Weems",
       "legal": "Mentions légales",
       "terms": "Conditions d'utilisation",
       "privacy": "Confidentialité",
-      "contact": "Contact"
+      "contact": "Contact",
+      "features": "Fonctionnalités"
     }
   },
   "Home": {
@@ -431,6 +439,191 @@
       "publish": "Le rendre public",
       "open": "Voir la page publique",
       "settings": "Réglages du profil"
+    },
+    "private": "Carnet privé",
+    "public": {
+      "title": "Ma page publique"
+    },
+    "settings": "Réglages du profil",
+    "nav": {
+      "summary": "Résumé",
+      "flights": "Vols",
+      "stats": "Statistiques",
+      "goals": "Objectifs",
+      "soon": "bientôt"
+    },
+    "plan": {
+      "label": "Formule",
+      "free": "Pilot Free",
+      "pro": "Pilot Pro",
+      "upgrade": "Passer à Pilot Pro"
+    },
+    "locked": {
+      "discover": "Découvrir Pilot Pro"
+    },
+    "summary": {
+      "title": "Résumé",
+      "intro": "Votre carnet privé : progression, vols et points à travailler. Tous vos vols comptent, même ceux masqués sur votre page publique.",
+      "empty": "Aucun vol terminé pour l'instant. Lancez le traqueur et faites un premier vol : il apparaîtra ici.",
+      "last": {
+        "title": "Dernier vol",
+        "open": "Voir le vol"
+      },
+      "stages": {
+        "label": "Profil d'altitude du dernier vol, par phase",
+        "ground": "Roulage",
+        "climb": "Montée",
+        "cruise": "Croisière",
+        "descent": "Descente",
+        "approach": "Approche",
+        "minutes": "{minutes} min",
+        "top": "plus haut : {level}"
+      },
+      "kpis": {
+        "hours": {
+          "label": "Heures ce mois",
+          "sub": "{sign}{delta} par rapport au mois dernier",
+          "same": "autant que le mois dernier"
+        },
+        "touchdown": {
+          "label": "Toucher moyen (10 derniers)",
+          "sub": "{delta} ft/min par rapport aux 10 d'avant",
+          "first": "pas encore de comparaison"
+        },
+        "clean": {
+          "label": "Atterrissages propres",
+          "sub": "{delta} pts sur 30 jours",
+          "first": "sur 30 jours"
+        },
+        "streak": {
+          "label": "Série en cours",
+          "value": "{days, plural, =0 {0 jour} one {# jour} other {# jours}}",
+          "sub": "record : {days, plural, =0 {0 jour} one {# jour} other {# jours}}"
+        }
+      },
+      "landings": {
+        "title": "Progression des touchers",
+        "aside": "moyenne glissante sur 5 vols · zone verte = doux",
+        "empty": "Il faut au moins deux atterrissages mesurés pour tracer la courbe.",
+        "oldest": "plus ancien",
+        "newest": "{count} derniers vols →",
+        "average": "moyenne sur 5"
+      },
+      "regularity": {
+        "title": "Régularité",
+        "aside": "jours de vol, {weeks} dernières semaines",
+        "day": "{flights, plural, one {# vol} other {# vols}}, {time} en l'air",
+        "less": "Moins",
+        "more": "Plus",
+        "total": "{days, plural, =0 {aucun jour de vol} one {# jour de vol} other {# jours de vol}} sur {weeks} semaines"
+      },
+      "workOn": {
+        "title": "À travailler",
+        "aside": "{flights, plural, =0 {aucun vol} one {dernier vol} other {# derniers vols}}",
+        "empty": "Aucun atterrissage pour l'instant.",
+        "bounces": "{count, plural, =0 {Aucun rebond} one {# rebond} other {# rebonds}} sur {flights, plural, one {# atterrissage} other {# atterrissages}}",
+        "alerts": "{count, plural, =0 {Aucun vol avec alerte} one {# vol avec alerte} other {# vols avec alertes}}",
+        "alertsHint": "vols marqués non conformes",
+        "goArounds": "{count, plural, =0 {Aucune remise de gaz} one {# remise de gaz} other {# remises de gaz}}",
+        "detailed": {
+          "title": "Analyse détaillée de vos approches",
+          "text": "Arrondi, vitesse et pente à 1 000 et 500 ft, avec des conseils sur vos derniers vols.",
+          "soon": "bientôt : les critères sont en cours de définition avec un pilote."
+        }
+      },
+      "recent": {
+        "title": "Vols récents",
+        "all": "Tous les vols"
+      }
+    },
+    "minis": {
+      "touchdown": "Toucher (ft/min)",
+      "duration": "Durée",
+      "distance": "Distance",
+      "nm": "{nm} nm",
+      "fuel": "Carburant",
+      "tonnes": "{tonnes, number, ::.0} t",
+      "bounces": "Rebonds",
+      "alerts": "Alertes",
+      "noAlert": "Aucune"
+    },
+    "flights": {
+      "title": "Vols",
+      "count": "{count, plural, =0 {aucun vol} one {# vol} other {# vols}}",
+      "empty": "Aucun vol terminé pour l'instant.",
+      "all": "Tous les vols",
+      "fullPage": "Page complète du vol",
+      "bands": "Bandes de vol",
+      "bandsAside": "{minutes} min · {rows} paramètres",
+      "noTrack": "Ce vol n'a pas de trajectoire.",
+      "profile": "Profil d'altitude",
+      "intro": "{count, plural, =0 {Aucun vol} one {# vol} other {# vols}} · tous vos vols, y compris ceux masqués sur votre page publique.",
+      "filters": {
+        "all": "Tous",
+        "clean": "Propres",
+        "review": "À revoir"
+      },
+      "emptyFiltered": "Aucun vol pour ce filtre."
+    },
+    "verdicts": {
+      "clean": "Propre",
+      "firm": "Ferme",
+      "bounce": "Rebond",
+      "nonCompliant": "Non conforme",
+      "noLanding": "Sans atterrissage"
+    },
+    "bands": {
+      "phase": "Phase",
+      "hover": "Survolez une colonne pour lire toutes les valeurs de la minute. 1 case = 1 minute.",
+      "groups": {
+        "trajectory": "Trajectoire",
+        "controls": "Commandes",
+        "cabin": "Cabine"
+      },
+      "rows": {
+        "altitude": "Altitude",
+        "speed": "Vitesse",
+        "verticalSpeed": "Vitesse verticale",
+        "bank": "Inclinaison",
+        "gForce": "Facteur de charge",
+        "n1": "Poussée (N1)",
+        "flaps": "Volets",
+        "gear": "Train",
+        "spoilers": "Aérofreins",
+        "braking": "Freinage",
+        "parkingBrake": "Frein de parking",
+        "autopilot": "Pilote auto",
+        "landingLight": "Feux d'atterrissage",
+        "seatbelts": "Consigne ceintures",
+        "cabinAltitude": "Altitude cabine"
+      },
+      "values": {
+        "altitude": "{value} ft",
+        "speed": "{value} kt",
+        "verticalSpeed": "{value} ft/min",
+        "bank": "{value}°",
+        "g": "{value} g",
+        "n1": "{value} %",
+        "flaps": "cran {value}",
+        "gearDown": "sorti",
+        "gearUp": "rentré",
+        "percent": "{value} %",
+        "ktPerS": "{value} kt/s",
+        "on": "allumé",
+        "off": "éteint",
+        "share": "{value} % du temps",
+        "cabinAltitude": "{value} ft"
+      },
+      "marksLocked": "Pilot Pro signale sur les bandes les moments à retravailler (vario trop fort, inclinaison, vitesse sous le FL100…).",
+      "noMarks": "Aucun repère à revoir sur ce vol.",
+      "provisional": "critères provisoires, à valider avec un pilote",
+      "reasons": {
+        "speed250": "plus de 250 kt sous 10 000 ft",
+        "bank30": "inclinaison de plus de 30°",
+        "sinkRate": "plus de 1 000 ft/min de descente sous 1 000 ft"
+      },
+      "marksTitle": "Repères à revoir",
+      "discover": "Découvrir Pilot Pro"
     }
   },
   "Profile": {
@@ -599,5 +792,454 @@
   "Fictitious": {
     "badge": "Compte fictif",
     "help": "Compte créé par le simulateur d'activité, pour tester le site. Ce n'est pas un vrai pilote."
+  },
+  "Plans": {
+    "meta": {
+      "title": "Offres",
+      "description": "Pilot Free, Pilot Pro, Company et Holding : ce que contient chaque formule Weems."
+    },
+    "title": "Choisissez votre formule",
+    "lead": "Gratuit pour voler, Pro pour progresser, Company pour faire vivre une compagnie.",
+    "billing": {
+      "label": "Rythme de paiement",
+      "monthly": "Mensuel",
+      "yearly": "Annuel",
+      "yearlyBonus": "2 mois offerts"
+    },
+    "price": {
+      "forever": "pour toujours",
+      "perMonth": "par mois",
+      "perYear": "par an",
+      "orPerYear": "ou {price} par an",
+      "orPerMonth": "ou {price} par mois",
+      "noCard": "sans carte bancaire"
+    },
+    "names": {
+      "pilot_free": "Pilot Free",
+      "pilot_pro": "Pilot Pro",
+      "company": "Company",
+      "holding": "Holding"
+    },
+    "descriptions": {
+      "pilot_free": "Tout pour voler et garder la trace de chaque vol, sans limite.",
+      "pilot_pro": "L'analyse de chaque vol pour progresser comme un vrai équipage.",
+      "company": "Créez et faites vivre votre compagnie virtuelle.",
+      "holding": "Un groupe de plusieurs compagnies sous une même direction."
+    },
+    "audience": {
+      "pilot": "Pour les pilotes",
+      "company": "Pour les compagnies"
+    },
+    "recommended": "Recommandé",
+    "current": "Votre formule",
+    "cta": {
+      "signup": "Créer un compte",
+      "upgrade": "Passer à {plan}",
+      "choose": "Choisir {plan}",
+      "soon": "Paiement bientôt disponible"
+    },
+    "includes": {
+      "pilot": "Tout {plan}, plus :",
+      "company": "{plan} pour vous, plus :",
+      "holding": "Tout {plan}, plus :"
+    },
+    "compareLink": "Comparer toutes les fonctions des formules",
+    "compare": {
+      "title": "Comparer les formules",
+      "lead": "Toutes les fonctions, ligne par ligne.",
+      "back": "Retour aux offres",
+      "feature": "Fonction"
+    },
+    "groups": {
+      "fly": "Voler et suivre",
+      "logbook": "Carnet de vol",
+      "analysis": "Analyser ses vols",
+      "company": "Diriger une compagnie"
+    },
+    "values": {
+      "included": "Inclus",
+      "excluded": "Non inclus",
+      "unlimited": "Illimité"
+    },
+    "features": {
+      "tracker": {
+        "label": "Tracker MSFS 2020 et 2024"
+      },
+      "liveMap": {
+        "label": "Carte des vols en direct"
+      },
+      "publicProfile": {
+        "label": "Profil public"
+      },
+      "flightHistory": {
+        "label": "Tous les vols et l'historique complet"
+      },
+      "simbriefNextFlight": {
+        "label": "Prochain vol SimBrief et lancement du traqueur"
+      },
+      "logbookSummary": {
+        "label": "Résumé du carnet : dernier vol, heures du mois, toucher moyen, régularité"
+      },
+      "flightDetail": {
+        "label": "Fiche de vol : trajet, profil d'altitude, dernière approche, chronologie"
+      },
+      "flightBands": {
+        "label": "Bandes de vol : altitude, vitesse, vario, inclinaison, g, poussée, volets, train, pilote auto… sur tout le vol"
+      },
+      "flightNotes": {
+        "label": "Note privée et étiquettes sur chaque vol"
+      },
+      "basicStats": {
+        "label": "Statistiques de base : heures, touchers, jours et heures de vol, routes, avions, aéroports, distance"
+      },
+      "statsPeriod": {
+        "label": "Période des statistiques",
+        "limited": "Statistiques sur les {count} derniers mois",
+        "unlimited": "Statistiques sur toute la période",
+        "cell": "{count} mois",
+        "cellUnlimited": "Toute la période"
+      },
+      "workOnBasic": {
+        "label": "« À travailler » : rebonds, alertes, remises de gaz"
+      },
+      "goals": {
+        "label": "Objectifs",
+        "limited": "{count, plural, one {# objectif} other {# objectifs}}",
+        "unlimited": "Objectifs illimités",
+        "cell": "{count}",
+        "cellUnlimited": "Illimités"
+      },
+      "approachAnalysis": {
+        "label": "Analyse de l'approche : vitesse, vario, axe à 1 000 et 500 ft, arrondi, zone de toucher"
+      },
+      "workOnDetailed": {
+        "label": "« À travailler » détaillé : arrondi, vitesse à 500 ft"
+      },
+      "flightBandsMarks": {
+        "label": "Repères à revoir sur les bandes de vol : vario trop fort, inclinaison, vitesse sous FL100…"
+      },
+      "plannedVsActual": {
+        "label": "Carburant et horaire prévus et réels (SimBrief)"
+      },
+      "community": {
+        "label": "Vous et la communauté : percentiles par catégorie d'avion"
+      },
+      "compareFlights": {
+        "label": "Comparer deux vols"
+      },
+      "sameAircraftComparison": {
+        "label": "Comparaison avec vos autres vols sur le même avion"
+      },
+      "categoryTrends": {
+        "label": "Tendances par catégorie d'avion"
+      },
+      "phaseTime": {
+        "label": "Analyse du temps passé dans chaque phase"
+      },
+      "goodPractices": {
+        "label": "Bonnes pratiques : vols sans alerte, 250 kt sous FL100, approches stabilisées, inclinaison en approche"
+      },
+      "export": {
+        "label": "Export CSV et PDF"
+      },
+      "companies": {
+        "label": "Compagnies",
+        "limited": "{count, plural, one {# compagnie} other {# compagnies}}",
+        "unlimited": "Compagnies illimitées",
+        "cell": "{count}",
+        "cellUnlimited": "Illimitées"
+      },
+      "activePilots": {
+        "label": "Pilotes actifs",
+        "limited": "{count} pilotes actifs",
+        "unlimited": "Pilotes actifs illimités*",
+        "cell": "{count, number}",
+        "cellUnlimited": "Illimités*"
+      },
+      "fleetAndRoutes": {
+        "label": "Flotte, routes et horaires"
+      },
+      "flightValidation": {
+        "label": "Validation des vols des pilotes"
+      },
+      "rankings": {
+        "label": "Classements et page publique de la compagnie"
+      },
+      "sharedManagement": {
+        "label": "Équipe de direction partagée"
+      },
+      "groupStats": {
+        "label": "Statistiques consolidées du groupe"
+      }
+    },
+    "reassure": {
+      "dataTitle": "Vos données, toujours",
+      "dataText": "Tous vos vols sont enregistrés, même en gratuit. Passer à Pro débloque l'analyse de tout l'historique.",
+      "freeTitle": "Sans engagement",
+      "freeText": "Résiliable à tout moment. Rien n'est supprimé à la fin de l'abonnement.",
+      "membersTitle": "Pilotes de compagnie gratuits",
+      "membersText": "Les membres d'une compagnie volent avec Pilot Free. Seule la compagnie paie."
+    },
+    "fairUse": "* Usage raisonnable : au-delà de {count, number} pilotes actifs par compagnie, nous contacter."
+  },
+  "Discover": {
+    "meta": {
+      "title": "Découvrir Weems · Le principe",
+      "description": "Un tracker enregistre vos vols MSFS, le site les raconte, la communauté les voit passer, et vous progressez vol après vol."
+    },
+    "banner": {
+      "eyebrow": "Découvrir Weems",
+      "title": "Voler, comprendre,",
+      "slogan": "Un tracker enregistre chacun de vos vols dans le simulateur. Le site les raconte, la communauté les voit passer, et vous progressez vol après vol.",
+      "plans": "Voir les offres",
+      "highlight": "progresser.",
+      "live": "Vols en direct",
+      "chips": {
+        "tracker": "Tracker MSFS",
+        "logbook": "Carnet de vol",
+        "live": "Carte en direct",
+        "community": "Communauté"
+      }
+    },
+    "stepNumber": "Étape {number}",
+    "steps": {
+      "tracker": {
+        "title": "Un tracker qui se fait oublier",
+        "text": "Installez-le une fois. Il reconnaît MSFS 2020 et 2024, enregistre votre vol dès la mise en route et le découpe en 12 phases, du roulage au parking.",
+        "point1": "Rien à remplir, rien à lancer en vol",
+        "point2": "Le vol est gardé si la connexion tombe, et envoyé au retour",
+        "point3": "Une fenêtre montre l'état du simulateur et du vol"
+      },
+      "followUp": {
+        "title": "Chaque vol, raconté",
+        "text": "Dès l'atterrissage, votre vol est dans votre carnet de bord : trajet sur la carte, profil d'altitude, phases, atterrissage et journal de bord.",
+        "point1": "Taux au toucher, rebonds, remises de gaz",
+        "point2": "Vos amis suivent votre vol en direct",
+        "point3": "Historique complet, sans limite de vols"
+      },
+      "community": {
+        "title": "Volez seul, jamais isolé",
+        "text": "Votre vol apparaît sur la carte des vols en direct, à côté de ceux des autres pilotes. Votre profil public montre vos heures, vos routes et vos avions, à partager où vous voulez.",
+        "point1": "Carte en direct ouverte à tous",
+        "point2": "Profil public à partager, privé tant que vous ne le publiez pas",
+        "point3": "Bientôt : les compagnies virtuelles et leurs pilotes"
+      },
+      "simplicity": {
+        "title": "Simple, dès le premier vol",
+        "text": "Un compte, le tracker, et vous volez. Pas de plan de vol à déposer, pas de réglage à comprendre.",
+        "point1": "Gratuit pour voler, sans limite de vols",
+        "point2": "Un seul compte pour le site et le tracker",
+        "point3": "En français et en anglais, en clair ou en sombre"
+      },
+      "training": {
+        "title": "Voler comme un vrai équipage",
+        "text": "Weems relit chaque vol avec les repères des pilotes de ligne : approche stabilisée, 250 kt sous le FL100, confort des passagers. Il vous montre ce qui est réussi et ce qui est à travailler.",
+        "point1": "Approche stabilisée à 1 000 et 500 ft",
+        "point2": "Vitesse sous le FL100 (règlement européen SERA)",
+        "point3": "Inclinaison et facteur de charge ressentis en cabine"
+      },
+      "progress": {
+        "title": "Voir le chemin parcouru",
+        "text": "Heures par catégorie d'avion, toucher moyen, régularité : vous voyez vos progrès vol après vol, et vous vous fixez des objectifs.",
+        "point1": "Statistiques de base pour tous",
+        "point2": "Objectifs et tendances sur la durée",
+        "point3": "Vous et la communauté, par catégorie d'avion"
+      }
+    },
+    "tags": {
+      "free": "Gratuit",
+      "freeBase": "Base gratuite",
+      "soonCompanies": "Compagnies : à venir",
+      "proAnalysis": "Analyse détaillée : Pilot Pro",
+      "proTrends": "Tendances et communauté : Pilot Pro"
+    },
+    "notice": {
+      "title": "Pour la simulation seulement.",
+      "text": "Weems ne remplace pas une formation aéronautique et ne sert jamais pour un vrai vol."
+    },
+    "illustration": {
+      "connected": "MSFS 2024 connecté",
+      "aircraft": "A320neo",
+      "cruise": "Croisière FL360",
+      "phase": "Phase 6 sur 12",
+      "duration": "1 h 46",
+      "touchdown": "Toucher",
+      "touchdownValue": "−142 ft/min",
+      "bounces": "0 rebond",
+      "fuel": "Carburant 4,1 t",
+      "live": "27 vols en direct",
+      "signup": "Créer un compte",
+      "install": "Installer le tracker",
+      "fly": "Voler",
+      "done": "C'est tout",
+      "approach": "Approche LEBL 25R",
+      "stable": "Stabilisé à 1 000 ft",
+      "speed": "Vitesse sur l'axe à 500 ft",
+      "sinkRate": "Vario 1 150 ft/min à 800 ft",
+      "zone": "Toucher dans la zone",
+      "average": "Toucher moyen",
+      "trend": "−38 % en 3 mois",
+      "from": "août",
+      "to": "nov."
+    },
+    "closing": {
+      "title": "Chaque vol compte.",
+      "text": "Faites de chacun un pas de plus vers le pilote que vous voulez devenir."
+    }
+  },
+  "Features": {
+    "meta": {
+      "title": "Fonctionnalités",
+      "description": "Toutes les fonctions de Weems, du tracker MSFS à la direction d'une compagnie virtuelle, et la formule qui contient chacune."
+    },
+    "title": "Tout ce que fait Weems",
+    "lead": "Du premier vol enregistré à la direction d'une compagnie : chaque fonction, ce qu'elle vous apporte et la formule qui la contient.",
+    "toc": "Sommaire des fonctionnalités",
+    "free": "Gratuit",
+    "fromPlan": "Dès {plan}",
+    "soon": "Bientôt",
+    "groups": {
+      "fly": "Installez le tracker et volez dans MSFS : chaque vol est enregistré et visible en direct, sans rien saisir.",
+      "logbook": "Votre carnet de bord personnel, rempli tout seul, avec toutes les données de chaque vol.",
+      "analysis": "Comprendre ce qui s'est passé et progresser, vol après vol, avec des repères tirés de la réglementation.",
+      "company": "Créez une compagnie virtuelle, recrutez des pilotes, validez leurs vols et animez vos classements."
+    },
+    "items": {
+      "tracker": {
+        "title": "Tracker MSFS 2020 et 2024",
+        "text": "Une petite application Windows qui se connecte au simulateur, détecte le départ et l'arrivée et envoie le vol, même si la connexion coupe en route."
+      },
+      "liveMap": {
+        "title": "Carte des vols en direct",
+        "text": "Tous les pilotes en vol sur une carte mise à jour en temps réel : trajet parcouru, progression, aéroports actifs, recherche."
+      },
+      "publicProfile": {
+        "title": "Profil public",
+        "text": "Une page à votre nom à partager : heures, distance, avions, derniers vols. Vous choisissez ce qui est public."
+      },
+      "flightHistory": {
+        "title": "Historique complet",
+        "text": "Tous vos vols sont gardés, sans limite de nombre ni de durée, y compris en gratuit."
+      },
+      "simbriefNextFlight": {
+        "title": "Prochain vol SimBrief",
+        "text": "Votre plan de vol SimBrief apparaît dans le carnet ; un bouton lance le tracker prêt à partir."
+      },
+      "logbookSummary": {
+        "title": "Résumé du carnet",
+        "text": "En un coup d'œil : dernier vol, heures du mois, toucher moyen et calendrier de régularité."
+      },
+      "flightDetail": {
+        "title": "Fiche de vol",
+        "text": "Pour chaque vol : trajet sur la carte, profil d'altitude, atterrissage et chronologie des phases."
+      },
+      "flightBands": {
+        "title": "Bandes de vol",
+        "text": "Altitude, vitesse, vario, inclinaison, g, poussée, volets, train, pilote auto… tracés sur toute la durée du vol."
+      },
+      "flightNotes": {
+        "title": "Notes et étiquettes",
+        "text": "Une note privée et des étiquettes sur chaque vol, pour retrouver un exercice ou une ligne."
+      },
+      "basicStats": {
+        "title": "Statistiques de base",
+        "text": "Heures, touchers, jours et heures de vol, routes, avions, aéroports et distance parcourue."
+      },
+      "statsPeriod": {
+        "title": "Période des statistiques",
+        "text": "Les statistiques portent sur les derniers mois en gratuit, sur toute votre carrière avec Pilot Pro."
+      },
+      "workOnBasic": {
+        "title": "« À travailler »",
+        "text": "Les rebonds, alertes et remises de gaz relevés sur vos derniers vols, pour savoir quoi revoir."
+      },
+      "goals": {
+        "title": "Objectifs",
+        "text": "Fixez-vous un objectif (heures, touchers doux, régularité) et suivez sa progression."
+      },
+      "approachAnalysis": {
+        "title": "Analyse de l'approche",
+        "text": "Vitesse, vario et axe à 1 000 et 500 ft, arrondi, zone de toucher : votre approche était-elle stabilisée ?"
+      },
+      "workOnDetailed": {
+        "title": "« À travailler » détaillé",
+        "text": "Le détail de chaque point faible : arrondi trop long, vitesse à 500 ft hors tolérance…"
+      },
+      "flightBandsMarks": {
+        "title": "Repères sur les bandes",
+        "text": "Les moments à revoir sont marqués sur les bandes : vario trop fort, inclinaison, plus de 250 kt sous le FL100."
+      },
+      "plannedVsActual": {
+        "title": "Prévu et réel",
+        "text": "Carburant et horaires prévus par SimBrief comparés à ce que vous avez réellement fait."
+      },
+      "community": {
+        "title": "Vous et la communauté",
+        "text": "Où vous situez-vous ? Percentiles par catégorie d'avion, sur les vols de tous les pilotes."
+      },
+      "compareFlights": {
+        "title": "Comparer deux vols",
+        "text": "Deux vols côte à côte : approche, toucher, carburant, temps par phase."
+      },
+      "sameAircraftComparison": {
+        "title": "Même avion",
+        "text": "Un vol face à vos autres vols sur le même avion."
+      },
+      "categoryTrends": {
+        "title": "Tendances par catégorie",
+        "text": "Votre progression mois après mois, en avion de ligne, en turbopropulseur ou en aviation légère."
+      },
+      "phaseTime": {
+        "title": "Temps par phase",
+        "text": "Le temps passé au roulage, en montée, en croisière et en approche, et son évolution."
+      },
+      "goodPractices": {
+        "title": "Bonnes pratiques",
+        "text": "Vols sans alerte, 250 kt sous le FL100, approches stabilisées, inclinaison en approche : vos taux."
+      },
+      "export": {
+        "title": "Export CSV et PDF",
+        "text": "Vos vols et vos analyses dans un tableur ou un rapport à imprimer."
+      },
+      "companies": {
+        "title": "Compagnies",
+        "text": "Créez votre compagnie virtuelle avec sa page publique ; plusieurs compagnies avec Holding."
+      },
+      "activePilots": {
+        "title": "Pilotes actifs",
+        "text": "Le nombre de pilotes qui volent pour votre compagnie sur 30 jours glissants."
+      },
+      "fleetAndRoutes": {
+        "title": "Flotte, routes et horaires",
+        "text": "Déclarez vos avions et votre réseau ; vos pilotes choisissent leurs vols dedans."
+      },
+      "flightValidation": {
+        "title": "Validation des vols",
+        "text": "Chaque vol est contrôlé (route, avion, règles) puis validé automatiquement ou par l'encadrement."
+      },
+      "rankings": {
+        "title": "Classements",
+        "text": "Heures, touchers, régularité : des classements pour animer la compagnie et sa page publique."
+      },
+      "sharedManagement": {
+        "title": "Direction partagée",
+        "text": "Une même équipe de direction pour toutes les compagnies du groupe."
+      },
+      "groupStats": {
+        "title": "Statistiques du groupe",
+        "text": "Les chiffres de toutes vos compagnies réunis dans un même tableau."
+      }
+    },
+    "banner": {
+      "eyebrow": "Fonctionnalités",
+      "title": "Tout ce que fait",
+      "highlight": "Weems.",
+      "lead": "Du premier vol enregistré à la direction d'une compagnie : chaque fonction, ce qu'elle vous apporte et la formule qui la contient.",
+      "offers": "Voir les offres",
+      "compare": "Comparer les formules",
+      "available": "{count, plural, one {# fonction disponible} other {# fonctions disponibles}}",
+      "soon": "{count} bientôt",
+      "plans": "{count} formules"
+    }
   }
 }

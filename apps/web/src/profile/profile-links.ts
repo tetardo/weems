@@ -2,7 +2,7 @@ import { OWN_PHOTO_URL, pilotPhotoUrl } from "../site/api-relay.ts";
 
 /**
  * Where a profile page points: the same page is the public profile (/pilots/{handle}) and the
- * pilot's own logbook (/logbook), whose photo and flights are the pilot's private addresses.
+ * pilot's preview of it in the logbook (/logbook/public), whose photo and flights are the pilot's private addresses.
  */
 export interface ProfileLinks {
   photo: string;
@@ -27,7 +27,7 @@ export function publicProfileLinks(handle: string): ProfileLinks {
 export function logbookLinks(publicHandle: string | null): ProfileLinks {
   return {
     photo: OWN_PHOTO_URL,
-    page: "/logbook",
+    page: "/logbook/public",
     flight: (flightId) => `/flights/${flightId}`,
     share: publicHandle ? `/pilots/${publicHandle}` : null,
   };

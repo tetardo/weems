@@ -22,6 +22,7 @@
   --color-accent-2: var(--wm-accent-2);
   --color-danger: var(--wm-danger);
   --color-success: var(--wm-success);
+  --color-holding: var(--wm-holding);
   /* Departures board of the home page (spec J4 accueil): dark like an airport board, light in the light theme. */
   --color-board: var(--wm-board);
   --color-board-head: var(--wm-board-head);
@@ -68,6 +69,8 @@
   --wm-accent-2: #ffb454;
   --wm-danger: #ff8a80;
   --wm-success: #6ee7a8;
+  /* Holding plan tag (page Fonctionnalités): the fourth plan colour, after success, link, accent 2. */
+  --wm-holding: #b9a2ff;
   --wm-glass: rgb(23 30 46 / 0.72);
   --wm-glow: rgb(79 209 232 / 0.16);
   --wm-shadow: rgb(0 0 0 / 0.35);
@@ -119,14 +122,16 @@
   --wm-line: #dde1ee;
   --wm-text: #1f2430;
   --wm-text-muted: #5a6378;
-  --wm-accent: #0e8fa6;
-  --wm-on-accent: #0e1320;
+  /* Darker than the dark theme's cyan so white text on filled buttons stays at WCAG AA (4.7:1). */
+  --wm-accent: #0c7f94;
+  --wm-on-accent: #ffffff;
   --wm-link: #0b7285;
   --wm-accent-2: #b86a00;
   --wm-danger: #b3261e;
   --wm-success: #1b7f4b;
+  --wm-holding: #6a4fd1;
   --wm-glass: rgb(255 255 255 / 0.75);
-  --wm-glow: rgb(14 143 166 / 0.12);
+  --wm-glow: rgb(12 127 148 / 0.12);
   --wm-shadow: rgb(30 40 70 / 0.12);
   --wm-veil: rgb(255 248 240 / 0.92);
   --wm-veil-mid: rgb(255 248 240 / 0.78);
@@ -230,6 +235,33 @@ h3 {
 
 @utility hero-sky {
   background: var(--wm-sky);
+}
+
+/* Promotional button of the bar (« Pilot Pro »): a soft glow in the accent colours. */
+@utility promo-glow {
+  color: var(--color-on-accent);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.12) inset,
+    0 6px 20px -6px color-mix(in srgb, var(--color-accent) 70%, transparent);
+  &:hover {
+    filter: brightness(1.08);
+  }
+}
+
+/*
+ * Photo banners (Découvrir, Fonctionnalités): the dashed route flows, the plane follows it, the
+ * airports pulse. Nothing moves when the system asks for less motion.
+ */
+@keyframes route-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+@utility route-flow {
+  animation: route-flow 1.6s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 /* Glass button on the photo (« Voir les vols en direct »). */

@@ -3,10 +3,13 @@
     "name": "Weems",
     "description": "Flight tracking for simulator pilots",
     "nav": {
+      "discover": "Discover",
       "logbook": "My logbook",
       "flights": "My flights",
       "live": "Live flights",
-      "profile": "My public profile"
+      "profile": "My public profile",
+      "plans": "Plans",
+      "features": "Features"
     },
     "notMeasured": "not measured",
     "mainNav": "Main navigation",
@@ -16,7 +19,8 @@
       "signup": "Create an account",
       "login": "Log in",
       "menu": "Open the menu",
-      "closeMenu": "Close the menu"
+      "closeMenu": "Close the menu",
+      "pilotPro": "Pilot Pro"
     },
     "busy": "Too many visits right now. Please try again in a minute.",
     "error": {
@@ -24,12 +28,16 @@
       "retry": "Try again"
     },
     "languages": "Language",
+    "testPlan": "Test plan",
+    "testPlanHint": "Test tool, outside production: changes your account's plan to try the Pilot Free and Pilot Pro pages. It will be removed before version 1.0.",
     "footer": {
       "copyright": "© {year} Weems",
+      "discover": "Discover Weems",
       "legal": "Legal notice",
       "terms": "Terms of use",
       "privacy": "Privacy",
-      "contact": "Contact"
+      "contact": "Contact",
+      "features": "Features"
     }
   },
   "Home": {
@@ -431,6 +439,191 @@
       "publish": "Make it public",
       "open": "Open the public page",
       "settings": "Profile settings"
+    },
+    "private": "Private logbook",
+    "public": {
+      "title": "My public page"
+    },
+    "settings": "Profile settings",
+    "nav": {
+      "summary": "Summary",
+      "flights": "Flights",
+      "stats": "Statistics",
+      "goals": "Goals",
+      "soon": "soon"
+    },
+    "plan": {
+      "label": "Plan",
+      "free": "Pilot Free",
+      "pro": "Pilot Pro",
+      "upgrade": "Upgrade to Pilot Pro"
+    },
+    "locked": {
+      "discover": "Discover Pilot Pro"
+    },
+    "summary": {
+      "title": "Summary",
+      "intro": "Your private logbook: progress, flights and points to work on. Every flight counts, even the ones hidden from your public page.",
+      "empty": "No finished flight yet. Start the tracker and make a first flight: it will show up here.",
+      "last": {
+        "title": "Last flight",
+        "open": "Open the flight"
+      },
+      "stages": {
+        "label": "Altitude profile of the last flight, by phase",
+        "ground": "Taxi",
+        "climb": "Climb",
+        "cruise": "Cruise",
+        "descent": "Descent",
+        "approach": "Approach",
+        "minutes": "{minutes} min",
+        "top": "highest: {level}"
+      },
+      "kpis": {
+        "hours": {
+          "label": "Hours this month",
+          "sub": "{sign}{delta} compared with last month",
+          "same": "same as last month"
+        },
+        "touchdown": {
+          "label": "Average touchdown (last 10)",
+          "sub": "{delta} ft/min compared with the 10 before",
+          "first": "no comparison yet"
+        },
+        "clean": {
+          "label": "Clean landings",
+          "sub": "{delta} pts over 30 days",
+          "first": "over 30 days"
+        },
+        "streak": {
+          "label": "Current streak",
+          "value": "{days, plural, one {# day} other {# days}}",
+          "sub": "record: {days, plural, one {# day} other {# days}}"
+        }
+      },
+      "landings": {
+        "title": "Touchdown progress",
+        "aside": "moving average over 5 flights · green zone = soft",
+        "empty": "At least two measured landings are needed to draw the curve.",
+        "oldest": "oldest",
+        "newest": "last {count} flights →",
+        "average": "average over 5"
+      },
+      "regularity": {
+        "title": "Regularity",
+        "aside": "flying days, last {weeks} weeks",
+        "day": "{flights, plural, one {# flight} other {# flights}}, {time} airborne",
+        "less": "Less",
+        "more": "More",
+        "total": "{days, plural, =0 {no flying day} one {# flying day} other {# flying days}} in {weeks} weeks"
+      },
+      "workOn": {
+        "title": "To work on",
+        "aside": "{flights, plural, =0 {no flight} one {last flight} other {last # flights}}",
+        "empty": "No landing yet.",
+        "bounces": "{count, plural, =0 {No bounce} one {# bounce} other {# bounces}} in {flights, plural, one {# landing} other {# landings}}",
+        "alerts": "{count, plural, =0 {No flight with alerts} one {# flight with alerts} other {# flights with alerts}}",
+        "alertsHint": "flights marked non-compliant",
+        "goArounds": "{count, plural, =0 {No go-around} one {# go-around} other {# go-arounds}}",
+        "detailed": {
+          "title": "Detailed analysis of your approaches",
+          "text": "Flare, speed and slope at 1,000 and 500 ft, with advice on your last flights.",
+          "soon": "soon: the criteria are being set with a pilot."
+        }
+      },
+      "recent": {
+        "title": "Recent flights",
+        "all": "All flights"
+      }
+    },
+    "minis": {
+      "touchdown": "Touchdown (ft/min)",
+      "duration": "Duration",
+      "distance": "Distance",
+      "nm": "{nm} nm",
+      "fuel": "Fuel",
+      "tonnes": "{tonnes, number, ::.0} t",
+      "bounces": "Bounces",
+      "alerts": "Alerts",
+      "noAlert": "None"
+    },
+    "flights": {
+      "title": "Flights",
+      "count": "{count, plural, =0 {no flight} one {# flight} other {# flights}}",
+      "empty": "No finished flight yet.",
+      "all": "All flights",
+      "fullPage": "Full flight page",
+      "bands": "Flight bands",
+      "bandsAside": "{minutes} min · {rows} parameters",
+      "noTrack": "This flight has no trajectory.",
+      "profile": "Altitude profile",
+      "intro": "{count, plural, =0 {No flight} one {# flight} other {# flights}} · all your flights, including the ones hidden from your public page.",
+      "filters": {
+        "all": "All",
+        "clean": "Clean",
+        "review": "To review"
+      },
+      "emptyFiltered": "No flight for this filter."
+    },
+    "verdicts": {
+      "clean": "Clean",
+      "firm": "Firm",
+      "bounce": "Bounce",
+      "nonCompliant": "Non-compliant",
+      "noLanding": "No landing"
+    },
+    "bands": {
+      "phase": "Phase",
+      "hover": "Hover a column to read every value of that minute. 1 cell = 1 minute.",
+      "groups": {
+        "trajectory": "Trajectory",
+        "controls": "Controls",
+        "cabin": "Cabin"
+      },
+      "rows": {
+        "altitude": "Altitude",
+        "speed": "Speed",
+        "verticalSpeed": "Vertical speed",
+        "bank": "Bank",
+        "gForce": "Load factor",
+        "n1": "Thrust (N1)",
+        "flaps": "Flaps",
+        "gear": "Gear",
+        "spoilers": "Spoilers",
+        "braking": "Braking",
+        "parkingBrake": "Parking brake",
+        "autopilot": "Autopilot",
+        "landingLight": "Landing lights",
+        "seatbelts": "Seat belt sign",
+        "cabinAltitude": "Cabin altitude"
+      },
+      "values": {
+        "altitude": "{value} ft",
+        "speed": "{value} kt",
+        "verticalSpeed": "{value} ft/min",
+        "bank": "{value}°",
+        "g": "{value} g",
+        "n1": "{value} %",
+        "flaps": "step {value}",
+        "gearDown": "down",
+        "gearUp": "up",
+        "percent": "{value} %",
+        "ktPerS": "{value} kt/s",
+        "on": "on",
+        "off": "off",
+        "share": "{value} % of the time",
+        "cabinAltitude": "{value} ft"
+      },
+      "marksLocked": "Pilot Pro marks on the bands the moments to work on (sink rate, bank, speed below FL100…).",
+      "noMarks": "Nothing to review on this flight.",
+      "provisional": "provisional criteria, to be checked with a pilot",
+      "reasons": {
+        "speed250": "over 250 kt below 10,000 ft",
+        "bank30": "bank over 30°",
+        "sinkRate": "sinking over 1,000 ft/min below 1,000 ft"
+      },
+      "marksTitle": "Points to review",
+      "discover": "Discover Pilot Pro"
     }
   },
   "Profile": {
@@ -599,5 +792,454 @@
   "Fictitious": {
     "badge": "Fictitious account",
     "help": "Account created by the activity simulator to test the site. Not a real pilot."
+  },
+  "Plans": {
+    "meta": {
+      "title": "Plans",
+      "description": "Pilot Free, Pilot Pro, Company and Holding: what each Weems plan includes."
+    },
+    "title": "Choose your plan",
+    "lead": "Free to fly, Pro to improve, Company to run an airline.",
+    "billing": {
+      "label": "Billing period",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyBonus": "2 months free"
+    },
+    "price": {
+      "forever": "forever",
+      "perMonth": "per month",
+      "perYear": "per year",
+      "orPerYear": "or {price} per year",
+      "orPerMonth": "or {price} per month",
+      "noCard": "no credit card"
+    },
+    "names": {
+      "pilot_free": "Pilot Free",
+      "pilot_pro": "Pilot Pro",
+      "company": "Company",
+      "holding": "Holding"
+    },
+    "descriptions": {
+      "pilot_free": "Everything to fly and keep track of every flight, without limit.",
+      "pilot_pro": "Every flight analysed, to improve like a real crew.",
+      "company": "Create and run your virtual airline.",
+      "holding": "A group of airlines under one management."
+    },
+    "audience": {
+      "pilot": "For pilots",
+      "company": "For airlines"
+    },
+    "recommended": "Recommended",
+    "current": "Your plan",
+    "cta": {
+      "signup": "Create an account",
+      "upgrade": "Upgrade to {plan}",
+      "choose": "Choose {plan}",
+      "soon": "Payment coming soon"
+    },
+    "includes": {
+      "pilot": "Everything in {plan}, plus:",
+      "company": "{plan} for you, plus:",
+      "holding": "Everything in {plan}, plus:"
+    },
+    "compareLink": "Compare every feature of the plans",
+    "compare": {
+      "title": "Compare the plans",
+      "lead": "Every feature, row by row.",
+      "back": "Back to plans",
+      "feature": "Feature"
+    },
+    "groups": {
+      "fly": "Fly and follow",
+      "logbook": "Logbook",
+      "analysis": "Analyse your flights",
+      "company": "Run an airline"
+    },
+    "values": {
+      "included": "Included",
+      "excluded": "Not included",
+      "unlimited": "Unlimited"
+    },
+    "features": {
+      "tracker": {
+        "label": "MSFS 2020 and 2024 tracker"
+      },
+      "liveMap": {
+        "label": "Live flights map"
+      },
+      "publicProfile": {
+        "label": "Public profile"
+      },
+      "flightHistory": {
+        "label": "Every flight and the full history"
+      },
+      "simbriefNextFlight": {
+        "label": "Next SimBrief flight and tracker launch"
+      },
+      "logbookSummary": {
+        "label": "Logbook summary: last flight, hours this month, average touchdown, regularity"
+      },
+      "flightDetail": {
+        "label": "Flight sheet: route, altitude profile, last approach, timeline"
+      },
+      "flightBands": {
+        "label": "Flight strips: altitude, speed, vertical speed, bank, g, thrust, flaps, gear, autopilot… over the whole flight"
+      },
+      "flightNotes": {
+        "label": "Private note and tags on each flight"
+      },
+      "basicStats": {
+        "label": "Basic statistics: hours, touchdowns, flying days and times, routes, aircraft, airports, distance"
+      },
+      "statsPeriod": {
+        "label": "Statistics period",
+        "limited": "Statistics over the last {count} months",
+        "unlimited": "Statistics over the whole period",
+        "cell": "{count} months",
+        "cellUnlimited": "Whole period"
+      },
+      "workOnBasic": {
+        "label": "« To work on »: bounces, alerts, go-arounds"
+      },
+      "goals": {
+        "label": "Goals",
+        "limited": "{count, plural, one {# goal} other {# goals}}",
+        "unlimited": "Unlimited goals",
+        "cell": "{count}",
+        "cellUnlimited": "Unlimited"
+      },
+      "approachAnalysis": {
+        "label": "Approach analysis: speed, vertical speed, alignment at 1,000 and 500 ft, flare, touchdown zone"
+      },
+      "workOnDetailed": {
+        "label": "Detailed « to work on »: flare, speed at 500 ft"
+      },
+      "flightBandsMarks": {
+        "label": "Points to review on the flight strips: excessive vertical speed, bank, speed below FL100…"
+      },
+      "plannedVsActual": {
+        "label": "Planned and actual fuel and times (SimBrief)"
+      },
+      "community": {
+        "label": "You and the community: percentiles by aircraft category"
+      },
+      "compareFlights": {
+        "label": "Compare two flights"
+      },
+      "sameAircraftComparison": {
+        "label": "Comparison with your other flights on the same aircraft"
+      },
+      "categoryTrends": {
+        "label": "Trends by aircraft category"
+      },
+      "phaseTime": {
+        "label": "Time spent in each phase"
+      },
+      "goodPractices": {
+        "label": "Good practices: flights without alerts, 250 kt below FL100, stabilised approaches, bank on approach"
+      },
+      "export": {
+        "label": "CSV and PDF export"
+      },
+      "companies": {
+        "label": "Airlines",
+        "limited": "{count, plural, one {# airline} other {# airlines}}",
+        "unlimited": "Unlimited airlines",
+        "cell": "{count}",
+        "cellUnlimited": "Unlimited"
+      },
+      "activePilots": {
+        "label": "Active pilots",
+        "limited": "{count} active pilots",
+        "unlimited": "Unlimited active pilots*",
+        "cell": "{count, number}",
+        "cellUnlimited": "Unlimited*"
+      },
+      "fleetAndRoutes": {
+        "label": "Fleet, routes and schedules"
+      },
+      "flightValidation": {
+        "label": "Validation of the pilots' flights"
+      },
+      "rankings": {
+        "label": "Rankings and public airline page"
+      },
+      "sharedManagement": {
+        "label": "Shared management team"
+      },
+      "groupStats": {
+        "label": "Consolidated group statistics"
+      }
+    },
+    "reassure": {
+      "dataTitle": "Your data, always",
+      "dataText": "Every flight is recorded, even on the free plan. Pro unlocks the analysis of your whole history.",
+      "freeTitle": "No commitment",
+      "freeText": "Cancel any time. Nothing is deleted when the subscription ends.",
+      "membersTitle": "Airline pilots fly free",
+      "membersText": "Members of an airline fly with Pilot Free. Only the airline pays."
+    },
+    "fairUse": "* Fair use: above {count, number} active pilots per airline, contact us."
+  },
+  "Discover": {
+    "meta": {
+      "title": "Discover Weems · How it works",
+      "description": "A tracker records your MSFS flights, the site tells their story, the community sees them go by, and you improve flight after flight."
+    },
+    "banner": {
+      "eyebrow": "Discover Weems",
+      "title": "Fly, understand,",
+      "slogan": "A tracker records every flight you make in the simulator. The site tells their story, the community sees them go by, and you improve flight after flight.",
+      "plans": "See the plans",
+      "highlight": "improve.",
+      "live": "Live flights",
+      "chips": {
+        "tracker": "MSFS tracker",
+        "logbook": "Logbook",
+        "live": "Live map",
+        "community": "Community"
+      }
+    },
+    "stepNumber": "Step {number}",
+    "steps": {
+      "tracker": {
+        "title": "A tracker you forget about",
+        "text": "Install it once. It recognises MSFS 2020 and 2024, records your flight from engine start and splits it into 12 phases, from taxi to parking.",
+        "point1": "Nothing to fill in, nothing to start in flight",
+        "point2": "The flight is kept if the connection drops, and sent when it is back",
+        "point3": "A window shows the state of the simulator and the flight"
+      },
+      "followUp": {
+        "title": "Every flight, told",
+        "text": "As soon as you land, your flight is in your logbook: route on the map, altitude profile, phases, landing and flight log.",
+        "point1": "Touchdown rate, bounces, go-arounds",
+        "point2": "Your friends follow your flight live",
+        "point3": "Full history, no flight limit"
+      },
+      "community": {
+        "title": "Fly alone, never isolated",
+        "text": "Your flight shows on the live map, next to the other pilots' flights. Your public profile shows your hours, routes and aircraft, to share wherever you like.",
+        "point1": "Live map open to everyone",
+        "point2": "Public profile to share, private until you publish it",
+        "point3": "Coming soon: virtual airlines and their pilots"
+      },
+      "simplicity": {
+        "title": "Simple from the first flight",
+        "text": "An account, the tracker, and you fly. No flight plan to file, no setting to figure out.",
+        "point1": "Free to fly, no flight limit",
+        "point2": "One account for the site and the tracker",
+        "point3": "In French and English, light or dark"
+      },
+      "training": {
+        "title": "Fly like a real crew",
+        "text": "Weems reviews each flight with airline pilots' benchmarks: stabilised approach, 250 kt below FL100, passenger comfort. It shows you what went well and what to work on.",
+        "point1": "Stabilised approach at 1,000 and 500 ft",
+        "point2": "Speed below FL100 (European SERA rules)",
+        "point3": "Bank angle and g-load felt in the cabin"
+      },
+      "progress": {
+        "title": "See how far you have come",
+        "text": "Hours by aircraft category, average touchdown, regularity: you see your progress flight after flight, and set yourself goals.",
+        "point1": "Basic statistics for everyone",
+        "point2": "Goals and trends over time",
+        "point3": "You and the community, by aircraft category"
+      }
+    },
+    "tags": {
+      "free": "Free",
+      "freeBase": "Free basics",
+      "soonCompanies": "Airlines: coming soon",
+      "proAnalysis": "Detailed analysis: Pilot Pro",
+      "proTrends": "Trends and community: Pilot Pro"
+    },
+    "notice": {
+      "title": "For simulation only.",
+      "text": "Weems does not replace aviation training and is never used for a real flight."
+    },
+    "illustration": {
+      "connected": "MSFS 2024 connected",
+      "aircraft": "A320neo",
+      "cruise": "Cruise FL360",
+      "phase": "Phase 6 of 12",
+      "duration": "1 h 46",
+      "touchdown": "Touchdown",
+      "touchdownValue": "−142 ft/min",
+      "bounces": "0 bounces",
+      "fuel": "Fuel 4.1 t",
+      "live": "27 flights live",
+      "signup": "Create an account",
+      "install": "Install the tracker",
+      "fly": "Fly",
+      "done": "That's all",
+      "approach": "Approach LEBL 25R",
+      "stable": "Stabilised at 1,000 ft",
+      "speed": "On speed at 500 ft",
+      "sinkRate": "Sink rate 1,150 ft/min at 800 ft",
+      "zone": "Touchdown in the zone",
+      "average": "Average touchdown",
+      "trend": "−38% in 3 months",
+      "from": "Aug",
+      "to": "Nov"
+    },
+    "closing": {
+      "title": "Every flight counts.",
+      "text": "Make each one a step closer to the pilot you want to become."
+    }
+  },
+  "Features": {
+    "meta": {
+      "title": "Features",
+      "description": "Every Weems feature, from the MSFS tracker to running a virtual airline, and the plan that includes each one."
+    },
+    "title": "Everything Weems does",
+    "lead": "From your first recorded flight to running an airline: every feature, what it brings you and the plan that includes it.",
+    "toc": "Features summary",
+    "free": "Free",
+    "fromPlan": "From {plan}",
+    "soon": "Coming soon",
+    "groups": {
+      "fly": "Install the tracker and fly in MSFS: every flight is recorded and shown live, with nothing to type.",
+      "logbook": "Your personal logbook, filled in by itself, with all the data of every flight.",
+      "analysis": "Understand what happened and improve, flight after flight, with benchmarks taken from the regulations.",
+      "company": "Create a virtual airline, recruit pilots, approve their flights and run your rankings."
+    },
+    "items": {
+      "tracker": {
+        "title": "MSFS 2020 and 2024 tracker",
+        "text": "A small Windows app that connects to the simulator, detects departure and arrival and sends the flight, even if the connection drops on the way."
+      },
+      "liveMap": {
+        "title": "Live flight map",
+        "text": "Every pilot in the air on a real-time map: route flown, progress, active airports, search."
+      },
+      "publicProfile": {
+        "title": "Public profile",
+        "text": "A page in your name to share: hours, distance, aircraft, latest flights. You choose what is public."
+      },
+      "flightHistory": {
+        "title": "Full history",
+        "text": "All your flights are kept, with no limit on number or age, free plan included."
+      },
+      "simbriefNextFlight": {
+        "title": "Next SimBrief flight",
+        "text": "Your SimBrief flight plan shows in the logbook; one button starts the tracker ready to go."
+      },
+      "logbookSummary": {
+        "title": "Logbook summary",
+        "text": "At a glance: last flight, hours this month, average touchdown and consistency calendar."
+      },
+      "flightDetail": {
+        "title": "Flight sheet",
+        "text": "For each flight: route on the map, altitude profile, landing and phase timeline."
+      },
+      "flightBands": {
+        "title": "Flight bands",
+        "text": "Altitude, speed, vertical speed, bank, g, thrust, flaps, gear, autopilot… plotted over the whole flight."
+      },
+      "flightNotes": {
+        "title": "Notes and tags",
+        "text": "A private note and tags on each flight, to find an exercise or a route again."
+      },
+      "basicStats": {
+        "title": "Basic statistics",
+        "text": "Hours, touchdowns, flying days and hours, routes, aircraft, airports and distance flown."
+      },
+      "statsPeriod": {
+        "title": "Statistics period",
+        "text": "Statistics cover the last months on the free plan, your whole career with Pilot Pro."
+      },
+      "workOnBasic": {
+        "title": "“To work on”",
+        "text": "Bounces, alerts and go-arounds spotted on your latest flights, so you know what to practise."
+      },
+      "goals": {
+        "title": "Goals",
+        "text": "Set yourself a goal (hours, soft touchdowns, consistency) and follow its progress."
+      },
+      "approachAnalysis": {
+        "title": "Approach analysis",
+        "text": "Speed, vertical speed and centreline at 1,000 and 500 ft, flare, touchdown zone: was your approach stabilised?"
+      },
+      "workOnDetailed": {
+        "title": "Detailed “To work on”",
+        "text": "Each weak point in detail: long flare, speed out of tolerance at 500 ft…"
+      },
+      "flightBandsMarks": {
+        "title": "Marks on the bands",
+        "text": "Moments worth a second look are marked on the bands: high sink rate, bank, over 250 kt below FL100."
+      },
+      "plannedVsActual": {
+        "title": "Planned and actual",
+        "text": "Fuel and times planned by SimBrief compared with what you actually flew."
+      },
+      "community": {
+        "title": "You and the community",
+        "text": "Where do you stand? Percentiles by aircraft category, over every pilot's flights."
+      },
+      "compareFlights": {
+        "title": "Compare two flights",
+        "text": "Two flights side by side: approach, touchdown, fuel, time per phase."
+      },
+      "sameAircraftComparison": {
+        "title": "Same aircraft",
+        "text": "A flight against your other flights on the same aircraft."
+      },
+      "categoryTrends": {
+        "title": "Trends by category",
+        "text": "Your progress month after month, in airliners, turboprops or light aircraft."
+      },
+      "phaseTime": {
+        "title": "Time per phase",
+        "text": "Time spent taxiing, climbing, cruising and on approach, and how it changes."
+      },
+      "goodPractices": {
+        "title": "Good practices",
+        "text": "Flights without alerts, 250 kt below FL100, stabilised approaches, bank on approach: your rates."
+      },
+      "export": {
+        "title": "CSV and PDF export",
+        "text": "Your flights and analyses in a spreadsheet or a printable report."
+      },
+      "companies": {
+        "title": "Airlines",
+        "text": "Create your virtual airline with its public page; several airlines with Holding."
+      },
+      "activePilots": {
+        "title": "Active pilots",
+        "text": "The number of pilots flying for your airline over the last 30 days."
+      },
+      "fleetAndRoutes": {
+        "title": "Fleet, routes and schedules",
+        "text": "Declare your aircraft and network; your pilots pick their flights from it."
+      },
+      "flightValidation": {
+        "title": "Flight validation",
+        "text": "Each flight is checked (route, aircraft, rules) then approved automatically or by staff."
+      },
+      "rankings": {
+        "title": "Rankings",
+        "text": "Hours, touchdowns, consistency: rankings to bring the airline and its public page to life."
+      },
+      "sharedManagement": {
+        "title": "Shared management",
+        "text": "One management team for every airline of the group."
+      },
+      "groupStats": {
+        "title": "Group statistics",
+        "text": "The figures of all your airlines together in one table."
+      }
+    },
+    "banner": {
+      "eyebrow": "Features",
+      "title": "Everything",
+      "highlight": "Weems does.",
+      "lead": "From your first recorded flight to running an airline: every feature, what it brings you and the plan that includes it.",
+      "offers": "See the plans",
+      "compare": "Compare the plans",
+      "available": "{count, plural, one {# feature available} other {# features available}}",
+      "soon": "{count} coming soon",
+      "plans": "{count} plans"
+    }
   }
 }

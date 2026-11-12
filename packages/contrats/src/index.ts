@@ -49,6 +49,16 @@ export {
   FlightTimes,
 } from "./api/flight-list.ts";
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
+export { LogbookLastFlight, LogbookSummary } from "./api/logbook.ts";
+export {
+  BandMarkReason,
+  BandMinute,
+  BandRow,
+  FlightBands,
+  LandingVerdict,
+  LogbookEntries,
+  LogbookEntry,
+} from "./api/logbook-flights.ts";
 export {
   LiveEvent,
   LiveFlight,
@@ -59,6 +69,19 @@ export {
   MAX_LIVE_EVENTS,
 } from "./api/live.ts";
 export { SiteStats } from "./api/stats.ts";
+export {
+  FeatureAvailability,
+  FeatureGroup,
+  FeatureKey,
+  FeatureValue,
+  MyPlan,
+  TestPlanChange,
+  PlanAudience,
+  PlanCatalog,
+  PlanFeature,
+  PlanId,
+  PlanOffer,
+} from "./api/plans.ts";
 export {
   AdminDatabase,
   CLEANUP_SIMULATED_AFTER_DAYS,

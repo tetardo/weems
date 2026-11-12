@@ -1,5 +1,6 @@
 import {
   HomeImages,
+  PlanCatalog,
   PilotRoutes,
   PublicFlightList,
   PublicFlightView,
@@ -60,3 +61,8 @@ export function getSiteStats(): Promise<SiteStats | null> {
 export function getHomeImages(): Promise<HomeImages | null> {
   return get("/v1/site/home-images", HomeImages);
 }
+
+/** Plans and what they include (page Offres); null when the API does not answer. */
+export const getPlanCatalog = cache((): Promise<PlanCatalog | null> =>
+  get("/v1/plans", PlanCatalog),
+);
