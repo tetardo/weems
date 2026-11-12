@@ -44,6 +44,11 @@ export class PilotIdentifier {
     return (await this.statusOf(userId))?.role === "admin";
   }
 
+  async isFictitious(userId: string): Promise<boolean> {
+    const status = await this.statusOf(userId);
+    return status !== null && status.fictitious && !status.disabledAt;
+  }
+
   async fromAccessToken(token: string): Promise<string | null> {
     try {
       const { issuer, keySet } = await this.verificationKeys(token);

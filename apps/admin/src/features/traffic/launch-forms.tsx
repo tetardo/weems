@@ -4,7 +4,7 @@ import { Field, Segmented } from "@weems/ui";
 import { useState } from "react";
 import type { Launch } from "../../server/traffic/launch.ts";
 import { LoadIcon, SimulateIcon, StartIcon } from "../../ui/icons.ts";
-import { NumberField } from "./number-field.tsx";
+import { NumberField } from "../../ui/number-field.tsx";
 
 const SPEEDS = [1, 10, 50, 100];
 

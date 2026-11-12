@@ -41,22 +41,27 @@ async function cwdOf(pid: number): Promise<string> {
   }
 }
 
-interface Listener {
-  pid: number;
-  command: string;
-  cwd: string;
+/** A process of this Mac, with its command line (ps) and working folder; null if it is gone. */
+export async function processOwner(pid: number, repoRoot: string): Promise<PortOwner | null> {
+  try {
+    const ps = await run("ps", ["-o", "command=", "-p", String(pid)], { timeout: 5_000 });
+    const command = ps.stdout.trim();
+    if (!command) return null;
+    const weems = isWeemsProcess(command, await cwdOf(pid), repoRoot);
+    return { kind: "process", name: command, pid, weems };
+  } catch {
+    return null;
+  }
 }
 
-/** Process listening on the port (lsof), with its command line (ps); null if none or no lsof. */
-async function listeningProcess(port: number): Promise<Listener | null> {
+/** Process listening on the port (lsof); null if none or no lsof. */
+async function listeningPid(port: number): Promise<number | null> {
   try {
     const { stdout } = await run("lsof", ["-nP", `-iTCP:${port}`, "-sTCP:LISTEN", "-t"], {
       timeout: 5_000,
     });
     const pid = Number(stdout.trim().split("\n")[0]);
-    if (!Number.isInteger(pid) || pid <= 0) return null;
-    const ps = await run("ps", ["-o", "command=", "-p", String(pid)], { timeout: 5_000 });
-    return { pid, command: ps.stdout.trim(), cwd: await cwdOf(pid) };
+    return Number.isInteger(pid) && pid > 0 ? pid : null;
   } catch {
     return null;
   }
@@ -68,12 +73,6 @@ export async function portOwner(port: number, repoRoot: string): Promise<PortOwn
   if (container) {
     return { kind: "docker", name: container, pid: null, weems: isWeemsContainer(container) };
   }
-  const process = await listeningProcess(port);
-  if (!process) return null;
-  return {
-    kind: "process",
-    name: process.command,
-    pid: process.pid,
-    weems: isWeemsProcess(process.command, process.cwd, repoRoot),
-  };
+  const pid = await listeningPid(port);
+  return pid === null ? null : processOwner(pid, repoRoot);
 }

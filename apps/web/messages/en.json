@@ -17,7 +17,11 @@
       "login": "Log in",
       "signup": "Create my logbook"
     },
-    "busy": "Too many visits right now. Please try again in a minute."
+    "busy": "Too many visits right now. Please try again in a minute.",
+    "error": {
+      "text": "This page could not be shown: the site's server ran into an error. The details are in the terminal running the site.",
+      "retry": "Try again"
+    }
   },
   "Live": {
     "title": "Live map",
@@ -122,6 +126,7 @@
     "next": "Older flights",
     "first": "Back to the latest",
     "apiDown": "The API does not answer ({url}). Is it running on the Mac?",
+    "apiOutdated": "The API ({url}) answers in a format the site does not know: probably an older version (Docker container weems-api-1?). Stop it and start the up-to-date API with pnpm --filter @weems/api dev.",
     "deleteAll": "Delete all my flights",
     "deleteAllConfirm": "Permanently delete all your flights? (development tool)",
     "deleteAllHint": "Development only: clears the test flights."
@@ -504,5 +509,9 @@
     },
     "estimated": "{category} · estimated",
     "estimatedHint": "Type missing from the Weems catalogue: category estimated from the engines and weight given by the simulator."
+  },
+  "Fictitious": {
+    "badge": "Fictitious account",
+    "help": "Account created by the activity simulator to test the site. Not a real pilot."
   }
 }

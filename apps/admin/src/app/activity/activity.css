@@ -1,0 +1,227 @@
+/* Page Activité simulée (maquette A validée par Greg le 12/11/2026, /mnt/project-files/admin/activite/). */
+.fields.two {
+  grid-template-columns: 1fr 1fr;
+}
+.mode .lead {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.mode .hd .n {
+  font:
+    700 11.5px var(--font-mono),
+    monospace;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.popband {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.popband .ic {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 12%, transparent);
+}
+.popband .sub {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.popband .nums {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.popband .nums div {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.popband .nums b {
+  display: block;
+  font:
+    700 20px var(--font-grotesk),
+    sans-serif;
+  color: var(--ink);
+}
+.popband .acts {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.sum {
+  border-radius: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  font-size: 13.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sum .r {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.sum .r svg {
+  color: var(--link);
+  flex: none;
+}
+.sum .r .m {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.range {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.range > * {
+  flex: 1;
+}
+.range .to {
+  flex: none;
+  color: var(--muted);
+  font-size: 13px;
+  padding-bottom: 12px;
+}
+.steps {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+.stp {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.stp:last-child {
+  border-bottom: 0;
+}
+.stp .k {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font:
+    700 12px var(--font-inter),
+    sans-serif;
+}
+.stp.done .k {
+  color: var(--success);
+  border-color: color-mix(in srgb, var(--success) 50%, transparent);
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+}
+.stp.cur .k {
+  color: var(--link);
+  border-color: var(--accent);
+  background: var(--soft);
+}
+.stp.wait {
+  color: var(--muted);
+}
+.stp .x {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stp .bar3 {
+  width: 160px;
+  height: 6px;
+  border-radius: 9px;
+  background: var(--surface2);
+  overflow: hidden;
+}
+.stp .bar3 i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.fills h2 {
+  font-size: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fills .g {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.fills .c {
+  padding: 14px 16px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.fills .c:last-child {
+  border-right: 0;
+}
+.fills .c .t {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.fills .c .t svg {
+  color: var(--link);
+}
+.fills .c p {
+  margin: 0;
+  color: var(--muted);
+}
+.fills .c a {
+  color: var(--link);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto;
+}
+@media (max-width: 640px) {
+  .fills .g {
+    grid-template-columns: 1fr 1fr;
+  }
+  .fills .c:nth-child(2n) {
+    border-right: 0;
+  }
+  .fills .c:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+  .popband .acts {
+    margin-left: 0;
+    width: 100%;
+  }
+  .popband .acts .btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .stp .bar3 {
+    width: 70px;
+  }
+}

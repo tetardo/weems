@@ -17,7 +17,11 @@
       "login": "Se connecter",
       "signup": "Créer mon carnet"
     },
-    "busy": "Trop de visites en ce moment. Réessayez dans une minute."
+    "busy": "Trop de visites en ce moment. Réessayez dans une minute.",
+    "error": {
+      "text": "Cette page n'a pas pu s'afficher : le serveur du site a rencontré une erreur. Le détail est dans le terminal où tourne le site.",
+      "retry": "Réessayer"
+    }
   },
   "Live": {
     "title": "Carte en direct",
@@ -122,6 +126,7 @@
     "next": "Vols plus anciens",
     "first": "Retour aux plus récents",
     "apiDown": "L'API ne répond pas ({url}). Est-elle lancée sur le Mac ?",
+    "apiOutdated": "L'API ({url}) répond dans un format que le site ne connaît pas : c'est sans doute une ancienne version (conteneur Docker weems-api-1 ?). Arrêtez-la et relancez l'API à jour avec pnpm --filter @weems/api dev.",
     "deleteAll": "Supprimer tous mes vols",
     "deleteAllConfirm": "Supprimer définitivement tous vos vols ? (outil de développement)",
     "deleteAllHint": "Développement seulement : vide la liste des vols de test."
@@ -504,5 +509,9 @@
     },
     "estimated": "{category} · estimée",
     "estimatedHint": "Type absent du catalogue Weems : catégorie estimée d'après le moteur et la masse donnés par le simulateur."
+  },
+  "Fictitious": {
+    "badge": "Compte fictif",
+    "help": "Compte créé par le simulateur d'activité, pour tester le site. Ce n'est pas un vrai pilote."
   }
 }

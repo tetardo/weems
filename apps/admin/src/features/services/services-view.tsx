@@ -97,7 +97,7 @@ function FreeDialog(props: {
   const id = props.service.id === "api" ? "api" : "site";
   return (
     <ConfirmDialog
-      title={`Libérer le port ${props.service.port} ?`}
+      title="Arrêter l'ancien lancement ?"
       confirmLabel="Arrêter et démarrer"
       busy={props.busy}
       onCancel={props.onCancel}

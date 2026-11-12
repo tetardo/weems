@@ -6,7 +6,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import { routing } from "../../i18n/routing.ts";
 import { siteUrl } from "../../site/site-url.ts";
-import { THEME_SCRIPT } from "../../site/theme.ts";
+import { ThemeScript } from "../../site/theme-script.tsx";
 import "../global.css";
 
 /** GameLab fonts, self-hosted by Next.js at build time (no request to Google from the browser). */
@@ -45,7 +45,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <ThemeScript />
       </head>
       <body className="min-h-full bg-bg text-ink">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>

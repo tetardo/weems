@@ -29,6 +29,10 @@ export const AdminAccount = z.object({
   disabledAt: UtcTimestamp.nullable(),
   /** The development pilot (pnpm simulate, pnpm fly), outside production only. */
   development: z.boolean(),
+  /** Fictitious account of the simulated activity (page Activité simulée), outside production only. */
+  fictitious: z.boolean(),
+  /** Address of the public profile (/pilots/{handle}) when the profile is public; null otherwise. */
+  publicHandle: z.string().nullable(),
   flights: z.number().int().nonnegative(),
   createdAt: UtcTimestamp,
   /** Last session opened, on the site or by the tracker's login; null if never. */

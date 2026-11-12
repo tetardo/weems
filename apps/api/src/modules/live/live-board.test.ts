@@ -11,6 +11,7 @@ const info: LiveFlightInfo = {
   aircraftClass: { category: "narrowBody", estimated: false },
   departureIcao: "LFLL",
   plannedArrivalIcao: "LFMN",
+  fictitious: false,
 };
 const report = (seq: number): PositionReport => ({
   seq,

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { ServiceView } from "../server/services/service-view.ts";
 import {
   AccountsIcon,
+  ActivityIcon,
   DocsIcon,
   ExternalIcon,
   ServicesIcon,
@@ -55,6 +56,10 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
         <Link href="/traffic" className={on("/traffic")}>
           <TrafficIcon /> Trafic simulé
           {status.trafficRunning && <span className="st live">en cours</span>}
+        </Link>
+        <Link href="/activity" className={on("/activity")}>
+          <ActivityIcon /> Activité simulée
+          {status.activityRunning && <span className="st live">en cours</span>}
         </Link>
       </nav>
       <nav className="grp">

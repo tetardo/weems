@@ -81,6 +81,11 @@ export class ProfilesService {
     return this.view(caller.pilotId, profile);
   }
 
+  /** Address of every public profile, by pilot (admin console: Comptes, Activité simulée). */
+  publicHandles(): Promise<Map<string, string>> {
+    return this.repository.publicHandles();
+  }
+
   async savePhoto(caller: Caller, upload: Buffer): Promise<void> {
     await this.repository.savePhoto(caller.pilotId, await normalizePhoto(upload));
   }

@@ -30,7 +30,7 @@ Laisser cette fenêtre ouverte : elle affiche les journaux de la console. La fer
 
 ## Weems Stop
 
-Dans l'ordre : la simulation en cours (ses vols sont fermés comme interrompus), le site, l'API, la console, puis la base (`docker compose stop`). Les données sont gardées : jamais `docker compose down -v`. Docker Desktop reste ouvert.
+Dans l'ordre : la simulation ou l'activité simulée en cours (ses vols sont fermés comme interrompus), le site, l'API, la console, puis la base (`docker compose stop`). Les données sont gardées : jamais `docker compose down -v`. Docker Desktop reste ouvert.
 
 Si la console ne répond plus (fenêtre fermée de force, plantage), Stop retrouve les programmes Weems restés seuls par les ports 3000 à 3002 et les simulations, en vérifiant que leur dossier de travail est dans le dépôt.
 

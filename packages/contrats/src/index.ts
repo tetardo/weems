@@ -78,7 +78,25 @@ export {
   FacebookName,
 } from "./api/profiles.ts";
 export { DevFlightCounts, DevMetrics } from "./api/dev-metrics.ts";
+export {
+  FICTITIOUS_EMAIL_DOMAIN,
+  FICTITIOUS_PASSWORD,
+  FictitiousPilot,
+  FictitiousPilotRequest,
+  FictitiousPilotsCreated,
+  FictitiousPilotsRequest,
+  FictitiousPopulation,
+  MAX_FICTITIOUS_PILOTS,
+} from "./api/fictitious.ts";
 export { PilotProgress, SimulationLine, SimulationProgress } from "./tools/simulation-progress.ts";
+export {
+  LiveActivityLine,
+  LiveActivityProgress,
+  PopulationLine,
+  PopulationProgress,
+  PopulationResult,
+  PopulationStep,
+} from "./tools/activity-progress.ts";
 export {
   AccountRole,
   AccountUpdate,

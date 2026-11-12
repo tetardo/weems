@@ -13,7 +13,7 @@ export interface PortHolder {
   message: string;
   /** « le conteneur Docker « weems-api-1 » », « le processus 4211 (…) »; null if unknown. */
   owner: string | null;
-  /** An old Weems launch: the console may stop it (« Libérer le port », after a confirmation). */
+  /** An old Weems launch: the console may stop it (« Libérer et démarrer », after a confirmation). */
   freeable: boolean;
 }
 

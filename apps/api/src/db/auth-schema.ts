@@ -33,6 +33,8 @@ export const users = pgTable("users", {
   role: text("role").notNull().default("pilot"),
   /** Set when an administrator disables the account: no login, no token accepted. */
   disabledAt: utc("disabled_at"),
+  /** Fictitious account of the admin console's simulated activity (development only, page Activité simulée). */
+  fictitious: boolean("fictitious").notNull().default(false),
 });
 
 export const sessions = pgTable(

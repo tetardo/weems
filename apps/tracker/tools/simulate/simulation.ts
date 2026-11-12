@@ -1,13 +1,7 @@
 import { mkdirSync } from "node:fs";
-import { join } from "node:path";
-import { uuidV7 } from "@weems/contrats";
-import { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts";
-import { replayFrom, replayUntil } from "../../src/connectors/replay/replay-format.ts";
-import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
-import { flightStarts } from "../../src/core/session.ts";
-import { createTracker } from "../../src/runtime/create-tracker.ts";
 import type { ApiClient } from "../../src/sender/api-client.ts";
-import { generateFlight } from "../generate-flights/generator.ts";
+import type { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts";
+import { liveTracker } from "./live-tracker.ts";
 import type { Scenario } from "../generate-flights/scenario.ts";
 import type { SimulationProgress } from "@weems/contrats";
 import { progressOf, type ProgressSource } from "./progress.ts";
@@ -55,30 +49,14 @@ interface Run extends ProgressSource {
 }
 
 function buildTracker(scenario: Scenario, options: SimulationOptions) {
-  const generated = generateFlight(scenario);
-  const flight = options.skipBoarding ? replayFrom(generated, flightStarts) : generated;
-  // Only what can be played before the stop stays in memory (2 000 pilots in one process).
-  const replay =
-    options.stopAfterMs === undefined
-      ? flight
-      : replayUntil(flight, options.stopAfterMs * options.speed);
-  const connector = new ReplayConnector(replay, options.speed);
-  const first = flight.records[0]?.t ?? 0;
-  const durationMs = Math.max(1, (flight.records.at(-1)?.t ?? first) - first);
-  const tracker = createTracker({
-    connector,
-    databasePath: join(options.workDir, `${scenario.callsign}.db`),
+  return liveTracker(scenario, {
     api: options.api,
-    session: {
-      callsign: scenario.callsign,
-      flightPlan: { departureIcao: scenario.departure.icao, arrivalIcao: scenario.arrival.icao },
-      trackerVersion: options.trackerVersion,
-      clock: { nowUtcMs: () => Date.now() },
-      newFlightId: uuidV7,
-      params: AIRLINER_PARAMS,
-    },
+    speed: options.speed,
+    workDir: options.workDir,
+    trackerVersion: options.trackerVersion,
+    ...(options.skipBoarding ? { skipBoarding: true } : {}),
+    ...(options.stopAfterMs === undefined ? {} : { stopAfterMs: options.stopAfterMs }),
   });
-  return { connector, tracker, durationMs, startedAtMs: Date.now() };
 }
 
 /** When departures stop: moved to now when the simulation is stopped. */

@@ -1,0 +1,16 @@
+flowchart LR
+  console["Console :3002<br/>page Activité simulée"]
+  subgraph populate["pnpm populate (apps/tracker)"]
+    create["create<br/>comptes + vols passés<br/>(horloge du tracker figée)"]
+    live["live<br/>vols en direct<br/>+ visiteurs"]
+  end
+  api["API :3000<br/>routes /v1/dev/*<br/>absentes en production"]
+  base[("PostgreSQL<br/>users.fictitious = true<br/>@fictif.weems.local")]
+  site["Site :3001<br/>profils, carnet, direct<br/>badge « Compte fictif »"]
+
+  console -->|"lance, suit les lignes JSON,<br/>arrête"| populate
+  console -->|"GET / DELETE<br/>/v1/dev/fictitious-pilots"| api
+  create -->|"POST /v1/dev/fictitious-pilots<br/>puis vols « replay » avec<br/>jeton dev-token:&lt;id&gt;"| api
+  live -->|"vols « replay » en direct<br/>flux du direct (visiteurs)"| api
+  api --> base
+  site --> api

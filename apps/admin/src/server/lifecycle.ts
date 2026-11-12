@@ -1,4 +1,4 @@
-import { services, traffic } from "./console.ts";
+import { activity, services, traffic } from "./console.ts";
 
 /** What the desktop scripts (scripts/mac/start.sh, stop.sh) ask the console. */
 export type LifecycleAction = "start-all" | "stop-all";
@@ -24,11 +24,12 @@ export function parseAction(body: unknown): LifecycleAction | null {
 
 /**
  * Icône Start: the database, the API and the site, as the « Tout démarrer » button does.
- * Icône Stop: the simulation in progress first (its flights are closed as interrupted), then the
- * site, the API and the database. The console itself is stopped by the script.
+ * Icône Stop: the simulation or simulated activity in progress first (flights closed as
+ * interrupted), then the site, the API and the database. The console itself is stopped by the script.
  */
 export async function runLifecycle(action: LifecycleAction): Promise<void> {
   if (action === "start-all") return services().startAll();
   await traffic().stop();
+  await activity().stop();
   await services().stopAll();
 }

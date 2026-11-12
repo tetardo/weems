@@ -86,7 +86,7 @@ stop_leftovers() {
       stop_group "$(group_of "$pid")"
     fi
   done
-  for pid in $(pgrep -f 'tools/simulate/cli|e2e/load/cli' 2>/dev/null); do
+  for pid in $(pgrep -f 'tools/simulate/cli|tools/populate/cli|e2e/load/cli' 2>/dev/null); do
     if is_weems_process "$pid"; then
       say "Arrêt d'une simulation restée seule"
       stop_group "$(group_of "$pid")"
