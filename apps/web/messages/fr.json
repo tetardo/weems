@@ -19,7 +19,8 @@
       "signup": "Créer un compte",
       "login": "Se connecter",
       "menu": "Ouvrir le menu",
-      "closeMenu": "Fermer le menu"
+      "closeMenu": "Fermer le menu",
+      "pilotPro": "Pilot Pro"
     },
     "busy": "Trop de visites en ce moment. Réessayez dans une minute.",
     "error": {
@@ -988,9 +989,17 @@
     },
     "banner": {
       "eyebrow": "Découvrir Weems",
-      "title": "Voler, comprendre, progresser.",
+      "title": "Voler, comprendre,",
       "slogan": "Un tracker enregistre chacun de vos vols dans le simulateur. Le site les raconte, la communauté les voit passer, et vous progressez vol après vol.",
-      "plans": "Voir les offres"
+      "plans": "Voir les offres",
+      "highlight": "progresser.",
+      "live": "Vols en direct",
+      "chips": {
+        "tracker": "Tracker MSFS",
+        "logbook": "Carnet de vol",
+        "live": "Carte en direct",
+        "community": "Communauté"
+      }
     },
     "stepNumber": "Étape {number}",
     "steps": {
@@ -1220,6 +1229,17 @@
         "title": "Statistiques du groupe",
         "text": "Les chiffres de toutes vos compagnies réunis dans un même tableau."
       }
+    },
+    "banner": {
+      "eyebrow": "Fonctionnalités",
+      "title": "Tout ce que fait",
+      "highlight": "Weems.",
+      "lead": "Du premier vol enregistré à la direction d'une compagnie : chaque fonction, ce qu'elle vous apporte et la formule qui la contient.",
+      "offers": "Voir les offres",
+      "compare": "Comparer les formules",
+      "available": "{count, plural, one {# fonction disponible} other {# fonctions disponibles}}",
+      "soon": "{count} bientôt",
+      "plans": "{count} formules"
     }
   }
 }

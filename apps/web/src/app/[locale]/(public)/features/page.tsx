@@ -5,6 +5,9 @@ import { getPlanCatalog } from "../../../../api/public-api.ts";
 import { FeaturesPage } from "../../../../features/features-page.tsx";
 import { publicPageMetadata } from "../../../../profile/page-metadata.ts";
 import { apiFallback } from "../../../../site/api-fallback.tsx";
+import { homeImages } from "../../../../home/home-data.ts";
+import { homeBackgrounds } from "../../../../home/home-image.ts";
+import { publicApiUrl } from "../../../../site/api-url.ts";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -25,9 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function FeaturesRoute({ params }: Props) {
   setRequestLocale((await params).locale);
   try {
-    const catalog = await getPlanCatalog();
+    const [catalog, images] = await Promise.all([getPlanCatalog(), homeImages()]);
     if (!catalog) notFound();
-    return <FeaturesPage catalog={catalog} />;
+    return <FeaturesPage catalog={catalog} photos={homeBackgrounds(images, publicApiUrl())} />;
   } catch (error) {
     return apiFallback(error);
   }

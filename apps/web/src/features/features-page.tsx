@@ -5,6 +5,8 @@ import { SectionMain } from "../ui/section-main.tsx";
 import { GROUP_ICONS } from "./group-icons.ts";
 import { FeatureRow } from "./feature-row.tsx";
 import { FeaturesToc } from "./features-toc.tsx";
+import { FeaturesBanner } from "./features-banner.tsx";
+import type { ThemePhotos } from "../ui/photo-background.tsx";
 
 function GroupSection({
   catalog,
@@ -44,14 +46,12 @@ function GroupSection({
  * brings and the plan it starts in. Nothing is listed by hand: a function added to the catalogue
  * shows up here with its texts (Features.items.<key>), « Bientôt » until it is available.
  */
-export function FeaturesPage({ catalog }: { catalog: PlanCatalog }) {
-  const t = useTranslations("Features");
+export function FeaturesPage({ catalog, photos }: { catalog: PlanCatalog; photos: ThemePhotos }) {
   const groups = featureGroups(catalog);
   return (
     <SectionMain>
-      <div className="mx-auto mt-4 mb-7 max-w-3xl text-center">
-        <h1 className="m-0 text-[2em]">{t("title")}</h1>
-        <p className="mt-2 text-base text-muted">{t("lead")}</p>
+      <div className="mb-9">
+        <FeaturesBanner photos={photos} catalog={catalog} />
       </div>
       <div className="grid items-start gap-4 md:grid-cols-[220px_1fr] md:gap-8">
         <FeaturesToc groups={groups.map(([group, features]) => [group, features.length])} />

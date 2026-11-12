@@ -237,6 +237,33 @@ h3 {
   background: var(--wm-sky);
 }
 
+/* Promotional button of the bar (« Pilot Pro »): a soft glow in the accent colours. */
+@utility promo-glow {
+  color: var(--color-on-accent);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.12) inset,
+    0 6px 20px -6px color-mix(in srgb, var(--color-accent) 70%, transparent);
+  &:hover {
+    filter: brightness(1.08);
+  }
+}
+
+/*
+ * Photo banners (Découvrir, Fonctionnalités): the dashed route flows, the plane follows it, the
+ * airports pulse. Nothing moves when the system asks for less motion.
+ */
+@keyframes route-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+@utility route-flow {
+  animation: route-flow 1.6s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
 /* Glass button on the photo (« Voir les vols en direct »). */
 @utility hero-glass {
   background: var(--wm-hero-card);

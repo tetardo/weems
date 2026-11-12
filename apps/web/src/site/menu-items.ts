@@ -18,6 +18,8 @@ export interface MenuItem {
   readonly label: string;
   readonly icon: IconComponent;
   readonly audience: MenuAudience;
+  /** "account": on large screens, beside the way in rather than after the logo (Greg, 13/11). */
+  readonly placement?: "account";
 }
 
 /**
@@ -31,12 +33,17 @@ const MENU: readonly MenuItem[] = [
   { href: "/features", label: "features", icon: FeaturesIcon, audience: "visitor" },
   { href: "/logbook", label: "logbook", icon: LogbookIcon, audience: "pilot" },
   { href: "/flights", label: "flights", icon: FlightsIcon, audience: "pilot" },
-  { href: "/live", label: "live", icon: LiveIcon, audience: "everyone" },
+  { href: "/live", label: "live", icon: LiveIcon, audience: "everyone", placement: "account" },
   { href: "/plans", label: "plans", icon: PlansIcon, audience: "everyone" },
 ];
 
-/** Entries of the bar for a logged-in pilot or for a visitor. */
+/** Entries of the menu for a logged-in pilot or for a visitor (all of them on phones). */
 export function menuFor(loggedIn: boolean): readonly MenuItem[] {
   const shown: MenuAudience = loggedIn ? "pilot" : "visitor";
   return MENU.filter((item) => item.audience === "everyone" || item.audience === shown);
+}
+
+/** Entries after the logo on large screens; the others sit beside the way in. */
+export function navFor(loggedIn: boolean): readonly MenuItem[] {
+  return menuFor(loggedIn).filter((item) => item.placement !== "account");
 }
