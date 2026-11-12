@@ -1,4 +1,5 @@
-const EARTH_RADIUS_NM = 3440.065;
+/** Mean Earth radius, in nautical miles. */
+export const EARTH_RADIUS_NM = 3440.065;
 /** Radians per degree. */
 export const RAD = Math.PI / 180;
 

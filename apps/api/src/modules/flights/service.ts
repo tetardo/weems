@@ -114,6 +114,11 @@ export class FlightsService {
     }
     if (known.length === events.length) return ALREADY_RECEIVED;
     await this.repository.insertEvents(flightId, events);
+    const knownSeqs = new Set(known.map((e) => e.seq));
+    this.live.events(
+      flightId,
+      events.filter((e) => !knownSeqs.has(e.seq)),
+    );
     return CREATED;
   }
 

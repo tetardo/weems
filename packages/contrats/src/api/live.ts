@@ -40,8 +40,34 @@ export const LiveFlight = z.object({
 });
 export type LiveFlight = z.infer<typeof LiveFlight>;
 
-/** SSE event "snapshot", sent on connection: every flight on the map. */
-export const LiveSnapshot = z.object({ flights: z.array(LiveFlight) });
+/**
+ * Something that just happened on the live map (spec J4, carte en direct): a take-off, a landing
+ * with its vertical speed at touchdown, or a public pilot starting a flight. A pilot whose
+ * profile is not public is never named, and never announced when starting.
+ */
+export const LiveEvent = z.object({
+  at: UtcTimestamp,
+  flightId: FlightId,
+  callsign: z.string(),
+  kind: z.enum(["takeoff", "landing", "started"]),
+  /** Departure for a take-off or a start, planned arrival for a landing; null when not given. */
+  airportIcao: IcaoCode.nullable(),
+  /** Started: the planned arrival, for « LFPG → EGCC ». */
+  arrivalIcao: IcaoCode.nullable(),
+  /** Landing: vertical speed at touchdown, ft/min (negative = descending); null otherwise. */
+  touchdownVs: z.number().nullable(),
+  pilot: LivePilot.nullable(),
+});
+export type LiveEvent = z.infer<typeof LiveEvent>;
+
+/** At most this many events in a snapshot, newest first. */
+export const MAX_LIVE_EVENTS = 10;
+
+/** SSE event "snapshot", sent on connection: every flight on the map and the latest events. */
+export const LiveSnapshot = z.object({
+  flights: z.array(LiveFlight),
+  events: z.array(LiveEvent).max(MAX_LIVE_EVENTS),
+});
 export type LiveSnapshot = z.infer<typeof LiveSnapshot>;
 
 /** SSE event "update", every 2 s when something changed. */
@@ -49,6 +75,8 @@ export const LiveUpdate = z.object({
   flights: z.array(LiveFlight),
   /** Flights to take off the map: closed, or silent for 10 minutes. */
   removed: z.array(FlightId),
+  /** Events since the previous update, oldest first. */
+  events: z.array(LiveEvent),
 });
 export type LiveUpdate = z.infer<typeof LiveUpdate>;
 

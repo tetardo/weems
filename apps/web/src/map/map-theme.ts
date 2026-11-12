@@ -14,8 +14,10 @@ export interface MapTheme {
   /** Aircraft with a live signal, and with a lost one. */
   readonly aircraft: string;
   readonly aircraftLost: string;
-  /** Airports of the map of a public profile. */
+  /** Airports of the map of a public profile, and busy airports of the live map. */
   readonly airport: string;
+  /** Shade of the night on the live map. */
+  readonly night: string;
 }
 
 const STYLES = "https://tiles.openfreemap.org/styles";
@@ -28,6 +30,7 @@ const DARK: MapTheme = {
   aircraft: "#4fd1e8",
   aircraftLost: "#9aa6bf",
   airport: "#ffb454",
+  night: "rgba(0, 0, 0, 0.32)",
 };
 
 const LIGHT: MapTheme = {
@@ -38,6 +41,7 @@ const LIGHT: MapTheme = {
   aircraft: "#0b7285",
   aircraftLost: "#9aa5b1",
   airport: "#b86a00",
+  night: "rgba(15, 23, 42, 0.12)",
 };
 
 export const mapTheme = (dark: boolean): MapTheme => (dark ? DARK : LIGHT);

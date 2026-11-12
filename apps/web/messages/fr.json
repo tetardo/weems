@@ -63,7 +63,7 @@
   },
   "Live": {
     "title": "Carte en direct",
-    "count": "{count, plural, =0 {Aucun vol en cours} one {# vol en cours} other {# vols en cours}}",
+    "count": "{count, plural, =0 {Aucun vol} one {# vol} other {# vols}}",
     "connection": {
       "connecting": "Connexion…",
       "open": "En direct",
@@ -97,6 +97,32 @@
       "copied": "Lien copié",
       "shareTitle": "{callsign} en direct sur Weems",
       "recenter": "Recentrer"
+    },
+    "showNight": "Jour / nuit",
+    "search": {
+      "label": "Chercher un vol",
+      "placeholder": "Indicatif, pilote, aéroport",
+      "none": "Aucun vol trouvé"
+    },
+    "list": {
+      "title": "En vol",
+      "sortLabel": "Trier",
+      "sorts": {
+        "arrival": "Arrivée la plus proche",
+        "callsign": "Indicatif",
+        "phase": "Phase"
+      },
+      "toggle": "Afficher ou masquer la liste des vols"
+    },
+    "legend": {
+      "label": "Catégories d'avion : cliquer pour masquer ou afficher"
+    },
+    "events": {
+      "title": "Derniers événements",
+      "takeoff": "<strong>{callsign}</strong> a décollé{airport, select, none {} other { de {airport}}}",
+      "landing": "<strong>{callsign}</strong> a atterri{airport, select, none {} other { à {airport}}}",
+      "started": "<strong>{name}</strong> a commencé un vol{from, select, none {} other { ({from} → {to})}}",
+      "vs": "{vs} ft/min"
     }
   },
   "Phases": {

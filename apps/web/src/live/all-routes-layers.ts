@@ -3,6 +3,8 @@ import type { FilterSpecification, GeoJSONSource, Map as MapLibreMap } from "map
 import type { MapTheme } from "../map/map-theme.ts";
 
 const ALL_ROUTES = "all-routes";
+/** The lowest of our layers: the night goes under it. */
+export const LOWEST_LIVE_LAYER = `${ALL_ROUTES}-flown`;
 /** Faint lines, fainter still while a flight is selected so that its own route stands out. */
 const OPACITY = { flown: [0.45, 0.12], ahead: [0.3, 0.08] } as const;
 
@@ -23,7 +25,7 @@ export function addAllRoutesLayers(map: MapLibreMap, theme: MapTheme, beforeId: 
   map.addSource(ALL_ROUTES, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
   map.addLayer(
     {
-      id: `${ALL_ROUTES}-flown`,
+      id: LOWEST_LIVE_LAYER,
       type: "line",
       source: ALL_ROUTES,
       filter: ["==", ["get", "kind"], "flown"],
