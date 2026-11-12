@@ -1,0 +1,11 @@
+flowchart LR
+  pr["Pull request"]
+  main["Fusion sur main,<br/>chaque nuit à 3 h,<br/>ou « Run workflow »"]
+  filtre{"Fichiers de la chaîne<br/>tracker → API → direct ?"}
+  court["Types, style, structure,<br/>tests, J2, J3<br/>(environ 3 min)"]
+  long["Types, style, structure,<br/>tests, J1, J2, J3<br/>(environ 10 min)"]
+
+  pr --> filtre
+  filtre -->|non| court
+  filtre -->|oui| long
+  main --> long
