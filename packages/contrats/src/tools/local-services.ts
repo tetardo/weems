@@ -67,6 +67,8 @@ export const LauncherOverview = z.object({
     live: z.object({ flights: Count, simulated: Count }),
     /** Beyond it the API is slow (page Supervision): the progress circle of the card. */
     slowP95Ms: Count,
+    /** Live flights the load test held (J4): the progress circle of « En direct ». */
+    liveTestedFlights: Count,
   }),
   /** Accounts not disabled, the fictitious ones included. */
   users: z.object({

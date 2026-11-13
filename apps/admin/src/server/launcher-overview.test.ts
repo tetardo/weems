@@ -45,6 +45,7 @@ describe("launcherOverview", () => {
       positionsLastMinute: 120,
       live: { flights: 7, simulated: 5 },
       slowP95Ms: 500,
+      liveTestedFlights: 500,
     });
     expect(overview.users).toEqual({ real: 3, fictitious: 97, newLast7Days: 2, publicProfiles: 2 });
   });

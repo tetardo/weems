@@ -16,23 +16,54 @@
         <h1>Weems en local</h1>
         <p id="summary"><span class="dot"></span><span id="summary-text">Lecture…</span></p>
       </div>
-      <div class="head-buttons" id="head-buttons"></div>
+      <div class="head-buttons">
+        <button
+          class="button brand docker icon-only"
+          data-open="docker"
+          data-icon="docker"
+          title="Ouvrir Docker Desktop"
+          aria-label="Ouvrir Docker Desktop"
+        ></button>
+        <button
+          class="button brand vscode icon-only"
+          data-open="vscode"
+          data-icon="code"
+          title="Ouvrir le projet dans VS Code"
+          aria-label="Ouvrir le projet dans VS Code"
+        ></button>
+        <div class="menu">
+          <button class="button open menu-toggle" data-icon="globe" aria-haspopup="menu">
+            Ouvrir<span class="chevron" data-icon="chevron"></span>
+          </button>
+          <div class="menu-list" role="menu">
+            <button role="menuitem" data-open="site">Le site web</button>
+            <button role="menuitem" data-open="console">La console d'administration</button>
+          </div>
+        </div>
+        <div class="menu">
+          <button
+            class="button primary menu-toggle"
+            id="power-toggle"
+            data-icon="power"
+            aria-haspopup="menu"
+          >
+            Services<span class="chevron" data-icon="chevron"></span>
+          </button>
+          <div class="menu-list" role="menu">
+            <button role="menuitem" data-all="start-all" data-icon="start">Tout démarrer</button>
+            <button role="menuitem" data-all="stop-all" data-icon="stop">Tout arrêter</button>
+            <button role="menuitem" data-all="restart-all" data-icon="restart">
+              Tout redémarrer
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
     <p class="notice" id="notice" hidden></p>
     <div class="middle">
       <section class="list" id="rows" aria-label="Services"></section>
       <aside class="cards" id="cards" aria-label="Weems en chiffres"></aside>
     </div>
-    <nav class="links">
-      <button class="button small open" data-open="site">Ouvrir le site</button>
-      <button class="button small open" data-open="console">Ouvrir la console</button>
-      <button class="button small simulate" data-open="traffic">Simuler du trafic</button>
-      <button class="button small simulate" data-open="activity">Simuler des activités</button>
-      <button class="button small brand docker" data-open="docker" data-icon="docker">
-        Docker
-      </button>
-      <button class="button small brand vscode" data-open="vscode" data-icon="code">VS Code</button>
-    </nav>
     <section class="logs" aria-label="Journaux">
       <div class="logs-head">
         <strong>Journaux</strong>

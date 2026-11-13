@@ -22,6 +22,7 @@ const overview: LauncherOverview = {
     positionsLastMinute: 120,
     live: { flights: 7, simulated: 5 },
     slowP95Ms: 500,
+    liveTestedFlights: 500,
   },
   users: { real: 3, fictitious: 122, newLast7Days: 2, publicProfiles: 2 },
   revenue: {
@@ -34,22 +35,23 @@ const overview: LauncherOverview = {
 };
 
 describe("cardsOf", () => {
-  it("puts « Base de données » and « Fichiers » first, as half cards", () => {
+  it("puts the four half cards first: base, fichiers, API, en direct", () => {
     const cards = cardsOf(overview, now);
     expect(cards.map((card) => [card.title, card.half ?? false])).toEqual([
       ["Base de données", true],
       ["Fichiers", true],
-      ["API", false],
-      ["Utilisateurs actifs", false],
+      ["API", true],
+      ["En direct", true],
+      ["Utilisateurs", false],
       ["Revenu total", false],
     ]);
   });
 
   it("fills each circle against its reference", () => {
     const rings = cardsOf(overview, now).map((card) => card.ring);
-    expect(rings.map((ring) => ring?.share)).toEqual([0.05, 0.9, 0.08, 0.25, 0.75]);
+    expect(rings.map((ring) => ring?.share)).toEqual([0.05, 0.9, 0.08, 0.014, 0.25, 0.75]);
     expect(rings[1]?.tone).toBe("warn"); // Mac disk 90 % full
-    expect(rings[3]?.caption).toBe("objectif 500");
+    expect(rings[4]?.caption).toBe("objectif 500");
   });
 
   it("says when the last backup was made, or that there is none", () => {
@@ -61,7 +63,7 @@ describe("cardsOf", () => {
     });
   });
 
-  it("shows five empty cards when the console does not answer", () => {
-    expect(cardsOf(null, now)).toHaveLength(5);
+  it("shows six empty cards when the console does not answer", () => {
+    expect(cardsOf(null, now)).toHaveLength(6);
   });
 });

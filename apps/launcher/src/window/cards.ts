@@ -4,8 +4,8 @@ import { eurosText, numberText, shareOf, sinceText, trendOf, usageTone } from ".
 
 /**
  * What the cards right of the services say (Greg, 13/11): short lines, never wrapped (about 26
- * characters at the window's width), and a progress circle each. « Base de données » and
- * « Fichiers » are half cards, one above the other.
+ * characters at the window's width), and a progress circle each, same size, top right. Base de
+ * données over Fichiers, API over En direct: half cards, one above the other.
  */
 
 type Tone = "ok" | "warn" | "down";
@@ -23,7 +23,6 @@ export interface Card {
   title: string;
   value: string;
   tone?: Tone;
-  badge?: string;
   half?: boolean;
   ring?: Ring;
   lines: Line[];
@@ -79,6 +78,7 @@ function apiCard({ api }: LauncherOverview): Card {
   return {
     title: "API",
     value: api.p95Ms === null ? "—" : `${numberText(Math.round(api.p95Ms))} ms`,
+    half: true,
     ring: usage(api.p95Ms ?? 0, api.slowP95Ms, `seuil ${numberText(api.slowP95Ms)} ms`),
     lines: [
       line("p95, heure en cours"),
@@ -86,8 +86,20 @@ function apiCard({ api }: LauncherOverview): Card {
         `Erreurs 5xx 24 h : ${numberText(api.serverErrors24h)}`,
         api.serverErrors24h > 0 ? "warn" : undefined,
       ),
+    ],
+  };
+}
+
+function liveCard({ api }: LauncherOverview): Card {
+  const { flights, simulated } = api.live;
+  return {
+    title: "En direct",
+    value: `${numberText(flights)} vol${flights > 1 ? "s" : ""}`,
+    half: true,
+    ring: usage(flights, api.liveTestedFlights, `testé à ${numberText(api.liveTestedFlights)}`),
+    lines: [
+      line(`Dont simulés : ${numberText(simulated)}`),
       line(`Positions : ${numberText(api.positionsLastMinute)} / min`),
-      line(`En direct : ${numberText(api.live.flights)} (${numberText(api.live.simulated)} sim.)`),
     ],
   };
 }
@@ -95,8 +107,8 @@ function apiCard({ api }: LauncherOverview): Card {
 function usersCard({ users }: LauncherOverview): Card {
   const total = users.real + users.fictitious;
   return {
-    title: "Utilisateurs actifs",
-    value: numberText(total),
+    title: "Utilisateurs",
+    value: `${numberText(total)} actifs`,
     tone: "ok",
     ring: goal(total, FOUNDER_OFFER.places, `objectif ${FOUNDER_OFFER.places}`),
     lines: [
@@ -113,12 +125,12 @@ function revenueCard({ revenue }: LauncherOverview): Card {
   return {
     title: "Revenu total",
     value: eurosText(revenue.totalEuros),
-    ...(revenue.fictitious ? { badge: "Fictif" } : {}),
     ring: goal(revenue.monthEuros, revenue.monthGoalEuros, `budget ${revenue.monthGoalEuros} €`),
     lines: [
       line(`Ce mois : ${eurosText(revenue.monthEuros)}`),
       line(`Tendance : ${trend.text}`, trend.up ? "ok" : "down"),
       line(`Mois dernier : ${eurosText(revenue.previousMonthEuros)}`),
+      ...(revenue.fictitious ? [line("Montants fictifs", "warn")] : []),
     ],
   };
 }
@@ -126,18 +138,20 @@ function revenueCard({ revenue }: LauncherOverview): Card {
 const EMPTY: Card[] = [
   { title: "Base de données", half: true },
   { title: "Fichiers", half: true },
-  { title: "API" },
-  { title: "Utilisateurs actifs" },
+  { title: "API", half: true },
+  { title: "En direct", half: true },
+  { title: "Utilisateurs" },
   { title: "Revenu total" },
 ].map((card) => ({ ...card, value: "—", lines: [line("Console ou API arrêtée")] }));
 
-/** In the order of the grid: the two half cards first, then API, users, revenue. */
+/** In the order of the grid: the four half cards (two columns of two), then users and revenue. */
 export function cardsOf(overview: LauncherOverview | null, nowMs: number): Card[] {
   if (!overview) return EMPTY;
   return [
     databaseCard(overview),
     filesCard(overview, nowMs),
     apiCard(overview),
+    liveCard(overview),
     usersCard(overview),
     revenueCard(overview),
   ];

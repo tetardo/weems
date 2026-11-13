@@ -2,6 +2,7 @@ import type { LauncherBridge, LauncherState, LinkTarget, RowId } from "../launch
 import { lineKind, plainText } from "./format.ts";
 import { ICONS } from "./icons.ts";
 import { renderCards } from "./cards-view.ts";
+import { renderPowerMenu, setupMenus } from "./menus.ts";
 import { element, renderRow } from "./rows-view.ts";
 
 /** The launcher's window: shows the state sent by the main process, sends the clicks back. */
@@ -14,19 +15,6 @@ declare global {
 const bridge = window.weems;
 const byId = (id: string) => document.getElementById(id) as HTMLElement;
 
-function headButton(
-  label: string,
-  icon: keyof typeof ICONS,
-  primary: boolean,
-  onClick: () => void,
-) {
-  const button = element("button", primary ? "button primary" : "button") as HTMLButtonElement;
-  button.innerHTML = ICONS[icon]; // static SVG of icons.ts
-  button.append(label);
-  button.addEventListener("click", onClick);
-  return button;
-}
-
 function renderHead(state: LauncherState): void {
   const running = state.rows.filter((row) => row.state === "running").length;
   const total = state.rows.length;
@@ -34,17 +22,7 @@ function renderHead(state: LauncherState): void {
     state.busy || (running > 0 && running < total) ? "starting" : running ? "running" : "stopped";
   byId("summary").querySelector(".dot")?.setAttribute("class", `dot ${dot}`);
   byId("summary-text").textContent = state.busy ?? `${running} sur ${total} en marche`;
-  const buttons =
-    running === 0
-      ? [headButton("Tout démarrer", "start", true, () => bridge.send({ type: "start-all" }))]
-      : [
-          headButton("Tout arrêter", "stop", false, () => bridge.send({ type: "stop-all" })),
-          headButton("Tout redémarrer", "restart", true, () =>
-            bridge.send({ type: "restart-all" }),
-          ),
-        ];
-  for (const button of buttons) button.disabled = state.busy !== null;
-  byId("head-buttons").replaceChildren(...buttons);
+  renderPowerMenu(running, state.busy !== null);
   const notice = byId("notice");
   notice.hidden = state.notice === null;
   notice.textContent = state.notice;
@@ -87,4 +65,5 @@ for (const link of document.querySelectorAll<HTMLButtonElement>("[data-open]")) 
 for (const holder of document.querySelectorAll<HTMLElement>("[data-icon]")) {
   holder.insertAdjacentHTML("afterbegin", ICONS[holder.dataset["icon"] as keyof typeof ICONS]);
 }
+setupMenus(bridge.send);
 bridge.onState(render);

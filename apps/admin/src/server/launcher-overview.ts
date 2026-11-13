@@ -7,6 +7,8 @@ import { apiSummary, SLOW_P95_MS } from "../features/supervision/figures.ts";
  * the launcher's card moves with the population. Replaced by the real sums, never shown as real.
  */
 const FICTITIOUS_EUROS_PER_ACCOUNT = { total: 2.4, month: 0.6, previousMonth: 0.5 } as const;
+/** Live flights held by the load test of J4 (#34). */
+const LIVE_TESTED_FLIGHTS = 500;
 /** Working budget of docs/cadrage/03-fondamentaux.md: less than 100 € a month. */
 const MONTH_GOAL_EUROS = 100;
 const euros = (accounts: number, perAccount: number) =>
@@ -34,6 +36,7 @@ export function launcherOverview(
       positionsLastMinute: health.positionsPerMinute.at(-1) ?? 0,
       live,
       slowP95Ms: SLOW_P95_MS,
+      liveTestedFlights: LIVE_TESTED_FLIGHTS,
     },
     users: {
       real: accounts.real,

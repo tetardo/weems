@@ -13,7 +13,6 @@
   --success: #6ee7a8;
   --danger: #ff7a8a;
   --off: #5b6680;
-  --violet: #b794f6;
   /* Docker's and VS Code's blues, for their buttons only. */
   --docker: #1d63ed;
   --on-brand: #ffffff;
@@ -76,6 +75,74 @@ h1 {
   display: flex;
   gap: 8px;
 }
+.button.icon-only {
+  width: 36px;
+  padding: 0;
+  justify-content: center;
+}
+.button.icon-only svg {
+  width: 17px;
+  height: 17px;
+}
+.menu {
+  position: relative;
+}
+.chevron {
+  display: inline-flex;
+  margin-left: -2px;
+}
+.chevron svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.15s;
+}
+.menu.open .chevron svg {
+  transform: rotate(180deg);
+}
+.menu-list {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 10;
+  min-width: 100%;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface2);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 45%);
+}
+.menu.open .menu-list {
+  display: grid;
+  gap: 2px;
+}
+.menu-list button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: calc(var(--radius) - 4px);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.menu-list button[hidden] {
+  display: none;
+}
+.menu-list button:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+.menu-list svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
 .button {
   border: 1px solid var(--line);
   background: var(--surface2);
@@ -102,16 +169,11 @@ h1 {
   border-color: var(--accent);
   color: var(--on-accent);
 }
-/* Links: open (site, console), simulate (traffic, activity), Docker Desktop. */
+/* Links: open (site, console), Docker Desktop and VS Code (icons only, top bar). */
 .button.open {
   color: var(--accent);
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   background: color-mix(in srgb, var(--accent) 9%, transparent);
-}
-.button.simulate {
-  color: var(--violet);
-  border-color: color-mix(in srgb, var(--violet) 40%, transparent);
-  background: color-mix(in srgb, var(--violet) 9%, transparent);
 }
 /* Docker and VS Code: white on their own blue. */
 .button.brand {
@@ -127,9 +189,6 @@ h1 {
 }
 .button.vscode {
   --brand: var(--vscode);
-}
-.button.simulate:hover:not(:disabled) {
-  border-color: var(--violet);
 }
 .button svg.filled {
   fill: currentColor;
@@ -181,6 +240,9 @@ h1 {
   background: var(--surface);
   padding: 12px 14px;
   min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 .card-title {
   margin: 0;
@@ -193,15 +255,6 @@ h1 {
   text-transform: uppercase;
   color: var(--muted);
 }
-.badge {
-  font-size: 10px;
-  letter-spacing: 0;
-  text-transform: none;
-  padding: 1px 7px;
-  border-radius: 99px;
-  color: var(--warn);
-  background: color-mix(in srgb, var(--warn) 14%, transparent);
-}
 .card-stack {
   display: grid;
   grid-template-rows: 1fr 1fr;
@@ -210,11 +263,6 @@ h1 {
 }
 .card.half {
   padding: 9px 14px;
-}
-.card-body {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 .card-text {
   flex: 1;
@@ -238,12 +286,9 @@ h1 {
 .ring.down {
   color: var(--danger);
 }
+/* Same size on every card (Greg, 13/11). */
 .ring-dial {
   position: relative;
-  width: 50px;
-  height: 50px;
-}
-.card.half .ring-dial {
   width: 44px;
   height: 44px;
 }
@@ -269,13 +314,10 @@ h1 {
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
-}
-.card.half .ring-percent {
-  font-size: 10px;
 }
 .ring-caption {
   font-size: 9.5px;
@@ -327,6 +369,10 @@ h1 {
 }
 .row:first-child {
   border-top: 0;
+}
+/* The list keeps the cards' height: a line closes the last service, the rest stays empty. */
+.row:last-child {
+  border-bottom: 1px solid var(--line);
 }
 .row-text {
   min-width: 0;
@@ -398,14 +444,8 @@ h1 {
   color: var(--danger);
   background: color-mix(in srgb, var(--danger) 12%, transparent);
 }
-.links {
-  flex-wrap: wrap;
-  display: flex;
-  gap: 8px;
-  margin: 14px 20px;
-}
 .logs {
-  margin: 0 20px 18px;
+  margin: 14px 20px 18px;
   flex: 1;
   min-height: 160px;
   border: 1px solid var(--line);

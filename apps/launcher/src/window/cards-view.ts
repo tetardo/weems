@@ -32,22 +32,27 @@ function renderRing({ share, tone, caption }: Ring): HTMLElement {
 function renderCard(card: Card): HTMLElement {
   const box = element("section", `card${card.half ? " half" : ""}`);
   const title = element("h2", "card-title", card.title);
-  if (card.badge) title.append(element("span", "badge", card.badge));
   const text = element("div", "card-text");
   text.append(
+    title,
     element("div", `card-value ${card.tone ?? ""}`, card.value),
     ...card.lines.map(({ text, tone }) => element("p", `card-line ${tone ?? ""}`, text)),
   );
-  const body = element("div", "card-body");
-  body.append(text);
-  if (card.ring) body.append(renderRing(card.ring));
-  box.append(title, body);
+  box.append(text);
+  if (card.ring) box.append(renderRing(card.ring));
   return box;
 }
 
-export function renderCards(overview: LauncherOverview | null): void {
-  const [database, files, ...others] = cardsOf(overview, Date.now()).map(renderCard);
+const stackOf = (cards: HTMLElement[]) => {
   const stack = element("div", "card-stack");
-  stack.append(...[database, files].filter((card) => card !== undefined));
-  document.getElementById("cards")?.replaceChildren(stack, ...others);
+  stack.append(...cards);
+  return stack;
+};
+
+export function renderCards(overview: LauncherOverview | null): void {
+  const cards = cardsOf(overview, Date.now()).map(renderCard);
+  const halves = cards.slice(0, 4);
+  document
+    .getElementById("cards")
+    ?.replaceChildren(stackOf(halves.slice(0, 2)), stackOf(halves.slice(2)), ...cards.slice(4));
 }

@@ -24,16 +24,13 @@ export const URLS = {
   site: "http://localhost:3001/fr",
 } as const;
 
-/** Pages of the console opened by the window's links. */
-const CONSOLE_PAGES = { console: "services", traffic: "traffic", activity: "activity" } as const;
-
-/** Docker Desktop, where the database runs (button « Ouvrir Docker »). */
+/** Docker Desktop, where the database runs (icon of the top bar). */
 export const DOCKER_APP = "/Applications/Docker.app";
 
-/** VS Code, opened on the repository (button « VS Code »). */
+/** VS Code, opened on the repository (icon of the top bar). */
 export const VSCODE_APP = "Visual Studio Code";
 
 export function linkUrl(target: Exclude<LinkTarget, "docker" | "vscode">): string {
   if (target === "site") return URLS.site;
-  return `${URLS.console}/${CONSOLE_PAGES[target]}`;
+  return `${URLS.console}/services`;
 }
