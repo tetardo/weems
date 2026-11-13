@@ -6,6 +6,7 @@ import { FictitiousBadge } from "../ui/fictitious-badge.tsx";
 import { FounderBadge } from "../ui/founder-badge.tsx";
 import { InfoTip } from "../ui/info-tip.tsx";
 import { PilotAvatar } from "../ui/pilot-avatar.tsx";
+import { RankBadge } from "../ui/rank-badge.tsx";
 import { ShareButton } from "../ui/share-button.tsx";
 import type { ProfileLinks } from "./profile-links.ts";
 
@@ -81,6 +82,7 @@ function Identity({ pilot, country }: { pilot: PilotPage; country: string | null
         {pilot.country && country && <CountryFlag code={pilot.country} name={country} />}
         {pilot.fictitious && <FictitiousBadge />}
         {pilot.founderNumber !== null && <FounderBadge number={pilot.founderNumber} />}
+        <RankBadge rank={pilot.rank.rank} />
         {pilot.level && (
           <span className="rounded-full bg-accent/12 px-3 py-1 text-[13px] font-semibold text-link">
             {t("level", { level: levels(pilot.level) })}

@@ -4,6 +4,7 @@ import {
   LogbookStats,
   type LogbookStatsPeriod,
   LogbookSummary,
+  MyRank,
   PilotLogbook,
   PilotRoutes,
   PublicFlightList,
@@ -29,6 +30,11 @@ export function getMyLogbookFlights(cursor: string | undefined): Promise<PublicF
 /** Page Résumé of the private logbook: every closed flight, hidden ones included. */
 export function getLogbookSummary(): Promise<LogbookSummary | null> {
   return apiRequest("/v1/me/logbook/summary", LogbookSummary);
+}
+
+/** Card « Votre grade » of the page Résumé (spec grades des pilotes). */
+export function getMyRank(): Promise<MyRank | null> {
+  return apiRequest("/v1/me/rank", MyRank);
 }
 
 /** Page Vols: every closed flight with its verdict, read once per page (list and sheet). */

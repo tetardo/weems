@@ -92,6 +92,13 @@
       "when": 1794545221188,
       "tag": "0012_offers",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1794547410008,
+      "tag": "0013_declared_real_pilot",
+      "breakpoints": true
     }
   ]
 }

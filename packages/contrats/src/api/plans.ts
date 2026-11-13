@@ -28,6 +28,7 @@ export const FeatureKey = z.enum([
   "liveMap",
   "boarding",
   "publicProfile",
+  "pilotRanks",
   "flightHistory",
   "simbriefNextFlight",
   // Carnet de vol

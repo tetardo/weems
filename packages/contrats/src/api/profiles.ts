@@ -3,6 +3,7 @@ import { AircraftCategory } from "./aircraft-class.ts";
 import { FlightView } from "./flights.ts";
 import { FlightSummary } from "./flight-list.ts";
 import { IcaoCode, UtcTimestamp } from "./common.ts";
+import { PublicRank } from "./ranks.ts";
 import { Latitude, Longitude } from "../telemetry/common.ts";
 
 /**
@@ -18,8 +19,11 @@ export const PilotHandle = z
 /** ISO 3166-1 alpha-2 country code (FR). */
 export const CountryCode = z.string().regex(/^[A-Z]{2}$/);
 
-/** Experience declared by the pilot; nothing checks it. */
-export const PilotLevel = z.enum(["beginner", "intermediate", "advanced", "realPilot"]);
+/**
+ * Experience declared by the pilot; nothing checks it. Only « real pilot » since the ranks earned
+ * with valid flights (spec grades des pilotes) replaced beginner, intermediate and advanced.
+ */
+export const PilotLevel = z.enum(["realPilot"]);
 export type PilotLevel = z.infer<typeof PilotLevel>;
 
 /** VATSIM member id (CID). */
@@ -194,6 +198,8 @@ export const PilotPage = z.object({
   fictitious: z.boolean(),
   /** Confirmed founder number (offer « Pilote fondateur »); null otherwise. */
   founderNumber: z.number().int().positive().nullable(),
+  /** Rank earned by valid flights (spec grades des pilotes), shown with the founder badge. */
+  rank: PublicRank,
   stats: PilotStats,
   charts: PilotCharts,
 });

@@ -143,7 +143,7 @@ function profile(handle: string) {
     isPublic: true,
     country: "PT",
     homeIcao: "LFPG",
-    level: "intermediate",
+    level: "realPilot",
     vatsimId: null,
     ivaoId: null,
     instagram: null,

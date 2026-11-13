@@ -26,6 +26,11 @@
   --color-success: var(--wm-success);
   --color-holding: var(--wm-holding);
   --color-founder: var(--wm-founder);
+  /* Pilot ranks (spec grades des pilotes): one metal per tier of 3 ranks. */
+  --color-rank-bronze: var(--wm-rank-bronze);
+  --color-rank-silver: var(--wm-rank-silver);
+  --color-rank-gold: var(--wm-rank-gold);
+  --color-rank-plate: var(--wm-rank-plate);
   /* Departures board of the home page (spec J4 accueil): dark like an airport board, light in the light theme. */
   --color-board: var(--wm-board);
   --color-board-head: var(--wm-board-head);
@@ -88,6 +93,11 @@
   --wm-holding: #b9a2ff;
   /* Founder badge (offer « Pilote fondateur »). */
   --wm-founder: #f5c76a;
+  /* Insignia of the pilot ranks: bronze, silver, gold, and the navy plate behind the marks. */
+  --wm-rank-bronze: #cf8f5c;
+  --wm-rank-silver: #c9d4e6;
+  --wm-rank-gold: #f5c76a;
+  --wm-rank-plate: #1d2a47;
   --wm-glass: rgb(23 30 46 / 0.72);
   --wm-glow: rgb(79 209 232 / 0.16);
   --wm-shadow: rgb(0 0 0 / 0.35);
@@ -164,6 +174,10 @@
   --wm-success: #1b7f4b;
   --wm-holding: #6a4fd1;
   --wm-founder: #9a6400;
+  --wm-rank-bronze: #a5612d;
+  --wm-rank-silver: #6b7890;
+  --wm-rank-gold: #b07a12;
+  --wm-rank-plate: #1d2a47;
   --wm-glass: rgb(255 255 255 / 0.75);
   /* Darker than accent 2 so the letters stay at 4.5:1 on white. */
   --wm-promo-text-end: #9a5800;

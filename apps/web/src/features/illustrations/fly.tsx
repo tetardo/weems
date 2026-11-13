@@ -51,6 +51,17 @@ export const FLY_ILLUSTRATIONS = {
       </Accent>
     </>
   ),
+  // Pilot ranks: pilot wings over three steps, the last one gold.
+  pilotRanks: (
+    <>
+      <path d="M14 40H26V34H38V28H50V22H62" strokeOpacity={0.5} />
+      <path d="M20 26C24 24 28 24 30 26M42 26C40 24 44 24 50 26" />
+      <Accent>
+        <circle cx={36} cy={18} r={5} />
+        <path d="M30 18C24 14 18 14 14 16C18 18 24 20 30 20M42 18C48 14 54 14 58 16C54 18 48 20 42 20" />
+      </Accent>
+    </>
+  ),
   // The full history: a stack of logbook pages.
   flightHistory: (
     <>

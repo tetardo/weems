@@ -3,6 +3,7 @@ import { Latitude, Longitude } from "../telemetry/common.ts";
 import { Airport } from "./airports.ts";
 import { AircraftClass } from "./aircraft-class.ts";
 import { FlightId, IcaoCode, UtcTimestamp } from "./common.ts";
+import { PilotRank } from "./ranks.ts";
 import { PositionReport } from "./flights.ts";
 import { CountryCode, PilotHandle } from "./profiles.ts";
 
@@ -18,6 +19,8 @@ export const LivePilot = z.object({
   hasPhoto: z.boolean(),
   /** Confirmed founder number (offer « Pilote fondateur »); absent otherwise. */
   founderNumber: z.number().int().positive().optional(),
+  /** Rank earned by valid flights (spec grades des pilotes); absent while unknown. */
+  rank: PilotRank.optional(),
 });
 export type LivePilot = z.infer<typeof LivePilot>;
 
