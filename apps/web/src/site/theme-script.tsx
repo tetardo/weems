@@ -1,19 +1,13 @@
 "use client";
 
 import { useLayoutEffect } from "react";
-import { resolveTheme, THEME_SCRIPT, THEME_STORAGE_KEY } from "./theme.ts";
+import { currentTheme } from "@weems/ui";
+import { THEME_SCRIPT, THEME_STORAGE_KEY } from "./theme.ts";
 
 /** Puts data-theme back on <html> when React has rebuilt the element without it. */
 function restoreTheme() {
   const root = document.documentElement;
-  if (root.dataset.theme) return;
-  let stored: string | null = null;
-  try {
-    stored = localStorage.getItem(THEME_STORAGE_KEY);
-  } catch {
-    // Storage refused (private browsing): the system setting decides.
-  }
-  root.dataset.theme = resolveTheme(stored, matchMedia("(prefers-color-scheme: light)").matches);
+  if (!root.dataset.theme) root.dataset.theme = currentTheme(THEME_STORAGE_KEY);
 }
 
 /**

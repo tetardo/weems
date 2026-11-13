@@ -69,6 +69,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [013](decisions/013-ci-j1-seulement-si-chaine-touchee.md) | CI : J1 filtré par chemins | À jour |
 | [014](decisions/014-arrondis-des-cadres.md) | 6 jetons d'arrondi | À jour |
 | [015](decisions/015-catalogue-des-formules.md) | Catalogue des formules, pages Offres et Fonctionnalités | À jour au 13/11 |
+| [016](decisions/016-fond-plan-aeroport.md) | Fond du site : plan d'aéroport inventé, très léger | À jour au 13/11 |
 
 ## Développement (`developpement/`)
 

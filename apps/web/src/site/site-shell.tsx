@@ -22,7 +22,7 @@ interface Props {
  */
 export function SiteShell({ loggedIn, footer = true, children }: Props) {
   return (
-    <div className="app-glow flex min-h-screen flex-col">
+    <div className="app-glow airport-plan flex min-h-screen flex-col">
       <FloatingBar
         nav={<SiteNav loggedIn={loggedIn} />}
         account={
