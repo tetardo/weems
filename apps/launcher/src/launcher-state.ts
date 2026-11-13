@@ -26,7 +26,8 @@ export interface LauncherState {
   logs: string[];
 }
 
-export type LinkTarget = "site" | "console" | "traffic" | "activity";
+/** Pages opened in the browser, or Docker Desktop. */
+export type LinkTarget = "site" | "console" | "traffic" | "activity" | "docker";
 
 export type LauncherCommand =
   | { type: "start-all" }

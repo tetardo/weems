@@ -4,8 +4,13 @@ import { ManagedProcess } from "@weems/local-process";
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, shell, Tray } from "electron";
 import { ConsoleClient } from "./console-client.ts";
 import { Launcher } from "./launcher.ts";
-import { CHANNELS, type LauncherCommand, type LauncherState } from "./launcher-state.ts";
-import { linkUrl, repoPaths, URLS } from "./repo.ts";
+import {
+  CHANNELS,
+  type LauncherCommand,
+  type LauncherState,
+  type LinkTarget,
+} from "./launcher-state.ts";
+import { DOCKER_APP, linkUrl, repoPaths, URLS } from "./repo.ts";
 import { type TrayItem, trayMenu, trayTitle } from "./tray-menu.ts";
 
 /** Replaced at build time (scripts/build-app.ts): the repository the app was built from. */
@@ -27,7 +32,7 @@ let quitting = false;
 
 function openWindow(): BrowserWindow {
   const created = new BrowserWindow({
-    width: 640,
+    width: 720,
     height: 760,
     minWidth: 560,
     minHeight: 520,
@@ -60,11 +65,13 @@ function showWindow(): void {
 function run(command: LauncherCommand | "show" | "quit"): void {
   if (command === "show") return showWindow();
   if (command === "quit") return app.quit();
-  if (command.type === "open") {
-    void shell.openExternal(linkUrl(command.target));
-    return;
-  }
+  if (command.type === "open") return openTarget(command.target);
   void launcher.command(command);
+}
+
+function openTarget(target: LinkTarget): void {
+  if (target === "docker") void shell.openPath(DOCKER_APP);
+  else void shell.openExternal(linkUrl(target));
 }
 
 /** The menu is rebuilt only when it changes: rebuilding it closes it if it is open. */

@@ -52,6 +52,7 @@ export function trayMenu(state: LauncherState): TrayItem[] {
     { label: "Afficher la fenêtre Weems", command: "show" },
     { label: "Ouvrir le site", command: { type: "open", target: "site" } },
     { label: "Ouvrir la console", command: { type: "open", target: "console" } },
+    { label: "Ouvrir Docker Desktop", command: { type: "open", target: "docker" } },
     separator,
     nothingRuns
       ? { label: "Tout démarrer", enabled: idle, command: { type: "start-all" } }

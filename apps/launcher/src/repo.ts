@@ -27,7 +27,10 @@ export const URLS = {
 /** Pages of the console opened by the window's links. */
 const CONSOLE_PAGES = { console: "services", traffic: "traffic", activity: "activity" } as const;
 
-export function linkUrl(target: LinkTarget): string {
+/** Docker Desktop, where the database runs (button « Ouvrir Docker »). */
+export const DOCKER_APP = "/Applications/Docker.app";
+
+export function linkUrl(target: Exclude<LinkTarget, "docker">): string {
   if (target === "site") return URLS.site;
   return `${URLS.console}/${CONSOLE_PAGES[target]}`;
 }
