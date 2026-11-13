@@ -34,6 +34,9 @@ Liste tenue à jour au fil du projet : idées validées sur le principe par Greg
   Rien à stocker tant que tous les pilotes en font partie : l'appartenance se déduit. Le jour où les compagnies arrivent (lot 3), créer les tables compagnies et adhésions, puis y inscrire tous les pilotes existants dans Weems.
   Bonus : des vols planifiés par la compagnie donnent une heure prévue, donc les statuts « Prévu » et « Retardé » du tableau Boarding.
 
+- **Vols de la compagnie Weems organisés par une IA** (ajouté le 13/11/2026, page Boarding ; à rediscuter avec Greg)
+  Une IA propose des vols aux pilotes de la compagnie Weems, comme le feront les responsables des compagnies du lot 3. Piste de Claude : générer les vols par des règles simples (terrains, catégorie d'avion, niveau du pilote), et réserver l'IA aux textes (briefings), pour le coût, la prévisibilité et les tests.
+
 ## Planifiées
 
 - **Export du carnet** : clé `export` du catalogue des formules (Pilot Pro, « bientôt »), fiche [015](../decisions/015-catalogue-des-formules.md).
