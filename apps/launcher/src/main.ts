@@ -35,9 +35,9 @@ let quitting = false;
 
 function openWindow(): BrowserWindow {
   const created = new BrowserWindow({
-    width: 960,
+    width: 840,
     height: 660,
-    minWidth: 900,
+    minWidth: 820,
     minHeight: 620,
     title: "Weems",
     backgroundColor: "#0e1320",
