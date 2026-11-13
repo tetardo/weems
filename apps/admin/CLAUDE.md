@@ -43,13 +43,14 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 ```
 src/
   app/                 routes Next.js : mise en page (barre latérale G), / (Supervision), /services, /traffic, /activity, /accounts, /founders, /codes, /customize, /libraries, /database, styles ;
-                       api/lifecycle (état et actions des services, appelé par le lanceur Mac et scripts/mac/), api/overview (quatre cartes du lanceur, tirées de Supervision)
+                       api/lifecycle (état et actions des services, appelé par le lanceur Mac et scripts/mac/), api/overview (cinq cartes du lanceur, tirées de Supervision et des fichiers du Mac)
   proxy.ts             refus des requêtes adressées à un autre nom que 127.0.0.1:3002 / localhost:3002
   actions/             actions serveur appelées par les pages (résultat { ok, value | error }, jamais d'exception)
   server/              côté serveur seulement
     console.ts           configuration et instances uniques (services, trafic)
     lifecycle.ts         état et actions des services pour le lanceur Mac et scripts/mac/ (en-tête exigé)
-    launcher-overview.ts quatre cartes du lanceur Mac (base, API, utilisateurs, revenu fictif) depuis Supervision
+    launcher-overview.ts cartes du lanceur Mac (base, API, utilisateurs, revenu fictif) depuis Supervision
+    launcher-files.ts    carte « Fichiers » du lanceur : sauvegardes de la console et disque du Mac
     services/            Docker (docker compose), sondes de santé, états des cartes, gestionnaire des services
     traffic/             lancement (formulaires → arguments pnpm), suivi, mesures de l'API, résultat, historique
     activity/            lancement de pnpm populate, suivi, résultat, population fictive (/v1/dev/fictitious-pilots)

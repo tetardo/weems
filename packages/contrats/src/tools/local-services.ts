@@ -51,6 +51,13 @@ export const LauncherOverview = z.object({
     largestTable: z.object({ name: z.string(), bytes: Count }).nullable(),
     migrations: z.object({ applied: Count, expected: Count }),
     flights: z.object({ real: Count, simulated: Count }),
+    /** Disk of the alpha server (20 Go): the progress circle of the card. */
+    diskBytes: Count,
+  }),
+  /** Files the console keeps on the Mac: backups (pg_dump) and the Mac's disk. */
+  files: z.object({
+    backups: z.object({ count: Count, bytes: Count, lastAt: z.string().nullable() }),
+    disk: z.object({ usedBytes: Count, totalBytes: Count }).nullable(),
   }),
   api: z.object({
     /** 95th percentile of the current hour, null when no request yet. */
@@ -58,6 +65,8 @@ export const LauncherOverview = z.object({
     serverErrors24h: Count,
     positionsLastMinute: Count,
     live: z.object({ flights: Count, simulated: Count }),
+    /** Beyond it the API is slow (page Supervision): the progress circle of the card. */
+    slowP95Ms: Count,
   }),
   /** Accounts not disabled, the fictitious ones included. */
   users: z.object({
@@ -73,6 +82,8 @@ export const LauncherOverview = z.object({
     monthEuros: z.number().nonnegative(),
     /** Last month, for the trend arrow of « Ce mois ». */
     previousMonthEuros: z.number().nonnegative(),
+    /** Monthly budget (fondamentaux, < 100 €): what « Ce mois » should cover. */
+    monthGoalEuros: z.number().positive(),
   }),
 });
 export type LauncherOverview = z.infer<typeof LauncherOverview>;

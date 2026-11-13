@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { lineKind, plainText, sinceText, trendOf } from "./format.ts";
+import {
+  lineKind,
+  percentText,
+  plainText,
+  shareOf,
+  sinceText,
+  trendOf,
+  usageTone,
+} from "./format.ts";
 
 describe("sinceText", () => {
   const now = Date.parse("2026-11-13T08:00:00.000Z");
@@ -31,5 +39,20 @@ describe("trendOf", () => {
     expect(trendOf(60, 50)).toEqual({ text: "▲ +20 %", up: true });
     expect(trendOf(46, 50)).toEqual({ text: "▼ −8 %", up: false });
     expect(trendOf(10, 0)).toEqual({ text: "▲", up: true });
+  });
+});
+
+describe("progress circles", () => {
+  it("clamps the share and writes it in percent", () => {
+    expect(shareOf(1.2e9, 20e9)).toBeCloseTo(0.06);
+    expect(shareOf(700, 500)).toBe(1);
+    expect(shareOf(3, 0)).toBe(0);
+    expect(percentText(0.064)).toBe("6 %");
+  });
+
+  it("turns orange past 80 % and red past 95 %", () => {
+    expect(usageTone(0.5)).toBe("ok");
+    expect(usageTone(0.85)).toBe("warn");
+    expect(usageTone(0.97)).toBe("down");
   });
 });

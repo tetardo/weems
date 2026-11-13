@@ -44,3 +44,16 @@ export function trendOf(current: number, previous: number): { text: string; up: 
   const percent = Math.round(((current - previous) / previous) * 100);
   return { text: `${up ? "▲ +" : "▼ −"}${Math.abs(percent)} %`, up };
 }
+
+/** Share of a progress circle, between 0 and 1 (0 when there is no maximum). */
+export const shareOf = (value: number, max: number) =>
+  max > 0 ? Math.min(1, Math.max(0, value / max)) : 0;
+
+/** « 6 % », « 100 % ». */
+export const percentText = (share: number) => `${Math.round(share * 100)} %`;
+
+/** A filling resource (disk, latency): orange past 80 %, red past 95 %. */
+export function usageTone(share: number): "ok" | "warn" | "down" {
+  if (share > 0.95) return "down";
+  return share > 0.8 ? "warn" : "ok";
+}

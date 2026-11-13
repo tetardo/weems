@@ -23,30 +23,39 @@ const supervision = {
   },
 } as unknown as AdminSupervision;
 
+const files = {
+  backups: { count: 2, bytes: 300, lastAt: "2026-11-13T07:00:00.000Z" },
+  disk: { usedBytes: 250e9, totalBytes: 500e9 },
+};
+
 describe("launcherOverview", () => {
   it("makes the four cards from Supervision, fictitious accounts counted apart", () => {
-    const overview = launcherOverview(supervision);
+    const overview = launcherOverview(supervision, files);
     expect(overview.database).toEqual({
       bytes: 1_200_000_000,
       largestTable: { name: "flight_tracks", bytes: 1_100_000_000 },
       migrations: { applied: 14, expected: 14 },
       flights: { real: 40, simulated: 900 },
+      diskBytes: 20e9,
     });
+    expect(overview.files).toBe(files);
     expect(overview.api).toEqual({
       p95Ms: 42,
       serverErrors24h: 3,
       positionsLastMinute: 120,
       live: { flights: 7, simulated: 5 },
+      slowP95Ms: 500,
     });
     expect(overview.users).toEqual({ real: 3, fictitious: 97, newLast7Days: 2, publicProfiles: 2 });
   });
 
   it("says the revenue is fictitious, and moves it with the population", () => {
-    expect(launcherOverview(supervision).revenue).toEqual({
+    expect(launcherOverview(supervision, files).revenue).toEqual({
       fictitious: true,
       totalEuros: 240,
       monthEuros: 60,
       previousMonthEuros: 50,
+      monthGoalEuros: 100,
     });
   });
 });

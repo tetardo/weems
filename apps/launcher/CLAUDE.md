@@ -22,10 +22,10 @@ src/
   launcher-state.ts  ce que la fenêtre montre et peut demander (partagé main / preload / fenêtre)
   launcher.ts        démarrer, arrêter, redémarrer (tout ou un service), journaux de l'onglet Console
   rows.ts            les quatre lignes, à partir de la console et du processus de la console
-  console-client.ts  appels à /api/lifecycle et /api/overview (quatre cartes) de la console
+  console-client.ts  appels à /api/lifecycle et /api/overview (cinq cartes) de la console
   tray-menu.ts       titre et menu de la barre des menus
   repo.ts            chemins des scripts, adresses du site et de la console
-  window/            index.html, window.css, view.ts (entrée), rows-view.ts, cards-view.ts, format.ts, icons.ts
+  window/            index.html, window.css, view.ts (entrée), rows-view.ts, cards.ts (contenu des cartes et cercles), cards-view.ts, format.ts, icons.ts
 scripts/build-app.ts dist/app (bundles esbuild), comme le tracker
 electron-builder.yml Weems.app (dossier, pas d'installateur), icône build/icon.png
 ```

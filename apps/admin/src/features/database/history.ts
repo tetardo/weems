@@ -6,7 +6,7 @@ import type { DatabaseDay } from "@weems/contrats";
  */
 
 /** Disk of the alpha server (Scaleway DEV1-S, 20 Go): what the projection aims at. */
-const DISK_BYTES = 20e9;
+export const DISK_BYTES = 20e9;
 /** Beyond this, the projection only says « plus de 5 ans ». */
 const FAR_DAYS = 5 * 365;
 const DAY_MS = 86_400_000;
