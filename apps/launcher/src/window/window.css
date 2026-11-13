@@ -89,7 +89,15 @@ h1 {
 .joined .button + .button {
   margin-left: -1px;
 }
-.joined .button.primary + .button.primary {
+.button.power {
+  background: var(--warn);
+  border-color: var(--warn);
+  color: var(--on-accent);
+}
+.button.power:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+.joined .button.power + .button.power {
   border-left-color: color-mix(in srgb, var(--on-accent) 35%, transparent);
 }
 .joined .button[hidden] {
@@ -471,4 +479,38 @@ pre .step {
 }
 pre .ok {
   color: var(--success);
+}
+
+/* Warning before « Tout arrêter » and « Tout redémarrer » (Greg, 13/11). */
+.confirm {
+  width: 380px;
+  padding: 20px 22px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 20px 50px rgb(0 0 0 / 55%);
+}
+.confirm::backdrop {
+  background: rgb(5 8 15 / 65%);
+}
+.confirm h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.confirm p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.confirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+.button.danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--on-accent);
 }

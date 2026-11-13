@@ -25,7 +25,7 @@ src/
   console-client.ts  appels à /api/lifecycle et /api/overview (six cartes) de la console
   tray-menu.ts       titre et menu de la barre des menus
   repo.ts            chemins des scripts, adresses du site et de la console
-  window/            index.html, window.css, view.ts (entrée), rows-view.ts, cards.ts (contenu des cartes et cercles), cards-view.ts, head-buttons.ts (Tout démarrer, arrêter, redémarrer de la barre haute), format.ts, icons.ts
+  window/            index.html, window.css, view.ts (entrée), rows-view.ts, cards.ts (contenu des cartes et cercles), cards-view.ts, head-buttons.ts (Tout démarrer, arrêter, redémarrer de la barre haute), confirm-dialog.ts (avertissement avant arrêt et redémarrage), format.ts, icons.ts
 scripts/build-app.ts dist/app (bundles esbuild), comme le tracker
 electron-builder.yml Weems.app (dossier, pas d'installateur), icône build/icon.png
 ```

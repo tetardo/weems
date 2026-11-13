@@ -36,13 +36,23 @@
           aria-label="Ouvrir Docker Desktop"
         ></button>
         <div class="joined" role="group" aria-label="Services">
-          <button class="button primary" data-all="start-all" data-icon="start">
+          <button class="button power" data-all="start-all" data-icon="start">
             Tout démarrer
           </button>
-          <button class="button primary" data-all="stop-all" data-icon="stop">Tout arrêter</button>
-          <button class="button primary" data-all="restart-all" data-icon="restart">
-            Tout redémarrer
-          </button>
+          <button
+            class="button power icon-only"
+            data-all="stop-all"
+            data-icon="stop"
+            title="Tout arrêter"
+            aria-label="Tout arrêter"
+          ></button>
+          <button
+            class="button power icon-only"
+            data-all="restart-all"
+            data-icon="restart"
+            title="Tout redémarrer"
+            aria-label="Tout redémarrer"
+          ></button>
         </div>
       </div>
     </header>
@@ -64,6 +74,14 @@
       </div>
       <pre id="logs"></pre>
     </section>
+    <dialog class="confirm" id="confirm" aria-labelledby="confirm-title">
+      <h2 id="confirm-title"></h2>
+      <p id="confirm-text"></p>
+      <form method="dialog" class="confirm-buttons">
+        <button class="button" value="cancel" autofocus>Annuler</button>
+        <button class="button danger" value="ok" id="confirm-ok"></button>
+      </form>
+    </dialog>
     <script src="view.js"></script>
   </body>
 </html>
