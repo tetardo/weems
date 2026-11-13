@@ -236,6 +236,7 @@ export {
   PopulationStep,
 } from "./tools/activity-progress.ts";
 export {
+  LauncherOverview,
   LifecycleRequest,
   LifecycleStatus,
   LOCAL_SCRIPT_HEADER,

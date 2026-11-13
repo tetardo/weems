@@ -3,7 +3,6 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { join } from "node:path";
 import { ManagedProcess } from "@weems/local-process";
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, shell, Tray } from "electron";
-import { readSiteStats } from "./api-client.ts";
 import { ConsoleClient } from "./console-client.ts";
 import { Launcher } from "./launcher.ts";
 import {
@@ -25,7 +24,7 @@ const HERE = __dirname;
 const paths = repoPaths(process.env["WEEMS_REPO"] ?? WEEMS_REPO_ROOT);
 const launcher = new Launcher({
   client: new ConsoleClient(URLS.console),
-  siteStats: () => readSiteStats(URLS.api),
+  now: () => Date.now(),
   paths,
   newProcess: (onLine) => new ManagedProcess(onLine),
   sleep: (ms) => sleep(ms),
@@ -36,9 +35,9 @@ let quitting = false;
 
 function openWindow(): BrowserWindow {
   const created = new BrowserWindow({
-    width: 720,
+    width: 880,
     height: 760,
-    minWidth: 560,
+    minWidth: 760,
     minHeight: 520,
     title: "Weems",
     backgroundColor: "#0e1320",

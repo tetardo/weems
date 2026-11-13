@@ -43,12 +43,13 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 ```
 src/
   app/                 routes Next.js : mise en page (barre latérale G), / (Supervision), /services, /traffic, /activity, /accounts, /founders, /codes, /customize, /libraries, /database, styles ;
-                       api/lifecycle (état et actions des services, appelé par le lanceur Mac et scripts/mac/)
+                       api/lifecycle (état et actions des services, appelé par le lanceur Mac et scripts/mac/), api/overview (quatre cartes du lanceur, tirées de Supervision)
   proxy.ts             refus des requêtes adressées à un autre nom que 127.0.0.1:3002 / localhost:3002
   actions/             actions serveur appelées par les pages (résultat { ok, value | error }, jamais d'exception)
   server/              côté serveur seulement
     console.ts           configuration et instances uniques (services, trafic)
     lifecycle.ts         état et actions des services pour le lanceur Mac et scripts/mac/ (en-tête exigé)
+    launcher-overview.ts quatre cartes du lanceur Mac (base, API, utilisateurs, revenu fictif) depuis Supervision
     services/            Docker (docker compose), sondes de santé, états des cartes, gestionnaire des services
     traffic/             lancement (formulaires → arguments pnpm), suivi, mesures de l'API, résultat, historique
     activity/            lancement de pnpm populate, suivi, résultat, population fictive (/v1/dev/fictitious-pilots)
@@ -60,7 +61,7 @@ src/
   site/                bandeau du haut (logo compris), barre latérale, onglets mobiles
   features/            composants des pages : supervision/, services/, traffic/, activity/, accounts/, customize/, libraries/, database/ (logique pure à part, testée)
   ui/                  icônes, bloc à titre, champ numérique, état d'un lancement, pastilles d'état, titre de page, confirmation, sondage périodique
-  format/              heures, durées, tailles, noms des phases
+  format/              heures, durées, noms des phases (tailles : @weems/ui/format, partagé avec le lanceur)
 ```
 
 ## Commandes

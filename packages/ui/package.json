@@ -5,7 +5,8 @@
   "description": "Shared React components (form model C, fiche 008) for the web site and the admin console, styled with Tailwind CSS",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./format": "./src/format/index.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"

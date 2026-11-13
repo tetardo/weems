@@ -1,3 +1,5 @@
+import type { LauncherOverview } from "@weems/contrats";
+
 /** Shared by the main process, the preload and the window: what the window shows and can ask. */
 
 /** The four rows of the window, and the tabs of the logs. */
@@ -15,17 +17,11 @@ export interface Row {
   note: string | null;
 }
 
-/** The site's counters (GET /v1/stats of the API, as on the home page); null when it does not answer. */
-export interface SiteNumbers {
-  pilots: number;
-  flights: number;
-  liveFlights: number;
-}
-
 /** Everything the window shows, sent by the main process at each change. */
 export interface LauncherState {
   rows: Row[];
-  stats: SiteNumbers | null;
+  /** The four cards (console's GET /api/overview); null when the console or the API does not answer. */
+  overview: LauncherOverview | null;
   /** What the launcher is doing (« Démarrage… »): buttons wait meanwhile. Null when idle. */
   busy: string | null;
   /** Last problem to show, null when none. */

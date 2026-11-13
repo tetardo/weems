@@ -1,4 +1,4 @@
-import type { LifecycleRequest, LifecycleStatus } from "@weems/contrats";
+import type { LauncherOverview, LifecycleRequest, LifecycleStatus } from "@weems/contrats";
 import type { ProcessStatus } from "@weems/local-process";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { type LaunchedProcess, Launcher } from "./launcher.ts";
 import { repoPaths } from "./repo.ts";
 
+const OVERVIEW = { revenue: { fictitious: true } } as unknown as LauncherOverview;
 const ANSWER: LifecycleStatus = { services: [], dockerAvailable: true, logs: null };
 
 /** A started command: records what ran, ends at once with `exitCode` (scripts) or runs (console). */
@@ -50,12 +51,13 @@ class World {
     return new Launcher({
       client: {
         status: async () => (this.consoleUp ? ANSWER : null),
+        overview: async () => OVERVIEW,
         send: async (request) => {
           if (this.refuse) throw new Error(this.refuse);
           this.sent.push(request);
         },
       },
-      siteStats: async () => (this.consoleUp ? { pilots: 12, flights: 340, liveFlights: 3 } : null),
+      now: () => 0,
       paths: repoPaths(this.root),
       newProcess: (onLine) => new FakeProcess(this, onLine),
       sleep: async () => undefined,
@@ -76,7 +78,7 @@ describe("Launcher", () => {
     expect(state.busy).toBeNull();
     expect(state.rows.at(-1)?.state).toBe("running");
     expect(state.logs).toContain("ran console.sh");
-    expect(state.stats).toEqual({ pilots: 12, flights: 340, liveFlights: 3 });
+    expect(state.overview).toBe(OVERVIEW);
   });
 
   it("reuses a console that already answers", async () => {
@@ -124,6 +126,14 @@ describe("Launcher", () => {
     await launcher.command({ type: "start-all" });
     await launcher.command({ type: "restart-all" });
     expect(world.ran).toEqual(["prepare.sh", "console.sh", "stop.sh", "prepare.sh", "console.sh"]);
+  });
+
+  it("forgets the cards when the console stops answering", async () => {
+    const world = new World();
+    const launcher = world.launcher();
+    await launcher.command({ type: "start-all" });
+    await launcher.command({ type: "stop-all" });
+    expect(launcher.state().overview).toBeNull();
   });
 
   it("shows the logs of the tab chosen", async () => {

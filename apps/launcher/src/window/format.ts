@@ -27,3 +27,12 @@ export function lineKind(line: string): LineKind {
   if (/✓|\bReady\b/.test(line)) return "ok";
   return null;
 }
+
+const number = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 });
+const euros = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+
+/** « 12 », « 4 312 », « 1,5 ». */
+export const numberText = (value: number) => number.format(value);
+
+/** « 0 € », « 1 234,50 € ». */
+export const eurosText = (value: number) => euros.format(value);

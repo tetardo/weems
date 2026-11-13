@@ -1,4 +1,5 @@
 import {
+  LauncherOverview,
   type LifecycleRequest,
   LifecycleStatus,
   LOCAL_SCRIPT_HEADER,
@@ -15,20 +16,32 @@ const ACTION_TIMEOUT_MS = 180_000;
 export class ConsoleClient {
   private readonly url: string;
 
+  private readonly overviewUrl: string;
+
   constructor(consoleUrl: string) {
     this.url = `${consoleUrl}/api/lifecycle`;
+    this.overviewUrl = `${consoleUrl}/api/overview`;
+  }
+
+  /** The four cards (route /api/overview, from Supervision); null when they cannot be read. */
+  async overview(): Promise<LauncherOverview | null> {
+    return this.read(this.overviewUrl, LauncherOverview);
   }
 
   /** The services, and the logs of one when asked; null when the console does not answer. */
   async status(logsOf: LocalServiceId | null): Promise<LifecycleStatus | null> {
     const query = logsOf ? `?logs=${logsOf}` : "";
+    return this.read(this.url + query, LifecycleStatus);
+  }
+
+  private async read<T>(url: string, schema: { parse(data: unknown): T }): Promise<T | null> {
     try {
-      const response = await fetch(this.url + query, {
+      const response = await fetch(url, {
         headers: HEADERS,
         signal: AbortSignal.timeout(STATUS_TIMEOUT_MS),
       });
       if (!response.ok) return null;
-      return LifecycleStatus.parse(await response.json());
+      return schema.parse(await response.json());
     } catch {
       return null;
     }

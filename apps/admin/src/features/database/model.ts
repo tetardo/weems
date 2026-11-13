@@ -4,7 +4,7 @@ import type {
   DatabaseCleanupResult,
   MigrationState,
 } from "@weems/contrats";
-import { bytes } from "../../format/bytes.ts";
+import { bytes } from "@weems/ui/format";
 
 /** Figures and sentences of the page Base de données, in French. Pure: tested apart. */
 

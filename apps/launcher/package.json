@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@weems/contrats": "workspace:*",
-    "@weems/local-process": "workspace:*"
+    "@weems/local-process": "workspace:*",
+    "@weems/ui": "workspace:*"
   },
   "devDependencies": {
     "electron": "45.3.0",

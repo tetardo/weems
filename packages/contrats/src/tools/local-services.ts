@@ -37,3 +37,40 @@ export const LifecycleStatus = z.object({
   logs: z.array(z.string()).nullable(),
 });
 export type LifecycleStatus = z.infer<typeof LifecycleStatus>;
+
+const Count = z.number().int().nonnegative();
+
+/**
+ * GET /api/overview of the console: the four cards of the Mac launcher, made from the page
+ * Supervision (GET /v1/admin/supervision). Counts include the fictitious accounts and simulated
+ * flights, shown apart.
+ */
+export const LauncherOverview = z.object({
+  database: z.object({
+    bytes: Count,
+    largestTable: z.object({ name: z.string(), bytes: Count }).nullable(),
+    migrations: z.object({ applied: Count, expected: Count }),
+    flights: z.object({ real: Count, simulated: Count }),
+  }),
+  api: z.object({
+    /** 95th percentile of the current hour, null when no request yet. */
+    p95Ms: z.number().nonnegative().nullable(),
+    serverErrors24h: Count,
+    positionsLastMinute: Count,
+    live: z.object({ flights: Count, simulated: Count }),
+  }),
+  /** Accounts not disabled, the fictitious ones included. */
+  users: z.object({
+    real: Count,
+    fictitious: Count,
+    newLast7Days: Count,
+    publicProfiles: Count,
+  }),
+  /** No payment exists yet (lot 2): fictitious figures, said so on the card. */
+  revenue: z.object({
+    fictitious: z.boolean(),
+    totalEuros: z.number().nonnegative(),
+    monthEuros: z.number().nonnegative(),
+  }),
+});
+export type LauncherOverview = z.infer<typeof LauncherOverview>;

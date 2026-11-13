@@ -145,6 +145,9 @@ importers:
       '@weems/local-process':
         specifier: workspace:*
         version: link:../../packages/local-process
+      '@weems/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
     devDependencies:
       electron:
         specifier: 45.3.0

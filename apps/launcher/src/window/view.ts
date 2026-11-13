@@ -1,6 +1,7 @@
 import type { LauncherBridge, LauncherState, LinkTarget, RowId } from "../launcher-state.ts";
 import { lineKind, plainText } from "./format.ts";
 import { ICONS } from "./icons.ts";
+import { renderCards } from "./cards-view.ts";
 import { element, renderRow } from "./rows-view.ts";
 
 /** The launcher's window: shows the state sent by the main process, sends the clicks back. */
@@ -65,18 +66,9 @@ function renderLogs(state: LauncherState): void {
   }
 }
 
-const number = new Intl.NumberFormat("fr-FR");
-
-function renderStats({ stats }: LauncherState): void {
-  byId("stat-live").textContent = stats ? number.format(stats.liveFlights) : "—";
-  byId("stat-pilots").textContent = stats ? number.format(stats.pilots) : "—";
-  byId("stat-flights").textContent = stats ? number.format(stats.flights) : "—";
-  byId("stats-note").hidden = stats !== null;
-}
-
 function render(state: LauncherState): void {
   renderHead(state);
-  renderStats(state);
+  renderCards(state.overview);
   const rows = state.rows.map((row) => renderRow(row, state.busy !== null, bridge.send));
   byId("rows").replaceChildren(...rows);
   renderLogs(state);
