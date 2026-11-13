@@ -483,6 +483,9 @@ a.localbadge:hover {
 .term.short {
   max-height: 220px;
 }
+.term .ok {
+  color: var(--success);
+}
 .term .err {
   color: var(--danger);
 }
