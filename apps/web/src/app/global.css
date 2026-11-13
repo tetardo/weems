@@ -116,7 +116,7 @@
   --wm-cat-other: #adb5bd;
   /* Airport plan behind every page (decision 016): its colour and how much it shows. */
   --wm-plan-ink: #9fb4d9;
-  --wm-plan-opacity: 0.17;
+  --wm-plan-opacity: 0.16;
 }
 
 /* Light theme: set on <html> by the head script (src/site/theme.ts, rules in @weems/ui). */
@@ -174,7 +174,7 @@
   --wm-cat-helicopter: #c2255c;
   --wm-cat-other: #6c757d;
   --wm-plan-ink: #1f3a66;
-  --wm-plan-opacity: 0.14;
+  --wm-plan-opacity: 0.13;
 }
 
 html,
@@ -316,8 +316,7 @@ h3 {
 }
 
 /*
- * Photo banners (Découvrir, Fonctionnalités): the dashed route flows, the plane follows it, the
- * airports pulse. Nothing moves when the system asks for less motion.
+ * Photo banners (Découvrir, Fonctionnalités): the dashed route flows and the airports pulse. Nothing moves when the system asks for less motion.
  */
 @keyframes route-flow {
   to {
