@@ -15,7 +15,7 @@ interface Props {
 export function AuthPage({ title, form, other }: Props) {
   const t = useTranslations("Site");
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-bg bg-[radial-gradient(60rem_30rem_at_50%_-10%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent)] p-4">
+    <main className="airport-plan flex min-h-screen flex-col items-center justify-center gap-4 bg-bg bg-[radial-gradient(60rem_30rem_at_50%_-10%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent)] p-4">
       <Brand name={t("name")} />
       <CardBox className="flex w-full flex-col sm:w-[440px]">
         <h1 className="mt-0 mb-4 text-[1.5em]">{title}</h1>
