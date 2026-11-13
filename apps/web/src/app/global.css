@@ -114,6 +114,9 @@
   --wm-cat-wide-body: #91a7ff;
   --wm-cat-helicopter: #f783ac;
   --wm-cat-other: #adb5bd;
+  /* Airport plan behind every page (decision 016): its colour and how much it shows. */
+  --wm-plan-ink: #9fb4d9;
+  --wm-plan-opacity: 0.15;
 }
 
 /* Light theme: set on <html> by the head script (src/site/theme.ts). */
@@ -170,6 +173,8 @@
   --wm-cat-wide-body: #3b5bdb;
   --wm-cat-helicopter: #c2255c;
   --wm-cat-other: #6c757d;
+  --wm-plan-ink: #1f3a66;
+  --wm-plan-opacity: 0.12;
 }
 
 html,
@@ -245,6 +250,31 @@ h3 {
   background: linear-gradient(90deg, var(--color-accent), var(--wm-promo-text-end));
   background-clip: text;
   color: transparent;
+}
+
+/*
+ * Airport plan behind every page (decision 016): an invented aerodrome chart, single colour, tinted
+ * through a mask. It stays put while the page scrolls; opaque cards hide it, so it only shows in the
+ * margins. Gone when the system asks for more contrast.
+ */
+@utility airport-plan {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--wm-plan-ink);
+    opacity: var(--wm-plan-opacity);
+    mask: url("/backgrounds/airport-plan.svg") center / cover no-repeat;
+  }
+  @media (prefers-contrast: more) {
+    &::before {
+      display: none;
+    }
+  }
 }
 
 /* Pilot's initial in the floating bar (blue gradient of the mock-up, both themes). */
