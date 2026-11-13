@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { writeSound } from "./sound-setting.ts";
+import { siteAudio, writeSound } from "./sound-setting.ts";
 
 describe("sound setting", () => {
   let stored: Map<string, string>;
@@ -12,6 +12,16 @@ describe("sound setting", () => {
       setItem: (key: string, value: string) => stored.set(key, value),
     });
     vi.stubGlobal("window", { dispatchEvent: (event: Event) => events.push(event.type) });
+    vi.stubGlobal(
+      "AudioContext",
+      class {
+        state = "suspended";
+        resume() {
+          this.state = "running";
+          return Promise.resolve();
+        }
+      },
+    );
   });
   afterEach(() => vi.unstubAllGlobals());
 
@@ -21,6 +31,11 @@ describe("sound setting", () => {
     writeSound(false);
     expect(stored.get("weems-sound")).toBe("off");
     expect(events).toEqual(["weems-sound-change", "weems-sound-change"]);
+  });
+
+  it("starts the sound in the click that turns it on (browsers allow it only then)", () => {
+    writeSound(true);
+    expect(siteAudio().state).toBe("running");
   });
 
   it("still tells the page when storage is refused", () => {

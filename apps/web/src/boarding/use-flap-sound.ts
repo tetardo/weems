@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { siteAudio, wakeSoundOnTouch } from "../site/sound-setting.ts";
 
 /** One flap falling: a very short burst of noise, high-passed so it clicks. */
 function click(audio: AudioContext, at: number): void {
@@ -31,8 +32,9 @@ export function useFlapSound(enabled: boolean): (durationMs: number) => void {
 
   useEffect(() => {
     if (!enabled) return;
-    audio.current ??= new AudioContext();
-    void audio.current.resume();
+    audio.current = siteAudio();
+    // On before this page opened: the browser keeps it muted until the visitor touches the page.
+    return wakeSoundOnTouch();
   }, [enabled]);
 
   return useCallback(
