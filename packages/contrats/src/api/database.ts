@@ -63,6 +63,24 @@ export const DatabaseCleanupPreview = z.object({
 });
 export type DatabaseCleanupPreview = z.infer<typeof DatabaseCleanupPreview>;
 
+/** Days of the charts at the top of the page Base de données. */
+export const DATABASE_HISTORY_DAYS = 30;
+
+/**
+ * One UTC day of the history: the API's size reading of that day (the last of the day; null
+ * before the readings began or on a day the API did not run) and the flights opened that day.
+ */
+export const DatabaseDay = z.object({
+  date: z.iso.date(),
+  totalBytes: Count.nullable(),
+  /** Total size of each table, by name; null with totalBytes. */
+  tables: z.record(z.string(), Count).nullable(),
+  realFlights: Count,
+  /** Replayed (simulator "replay") or flown by a fictitious account. */
+  simulatedFlights: Count,
+});
+export type DatabaseDay = z.infer<typeof DatabaseDay>;
+
 export const AdminDatabase = z.object({
   generatedAt: UtcTimestamp,
   /** "PostgreSQL 16.4" and the database's name. */
@@ -73,6 +91,8 @@ export const AdminDatabase = z.object({
   /** Newest first. */
   migrations: z.array(DatabaseMigration),
   cleanup: DatabaseCleanupPreview,
+  /** The last DATABASE_HISTORY_DAYS days, oldest first, today last. */
+  history: z.array(DatabaseDay),
 });
 export type AdminDatabase = z.infer<typeof AdminDatabase>;
 

@@ -225,7 +225,7 @@ flowchart LR
 
 **Constats qui ont orienté la page** : il n'existe pas de table de positions (le direct reste en mémoire dans l'API) ; ce qui grossit, c'est `flight_tracks`, la trajectoire complète de chaque vol. Les vols réels ne sont jamais supprimés (EF-14). Aucune sauvegarde n'existait.
 
-**Qui fait quoi** : l'API lit la base et supprime (session d'un administrateur, comme Supervision) ; la console garde elle-même les relevés de taille, lance les sauvegardes et la commande des migrations. La console n'écrit toujours jamais dans la base.
+**Qui fait quoi** : l'API lit la base, relève sa taille chaque heure et supprime (session d'un administrateur, comme Supervision) ; la console lance les sauvegardes et la commande des migrations. La console n'écrit toujours jamais dans la base.
 
 ```mermaid
 flowchart LR
@@ -233,7 +233,8 @@ flowchart LR
   P -->|Nettoyer, après confirmation| N[POST /v1/admin/database/cleanup]
   R --> B[(PostgreSQL : catalogue, drizzle.__drizzle_migrations)]
   N --> F[Services flights et accounts]
-  P --> H[(.data/database-sizes.json : un relevé par jour)]
+  A[API : au démarrage puis chaque heure] --> H[(database_size_readings : un relevé par jour, 13 mois)]
+  R --> H
   P -->|Sauvegarder maintenant| D[pg_dump dans le conteneur db]
   D --> S[(.data/backups : 7 gardées)]
   P -->|Appliquer les migrations| M[pnpm --filter @weems/api db:migrate]
@@ -242,6 +243,7 @@ flowchart LR
 | Partie | Contenu |
 | --- | --- |
 | En-tête | Heure de la lecture, nom de la base et version de PostgreSQL à gauche, bouton « Actualiser » à droite. |
+| Graphiques (13/11/2026) | Trois cartes sur les 30 derniers jours, au-dessus des tuiles : **Taille totale** (courbe, évolution sur 30 j, date projetée où la base atteint 20 Go, le disque du serveur alpha) ; **Répartition par table** (colonnes empilées : les 3 plus grosses tables et « autres », part de la plus grosse) ; **Vols enregistrés par jour** (colonnes empilées réels / simulés). Le survol d'un jour l'affiche sous le graphique. Maquette validée : `/mnt/project-files/admin/base-de-donnees/graphiques/`. |
 | Tuiles | Taille totale (évolution sur 7 jours, part de la plus grosse table) ; migrations appliquées sur celles du code ; dernière sauvegarde (orange si aucune ou plus de 7 jours) ; part simulée des tables des vols. |
 | Bandeau | « Aucune sauvegarde » ou « Dernière sauvegarde il y a N jours », avec le bouton « Sauvegarder maintenant ». |
 | Tables | Chaque table, la plus grosse d'abord : lignes (estimation de PostgreSQL), données, index, total, barre réel / simulé, part simulée (tables des vols seulement), évolution sur 7 jours. Sur téléphone : table, total et barre. |
@@ -263,7 +265,10 @@ Les trois derniers états et « sautée » se corrigent à la main ; la page le 
 - Sessions : celles dont la date d'expiration est passée. Invitations : jamais utilisées et expirées (14 jours).
 - PostgreSQL ne rend pas l'espace au disque après une suppression : il le réutilise. La taille totale ne baisse donc pas forcément tout de suite.
 - Sauvegarde : `docker compose exec -T db pg_dump -U weems -Fc weems`, écrite d'abord dans un fichier `.part` puis renommée ; une seule à la fois ; au-delà de 7, les plus anciennes sont supprimées. La restauration remplace toute la base : jamais de bouton, la commande est affichée.
-- Évolution sur 7 jours : un relevé par jour (le dernier de la journée gagne), 31 jours gardés ; sans relevé de 7 jours, comparaison avec le plus ancien, et la page dit depuis quand.
+- Relevés de taille (13/11/2026) : l'API les écrit dans la table `database_size_readings` (une ligne par jour UTC, le dernier relevé du jour gagne) au démarrage, chaque heure et à chaque lecture de la page ; gardés 13 mois. Ils remplacent le fichier `.data/database-sizes.json` de la console, qui ne relevait que quand la page était ouverte (fichier ignoré désormais, non importé : un ou deux jours de données).
+- Jour sans relevé (API arrêtée, ou avant la mise en place) : pas de valeur inventée. La courbe de taille passe en pointillés entre deux relevés, la répartition n'a pas de colonne. Les vols par jour se calculent depuis `opened_at` : complets dès le premier jour. Les vols simulés déjà nettoyés n'y figurent plus.
+- Projection vers 20 Go : pente entre le premier et le dernier relevé des 30 jours, vols simulés compris ; « plus de 5 ans » au-delà, rien si la base ne grossit pas (après un nettoyage).
+- Évolution sur 7 jours (tuile et tableau) : depuis le relevé d'au moins 7 jours ; sans lui, depuis le plus ancien, et la page dit depuis quand.
 
 ## Pages Fondateurs et Codes d'offre (13/11/2026)
 

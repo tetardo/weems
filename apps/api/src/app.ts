@@ -65,9 +65,11 @@ import { StatsService, type StatsSources } from "./modules/stats/service.ts";
 import { SupervisionRepository } from "./modules/supervision/repository.ts";
 import { SupervisionListsRepository } from "./modules/supervision/repository-lists.ts";
 import { SupervisionSystemRepository } from "./modules/supervision/repository-system.ts";
+import { HistoryRepository } from "./modules/database/history-repository.ts";
 import { DatabaseRepository } from "./modules/database/repository.ts";
 import { registerDatabaseRoutes } from "./modules/database/routes.ts";
 import { DatabaseService } from "./modules/database/service.ts";
+import { SizeRecorder } from "./modules/database/size-recorder.ts";
 import { FlightsCleanupService } from "./modules/flights/cleanup-service.ts";
 import type { LiveFeed } from "./modules/flights/live-feed.ts";
 import { FlightsCleanupRepository } from "./modules/flights/repository-cleanup.ts";
@@ -135,11 +137,25 @@ export function createDatabaseService(
 ): DatabaseService {
   return new DatabaseService({
     repository: new DatabaseRepository(db),
+    history: new HistoryRepository(db),
     flights: new FlightsCleanupService(new FlightsCleanupRepository(db), live),
     accounts: new AccountsCleanupService(new AccountsCleanupRepository(db)),
     migrationFiles: readMigrationFiles(),
     ...(now ? { now } : {}),
   });
+}
+
+/** Page Base de données: its routes, and the hourly size reading its charts need. */
+function registerDatabasePage(
+  app: FastifyInstance,
+  deps: { database: DatabaseHandle; guards: Guards; board: LiveBoard },
+): SizeRecorder {
+  const service = createDatabaseService(deps.database.db, deps.board);
+  registerDatabaseRoutes(app, service, deps.guards);
+  return new SizeRecorder(
+    () => service.record(),
+    (err) => app.log.error({ err }, "Database size not recorded"),
+  );
 }
 
 /** Fastify with its plugins: validation, errors, documentation, rate limits. */
@@ -292,12 +308,12 @@ export async function buildApp({
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));
   registerSupervision(app, { database, guards, board, metrics });
-  registerDatabaseRoutes(app, createDatabaseService(database.db, board), guards);
+  const sizes = registerDatabasePage(app, { database, guards, board });
   if (config.env !== "production") {
     registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }
-  app.addHook("onReady", async () => stream.start());
-  app.addHook("preClose", async () => stream.stop());
+  app.addHook("onReady", async () => [stream, sizes].forEach((job) => job.start()));
+  app.addHook("preClose", async () => [stream, sizes].forEach((job) => job.stop()));
 
   await app.ready();
   return app;

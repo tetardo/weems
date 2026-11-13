@@ -150,9 +150,11 @@ export {
 export {
   AdminDatabase,
   CLEANUP_SIMULATED_AFTER_DAYS,
+  DATABASE_HISTORY_DAYS,
   DatabaseCleanupPreview,
   DatabaseCleanupRequest,
   DatabaseCleanupResult,
+  DatabaseDay,
   DatabaseMigration,
   DatabaseTable,
   MigrationState,
