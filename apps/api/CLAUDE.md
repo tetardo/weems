@@ -17,14 +17,18 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Comptes, connexion du site et du tracker (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public du pilote (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
 | Comptes vus par la console d'administration (rôles, désactivation, invitations) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, fiche `../../docs/decisions/009-console-admin-locale.md` |
+| Accueil : compteurs et images de fond | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md`, `../../docs/cahiers-des-charges/web/spec-J4-personnalisation.md` |
+| Formules et catalogue (`modules/plans`) | `../../docs/cadrage/05-formules-abonnement.md`, fiche `../../docs/decisions/015-catalogue-des-formules.md`, section 12 des règles de développement |
+| Carnet privé (`modules/logbook`) | `../../docs/cahiers-des-charges/web/spec-carnet-prive.md` ; critères provisoires des repères : `../../docs/suivi/a-voir-avec-houssine.md` |
+| Supervision et base de données (`modules/supervision`, `modules/database`) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, sections « Page Supervision » et « Page Base de données » |
 | Ce que le tracker envoie | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` (section « Contrat avec l'API ») |
 | Formats des messages | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
-| Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici) |
+| Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici ; encore vide : critères à fixer avec un pilote) |
 
 ## Stack
 
-- Node.js LTS, TypeScript strict, Fastify (en attente de confirmation de Thibault ; NestJS seulement s'il code l'API).
-- PostgreSQL avec Drizzle ; fichiers dans un stockage compatible S3 à partir de J2 (outil local à choisir).
+- Node.js LTS, TypeScript strict, Fastify (toute l'API est écrite en Fastify depuis J0 ; la question NestJS ne se pose que si Thibault code l'API : `../../docs/suivi/a-voir-avec-thibault.md`).
+- PostgreSQL avec Drizzle. Trajectoires compressées, photos de profil et images de l'accueil sont stockées dans PostgreSQL (spec J2, spec profil public, spec personnalisation) ; un stockage compatible S3 ne viendra que si le volume l'exige.
 - Validation et documentation OpenAPI à partir des schémas Zod de `packages/contrats`.
 - Tests : Vitest contre une vraie base PostgreSQL dans Docker.
 

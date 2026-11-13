@@ -35,11 +35,22 @@ Demande de Greg (« la nouvelle barre de menu qui est sur l'accueil doit être l
 
 - Après le logo, groupe de liens avec la page active en relief : « Mes vols » (pilote connecté) et « Vols en direct » (tous). Les entrées et qui les voit sont dans `src/site/menu-items.ts` (`menuFor`) ; la limite de 5 entrées reste, pour chaque public. Mise à jour du 12/11/2026 : chaque entrée a un public (`pilot`, `visitor` ou `everyone`). « Découvrir » (`/discover`) et « Fonctionnalités » (`/features`) sont pour les visiteurs seulement (Découvrir, Fonctionnalités, Vols en direct, Offres) : le pilote connecté connaît déjà Weems et garde ses 4 entrées ; tout le monde retrouve « Découvrir Weems » et « Fonctionnalités » dans le pied de page.
 - « Découvrir Weems » est retiré (il renvoyait à l'accueil, comme le logo).
-- À droite : « Créer un compte » et l'icône de connexion pour un visiteur ; l'initiale du pilote et son menu (« Mon profil public », déconnexion) une fois connecté ; puis thème et FR | EN pour tous. La langue sort du menu du pilote (FR | EN est toujours visible).
+- À droite : « Créer un compte » (remplacé le 13/11 par le bouton « Pilot Pro », voir plus bas) et l'icône de connexion pour un visiteur ; l'initiale du pilote et son menu (« Mon profil public », déconnexion) une fois connecté ; puis thème et FR | EN pour tous. La langue sort du menu du pilote (FR | EN est toujours visible).
 - Mise à jour du 13/11/2026 (demande de Greg) : « Vols en direct » quitte le groupe de liens et passe à droite, juste avant l'icône de connexion ou le menu du pilote (`placement: "account"` dans `menu-items.ts`, `navFor`) ; il reste dans le menu du téléphone. « Créer un compte » est remplacé par un bouton promotionnel « Pilot Pro » (dégradé, halo) qui mène aux offres `/plans` ; l'inscription reste accessible depuis la page de connexion et les offres.
 - Sous 768 px : bouton menu avec les mêmes liens, partout. **Le dock flottant du bas est supprimé** (une seule navigation au lieu de deux selon la page) ; le menu du pilote s'ouvre sur toute la largeur.
 - Pied de page P2 sur l'accueil et les profils publics, pas sur les pages du pilote ni la carte en direct.
 
 ## Mise à jour du 12/11/2026 : « Mon carnet de bord »
 
-Demande de Greg : un bouton « Mon carnet de bord » avant « Mes vols » (pilote connecté), qui montre sa page publique ; c'est la page d'arrivée après connexion. La barre compte maintenant 3 entrées sur 5 (carnet, mes vols, direct). Détails dans la spec J4 profil public, section 7.
+Demande de Greg : un bouton « Mon carnet de bord » avant « Mes vols » (pilote connecté), qui montre sa page publique ; c'est la page d'arrivée après connexion. Détails dans la spec J4 profil public, section 7.
+
+Remplacé le 12/11/2026 au soir (#81) : `/logbook` est devenu le **carnet de vol privé** (Résumé, Vols, Statistiques ; spec [carnet privé](../cahiers-des-charges/web/spec-carnet-prive.md)) ; la page publique vue par son pilote est passée à `/logbook/public` (« Ma page publique », dans le menu de gauche du carnet).
+
+## État de la barre au 13/11/2026
+
+| Public | Après le logo | À droite |
+| --- | --- | --- |
+| Visiteur | Découvrir, Fonctionnalités, Offres | bouton « Pilot Pro » (vers `/plans`), « Vols en direct », icône de connexion, thème, FR \| EN |
+| Pilote connecté | Mon carnet de bord, Mes vols, Offres | « Vols en direct », menu du pilote, thème, FR \| EN ; hors production, bouton de test Free \| Pro |
+
+Chaque public a 4 entrées sur 5 (« Vols en direct » compris). Source : `apps/web/src/site/menu-items.ts`.

@@ -14,7 +14,8 @@ Une modification n'est terminée que si **tous** ces points sont vrais :
 4. La vérification des types, le contrôle du style et tous les tests passent, sur le Mac et dans l'intégration continue.
 5. Elle a été relue par Claude (`/code-review`), avec `/security-review` si elle touche la connexion, les droits, les données personnelles ou les entrées venant de l'extérieur.
 6. La documentation concernée est à jour : spécification, `CLAUDE.md` de l'application, `README.md` si l'usage change.
-   Une fonction visible par le pilote, nouvelle ou modifiée, met aussi à jour le catalogue des formules (clé, ligne, textes : fiche [015](../decisions/015-catalogue-des-formules.md)) : la page Offres en dépend.
+   Une fonction visible par le pilote, nouvelle ou modifiée, met aussi à jour le catalogue des formules (clé, ligne, textes : fiche [015](../decisions/015-catalogue-des-formules.md)) : la page Offres en dépend. Voir les règles permanentes de la section 12.
+   L'index [`docs/README.md`](../README.md) liste tout document ajouté, et un document dépassé part dans `docs/archives/` (voir [archives/README.md](../archives/README.md)).
 7. Elle tourne sur le Mac de Greg (sauf le connecteur MSFS, testé sur le PC Windows).
 
 ## 2. Branches et fusions
@@ -89,7 +90,9 @@ Pas d'objectif de pourcentage de couverture : il pousse à écrire des tests inu
 2. tests, avec un service PostgreSQL ;
 3. construction des applications.
 
-À partir de T1, une étape sur un serveur Windows construit le paquet MSIX du tracker.
+Puis les tests de sortie des jalons : J1 seulement si la PR touche la chaîne tracker → API → direct, toujours sur `main` et chaque nuit (fiche [013](../decisions/013-ci-j1-seulement-si-chaine-touchee.md)) ; J2 et J3 dans un navigateur sans écran.
+
+Un second flux (`.github/workflows/tracker-installer.yml`, serveur Windows) teste le tracker sous Windows, construit son installateur, ouvre la vraie fenêtre de l'application installée et prépare une version brouillon sur GitHub (guide de l'organisateur de l'alpha). Le paquet MSIX du Microsoft Store viendra avec la publication sur le Store.
 
 ## 7. Garde-fous pour Claude Code
 
@@ -121,3 +124,15 @@ Pas d'objectif de pourcentage de couverture : il pousse à écrire des tests inu
 - Documents et messages de commit : français.
 - Code, noms, commentaires et messages d'erreur de l'API : anglais.
 - Textes affichés aux utilisateurs : en français et en anglais, dans des fichiers de traduction, jamais écrits en dur dans le code.
+
+## 12. Règles permanentes des pages Offres et Fonctionnalités
+
+Demandées par Greg le 12/11/2026, valables pour toute PR, quel que soit le fil de travail.
+
+1. **La grille des offres est tenue à jour à chaque changement de fonctionnalité.** Toute fonction visible par le pilote, ajoutée ou modifiée sur n'importe quelle page du site, met à jour dans la même PR : la clé dans `FeatureKey` (`packages/contrats/src/api/plans.ts`), la ligne dans `apps/api/src/modules/plans/catalog.ts` (valeur dans chaque formule, disponibilité), le libellé `Plans.features.<clé>` en français et en anglais. La page Offres (`/plans`) et le tableau comparatif (`/plans/compare`) suivent seuls.
+2. **La page Fonctionnalités se met à jour automatiquement depuis `GET /v1/plans`.** Elle n'a aucune liste écrite à la main. Une nouvelle fonction ajoute son explication `Features.items.<clé>.title` et `.text` (FR et EN) et son illustration dans `apps/web/src/features/illustrations/` ; une fonction livrée passe de `SOON` à `NOW` dans le catalogue, dans la PR qui la livre.
+3. **Les étiquettes « Gratuit » / « Pilot Pro » de la page Découvrir** (`apps/web/src/discover/discover-steps.ts`) restent fidèles au catalogue.
+4. **Le code teste une clé de fonction, jamais un nom de formule** ; sans le droit, l'API ne renvoie jamais le vrai chiffre (aperçu fictif côté site).
+
+Des tests bloquent les oublis : chaque clé est décrite une fois par l'API, a son libellé et son explication dans les deux langues, et son illustration (sinon le site ne compile pas).
+

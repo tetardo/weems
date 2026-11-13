@@ -161,6 +161,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 - Les composants de la page de vol sont réutilisés tels quels (`src/flight/`) ; la page publique ne fait que changer la source des données (routes publiques, sans cookie).
 - Nouveau dossier `src/profile/` : statistiques, en-tête, réglages.
 - Carnet de bord (ajout du 12/11/2026, demande de Greg) : bouton « Mon carnet de bord » en premier dans la barre, page `/logbook` réservée au pilote connecté et page d'arrivée après connexion ou inscription. Elle montre la même page que le profil public (mêmes composants, `src/profile/profile-page.tsx`), avec un bandeau sous l'en-tête (photo et nom ; demande de Greg du 12/11) : « Aperçu, vous seul le voyez » et un lien vers les réglages tant que le profil n'est pas public, sinon un lien vers la page publique. La photo est celle du pilote (`/api/me/profile/photo`), les vols ouvrent sa page de vol privée (`/flights/{id}`), et le bouton « Partager » n'apparaît qu'une fois le profil public (il partage alors l'adresse publique, jamais `/logbook`). Liens des deux pages : `src/profile/profile-links.ts`.
+- Remplacé le 12/11/2026 au soir (#81) : `/logbook` est désormais le carnet de vol privé ([spec](web/spec-carnet-prive.md)) ; la page décrite au point précédent est servie à `/logbook/public` (« Ma page publique »), avec le même bandeau d'aperçu.
 
 ## 8. Tests
 

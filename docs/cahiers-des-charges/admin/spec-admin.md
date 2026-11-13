@@ -29,11 +29,11 @@ flowchart LR
 
 | Élément | Contenu |
 | --- | --- |
-| Barre latérale | Logo « Weems Admin ». Groupe **Exploitation** : Services (compteur « 2 / 3 » en marche), Trafic simulé (pastille « en cours » pendant un lancement). Groupe **Utilisateurs** : Comptes (nombre de comptes). Groupe **Raccourcis** : Site (:3001), Carte en direct, Documentation de l'API (:3000/docs), chacun ouvert dans un nouvel onglet. |
+| Barre latérale | Logo « Weems Admin ». État au 13/11/2026 (#82 ; Greg a refusé une réorganisation plus poussée des sections) : groupe **Exploitation** : Supervision (accueil), Services (compteur « 2 / 3 » en marche), Trafic simulé (pastille « en cours » pendant un lancement), Activité simulée. Groupe **Utilisateurs** : Comptes. Groupe **Site** : Personnalisation. Groupe **Maintenance** : Librairies, Base de données. Groupe **Raccourcis** : Site (:3001) et Doc API (:3000/docs), ouverts dans un nouvel onglet. Titres de section discrets mais lisibles, liste resserrée. |
 | Bloc « État local » | En bas de la barre : Base, API, Site, chacun avec une pastille (en marche, arrêté, en erreur) et son port. Rafraîchi toutes les 5 secondes. |
 | Barre du haut | Fil d'Ariane (Admin / page), badge « localhost · Mac », bouton thème clair/sombre, administrateur connecté (s'il l'est). |
-| Mobile (moins de 768 px) | La barre latérale devient des onglets en bas : Services, Trafic, Comptes, Site. L'état local devient trois pastilles dans la barre du haut. |
-| Thème | Clair ou sombre, mêmes couleurs que le site. |
+| Mobile (moins de 768 px) | La barre latérale devient des onglets en bas : Supervision, Services, Trafic, Activité, Comptes (état au 13/11/2026). L'état local devient trois pastilles dans la barre du haut. |
+| Thème | Clair ou sombre, mêmes couleurs que le site (en clair, boutons pleins à texte blanc sur l'accent #0c7f94, contraste WCAG AA, #78). |
 | Langue | Français seulement (voir question 2). |
 
 **Accès** : pas de connexion pour Services et Trafic, puisque la console n'écoute que sur le Mac (mêmes droits que le Terminal) et doit fonctionner **API arrêtée** (c'est là qu'on en a besoin pour la démarrer). La page Comptes demande la connexion d'un compte Administrateur, car elle passe par l'API (voir question 1).

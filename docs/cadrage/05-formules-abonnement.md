@@ -1,6 +1,8 @@
 # Étape 5 — Formules d'abonnement et droits dans l'API
 
-Date : 12/11/2026. Base donnée par Greg le 12/11/2026, « à redéfinir au fur et à mesure ». Document de cadrage : **aucun code avant validation par Greg**.
+Date : 12/11/2026. Base donnée par Greg le 12/11/2026, « à redéfinir au fur et à mesure ». Document de cadrage.
+
+**État au 13/11/2026** : la page Offres, le catalogue et une première vérification des droits sont codés (section 5 bis). Ce qui existe : `GET /v1/plans` (catalogue public) et `GET /v1/me/plan` (formule du pilote, `{ plan, testSwitch }`) ; le site et l'API en déduisent les fonctions incluses à partir du catalogue. La réponse `GET /v1/me` décrite en section 3.2 (droits et limites calculés) n'existe pas encore : elle viendra avec les abonnements (lot 2) et les compagnies (lot 3). Les questions de la section 6 restent ouvertes.
 
 ## En bref
 
@@ -99,7 +101,9 @@ Les noms de droits suivent un format `domaine.action`, en anglais (identifiants 
 
 ## 5 bis. Page Offres et catalogue (12/11/2026)
 
-Greg a choisi la mise en page « 4 cartes » (maquettes `offres/v1` et `v2`) avec un lien vers un tableau comparatif, une bannière dessinée par formule, le prix annuel sous le prix mensuel, des boutons alignés, sans essai. Il a demandé une vraie page, prix fictifs, **entièrement alimentée par l'API** et tenue à jour à chaque nouvelle page du site. Réalisé selon la fiche [015 — Catalogue des formules](../decisions/015-catalogue-des-formules.md) : `GET /v1/plans`, pages `/plans` et `/plans/compare`. L'étape 1 de la section 5 est ainsi commencée (catalogue en code, `GET /v1/me/plan`), sans encore de vérification de droits sur les routes.
+Greg a choisi la mise en page « 4 cartes » (maquettes `offres/v1` et `v2`) avec un lien vers un tableau comparatif, une bannière dessinée par formule, le prix annuel sous le prix mensuel, des boutons alignés, sans essai. Il a demandé une vraie page, prix fictifs, **entièrement alimentée par l'API** et tenue à jour à chaque nouvelle page du site. Réalisé selon la fiche [015 — Catalogue des formules](../decisions/015-catalogue-des-formules.md) : `GET /v1/plans`, pages `/plans` et `/plans/compare`. L'étape 1 de la section 5 est ainsi commencée (catalogue en code, `GET /v1/me/plan`).
+
+Mise à jour du 13/11/2026 : le carnet privé vérifie les droits sur ses routes, par clé de fonction (jamais par nom de formule) : `flightBandsMarks` (repères des bandes de vol), `statsPeriod` (période « Tout » des statistiques), `categoryTrends`, `phaseTime`, `goodPractices`. Sans le droit, l'API renvoie `null` et le site montre une carte verrouillée avec un aperçu fictif. Pas encore de module `entitlements` séparé ni de réglage par compte dans la console : la formule vient du bouton de test (hors production) ou vaut Pilot Free. Pages liées : Fonctionnalités (`/features`, générée depuis le catalogue) et Découvrir (`/discover`).
 
 ## 6. Questions ouvertes pour Greg
 

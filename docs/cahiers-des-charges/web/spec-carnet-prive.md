@@ -72,13 +72,15 @@ Liste des objectifs en cours (anneau de progression, barre avec le repère « o�
 
 [Confiance élevée] Le traqueur mesure carburant, volets, train, aérofreins, N1, pilote automatique, feux… (format `Sample`), mais la trajectoire envoyée à l'API (`TrackPoint`) ne garde que position, altitudes, vitesses, vario, cap et sol. Les bandes de vol, le carburant du dernier vol et « Prévu ou réel » demandent d'ajouter ces champs, facultatifs, à `TrackPoint`, côté traqueur et côté API (PR des Vols). Les vols déjà enregistrés n'auront pas ces lignes : la carte affiche « non mesuré ».
 
+**Fait le 12/11/2026 (#83)** : `TrackPoint` (`packages/contrats/src/api/tracks.ts`) porte ces champs, facultatifs, envoyés par le traqueur et gardés par l'API. Restent à faire : le plan SimBrief (« Prochain vol », « Prévu ou réel »).
+
 ## 8. Découpage
 
-| PR | Contenu |
-| --- | --- |
-| #77 | Bouton de test Free \| Pro |
-| 2 | Cadre du carnet (menu, onglets, `/logbook/public`) et Résumé (sans Prochain vol ni communauté réelle : cartes verrouillées ou « bientôt ») |
-| 3 | Vols : liste + fiche, trajectoire enrichie, bandes de vol (repères à revoir sur critères provisoires : 250 kt sous 10 000 ft, inclinaison > 30°, plus de 1 000 ft/min de descente sous 1 000 ft) ; dernière approche, analyse, note, chronologie et comparaison plus tard |
-| 4 | Statistiques par thème (`GET /v1/me/logbook/stats`). Bonnes pratiques mesurées avec les critères provisoires des bandes (pas encore d'« approche stabilisée », critères à fixer avec un pilote) |
-| 5 | Objectifs (table, routes, page) |
-| plus tard | Prochain vol SimBrief, communauté, analyse d'approche (critères à fixer avec un pilote) |
+| PR | Contenu | État au 13/11/2026 |
+| --- | --- | --- |
+| #77 | Bouton de test Free \| Pro | Fusionnée |
+| #81 | Cadre du carnet (menu, onglets, `/logbook/public`) et Résumé (sans Prochain vol ni communauté réelle : cartes verrouillées ou « bientôt ») | Fusionnée |
+| #83 | Vols : liste + fiche, trajectoire enrichie, bandes de vol (repères à revoir sur critères provisoires : 250 kt sous 10 000 ft, inclinaison > 30°, plus de 1 000 ft/min de descente sous 1 000 ft, à valider : liste Houssine) ; dernière approche, analyse, note, chronologie et comparaison plus tard | Fusionnée |
+| #86 | Statistiques par thème (`GET /v1/me/logbook/stats`). Bonnes pratiques mesurées avec les critères provisoires des bandes (pas encore d'« approche stabilisée », critères à fixer avec un pilote) | Fusionnée |
+| à venir | Objectifs (table, routes, page) | À faire |
+| plus tard | Prochain vol SimBrief, communauté, analyse d'approche (critères à fixer avec un pilote), notes de vol | À faire |

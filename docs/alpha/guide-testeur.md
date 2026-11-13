@@ -15,7 +15,7 @@ Merci de tester Weems ! Le tracker enregistre vos vols dans Microsoft Flight Sim
 
 1. Ouvrez le lien d'inscription : le code d'invitation est déjà rempli.
 2. Choisissez votre nom de pilote et un mot de passe (10 caractères au moins).
-3. Vous arrivez sur « Mes vols », vide pour l'instant.
+3. Vous arrivez sur « Mon carnet de bord », vide pour l'instant. Vos vols seront aussi dans « Mes vols ».
 
 Le site : [adresse du site].
 
