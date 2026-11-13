@@ -2,24 +2,26 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import type { PlanId } from "@weems/contrats";
 import { Link } from "../i18n/navigation.ts";
-import { ProfileIcon, ShowIcon } from "../ui/icons.ts";
+import { ProfileIcon, ProIcon, ShowIcon } from "../ui/icons.ts";
 import { LogbookNav } from "./logbook-nav.tsx";
 
-/** Plan of the pilot at the top of the menu, with the way to Pilot Pro for a free pilot. */
+/** Plan at the top of the menu, on one line: the way to Pilot Pro for a free pilot. */
 function PlanBox({ plan }: { plan: PlanId }) {
   const t = useTranslations("Logbook.plan");
-  const free = plan === "pilot_free";
+  if (plan === "pilot_free") {
+    return (
+      <Link
+        href="/plans"
+        className="mb-2 flex items-center gap-1.5 rounded-box bg-accent/12 px-2.5 py-2 text-[12.5px] font-semibold text-accent-2"
+      >
+        <ProIcon size={14} aria-hidden="true" />
+        {t("upgrade")}
+      </Link>
+    );
+  }
   return (
-    <div
-      className={`mb-2 rounded-box px-2.5 py-2 text-[12.5px] ${free ? "bg-accent/12" : "bg-accent-2/14"}`}
-    >
-      {t("label")}{" "}
-      <b className={free ? "text-link" : "text-accent-2"}>{t(free ? "free" : "pro")}</b>
-      {free && (
-        <Link href="/plans" className="block font-semibold text-accent-2">
-          {t("upgrade")}
-        </Link>
-      )}
+    <div className="mb-2 rounded-box bg-accent-2/14 px-2.5 py-2 text-[12.5px]">
+      {t("label")} <b className="text-accent-2">{t("pro")}</b>
     </div>
   );
 }

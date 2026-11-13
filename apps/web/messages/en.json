@@ -454,7 +454,6 @@
     },
     "plan": {
       "label": "Plan",
-      "free": "Pilot Free",
       "pro": "Pilot Pro",
       "upgrade": "Upgrade to Pilot Pro"
     },
@@ -463,7 +462,6 @@
     },
     "summary": {
       "title": "Summary",
-      "intro": "Your private logbook: progress, flights and points to work on. Every flight counts, even the ones hidden from your public page.",
       "empty": "No finished flight yet. Start the tracker and make a first flight: it will show up here.",
       "last": {
         "title": "Last flight",

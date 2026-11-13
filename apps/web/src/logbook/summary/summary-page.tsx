@@ -24,10 +24,7 @@ export function SummaryPage({ summary, points, detailed, today }: Props) {
   const t = useTranslations("Logbook.summary");
   return (
     <div className="grid gap-4">
-      <header>
-        <h1 className="m-0 text-[1.7em]">{t("title")}</h1>
-        <p className="m-0 mt-1 text-muted">{t("intro")}</p>
-      </header>
+      <h1 className="sr-only">{t("title")}</h1>
       {summary.lastFlight ? (
         <LastFlightCard last={summary.lastFlight} points={points} now={today} />
       ) : (

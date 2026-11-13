@@ -454,7 +454,6 @@
     },
     "plan": {
       "label": "Formule",
-      "free": "Pilot Free",
       "pro": "Pilot Pro",
       "upgrade": "Passer à Pilot Pro"
     },
@@ -463,7 +462,6 @@
     },
     "summary": {
       "title": "Résumé",
-      "intro": "Votre carnet privé : progression, vols et points à travailler. Tous vos vols comptent, même ceux masqués sur votre page publique.",
       "empty": "Aucun vol terminé pour l'instant. Lancez le traqueur et faites un premier vol : il apparaîtra ici.",
       "last": {
         "title": "Dernier vol",
