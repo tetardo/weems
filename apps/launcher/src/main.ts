@@ -11,7 +11,7 @@ import {
   type LauncherState,
   type LinkTarget,
 } from "./launcher-state.ts";
-import { DOCKER_APP, linkUrl, repoPaths, URLS, VSCODE_APP } from "./repo.ts";
+import { CLAUDE_APP, DOCKER_APP, linkUrl, repoPaths, URLS, VSCODE_APP } from "./repo.ts";
 import { type TrayItem, trayMenu, trayTitle } from "./tray-menu.ts";
 
 /** Replaced at build time (scripts/build-app.ts): the repository the app was built from. */
@@ -75,6 +75,7 @@ function run(command: LauncherCommand | "show" | "quit"): void {
 function openTarget(target: LinkTarget): void {
   if (target === "docker") void shell.openPath(DOCKER_APP);
   else if (target === "vscode") execFile("open", ["-a", VSCODE_APP, paths.root], () => undefined);
+  else if (target === "claude") execFile("open", ["-a", CLAUDE_APP], () => undefined);
   else void shell.openExternal(linkUrl(target));
 }
 

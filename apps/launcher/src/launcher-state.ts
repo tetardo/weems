@@ -31,7 +31,7 @@ export interface LauncherState {
 }
 
 /** Pages opened in the browser, Docker Desktop, or the repository in VS Code. */
-export type LinkTarget = "site" | "console" | "docker" | "vscode";
+export type LinkTarget = "site" | "console" | "vscode" | "claude" | "docker";
 
 export type LauncherCommand =
   | { type: "start-all" }

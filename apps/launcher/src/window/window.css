@@ -19,6 +19,8 @@
   --open: #0c7f94;
   --on-brand: #ffffff;
   --vscode: #007acc;
+  /* Claude's orange, for its button only. */
+  --claude: #d97757;
   --term: #0a0e18;
   --term-ink: #c8d1e4;
   --radius: 10px;
@@ -157,6 +159,9 @@ h1 {
 .button.site,
 .button.console {
   --brand: var(--open);
+}
+.button.claude {
+  --brand: var(--claude);
 }
 .button.docker {
   --brand: var(--docker);

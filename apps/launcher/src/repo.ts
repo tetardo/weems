@@ -30,7 +30,13 @@ export const DOCKER_APP = "/Applications/Docker.app";
 /** VS Code, opened on the repository (icon of the top bar). */
 export const VSCODE_APP = "Visual Studio Code";
 
-export function linkUrl(target: Exclude<LinkTarget, "docker" | "vscode">): string {
+/**
+ * Claude desktop (icon of the top bar). macOS opens the app only: it has no documented way to be
+ * opened on a folder, the project is picked inside it.
+ */
+export const CLAUDE_APP = "Claude";
+
+export function linkUrl(target: Exclude<LinkTarget, "docker" | "vscode" | "claude">): string {
   if (target === "site") return URLS.site;
   return `${URLS.console}/services`;
 }
