@@ -44,7 +44,7 @@ src/
   app/[locale]/        routes Next.js (pages et mise en page), sans logique
     (home)/              accueil public : barre et pied de page des pages publiques
     (app)/               pages du pilote connecté (et /live sans session) : même barre, sans pied de page
-    (auth)/              connexion et inscription, panneau centré
+    (auth)/              connexion et inscription, écran coupé en deux (maquette du 13/11)
     (public)/            pages ouvertes à tous (profils publics) : même barre, pied de page
   app/sitemap.ts, app/robots.ts   plan du site (profils activés) et règles des moteurs de recherche
   proxy.ts             relais /api/auth vers l'API, connexion obligatoire, langue dans l'adresse (/ → /fr)
@@ -55,7 +55,12 @@ src/
   api/logbook-api.ts   carnet de bord du pilote connecté (carnet privé, et sa page publique même non publiée)
   api/public-api.ts    pages publiques : toujours sans cookie
   api/plans-api.ts     formule du pilote connecté (page Offres)
-  auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion
+  auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion ;
+                       page coupée en deux (auth-page) : à gauche, dès 1024 px, panneau toujours sombre sur le plan d'aéroport (auth-welcome),
+                       cadran de cap à deux vols (route-dial, dial-ring, dial-flight ; géométrie testée dans route-dial-geometry.ts) dont les
+                       destinations changent au survol (use-route-morph.ts, souris seulement, jamais si l'utilisateur refuse les animations) ;
+                       à droite le formulaire (auth-field : champ à icône, mot de passe affichable ; « Rester connecté » envoie rememberMe).
+                       Pas de « Mot de passe oublié » tant que l'API n'envoie pas d'e-mail
   home/                accueil : héros (home-hero.tsx), image de chaque thème lue sur l'API ou `public/home/default.jpg` (home-image.ts, testé), compteurs et images lus par le serveur (home-data.ts),
                        tableau des départs (departures.ts testé : phases regroupées, niveau, lignes ; departures-board.tsx, split-flap.tsx)
   site/                cadre unique des pages (site-shell : barre flottante, liens site-nav, entrée ou menu du pilote site-account, menu téléphone site-menu, compteur en direct live-status/live-link, bouton de langue language-choice, pied de page site-footer ; entrées dans menu-items.ts, page active current-page.ts), adresse de l'API, API injoignable

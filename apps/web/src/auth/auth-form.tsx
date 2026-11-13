@@ -6,6 +6,7 @@ import { type FormEvent, type ReactNode, useState } from "react";
 import { type AuthError, authRequest } from "./auth-request.ts";
 import { Button } from "@weems/ui";
 import { LANDING_PAGE, safeNext } from "./session-cookie.ts";
+import { ForwardIcon } from "../ui/icons.ts";
 
 interface Props {
   path: "/sign-in/email" | "/sign-up/email";
@@ -28,8 +29,13 @@ export function AuthForm({ path, submitLabel, children }: Props) {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setBusy(true);
-    const fields = Object.fromEntries(new FormData(event.currentTarget)) as Record<string, string>;
-    const result = await authRequest(path, fields, search.toString());
+    const { rememberMe, ...fields } = Object.fromEntries(
+      new FormData(event.currentTarget),
+    ) as Record<string, string>;
+    // An unchecked box is absent from the form: the API wants true or false (login only).
+    const body =
+      path === "/sign-in/email" ? { ...fields, rememberMe: rememberMe === "on" } : fields;
+    const result = await authRequest(path, body, search.toString());
     if (!result.ok) {
       setError(result.error);
       setBusy(false);
@@ -56,8 +62,9 @@ export function AuthForm({ path, submitLabel, children }: Props) {
           {t(`errors.${error}`)}
         </p>
       )}
-      <Button type="submit" disabled={busy} className="mt-1 w-full">
+      <Button type="submit" disabled={busy} className="mt-1 h-12 w-full gap-2.5 text-base">
         {submitLabel}
+        <ForwardIcon size={18} aria-hidden="true" />
       </Button>
     </form>
   );

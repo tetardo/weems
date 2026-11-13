@@ -18,9 +18,16 @@ export default async function LoginPage({ params }: Props) {
   const t = await getTranslations("Auth");
   return (
     <AuthPage
+      welcome={t("welcome.title")}
       title={t("title")}
+      subtitle={t("subtitle")}
       form={<LoginForm />}
-      other={{ href: "/signup", label: t("toSignup") }}
+      other={{
+        href: "/signup",
+        question: t("toSignupQuestion"),
+        label: t("toSignup"),
+        hint: t("toSignupHint"),
+      }}
     />
   );
 }

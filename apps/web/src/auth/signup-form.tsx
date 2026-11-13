@@ -2,8 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { AuthField, PasswordField } from "./auth-field.tsx";
 import { AuthForm } from "./auth-form.tsx";
-import { FormField } from "@weems/ui";
+import { AccountIcon, EmailIcon, InviteIcon } from "../ui/icons.ts";
 
 /** Closed alpha: the invitation code comes in the address sent to the pilot (?code=…). */
 export function SignupForm() {
@@ -11,13 +12,30 @@ export function SignupForm() {
   const code = useSearchParams().get("code") ?? "";
   return (
     <AuthForm path="/sign-up/email" submitLabel={t("signupSubmit")}>
-      <FormField label={t("inviteCode")} name="inviteCode" defaultValue={code} autoComplete="off" />
-      <FormField label={t("name")} name="name" autoComplete="nickname" maxLength={40} />
-      <FormField label={t("email")} name="email" type="email" autoComplete="email" />
-      <FormField
+      <AuthField
+        label={t("inviteCode")}
+        icon={InviteIcon}
+        name="inviteCode"
+        defaultValue={code}
+        autoComplete="off"
+      />
+      <AuthField
+        label={t("name")}
+        icon={AccountIcon}
+        name="name"
+        autoComplete="nickname"
+        maxLength={40}
+      />
+      <AuthField
+        label={t("email")}
+        icon={EmailIcon}
+        name="email"
+        type="email"
+        autoComplete="email"
+      />
+      <PasswordField
         label={`${t("password")} (${t("passwordRule")})`}
         name="password"
-        type="password"
         minLength={10}
         autoComplete="new-password"
       />

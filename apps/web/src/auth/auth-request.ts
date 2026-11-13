@@ -24,7 +24,7 @@ function oauthQuery(search: string): string | undefined {
 /** POST to the login routes of the API, relayed by the site (/api/auth/…). */
 export async function authRequest(
   path: "/sign-in/email" | "/sign-up/email",
-  body: Record<string, string>,
+  body: Record<string, string | boolean>,
   search: string,
 ): Promise<AuthResult> {
   try {
