@@ -64,17 +64,19 @@ function FounderRow({ founder, busy, onConfirm, onRefuse }: RowProps) {
           ? `refusé ${dayAndClock(founder.refusedAt)}`
           : dayAndClock(founder.confirmsAt)}
       </td>
-      <td className="fd-actions">
-        {founder.status === "pending" && (
-          <button className="btn sm" disabled={busy} onClick={() => onConfirm(founder)}>
-            Confirmer
-          </button>
-        )}
-        {founder.status !== "refused" && (
-          <button className="btn sm ghost" disabled={busy} onClick={() => onRefuse(founder)}>
-            Refuser
-          </button>
-        )}
+      <td>
+        <div className="fd-actions">
+          {founder.status === "pending" && (
+            <button className="btn sm" disabled={busy} onClick={() => onConfirm(founder)}>
+              Confirmer
+            </button>
+          )}
+          {founder.status !== "refused" && (
+            <button className="btn sm ghost" disabled={busy} onClick={() => onRefuse(founder)}>
+              Refuser
+            </button>
+          )}
+        </div>
       </td>
     </tr>
   );
@@ -105,11 +107,11 @@ function RefuseDialog(props: {
 
 function Rules() {
   return (
-    <div className="note">
+    <div className="note fd-note">
       <InfoIcon size={16} />
       <div>
         Une place gagnée est confirmée seule après 48 h. Refusez-la si les vols semblent falsifiés
-        (trajets impossibles, vols identiques) : regardez-les dans la page Comptes.
+        (trajets impossibles, vols identiques en série).
       </div>
     </div>
   );

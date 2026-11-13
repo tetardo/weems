@@ -40,7 +40,7 @@ function CampaignRow({
     <tr>
       <td>{KIND[campaign.kind]}</td>
       <td>
-        {campaign.ambassador ?? campaign.label}
+        {campaign.label}
         {campaign.code && <span className="mono muted"> · {campaign.code}</span>}
       </td>
       <td>{campaign.months} mois</td>
@@ -51,25 +51,27 @@ function CampaignRow({
       <td>
         <State campaign={campaign} now={props.now} />
       </td>
-      <td className="fd-actions">
-        {campaign.kind === "batch" && (
-          <button
-            className="btn sm ghost"
-            disabled={props.busy}
-            onClick={() => props.onCsv(campaign)}
-          >
-            <DownloadIcon size={14} /> CSV
-          </button>
-        )}
-        {campaign.kind !== "referral" && !campaign.cancelledAt && (
-          <button
-            className="btn sm ghost"
-            disabled={props.busy}
-            onClick={() => props.onCancel(campaign)}
-          >
-            Annuler
-          </button>
-        )}
+      <td>
+        <div className="fd-actions">
+          {campaign.kind === "batch" && (
+            <button
+              className="btn sm ghost"
+              disabled={props.busy}
+              onClick={() => props.onCsv(campaign)}
+            >
+              <DownloadIcon size={14} /> CSV
+            </button>
+          )}
+          {campaign.kind !== "referral" && !campaign.cancelledAt && (
+            <button
+              className="btn sm ghost"
+              disabled={props.busy}
+              onClick={() => props.onCancel(campaign)}
+            >
+              Annuler
+            </button>
+          )}
+        </div>
       </td>
     </tr>
   );

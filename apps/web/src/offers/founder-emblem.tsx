@@ -17,7 +17,7 @@ export function FounderEmblem({ label, className = "" }: { label: string; classN
         fill="none"
       />
       <path
-        d="M14 58c12 2 22 6 30 12M106 58c-12 2-22 6-30 12M20 48c10 2 18 5 25 10M100 48c-10 2-18 5-25 10"
+        d="M30 84c8 4 18 6 30 6s22-2 30-6M38 94c7 3 14 4 22 4s15-1 22-4"
         stroke="currentColor"
         strokeWidth={2.2}
         strokeLinecap="round"
@@ -25,11 +25,11 @@ export function FounderEmblem({ label, className = "" }: { label: string; classN
       />
       <text
         x={60}
-        y={70}
+        y={68}
         textAnchor="middle"
         fill="currentColor"
         className="font-title"
-        fontSize={label.length > 3 ? 24 : 30}
+        fontSize={label.length > 3 ? 24 : 28}
         fontWeight={700}
       >
         {label}

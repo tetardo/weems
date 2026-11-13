@@ -81,3 +81,6 @@
     grid-template-columns: 1fr;
   }
 }
+.fd-note {
+  margin-bottom: 12px;
+}
