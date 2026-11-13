@@ -17,7 +17,10 @@ J2 : site en français et en anglais (`/fr/…`, `/en/…`), liste des vols `/fl
 | Comptes et connexion (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
 | Page d'accueil (J4) | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md`, images choisies dans la console : `spec-J4-personnalisation.md` |
-| Formules et page Offres | `../../docs/cadrage/05-formules-abonnement.md`, fiche `../../docs/decisions/015-catalogue-des-formules.md` |
+| Formules, pages Offres et Fonctionnalités (règles permanentes) | `../../docs/cadrage/05-formules-abonnement.md`, fiche `../../docs/decisions/015-catalogue-des-formules.md`, section 12 des règles de développement |
+| Carnet de vol privé (Résumé, Vols, Statistiques, Objectifs) | `../../docs/cahiers-des-charges/web/spec-carnet-prive.md` |
+| Barre et menu (état actuel) | `../../docs/decisions/003-navigation-barre-flottante.md` |
+| Arrondis | `../../docs/decisions/014-arrondis-des-cadres.md` (jetons de `@weems/ui`, jamais de rayon en dur) |
 | Catégories d'avion (J4) | `../../docs/cahiers-des-charges/spec-J4-categories-avion.md` |
 | Formats reçus de l'API | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 

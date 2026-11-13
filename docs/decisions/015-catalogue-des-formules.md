@@ -29,7 +29,7 @@ Quatre formules : Pilot Free, Pilot Pro, Company, Holding. Le paiement n'existe 
 Greg a demandé une page qui explique chaque fonction de Weems (maquette A choisie : une ligne par fonction, sommaire à gauche) et qui reste **à jour automatiquement** avec les autres pages du site et les choix sur les formules. Elle ne contient donc aucune liste écrite à la main :
 
 - `/features` lit `GET /v1/plans` comme la page Offres : groupes, fonctions, première formule qui contient chaque fonction (« Gratuit », « Dès Pilot Pro »…), limites formule par formule.
-- Chaque fonction du catalogue porte `availability` : `available` (utilisable aujourd'hui) ou `soon` (annoncée, pas encore codée). La page affiche « Bientôt » pour `soon`. Le catalogue décrit l'offre visée ; ce champ évite de promettre comme existant ce qui ne l'est pas. Au 12/11 : tracker, carte en direct, profil public, historique, fiche de vol et statistiques de base sont disponibles ; le reste est « bientôt ».
+- Chaque fonction du catalogue porte `availability` : `available` (utilisable aujourd'hui) ou `soon` (annoncée, pas encore codée). La page affiche « Bientôt » pour `soon`. Le catalogue décrit l'offre visée ; ce champ évite de promettre comme existant ce qui ne l'est pas. Au 12/11 : tracker, carte en direct, profil public, historique, fiche de vol et statistiques de base sont disponibles ; le reste est « bientôt ». Au 13/11 (#81, #83, #86), sont aussi disponibles : résumé du carnet, bandes de vol et leurs repères, points à travailler, période des statistiques, tendances par catégorie, temps par phase, bonnes pratiques. Restent « bientôt » : prochain vol SimBrief, notes de vol, objectifs, analyse d'approche, analyse détaillée, prévu ou réel, communauté, comparaison de vols, export et toutes les fonctions de compagnie.
 - Textes : `Features.items.<clé>.title` et `.text` (FR et EN), à côté du libellé court `Plans.features.<clé>.label` ; illustration dans `apps/web/src/features/illustrations/`.
 - Lien « Fonctionnalités » dans la barre des visiteurs (fiche 003) et dans le pied de page pour tous.
 
@@ -39,7 +39,7 @@ Greg a demandé une page qui explique chaque fonction de Weems (maquette A chois
 
 ## Conséquences
 
-- Les fonctions du carnet de vol privé (maquettes v6 à v8, pas encore codées) sont déjà dans le catalogue : la page décrit l'offre visée, pas seulement ce qui existe.
+- Les fonctions du carnet de vol privé sont entrées dans le catalogue avant d'être codées : la page décrit l'offre visée, pas seulement ce qui existe. Au 13/11, les pages Résumé, Vols et Statistiques sont livrées, les Objectifs restent à faire.
 - Les boutons « Passer à Pilot Pro », « Choisir Company » et « Choisir Holding » n'agissent pas (« Paiement bientôt disponible ») jusqu'au lot 2.
 - Le jour où l'API vérifiera les droits, elle lira ce même catalogue : le code testera une clé (`approachAnalysis`), jamais un nom de formule.
 - Bouton de test Free | Pro (12/11/2026, demande de Greg) : hors production, la barre du site propose à un pilote connecté de passer son compte en Pilot Free ou Pilot Pro (`PUT /v1/dev/me/plan`, table `test_plans`), pour essayer chaque page avec ses cartes verrouillées. La route n'existe pas en production, où `GET /v1/me/plan` répond toujours Pilot Free et `testSwitch: false`. Bouton, route et table seront retirés avant la 1.0, quand les abonnements répondront.

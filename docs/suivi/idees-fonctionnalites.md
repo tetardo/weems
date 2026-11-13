@@ -23,12 +23,13 @@ Liste tenue à jour au fil du projet : idées validées sur le principe par Greg
 - **Suivre un pilote, fil d'activité** (ajouté le 11/11/2026, profil public)
   Suivre d'autres pilotes et voir leurs derniers vols dans un fil.
 
-- **Rejeu d'un vol et export PDF du carnet** (ajouté le 11/11/2026)
-  À garder pour l'abonnement pilote (lot 2).
+- **Rejeu d'un vol** (ajouté le 11/11/2026)
+  À garder pour l'abonnement pilote (lot 2). Pas encore dans le catalogue des formules.
 
 - **Heures en ligne VATSIM et IVAO** (ajouté le 11/11/2026, profil public)
   Lues depuis les données publiques des deux réseaux, à partir des identifiants du profil. Vérifier leurs conditions d'usage.
 
 ## Planifiées
 
+- **Export du carnet** : clé `export` du catalogue des formules (Pilot Pro, « bientôt »), fiche [015](../decisions/015-catalogue-des-formules.md).
 - **Compagnies du pilote sur son profil** : lot 3 (VACommunity). Emplacement montré sur la maquette du profil public.

@@ -8,3 +8,5 @@ Lire d'abord `README.md` (organisation), puis `docs/developpement/regles-de-deve
 - Les décisions et cahiers des charges sont dans `docs/` : les consulter avant de proposer une fonctionnalité.
 - Code organisé, jamais de morceaux collés bout à bout : chaque fichier à sa place prévue, une responsabilité par fichier, pas de duplication (voir « Structure du code » dans les règles de développement).
 - Développeur principal sur Mac : tout ce qui ne parle pas directement au simulateur doit tourner et être testé sur Mac.
+- Index de toute la documentation : `docs/README.md` (un document ajouté y est listé ; un document dépassé part dans `docs/archives/`).
+- Règles permanentes (section 12 des règles de développement) : toute fonction visible par le pilote, ajoutée ou modifiée, met à jour le catalogue des formules dans la même PR (grille de la page Offres) ; la page Fonctionnalités se met à jour seule depuis `GET /v1/plans`, une fonction livrée passe de `SOON` à `NOW`.
