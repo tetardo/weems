@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 export function DiscoverClosing() {
   const t = useTranslations("Discover.closing");
   return (
-    <section className="mx-auto mt-10 mb-2 max-w-[760px] text-center max-md:mt-8">
+    <section className="mx-auto mt-14 mb-4 max-w-[760px] text-center max-md:mt-10">
       <p className="m-0 font-title text-[44px] leading-[1.1] font-bold tracking-[-.02em] max-md:text-[30px]">
         {t("title")}
       </p>

@@ -51,7 +51,7 @@ export function DiscoverStepRow({ step, index }: { step: DiscoverStep; index: nu
       <span className="absolute top-1/2 left-1/2 grid size-11 -translate-1/2 place-items-center rounded-full border-2 border-accent bg-surface text-accent shadow-[0_0_0_6px_var(--wm-surface)] max-md:top-10 max-md:left-[22px]">
         <step.icon size={18} aria-hidden="true" />
       </span>
-      <div className={`max-w-[440px] ${flipped ? "md:order-2" : "md:justify-self-end"}`}>
+      <div className={`max-w-[520px] ${flipped ? "md:order-2" : "md:justify-self-end"}`}>
         <p className="m-0 font-mono text-xs font-bold tracking-[.06em] text-muted">
           <span className="sr-only">{t("stepNumber", { number: index + 1 })}</span>
           <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
