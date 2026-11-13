@@ -468,8 +468,8 @@
       "none": "Non précisé",
       "homeIcao": "Aéroport de base",
       "homeIcaoHelp": "Code OACI à 4 lettres, par exemple LFPG.",
-      "level": "Niveau",
-      "levelHelp": "Déclaré par vous, non vérifié.",
+      "level": "Pilote breveté",
+      "levelHelp": "Brevet de pilote réel, déclaré par vous, non vérifié. Votre grade, lui, se gagne avec vos vols valides.",
       "vatsimId": "Identifiant VATSIM",
       "vatsimHelp": "Public, avec un lien vers votre page VATSIM",
       "ivaoId": "Identifiant IVAO",
@@ -1036,10 +1036,7 @@
   },
   "Profile": {
     "levels": {
-      "beginner": "Débutant",
-      "intermediate": "Intermédiaire",
-      "advanced": "Confirmé",
-      "realPilot": "Pilote réel"
+      "realPilot": "Pilote breveté (déclaré)"
     },
     "meta": {
       "title": "{name} — {flights, plural, =0 {aucun vol} one {# vol} other {# vols}} sur Weems",
@@ -1047,7 +1044,7 @@
       "flight": "Vol {callsign} {route} de {handle} sur Weems : trajectoire, phases et atterrissage."
     },
     "header": {
-      "level": "Niveau : {level}",
+      "level": "{level}",
       "since": "Sur Weems depuis {date}",
       "favorite": "Avion favori : {name}",
       "base": "Base : {icao}",
@@ -1059,7 +1056,7 @@
     },
     "help": {
       "label": "Explication",
-      "level": "Niveau déclaré par le pilote lui-même. Weems ne le vérifie pas.",
+      "level": "Brevet de pilote réel déclaré par le pilote lui-même. Weems ne le vérifie pas.",
       "distance": "Somme des distances le long des trajectoires enregistrées, vols montrés seulement. Tour de la Terre à l'équateur : 21 600 nm.",
       "map": "Un arc par trajet, plus épais quand il est volé souvent, de la couleur de la catégorie d'avion la plus volée sur ce trajet. Les aéroports sont placés au premier et au dernier point enregistré de chaque vol.",
       "activity": "Heures de vol par mois de départ (heure UTC). Un mois vide reste affiché.",
@@ -1281,6 +1278,9 @@
       },
       "publicProfile": {
         "label": "Profil public"
+      },
+      "pilotRanks": {
+        "label": "Grades des pilotes"
       },
       "flightHistory": {
         "label": "Tous les vols et l'historique complet"
@@ -1549,6 +1549,10 @@
         "title": "Profil public",
         "text": "Une page à votre nom à partager : heures, distance, avions, derniers vols. Vous choisissez ce qui est public."
       },
+      "pilotRanks": {
+        "title": "Grades des pilotes",
+        "text": "Neuf grades, de l'Élève à la Légende, gagnés avec vos heures et vos vols valides. Ils s'affichent sur votre profil public et dans Boarding, et ne se perdent jamais."
+      },
       "flightHistory": {
         "title": "Historique complet",
         "text": "Tous vos vols sont gardés, sans limite de nombre ni de durée, y compris en gratuit."
@@ -1715,6 +1719,45 @@
       "tooShortDistance": "moins de 20 NM parcourus",
       "moved": "avion déplacé pendant le vol",
       "crashed": "vol terminé par un crash"
+    }
+  },
+  "Ranks": {
+    "names": {
+      "student": "Élève",
+      "cadet": "Cadet",
+      "flyer": "Navigant",
+      "officer": "Officier",
+      "firstOfficer": "Premier officier",
+      "captain": "Commandant",
+      "seniorCaptain": "Commandant chevronné",
+      "chiefPilot": "Chef pilote",
+      "legend": "Légende"
+    },
+    "badgeHelp": "{name} : grade obtenu avec au moins {hours} h et {flights} vols valides.",
+    "card": {
+      "title": "Votre grade",
+      "since": "depuis le {date}",
+      "first": "premier grade",
+      "position": "grade {index} sur 9",
+      "next": "Prochain grade",
+      "hours": "Heures valides",
+      "flights": "Vols valides",
+      "hoursValue": "{done} h / {need} h",
+      "flightsValue": "{done} / {need}",
+      "missing": "Il vous manque {hours} h et {flights, plural, one {# vol valide} other {# vols valides}}.",
+      "missingHours": "Il vous manque {hours} h de vol valides.",
+      "missingFlights": "Il vous manque {flights, plural, one {# vol valide} other {# vols valides}}.",
+      "top": "Vous avez atteint le plus haut grade.",
+      "recent": "Vos derniers vols pour le grade",
+      "totals": "{total} h au total · {valid} h valides",
+      "counted": "+{hours}",
+      "notCounted": "0 h",
+      "none": "Aucun vol clos pour l'instant : votre premier vol valide commence votre progression."
+    },
+    "promotion": {
+      "eyebrow": "Nouveau grade",
+      "text": "Atteint le {date} : au moins {hours} h et {flights} vols valides. Votre profil public l'affiche dès maintenant.",
+      "close": "Fermer"
     }
   },
   "Offers": {

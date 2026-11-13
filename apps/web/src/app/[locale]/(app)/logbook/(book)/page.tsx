@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { getLogbookSummary } from "../../../../../api/logbook-api.ts";
+import { getLogbookSummary, getMyRank } from "../../../../../api/logbook-api.ts";
 import { getTrack } from "../../../../../api/weems-api.ts";
 import { SummaryPage } from "../../../../../logbook/summary/summary-page.tsx";
 import { getMyFeatures } from "../../../../../plans/my-features.ts";
@@ -17,13 +17,18 @@ export default async function LogbookSummaryPage({
 }) {
   setRequestLocale((await params).locale);
   try {
-    const [summary, features] = await Promise.all([getLogbookSummary(), getMyFeatures()]);
+    const [summary, features, rank] = await Promise.all([
+      getLogbookSummary(),
+      getMyFeatures(),
+      getMyRank(),
+    ]);
     if (!summary) notFound();
     const last = summary.lastFlight?.flight.flightId;
     const track = last ? await getTrack(last) : null;
     return (
       <SummaryPage
         summary={summary}
+        rank={rank}
         points={track?.points ?? []}
         detailed={features.has("workOnDetailed")}
         today={new Date()}

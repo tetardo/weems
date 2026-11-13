@@ -8,7 +8,7 @@ export interface Identity {
   handle: string;
   country: string;
   homeIcao: string;
-  level: PilotLevel;
+  level: PilotLevel | null;
   /** Pseudonym flown as callsign on all the pilot's flights ("Skyhawk72", "Hugo31"). */
   callsign: string;
   isPublic: boolean;
@@ -90,11 +90,9 @@ const NAMES: Record<string, { first: string[]; last: string[] }> = {
   IE: { first: ["Seán", "Aoife", "Cian", "Niamh"], last: ["Murphy", "Kelly", "Byrne", "Ryan"] },
 };
 
-/** Most simulator pilots call themselves intermediate; a few fly for real. */
-const LEVELS: readonly [PilotLevel, number][] = [
-  ["beginner", 0.25],
-  ["intermediate", 0.45],
-  ["advanced", 0.22],
+/** A few simulator pilots fly for real (the only declared level since the pilot ranks). */
+const LEVELS: readonly [PilotLevel | null, number][] = [
+  [null, 0.92],
   ["realPilot", 0.08],
 ];
 

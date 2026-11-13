@@ -468,8 +468,8 @@
       "none": "Not specified",
       "homeIcao": "Home airport",
       "homeIcaoHelp": "4-letter ICAO code, for example EGLL.",
-      "level": "Level",
-      "levelHelp": "Declared by you, not checked.",
+      "level": "Licensed pilot",
+      "levelHelp": "Real pilot licence, declared by you, not checked. Your rank is earned with your valid flights.",
       "vatsimId": "VATSIM id",
       "vatsimHelp": "Public, with a link to your VATSIM page",
       "ivaoId": "IVAO id",
@@ -1036,10 +1036,7 @@
   },
   "Profile": {
     "levels": {
-      "beginner": "Beginner",
-      "intermediate": "Intermediate",
-      "advanced": "Advanced",
-      "realPilot": "Real pilot"
+      "realPilot": "Licensed pilot (declared)"
     },
     "meta": {
       "title": "{name} — {flights, plural, =0 {no flights} one {# flight} other {# flights}} on Weems",
@@ -1047,7 +1044,7 @@
       "flight": "Flight {callsign} {route} by {handle} on Weems: track, phases and landing."
     },
     "header": {
-      "level": "Level: {level}",
+      "level": "{level}",
       "since": "On Weems since {date}",
       "favorite": "Favourite aircraft: {name}",
       "base": "Home: {icao}",
@@ -1059,7 +1056,7 @@
     },
     "help": {
       "label": "Explanation",
-      "level": "Level declared by the pilot. Weems does not check it.",
+      "level": "Real pilot licence declared by the pilot. Weems does not check it.",
       "distance": "Sum of the distances along the recorded tracks, shown flights only. Around the Earth at the equator: 21,600 nm.",
       "map": "One arc per route, thicker when flown often, in the colour of the aircraft category most flown on it. Airports are placed at the first and last recorded point of each flight.",
       "activity": "Flight hours by month of departure (UTC). An empty month is still shown.",
@@ -1281,6 +1278,9 @@
       },
       "publicProfile": {
         "label": "Public profile"
+      },
+      "pilotRanks": {
+        "label": "Pilot ranks"
       },
       "flightHistory": {
         "label": "Every flight and the full history"
@@ -1549,6 +1549,10 @@
         "title": "Public profile",
         "text": "A page in your name to share: hours, distance, aircraft, latest flights. You choose what is public."
       },
+      "pilotRanks": {
+        "title": "Pilot ranks",
+        "text": "Nine ranks, from Student to Legend, earned with your valid hours and flights. They show on your public profile and on Boarding, and are never lost."
+      },
       "flightHistory": {
         "title": "Full history",
         "text": "All your flights are kept, with no limit on number or age, free plan included."
@@ -1715,6 +1719,45 @@
       "tooShortDistance": "less than 20 NM flown",
       "moved": "aircraft moved during the flight",
       "crashed": "flight ended in a crash"
+    }
+  },
+  "Ranks": {
+    "names": {
+      "student": "Student",
+      "cadet": "Cadet",
+      "flyer": "Flyer",
+      "officer": "Officer",
+      "firstOfficer": "First officer",
+      "captain": "Captain",
+      "seniorCaptain": "Senior captain",
+      "chiefPilot": "Chief pilot",
+      "legend": "Legend"
+    },
+    "badgeHelp": "{name}: rank earned with at least {hours} h and {flights} valid flights.",
+    "card": {
+      "title": "Your rank",
+      "since": "since {date}",
+      "first": "first rank",
+      "position": "rank {index} of 9",
+      "next": "Next rank",
+      "hours": "Valid hours",
+      "flights": "Valid flights",
+      "hoursValue": "{done} h / {need} h",
+      "flightsValue": "{done} / {need}",
+      "missing": "You need {hours} more hours and {flights, plural, one {# valid flight} other {# valid flights}}.",
+      "missingHours": "You need {hours} more valid hours.",
+      "missingFlights": "You need {flights, plural, one {# more valid flight} other {# more valid flights}}.",
+      "top": "You have reached the highest rank.",
+      "recent": "Your latest flights for the rank",
+      "totals": "{total} h in all · {valid} h valid",
+      "counted": "+{hours}",
+      "notCounted": "0 h",
+      "none": "No closed flight yet: your first valid flight starts your progress."
+    },
+    "promotion": {
+      "eyebrow": "New rank",
+      "text": "Reached on {date}: at least {hours} h and {flights} valid flights. Your public profile shows it now.",
+      "close": "Close"
     }
   },
   "Offers": {

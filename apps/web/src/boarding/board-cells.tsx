@@ -11,6 +11,7 @@ import { CountryFlag } from "../ui/country-flag.tsx";
 import { FounderBadge } from "../ui/founder-badge.tsx";
 import { PrivateIcon } from "../ui/icons.ts";
 import { PilotAvatar } from "../ui/pilot-avatar.tsx";
+import { RankBadge } from "../ui/rank-badge.tsx";
 import { utcTime } from "./board-rows.ts";
 import { FlapText } from "./flap-text.tsx";
 
@@ -133,6 +134,7 @@ export function PilotCell({ flight }: { flight: BoardingFlight }) {
     >
       <PilotAvatar pilot={pilot} src={pilotPhotoUrl(pilot.handle)} className="size-5 text-[10px]" />
       <span className="truncate">{pilot.name}</span>
+      {pilot.rank !== undefined && <RankBadge rank={pilot.rank} compact />}
       {pilot.founderNumber !== undefined && <FounderBadge number={pilot.founderNumber} compact />}
       {pilot.country && (
         <span className="flex-none">

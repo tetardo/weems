@@ -76,6 +76,7 @@ import { SupervisionService } from "./modules/supervision/service.ts";
 import { registerTrafficHooks } from "./modules/supervision/traffic-hooks.ts";
 import { TrafficMetrics } from "./modules/supervision/traffic-metrics.ts";
 import { registerOffers } from "./offers-assembly.ts";
+import { registerRanks } from "./ranks-assembly.ts";
 import { type Guards, registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
@@ -286,6 +287,7 @@ export async function buildApp({
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));
   registerOffers(app, { database, guards, accounts, flights, tracks, plans, publicProfiles });
+  registerRanks(app, { guards, flights, tracks, publicProfiles });
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));

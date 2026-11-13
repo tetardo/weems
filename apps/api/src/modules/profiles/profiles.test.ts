@@ -163,7 +163,7 @@ describe("public profile (spec J4)", () => {
   it("shows closed flights only, never hidden ones, with their statistics", async () => {
     const { pilot, handle } = await publicPilot({
       country: "FR",
-      level: "advanced",
+      level: "realPilot",
       homeIcao: "LFBO",
     });
     const shown = await fly(pilot, { touchdownVs: -100 });
@@ -178,7 +178,7 @@ describe("public profile (spec J4)", () => {
     expect(hide.json()).toEqual({ hiddenOnProfile: true });
 
     const profile = (await visit(`/v1/pilots/${handle}`)).json();
-    expect(profile).toMatchObject({ handle, country: "FR", homeIcao: "LFBO", level: "advanced" });
+    expect(profile).toMatchObject({ handle, country: "FR", homeIcao: "LFBO", level: "realPilot" });
     expect(profile.stats).toMatchObject({ flights: 1, averageTouchdownVs: -100, nightS: 0 });
     expect(profile.stats.dayS).toBeGreaterThan(0);
     expect(profile.stats.distanceNm).toBeGreaterThan(0);
@@ -376,7 +376,13 @@ describe("pilot on the live map (spec J4, carte en direct)", () => {
   it("names a pilot whose profile is public, with a link to the profile", async () => {
     const { pilot, handle } = await publicPilot({ country: "FR" });
     const flight = await seenLive(pilot, (f) => f.pilot !== null);
-    expect(flight?.pilot).toEqual({ handle, name: "Test pilot", country: "FR", hasPhoto: false });
+    expect(flight?.pilot).toEqual({
+      handle,
+      name: "Test pilot",
+      country: "FR",
+      hasPhoto: false,
+      rank: "student",
+    });
     expect(flight).not.toHaveProperty("pilotId");
   }, 15_000);
 

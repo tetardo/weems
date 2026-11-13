@@ -71,6 +71,7 @@ const ROWS: readonly Row[] = [
   ["liveMap", "fly", true, ALL, NOW],
   ["boarding", "fly", false, ALL, NOW],
   ["publicProfile", "fly", true, ALL, NOW],
+  ["pilotRanks", "fly", false, ALL, NOW],
   ["flightHistory", "fly", true, ALL, NOW],
   ["simbriefNextFlight", "fly", false, ALL, SOON],
   ["logbookSummary", "logbook", true, ALL, NOW],

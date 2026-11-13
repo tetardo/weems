@@ -59,6 +59,7 @@ export {
   Target as TargetIcon,
   Repeat as BounceIcon,
   Ticket as InviteIcon,
+  ChevronsUp as RankIcon,
   CalendarDays as CalendarIcon,
   Trash2 as DeleteIcon,
   TrendingUp as ProgressIcon,

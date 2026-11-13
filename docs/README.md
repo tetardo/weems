@@ -46,6 +46,7 @@ flowchart LR
 | [Site — pilote et enrichissements du direct (J4)](cahiers-des-charges/web/spec-J4-direct-pilote.md) | Bulle, vol suivi, recherche, nuit, filtres, événements | Référence |
 | [Site — page Boarding](cahiers-des-charges/web/spec-boarding.md) | Tableau à palettes des départs et arrivées de tous les membres | Référence |
 | [Offre Pilote fondateur et codes d'offre](cahiers-des-charges/web/spec-offre-fondateurs.md) | 500 premiers pilotes, codes, parrainage, ambassadeurs | Référence |
+| [Grades des pilotes](cahiers-des-charges/web/spec-grades-des-pilotes.md) | 9 grades sur heures et vols valides, insignes, carnet, profil, Boarding | Référence |
 | [Site — carnet de vol privé](cahiers-des-charges/web/spec-carnet-prive.md) | Résumé, Vols, Statistiques livrés ; Objectifs à faire | Ouvert |
 | [Console d'administration](cahiers-des-charges/admin/spec-admin.md) | Les 8 pages de la console | À jour |
 
@@ -73,6 +74,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [015](decisions/015-catalogue-des-formules.md) | Catalogue des formules, pages Offres et Fonctionnalités | À jour au 13/11 |
 | [016](decisions/016-fond-plan-aeroport.md) | Fond du site : plan d'aéroport inventé, très léger | À jour au 13/11 |
 | [017](decisions/017-offre-fondateurs-hors-catalogue.md) | Offre fondateurs : droits offerts, hors catalogue des formules | À jour au 13/11 |
+| [018](decisions/018-grades-heures-et-vols-valides.md) | Grades des pilotes : heures et vols valides, calculés à la lecture | À jour au 13/11 |
 
 ## Développement (`developpement/`)
 
