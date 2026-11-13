@@ -8,6 +8,7 @@
       "live": "Live flights",
       "boarding": "Boarding",
       "profile": "My profile",
+      "subscription": "My subscription",
       "plans": "Plans",
       "features": "Features"
     },
@@ -334,7 +335,7 @@
     "email": "E-mail address",
     "password": "Password",
     "name": "Pseudonym (seen by other pilots)",
-    "inviteCode": "Invitation code",
+    "inviteCode": "Invitation or offer code",
     "submit": "Log in",
     "signupSubmit": "Create my account",
     "toSignup": "Continue",
@@ -344,7 +345,7 @@
     "passwordRule": "At least 10 characters.",
     "errors": {
       "credentials": "Wrong e-mail address or password.",
-      "invitation": "This invitation code does not match this address, or has already been used.",
+      "invitation": "This code does not match this address, has already been used or is no longer valid.",
       "exists": "An account already exists with this address.",
       "password": "The password must be at least 10 characters long.",
       "unknown": "Logging in did not work. Try again in a moment."
@@ -352,7 +353,7 @@
     "subtitle": "Good to see you again, captain.",
     "signupSubtitle": "Your invitation is waiting: a few seconds and you are on board.",
     "toSignupQuestion": "Not a Weems pilot yet?",
-    "toSignupHint": "Received an invitation code?",
+    "toSignupHint": "Received an invitation or offer code?",
     "toLoginQuestion": "Already a Weems pilot?",
     "toLoginHint": "Your logbook is waiting",
     "rememberMe": "Stay logged in",
@@ -1678,6 +1679,106 @@
       "available": "{count, plural, one {# feature available} other {# features available}}",
       "soon": "{count} coming soon",
       "plans": "{count} plans"
+    }
+  },
+  "Founders": {
+    "badge": "Founding pilot · No. {number}",
+    "badgeShort": "No. {number}",
+    "badgeHelp": "Founding pilot No. {number}: one of the first 500 Weems pilots.",
+    "banner": {
+      "eyebrow": "Launch offer · Founding pilot",
+      "title": "The first {places} pilots: Pilot Pro for free",
+      "closed": "All 500 founding pilot places are taken",
+      "text": "Fly {flights} valid flights on {days} different days: Pilot Pro is yours for {months} months, with the numbered « Founding pilot » badge for life. After that, {discount}% off Pilot Pro for life.",
+      "placesLeft": "{count, plural, one {Only one place left} other {Only # places left}}",
+      "latest": "Latest founders:",
+      "number": "No. {number}",
+      "hiddenPilot": "Hidden pilot",
+      "yours": "Your progress",
+      "haveCode": "I have an offer code",
+      "signup": "Create my account",
+      "login": "Log in"
+    },
+    "progress": {
+      "count": "{flights} of {requiredFlights} valid flights · {days} of {requiredDays} days",
+      "confirmed": "You are founding pilot No. {number}.",
+      "pending": "Place No. {number} won.",
+      "pendingHelp": "Your flights are being checked, confirmed on {at} at the latest. Pilot Pro is already on.",
+      "refused": "Your founding pilot place was withdrawn after your flights were checked.",
+      "ineligible": "Test and administration accounts do not take a founding pilot place."
+    },
+    "checks": {
+      "valid": "counts",
+      "simulated": "simulated flight, does not count",
+      "noTakeoffOrLanding": "no takeoff or landing",
+      "tooShort": "less than 15 min airborne",
+      "tooShortDistance": "less than 20 NM flown",
+      "moved": "aircraft moved during the flight",
+      "crashed": "flight ended in a crash"
+    }
+  },
+  "Offers": {
+    "redeem": {
+      "title": "Use a code",
+      "lead": "A code from an ambassador, a club or a founding pilot: it adds months of Pilot Pro to your account.",
+      "label": "Offer code",
+      "submit": "Use the code",
+      "done": "Done: {months} months of Pilot Pro, until {until}.",
+      "thanks": "Offered by {name}.",
+      "seePlan": "See my subscription",
+      "rules": "One code per offer and per pilot. Offered months add up after the current ones. A referral code gives {referralMonths} months.",
+      "errors": {
+        "unknown": "This code does not exist. Check the letters and digits.",
+        "already": "You already used this offer (or it is your own code).",
+        "gone": "This code is no longer valid: expired, already used or all its places are taken.",
+        "tooMany": "Too many tries. Try again in an hour.",
+        "error": "The code could not be checked. Try again in a moment."
+      }
+    },
+    "ambassador": {
+      "meta": {
+        "title": "{name} · Weems offer",
+        "description": "{name} offers you {months} months of Pilot Pro on Weems, the logbook of simulator pilots."
+      },
+      "eyebrow": "Weems ambassador",
+      "profile": "Pilot profile",
+      "links": {
+        "twitch": "Twitch",
+        "youtube": "YouTube",
+        "website": "Website"
+      },
+      "offer": "{months} months of Pilot Pro offered",
+      "placesLeft": "{count, plural, one {One place left} other {# places left}}",
+      "until": "until {date}",
+      "use": "Use this code",
+      "signup": "Create my account with this code",
+      "already": "Already a Weems pilot? Log in to use it",
+      "closed": "This offer has ended.",
+      "note": "The code also opens sign-up during the closed alpha. One code per pilot."
+    },
+    "plan": {
+      "title": "My subscription",
+      "current": "Your plan",
+      "offered": {
+        "founder": "Offered: founding pilot.",
+        "code": "Offered by a code.",
+        "admin": "Offered by the Weems team."
+      },
+      "offeredUntil": "Until {date} ({days, plural, one {# day} other {# days}}). Reminder 30 days before the end, then back to Pilot Free.",
+      "noGift": "Paying for plans is coming soon.",
+      "seePlans": "See the plans",
+      "enterCode": "Use a code",
+      "founderTitle": "Founding pilot",
+      "discount": "Badge for life and {discount}% off Pilot Pro for life after your free year.",
+      "referralTitle": "Your codes to give",
+      "referralLead": "Each code gives {months} months of Pilot Pro to a new pilot. It also opens sign-up.",
+      "usedBy": "Used by {name}",
+      "someone": "a pilot",
+      "expired": "Expired",
+      "validUntil": "Valid until {date}",
+      "copyCode": "Copy the code",
+      "copyLink": "Copy the link",
+      "copied": "Copied"
     }
   }
 }

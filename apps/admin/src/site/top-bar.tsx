@@ -18,6 +18,8 @@ const TITLES = {
   "/traffic": "Trafic simulé",
   "/activity": "Activité simulée",
   "/accounts": "Comptes",
+  "/founders": "Fondateurs",
+  "/codes": "Codes d'offre",
   "/customize": "Personnalisation",
   "/libraries": "Librairies",
   "/database": "Base de données",

@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import type { ServiceView } from "../server/services/service-view.ts";
 import {
   AccountsIcon,
+  CodesIcon,
+  FoundersIcon,
   ActivityIcon,
   CustomizeIcon,
   DatabaseIcon,
@@ -108,6 +110,12 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
         <div className="t">Utilisateurs</div>
         <Link href="/accounts" className={on("/accounts")}>
           <AccountsIcon /> Comptes
+        </Link>
+        <Link href="/founders" className={on("/founders")}>
+          <FoundersIcon /> Fondateurs
+        </Link>
+        <Link href="/codes" className={on("/codes")}>
+          <CodesIcon /> Codes d&apos;offre
         </Link>
       </nav>
       <SiteAndMaintenance on={on} />

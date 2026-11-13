@@ -58,6 +58,7 @@ import { PrivateLogbookService } from "./modules/logbook/service.ts";
 import { registerPlanRoutes } from "./modules/plans/routes.ts";
 import { registerDevPlanRoutes } from "./modules/plans/dev-routes.ts";
 import { TestPlansRepository } from "./modules/plans/repository.ts";
+import { GrantsRepository } from "./modules/plans/repository-grants.ts";
 import { PlansService } from "./modules/plans/service.ts";
 import { registerStatsRoutes } from "./modules/stats/routes.ts";
 import { StatsService, type StatsSources } from "./modules/stats/service.ts";
@@ -74,6 +75,7 @@ import { registerSupervisionRoutes } from "./modules/supervision/routes.ts";
 import { SupervisionService } from "./modules/supervision/service.ts";
 import { registerTrafficHooks } from "./modules/supervision/traffic-hooks.ts";
 import { TrafficMetrics } from "./modules/supervision/traffic-metrics.ts";
+import { registerOffers } from "./offers-assembly.ts";
 import { type Guards, registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
@@ -180,7 +182,8 @@ function registerPlans(
   guards: Guards,
   testSwitch: boolean,
 ): PlansService {
-  const plans = new PlansService(testSwitch ? new TestPlansRepository(database.db) : null);
+  const testPlans = testSwitch ? new TestPlansRepository(database.db) : null;
+  const plans = new PlansService(new GrantsRepository(database.db), testPlans);
   registerPlanRoutes(app, plans, guards);
   if (testSwitch) registerDevPlanRoutes(app, plans, guards);
   return plans;
@@ -282,6 +285,7 @@ export async function buildApp({
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));
+  registerOffers(app, { database, guards, accounts, flights, tracks, plans, publicProfiles });
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));

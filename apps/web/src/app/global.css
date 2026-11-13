@@ -25,6 +25,7 @@
   --color-danger: var(--wm-danger);
   --color-success: var(--wm-success);
   --color-holding: var(--wm-holding);
+  --color-founder: var(--wm-founder);
   /* Departures board of the home page (spec J4 accueil): dark like an airport board, light in the light theme. */
   --color-board: var(--wm-board);
   --color-board-head: var(--wm-board-head);
@@ -85,6 +86,8 @@
   --wm-success: #6ee7a8;
   /* Holding plan tag (page Fonctionnalités): the fourth plan colour, after success, link, accent 2. */
   --wm-holding: #b9a2ff;
+  /* Founder badge (offer « Pilote fondateur »). */
+  --wm-founder: #f5c76a;
   --wm-glass: rgb(23 30 46 / 0.72);
   --wm-glow: rgb(79 209 232 / 0.16);
   --wm-shadow: rgb(0 0 0 / 0.35);
@@ -160,6 +163,7 @@
   --wm-danger: #b3261e;
   --wm-success: #1b7f4b;
   --wm-holding: #6a4fd1;
+  --wm-founder: #9a6400;
   --wm-glass: rgb(255 255 255 / 0.75);
   /* Darker than accent 2 so the letters stay at 4.5:1 on white. */
   --wm-promo-text-end: #9a5800;

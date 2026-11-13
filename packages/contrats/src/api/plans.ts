@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UtcTimestamp } from "./common.ts";
 
 /**
  * Subscription plans (cadrage 05, decision 015). The API owns the catalogue: which feature each
@@ -118,7 +119,17 @@ export type PlanCatalog = z.infer<typeof PlanCatalog>;
  * GET /v1/me/plan: the plan of the pilot calling. testSwitch: the Free/Pro test switch of the
  * site bar is offered (outside production only, removed before the 1.0).
  */
-export const MyPlan = z.object({ plan: PlanId, testSwitch: z.boolean() });
+export const MyPlan = z.object({
+  plan: PlanId,
+  testSwitch: z.boolean(),
+  /**
+   * Pilot Pro given without payment (founder offer, offer code, console), while it lasts:
+   * source of the current one and end of all those in a row. Null otherwise.
+   */
+  offered: z
+    .object({ source: z.enum(["founder", "code", "admin"]), until: UtcTimestamp })
+    .nullable(),
+});
 export type MyPlan = z.infer<typeof MyPlan>;
 
 /** PUT /v1/dev/me/plan: plan chosen with the test switch. */

@@ -37,6 +37,9 @@ Liste tenue à jour au fil du projet : idées validées sur le principe par Greg
 - **Vols de la compagnie Weems organisés par une IA** (ajouté le 13/11/2026, page Boarding ; à rediscuter avec Greg)
   Une IA propose des vols aux pilotes de la compagnie Weems, comme le feront les responsables des compagnies du lot 3. Piste de Claude : générer les vols par des règles simples (terrains, catégorie d'avion, niveau du pilote), et réserver l'IA aux textes (briefings), pour le coût, la prévisibilité et les tests.
 
+- **E-mail de fin de Pilot Pro offert** (ajouté le 13/11/2026, offre fondateurs, Greg : « on verra plus tard »)
+  Rappel 30 jours avant la fin d'un Pilot Pro offert (fondateur, code d'offre), puis bascule en Pilot Free. Prérequis : l'envoi d'e-mails par l'API (aujourd'hui aucun). Spec `docs/cahiers-des-charges/web/spec-offre-fondateurs.md`, section « Hors de cette spec ».
+
 ## Planifiées
 
 - **Export du carnet** : clé `export` du catalogue des formules (Pilot Pro, « bientôt »), fiche [015](../decisions/015-catalogue-des-formules.md).

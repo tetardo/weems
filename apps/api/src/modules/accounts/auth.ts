@@ -18,8 +18,8 @@ export const TRACKER_SCOPES = ["openid", "profile", "offline_access"] as const;
 export interface AuthHooks {
   /** Called before an account is created: throws an ApiProblem to refuse it (closed alpha). */
   checkSignUp(body: unknown): Promise<void>;
-  /** Called once the account exists. */
-  signedUp(email: string): Promise<void>;
+  /** Called once the account exists, with the sign-up body (offer code). */
+  signedUp(user: { id: string; email: string }, body: unknown): Promise<void>;
   /** Called before a session opens (site or tracker login): throws 403 for a disabled account. */
   checkLogin(userId: string): Promise<void>;
 }
@@ -63,7 +63,7 @@ export function createAuth(config: Config, db: Database, hooks: AuthHooks) {
       }),
     },
     databaseHooks: {
-      user: { create: { after: async (user) => hooks.signedUp(user.email) } },
+      user: { create: { after: async (user, context) => hooks.signedUp(user, context?.body) } },
       session: {
         create: { before: async (session) => asAuthError(() => hooks.checkLogin(session.userId)) },
       },

@@ -8,6 +8,7 @@
       "live": "Vols en direct",
       "boarding": "Boarding",
       "profile": "Mon profil",
+      "subscription": "Mon abonnement",
       "plans": "Offres",
       "features": "Fonctionnalités"
     },
@@ -334,7 +335,7 @@
     "email": "Adresse e-mail",
     "password": "Mot de passe",
     "name": "Pseudo (visible des autres pilotes)",
-    "inviteCode": "Code d'invitation",
+    "inviteCode": "Code d'invitation ou d'offre",
     "submit": "Se connecter",
     "signupSubmit": "Créer mon compte",
     "toSignup": "Continuer",
@@ -344,7 +345,7 @@
     "passwordRule": "10 caractères au moins.",
     "errors": {
       "credentials": "Adresse e-mail ou mot de passe incorrect.",
-      "invitation": "Ce code d'invitation ne correspond pas à cette adresse, ou a déjà servi.",
+      "invitation": "Ce code ne correspond pas à cette adresse, a déjà servi ou n'est plus valable.",
       "exists": "Un compte existe déjà avec cette adresse.",
       "password": "Le mot de passe doit faire au moins 10 caractères.",
       "unknown": "La connexion n'a pas abouti. Réessayez dans un instant."
@@ -352,7 +353,7 @@
     "subtitle": "Content de vous revoir, commandant.",
     "signupSubtitle": "Votre invitation vous attend : quelques secondes et c'est parti.",
     "toSignupQuestion": "Pas encore pilote Weems ?",
-    "toSignupHint": "Vous avez reçu un code d'invitation ?",
+    "toSignupHint": "Vous avez reçu un code d'invitation ou d'offre ?",
     "toLoginQuestion": "Déjà pilote Weems ?",
     "toLoginHint": "Votre carnet vous attend",
     "rememberMe": "Rester connecté",
@@ -1678,6 +1679,106 @@
       "available": "{count, plural, one {# fonction disponible} other {# fonctions disponibles}}",
       "soon": "{count} bientôt",
       "plans": "{count} formules"
+    }
+  },
+  "Founders": {
+    "badge": "Pilote fondateur · n° {number}",
+    "badgeShort": "n° {number}",
+    "badgeHelp": "Pilote fondateur n° {number} : l'un des 500 premiers pilotes de Weems.",
+    "banner": {
+      "eyebrow": "Offre de lancement · Pilote fondateur",
+      "title": "Les {places} premiers pilotes : Pilot Pro offert",
+      "closed": "Les 500 places de Pilote fondateur sont prises",
+      "text": "Faites {flights} vols valides sur {days} jours différents : Pilot Pro vous est offert pendant {months} mois, avec le badge « Pilote fondateur » numéroté, à vie. Ensuite, -{discount} % à vie sur Pilot Pro.",
+      "placesLeft": "{count, plural, one {Plus qu'une place} other {Plus que # places}}",
+      "latest": "Derniers fondateurs :",
+      "number": "n° {number}",
+      "hiddenPilot": "Pilote masqué",
+      "yours": "Votre progression",
+      "haveCode": "J'ai un code d'offre",
+      "signup": "Créer mon compte",
+      "login": "Se connecter"
+    },
+    "progress": {
+      "count": "{flights} vol(s) valide(s) sur {requiredFlights} · {days} jour(s) sur {requiredDays}",
+      "confirmed": "Vous êtes Pilote fondateur n° {number}.",
+      "pending": "Place n° {number} gagnée.",
+      "pendingHelp": "Vérification de vos vols en cours, confirmée le {at} au plus tard. Pilot Pro est déjà actif.",
+      "refused": "Votre place de Pilote fondateur a été retirée après vérification de vos vols.",
+      "ineligible": "Les comptes de test et d'administration ne prennent pas de place de Pilote fondateur."
+    },
+    "checks": {
+      "valid": "compte",
+      "simulated": "vol simulé, ne compte pas",
+      "noTakeoffOrLanding": "sans décollage ni atterrissage",
+      "tooShort": "moins de 15 min en l'air",
+      "tooShortDistance": "moins de 20 NM parcourus",
+      "moved": "avion déplacé pendant le vol",
+      "crashed": "vol terminé par un crash"
+    }
+  },
+  "Offers": {
+    "redeem": {
+      "title": "Utiliser un code",
+      "lead": "Code reçu d'un ambassadeur, d'un club ou d'un Pilote fondateur : il ajoute des mois de Pilot Pro à votre compte.",
+      "label": "Code d'offre",
+      "submit": "Utiliser le code",
+      "done": "C'est fait : {months} mois de Pilot Pro, jusqu'au {until}.",
+      "thanks": "Offert par {name}.",
+      "seePlan": "Voir mon abonnement",
+      "rules": "Un code par offre et par pilote. Les mois offerts s'ajoutent à la suite de ceux en cours. Un code de parrainage donne {referralMonths} mois.",
+      "errors": {
+        "unknown": "Ce code n'existe pas. Vérifiez les lettres et les chiffres.",
+        "already": "Vous avez déjà utilisé cette offre (ou c'est votre propre code).",
+        "gone": "Ce code n'est plus valable : expiré, déjà utilisé ou toutes ses places sont prises.",
+        "tooMany": "Trop d'essais. Réessayez dans une heure.",
+        "error": "Le code n'a pas pu être vérifié. Réessayez dans un instant."
+      }
+    },
+    "ambassador": {
+      "meta": {
+        "title": "{name} · offre Weems",
+        "description": "{name} vous offre {months} mois de Pilot Pro sur Weems, le carnet de vol des pilotes de simulation."
+      },
+      "eyebrow": "Ambassadeur Weems",
+      "profile": "Profil de pilote",
+      "links": {
+        "twitch": "Twitch",
+        "youtube": "YouTube",
+        "website": "Site"
+      },
+      "offer": "{months} mois de Pilot Pro offerts",
+      "placesLeft": "{count, plural, one {Une place restante} other {# places restantes}}",
+      "until": "jusqu'au {date}",
+      "use": "Utiliser ce code",
+      "signup": "Créer mon compte avec ce code",
+      "already": "Déjà pilote Weems ? Connectez-vous pour l'utiliser",
+      "closed": "Cette offre est terminée.",
+      "note": "Le code ouvre aussi l'inscription pendant l'alpha fermée. Un code par pilote."
+    },
+    "plan": {
+      "title": "Mon abonnement",
+      "current": "Votre formule",
+      "offered": {
+        "founder": "Offert : Pilote fondateur.",
+        "code": "Offert par un code.",
+        "admin": "Offert par l'équipe Weems."
+      },
+      "offeredUntil": "Jusqu'au {date} ({days, plural, one {# jour} other {# jours}}). Rappel 30 jours avant la fin, puis retour à Pilot Free.",
+      "noGift": "Le paiement des formules arrive bientôt.",
+      "seePlans": "Voir les offres",
+      "enterCode": "Utiliser un code",
+      "founderTitle": "Pilote fondateur",
+      "discount": "Badge à vie et -{discount} % à vie sur Pilot Pro après votre année offerte.",
+      "referralTitle": "Vos codes à offrir",
+      "referralLead": "Chaque code donne {months} mois de Pilot Pro à un nouveau pilote. Il ouvre aussi l'inscription.",
+      "usedBy": "Utilisé par {name}",
+      "someone": "un pilote",
+      "expired": "Expiré",
+      "validUntil": "Valable jusqu'au {date}",
+      "copyCode": "Copier le code",
+      "copyLink": "Copier le lien",
+      "copied": "Copié"
     }
   }
 }

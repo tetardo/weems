@@ -85,6 +85,13 @@
       "when": 1794535391691,
       "tag": "0011_goals",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794545221188,
+      "tag": "0012_offers",
+      "breakpoints": true
     }
   ]
 }
