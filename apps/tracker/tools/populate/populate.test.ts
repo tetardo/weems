@@ -122,15 +122,17 @@ describe("past flight", () => {
     expect(sent.some((s) => s.path.endsWith("/track"))).toBe(true);
   });
 
-  it("closes the flight of every simulated type, even after a go-around", async () => {
-    const from = airportOf("LFPG");
-    for (const type of SIMULATED_TYPES) {
+  // One test per type: a whole flight each, slow on the Windows runner.
+  it.each(SIMULATED_TYPES.map((type) => [type.aircraft.model ?? "", type] as const))(
+    "closes the flight of a %s, even after a go-around",
+    async (_model, type) => {
+      const from = airportOf("LFPG");
       const sent: string[] = [];
       const api = { post: async (path: string) => (sent.push(path), { status: 201 }) };
       const [to] = destinationsOf(type, from).sort(
         (a, b) => estimatedAirborneS(type, from, a) - estimatedAirborneS(type, from, b),
       );
-      if (!to) throw new Error(`${type.aircraft.model}: no destination`);
+      if (!to) throw new Error("no destination");
       const order = {
         callsign: "WMS1",
         seed: 1,
@@ -143,10 +145,8 @@ describe("past flight", () => {
         { scenario: scenarioOf(order), openedAtMs: NOW - DAY_MS },
         { api, workDir: join(tmpdir(), "weems-populate-test"), trackerVersion: "0.1.0" },
       );
-      expect(
-        sent.some((path) => path.endsWith("/close")),
-        type.aircraft.model ?? "",
-      ).toBe(true);
-    }
-  }, 60_000);
+      expect(sent.some((path) => path.endsWith("/close"))).toBe(true);
+    },
+    60_000,
+  );
 });
