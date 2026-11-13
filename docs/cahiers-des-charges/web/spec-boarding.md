@@ -9,6 +9,7 @@ Demandée par Greg le 13/11/2026 (maquette dense validée : `/mnt/project-files/
 - **Adresse** : `/boarding` (`/fr/boarding`, `/en/boarding`), ouverte sans compte (liste `PUBLIC_PAGES` du site).
 - **Barre** : pastille « Boarding » ambre à droite du compteur « N en vol », dans le même style (choix de Greg) ; sur téléphone, l'icône seule et l'entrée dans le menu.
 - **En-tête sur une ligne** : titre, filtre par terrain (code OACI, touche « / »), les 3 terrains les plus actifs en un clic, horloges UTC et locale (ville du fuseau du navigateur).
+- **Largeur** : 1 200 px au plus, comme les autres pages du site (`SectionMain`).
 - **Deux tableaux côte à côte** (l'un sous l'autre sous 1 280 px) :
 
 | Tableau | Lignes | Heure | Colonnes |
@@ -17,9 +18,9 @@ Demandée par Greg le 13/11/2026 (maquette dense validée : `/mnt/project-files/
 | Arrivées | Vols en l'air par heure estimée, puis posés depuis moins d'une heure (le plus récent en haut, grisés) | Estimée (« EST ») d'après la distance restante et la vitesse sol, puis heure du toucher | Heure, vol, de, avion, pilote, statut (« Posé −118 » : toucher en ft/min) |
 
 - **Pages** : 12 lignes par tableau ; au-delà, le tableau passe seul à la page suivante toutes les 15 s (« 1/3 »).
-- **Nom des terrains** : en petit à côté du code, à partir de 1 536 px de large (comme à l'origine, demande de Greg du 13/11) ; coupé par « … » dans sa colonne, jamais sous la colonne voisine ; nom complet au survol.
+- **Nom des terrains** : code OACI seul dans la ligne ; nom dans une bulle au survol (et au clavier) (demande de Greg du 13/11, 8 h).
 - **Avion** : silhouette de la catégorie dans sa couleur, comme sur la carte en direct, puis le type.
-- **Pilote** : nom, photo et drapeau du pays si son profil est public, sinon « Pilote masqué » (choix de Greg : le vol reste affiché).
+- **Pilote** : seulement sa pastille (photo ou initiale), son nom dans une bulle au survol, un clic ouvre sa page ; puis insigne de grade, badge fondateur et drapeau du pays. Profil privé : pastille grise avec un fantôme, « Pilote masqué » dans la bulle (choix de Greg : le vol reste affiché ; plus de nom ni de texte dans la ligne depuis le 13/11, 8 h).
 - **Effet de palettes** : quand un texte change (vol, terrain), chaque case fait défiler le tambour jusqu'au bon caractère. Sans animation si le système demande moins de mouvement. Son des palettes coupé par défaut : il suit le bouton son de la barre du site, à côté du thème (demande de Greg du 13/11 : plus de haut-parleur sur la page), choix gardé dans le navigateur (`site/sound-setting.ts`).
 - **Clics** (demande de Greg du 13/11) :
 

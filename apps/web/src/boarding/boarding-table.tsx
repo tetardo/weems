@@ -124,7 +124,7 @@ function ColumnTitles({ kind }: { kind: Kind }) {
           {t("time")}
         </th>
         <th className="w-[124px] px-1.5 font-semibold sm:w-40">{t("flight")}</th>
-        <th className="w-[60px] px-1.5 font-semibold sm:w-20 2xl:w-44">
+        <th className="w-[60px] px-1.5 font-semibold sm:w-[76px]">
           {t(kind === "departures" ? "to" : "from")}
         </th>
         <th className="w-[76px] px-1.5 font-semibold max-lg:hidden">{t("aircraft")}</th>

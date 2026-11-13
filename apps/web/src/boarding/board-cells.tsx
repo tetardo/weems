@@ -9,7 +9,8 @@ import { publicProfileLinks } from "../profile/profile-links.ts";
 import { pilotPhotoUrl } from "../site/api-relay.ts";
 import { CountryFlag } from "../ui/country-flag.tsx";
 import { FounderBadge } from "../ui/founder-badge.tsx";
-import { PrivateIcon } from "../ui/icons.ts";
+import { HoverBubble } from "../ui/hover-bubble.tsx";
+import { HiddenPilotIcon } from "../ui/icons.ts";
 import { PilotAvatar } from "../ui/pilot-avatar.tsx";
 import { RankBadge } from "../ui/rank-badge.tsx";
 import { utcTime } from "./board-rows.ts";
@@ -56,8 +57,8 @@ const CHOICE =
   "flex w-full min-w-0 items-center gap-1.5 overflow-hidden rounded-tag text-left hover:opacity-75";
 
 /**
- * Airport code in flaps and its name in small from 1 536 px, cut with « … » inside its column;
- * full name on hover. A click shows only this airport's boards.
+ * Airport code in flaps; its name in a bubble on hover (Greg, 13/11: no name in the row). A click
+ * shows only this airport's boards.
  */
 export function AirportCell({
   icao,
@@ -69,24 +70,18 @@ export function AirportCell({
   onChoose: (icao: string) => void;
 }) {
   const t = useTranslations("Boarding.filter");
-  const content = (
-    <>
-      <FlapText text={icao ?? ""} width={4} />
-      {name && (
-        <span className="min-w-0 truncate text-[11px] text-board-muted max-2xl:hidden">{name}</span>
-      )}
-    </>
-  );
-  if (!icao) return <span className="flex">{content}</span>;
+  if (!icao) return <FlapText text="" width={4} />;
   return (
-    <button
-      type="button"
-      onClick={() => onChoose(icao)}
-      title={`${name ?? icao} · ${t("onlyThis", { value: icao })}`}
-      className={CHOICE}
-    >
-      {content}
-    </button>
+    <HoverBubble text={name ?? icao}>
+      <button
+        type="button"
+        onClick={() => onChoose(icao)}
+        aria-label={`${name ?? icao} · ${t("onlyThis", { value: icao })}`}
+        className={CHOICE}
+      >
+        <FlapText text={icao} width={4} />
+      </button>
+    </HoverBubble>
   );
 }
 
@@ -114,26 +109,42 @@ export function AircraftCell({
   );
 }
 
-/** Public pilot with the flag of their country; « Pilote masqué » for a private profile. */
+/**
+ * Public pilot: photo or initial (name in a bubble on hover, link to their page), grade, founder
+ * badge and flag. A private profile: a grey disc with a ghost, « Pilote masqué » in its bubble.
+ */
 export function PilotCell({ flight }: { flight: BoardingFlight }) {
   const t = useTranslations("Boarding");
   const locale = useLocale();
   const { pilot } = flight;
   if (!pilot) {
     return (
-      <span className="flex items-center gap-1.5 text-[11.5px] whitespace-nowrap text-board-muted italic">
-        <PrivateIcon size={13} aria-hidden="true" />
-        {t("hiddenPilot")}
-      </span>
+      <HoverBubble text={t("hiddenPilot")}>
+        <span
+          role="img"
+          aria-label={t("hiddenPilot")}
+          className="grid size-5 flex-none place-items-center rounded-full bg-board-off/40 text-board-muted"
+        >
+          <HiddenPilotIcon size={12} aria-hidden="true" />
+        </span>
+      </HoverBubble>
     );
   }
   return (
-    <Link
-      href={publicProfileLinks(pilot.handle).page}
-      className="flex min-w-0 items-center gap-1.5 rounded-tag font-sans text-[12.5px] text-board-title hover:underline"
-    >
-      <PilotAvatar pilot={pilot} src={pilotPhotoUrl(pilot.handle)} className="size-5 text-[10px]" />
-      <span className="truncate">{pilot.name}</span>
+    <span className="flex min-w-0 items-center gap-1.5">
+      <HoverBubble text={pilot.name}>
+        <Link
+          href={publicProfileLinks(pilot.handle).page}
+          aria-label={pilot.name}
+          className="rounded-full hover:opacity-80"
+        >
+          <PilotAvatar
+            pilot={pilot}
+            src={pilotPhotoUrl(pilot.handle)}
+            className="size-5 text-[10px]"
+          />
+        </Link>
+      </HoverBubble>
       {pilot.rank !== undefined && <RankBadge rank={pilot.rank} compact />}
       {pilot.founderNumber !== undefined && <FounderBadge number={pilot.founderNumber} compact />}
       {pilot.country && (
@@ -141,7 +152,7 @@ export function PilotCell({ flight }: { flight: BoardingFlight }) {
           <CountryFlag code={pilot.country} name={countryName(pilot.country, locale)} />
         </span>
       )}
-    </Link>
+    </span>
   );
 }
 
