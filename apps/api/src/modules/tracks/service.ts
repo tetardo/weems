@@ -19,7 +19,7 @@ const timesOf = (points: readonly TrackPoint[]) => points.map((p) => Date.parse(
 export class TracksService {
   private readonly store: TrackStore;
   private readonly flights: FlightsService;
-  private completed: (pilotId: string) => Promise<void> = () => Promise.resolve();
+  private readonly completed: ((pilotId: string) => Promise<void>)[] = [];
 
   constructor(store: TrackStore, flights: FlightsService) {
     this.store = store;
@@ -28,10 +28,10 @@ export class TracksService {
 
   /**
    * Called once per flight, when its trajectory is stored: the flight is complete (founder
-   * offer). The listener must not throw: the tracker's request does not depend on it.
+   * offer, grades). A listener must not throw: the tracker's request does not depend on it.
    */
   whenCompleted(listener: (pilotId: string) => Promise<void>): void {
-    this.completed = listener;
+    this.completed.push(listener);
   }
 
   async upload(caller: Caller, flightId: string, points: TrackPoint[]): Promise<Receipt> {
@@ -48,7 +48,7 @@ export class TracksService {
     );
     const track = { recordedPoints: points.length, sha256, simplified, points: gzipSync(json) };
     if (await this.store.insert(flightId, track)) {
-      await this.completed(caller.pilotId);
+      for (const listener of this.completed) await listener(caller.pilotId);
       return { result: "created" };
     }
     // Lost a race with an identical upload: compare with the winner.
