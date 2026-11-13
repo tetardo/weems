@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { childEnv } from "../managed-process.ts";
+import { childEnv } from "@weems/local-process";
 
 const run = promisify(execFile);
 

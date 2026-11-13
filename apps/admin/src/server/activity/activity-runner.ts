@@ -1,6 +1,6 @@
 import { LiveActivityLine, PopulationLine } from "@weems/contrats";
 import type { ConsoleConfig } from "../console-config.ts";
-import { ManagedProcess } from "../managed-process.ts";
+import { ManagedProcess } from "@weems/local-process";
 import type { ActivityRun, ActivityView } from "./activity-view.ts";
 import { FictitiousApi } from "./fictitious-api.ts";
 import { type ActivityLaunch, pnpmArgsOf, summaryOf } from "./launch.ts";

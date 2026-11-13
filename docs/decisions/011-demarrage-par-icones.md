@@ -1,5 +1,7 @@
 # 011 — Démarrer et arrêter Weems par deux icônes, pas par un conteneur
 
+> Mise à jour du 13/11/2026 : les deux icônes sont remplacées par l'app Mac « Weems » (fiche 019). Les scripts et le principe de cette fiche (la console est le seul chef d'orchestre) restent.
+
 Date : 11/11/2026. Proposé par Claude, validé par Greg (« deux icônes sur le bureau, un start qui lance tout, un stop qui arrête tout »).
 
 ## Contexte

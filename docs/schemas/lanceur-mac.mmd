@@ -1,0 +1,31 @@
+flowchart TB
+  subgraph mac["Mac de Greg"]
+    icone["Icône « Weems »<br/>(Applications, Dock, bureau)"]
+    subgraph app["Weems.app : apps/launcher (Electron)"]
+      fenetre["Fenêtre<br/>4 services, boutons, journaux, liens"]
+      barre["Barre des menus<br/>🟢 Weems 4/4"]
+      lanceur["Processus principal<br/>launcher.ts"]
+    end
+    subgraph scripts["scripts/mac/ (sans Terminal)"]
+      prepare["prepare.sh<br/>Docker Desktop, base,<br/>apps/api/.env, ports"]
+      consolesh["console.sh<br/>pnpm admin"]
+      stopsh["stop.sh<br/>tout arrêter"]
+    end
+    console["Console :3002<br/>GET et POST /api/lifecycle"]
+    api["API :3000"]
+    site["Site :3001"]
+    db["Base PostgreSQL<br/>weems-db-1"]
+  end
+
+  icone --> fenetre
+  fenetre --> lanceur
+  barre --> lanceur
+  lanceur -->|"1. démarrer"| prepare
+  lanceur -->|"2. groupe de processus,<br/>journaux gardés"| consolesh
+  consolesh --> console
+  lanceur -->|"3. état, journaux,<br/>démarrer, arrêter, redémarrer"| console
+  lanceur -->|"Quitter = tout arrêter"| stopsh
+  stopsh -->|"stop-all"| console
+  console --> api
+  console --> site
+  console --> db

@@ -47,6 +47,9 @@ importers:
       '@weems/contrats':
         specifier: workspace:*
         version: link:../../packages/contrats
+      '@weems/local-process':
+        specifier: workspace:*
+        version: link:../../packages/local-process
       '@weems/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -133,6 +136,25 @@ importers:
       drizzle-kit:
         specifier: 0.31.11
         version: 0.31.11
+
+  apps/launcher:
+    dependencies:
+      '@weems/contrats':
+        specifier: workspace:*
+        version: link:../../packages/contrats
+      '@weems/local-process':
+        specifier: workspace:*
+        version: link:../../packages/local-process
+    devDependencies:
+      electron:
+        specifier: 45.3.0
+        version: 45.3.0
+      electron-builder:
+        specifier: 26.18.0
+        version: 26.18.0(electron-builder-squirrel-windows@26.18.0)
+      esbuild:
+        specifier: 0.28.2
+        version: 0.28.2
 
   apps/tracker:
     dependencies:
@@ -226,6 +248,8 @@ importers:
       zod:
         specifier: 4.6.7
         version: 4.6.7
+
+  packages/local-process: {}
 
   packages/ui:
     dependencies:

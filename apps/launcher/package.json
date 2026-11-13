@@ -1,0 +1,23 @@
+{
+  "name": "@weems/launcher",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Weems launcher for the developer's Mac: one window and a menu bar item to start, stop and restart the local services, without Terminal",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json && tsc -p src/window/tsconfig.json",
+    "app": "pnpm app:build && electron dist/app",
+    "app:build": "node scripts/build-app.ts",
+    "app:package": "pnpm app:build && electron-builder --config electron-builder.yml"
+  },
+  "dependencies": {
+    "@weems/contrats": "workspace:*",
+    "@weems/local-process": "workspace:*"
+  },
+  "devDependencies": {
+    "electron": "45.3.0",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2"
+  },
+  "main": "dist/app/main.cjs"
+}

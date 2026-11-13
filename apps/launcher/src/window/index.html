@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:"
+    />
+    <title>Weems</title>
+    <link rel="stylesheet" href="window.css" />
+  </head>
+  <body>
+    <header class="head">
+      <div class="logo" aria-hidden="true">W</div>
+      <div class="head-text">
+        <h1>Weems en local</h1>
+        <p id="summary"><span class="dot"></span><span id="summary-text">Lecture…</span></p>
+      </div>
+      <div class="head-buttons" id="head-buttons"></div>
+    </header>
+    <p class="notice" id="notice" hidden></p>
+    <section class="list" id="rows" aria-label="Services"></section>
+    <nav class="links">
+      <button class="button small" data-open="site">Ouvrir le site</button>
+      <button class="button small" data-open="console">Ouvrir la console</button>
+      <button class="button small" data-open="traffic">Simuler du trafic</button>
+    </nav>
+    <section class="logs" aria-label="Journaux">
+      <div class="logs-head">
+        <strong>Journaux</strong>
+        <div class="tabs" id="tabs">
+          <button data-tab="db">Base</button>
+          <button data-tab="api">API</button>
+          <button data-tab="site">Site</button>
+          <button data-tab="console">Console</button>
+        </div>
+        <span class="muted" id="logs-count"></span>
+      </div>
+      <pre id="logs"></pre>
+    </section>
+    <script src="view.js"></script>
+  </body>
+</html>

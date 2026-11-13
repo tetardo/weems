@@ -10,7 +10,9 @@
 | `apps/api` | API centrale (Fastify, PostgreSQL, Drizzle) | Vols, trajectoires enrichies, carte en direct (SSE) avec trajets et événements, comptes et invitations, profil public, catégories d'avion, aéroports, compteurs de l'accueil (`GET /v1/stats`), images de l'accueil, catalogue des formules (`GET /v1/plans`, `GET /v1/me/plan`), carnet privé (`/v1/me/logbook/*` : résumé, vols, bandes de vol, statistiques), supervision et base de données pour la console |
 | `apps/web` | Site (Next.js), français et anglais | Accueil public (tableau des départs), Découvrir, Fonctionnalités (générée depuis le catalogue), Offres et tableau comparatif, carte en direct `/live` publique ; pour le pilote : Mon carnet de bord (Résumé, Vols, Statistiques, Ma page publique), Mes vols et page de vol, réglages du profil ; profils publics `/pilots/<nom>` référencés ; une seule barre flottante sur tout le site |
 | `apps/admin` | Console d'administration locale (Next.js, jamais déployée) | Supervision (accueil), Services, Trafic simulé, Activité simulée (comptes fictifs), Comptes et invitations, Personnalisation (images de l'accueil), Librairies (versions, alertes), Base de données (tailles, migrations, sauvegardes, nettoyage) |
+| `apps/launcher` | App Mac « Weems » (Electron, locale) | Démarrer, arrêter, redémarrer la base, la console, l'API et le site sans Terminal ; journaux ; pastille dans la barre des menus (fiche 019) |
 | `packages/contrats` | Formats échangés entre le tracker, l'API et le site (Zod) | En place |
+| `packages/local-process` | Commandes lancées sur le Mac (groupe de processus, journaux), communes à la console et au lanceur | En place |
 | `packages/ui` | Composants React communs au site et à la console d'administration (formulaires du modèle C, fiche 008 ; bouton ; jetons d'arrondi, fiche 014) | En place |
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À écrire avec un pilote |
 | `docs/` | Cadrage, cahiers des charges, décisions (`docs/decisions/`), revues, schémas | Voir « Documents clés » |
@@ -48,7 +50,7 @@ L'index complet de `docs/`, avec l'état de chaque document, est dans [docs/READ
 **Développement**
 
 - [Règles de développement](docs/developpement/regles-de-developpement.md) : définition de « terminé », tests, branches, garde-fous Claude Code, règles permanentes des pages Offres et Fonctionnalités
-- [Démarrage sur le Mac](docs/developpement/demarrage-mac.md) : icônes Weems Start et Weems Stop
+- [Démarrage sur le Mac](docs/developpement/demarrage-mac.md) : l'app Weems (lanceur)
 - [Guide PC Windows (J2)](docs/developpement/guide-pc-windows-j2.md) : installer le PC, lancer `pnpm fly`, les 10 vols de référence
 - [Fiches de décision](docs/decisions/) : une fiche par choix structurant (look, navigation, formulaires, console, arrondis, catalogue des formules…)
 - [Revues](docs/revues/) : revue de fin de J3, mesure du direct, rapports de mise à jour de la documentation
@@ -96,7 +98,7 @@ Elles valent pour toute PR, quel que soit le fil de travail (détail dans les [r
 
 ### Démarrer en local
 
-**Le plus simple : deux icônes sur le bureau du Mac**, Weems Start et Weems Stop (installation une fois : `bash scripts/mac/install-desktop-icons.sh`). Start lance Docker Desktop, la base, la console, l'API et le site, puis ouvre la console ; Stop arrête tout, base comprise, sans effacer de données. Détails : [docs/developpement/demarrage-mac.md](docs/developpement/demarrage-mac.md).
+**Le plus simple : l'app Weems sur le Mac** (installation : `bash scripts/mac/install-launcher.sh`). Elle démarre Docker Desktop, la base, la console, l'API et le site sans fenêtre Terminal, montre l'état et les journaux de chaque service avec des boutons démarrer, arrêter, redémarrer ; la quitter arrête tout, base comprise, sans effacer de données. Détails : [docs/developpement/demarrage-mac.md](docs/developpement/demarrage-mac.md).
 
 À la main : Docker Desktop doit être lancé. Un onglet de Terminal par programme, depuis la racine du dépôt.
 

@@ -67,7 +67,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [009](decisions/009-console-admin-locale.md) | Console locale | À jour |
 | [010](decisions/010-vols-simules-pistes-et-virages.md) | Vols simulés réalistes | À jour |
 | [011 — activité simulée](decisions/011-activite-simulee-comptes-fictifs.md) | Comptes fictifs, vols passés | À jour |
-| [011 — démarrage par icônes](decisions/011-demarrage-par-icones.md) | Icônes Weems Start / Stop | À jour (deux fiches portent le numéro 011 ; gardées telles quelles pour ne pas casser les liens, la prochaine fiche est la 018) |
+| [011 — démarrage par icônes](decisions/011-demarrage-par-icones.md) | Icônes Weems Start / Stop | Scripts à jour ; les icônes sont remplacées par l'app de la fiche 019 (deux fiches portent le numéro 011 ; gardées telles quelles pour ne pas casser les liens, la prochaine fiche est la 020) |
 | [012](decisions/012-console-connexion-automatique-en-local.md) | Connexion automatique de la console | À jour |
 | [013](decisions/013-ci-j1-seulement-si-chaine-touchee.md) | CI : J1 filtré par chemins | À jour |
 | [014](decisions/014-arrondis-des-cadres.md) | 6 jetons d'arrondi | À jour |
@@ -75,13 +75,14 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [016](decisions/016-fond-plan-aeroport.md) | Fond du site : plan d'aéroport inventé, très léger | À jour au 13/11 |
 | [017](decisions/017-offre-fondateurs-hors-catalogue.md) | Offre fondateurs : droits offerts, hors catalogue des formules | À jour au 13/11 |
 | [018](decisions/018-grades-heures-et-vols-valides.md) | Grades des pilotes : heures et vols valides, calculés à la lecture | À jour au 13/11 |
+| [019](decisions/019-lanceur-mac.md) | App Mac « Weems » : démarrer, arrêter, redémarrer sans Terminal | À jour au 13/11 |
 
 ## Développement (`developpement/`)
 
 | Document | Contenu | État |
 | --- | --- | --- |
 | [Règles de développement](developpement/regles-de-developpement.md) | Terminé, branches, outils, structure, tests, règles permanentes | À jour |
-| [Démarrage sur le Mac](developpement/demarrage-mac.md) | Icônes Weems Start et Weems Stop | À jour |
+| [Démarrage sur le Mac](developpement/demarrage-mac.md) | App Weems (lanceur) : installation, utilisation, dépannage | À jour au 13/11 |
 | [Guide PC Windows (J2)](developpement/guide-pc-windows-j2.md) | Installer le PC, `pnpm fly`, 10 vols de référence | Ouvert (étape E à faire) |
 
 ## Revues (`revues/`)

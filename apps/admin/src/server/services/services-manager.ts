@@ -1,5 +1,5 @@
 import type { ConsoleConfig } from "../console-config.ts";
-import { ManagedProcess } from "../managed-process.ts";
+import { ManagedProcess } from "@weems/local-process";
 import { type ContainerState, DockerCompose, type DockerState } from "./docker.ts";
 import { portHolder, releasePort } from "./port-guard.ts";
 import { type Probe, probeHttp, probePort } from "./probes.ts";
