@@ -68,6 +68,15 @@ Sous-menu collant : Activité (heures, jours de vol, régularité 12 mois, heure
 
 Liste des objectifs en cours (anneau de progression, barre avec le repère « où vous devriez être aujourd'hui », badge En avance / En retard), suivi détaillé de l'objectif choisi (courbe cumulée, rythme attendu, projection, vols qui comptent, périodes précédentes), suggestions, objectifs atteints et manqués, formulaire de création (8 types : heures, vols, toucher doux, série propre, catégorie ou avion, aéroports, régularité, bonnes pratiques). Pilot Free : 1 objectif actif (en créer un remplace l'actuel) ; Pilot Pro : illimités (`goals`), suggestions (`goalSuggestions`), type « Bonnes pratiques » (`goalGoodPractices`). Nouvelle table dans l'API.
 
+**Codé le 13/11/2026** (règles retenues) :
+
+- Table `goals` : seule la définition est stockée (type, cible, seuil, pratique, avions, échéance, répétition) ; la progression est **recalculée à chaque lecture** à partir des vols clos, jamais stockée. Un objectif compte les vols posés **depuis sa création** (ou depuis le début de la semaine ou du mois en cours pour un objectif « cette semaine », « ce mois »). Semaines du lundi au dimanche, en UTC.
+- Routes : `GET /v1/me/goals` (en cours, 10 derniers terminés, suggestions ou `null` sans Pilot Pro), `POST /v1/me/goals`, `PUT /v1/me/goals/{id}`, `POST /v1/me/goals/{id}/archive`.
+- Pilot Free : créer un objectif quand la limite est atteinte archive le plus ancien (l'API applique la limite, pas le site). Le type « Bonnes pratiques » sans `goalGoodPractices` répond 403.
+- « En avance / En retard » seulement pour un objectif en cours avec échéance (pas pour une série propre ni des bonnes pratiques) ; projection = rythme moyen depuis le début.
+- Suggestions (Pilot Pro, au moins 3 vols) : heures du mois (+20 % sur la moyenne de 3 mois), toucher doux (médiane − 10 ft/min), régularité, nouveaux aéroports ; jamais un type déjà suivi.
+- « Atteints et terminés » : atteints, manqués et archivés, avec leur dernière valeur.
+
 ## 7. Données qui manquent aujourd'hui
 
 [Confiance élevée] Le traqueur mesure carburant, volets, train, aérofreins, N1, pilote automatique, feux… (format `Sample`), mais la trajectoire envoyée à l'API (`TrackPoint`) ne garde que position, altitudes, vitesses, vario, cap et sol. Les bandes de vol, le carburant du dernier vol et « Prévu ou réel » demandent d'ajouter ces champs, facultatifs, à `TrackPoint`, côté traqueur et côté API (PR des Vols). Les vols déjà enregistrés n'auront pas ces lignes : la carte affiche « non mesuré ».
@@ -82,5 +91,5 @@ Liste des objectifs en cours (anneau de progression, barre avec le repère « o�
 | #81 | Cadre du carnet (menu, onglets, `/logbook/public`) et Résumé (sans Prochain vol ni communauté réelle : cartes verrouillées ou « bientôt ») | Fusionnée |
 | #83 | Vols : liste + fiche, trajectoire enrichie, bandes de vol (repères à revoir sur critères provisoires : 250 kt sous 10 000 ft, inclinaison > 30°, plus de 1 000 ft/min de descente sous 1 000 ft, à valider : liste Houssine) ; dernière approche, analyse, note, chronologie et comparaison plus tard | Fusionnée |
 | #86 | Statistiques par thème (`GET /v1/me/logbook/stats`). Bonnes pratiques mesurées avec les critères provisoires des bandes (pas encore d'« approche stabilisée », critères à fixer avec un pilote) | Fusionnée |
-| à venir | Objectifs (table, routes, page) | À faire |
+| #94 | Objectifs (table `goals`, routes `/v1/me/goals`, page `/logbook/goals`, maquette v12 B) | En revue |
 | plus tard | Prochain vol SimBrief, communauté, analyse d'approche (critères à fixer avec un pilote), notes de vol | À faire |

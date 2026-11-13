@@ -19,7 +19,7 @@ export const LOGBOOK_PAGES: readonly LogbookPage[] = [
   { href: "/logbook", label: "summary", icon: LogbookIcon, soon: false },
   { href: "/logbook/flights", label: "flights", icon: FlightsIcon, soon: false },
   { href: "/logbook/stats", label: "stats", icon: StatsIcon, soon: false },
-  { href: "/logbook/goals", label: "goals", icon: TargetIcon, soon: true },
+  { href: "/logbook/goals", label: "goals", icon: TargetIcon, soon: false },
 ];
 
 /** The page of the menu shown as current: exact match (the Résumé is the parent of the others). */

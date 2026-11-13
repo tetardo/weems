@@ -37,6 +37,8 @@ export const FeatureKey = z.enum([
   "statsPeriod",
   "workOnBasic",
   "goals",
+  "goalSuggestions",
+  "goalGoodPractices",
   // Analyse
   "approachAnalysis",
   "workOnDetailed",

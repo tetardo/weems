@@ -78,6 +78,13 @@
       "when": 1794521682783,
       "tag": "0010_test_plans",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794535391691,
+      "tag": "0011_goals",
+      "breakpoints": true
     }
   ]
 }
