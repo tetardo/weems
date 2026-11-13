@@ -3,12 +3,14 @@ import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { httpApiClient } from "../../src/sender/api-client.ts";
 import { fleetOf } from "../generate-flights/fleet.ts";
+import { seededRandom } from "../generate-flights/random.ts";
 import type { SimulationProgress } from "@weems/contrats";
 import { runSimulation } from "./simulation.ts";
 
 /**
- * pnpm simulate [--count 10] [--speed 1] [--stagger 30] [--api http://localhost:3000] [--progress]
- * Flies the J1 fleet of simulated pilots against a running API.
+ * pnpm simulate [--count 10] [--speed 1] [--stagger 30] [--seed N] [--api http://localhost:3000] [--progress]
+ * Flies the J1 fleet of simulated pilots against a running API, departing at random intervals
+ * averaging --stagger simulated seconds (--seed: the same intervals again).
  * Ctrl+C (or SIGTERM, sent by the admin console) closes the flights in the air as interrupted.
  * --progress: one JSON line per second, then one with the result (read by the admin console).
  */
@@ -17,6 +19,7 @@ const { values } = parseArgs({
     count: { type: "string", default: "10" },
     speed: { type: "string", default: "1" },
     stagger: { type: "string", default: "30" },
+    seed: { type: "string" },
     api: { type: "string", default: "http://localhost:3000" },
     token: { type: "string", default: "dev-token" },
     progress: { type: "boolean", default: false },
@@ -46,6 +49,7 @@ const results = await runSimulation({
   api: httpApiClient({ baseUrl: values.api, token: values.token, trackerVersion }),
   speed: Number(values.speed),
   staggerS: Number(values.stagger),
+  random: seededRandom(Number(values.seed ?? Date.now() % 2 ** 31)),
   workDir: join(tmpdir(), `weems-simulate-${Date.now()}`),
   trackerVersion,
   signal: controller.signal,

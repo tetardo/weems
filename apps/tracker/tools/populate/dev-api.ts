@@ -21,6 +21,8 @@ export interface DevApi {
 }
 
 const PATH = "/v1/dev/fictitious-pilots";
+/** Deleting a population with its careers removes thousands of hours of trajectories: minutes. */
+const DELETE_TIMEOUT_MS = 30 * 60_000;
 
 function profileOf(identity: Identity): ProfileUpdate {
   return {
@@ -46,7 +48,7 @@ export function devApi(baseUrl: string, devToken: string): DevApi {
         ...(body === undefined ? {} : { "content-type": "application/json" }),
       },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-      signal: AbortSignal.timeout(60_000),
+      signal: AbortSignal.timeout(method === "DELETE" ? DELETE_TIMEOUT_MS : 60_000),
     });
     if (!response.ok) {
       throw new Error(`${method} ${path}: ${response.status} ${await response.text()}`);

@@ -75,6 +75,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [016](decisions/016-fond-plan-aeroport.md) | Fond du site : plan d'aéroport inventé, très léger | À jour au 13/11 |
 | [017](decisions/017-offre-fondateurs-hors-catalogue.md) | Offre fondateurs : droits offerts, hors catalogue des formules | À jour au 13/11 |
 | [018](decisions/018-grades-heures-et-vols-valides.md) | Grades des pilotes : heures et vols valides, calculés à la lecture | À jour au 13/11 |
+| [019](decisions/019-comptes-fictifs-grades-et-vols-varies.md) | Comptes fictifs : vols variés, carrières jusqu'aux 9 grades, départs aléatoires | À jour au 13/11 |
 | [020](decisions/020-lanceur-mac.md) | App Mac « Weems » : démarrer, arrêter, redémarrer sans Terminal | À jour au 13/11 |
 
 ## Développement (`developpement/`)

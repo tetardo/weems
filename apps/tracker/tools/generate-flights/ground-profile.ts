@@ -2,7 +2,7 @@ import { angleDiffDeg, distanceBetweenNm as away, type LatLon } from "@weems/con
 import type { RunwayEnd } from "./airports/airport-data.ts";
 import type { FlightScript } from "./flight-script.ts";
 import { runwayAxisLeg } from "./navigation/route-plan.ts";
-import type { Scenario } from "./scenario.ts";
+import { DEFAULT_CLIMB_FPM, DEFAULT_ROTATE_GS, type Scenario } from "./scenario.ts";
 
 const has = (scenario: Scenario, d: Scenario["disturbances"][number]) =>
   scenario.disturbances.includes(d);
@@ -70,13 +70,14 @@ export function takeoff(script: FlightScript, scenario: Scenario): void {
     );
     taxiToRunway(script, runway);
   }
+  const rotateGs = scenario.rotateGs ?? DEFAULT_ROTATE_GS;
   script.until(
-    (s) => s.gs >= 160,
+    (s) => s.gs >= rotateGs,
     (s) => (s.gs += 4),
   );
   script.run(1, (s) => {
     s.onGround = false;
-    s.vs = 2500;
+    s.vs = scenario.climbFpm ?? DEFAULT_CLIMB_FPM;
   });
 }
 

@@ -155,7 +155,7 @@
     "clocks": "Clocks",
     "utc": "UTC",
     "late": "The board is out of date: the API does not answer, trying again in a few seconds.",
-    "privacy": "Every flight under way is shown live; a pilot with a private profile appears as “Hidden pilot”. Click a callsign to follow the flight on the map, or open its page once landed; a pilot for their page; an airport or an aircraft to show only that one.",
+    "privacy": "Every flight under way is shown live; a pilot with a private profile appears as a grey disc (“Hidden pilot”). Hover over a pilot or an airport to see its name. Click a callsign to follow the flight on the map, or open its page once landed; a pilot for their page; an airport or an aircraft to show only that one.",
     "status": {
       "boarding": "Boarding",
       "pushback": "Pushback",

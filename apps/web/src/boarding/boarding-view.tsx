@@ -39,7 +39,7 @@ export function BoardingView({ apiUrl }: { apiUrl: string }) {
 
   return (
     <FlapSoundContext value={rattle}>
-      <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 px-3 py-5 sm:px-6">
+      <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-3 px-4 pt-6 pb-12 sm:px-6">
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="mr-2 flex items-center gap-2.5 font-title text-2xl font-bold">
             <DepartureIcon size={24} className="text-board-ink" aria-hidden="true" />

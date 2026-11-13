@@ -76,7 +76,7 @@ flowchart LR
 | | Pilotes simulés | Test de charge |
 | --- | --- | --- |
 | Commande | `pnpm simulate` | `pnpm load` |
-| Réglages | Pilotes : 1 à 10 (les 10 trajets de la flotte J1, en Europe), défaut 10. Vitesse : ×1, ×10, ×50, ×100, défaut ×10. Décalage entre deux départs : en secondes, défaut 30 | Pilotes : défaut 50. Spectateurs : défaut 100. Durée : en minutes, défaut 30. Vitesse : défaut ×1 |
+| Réglages | Pilotes : 1 à 10 (les 10 trajets de la flotte J1, en Europe), défaut 10. Vitesse : ×1, ×10, ×50, ×100, défaut ×10. Décalage moyen entre deux départs : en secondes, défaut 30, écarts tirés au hasard autour (fiche 019) | Pilotes : défaut 50. Spectateurs : défaut 100. Durée : en minutes, défaut 30. Vitesse : défaut ×1 |
 | Avertissement | Les vols sont enregistrés au nom du pilote de développement (`pilote@weems.local`) | Le test commence par vider les vols simulés (jamais les vols MSFS), rappelé à côté du bouton |
 
 **Pendant un lancement** (bloc en haut de page)
@@ -137,8 +137,10 @@ flowchart LR
 | | Population fictive (reste en base) | Activité en direct (temporaire) |
 | --- | --- | --- |
 | Commande | `pnpm populate create` | `pnpm populate live` |
-| Réglages | Comptes : 1 à 500, défaut 50. Vols par compte : min–max, défaut 5–40. Historique : 1, 6 ou 12 mois, défaut 6. Profils publics : défaut 75 % | Vols en direct : défaut 12. Visiteurs : défaut 100. Durée : défaut 30 min. Vitesse : ×1, ×10, ×50 |
+| Réglages | Comptes : 1 à 500, défaut 50. Vols par compte : min–max, défaut 5–40. Historique : 1, 6 ou 12 mois, défaut 6. Profils publics : défaut 75 %. **Couvrir les 9 grades** (13/11/2026, coché par défaut) : les 9 premiers comptes, publics, ont chacun la carrière d'un grade, d'Élève à Légende (fiche 019) | Vols en direct : défaut 12 (avions en l'air au plus). Visiteurs : défaut 100. Durée : défaut 30 min. Vitesse : ×1, ×10, ×50. Départs : premier tiré dans la première minute, puis 5 à 45 min au sol entre deux vols |
 | Avertissement | Remplace la population existante | Demande une population |
+
+**Vols** (fiche 019) : 21 types d'avions, de l'aéroclub au long-courrier, sur 71 aéroports, selon le style de chaque pilote ; déclarés `msfs2024` pour compter dans les grades, à part par leur compte fictif. Chaque pilote a un niveau qui progresse (toucher, rebonds, remises de gaz), environ 5 % de vols non comptés (crash, téléportation, interrompu) et vole aux heures de son fuseau. Estimation affichée : vols et heures, ≈ 8 h de vol rejouées par seconde.
 
 **Pendant un lancement** : étapes (nettoyage, comptes, vols, vérification) avec compteurs et débit pour la population ; vols en l'air, partis, visiteurs, temps écoulé pour le direct. Bouton **Arrêter**.
 

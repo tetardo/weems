@@ -70,7 +70,7 @@ function SimulateForm({ disabled, onLaunch }: FormProps) {
           onChange={setCount}
         />
         <NumberField
-          label="Décalage"
+          label="Décalage moyen"
           value={stagger}
           min={0}
           max={600}

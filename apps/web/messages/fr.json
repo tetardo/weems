@@ -155,7 +155,7 @@
     "clocks": "Horloges",
     "utc": "UTC",
     "late": "Le tableau n'est plus à jour : l'API ne répond pas, nouvel essai dans quelques secondes.",
-    "privacy": "Tous les vols en cours sont affichés en direct ; un pilote au profil privé apparaît comme « Pilote masqué ». Cliquez sur un indicatif pour suivre le vol sur la carte, ou ouvrir sa page une fois posé ; sur un pilote pour sa page ; sur un terrain ou un avion pour n'afficher que lui.",
+    "privacy": "Tous les vols en cours sont affichés en direct ; un pilote au profil privé apparaît en pastille grise (« Pilote masqué »). Survolez un pilote ou un terrain pour voir son nom. Cliquez sur un indicatif pour suivre le vol sur la carte, ou ouvrir sa page une fois posé ; sur un pilote pour sa page ; sur un terrain ou un avion pour n'afficher que lui.",
     "status": {
       "boarding": "Embarq.",
       "pushback": "Repouss.",

@@ -1,6 +1,186 @@
 {
-  "source": "OurAirports (public domain), 2026-11-11",
+  "source": "OurAirports (public domain), 2026-11-13",
   "airports": [
+    {
+      "icao": "BIKF",
+      "name": "Keflavik International Airport",
+      "lat": 63.985001,
+      "lon": -22.6056,
+      "elevationFt": 171,
+      "runways": [
+        {
+          "ident": "01",
+          "lat": 63.964487,
+          "lon": -22.605428,
+          "headingDeg": 14,
+          "lengthFt": 10020,
+          "elevationFt": 135,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19",
+          "lat": 63.99186,
+          "lon": -22.605407,
+          "headingDeg": 194,
+          "lengthFt": 10020,
+          "elevationFt": 161,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "10",
+          "lat": 63.985026,
+          "lon": -22.654977,
+          "headingDeg": 104,
+          "lengthFt": 10056,
+          "elevationFt": 109,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "28",
+          "lat": 63.985031,
+          "lon": -22.592365,
+          "headingDeg": 284,
+          "lengthFt": 10056,
+          "elevationFt": 168,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "CYUL",
+      "name": "Montreal / Pierre Elliott Trudeau International Airport",
+      "lat": 45.467837,
+      "lon": -73.742294,
+      "elevationFt": 118,
+      "runways": [
+        {
+          "ident": "06L",
+          "lat": 45.461063,
+          "lon": -73.765015,
+          "headingDeg": 42.7,
+          "lengthFt": 11000,
+          "elevationFt": 96,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "24R",
+          "lat": 45.483276,
+          "lon": -73.735924,
+          "headingDeg": 222.7,
+          "lengthFt": 11000,
+          "elevationFt": 106,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "06R",
+          "lat": 45.457661,
+          "lon": -73.741386,
+          "headingDeg": 41.3,
+          "lengthFt": 9600,
+          "elevationFt": 98,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "24L",
+          "lat": 45.47702,
+          "lon": -73.716011,
+          "headingDeg": 221.3,
+          "lengthFt": 9600,
+          "elevationFt": 117,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "DAAG",
+      "name": "Houari Boumediene Airport",
+      "lat": 36.693886,
+      "lon": 3.214531,
+      "elevationFt": 82,
+      "runways": [
+        {
+          "ident": "05",
+          "lat": 36.693901,
+          "lon": 3.22017,
+          "headingDeg": 53,
+          "lengthFt": 11483,
+          "elevationFt": 72,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "23",
+          "lat": 36.712898,
+          "lon": 3.2514,
+          "headingDeg": 233,
+          "lengthFt": 11483,
+          "elevationFt": 82,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "09",
+          "lat": 36.692101,
+          "lon": 3.17083,
+          "headingDeg": 92,
+          "lengthFt": 11483,
+          "elevationFt": 56,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "27",
+          "lat": 36.6912,
+          "lon": 3.20992,
+          "headingDeg": 272,
+          "lengthFt": 11483,
+          "elevationFt": 82,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "DTTA",
+      "name": "Tunis Carthage International Airport",
+      "lat": 36.851002,
+      "lon": 10.2272,
+      "elevationFt": 22,
+      "runways": [
+        {
+          "ident": "01",
+          "lat": 36.8391,
+          "lon": 10.2238,
+          "headingDeg": 12.3,
+          "lengthFt": 10499,
+          "elevationFt": 13,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19",
+          "lat": 36.867199,
+          "lon": 10.2314,
+          "headingDeg": 192.3,
+          "lengthFt": 10499,
+          "elevationFt": 21,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "11",
+          "lat": 36.854301,
+          "lon": 10.2177,
+          "headingDeg": 112.5,
+          "lengthFt": 9318,
+          "elevationFt": 19,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "29",
+          "lat": 36.844398,
+          "lon": 10.2472,
+          "headingDeg": 292.5,
+          "lengthFt": 9318,
+          "elevationFt": 11,
+          "displacedThresholdFt": 657
+        }
+      ]
+    },
     {
       "icao": "EBBR",
       "name": "Brussels Airport",
@@ -60,6 +240,51 @@
           "headingDeg": 250,
           "lengthFt": 10535,
           "elevationFt": 159,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "EDDB",
+      "name": "Berlin Brandenburg Airport",
+      "lat": 52.361738,
+      "lon": 13.502341,
+      "elevationFt": 157,
+      "runways": [
+        {
+          "ident": "06L",
+          "lat": 52.366724,
+          "lon": 13.480928,
+          "headingDeg": 69,
+          "lengthFt": 11811,
+          "elevationFt": 144,
+          "displacedThresholdFt": 970
+        },
+        {
+          "ident": "24R",
+          "lat": 52.378409,
+          "lon": 13.530214,
+          "headingDeg": 249,
+          "lengthFt": 11811,
+          "elevationFt": 154,
+          "displacedThresholdFt": 985
+        },
+        {
+          "ident": "06R",
+          "lat": 52.34544,
+          "lon": 13.468435,
+          "headingDeg": 69,
+          "lengthFt": 13123,
+          "elevationFt": 152,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "24L",
+          "lat": 52.358431,
+          "lon": 13.523175,
+          "headingDeg": 249,
+          "lengthFt": 13123,
+          "elevationFt": 149,
           "displacedThresholdFt": 0
         }
       ]
@@ -142,6 +367,51 @@
           "lengthFt": 13123,
           "elevationFt": 316,
           "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "EDDH",
+      "name": "Hamburg Helmut Schmidt Airport",
+      "lat": 53.630402,
+      "lon": 9.98823,
+      "elevationFt": 53,
+      "runways": [
+        {
+          "ident": "05",
+          "lat": 53.618301,
+          "lon": 9.96371,
+          "headingDeg": 50.3,
+          "lengthFt": 10663,
+          "elevationFt": 32,
+          "displacedThresholdFt": 978
+        },
+        {
+          "ident": "23",
+          "lat": 53.6371,
+          "lon": 10.0018,
+          "headingDeg": 230.3,
+          "lengthFt": 10663,
+          "elevationFt": 43,
+          "displacedThresholdFt": 512
+        },
+        {
+          "ident": "15",
+          "lat": 53.6544,
+          "lon": 9.97521,
+          "headingDeg": 152.8,
+          "lengthFt": 12028,
+          "elevationFt": 53,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "33",
+          "lat": 53.625099,
+          "lon": 10.0005,
+          "headingDeg": 332.8,
+          "lengthFt": 12028,
+          "elevationFt": 35,
+          "displacedThresholdFt": 1464
         }
       ]
     },
@@ -236,6 +506,69 @@
       ]
     },
     {
+      "icao": "EFHK",
+      "name": "Helsinki Vantaa Airport",
+      "lat": 60.318363,
+      "lon": 24.963341,
+      "elevationFt": 179,
+      "runways": [
+        {
+          "ident": "04L",
+          "lat": 60.312901,
+          "lon": 24.9039,
+          "headingDeg": 48,
+          "lengthFt": 10039,
+          "elevationFt": 133,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "22R",
+          "lat": 60.331501,
+          "lon": 24.9447,
+          "headingDeg": 228,
+          "lengthFt": 10039,
+          "elevationFt": 178,
+          "displacedThresholdFt": 196
+        },
+        {
+          "ident": "04R",
+          "lat": 60.309467,
+          "lon": 24.932343,
+          "headingDeg": 48,
+          "lengthFt": 11483,
+          "elevationFt": 152,
+          "displacedThresholdFt": 787
+        },
+        {
+          "ident": "22L",
+          "lat": 60.330692,
+          "lon": 24.979092,
+          "headingDeg": 228,
+          "lengthFt": 11483,
+          "elevationFt": 149,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "15",
+          "lat": 60.330299,
+          "lon": 24.9645,
+          "headingDeg": 154.1,
+          "lengthFt": 9518,
+          "elevationFt": 162,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "33",
+          "lat": 60.307098,
+          "lon": 24.9883,
+          "headingDeg": 334.1,
+          "lengthFt": 9518,
+          "elevationFt": 146,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
       "icao": "EGCC",
       "name": "Manchester Airport",
       "lat": 53.349375,
@@ -281,6 +614,51 @@
       ]
     },
     {
+      "icao": "EGKK",
+      "name": "London Gatwick Airport",
+      "lat": 51.148744,
+      "lon": -0.185739,
+      "elevationFt": 202,
+      "runways": [
+        {
+          "ident": "08L",
+          "lat": 51.146893,
+          "lon": -0.212599,
+          "headingDeg": 78,
+          "lengthFt": 8402,
+          "elevationFt": 195,
+          "displacedThresholdFt": 1053
+        },
+        {
+          "ident": "26R",
+          "lat": 51.151825,
+          "lon": -0.176795,
+          "headingDeg": 258,
+          "lengthFt": 8402,
+          "elevationFt": 195,
+          "displacedThresholdFt": 1366
+        },
+        {
+          "ident": "08R",
+          "lat": 51.145103,
+          "lon": -0.212345,
+          "headingDeg": 78,
+          "lengthFt": 10883,
+          "elevationFt": 196,
+          "displacedThresholdFt": 1288
+        },
+        {
+          "ident": "26L",
+          "lat": 51.151493,
+          "lon": -0.165992,
+          "headingDeg": 258,
+          "lengthFt": 10883,
+          "elevationFt": 196,
+          "displacedThresholdFt": 1400
+        }
+      ]
+    },
+    {
       "icao": "EGLL",
       "name": "London Heathrow Airport",
       "lat": 51.470748,
@@ -322,6 +700,33 @@
           "lengthFt": 12001,
           "elevationFt": 77,
           "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "EGPH",
+      "name": "Edinburgh Airport",
+      "lat": 55.950145,
+      "lon": -3.372288,
+      "elevationFt": 135,
+      "runways": [
+        {
+          "ident": "06",
+          "lat": 55.944,
+          "lon": -3.39014,
+          "headingDeg": 59,
+          "lengthFt": 8392,
+          "elevationFt": 110,
+          "displacedThresholdFt": 700
+        },
+        {
+          "ident": "24",
+          "lat": 55.955898,
+          "lon": -3.35506,
+          "headingDeg": 239,
+          "lengthFt": 8392,
+          "elevationFt": 100,
+          "displacedThresholdFt": 700
         }
       ]
     },
@@ -465,6 +870,699 @@
           "headingDeg": 275,
           "lengthFt": 8652,
           "elevationFt": 202,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "EKCH",
+      "name": "Copenhagen Kastrup Airport",
+      "lat": 55.617901,
+      "lon": 12.656,
+      "elevationFt": 17,
+      "runways": [
+        {
+          "ident": "04L",
+          "lat": 55.592201,
+          "lon": 12.603536,
+          "headingDeg": 41,
+          "lengthFt": 11811,
+          "elevationFt": 13,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "22R",
+          "lat": 55.616543,
+          "lon": 12.641174,
+          "headingDeg": 221,
+          "lengthFt": 11811,
+          "elevationFt": 14,
+          "displacedThresholdFt": 1967
+        },
+        {
+          "ident": "04R",
+          "lat": 55.6031,
+          "lon": 12.633,
+          "headingDeg": 41,
+          "lengthFt": 10827,
+          "elevationFt": 12,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "22L",
+          "lat": 55.625401,
+          "lon": 12.6676,
+          "headingDeg": 221,
+          "lengthFt": 10827,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "12",
+          "lat": 55.626293,
+          "lon": 12.633331,
+          "headingDeg": 123,
+          "lengthFt": 9186,
+          "elevationFt": 13,
+          "displacedThresholdFt": 2313
+        },
+        {
+          "ident": "30",
+          "lat": 55.612522,
+          "lon": 12.670532,
+          "headingDeg": 303,
+          "lengthFt": 9186,
+          "elevationFt": 8,
+          "displacedThresholdFt": 886
+        }
+      ]
+    },
+    {
+      "icao": "ENGM",
+      "name": "Oslo-Gardermoen International Airport",
+      "lat": 60.193901,
+      "lon": 11.1004,
+      "elevationFt": 681,
+      "runways": [
+        {
+          "ident": "01L",
+          "lat": 60.185001,
+          "lon": 11.0737,
+          "headingDeg": 16,
+          "lengthFt": 11811,
+          "elevationFt": 656,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19R",
+          "lat": 60.216099,
+          "lon": 11.0917,
+          "headingDeg": 196,
+          "lengthFt": 11811,
+          "elevationFt": 675,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "01R",
+          "lat": 60.1758,
+          "lon": 11.1078,
+          "headingDeg": 16,
+          "lengthFt": 9678,
+          "elevationFt": 670,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19L",
+          "lat": 60.201199,
+          "lon": 11.1225,
+          "headingDeg": 196,
+          "lengthFt": 9678,
+          "elevationFt": 681,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "EPWA",
+      "name": "Warsaw Chopin Airport",
+      "lat": 52.165699,
+      "lon": 20.9671,
+      "elevationFt": 362,
+      "runways": [
+        {
+          "ident": "11",
+          "lat": 52.171501,
+          "lon": 20.946699,
+          "headingDeg": 115,
+          "lengthFt": 9186,
+          "elevationFt": 362,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "29",
+          "lat": 52.160999,
+          "lon": 20.9839,
+          "headingDeg": 295,
+          "lengthFt": 9186,
+          "elevationFt": 347,
+          "displacedThresholdFt": 1640
+        },
+        {
+          "ident": "15",
+          "lat": 52.1786,
+          "lon": 20.9559,
+          "headingDeg": 152,
+          "lengthFt": 12106,
+          "elevationFt": 353,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "33",
+          "lat": 52.149399,
+          "lon": 20.9814,
+          "headingDeg": 332,
+          "lengthFt": 12106,
+          "elevationFt": 355,
+          "displacedThresholdFt": 2170
+        }
+      ]
+    },
+    {
+      "icao": "ESSA",
+      "name": "Stockholm-Arlanda Airport",
+      "lat": 59.64849,
+      "lon": 17.928829,
+      "elevationFt": 137,
+      "runways": [
+        {
+          "ident": "01L",
+          "lat": 59.637299,
+          "lon": 17.9132,
+          "headingDeg": 10,
+          "lengthFt": 10830,
+          "elevationFt": 98,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19R",
+          "lat": 59.666401,
+          "lon": 17.9238,
+          "headingDeg": 190,
+          "lengthFt": 10830,
+          "elevationFt": 118,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "01R",
+          "lat": 59.6264,
+          "lon": 17.950701,
+          "headingDeg": 10.4,
+          "lengthFt": 8201,
+          "elevationFt": 137,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19L",
+          "lat": 59.648499,
+          "lon": 17.9587,
+          "headingDeg": 190.4,
+          "lengthFt": 8201,
+          "elevationFt": 98,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "08",
+          "lat": 59.658401,
+          "lon": 17.9361,
+          "headingDeg": 75.9,
+          "lengthFt": 8202,
+          "elevationFt": 108,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "26",
+          "lat": 59.663898,
+          "lon": 17.9792,
+          "headingDeg": 255.9,
+          "lengthFt": 8202,
+          "elevationFt": 124,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "GCLP",
+      "name": "Gran Canaria Airport",
+      "lat": 27.9319,
+      "lon": -15.3866,
+      "elevationFt": 78,
+      "runways": [
+        {
+          "ident": "03L",
+          "lat": 27.9189,
+          "lon": -15.3923,
+          "headingDeg": 22,
+          "lengthFt": 10171,
+          "elevationFt": 78,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "21R",
+          "lat": 27.944901,
+          "lon": -15.3808,
+          "headingDeg": 202,
+          "lengthFt": 10171,
+          "elevationFt": 33,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "03R",
+          "lat": 27.9182,
+          "lon": -15.3904,
+          "headingDeg": 22,
+          "lengthFt": 10171,
+          "elevationFt": 69,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "21L",
+          "lat": 27.944201,
+          "lon": -15.3788,
+          "headingDeg": 202,
+          "lengthFt": 10171,
+          "elevationFt": 27,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "GMMN",
+      "name": "Mohammed V International Airport",
+      "lat": 33.3675,
+      "lon": -7.58997,
+      "elevationFt": 656,
+      "runways": [
+        {
+          "ident": "17L",
+          "lat": 33.383999,
+          "lon": -7.59352,
+          "headingDeg": 164,
+          "lengthFt": 12205,
+          "elevationFt": 633,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "35R",
+          "lat": 33.351799,
+          "lon": -7.58249,
+          "headingDeg": 344,
+          "lengthFt": 12205,
+          "elevationFt": 656,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "17R",
+          "lat": 33.383099,
+          "lon": -7.59743,
+          "headingDeg": 164,
+          "lengthFt": 12205,
+          "elevationFt": 636,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "35L",
+          "lat": 33.350899,
+          "lon": -7.58642,
+          "headingDeg": 344,
+          "lengthFt": 12205,
+          "elevationFt": 656,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "HECA",
+      "name": "Cairo International Airport",
+      "lat": 30.111534,
+      "lon": 31.396694,
+      "elevationFt": 322,
+      "runways": [
+        {
+          "ident": "05C",
+          "lat": 30.099701,
+          "lon": 31.398199,
+          "headingDeg": 45,
+          "lengthFt": 13123,
+          "elevationFt": 382,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "23C",
+          "lat": 30.123301,
+          "lon": 31.4296,
+          "headingDeg": 225,
+          "lengthFt": 13123,
+          "elevationFt": 375,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "05L",
+          "lat": 30.119699,
+          "lon": 31.380199,
+          "headingDeg": 49,
+          "lengthFt": 10827,
+          "elevationFt": 190,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "23R",
+          "lat": 30.139099,
+          "lon": 31.4063,
+          "headingDeg": 229,
+          "lengthFt": 10827,
+          "elevationFt": 199,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "05R",
+          "lat": 30.097166,
+          "lon": 31.419001,
+          "headingDeg": 49.2,
+          "lengthFt": 13124,
+          "elevationFt": 382,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "23L",
+          "lat": 30.120667,
+          "lon": 31.4505,
+          "headingDeg": 229.2,
+          "lengthFt": 13124,
+          "elevationFt": 375,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "KBOS",
+      "name": "Boston Logan International Airport",
+      "lat": 42.36197,
+      "lon": -71.0079,
+      "elevationFt": 20,
+      "runways": [
+        {
+          "ident": "04L",
+          "lat": 42.357997,
+          "lon": -71.014344,
+          "headingDeg": 20,
+          "lengthFt": 7864,
+          "elevationFt": 14,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "22R",
+          "lat": 42.378322,
+          "lon": -71.004511,
+          "headingDeg": 200,
+          "lengthFt": 7864,
+          "elevationFt": 15,
+          "displacedThresholdFt": 825
+        },
+        {
+          "ident": "04R",
+          "lat": 42.351064,
+          "lon": -71.011801,
+          "headingDeg": 20,
+          "lengthFt": 10006,
+          "elevationFt": 18,
+          "displacedThresholdFt": 1154
+        },
+        {
+          "ident": "22L",
+          "lat": 42.376923,
+          "lon": -70.999288,
+          "headingDeg": 200,
+          "lengthFt": 10006,
+          "elevationFt": 16,
+          "displacedThresholdFt": 1200
+        },
+        {
+          "ident": "09",
+          "lat": 42.355801,
+          "lon": -71.012901,
+          "headingDeg": 77,
+          "lengthFt": 7001,
+          "elevationFt": 17,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "27",
+          "lat": 42.360199,
+          "lon": -70.987701,
+          "headingDeg": 257,
+          "lengthFt": 7001,
+          "elevationFt": 15,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "15R",
+          "lat": 42.374298,
+          "lon": -71.017899,
+          "headingDeg": 135,
+          "lengthFt": 10083,
+          "elevationFt": 17,
+          "displacedThresholdFt": 880
+        },
+        {
+          "ident": "33L",
+          "lat": 42.354599,
+          "lon": -70.9916,
+          "headingDeg": 315,
+          "lengthFt": 10083,
+          "elevationFt": 15,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "KIAD",
+      "name": "Washington Dulles International Airport",
+      "lat": 38.9445,
+      "lon": -77.455803,
+      "elevationFt": 312,
+      "runways": [
+        {
+          "ident": "01C",
+          "lat": 38.939098,
+          "lon": -77.459801,
+          "headingDeg": 1,
+          "lengthFt": 11500,
+          "elevationFt": 286,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19C",
+          "lat": 38.9706,
+          "lon": -77.459297,
+          "headingDeg": 181,
+          "lengthFt": 11500,
+          "elevationFt": 269,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "01L",
+          "lat": 38.945,
+          "lon": -77.47482,
+          "headingDeg": 1,
+          "lengthFt": 9400,
+          "elevationFt": 286,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19R",
+          "lat": 38.97078,
+          "lon": -77.47445,
+          "headingDeg": 181,
+          "lengthFt": 9400,
+          "elevationFt": 269,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "01R",
+          "lat": 38.923801,
+          "lon": -77.436401,
+          "headingDeg": 0.7,
+          "lengthFt": 11500,
+          "elevationFt": 312,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "19L",
+          "lat": 38.955299,
+          "lon": -77.435997,
+          "headingDeg": 180.7,
+          "lengthFt": 11500,
+          "elevationFt": 293,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "12",
+          "lat": 38.943802,
+          "lon": -77.490402,
+          "headingDeg": 110.6,
+          "lengthFt": 10501,
+          "elevationFt": 310,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "30",
+          "lat": 38.933601,
+          "lon": -77.455902,
+          "headingDeg": 290.6,
+          "lengthFt": 10501,
+          "elevationFt": 288,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "KJFK",
+      "name": "John F. Kennedy International Airport",
+      "lat": 40.639447,
+      "lon": -73.779317,
+      "elevationFt": 13,
+      "runways": [
+        {
+          "ident": "04L",
+          "lat": 40.622002,
+          "lon": -73.785599,
+          "headingDeg": 31,
+          "lengthFt": 12079,
+          "elevationFt": 12,
+          "displacedThresholdFt": 463
+        },
+        {
+          "ident": "22R",
+          "lat": 40.6488,
+          "lon": -73.764702,
+          "headingDeg": 211,
+          "lengthFt": 12079,
+          "elevationFt": 13,
+          "displacedThresholdFt": 2696
+        },
+        {
+          "ident": "04R",
+          "lat": 40.625401,
+          "lon": -73.770302,
+          "headingDeg": 30.6,
+          "lengthFt": 8400,
+          "elevationFt": 13,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "22L",
+          "lat": 40.645199,
+          "lon": -73.754898,
+          "headingDeg": 210.6,
+          "lengthFt": 8400,
+          "elevationFt": 13,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "13L",
+          "lat": 40.657799,
+          "lon": -73.790199,
+          "headingDeg": 121,
+          "lengthFt": 10000,
+          "elevationFt": 13,
+          "displacedThresholdFt": 905
+        },
+        {
+          "ident": "31R",
+          "lat": 40.6437,
+          "lon": -73.7593,
+          "headingDeg": 301,
+          "lengthFt": 10000,
+          "elevationFt": 13,
+          "displacedThresholdFt": 1030
+        },
+        {
+          "ident": "13R",
+          "lat": 40.648399,
+          "lon": -73.816704,
+          "headingDeg": 121,
+          "lengthFt": 14511,
+          "elevationFt": 13,
+          "displacedThresholdFt": 2043
+        },
+        {
+          "ident": "31L",
+          "lat": 40.627899,
+          "lon": -73.771599,
+          "headingDeg": 301,
+          "lengthFt": 14511,
+          "elevationFt": 13,
+          "displacedThresholdFt": 3263
+        }
+      ]
+    },
+    {
+      "icao": "KMIA",
+      "name": "Miami International Airport",
+      "lat": 25.796011,
+      "lon": -80.289751,
+      "elevationFt": 8,
+      "runways": [
+        {
+          "ident": "08L",
+          "lat": 25.8029,
+          "lon": -80.301498,
+          "headingDeg": 87.4,
+          "lengthFt": 8600,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "26R",
+          "lat": 25.804001,
+          "lon": -80.275398,
+          "headingDeg": 267.4,
+          "lengthFt": 8600,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "08R",
+          "lat": 25.800699,
+          "lon": -80.301399,
+          "headingDeg": 87,
+          "lengthFt": 10506,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "26L",
+          "lat": 25.802,
+          "lon": -80.269501,
+          "headingDeg": 267,
+          "lengthFt": 10506,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "09",
+          "lat": 25.7861,
+          "lon": -80.314796,
+          "headingDeg": 87,
+          "lengthFt": 13016,
+          "elevationFt": 7,
+          "displacedThresholdFt": 1350
+        },
+        {
+          "ident": "27",
+          "lat": 25.787701,
+          "lon": -80.275398,
+          "headingDeg": 267,
+          "lengthFt": 13016,
+          "elevationFt": 8,
+          "displacedThresholdFt": 267
+        },
+        {
+          "ident": "12",
+          "lat": 25.799299,
+          "lon": -80.3023,
+          "headingDeg": 119,
+          "lengthFt": 9360,
+          "elevationFt": 8,
+          "displacedThresholdFt": 950
+        },
+        {
+          "ident": "30",
+          "lat": 25.7866,
+          "lon": -80.277496,
+          "headingDeg": 299,
+          "lengthFt": 9360,
+          "elevationFt": 8,
           "displacedThresholdFt": 0
         }
       ]
@@ -614,6 +1712,96 @@
       ]
     },
     {
+      "icao": "LEMG",
+      "name": "Málaga-Costa del Sol Airport",
+      "lat": 36.678234,
+      "lon": -4.500208,
+      "elevationFt": 53,
+      "runways": [
+        {
+          "ident": "12",
+          "lat": 36.691002,
+          "lon": -4.5078,
+          "headingDeg": 119,
+          "lengthFt": 9022,
+          "elevationFt": 52,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "30",
+          "lat": 36.6796,
+          "lon": -4.48053,
+          "headingDeg": 299,
+          "lengthFt": 9022,
+          "elevationFt": 31,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "13",
+          "lat": 36.684502,
+          "lon": -4.51259,
+          "headingDeg": 133,
+          "lengthFt": 10500,
+          "elevationFt": 52,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "31",
+          "lat": 36.665401,
+          "lon": -4.48582,
+          "headingDeg": 313,
+          "lengthFt": 10500,
+          "elevationFt": 31,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LEPA",
+      "name": "Palma de Mallorca Airport",
+      "lat": 39.551701,
+      "lon": 2.73881,
+      "elevationFt": 27,
+      "runways": [
+        {
+          "ident": "06L",
+          "lat": 39.5471,
+          "lon": 2.71073,
+          "headingDeg": 58.6,
+          "lengthFt": 10728,
+          "elevationFt": 15,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "24R",
+          "lat": 39.5625,
+          "lon": 2.74319,
+          "headingDeg": 238.6,
+          "lengthFt": 10728,
+          "elevationFt": 8,
+          "displacedThresholdFt": 230
+        },
+        {
+          "ident": "06R",
+          "lat": 39.541302,
+          "lon": 2.73174,
+          "headingDeg": 58.6,
+          "lengthFt": 9842,
+          "elevationFt": 24,
+          "displacedThresholdFt": 1345
+        },
+        {
+          "ident": "24L",
+          "lat": 39.555302,
+          "lon": 2.76153,
+          "headingDeg": 238.6,
+          "lengthFt": 9842,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
       "icao": "LFBD",
       "name": "Bordeaux–Mérignac Airport",
       "lat": 44.82865,
@@ -655,6 +1843,33 @@
           "lengthFt": 7923,
           "elevationFt": 160,
           "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFBH",
+      "name": "La Rochelle Île de Ré Airport",
+      "lat": 46.179199,
+      "lon": -1.19528,
+      "elevationFt": 74,
+      "runways": [
+        {
+          "ident": "09",
+          "lat": 46.179699,
+          "lon": -1.21101,
+          "headingDeg": 93,
+          "lengthFt": 7398,
+          "elevationFt": 59,
+          "displacedThresholdFt": 1033
+        },
+        {
+          "ident": "27",
+          "lat": 46.178799,
+          "lon": -1.18181,
+          "headingDeg": 273,
+          "lengthFt": 7398,
+          "elevationFt": 74,
+          "displacedThresholdFt": 1532
         }
       ]
     },
@@ -704,6 +1919,141 @@
       ]
     },
     {
+      "icao": "LFBP",
+      "name": "Pau Pyrénées Airport",
+      "lat": 43.380001,
+      "lon": -0.418611,
+      "elevationFt": 616,
+      "runways": [
+        {
+          "ident": "13",
+          "lat": 43.387699,
+          "lon": -0.433261,
+          "headingDeg": 125,
+          "lengthFt": 8202,
+          "elevationFt": 581,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "31",
+          "lat": 43.3745,
+          "lon": -0.408242,
+          "headingDeg": 305,
+          "lengthFt": 8202,
+          "elevationFt": 616,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFBZ",
+      "name": "Biarritz Pays Basque airport",
+      "lat": 43.468372,
+      "lon": -1.523223,
+      "elevationFt": 245,
+      "runways": [
+        {
+          "ident": "09",
+          "lat": 43.468201,
+          "lon": -1.53723,
+          "headingDeg": 89,
+          "lengthFt": 7382,
+          "elevationFt": 242,
+          "displacedThresholdFt": 656
+        },
+        {
+          "ident": "27",
+          "lat": 43.468498,
+          "lon": -1.50942,
+          "headingDeg": 269,
+          "lengthFt": 7382,
+          "elevationFt": 219,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFKB",
+      "name": "Bastia-Poretta International airport",
+      "lat": 42.5527,
+      "lon": 9.48373,
+      "elevationFt": 26,
+      "runways": [
+        {
+          "ident": "16",
+          "lat": 42.563499,
+          "lon": 9.47919,
+          "headingDeg": 163,
+          "lengthFt": 8266,
+          "elevationFt": 13,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "34",
+          "lat": 42.541801,
+          "lon": 9.48827,
+          "headingDeg": 343,
+          "lengthFt": 8266,
+          "elevationFt": 26,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFKJ",
+      "name": "Ajaccio Napoléon Bonaparte airport",
+      "lat": 41.923599,
+      "lon": 8.80292,
+      "elevationFt": 18,
+      "runways": [
+        {
+          "ident": "02",
+          "lat": 41.911598,
+          "lon": 8.79542,
+          "headingDeg": 24.9,
+          "lengthFt": 7897,
+          "elevationFt": 15,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "20",
+          "lat": 41.931301,
+          "lon": 8.80769,
+          "headingDeg": 204.9,
+          "lengthFt": 7897,
+          "elevationFt": 18,
+          "displacedThresholdFt": 744
+        }
+      ]
+    },
+    {
+      "icao": "LFLC",
+      "name": "Clermont-Ferrand Auvergne airport",
+      "lat": 45.786701,
+      "lon": 3.16917,
+      "elevationFt": 1090,
+      "runways": [
+        {
+          "ident": "08",
+          "lat": 45.784801,
+          "lon": 3.15082,
+          "headingDeg": 82,
+          "lengthFt": 9885,
+          "elevationFt": 1089,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "26",
+          "lat": 45.788601,
+          "lon": 3.18916,
+          "headingDeg": 262,
+          "lengthFt": 9885,
+          "elevationFt": 1057,
+          "displacedThresholdFt": 476
+        }
+      ]
+    },
+    {
       "icao": "LFLL",
       "name": "Lyon Saint-Exupéry Airport",
       "lat": 45.725996,
@@ -749,6 +2099,78 @@
       ]
     },
     {
+      "icao": "LFLS",
+      "name": "Grenoble Alpes Isère Airport",
+      "lat": 45.3629,
+      "lon": 5.32937,
+      "elevationFt": 1302,
+      "runways": [
+        {
+          "ident": "09",
+          "lat": 45.362999,
+          "lon": 5.30991,
+          "headingDeg": 90,
+          "lengthFt": 10007,
+          "elevationFt": 1224,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "27",
+          "lat": 45.3629,
+          "lon": 5.34884,
+          "headingDeg": 270,
+          "lengthFt": 10007,
+          "elevationFt": 1302,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFML",
+      "name": "Marseille Provence Airport",
+      "lat": 43.438088,
+      "lon": 5.2125,
+      "elevationFt": 74,
+      "runways": [
+        {
+          "ident": "13L",
+          "lat": 43.4491,
+          "lon": 5.19731,
+          "headingDeg": 133.7,
+          "lengthFt": 11483,
+          "elevationFt": 8,
+          "displacedThresholdFt": 1116
+        },
+        {
+          "ident": "31R",
+          "lat": 43.427299,
+          "lon": 5.22846,
+          "headingDeg": 313.7,
+          "lengthFt": 11483,
+          "elevationFt": 53,
+          "displacedThresholdFt": 2165
+        },
+        {
+          "ident": "13R",
+          "lat": 43.441299,
+          "lon": 5.20302,
+          "headingDeg": 134.4,
+          "lengthFt": 7776,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "31L",
+          "lat": 43.4259,
+          "lon": 5.22435,
+          "headingDeg": 314.4,
+          "lengthFt": 7776,
+          "elevationFt": 61,
+          "displacedThresholdFt": 345
+        }
+      ]
+    },
+    {
       "icao": "LFMN",
       "name": "Nice-Côte d'Azur Airport",
       "lat": 43.658401,
@@ -790,6 +2212,105 @@
           "lengthFt": 9721,
           "elevationFt": 12,
           "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFMT",
+      "name": "Montpellier-Méditerranée Airport",
+      "lat": 43.576199,
+      "lon": 3.96301,
+      "elevationFt": 17,
+      "runways": [
+        {
+          "ident": "12L",
+          "lat": 43.586102,
+          "lon": 3.95573,
+          "headingDeg": 124,
+          "lengthFt": 8530,
+          "elevationFt": 17,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "30R",
+          "lat": 43.5728,
+          "lon": 3.98222,
+          "headingDeg": 304,
+          "lengthFt": 8530,
+          "elevationFt": 6,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFOT",
+      "name": "Tours Val de Loire Airport",
+      "lat": 47.432201,
+      "lon": 0.727606,
+      "elevationFt": 357,
+      "runways": [
+        {
+          "ident": "02",
+          "lat": 47.421799,
+          "lon": 0.723408,
+          "headingDeg": 15,
+          "lengthFt": 7887,
+          "elevationFt": 351,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "20",
+          "lat": 47.442699,
+          "lon": 0.7318,
+          "headingDeg": 195,
+          "lengthFt": 7887,
+          "elevationFt": 351,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LFPB",
+      "name": "Paris-Le Bourget International Airport",
+      "lat": 48.962276,
+      "lon": 2.436539,
+      "elevationFt": 218,
+      "runways": [
+        {
+          "ident": "03",
+          "lat": 48.9487,
+          "lon": 2.42686,
+          "headingDeg": 26,
+          "lengthFt": 7858,
+          "elevationFt": 147,
+          "displacedThresholdFt": 144
+        },
+        {
+          "ident": "21",
+          "lat": 48.970501,
+          "lon": 2.44215,
+          "headingDeg": 206,
+          "lengthFt": 7858,
+          "elevationFt": 173,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "07",
+          "lat": 48.963799,
+          "lon": 2.42029,
+          "headingDeg": 69,
+          "lengthFt": 9843,
+          "elevationFt": 148,
+          "displacedThresholdFt": 985
+        },
+        {
+          "ident": "25",
+          "lat": 48.973999,
+          "lon": 2.45825,
+          "headingDeg": 249,
+          "lengthFt": 9843,
+          "elevationFt": 186,
+          "displacedThresholdFt": 2953
         }
       ]
     },
@@ -875,6 +2396,177 @@
       ]
     },
     {
+      "icao": "LFPO",
+      "name": "Paris-Orly Airport",
+      "lat": 48.729499,
+      "lon": 2.358963,
+      "elevationFt": 291,
+      "runways": [
+        {
+          "ident": "02",
+          "lat": 48.717499,
+          "lon": 2.3767,
+          "headingDeg": 18,
+          "lengthFt": 7874,
+          "elevationFt": 287,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "20",
+          "lat": 48.737999,
+          "lon": 2.38697,
+          "headingDeg": 198,
+          "lengthFt": 7874,
+          "elevationFt": 287,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "06",
+          "lat": 48.720001,
+          "lon": 2.31692,
+          "headingDeg": 62,
+          "lengthFt": 11975,
+          "elevationFt": 283,
+          "displacedThresholdFt": 984
+        },
+        {
+          "ident": "24",
+          "lat": 48.7355,
+          "lon": 2.36068,
+          "headingDeg": 242,
+          "lengthFt": 11975,
+          "elevationFt": 284,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "07",
+          "lat": 48.719398,
+          "lon": 2.35859,
+          "headingDeg": 74,
+          "lengthFt": 10892,
+          "elevationFt": 277,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "25",
+          "lat": 48.727402,
+          "lon": 2.40207,
+          "headingDeg": 254,
+          "lengthFt": 10892,
+          "elevationFt": 287,
+          "displacedThresholdFt": 1427
+        }
+      ]
+    },
+    {
+      "icao": "LFQQ",
+      "name": "Lille Airport",
+      "lat": 50.566564,
+      "lon": 3.102429,
+      "elevationFt": 157,
+      "runways": [
+        {
+          "ident": "08",
+          "lat": 50.562901,
+          "lon": 3.08301,
+          "headingDeg": 78,
+          "lengthFt": 9268,
+          "elevationFt": 157,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "26",
+          "lat": 50.568501,
+          "lon": 3.12223,
+          "headingDeg": 258,
+          "lengthFt": 9268,
+          "elevationFt": 132,
+          "displacedThresholdFt": 918
+        }
+      ]
+    },
+    {
+      "icao": "LFRB",
+      "name": "Brest Bretagne airport",
+      "lat": 48.447899,
+      "lon": -4.41854,
+      "elevationFt": 325,
+      "runways": [
+        {
+          "ident": "07R",
+          "lat": 48.443401,
+          "lon": -4.43835,
+          "headingDeg": 71,
+          "lengthFt": 10171,
+          "elevationFt": 289,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "25L",
+          "lat": 48.452301,
+          "lon": -4.39869,
+          "headingDeg": 251,
+          "lengthFt": 10171,
+          "elevationFt": 312,
+          "displacedThresholdFt": 984
+        }
+      ]
+    },
+    {
+      "icao": "LFRG",
+      "name": "Deauville Normandie airport",
+      "lat": 49.365237,
+      "lon": 0.154481,
+      "elevationFt": 479,
+      "runways": [
+        {
+          "ident": "12",
+          "lat": 49.370499,
+          "lon": 0.138714,
+          "headingDeg": 117,
+          "lengthFt": 8366,
+          "elevationFt": 472,
+          "displacedThresholdFt": 1476
+        },
+        {
+          "ident": "30",
+          "lat": 49.3601,
+          "lon": 0.169933,
+          "headingDeg": 297,
+          "lengthFt": 8366,
+          "elevationFt": 466,
+          "displacedThresholdFt": 1378
+        }
+      ]
+    },
+    {
+      "icao": "LFRS",
+      "name": "Nantes Atlantique Airport",
+      "lat": 47.153198,
+      "lon": -1.61073,
+      "elevationFt": 90,
+      "runways": [
+        {
+          "ident": "03",
+          "lat": 47.141602,
+          "lon": -1.61954,
+          "headingDeg": 28,
+          "lengthFt": 9514,
+          "elevationFt": 73,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "21",
+          "lat": 47.164799,
+          "lon": -1.6019,
+          "headingDeg": 208,
+          "lengthFt": 9514,
+          "elevationFt": 86,
+          "displacedThresholdFt": 694
+        }
+      ]
+    },
+    {
       "icao": "LFSB",
       "name": "EuroAirport Basel–Mulhouse–Freiburg",
       "lat": 47.60068,
@@ -898,6 +2590,123 @@
           "lengthFt": 12795,
           "elevationFt": 882,
           "displacedThresholdFt": 3675
+        }
+      ]
+    },
+    {
+      "icao": "LFST",
+      "name": "Strasbourg Airport",
+      "lat": 48.5383,
+      "lon": 7.62823,
+      "elevationFt": 505,
+      "runways": [
+        {
+          "ident": "05",
+          "lat": 48.5312,
+          "lon": 7.61603,
+          "headingDeg": 48.7,
+          "lengthFt": 7874,
+          "elevationFt": 503,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "23",
+          "lat": 48.545399,
+          "lon": 7.64044,
+          "headingDeg": 228.7,
+          "lengthFt": 7874,
+          "elevationFt": 491,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LGAV",
+      "name": "Athens Eleftherios Venizelos International Airport",
+      "lat": 37.936401,
+      "lon": 23.9445,
+      "elevationFt": 308,
+      "runways": [
+        {
+          "ident": "03L",
+          "lat": 37.921001,
+          "lon": 23.919201,
+          "headingDeg": 36.6,
+          "lengthFt": 12467,
+          "elevationFt": 255,
+          "displacedThresholdFt": 984
+        },
+        {
+          "ident": "21R",
+          "lat": 37.948502,
+          "lon": 23.945,
+          "headingDeg": 216.6,
+          "lengthFt": 12467,
+          "elevationFt": 282,
+          "displacedThresholdFt": 984
+        },
+        {
+          "ident": "03R",
+          "lat": 37.9235,
+          "lon": 23.9433,
+          "headingDeg": 36.6,
+          "lengthFt": 13123,
+          "elevationFt": 271,
+          "displacedThresholdFt": 984
+        },
+        {
+          "ident": "21L",
+          "lat": 37.9524,
+          "lon": 23.9704,
+          "headingDeg": 216.6,
+          "lengthFt": 13123,
+          "elevationFt": 303,
+          "displacedThresholdFt": 984
+        }
+      ]
+    },
+    {
+      "icao": "LHBP",
+      "name": "Budapest Liszt Ferenc International Airport",
+      "lat": 47.43018,
+      "lon": 19.262393,
+      "elevationFt": 495,
+      "runways": [
+        {
+          "ident": "13L",
+          "lat": 47.4454,
+          "lon": 19.2575,
+          "headingDeg": 132,
+          "lengthFt": 12162,
+          "elevationFt": 495,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "31R",
+          "lat": 47.423,
+          "lon": 19.2939,
+          "headingDeg": 312,
+          "lengthFt": 12162,
+          "elevationFt": 417,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "13R",
+          "lat": 47.4487,
+          "lon": 19.2208,
+          "headingDeg": 132,
+          "lengthFt": 9875,
+          "elevationFt": 450,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "31L",
+          "lat": 47.4305,
+          "lon": 19.2502,
+          "headingDeg": 312,
+          "lengthFt": 9875,
+          "elevationFt": 450,
+          "displacedThresholdFt": 0
         }
       ]
     },
@@ -947,6 +2756,141 @@
       ]
     },
     {
+      "icao": "LIPZ",
+      "name": "Venice Marco Polo Airport",
+      "lat": 45.505299,
+      "lon": 12.3519,
+      "elevationFt": 7,
+      "runways": [
+        {
+          "ident": "04L",
+          "lat": 45.495201,
+          "lon": 12.3356,
+          "headingDeg": 42,
+          "lengthFt": 9121,
+          "elevationFt": 7,
+          "displacedThresholdFt": 308
+        },
+        {
+          "ident": "22R",
+          "lat": 45.513699,
+          "lon": 12.3594,
+          "headingDeg": 222,
+          "lengthFt": 9121,
+          "elevationFt": 7,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "04R",
+          "lat": 45.494099,
+          "lon": 12.3377,
+          "headingDeg": 42,
+          "lengthFt": 10827,
+          "elevationFt": 7,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "22L",
+          "lat": 45.516201,
+          "lon": 12.366,
+          "headingDeg": 222,
+          "lengthFt": 10827,
+          "elevationFt": 7,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LIRF",
+      "name": "Rome–Fiumicino Leonardo da Vinci International Airport",
+      "lat": 41.804532,
+      "lon": 12.251998,
+      "elevationFt": 13,
+      "runways": [
+        {
+          "ident": "07",
+          "lat": 41.799332,
+          "lon": 12.232144,
+          "headingDeg": 70,
+          "lengthFt": 10826,
+          "elevationFt": 7,
+          "displacedThresholdFt": 1348
+        },
+        {
+          "ident": "25",
+          "lat": 41.809631,
+          "lon": 12.269483,
+          "headingDeg": 250,
+          "lengthFt": 10826,
+          "elevationFt": 5,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "16L",
+          "lat": 41.846001,
+          "lon": 12.2615,
+          "headingDeg": 163,
+          "lengthFt": 12801,
+          "elevationFt": 14,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "34R",
+          "lat": 41.812401,
+          "lon": 12.2755,
+          "headingDeg": 343,
+          "lengthFt": 12801,
+          "elevationFt": 6,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "16R",
+          "lat": 41.815498,
+          "lon": 12.2264,
+          "headingDeg": 163,
+          "lengthFt": 12801,
+          "elevationFt": 7,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "34L",
+          "lat": 41.782001,
+          "lon": 12.2404,
+          "headingDeg": 343,
+          "lengthFt": 12801,
+          "elevationFt": 8,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LIRN",
+      "name": "Naples International Airport",
+      "lat": 40.886002,
+      "lon": 14.2908,
+      "elevationFt": 294,
+      "runways": [
+        {
+          "ident": "06",
+          "lat": 40.879799,
+          "lon": 14.2775,
+          "headingDeg": 58.1,
+          "lengthFt": 8622,
+          "elevationFt": 284,
+          "displacedThresholdFt": 1309
+        },
+        {
+          "ident": "24",
+          "lat": 40.8923,
+          "lon": 14.304,
+          "headingDeg": 238.1,
+          "lengthFt": 8622,
+          "elevationFt": 223,
+          "displacedThresholdFt": 624
+        }
+      ]
+    },
+    {
       "icao": "LKPR",
       "name": "Václav Havel Airport Prague",
       "lat": 50.100874,
@@ -992,6 +2936,51 @@
       ]
     },
     {
+      "icao": "LMML",
+      "name": "Malta International Airport",
+      "lat": 35.845932,
+      "lon": 14.491546,
+      "elevationFt": 300,
+      "runways": [
+        {
+          "ident": "05",
+          "lat": 35.8475,
+          "lon": 14.4601,
+          "headingDeg": 52,
+          "lengthFt": 7785,
+          "elevationFt": 297,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "23",
+          "lat": 35.859901,
+          "lon": 14.4815,
+          "headingDeg": 232,
+          "lengthFt": 7785,
+          "elevationFt": 247,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "13",
+          "lat": 35.8564,
+          "lon": 14.4788,
+          "headingDeg": 132,
+          "lengthFt": 10991,
+          "elevationFt": 256,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "31",
+          "lat": 35.8339,
+          "lon": 14.5068,
+          "headingDeg": 312,
+          "lengthFt": 10991,
+          "elevationFt": 230,
+          "displacedThresholdFt": 620
+        }
+      ]
+    },
+    {
       "icao": "LOWW",
       "name": "Vienna International Airport",
       "lat": 48.110298,
@@ -1033,6 +3022,60 @@
           "lengthFt": 11811,
           "elevationFt": 586,
           "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "LPPR",
+      "name": "Francisco de Sá Carneiro Airport",
+      "lat": 41.2481,
+      "lon": -8.68139,
+      "elevationFt": 228,
+      "runways": [
+        {
+          "ident": "17",
+          "lat": 41.263302,
+          "lon": -8.68524,
+          "headingDeg": 172.8,
+          "lengthFt": 11417,
+          "elevationFt": 151,
+          "displacedThresholdFt": 984
+        },
+        {
+          "ident": "35",
+          "lat": 41.232498,
+          "lon": -8.6772,
+          "headingDeg": 352.8,
+          "lengthFt": 11417,
+          "elevationFt": 226,
+          "displacedThresholdFt": 492
+        }
+      ]
+    },
+    {
+      "icao": "LPPT",
+      "name": "Lisbon Humberto Delgado Airport",
+      "lat": 38.7813,
+      "lon": -9.13592,
+      "elevationFt": 374,
+      "runways": [
+        {
+          "ident": "02",
+          "lat": 38.765678,
+          "lon": -9.144302,
+          "headingDeg": 22,
+          "lengthFt": 12500,
+          "elevationFt": 331,
+          "displacedThresholdFt": 290
+        },
+        {
+          "ident": "20",
+          "lat": 38.797313,
+          "lon": -9.127376,
+          "headingDeg": 202,
+          "lengthFt": 12500,
+          "elevationFt": 347,
+          "displacedThresholdFt": 1960
         }
       ]
     },
@@ -1096,6 +3139,222 @@
           "lengthFt": 12139,
           "elevationFt": 1388,
           "displacedThresholdFt": 1542
+        }
+      ]
+    },
+    {
+      "icao": "LTFM",
+      "name": "İstanbul Airport",
+      "lat": 41.274874,
+      "lon": 28.732136,
+      "elevationFt": 325,
+      "runways": [
+        {
+          "ident": "09",
+          "lat": 41.253693,
+          "lon": 28.766272,
+          "headingDeg": 89,
+          "lengthFt": 9250,
+          "elevationFt": 274,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "27",
+          "lat": 41.254063,
+          "lon": 28.800018,
+          "headingDeg": 269,
+          "lengthFt": 9250,
+          "elevationFt": 274,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "16L",
+          "lat": 41.298599,
+          "lon": 28.7092,
+          "headingDeg": 174,
+          "lengthFt": 12303,
+          "elevationFt": 218,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "34R",
+          "lat": 41.2649,
+          "lon": 28.7099,
+          "headingDeg": 354,
+          "lengthFt": 12303,
+          "elevationFt": 325,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "16R",
+          "lat": 41.298599,
+          "lon": 28.706751,
+          "headingDeg": 174,
+          "lengthFt": 12303,
+          "elevationFt": 218,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "34L",
+          "lat": 41.264839,
+          "lon": 28.707411,
+          "headingDeg": 354,
+          "lengthFt": 12303,
+          "elevationFt": 325,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "17L",
+          "lat": 41.298828,
+          "lon": 28.727039,
+          "headingDeg": 174,
+          "lengthFt": 13451,
+          "elevationFt": 202,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "35R",
+          "lat": 41.261921,
+          "lon": 28.72776,
+          "headingDeg": 354,
+          "lengthFt": 13451,
+          "elevationFt": 310,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "17R",
+          "lat": 41.298801,
+          "lon": 28.724501,
+          "headingDeg": 174,
+          "lengthFt": 13451,
+          "elevationFt": 202,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "35L",
+          "lat": 41.261902,
+          "lon": 28.7253,
+          "headingDeg": 354,
+          "lengthFt": 13451,
+          "elevationFt": 310,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "18",
+          "lat": 41.289799,
+          "lon": 28.756201,
+          "headingDeg": 179,
+          "lengthFt": 10039,
+          "elevationFt": 221,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "36",
+          "lat": 41.262199,
+          "lon": 28.756701,
+          "headingDeg": 354,
+          "lengthFt": 10039,
+          "elevationFt": 309,
+          "displacedThresholdFt": 0
+        }
+      ]
+    },
+    {
+      "icao": "OMDB",
+      "name": "Dubai International Airport",
+      "lat": 25.24979,
+      "lon": 55.370992,
+      "elevationFt": 62,
+      "runways": [
+        {
+          "ident": "12L",
+          "lat": 25.264627,
+          "lon": 55.350422,
+          "headingDeg": 121,
+          "lengthFt": 14275,
+          "elevationFt": 11,
+          "displacedThresholdFt": 1476
+        },
+        {
+          "ident": "30R",
+          "lat": 25.247709,
+          "lon": 55.380932,
+          "headingDeg": 301,
+          "lengthFt": 14275,
+          "elevationFt": 32,
+          "displacedThresholdFt": 984
+        },
+        {
+          "ident": "12R",
+          "lat": 25.252836,
+          "lon": 55.364376,
+          "headingDeg": 121,
+          "lengthFt": 14590,
+          "elevationFt": 11,
+          "displacedThresholdFt": 2345
+        },
+        {
+          "ident": "30L",
+          "lat": 25.23592,
+          "lon": 55.394882,
+          "headingDeg": 301,
+          "lengthFt": 14590,
+          "elevationFt": 60,
+          "displacedThresholdFt": 433
+        }
+      ]
+    },
+    {
+      "icao": "TFFF",
+      "name": "Martinique Aimé Césaire International Airport",
+      "lat": 14.591,
+      "lon": -61.003201,
+      "elevationFt": 16,
+      "runways": [
+        {
+          "ident": "10",
+          "lat": 14.588464,
+          "lon": -61.018288,
+          "headingDeg": 80,
+          "lengthFt": 9843,
+          "elevationFt": 10,
+          "displacedThresholdFt": 0
+        },
+        {
+          "ident": "28",
+          "lat": 14.592778,
+          "lon": -60.993126,
+          "headingDeg": 260,
+          "lengthFt": 9843,
+          "elevationFt": 14,
+          "displacedThresholdFt": 984
+        }
+      ]
+    },
+    {
+      "icao": "TFFR",
+      "name": "Maryse Condé International Airport",
+      "lat": 16.265443,
+      "lon": -61.532754,
+      "elevationFt": 36,
+      "runways": [
+        {
+          "ident": "12",
+          "lat": 16.268299,
+          "lon": -61.547901,
+          "headingDeg": 101,
+          "lengthFt": 11499,
+          "elevationFt": 5,
+          "displacedThresholdFt": 1312
+        },
+        {
+          "ident": "30",
+          "lat": 16.2623,
+          "lon": -61.515701,
+          "headingDeg": 281,
+          "lengthFt": 11499,
+          "elevationFt": 32,
+          "displacedThresholdFt": 820
         }
       ]
     }

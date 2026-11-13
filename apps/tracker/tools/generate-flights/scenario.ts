@@ -27,8 +27,18 @@ export interface Scenario {
   /** Ground speeds in kt. */
   cruiseGs: number;
   approachGs: number;
+  /** Lift-off ground speed, kt (airliner when absent). */
+  rotateGs?: number;
+  /** Vertical speed in the climb, ft/min (airliner when absent). */
+  climbFpm?: number;
+  /** Pilot's hand, 0 beginner to 1 expert (0.5 when absent): spread of the touchdowns. */
+  skill?: number;
   disturbances: readonly Disturbance[];
 }
+
+/** Airliner values, used when the scenario gives none. */
+export const DEFAULT_ROTATE_GS = 160;
+export const DEFAULT_CLIMB_FPM = 2500;
 
 export const A320: AircraftInfo = {
   simulator: "replay",

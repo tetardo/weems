@@ -2,6 +2,7 @@ import { mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { uuidV7 } from "@weems/contrats";
 import { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts";
+import { type Replay, replayUntil } from "../../src/connectors/replay/replay-format.ts";
 import { AIRLINER_PARAMS } from "../../src/core/phases/params.ts";
 import { createTracker } from "../../src/runtime/create-tracker.ts";
 import type { ApiClient } from "../../src/sender/api-client.ts";
@@ -12,6 +13,8 @@ export interface PastFlight {
   scenario: Scenario;
   /** When the tracker opens the flight (UTC ms, in the past). */
   openedAtMs: number;
+  /** Stopped at this share of the replay (0 to 1) and closed as interrupted: no landing. */
+  interruptAtShare?: number;
 }
 
 export interface PastFlightOptions {
@@ -27,6 +30,15 @@ export interface PastFlightOptions {
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** The flight's replay, cut short when it is interrupted. */
+function replayOf(flight: PastFlight): Replay {
+  const replay = generateFlight(flight.scenario);
+  if (flight.interruptAtShare === undefined) return replay;
+  const first = replay.records[0]?.t ?? 0;
+  const durationMs = (replay.records.at(-1)?.t ?? first) - first;
+  return replayUntil(replay, durationMs * flight.interruptAtShare);
+}
+
 /**
  * Flies one past flight through the real tracker (core, recorder, sender) as fast as the
  * machine allows: the replay is played at once and the clock is frozen at the opening, so the
@@ -41,7 +53,7 @@ export async function flyPastFlight(
   const databasePath = join(options.workDir, `${uuidV7()}.db`);
   const { scenario } = flight;
   const tracker = createTracker({
-    connector: new ReplayConnector(generateFlight(scenario), "instant"),
+    connector: new ReplayConnector(replayOf(flight), "instant"),
     databasePath,
     api: options.api,
     session: {
@@ -55,6 +67,7 @@ export async function flyPastFlight(
   });
   try {
     await tracker.runtime.start();
+    if (flight.interruptAtShare !== undefined) tracker.runtime.interruptFlight();
     const end = Date.now() + (options.drainTimeoutMs ?? 60_000);
     await tracker.runtime.pump(Date.now());
     while (tracker.sender.pendingCount() > 0 && Date.now() < end) {

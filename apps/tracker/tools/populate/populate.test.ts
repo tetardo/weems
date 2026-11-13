@@ -4,11 +4,19 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { seededRandom } from "../generate-flights/random.ts";
 import { identities } from "./identities.ts";
-import { flyPastFlight } from "./past-flight.ts";
-import { liveScenario, scheduleOf } from "./schedule.ts";
+import { flyPastFlight, type PastFlight } from "./past-flight.ts";
+import { SIMULATED_TYPES } from "../generate-flights/aircraft-types.ts";
+import { airportOf } from "../generate-flights/airports/airport-data.ts";
+import { destinationsOf, estimatedAirborneS, scenarioOf } from "../generate-flights/routes.ts";
+import { FICTITIOUS_SIMULATOR, liveScenario, scheduleOf } from "./schedule.ts";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const NOW = Date.parse("2026-11-11T12:00:00.000Z");
+const typeOf = (flight: PastFlight) => {
+  const type = SIMULATED_TYPES.find((t) => t.aircraft.model === flight.scenario.aircraft.model);
+  if (!type) throw new Error("unknown type");
+  return type;
+};
 const window = { minFlights: 5, maxFlights: 40, fromMs: NOW - 180 * DAY_MS, nowMs: NOW };
 
 describe("fictitious identities", () => {
@@ -34,13 +42,33 @@ describe("schedule of a fictitious pilot", () => {
 
   it("flies in the past, one flight after the other, after the account was created", () => {
     for (const { flights, createdAtMs } of schedules) {
-      const times = flights.map((f) => f.openedAtMs);
-      expect(times.every((t, i) => i === 0 || t - (times[i - 1] ?? 0) >= 4 * 60 * 60 * 1000)).toBe(
-        true,
-      );
-      expect(times.every((t) => t >= window.fromMs && t < NOW)).toBe(true);
-      expect(createdAtMs).toBeLessThan(times[0] ?? NOW);
+      const landed = (f: PastFlight) =>
+        f.openedAtMs +
+        estimatedAirborneS(typeOf(f), f.scenario.departure, f.scenario.arrival) * 1000;
+      expect(
+        flights.every((f, i) => i === 0 || f.openedAtMs > landed(flights[i - 1] as PastFlight)),
+      ).toBe(true);
+      expect(flights.every((f) => f.openedAtMs >= window.fromMs && landed(f) < NOW)).toBe(true);
+      expect(createdAtMs).toBeLessThan(flights[0]?.openedAtMs ?? NOW);
     }
+  });
+
+  it("spoils a few flights (crash, teleport, slew, interrupted), never most of them", () => {
+    const flights = schedules.flatMap((s) => s.flights);
+    const spoilt = flights.filter(
+      (f) =>
+        f.interruptAtShare !== undefined ||
+        f.scenario.disturbances.some((d) => ["crash", "teleport", "slew"].includes(d)),
+    );
+    expect(spoilt.length / flights.length).toBeGreaterThan(0.02);
+    expect(spoilt.length / flights.length).toBeLessThan(0.1);
+  });
+
+  it("flies varied types and routes, declared MSFS 2024 so that they count for the ranks", () => {
+    const flights = schedules.flatMap((s) => s.flights);
+    expect(new Set(flights.map((f) => f.scenario.aircraft.model)).size).toBeGreaterThan(15);
+    expect(new Set(flights.map((f) => f.scenario.name)).size).toBeGreaterThan(300);
+    expect(flights.every((f) => f.scenario.aircraft.simulator === FICTITIOUS_SIMULATOR)).toBe(true);
   });
 
   it("chains the legs from the home airport", () => {
@@ -93,4 +121,32 @@ describe("past flight", () => {
     expect(Date.parse(closed?.body.closedAt ?? "")).toBeLessThan(flight.openedAtMs + 6 * 3600_000);
     expect(sent.some((s) => s.path.endsWith("/track"))).toBe(true);
   });
+
+  // One test per type: a whole flight each, slow on the Windows runner.
+  it.each(SIMULATED_TYPES.map((type) => [type.aircraft.model ?? "", type] as const))(
+    "closes the flight of a %s, even after a go-around",
+    async (_model, type) => {
+      const from = airportOf("LFPG");
+      const sent: string[] = [];
+      const api = { post: async (path: string) => (sent.push(path), { status: 201 }) };
+      const [to] = destinationsOf(type, from).sort(
+        (a, b) => estimatedAirborneS(type, from, a) - estimatedAirborneS(type, from, b),
+      );
+      if (!to) throw new Error("no destination");
+      const order = {
+        callsign: "WMS1",
+        seed: 1,
+        type,
+        from,
+        to,
+        disturbances: ["goAround"],
+      } as const;
+      await flyPastFlight(
+        { scenario: scenarioOf(order), openedAtMs: NOW - DAY_MS },
+        { api, workDir: join(tmpdir(), "weems-populate-test"), trackerVersion: "0.1.0" },
+      );
+      expect(sent.some((path) => path.endsWith("/close"))).toBe(true);
+    },
+    60_000,
+  );
 });
