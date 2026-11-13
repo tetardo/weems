@@ -5,7 +5,7 @@ import { type BuildOptions, build } from "esbuild";
 /**
  * Builds the launcher into dist/app: one bundle per Electron process, the window files, and a
  * package.json without dependencies (everything is bundled). The repository it was built from is
- * written into the app: it is where the launcher finds scripts/mac/ (fiche 019).
+ * written into the app: it is where the launcher finds scripts/mac/ (fiche 020).
  */
 const root = join(import.meta.dirname, "..");
 const repoRoot = join(root, "..", "..");

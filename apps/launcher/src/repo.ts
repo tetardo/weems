@@ -1,3 +1,4 @@
+import type { LinkTarget } from "./launcher-state.ts";
 import { join } from "node:path";
 
 /** Where the launcher finds Weems on the Mac: the repository it was built from. */
@@ -23,7 +24,10 @@ export const URLS = {
   site: "http://localhost:3001/fr",
 } as const;
 
-export function linkUrl(target: "site" | "console" | "traffic"): string {
+/** Pages of the console opened by the window's links. */
+const CONSOLE_PAGES = { console: "services", traffic: "traffic", activity: "activity" } as const;
+
+export function linkUrl(target: LinkTarget): string {
   if (target === "site") return URLS.site;
-  return `${URLS.console}/${target === "console" ? "services" : "traffic"}`;
+  return `${URLS.console}/${CONSOLE_PAGES[target]}`;
 }

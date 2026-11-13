@@ -1,6 +1,6 @@
 # Weems — lanceur Mac
 
-App Electron **locale** de Greg : une icône « Weems » qui démarre, arrête et redémarre la base, la console, l'API et le site, sans fenêtre Terminal ; état et journaux de chaque service ; pastille dans la barre des menus. Jamais distribuée, jamais pour le site en ligne. Choix : `../../docs/decisions/019-lanceur-mac.md` ; guide : `../../docs/developpement/demarrage-mac.md` ; maquette validée : `/mnt/project-files/lanceur-mac/`.
+App Electron **locale** de Greg : une icône « Weems » qui démarre, arrête et redémarre la base, la console, l'API et le site, sans fenêtre Terminal ; état et journaux de chaque service ; pastille dans la barre des menus. Jamais distribuée, jamais pour le site en ligne. Choix : `../../docs/decisions/020-lanceur-mac.md` ; guide : `../../docs/developpement/demarrage-mac.md` ; maquette validée : `/mnt/project-files/lanceur-mac/`.
 
 Installation sur le Mac : `bash scripts/mac/install-launcher.sh` (racine du dépôt). Essai sans installer : `pnpm --filter @weems/launcher app`.
 

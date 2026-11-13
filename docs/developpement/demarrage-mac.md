@@ -1,6 +1,6 @@
 # Démarrer et arrêter Weems sur le Mac
 
-Une seule icône, **Weems** : elle ouvre une petite application qui démarre tout, montre l'état de chaque service et ses journaux, et arrête tout quand on la quitte. Aucune fenêtre Terminal. Choix expliqué dans `../decisions/019-lanceur-mac.md` (l'app remplace les icônes Weems Start et Weems Stop de la fiche 011).
+Une seule icône, **Weems** : elle ouvre une petite application qui démarre tout, montre l'état de chaque service et ses journaux, et arrête tout quand on la quitte. Aucune fenêtre Terminal. Choix expliqué dans `../decisions/020-lanceur-mac.md` (l'app remplace les icônes Weems Start et Weems Stop de la fiche 011).
 
 ![Lanceur Mac : ce que l'app lance et à qui elle parle](../schemas/img/lanceur-mac.png)
 
@@ -23,7 +23,7 @@ Le script construit `Weems.app` (une à deux minutes), la signe localement, l'in
 | Boutons de la ligne Console | Agissent sur tout : l'API et le site dépendent de la console |
 | Tout arrêter, Tout redémarrer | En haut de la fenêtre, ou dans le menu de la barre des menus |
 | Journaux | Un onglet par service ; l'onglet Console montre aussi les étapes de démarrage et d'arrêt |
-| Ouvrir le site, Ouvrir la console, Simuler du trafic | Ouvrent le navigateur sur http://localhost:3001/fr, http://127.0.0.1:3002/services, /traffic |
+| Ouvrir le site, Ouvrir la console, Simuler du trafic, Simuler des activités | Ouvrent le navigateur sur http://localhost:3001/fr, http://127.0.0.1:3002/services, /traffic, /activity (comptes fictifs) |
 | Fermer la fenêtre | Weems continue : pastille « 🟢 Weems 4/4 » dans la barre des menus, menu pour rouvrir la fenêtre |
 | Quitter (⌘Q ou menu de la barre) | Arrête tout, base comprise, sans effacer de données |
 

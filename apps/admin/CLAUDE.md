@@ -68,6 +68,6 @@ src/
 | Commande | Rôle |
 | --- | --- |
 | `pnpm admin` (racine) | Console sur http://127.0.0.1:3002 |
-| App Mac « Weems » (`../launcher`) et scripts `scripts/mac/` | État et journaux (`GET /api/lifecycle`), tout ou un service : démarrer, arrêter, redémarrer (`POST`) ; `src/server/lifecycle.ts`, format `@weems/contrats` (`tools/local-services.ts`), fiche `../../docs/decisions/019-lanceur-mac.md` |
+| App Mac « Weems » (`../launcher`) et scripts `scripts/mac/` | État et journaux (`GET /api/lifecycle`), tout ou un service : démarrer, arrêter, redémarrer (`POST`) ; `src/server/lifecycle.ts`, format `@weems/contrats` (`tools/local-services.ts`), fiche `../../docs/decisions/020-lanceur-mac.md` |
 | `pnpm --filter @weems/api make-admin <e-mail>` | Nomme un administrateur (le compte doit exister) ; avec `pilote@weems.local`, la page Comptes s'ouvre ensuite sans connexion |
 | `pnpm check` (racine) | Types, style, structure et tests, console comprise |

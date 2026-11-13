@@ -1,4 +1,4 @@
-# 019 — Une app Mac « Weems » pour démarrer, arrêter et redémarrer, sans Terminal
+# 020 — Une app Mac « Weems » pour démarrer, arrêter et redémarrer, sans Terminal
 
 Date : 13/11/2026. Proposé par Claude, validé par Greg sur maquette (« je valide, go »). Complète la fiche 011 (démarrage par icônes) : les scripts restent, l'app remplace les deux icônes.
 

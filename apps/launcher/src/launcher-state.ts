@@ -26,7 +26,7 @@ export interface LauncherState {
   logs: string[];
 }
 
-export type LinkTarget = "site" | "console" | "traffic";
+export type LinkTarget = "site" | "console" | "traffic" | "activity";
 
 export type LauncherCommand =
   | { type: "start-all" }

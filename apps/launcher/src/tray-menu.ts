@@ -37,7 +37,7 @@ function headline(state: LauncherState): string {
   return running === 0 ? "Tout est arrêté" : `${running} sur ${state.rows.length} en marche`;
 }
 
-/** The menu under « Weems 4/4 » (maquette du lanceur, fiche 019). */
+/** The menu under « Weems 4/4 » (maquette du lanceur, fiche 020). */
 export function trayMenu(state: LauncherState): TrayItem[] {
   const nothingRuns = runningCount(state.rows) === 0;
   const idle = state.busy === null;

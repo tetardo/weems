@@ -2,7 +2,7 @@
 # Construit Weems.app (apps/launcher) sur ce Mac, l'installe dans Applications, pose un raccourci
 # « Weems » sur le bureau et met les anciennes icônes Weems Start / Weems Stop à la corbeille.
 # À relancer après une mise à jour du lanceur. Usage : bash scripts/mac/install-launcher.sh
-# Fiche docs/decisions/019-lanceur-mac.md.
+# Fiche docs/decisions/020-lanceur-mac.md.
 set -euo pipefail
 # shellcheck source=lib.sh
 source "$(dirname "$0")/lib.sh"

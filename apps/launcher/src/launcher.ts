@@ -34,7 +34,7 @@ const LABELS: Record<ServiceAction, string> = {
 const NAMES = { db: "de la base", api: "de l'API", site: "du site" } as const;
 
 /**
- * Starts, stops and restarts Weems on the Mac without Terminal (fiche 019). The launcher runs
+ * Starts, stops and restarts Weems on the Mac without Terminal (fiche 020). The launcher runs
  * scripts/mac/prepare.sh and the console itself; the console runs the database, the API and the
  * site (route /api/lifecycle), as for the icons of fiche 011.
  */
