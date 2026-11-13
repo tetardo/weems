@@ -21,8 +21,8 @@ export function LoginForm() {
         autoComplete="email"
       />
       <PasswordField label={t("password")} name="password" autoComplete="current-password" />
-      <label className="mb-5 flex min-h-11 w-fit cursor-pointer items-center gap-2.5 text-sm">
-        <input type="checkbox" name="rememberMe" defaultChecked className="size-5 accent-accent" />
+      <label className="mb-4 flex min-h-11 w-fit cursor-pointer items-center gap-2.5 text-[13.5px]">
+        <input type="checkbox" name="rememberMe" defaultChecked className="size-4 accent-accent" />
         {t("rememberMe")}
       </label>
     </AuthForm>

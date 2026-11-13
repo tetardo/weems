@@ -62,9 +62,9 @@ export function AuthForm({ path, submitLabel, children }: Props) {
           {t(`errors.${error}`)}
         </p>
       )}
-      <Button type="submit" disabled={busy} className="mt-1 h-12 w-full gap-2.5 text-base">
+      <Button type="submit" disabled={busy} className="mt-1 w-full gap-2">
         {submitLabel}
-        <ForwardIcon size={18} aria-hidden="true" />
+        <ForwardIcon size={16} aria-hidden="true" />
       </Button>
     </form>
   );

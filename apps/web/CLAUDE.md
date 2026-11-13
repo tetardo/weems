@@ -60,7 +60,8 @@ src/
                        à gauche, dès 1024 px, plan d'aéroport (auth-welcome) et cadran de cap à deux vols (route-dial, dial-ring, dial-flight ;
                        géométrie testée dans route-dial-geometry.ts) : les avions traversent lentement leur route en continu, les destinations
                        changent au survol (use-route-morph.ts ; survol à la souris seulement, rien ne bouge si l'utilisateur refuse les animations) ;
-                       à droite le formulaire (auth-field : champ à icône, mot de passe affichable ; « Rester connecté » envoie rememberMe).
+                       à droite le formulaire, resserré (auth-field : champ à icône, mot de passe affichable ; « Rester connecté » envoie rememberMe),
+                       puis l'encadré du dessous (auth-switch) : code d'invitation qui ouvre `/signup?code=…` sur la connexion, lien vers la connexion sur l'inscription.
                        Pas de « Mot de passe oublié » tant que l'API n'envoie pas d'e-mail
   home/                accueil : héros (home-hero.tsx), image de chaque thème lue sur l'API ou `public/home/default.jpg` (home-image.ts, testé), compteurs et images lus par le serveur (home-data.ts),
                        tableau des départs (departures.ts testé : phases regroupées, niveau, lignes ; departures-board.tsx, split-flap.tsx)

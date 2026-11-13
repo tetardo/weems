@@ -16,9 +16,9 @@ export function AuthField({
 }: { label: string; icon: IconComponent; end?: React.ReactNode } & InputProps) {
   const id = useId();
   return (
-    <Field label={label} htmlFor={id} className="mb-4">
-      <span className={`${CONTROL_CLASS} h-12 border-line`}>
-        <Icon size={18} aria-hidden="true" className="flex-none text-muted" />
+    <Field label={label} htmlFor={id} className="mb-3.5 text-[13.5px]">
+      <span className={`${CONTROL_CLASS} border-line text-[14px]`}>
+        <Icon size={16} aria-hidden="true" className="flex-none text-muted" />
         <input id={id} required className={BARE_INPUT_CLASS} {...input} />
         {end}
       </span>
@@ -42,9 +42,9 @@ export function PasswordField({ label, ...input }: { label: string } & InputProp
           onClick={() => setShown(!shown)}
           aria-label={t(shown ? "hidePassword" : "showPassword")}
           aria-pressed={shown}
-          className="-mr-1 grid size-9 flex-none place-items-center rounded-control text-muted hover:text-ink"
+          className="-mr-1 grid size-8 flex-none place-items-center rounded-control text-muted hover:text-ink"
         >
-          <Icon size={18} aria-hidden="true" />
+          <Icon size={16} aria-hidden="true" />
         </button>
       }
       {...input}
