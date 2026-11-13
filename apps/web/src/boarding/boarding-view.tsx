@@ -2,15 +2,16 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useStoredSwitch } from "../live/use-stored-switch.ts";
-import { DepartureIcon, SoundOffIcon, SoundOnIcon } from "../ui/icons.ts";
+import { useSound } from "../site/sound-setting.ts";
+import { DepartureIcon } from "../ui/icons.ts";
+import { AircraftChip } from "./aircraft-chip.tsx";
 import { AirportFilter } from "./airport-filter.tsx";
-import { busiestAirports, forAirport, PAGE_EVERY_MS } from "./board-rows.ts";
+import { busiestAirports, PAGE_EVERY_MS } from "./board-rows.ts";
 import { BoardingClocks } from "./boarding-clocks.tsx";
 import { BoardingTable } from "./boarding-table.tsx";
 import { BoardingTicker } from "./boarding-ticker.tsx";
 import { FlapSoundContext } from "./flap-text.tsx";
-import { useAirportFilter } from "./use-airport-filter.ts";
+import { useBoardFilters } from "./use-board-filters.ts";
 import { useBoarding } from "./use-boarding.ts";
 import { useFlapSound } from "./use-flap-sound.ts";
 
@@ -24,36 +25,17 @@ function usePageTick(): number {
   return tick;
 }
 
-/** Rattle of the flaps: off by default, the choice kept in the browser. */
-function SoundSwitch({ on, onChange }: { on: boolean; onChange: (on: boolean) => void }) {
-  const t = useTranslations("Boarding");
-  const Icon = on ? SoundOnIcon : SoundOffIcon;
-  return (
-    <button
-      type="button"
-      aria-pressed={on}
-      title={t(on ? "soundOff" : "soundOn")}
-      onClick={() => onChange(!on)}
-      className={`grid size-9 place-items-center rounded-control border border-line ${on ? "text-accent" : "text-muted"} hover:text-ink`}
-    >
-      <Icon size={17} aria-hidden="true" />
-      <span className="sr-only">{t(on ? "soundOff" : "soundOn")}</span>
-    </button>
-  );
-}
-
 /**
  * Page Boarding (spec web Boarding): the Departures and Arrivals boards of every member side by
- * side, read every 5 s, filtered by airport, pages turning every 15 s, letters turning on change.
+ * side, read every 5 s, filtered by airport and aircraft, pages turning every 15 s, letters turning on change.
  */
 export function BoardingView({ apiUrl }: { apiUrl: string }) {
   const t = useTranslations("Boarding");
   const { board, failed } = useBoarding(apiUrl);
-  const [airport, chooseAirport] = useAirportFilter();
-  const [sound, setSound] = useStoredSwitch("weems.boarding.sound", false);
-  const rattle = useFlapSound(sound);
+  const { airport, chooseAirport, aircraft, chooseAircraft, choices, shown } =
+    useBoardFilters(board);
+  const rattle = useFlapSound(useSound());
   const tick = usePageTick();
-  const shown = board && forAirport(board, airport);
 
   return (
     <FlapSoundContext value={rattle}>
@@ -68,15 +50,25 @@ export function BoardingView({ apiUrl }: { apiUrl: string }) {
             busiest={board ? busiestAirports(board) : []}
             onChoose={chooseAirport}
           />
+          {aircraft && <AircraftChip type={aircraft} onClear={() => chooseAircraft(null)} />}
           <div className="ml-auto flex items-center gap-2">
             <BoardingClocks />
-            <SoundSwitch on={sound} onChange={setSound} />
           </div>
         </div>
         {failed && <p className="text-sm text-danger">{t("late")}</p>}
         <div className="grid gap-3 xl:grid-cols-2">
-          <BoardingTable kind="departures" flights={shown?.departures ?? []} tick={tick} />
-          <BoardingTable kind="arrivals" flights={shown?.arrivals ?? []} tick={tick} />
+          <BoardingTable
+            kind="departures"
+            flights={shown?.departures ?? []}
+            tick={tick}
+            choices={choices}
+          />
+          <BoardingTable
+            kind="arrivals"
+            flights={shown?.arrivals ?? []}
+            tick={tick}
+            choices={choices}
+          />
         </div>
         {shown && <BoardingTicker board={shown} />}
         <p className="text-xs text-muted">{t("privacy")}</p>

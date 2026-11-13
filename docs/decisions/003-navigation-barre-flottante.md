@@ -63,6 +63,7 @@ Greg trouvait la barre minimale mais fade : cinq groupes encadrés côte à côt
 - « Vols en direct » devient un compteur vivant « ● N en vol » (lu sur `GET /v1/stats`) ;
 - mise à jour du 13/11/2026 (page Boarding, demande de Greg) : pastille « Boarding » ambre juste à droite du compteur, dans le même style (`site/boarding-link.tsx`, `placement: "account"`) ; l'icône seule sur téléphone, et l'entrée dans le menu ;
 - langue en **un seul bouton** (langue courante, ouvre la même page dans l'autre langue) et thème restent dans la barre ; sur téléphone, ils passent en bas du menu ;
+- mise à jour du 13/11/2026 (demande de Greg) : bouton **son** (haut-parleur) juste avant le thème, coupé par défaut, choix gardé dans le navigateur (`site/sound-toggle.tsx`, `site/sound-setting.ts`) ; il commande le son des palettes de Boarding, qui n'a plus son propre bouton ; sur téléphone, il passe en bas du menu avec la langue et le thème ;
 - photo du pilote dans un anneau dégradé ; son menu : « Mon profil » (ex-« Mon profil public »), test Free | Pro (hors production), déconnexion ;
 - visiteur : « Pilot Pro » en texte dégradé, bouton plein « Se connecter ».
 

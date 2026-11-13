@@ -67,6 +67,7 @@ function estimatedArrival(flight: LiveFlight, arrival: Airport | null): string |
 function toBoardingFlight(
   source: BoardingSource,
   findAirport: (icao: string | null) => Airport | null,
+  closed: boolean,
 ): BoardingFlight {
   const { flight, times } = source;
   const departure = findAirport(flight.departureIcao);
@@ -86,6 +87,7 @@ function toBoardingFlight(
     ...times,
     estimatedArrivalAt:
       status === "landed" || BEFORE_TAKEOFF.has(status) ? null : estimatedArrival(flight, arrival),
+    closed,
     fictitious: flight.fictitious,
   };
 }
@@ -96,7 +98,8 @@ const estimateKey = (flight: BoardingFlight) => flight.estimatedArrivalAt ?? "~"
 
 /**
  * The two boards (spec web Boarding). Departures: every flight not landed yet, newest departure
- * first. Arrivals: flights in the air by estimated time, then landed ones, newest first.
+ * first. Arrivals: flights in the air by estimated time, then landed ones, newest first. `landed`
+ * holds the flights closed after a touchdown.
  */
 export function buildBoarding(
   live: readonly BoardingSource[],
@@ -104,7 +107,10 @@ export function buildBoarding(
   findAirport: (icao: string | null) => Airport | null,
   nowMs: number,
 ): Boarding {
-  const flights = [...live, ...landed].map((source) => toBoardingFlight(source, findAirport));
+  const flights = [
+    ...live.map((source) => toBoardingFlight(source, findAirport, false)),
+    ...landed.map((source) => toBoardingFlight(source, findAirport, true)),
+  ];
   const notLanded = flights.filter((flight) => flight.status !== "landed");
   const enRoute = notLanded.filter((flight) => !BEFORE_TAKEOFF.has(flight.status));
   const down = flights.filter((flight) => flight.status === "landed");
