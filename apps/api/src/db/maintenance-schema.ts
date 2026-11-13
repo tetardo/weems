@@ -2,7 +2,7 @@ import { bigint, date, jsonb, pgTable, timestamp } from "drizzle-orm/pg-core";
 
 /**
  * Size readings of the database, one row per UTC day (the last reading of the day), recorded by
- * the API every hour and kept 13 months: the charts of the page Base de données (spec admin).
+ * the API every hour and kept 13 months: the charts of the page Base de données (console spec).
  */
 export const databaseSizeReadings = pgTable("database_size_readings", {
   day: date("day", { mode: "string" }).primaryKey(),

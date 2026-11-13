@@ -6,7 +6,7 @@ export interface RepoPaths {
   root: string;
   /** scripts/mac/<name>.sh */
   script(name: "prepare" | "console" | "stop"): string;
-  /** apps/admin/.data/console.pid: read by stop.sh to stop the console's process group. */
+  /** apps/console/.data/console.pid: read by stop.sh to stop the console's process group. */
   consolePidFile: string;
 }
 
@@ -14,7 +14,7 @@ export function repoPaths(root: string): RepoPaths {
   return {
     root,
     script: (name) => join(root, "scripts", "mac", `${name}.sh`),
-    consolePidFile: join(root, "apps", "admin", ".data", "console.pid"),
+    consolePidFile: join(root, "apps", "console", ".data", "console.pid"),
   };
 }
 

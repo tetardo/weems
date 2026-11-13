@@ -11,8 +11,8 @@ import { runSimulation } from "./simulation.ts";
  * pnpm simulate [--count 10] [--speed 1] [--stagger 30] [--seed N] [--api http://localhost:3000] [--progress]
  * Flies the J1 fleet of simulated pilots against a running API, departing at random intervals
  * averaging --stagger simulated seconds (--seed: the same intervals again).
- * Ctrl+C (or SIGTERM, sent by the admin console) closes the flights in the air as interrupted.
- * --progress: one JSON line per second, then one with the result (read by the admin console).
+ * Ctrl+C (or SIGTERM, sent by the console) closes the flights in the air as interrupted.
+ * --progress: one JSON line per second, then one with the result (read by the console).
  */
 const { values } = parseArgs({
   options: {

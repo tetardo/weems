@@ -12,7 +12,7 @@ export interface HistoryWindow {
   utcOffsetH: number;
 }
 
-/** Local departure hour: mostly evenings and mornings, as a hobby (spec admin, Activité simulée). */
+/** Local departure hour: mostly evenings and mornings, as a hobby (console spec, Activité simulée). */
 function localHour(random: () => number): number {
   const slot = random();
   if (slot < 0.3) return 7 + random() * 3; // before work

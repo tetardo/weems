@@ -1,5 +1,5 @@
 /*
- * Corner radii of the whole product (site, admin console, shared components), one value per
+ * Corner radii of the whole product (site, console, shared components), one value per
  * level of frame. Imported by the CSS of each application; Tailwind turns each token into a
  * `rounded-<name>` class, and plain CSS reads it as `var(--radius-<name>)`.
  * `static`: the variables exist even when no class uses them (the console's own CSS reads them).

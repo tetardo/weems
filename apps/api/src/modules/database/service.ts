@@ -41,7 +41,7 @@ function toTable(table: TableSize, shares: SimulatedShares): DatabaseTable {
   };
 }
 
-/** The page Base de données of the admin console (spec admin): sizes, migrations, cleanup. */
+/** The page Base de données of the console (console spec): sizes, migrations, cleanup. */
 export class DatabaseService {
   private readonly sources: DatabaseSources;
   private readonly now: () => Date;

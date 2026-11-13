@@ -1,6 +1,6 @@
 # @weems/local-process
 
-Commandes lancées sur le Mac du développeur, partagées par la console d'administration (`apps/admin`) et le lanceur Mac (`apps/launcher`).
+Commandes lancées sur le Mac du développeur, partagées par la console (`apps/console`) et le lanceur Mac (`apps/launcher`).
 
 | Fichier | Rôle |
 | --- | --- |

@@ -12,7 +12,7 @@ const STATUS_TIMEOUT_MS = 10_000;
 /** Stopping waits for the simulation in progress (its flights are closed). */
 const ACTION_TIMEOUT_MS = 180_000;
 
-/** The console's route /api/lifecycle (apps/admin), the one the scripts of scripts/mac/ call. */
+/** The console's route /api/lifecycle (apps/console), the one the scripts of scripts/mac/ call. */
 export class ConsoleClient {
   private readonly url: string;
 

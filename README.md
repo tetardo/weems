@@ -9,11 +9,11 @@
 | `apps/tracker` | Tracker de bureau pour MSFS 2020/2024 (TypeScript, Electron) | Phases, enregistrement, envoi hors ligne ; connecteur MSFS (`pnpm fly`) ; fenêtre Electron et installateur Windows ; départ et arrivée obligatoires avant tout vol ; pilotes simulés sur de vraies pistes, avec virages et pente de 3° (`pnpm simulate`) ; activité simulée de comptes fictifs (`pnpm populate`) ; trajectoire enrichie (carburant, volets, train, N1, pilote automatique, feux) |
 | `apps/api` | API centrale (Fastify, PostgreSQL, Drizzle) | Vols, trajectoires enrichies, carte en direct (SSE) avec trajets et événements, comptes et invitations, profil public, catégories d'avion, aéroports, compteurs de l'accueil (`GET /v1/stats`), images de l'accueil, catalogue des formules (`GET /v1/plans`, `GET /v1/me/plan`), carnet privé (`/v1/me/logbook/*` : résumé, vols, bandes de vol, statistiques), supervision et base de données pour la console |
 | `apps/web` | Site (Next.js), français et anglais | Accueil public (tableau des départs), Découvrir, Fonctionnalités (générée depuis le catalogue), Offres et tableau comparatif, carte en direct `/live` publique ; pour le pilote : Mon carnet de bord (Résumé, Vols, Statistiques, Ma page publique), Mes vols et page de vol, réglages du profil ; profils publics `/pilots/<nom>` référencés ; une seule barre flottante sur tout le site |
-| `apps/admin` | Console d'administration locale (Next.js, jamais déployée) | Supervision (accueil), Services, Trafic simulé, Activité simulée (comptes fictifs), Comptes et invitations, Personnalisation (images de l'accueil), Librairies (versions, alertes), Base de données (tailles, migrations, sauvegardes, nettoyage) |
+| `apps/console` | Console locale (Next.js, jamais déployée) | Supervision (accueil), Services, Trafic simulé, Activité simulée (comptes fictifs), Comptes et invitations, Personnalisation (images de l'accueil), Librairies (versions, alertes), Base de données (tailles, migrations, sauvegardes, nettoyage) |
 | `apps/launcher` | App Mac « Weems » (Electron, locale) | Démarrer, arrêter, redémarrer la base, la console, l'API et le site sans Terminal ; journaux ; pastille dans la barre des menus (fiche 020) |
 | `packages/contrats` | Formats échangés entre le tracker, l'API et le site (Zod) | En place |
 | `packages/local-process` | Commandes lancées sur le Mac (groupe de processus, journaux), communes à la console et au lanceur | En place |
-| `packages/ui` | Composants React communs au site et à la console d'administration (formulaires du modèle C, fiche 008 ; bouton ; jetons d'arrondi, fiche 014) | En place |
+| `packages/ui` | Composants React communs au site et à la console (formulaires du modèle C, fiche 008 ; bouton ; jetons d'arrondi, fiche 014) | En place |
 | `packages/notation` | Règles et calcul de la note, communs au tracker et à l'API | À écrire avec un pilote |
 | `docs/` | Cadrage, cahiers des charges, décisions (`docs/decisions/`), revues, schémas | Voir « Documents clés » |
 
@@ -27,7 +27,7 @@ flowchart LR
   api <--> db[("PostgreSQL<br/>Docker")]
   site["Site :3001<br/>apps/web"] -->|"lecture, connexion,<br/>direct SSE"| api
   navigateur["Navigateur"] --> site
-  console["Console :3002<br/>apps/admin<br/>(locale)"] -->|"/v1/admin/*,<br/>/v1/dev/*"| api
+  console["Console :3002<br/>apps/console<br/>(locale)"] -->|"/v1/admin/*,<br/>/v1/dev/*"| api
   console -->|"lance et arrête"| api
   console -->|"lance et arrête"| site
   contrats["packages/contrats"] -.-> tracker
@@ -62,7 +62,7 @@ L'index complet de `docs/`, avec l'état de chaque document, est dans [docs/READ
 - Site : [site minimal (J2)](docs/cahiers-des-charges/web/spec-J2-site-minimal.md), [accueil](docs/cahiers-des-charges/web/spec-J4-accueil.md), [personnalisation de l'accueil](docs/cahiers-des-charges/web/spec-J4-personnalisation.md), [carnet de vol privé](docs/cahiers-des-charges/web/spec-carnet-prive.md), [profil public](docs/cahiers-des-charges/spec-J4-profil-public.md), [catégories d'avion](docs/cahiers-des-charges/spec-J4-categories-avion.md)
 - Carte en direct : [trajets et progression](docs/cahiers-des-charges/web/spec-J4-trajectoire-direct.md), [pilote, survol, vol suivi et enrichissements](docs/cahiers-des-charges/web/spec-J4-direct-pilote.md), [montée en charge](docs/cahiers-des-charges/api/spec-J4-montee-en-charge-direct.md)
 - Offres et Fonctionnalités : [fiche 015 — catalogue des formules](docs/decisions/015-catalogue-des-formules.md)
-- [Console d'administration](docs/cahiers-des-charges/admin/spec-admin.md) : Supervision, Services, Trafic, Activité, Comptes, Personnalisation, Librairies, Base de données
+- [Console](docs/cahiers-des-charges/console/spec-console.md) : Supervision, Services, Trafic, Activité, Comptes, Personnalisation, Librairies, Base de données
 - Tracker : [cahier des charges](docs/cahiers-des-charges/tracker/CDC-Tracker.md) (exigences, contrat avec l'API, lots T0 à T4), [architecture interne](docs/cahiers-des-charges/tracker/architecture-interne.md), [spécification T0](docs/cahiers-des-charges/tracker/spec-T0.md), [référence MSFS](apps/tracker/CLAUDE.md)
 
 **Suivi et alpha**
@@ -111,7 +111,7 @@ flowchart LR
 | --- | --- | --- |
 | 1. Base et API | `docker compose -f apps/api/docker-compose.yml up -d db` puis `pnpm --filter @weems/api dev` | http://localhost:3000/v1/health ; documentation sur http://localhost:3000/docs |
 | 2. Site | `pnpm --filter @weems/web dev` | http://localhost:3001, carte en direct sur http://localhost:3001/live |
-| 3. Console d'administration | `pnpm admin` | http://127.0.0.1:3002 ; l'API et le site y apparaissent « Lancés hors console », c'est normal |
+| 3. Console | `pnpm console` | http://127.0.0.1:3002 ; l'API et le site y apparaissent « Lancés hors console », c'est normal |
 | 4. Premier administrateur (une seule fois, API lancée) | `pnpm --filter @weems/api make-admin pilote@weems.local` | La page Comptes de la console s'ouvre ensuite sans connexion : elle se connecte seule avec le compte de développement `pilote@weems.local` (hors production seulement) |
 
 Les migrations de la base sont appliquées au démarrage de l'API (`WEEMS_MIGRATE_ON_START=true` dans `apps/api/.env`) ; sinon `pnpm --filter @weems/api db:migrate`, aussi proposé par la page Base de données de la console. La console peut aussi démarrer elle-même la base, l'API et le site depuis sa page Services.
@@ -131,7 +131,7 @@ Pièges connus :
 | `pnpm structure` | Frontières entre modules, code dupliqué, code inutilisé |
 | `pnpm test` | Tests de toutes les applications et de tous les paquets, et le test de bout en bout `e2e/` (tracker → API → base) ; base `weems_test` nécessaire |
 | `pnpm test:j1` · `pnpm test:j2` · `pnpm test:j3` · `pnpm test:tracker-app` | Tests de sortie des jalons et de l'application tracker (plus longs, navigateur sans écran pour le site) ; base `weems_test` nécessaire. En CI, J1 ne tourne sur une PR que si elle touche la chaîne tracker → API → direct, et toujours sur main et chaque nuit (fiche 013) |
-| `pnpm admin` | Console d'administration sur http://127.0.0.1:3002 : services, trafic simulé, comptes et invitations |
+| `pnpm console` | Console sur http://127.0.0.1:3002 : services, trafic simulé, comptes et invitations |
 | `pnpm --filter @weems/tracker simulate --count 10 --speed 10` | Pilotes simulés sur la carte en direct (API lancée) |
 | `pnpm --filter @weems/tracker populate create` | Comptes fictifs et leurs vols passés, ou vols en direct (`live`) : aussi depuis la page Activité de la console (fiche 011) |
 | `pnpm --filter @weems/tracker fly` | Vol réel depuis MSFS (PC Windows, voir le guide PC) |
@@ -156,7 +156,7 @@ Détail dans [Lots et feuille de route](docs/cadrage/04-lots-et-feuille-de-route
 | J1 | 10 pilotes simulés suivis sur la carte en direct | Mac | Fusionné |
 | J2 | Premier vrai vol affiché sur le site | Mac + PC Windows | Fusionné ; restent les 10 vols de référence sur PC |
 | J3 | Alpha fermée, 5 pilotes | Serveur de Greg | Fonctions fusionnées ; critère de sortie en attente de la mise en ligne (reportée, tout se fait en local pour l'instant) |
-| J4 | Bêta, environ 50 pilotes, Store limité | Production | En cours, en local : fusionnés la montée en charge du direct, le profil public, les catégories d'avion, la carte en direct enrichie, l'accueil public, la console d'administration (8 pages), les formules et les pages Offres, Découvrir et Fonctionnalités, le carnet privé (Résumé, Vols, Statistiques). À faire : Objectifs du carnet, débriefing, mise en ligne |
+| J4 | Bêta, environ 50 pilotes, Store limité | Production | En cours, en local : fusionnés la montée en charge du direct, le profil public, les catégories d'avion, la carte en direct enrichie, l'accueil public, la console (8 pages), les formules et les pages Offres, Découvrir et Fonctionnalités, le carnet privé (Résumé, Vols, Statistiques). À faire : Objectifs du carnet, débriefing, mise en ligne |
 | J5 | Version 1.0 publique sur le Store | Production | À venir |
 
 Ensuite : lot 2 abonnement pilote (catalogue des formules et cartes Pilot Pro déjà en place, sans paiement), lot 3 gestion de compagnie, lot 4 app iPad.

@@ -27,7 +27,7 @@ const typed = (scope: FastifyInstance) => scope.withTypeProvider<ZodTypeProvider
 type App = ReturnType<typeof typed>;
 
 /**
- * Pages Codes of the admin console: batches of single codes, their CSV, cancelling, and the
+ * Pages Codes of the console: batches of single codes, their CSV, cancelling, and the
  * ambassadors with their shared code and photo. Administrators only (guards.admin).
  */
 export function registerAdminOfferRoutes(

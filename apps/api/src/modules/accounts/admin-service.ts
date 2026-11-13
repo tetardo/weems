@@ -70,7 +70,7 @@ function toAccount(account: AccountRecord, { flights, handles, plans }: Director
   };
 }
 
-/** Admin console, page Comptes (spec admin): list, invite, change a role, disable. */
+/** Console, page Comptes (console spec): list, invite, change a role, disable. */
 export class AdminAccountsService {
   private readonly repository: AdminAccountsRepository;
   private readonly accounts: AccountsService;

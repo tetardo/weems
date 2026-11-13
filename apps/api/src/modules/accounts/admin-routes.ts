@@ -28,7 +28,7 @@ interface Base {
 }
 
 /**
- * Routes /v1/admin/*, for the local admin console (spec admin, page Comptes).
+ * Routes /v1/admin/*, for the local console (console spec, page Comptes).
  * Administrators only, logged in with a session cookie (guards.admin).
  */
 export function registerAdminAccountRoutes(

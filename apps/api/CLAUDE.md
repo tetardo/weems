@@ -18,13 +18,13 @@ Squelette J0 en place : vols (ouverture, événements, positions, clôture, rele
 | Page d'un vol en cours (`GET /v1/live/flights/{id}/trail`) | `../../docs/cahiers-des-charges/web/spec-vol-en-cours.md` |
 | Comptes, connexion du site et du tracker (J3) | `../../docs/cahiers-des-charges/spec-J3-alpha-fermee.md` |
 | Profil public du pilote (J4) | `../../docs/cahiers-des-charges/spec-J4-profil-public.md` |
-| Comptes vus par la console d'administration (rôles, désactivation, invitations) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, fiche `../../docs/decisions/009-console-admin-locale.md` |
+| Comptes vus par la console (rôles, désactivation, invitations) | `../../docs/cahiers-des-charges/console/spec-console.md`, fiche `../../docs/decisions/009-console-admin-locale.md` |
 | Accueil : compteurs et images de fond | `../../docs/cahiers-des-charges/web/spec-J4-accueil.md`, `../../docs/cahiers-des-charges/web/spec-J4-personnalisation.md` |
 | Offre fondateurs, codes d'offre, ambassadeurs (`modules/founders`, `modules/offers`) | `../../docs/cahiers-des-charges/web/spec-offre-fondateurs.md`, fiche `../../docs/decisions/017-offre-fondateurs-hors-catalogue.md` |
 | Formules et catalogue (`modules/plans`) | `../../docs/cadrage/05-formules-abonnement.md`, fiche `../../docs/decisions/015-catalogue-des-formules.md`, section 12 des règles de développement |
 | Grades des pilotes (`modules/ranks`) | `../../docs/cahiers-des-charges/web/spec-grades-des-pilotes.md`, fiche `../../docs/decisions/018-grades-heures-et-vols-valides.md` |
 | Carnet privé (`modules/logbook`) | `../../docs/cahiers-des-charges/web/spec-carnet-prive.md` ; critères provisoires des repères : `../../docs/suivi/a-voir-avec-houssine.md` |
-| Supervision et base de données (`modules/supervision`, `modules/database`) | `../../docs/cahiers-des-charges/admin/spec-admin.md`, sections « Page Supervision » et « Page Base de données » |
+| Supervision et base de données (`modules/supervision`, `modules/database`) | `../../docs/cahiers-des-charges/console/spec-console.md`, sections « Page Supervision » et « Page Base de données » |
 | Ce que le tracker envoie | `../../docs/cahiers-des-charges/tracker/CDC-Tracker.md` (section « Contrat avec l'API ») |
 | Formats des messages | `../../packages/contrats` (source unique, ne jamais les redéfinir ici) |
 | Calcul de la note | `../../packages/notation` (partagé avec le tracker, ne jamais le dupliquer ici ; encore vide : critères à fixer avec un pilote) |
@@ -95,13 +95,13 @@ docker-compose.yml
 - Hors production, le jeton de développement `Authorization: Bearer dev-token` reste accepté (`pnpm simulate`, `pnpm fly`) ; ses vols appartiennent au pilote de développement, qui peut se connecter au site avec `pilote@weems.local` / `weems-dev-password`.
 - Hors production seulement, comptes fictifs (fiche `../../docs/decisions/011-activite-simulee-comptes-fictifs.md`) : `POST|GET|DELETE /v1/dev/fictitious-pilots` (`modules/accounts/fictitious-routes.ts`) crée, compte ou supprime tous les comptes marqués `users.fictitious` (e-mail `@fictif.weems.local`, mot de passe commun `weems-fictif`). Le jeton `dev-token:<id>` vole au nom d'un compte fictif actif ; tout autre identifiant est refusé (401). Utilisé par `pnpm populate`.
 - Hors production seulement, `GET /v1/dev/metrics` donne le retard de la boucle d'événements, la mémoire, le nombre de spectateurs et de vols en direct (`modules/live/dev-routes.ts`, lu par `pnpm load`, spec J4 montée en charge).
-- Hors production seulement, `DELETE /v1/flights` supprime tous les vols du pilote connecté, avec événements, trajectoire et vérification (`modules/flights/dev-routes.ts`, bouton du site en `pnpm dev`) ; avec `?simulator=replay`, seulement les vols simulés (console d'administration, `pnpm load`), jamais les vrais vols de `pnpm fly`. `GET /v1/dev/flight-counts` compte les vols simulés et réels. En production ces routes n'existent pas : un vol réel n'est jamais effacé (EF-14).
+- Hors production seulement, `DELETE /v1/flights` supprime tous les vols du pilote connecté, avec événements, trajectoire et vérification (`modules/flights/dev-routes.ts`, bouton du site en `pnpm dev`) ; avec `?simulator=replay`, seulement les vols simulés (console, `pnpm load`), jamais les vrais vols de `pnpm fly`. `GET /v1/dev/flight-counts` compte les vols simulés et réels. En production ces routes n'existent pas : un vol réel n'est jamais effacé (EF-14).
 
-## Administration (console locale `apps/admin`)
+## Administration (console locale `apps/console`)
 
 - Rôles `pilot` et `admin` (`users.role`) ; une invitation porte le rôle donné à l'inscription. Invitations valables 14 jours, renouvelables (nouveau code), annulables ; une invitation expirée est refusée à l'inscription.
 - Routes `/v1/admin/*` (`modules/accounts/admin-routes.ts`, garde `guards.admin`) : session par cookie d'un administrateur, 401 sans session, 403 pour un pilote ; le jeton de développement n'y donne pas accès. Un administrateur ne change jamais son propre compte ; le dernier administrateur actif garde son rôle.
 - Désactiver un compte (`users.disabled_at`) supprime ses sessions et ses jetons du tracker ; `PilotIdentifier` refuse ensuite ses jetons d'accès déjà émis et la connexion est refusée (403). Ses vols restent ; réactivable.
-- Hors production, l'origine de la console (`WEEMS_ADMIN_URL`, http://127.0.0.1:3002) est autorisée à se connecter.
+- Hors production, l'origine de la console (`WEEMS_CONSOLE_URL`, http://127.0.0.1:3002) est autorisée à se connecter.
 
 En-tête obligatoire du tracker : `Weems-Client: tracker/0.1.0`.

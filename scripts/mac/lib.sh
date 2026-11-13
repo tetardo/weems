@@ -5,8 +5,8 @@
 WEEMS_REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WEEMS_COMPOSE="$WEEMS_REPO/apps/api/docker-compose.yml"
 WEEMS_CONSOLE_URL="http://127.0.0.1:3002"
-# Group of `pnpm admin` started by start.sh, and the pid of start.sh itself.
-WEEMS_RUN_DIR="$WEEMS_REPO/apps/admin/.data"
+# Group of `pnpm console` started by start.sh, and the pid of start.sh itself.
+WEEMS_RUN_DIR="$WEEMS_REPO/apps/console/.data"
 WEEMS_START_PID_FILE="$WEEMS_RUN_DIR/start.pid"
 WEEMS_CONSOLE_PID_FILE="$WEEMS_RUN_DIR/console.pid"
 
@@ -33,7 +33,7 @@ compose() { docker compose -f "$WEEMS_COMPOSE" "$@"; }
 
 console_answers() { curl -fs -o /dev/null --max-time 2 "$WEEMS_CONSOLE_URL/services"; }
 
-# POST to the console (route apps/admin/src/app/api/lifecycle). Long: stopping waits for the simulation.
+# POST to the console (route apps/console/src/app/api/lifecycle). Long: stopping waits for the simulation.
 # On failure, prints the console's message (e.g. a port held by another program).
 console_action() {
   local answer status

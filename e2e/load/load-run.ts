@@ -24,7 +24,7 @@ export interface LoadOptions {
    * it shares the development pilot with the other test files running at the same time.
    */
   clearFlights?: boolean;
-  /** Stops the run early (Ctrl+C, admin console): flights closed as interrupted, report kept. */
+  /** Stops the run early (Ctrl+C, console): flights closed as interrupted, report kept. */
   signal?: AbortSignal;
 }
 

@@ -30,7 +30,7 @@ export interface SimulationOptions {
    * nothing is sent: a short load test at ×1 would otherwise show no flight at all.
    */
   skipBoarding?: boolean;
-  /** Stops every replay and closes the flights in the air as interrupted (admin console). */
+  /** Stops every replay and closes the flights in the air as interrupted (console). */
   signal?: AbortSignal;
   /** Called after each sending round. */
   onProgress?: (progress: SimulationProgress) => void;

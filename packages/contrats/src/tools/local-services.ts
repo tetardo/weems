@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**
- * Route /api/lifecycle of the admin console, called on the Mac by the scripts of scripts/mac/ and by
+ * Route /api/lifecycle of the console, called on the Mac by the scripts of scripts/mac/ and by
  * the Mac launcher (apps/launcher, fiche 020). Not an API format: a contract between two local
  * programs.
  */

@@ -53,7 +53,7 @@ export class AccountsService {
     this.now = now;
   }
 
-  /** A new invitation, valid 14 days (spec admin). Refused when the account already exists. */
+  /** A new invitation, valid 14 days (console spec). Refused when the account already exists. */
   async createInvitation(email: string, role: AccountRole = "pilot"): Promise<InvitationRecord> {
     const address = normalized(email);
     if (await this.repository.userIdByEmail(address)) {
@@ -132,7 +132,7 @@ export class AccountsService {
     return this.repository.statusOf(userId);
   }
 
-  /** A disabled account cannot open a session (spec admin). */
+  /** A disabled account cannot open a session (console spec). */
   async checkLogin(userId: string): Promise<void> {
     if ((await this.repository.statusOf(userId))?.disabledAt) {
       throw forbidden("This account is disabled.");

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { UtcTimestamp } from "./common.ts";
 
 /**
- * GET /v1/admin/supervision: the page Supervision of the admin console (spec admin).
+ * GET /v1/admin/supervision: the page Supervision of the console (console spec).
  * "Real" leaves out the fictitious accounts and the simulated flights (simulator "replay" or
  * flown by a fictitious account); those are counted apart.
  */

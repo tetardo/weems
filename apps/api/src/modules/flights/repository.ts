@@ -190,7 +190,7 @@ export class FlightsRepository {
     return row?.n ?? 0;
   }
 
-  /** Number of flights of each pilot (admin console). */
+  /** Number of flights of each pilot (console). */
   async countByPilot(): Promise<Map<string, number>> {
     const rows = await this.db
       .select({ pilotId: flights.pilotId, n: count() })

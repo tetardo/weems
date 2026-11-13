@@ -233,7 +233,7 @@ export class FlightsService {
     for (const flightId of deleted) this.live.closed(flightId);
   }
 
-  /** Development only: the caller's simulated and real flights (admin console). */
+  /** Development only: the caller's simulated and real flights (console). */
   async devCounts(caller: Caller): Promise<DevFlightCounts> {
     const bySimulator = await this.repository.countBySimulator(caller.pilotId);
     let simulated = 0;
@@ -250,7 +250,7 @@ export class FlightsService {
     return this.repository.countAll();
   }
 
-  /** Number of flights of each pilot (admin console, FlightCounter of the accounts module). */
+  /** Number of flights of each pilot (console, FlightCounter of the accounts module). */
   countByPilot(): Promise<Map<string, number>> {
     return this.repository.countByPilot();
   }

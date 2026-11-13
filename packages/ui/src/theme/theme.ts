@@ -1,5 +1,5 @@
 /**
- * Light or dark theme of the web site and the admin console (decision 003): the visitor's choice
+ * Light or dark theme of the web site and the console (decision 003): the visitor's choice
  * kept in the browser, else the system setting. Each application names its own storage key.
  */
 export type Theme = "light" | "dark";

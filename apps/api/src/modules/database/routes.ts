@@ -14,7 +14,7 @@ const security = [{ session: [] }];
 const errors = { 401: Problem, 403: Problem };
 
 /**
- * Page Base de données of the local admin console (spec admin). Administrators only, logged in
+ * Page Base de données of the local console (console spec). Administrators only, logged in
  * with a session cookie, like every /v1/admin/* route.
  */
 export function registerDatabaseRoutes(

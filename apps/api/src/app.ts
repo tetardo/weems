@@ -111,7 +111,7 @@ function registerHomePage(
   registerAdminSiteRoutes(app, site, guards);
 }
 
-/** Page Supervision of the admin console: read-only counts, health, activity, community. */
+/** Page Supervision of the console: read-only counts, health, activity, community. */
 function registerSupervision(
   app: FastifyInstance,
   deps: { database: DatabaseHandle; guards: Guards; board: LiveBoard; metrics: TrafficMetrics },
@@ -128,7 +128,7 @@ function registerSupervision(
   registerSupervisionRoutes(app, service, deps.guards);
 }
 
-/** Page Base de données of the admin console: sizes, migrations, cleanup of what is no longer needed. */
+/** Page Base de données of the console: sizes, migrations, cleanup of what is no longer needed. */
 export function createDatabaseService(
   db: Database,
   live: Pick<LiveFeed, "closed">,
@@ -205,7 +205,7 @@ function registerPlans(
   return plans;
 }
 
-/** Page Comptes of the admin console: accounts with their flights, public profile and plan. */
+/** Page Comptes of the console: accounts with their flights, public profile and plan. */
 function registerAdminAccounts(
   app: FastifyInstance,
   database: DatabaseHandle,

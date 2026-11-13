@@ -4,8 +4,8 @@ import { connectDatabase } from "../../db/client.ts";
 import { AdminAccountsRepository } from "./repository-admin.ts";
 
 /**
- * Names the first administrator: `pnpm make-admin greg@example.com` (spec admin).
- * The account must exist; later administrators are invited from the admin console.
+ * Names the first administrator: `pnpm make-admin greg@example.com` (console spec).
+ * The account must exist; later administrators are invited from the console.
  */
 const { positionals } = parseArgs({ allowPositionals: true });
 const email = positionals[0];

@@ -39,7 +39,7 @@ export function registerFounderRoutes(
   );
 }
 
-/** Page Fondateurs of the admin console: every place, confirmation and refusal. */
+/** Page Fondateurs of the console: every place, confirmation and refusal. */
 export function registerAdminFounderRoutes(
   parent: FastifyInstance,
   service: FoundersService,

@@ -86,7 +86,7 @@ export class ProfilesRepository {
     }
   }
 
-  /** Address of every public profile, by pilot (admin console). */
+  /** Address of every public profile, by pilot (console). */
   async publicHandles(): Promise<Map<string, string>> {
     const rows = await this.db
       .select({ pilotId: pilotProfiles.pilotId, handle: pilotProfiles.handle })

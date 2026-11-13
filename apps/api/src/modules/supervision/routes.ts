@@ -5,7 +5,7 @@ import type { Guards } from "../../plugins/auth.ts";
 import type { SupervisionService } from "./service.ts";
 
 /**
- * GET /v1/admin/supervision: the page Supervision of the local admin console (spec admin).
+ * GET /v1/admin/supervision: the page Supervision of the local console (console spec).
  * Administrators only, logged in with a session cookie, like every /v1/admin/* route.
  */
 export function registerSupervisionRoutes(

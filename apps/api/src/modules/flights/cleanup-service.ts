@@ -1,7 +1,7 @@
 import type { LiveFeed } from "./live-feed.ts";
 import type { FlightsCleanupRepository } from "./repository-cleanup.ts";
 
-/** Old simulated flights, for the page Base de données of the admin console (spec admin). */
+/** Old simulated flights, for the page Base de données of the console (console spec). */
 export class FlightsCleanupService {
   private readonly repository: FlightsCleanupRepository;
   private readonly live: Pick<LiveFeed, "closed">;

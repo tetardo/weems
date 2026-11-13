@@ -22,7 +22,8 @@
     "test:j3": "pnpm --filter @weems/web build && vitest run --config e2e/vitest.j3.config.ts",
     "test:tracker-app": "pnpm --filter @weems/tracker app:build && vitest run --config e2e/vitest.tracker-app.config.ts",
     "load": "node e2e/load/cli.ts",
-    "admin": "pnpm --filter @weems/admin dev"
+    "console": "pnpm --filter @weems/console dev",
+    "admin": "echo '⚠️  « pnpm admin » est devenu « pnpm console » : cet alias disparaîtra bientôt.' >&2 && pnpm console"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

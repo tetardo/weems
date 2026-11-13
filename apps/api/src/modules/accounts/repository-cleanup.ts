@@ -9,7 +9,7 @@ const expiredSessions = (now: Date) => lt(sessions.expiresAt, now);
 const expiredInvitations = (now: Date) =>
   and(isNull(invitations.usedAt), lt(invitations.expiresAt, now));
 
-/** Cleanup of the page Base de données (spec admin): what the accounts no longer need. */
+/** Cleanup of the page Base de données (console spec): what the accounts no longer need. */
 export class AccountsCleanupRepository {
   private readonly db: Database;
 

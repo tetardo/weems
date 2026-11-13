@@ -11,7 +11,7 @@ export async function registerDocs(app: FastifyInstance): Promise<void> {
       components: {
         securitySchemes: {
           bearer: { type: "http", scheme: "bearer" },
-          // Session of the site and of the admin console (Better Auth cookie).
+          // Session of the site and of the console (Better Auth cookie).
           session: { type: "apiKey", in: "cookie", name: "better-auth.session_token" },
         },
       },
