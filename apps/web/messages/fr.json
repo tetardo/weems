@@ -1236,7 +1236,6 @@
       "highlight": "Weems.",
       "lead": "Du premier vol enregistré à la direction d'une compagnie : chaque fonction, ce qu'elle vous apporte et la formule qui la contient.",
       "offers": "Voir les offres",
-      "compare": "Comparer les formules",
       "available": "{count, plural, one {# fonction disponible} other {# fonctions disponibles}}",
       "soon": "{count} bientôt",
       "plans": "{count} formules"

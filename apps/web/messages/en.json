@@ -1236,7 +1236,6 @@
       "highlight": "Weems does.",
       "lead": "From your first recorded flight to running an airline: every feature, what it brings you and the plan that includes it.",
       "offers": "See the plans",
-      "compare": "Compare the plans",
       "available": "{count, plural, one {# feature available} other {# features available}}",
       "soon": "{count} coming soon",
       "plans": "{count} plans"

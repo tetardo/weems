@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { buttonClass } from "@weems/ui";
 import { Link } from "../i18n/navigation.ts";
 import { HeroBanner } from "../ui/hero-banner.tsx";
-import { CompareIcon, DoneIcon, FeaturesIcon, PlansIcon, ProgressIcon } from "../ui/icons.ts";
+import { DoneIcon, FeaturesIcon, PlansIcon, ProgressIcon } from "../ui/icons.ts";
 import type { ThemePhotos } from "../ui/photo-background.tsx";
 
 /**
@@ -28,22 +28,13 @@ export function FeaturesBanner({ photos, catalog }: { photos: ThemePhotos; catal
         { icon: FeaturesIcon, label: t("plans", { count: catalog.plans.length }) },
       ]}
       actions={
-        <>
-          <Link
-            href="/plans"
-            className={`${buttonClass("primary")} min-h-[52px] rounded-box px-5 text-base`}
-          >
-            <PlansIcon size={20} aria-hidden="true" />
-            {t("offers")}
-          </Link>
-          <Link
-            href="/plans/compare"
-            className={`${buttonClass("ghost")} min-h-[52px] rounded-box px-5 text-base hero-glass`}
-          >
-            <CompareIcon size={20} aria-hidden="true" />
-            {t("compare")}
-          </Link>
-        </>
+        <Link
+          href="/plans"
+          className={`${buttonClass("primary")} min-h-[52px] rounded-box px-5 text-base`}
+        >
+          <PlansIcon size={20} aria-hidden="true" />
+          {t("offers")}
+        </Link>
       }
     />
   );
