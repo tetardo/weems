@@ -5,7 +5,6 @@
     "nav": {
       "discover": "Discover",
       "logbook": "My logbook",
-      "flights": "My flights",
       "live": "Live flights",
       "profile": "My profile",
       "plans": "Plans",
@@ -52,7 +51,7 @@
     "sloganBottom": "Weems keeps the logbook.",
     "lead": "MSFS flights recorded automatically, phases detected, landing scored. Free for every pilot.",
     "signup": "Create my free account",
-    "myFlights": "My flights",
+    "myLogbook": "My logbook",
     "seeLive": "See live flights",
     "board": {
       "title": "In flight · En vol",
@@ -190,9 +189,6 @@
     "connectionRestored": "Simulator reconnected"
   },
   "Flights": {
-    "title": "My flights",
-    "empty": "No flight yet. Start pnpm fly on the PC, then fly.",
-    "emptyFiltered": "No flight matches these filters.",
     "columns": {
       "date": "Date (UTC)",
       "callsign": "Callsign",
@@ -203,18 +199,6 @@
       "alerts": "Alerts",
       "touchdown": "Touchdown (ft/min)"
     },
-    "filters": {
-      "from": "From",
-      "to": "To",
-      "aircraft": "Aircraft",
-      "category": "Category",
-      "allCategories": "All",
-      "airport": "Airport (ICAO)",
-      "apply": "Filter",
-      "reset": "Show all"
-    },
-    "next": "Older flights",
-    "first": "Back to the latest",
     "apiDown": "The API does not answer ({url}). Is it running on the Mac?",
     "apiOutdated": "The API ({url}) answers in a format the site does not know: probably an older version (Docker container weems-api-1?). Stop it and start the up-to-date API with pnpm --filter @weems/api dev.",
     "deleteAll": "Delete all my flights",
@@ -222,7 +206,6 @@
     "deleteAllHint": "Development only: clears the test flights."
   },
   "Flight": {
-    "back": "My flights",
     "notFound": "This flight does not exist.",
     "header": {
       "date": "Date",
@@ -274,7 +257,6 @@
       "later": "The score comes with flight scoring."
     },
     "review": {
-      "title": "Phase check",
       "question": "Are the phases detected by the tracker right for this flight?",
       "correct": "Yes, all right",
       "wrong": "No, at least one is wrong",
@@ -283,11 +265,6 @@
       "saved": "Thanks, answer saved.",
       "error": "Answer not saved, please try again.",
       "already": "You already answered: you can change it."
-    },
-    "publicProfile": {
-      "hidden": "Hidden from your public profile",
-      "hide": "Hide from my profile",
-      "show": "Show on my profile again"
     }
   },
   "Auth": {
@@ -725,6 +702,65 @@
           "bank30": "Bank ≤ 30°",
           "notMeasured": "not measured"
         }
+      }
+    },
+    "flight": {
+      "allFlights": "All flights",
+      "neighbours": "Neighbouring flights",
+      "older": "Previous flight",
+      "newer": "Next flight",
+      "touchdownUnit": "ft/min at touchdown",
+      "map": "Route",
+      "noTrack": "This flight has no trajectory.",
+      "profile": "Altitude and speed profile",
+      "profileAside": "hover the profile or the map",
+      "phases": "Phases",
+      "phasesAside": "{count, plural, one {# phase} other {# phases}}",
+      "noPhases": "No phase recorded.",
+      "bands": "Flight bands",
+      "review": "Are the phases right?",
+      "groups": {
+        "overview": "Overview",
+        "bands": "Flight bands",
+        "landing": "Landing",
+        "logbook": "Logbook"
+      },
+      "visibility": {
+        "label": "Visible on my public page",
+        "shown": "Visitors see the route, the phases and the touchdown.",
+        "hidden": "Hidden: only you see it, in your logbook."
+      },
+      "landing": {
+        "title": "Landing",
+        "touchdown": "Touchdown",
+        "gForce": "Load factor",
+        "bounces": "Bounces",
+        "goArounds": "Go-arounds",
+        "speed": "Speed at touchdown",
+        "none": "No landing recorded."
+      },
+      "approach": {
+        "title": "Last approach",
+        "aside": "last 3 minutes",
+        "height": "Height above ground (max {top} ft)",
+        "sink": "Vertical speed (0 to {floor} ft/min)",
+        "stable": "Green zone: {from} to {to} ft/min",
+        "none": "No trajectory before the touchdown."
+      },
+      "compare": {
+        "title": "Compared with your flights",
+        "locked": "This flight against your other flights on the same aircraft: touchdown, time and rank.",
+        "aside": "{aircraft} · {count} flights",
+        "rank": "{rank, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} softest touchdown on {aircraft}.",
+        "touchdown": "Touchdown",
+        "block": "Block time",
+        "mean": "avg. {value}",
+        "none": "First flight on this aircraft: nothing to compare yet."
+      },
+      "journal": {
+        "title": "Log",
+        "aside": "{count, plural, =0 {no event} one {# event} other {# events}} · UTC",
+        "none": "No notable event."
       }
     }
   },

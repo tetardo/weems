@@ -1,50 +1,13 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
-import { getVisibility } from "../../../../../api/profile-api.ts";
-import { getFlight, getReview, getTrack } from "../../../../../api/weems-api.ts";
-import { FlightPage } from "../../../../../flight/flight-page.tsx";
-import { formatRoute } from "../../../../../format/flight-format.ts";
-import { apiFallback } from "../../../../../site/api-fallback.tsx";
+import { permanentRedirect } from "next/navigation";
+import { getPathname } from "../../../../../i18n/navigation.ts";
+import { fullFlightHref } from "../../../../../logbook/flight/full-flight-href.ts";
 
-interface Props {
+/** Old address of a flight (« Mes vols »): its full page is now in the logbook (Greg, 13/11). */
+export default async function OldFlightPage({
+  params,
+}: {
   params: Promise<{ locale: string; flightId: string }>;
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  try {
-    const flight = await getFlight((await params).flightId);
-    return {
-      title: flight
-        ? `${flight.callsign} ${formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}`
-        : "—",
-    };
-  } catch {
-    return {};
-  }
-}
-
-/** Spec site minimal: one flight, with its simplified track (about 500 points) and its review (J3). */
-export default async function FlightRoute({ params }: Props) {
+}) {
   const { locale, flightId } = await params;
-  setRequestLocale(locale);
-  try {
-    const [flight, track, review, visibility] = await Promise.all([
-      getFlight(flightId),
-      getTrack(flightId),
-      getReview(flightId),
-      getVisibility(flightId),
-    ]);
-    if (!flight) notFound();
-    return (
-      <FlightPage
-        flight={flight}
-        track={track}
-        review={review}
-        hiddenOnProfile={visibility?.hiddenOnProfile ?? null}
-      />
-    );
-  } catch (error) {
-    return apiFallback(error);
-  }
+  permanentRedirect(getPathname({ href: fullFlightHref(flightId), locale }));
 }

@@ -1,20 +1,15 @@
 import type { FlightEvent } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { utcTime } from "../format/flight-format.ts";
-import { eventValues, logEntries } from "./event-log.ts";
+import { logEntries } from "./event-log.ts";
+import { useEventSentence } from "./event-sentence.ts";
 import { Section } from "./section.tsx";
 
 /** Dated events: pauses, time acceleration, slew, teleport, aircraft change, crash… */
 export function EventLogTable({ events }: { events: readonly FlightEvent[] }) {
   const t = useTranslations("Flight.log");
-  const sentence = useTranslations("Events");
+  const text = useEventSentence();
   const entries = logEntries(events);
-  const text = (event: FlightEvent) => {
-    const values = eventValues(event);
-    if (event.type === "touchdown" && values["vs"] === undefined)
-      return sentence("touchdownUnknown");
-    return sentence(event.type, values);
-  };
   return (
     <Section title={t("title")}>
       {entries.length === 0 ? (

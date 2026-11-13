@@ -27,6 +27,7 @@ describe("landing summary", () => {
     ];
     expect(landingSummary(events)).toEqual({
       touchdownVs: -180.4,
+      at: events[2]?.at,
       bounces: 1,
       touchdowns: 3,
       goArounds: 1,

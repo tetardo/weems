@@ -1,7 +1,6 @@
 import {
   DiscoverIcon,
   FeaturesIcon,
-  FlightsIcon,
   type IconComponent,
   LiveIcon,
   LogbookIcon,
@@ -26,13 +25,12 @@ export interface MenuItem {
  * Pages of the bar (links after the logo; menu button on phones), the same on every page.
  * Decision 003: at most 5 entries for each audience; later groups (« Ma compagnie », lot 3) open a
  * menu. « Découvrir » and « Fonctionnalités » are for visitors only: a pilot already knows Weems
- * (both stay in the footer).
+ * (both stay in the footer). « Mes vols » left the bar (Greg, 13/11): every flight is in the logbook.
  */
 const MENU: readonly MenuItem[] = [
   { href: "/discover", label: "discover", icon: DiscoverIcon, audience: "visitor" },
   { href: "/features", label: "features", icon: FeaturesIcon, audience: "visitor" },
   { href: "/logbook", label: "logbook", icon: LogbookIcon, audience: "pilot" },
-  { href: "/flights", label: "flights", icon: FlightsIcon, audience: "pilot" },
   { href: "/live", label: "live", icon: LiveIcon, audience: "everyone", placement: "account" },
   { href: "/plans", label: "plans", icon: PlansIcon, audience: "everyone" },
 ];

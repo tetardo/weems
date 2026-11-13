@@ -4,6 +4,8 @@ import { touchdownVsOf } from "./event-context.ts";
 export interface LandingSummary {
   /** Vertical speed of the first touchdown of the final landing, ft/min; null if not measured. */
   touchdownVs: number | null;
+  /** Time of that touchdown. */
+  at: string;
   bounces: number;
   touchdowns: number;
   goArounds: number;
@@ -22,6 +24,7 @@ export function landingSummary(events: readonly FlightEvent[]): LandingSummary |
   if (!touchdown) return null;
   return {
     touchdownVs: touchdownVsOf(touchdown),
+    at: touchdown.at,
     bounces: final.filter((e) => e.type === "bounce").length,
     touchdowns: events.filter((e) => e.type === "touchdown").length,
     goArounds: events.filter((e) => e.type === "goAround").length,

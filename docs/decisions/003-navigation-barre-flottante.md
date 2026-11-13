@@ -51,9 +51,9 @@ Remplacé le 12/11/2026 au soir (#81) : `/logbook` est devenu le **carnet de vol
 | Public | Après le logo | À droite |
 | --- | --- | --- |
 | Visiteur | Découvrir, Fonctionnalités, Offres | « Pilot Pro » en texte dégradé (vers `/plans`), compteur « ● N en vol », bouton de langue, thème, « Se connecter » |
-| Pilote connecté | Mon carnet de bord, Mes vols, Offres | compteur « ● N en vol », bouton de langue, thème, menu du pilote (« Mon profil », test Free \| Pro hors production, déconnexion) |
+| Pilote connecté | Mon carnet de bord, Offres | compteur « ● N en vol », bouton de langue, thème, menu du pilote (« Mon profil », test Free \| Pro hors production, déconnexion) |
 
-Chaque public a 4 entrées sur 5 (« Vols en direct » compris). Source : `apps/web/src/site/menu-items.ts`.
+Le visiteur a 4 entrées sur 5, le pilote connecté 3 (« Vols en direct » compris) depuis le retrait de « Mes vols ». Source : `apps/web/src/site/menu-items.ts`.
 
 ## Mise à jour du 13/11/2026 : barre A « Épurée »
 
@@ -66,3 +66,7 @@ Greg trouvait la barre minimale mais fade : cinq groupes encadrés côte à côt
 - visiteur : « Pilot Pro » en texte dégradé, bouton plein « Se connecter ».
 
 B (pilule) a été écartée en partie parce qu'elle demandait un nouvel arrondi hors des jetons de la fiche 014.
+
+## Mise à jour du 13/11/2026 : « Mes vols » retiré
+
+Demande de Greg (« on va supprimer la page du menu principal "mes vols", elle n'a plus de raison d'être, on va intégrer tout ça dans le carnet du pilote ») : l'entrée « Mes vols » quitte la barre. Tous les vols sont dans le carnet (`/logbook/flights`), chaque vol a sa page complète dans le carnet (`/logbook/flights/{id}/full`). Les anciennes adresses `/flights` et `/flights/{id}` renvoient (redirection permanente) vers ces pages.

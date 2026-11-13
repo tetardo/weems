@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { Button, INPUT_CLASS } from "@weems/ui";
 import { type ReviewState, submitReview } from "./review-action.ts";
-import { Section } from "./section.tsx";
 
 const NOTE_CLASS = `${INPUT_CLASS} min-h-24`;
 
@@ -33,9 +32,9 @@ function PhasesChoice({ current }: { current: FlightReviewView | null }) {
 
 /**
  * "Are the phases right?" (spec J3): the alpha's exit criterion counts the flights whose phases
- * the pilot found right. Shown on closed flights only.
+ * the pilot found right. Shown on closed flights only, in a card of the full flight page.
  */
-export function ReviewPanel({
+export function ReviewForm({
   flightId,
   review,
 }: {
@@ -49,31 +48,29 @@ export function ReviewPanel({
   );
   const current = state.review;
   return (
-    <Section title={t("title")}>
-      <form action={action} className="space-y-4">
-        <p>{t("question")}</p>
-        <PhasesChoice current={current} />
-        <label className="block">
-          <span className="mb-2 block text-sm text-muted">{t("note")}</span>
-          <textarea
-            name="note"
-            maxLength={1000}
-            rows={3}
-            defaultValue={current?.note ?? ""}
-            className={NOTE_CLASS}
-          />
-        </label>
-        <div className="flex items-center gap-4">
-          <Button type="submit" disabled={pending}>
-            {t("send")}
-          </Button>
-          <span role="status" className="text-sm text-muted">
-            {state.status === "saved" && t("saved")}
-            {state.status === "error" && t("error")}
-            {state.status === "idle" && current && t("already")}
-          </span>
-        </div>
-      </form>
-    </Section>
+    <form action={action} className="space-y-4 text-[13.5px]">
+      <p className="m-0">{t("question")}</p>
+      <PhasesChoice current={current} />
+      <label className="block">
+        <span className="mb-2 block text-sm text-muted">{t("note")}</span>
+        <textarea
+          name="note"
+          maxLength={1000}
+          rows={3}
+          defaultValue={current?.note ?? ""}
+          className={NOTE_CLASS}
+        />
+      </label>
+      <div className="flex items-center gap-4">
+        <Button type="submit" disabled={pending}>
+          {t("send")}
+        </Button>
+        <span role="status" className="text-sm text-muted">
+          {state.status === "saved" && t("saved")}
+          {state.status === "error" && t("error")}
+          {state.status === "idle" && current && t("already")}
+        </span>
+      </div>
+    </form>
   );
 }

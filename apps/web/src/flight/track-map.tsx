@@ -15,6 +15,8 @@ interface Props {
   points: readonly TrackPoint[];
   selected: number | null;
   onSelect: (index: number | null) => void;
+  /** Size of the map; it fills its box on the full page of a flight. */
+  className?: string;
 }
 
 const LINES = "track";
@@ -74,7 +76,7 @@ function pointUnder(
 }
 
 /** The whole track coloured by phase; hovering a point selects it (spec site minimal). */
-export function TrackMap({ points, selected, onSelect }: Props) {
+export function TrackMap({ points, selected, onSelect, className = "h-80 md:h-[28rem]" }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const select = useRef(onSelect);
@@ -114,7 +116,7 @@ export function TrackMap({ points, selected, onSelect }: Props) {
   return (
     <div
       ref={container}
-      className="h-80 w-full overflow-hidden rounded-control border border-line md:h-[28rem]"
+      className={`w-full overflow-hidden rounded-control border border-line ${className}`}
     />
   );
 }

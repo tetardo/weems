@@ -32,7 +32,7 @@ describe("J3 phase check", () => {
     const id = await closedFlight();
     const context = await loggedInContext(stack.browser, stack.siteUrl);
     const page = await context.newPage();
-    await page.goto(`${stack.siteUrl}/fr/flights/${id}`);
+    await page.goto(`${stack.siteUrl}/fr/logbook/flights/${id}/full`);
     await page.getByLabel("Non, au moins une est fausse").check();
     await page.locator("textarea[name=note]").fill("Croisière détectée trop tôt");
     await page.getByRole("button", { name: "Envoyer" }).click();
