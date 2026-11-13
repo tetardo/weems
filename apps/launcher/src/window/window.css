@@ -196,9 +196,10 @@ h1 {
   user-select: text;
 }
 /* Services on the left (half the width), the site's counters on the right. */
+/* Cards left, services right and a bit narrower (Greg, 13/11). */
 .middle {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.35fr 1fr;
   gap: 14px;
   margin: 0 20px;
 }

@@ -8,7 +8,7 @@ const INFO: Record<RowId, { name: string; detail: string }> = {
   site: { name: "Site web", detail: "Next.js · pnpm --filter @weems/web dev" },
   console: {
     name: "Console d'administration",
-    detail: "Next.js · pnpm admin · trafic et activité simulés",
+    detail: "Next.js · pnpm admin · simulations",
   },
 };
 const PILLS: Record<Exclude<RowState, "running">, string> = {
