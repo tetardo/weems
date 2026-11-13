@@ -316,8 +316,7 @@ h3 {
 }
 
 /*
- * Photo banners (Découvrir, Fonctionnalités): the dashed route flows, the plane follows it, the
- * airports pulse. Nothing moves when the system asks for less motion.
+ * Photo banners (Découvrir, Fonctionnalités): the dashed route flows and the airports pulse. Nothing moves when the system asks for less motion.
  */
 @keyframes route-flow {
   to {

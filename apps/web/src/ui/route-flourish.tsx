@@ -5,10 +5,6 @@ const [START, END] = [
   { x: 530, y: 92 },
 ];
 
-/** A small plane pointing right (along the route: animateMotion turns it). */
-const PLANE =
-  "M-9 -1.5 L3 -1.5 L8 0 L3 1.5 L-9 1.5 Z M-1 -1.5 L-5 -8 L-2 -8 L4 -1.5 Z M-1 1.5 L-5 8 L-2 8 L4 1.5 Z M-9 -1.5 L-11 -5 L-9 -5 L-6 -1.5 Z M-9 1.5 L-11 5 L-9 5 L-6 1.5 Z";
-
 function Airport({ x, y, code }: { x: number; y: number; code: string }) {
   return (
     <g>
@@ -34,7 +30,7 @@ function Airport({ x, y, code }: { x: number; y: number; code: string }) {
 
 /**
  * Decoration of the photo banners (Découvrir, Fonctionnalités): the dashed route of the site, now
- * flowing, a plane flying it and the two airports pulsing. Decorative only (aria-hidden).
+ * flowing, and the two airports pulsing (no plane since 13/11, Greg). Decorative only (aria-hidden).
  */
 export function RouteFlourish({
   from,
@@ -64,10 +60,6 @@ export function RouteFlourish({
       />
       <Airport {...START} code={from} />
       <Airport {...END} code={to} />
-      <g className="motion-reduce:hidden">
-        <path d={PLANE} className="fill-accent" transform="scale(1.6)" />
-        <animateMotion dur="9s" repeatCount="indefinite" rotate="auto" path={ROUTE} />
-      </g>
     </svg>
   );
 }
