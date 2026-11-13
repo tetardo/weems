@@ -29,6 +29,8 @@ export interface SummaryWithEvents {
   events: FlightEvent[];
   /** Engines of the aircraft: single- or multi-engine time of the profile. */
   engineCount: number;
+  /** "replay": flight of the simulation tools, never a real one (founder offer). */
+  simulator: Simulator;
 }
 
 /** One page of flights, and the cursor of the next one (null on the last page). */
@@ -217,7 +219,8 @@ export class FlightsService {
     const events = await this.repository.eventsOf(found.map((f) => f.flightId));
     return found.map((f) => {
       const own = events.get(f.flightId) ?? [];
-      return { summary: summarize(f, own), events: own, engineCount: f.aircraft.engineCount };
+      const { engineCount, simulator } = f.aircraft;
+      return { summary: summarize(f, own), events: own, engineCount, simulator };
     });
   }
 

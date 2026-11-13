@@ -97,6 +97,44 @@ export {
 } from "./api/boarding.ts";
 export { SiteStats } from "./api/stats.ts";
 export {
+  AdminFounder,
+  AdminFounders,
+  FOUNDER_OFFER,
+  FounderFlight,
+  FounderFlightCheck,
+  FounderPlace,
+  FounderStatus,
+  MyFounder,
+  PublicFounders,
+} from "./api/founders.ts";
+export {
+  AdminCampaign,
+  AdminCampaigns,
+  CampaignKind,
+  CODE_ALPHABET,
+  MyCodes,
+  NewCodeBatch,
+  OfferMonths,
+  REDEEM_ATTEMPTS_PER_HOUR,
+  RedeemCode,
+  RedeemResult,
+  ReferralCode,
+  SINGLE_CODE_PATTERN,
+  SharedCode,
+} from "./api/offer-codes.ts";
+export {
+  AdminAmbassador,
+  AdminAmbassadors,
+  AMBASSADOR_PHOTO_MAX_BYTES,
+  AmbassadorContent,
+  AmbassadorLink,
+  AmbassadorLinkKind,
+  AmbassadorOffer,
+  AmbassadorSettings,
+  AmbassadorSlug,
+  PublicAmbassador,
+} from "./api/ambassadors.ts";
+export {
   FeatureAvailability,
   FeatureGroup,
   FeatureKey,

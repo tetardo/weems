@@ -192,6 +192,8 @@ export const PilotPage = z.object({
   hasPhoto: z.boolean(),
   /** Fictitious account of the simulated activity: the site shows a badge (development only). */
   fictitious: z.boolean(),
+  /** Confirmed founder number (offer « Pilote fondateur »); null otherwise. */
+  founderNumber: z.number().int().positive().nullable(),
   stats: PilotStats,
   charts: PilotCharts,
 });
