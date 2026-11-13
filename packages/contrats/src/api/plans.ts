@@ -27,6 +27,7 @@ export const FeatureKey = z.enum([
   "tracker",
   "liveMap",
   "boarding",
+  "liveFlightPage",
   "publicProfile",
   "pilotRanks",
   "flightHistory",

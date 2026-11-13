@@ -40,6 +40,19 @@ export const FLY_ILLUSTRATIONS = {
       </Accent>
     </>
   ),
+  // The page of a flight in progress: a card, the aircraft along its progress bar, a live dot.
+  liveFlightPage: (
+    <>
+      <Panel x={6} y={6} w={60} h={36} />
+      <path d="M12 14H34M12 34H24M30 34H40M46 34H58" strokeOpacity={0.5} />
+      <path d="M12 25H58" strokeDasharray="2 3" strokeOpacity={0.5} />
+      <Accent>
+        <path d="M12 25H40" />
+        <PlaneTop x={44} y={25} rotate={90} scale={0.5} />
+        <circle cx={58} cy={14} r={2} />
+      </Accent>
+    </>
+  ),
   // The public profile: a pilot card with wings.
   publicProfile: (
     <>

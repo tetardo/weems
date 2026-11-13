@@ -7,13 +7,18 @@ import { applyUpdate, fromSnapshot, type LiveFlights } from "./flights-store.ts"
 
 export type Connection = "connecting" | "open" | "retrying";
 
-/** Follows GET /v1/live/stream. EventSource reconnects by itself after a cut. */
+/**
+ * Follows GET /v1/live/stream. EventSource reconnects by itself after a cut. `ready`: the first
+ * snapshot arrived, so a flight missing from `flights` is really not on the map.
+ */
 export function useLiveFlights(apiUrl: string): {
   flights: LiveFlights;
   events: LiveEvents;
   connection: Connection;
+  ready: boolean;
 } {
   const [flights, setFlights] = useState<LiveFlights>(new Map());
+  const [ready, setReady] = useState(false);
   const [events, setEvents] = useState<LiveEvents>([]);
   const [connection, setConnection] = useState<Connection>("connecting");
 
@@ -25,6 +30,7 @@ export function useLiveFlights(apiUrl: string): {
       const snapshot = LiveSnapshot.parse(JSON.parse(event.data));
       setFlights(fromSnapshot(snapshot));
       setEvents(snapshot.events);
+      setReady(true);
     });
     source.addEventListener("update", (event) => {
       const update = LiveUpdate.parse(JSON.parse(event.data));
@@ -34,5 +40,5 @@ export function useLiveFlights(apiUrl: string): {
     return () => source.close();
   }, [apiUrl]);
 
-  return { flights, events, connection };
+  return { flights, events, connection, ready };
 }

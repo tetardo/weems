@@ -1,6 +1,7 @@
 import type { FlightPhase, TrackView } from "@weems/contrats";
 
-type TrackPoint = TrackView["points"][number];
+/** What the profile reads of a point: also met by the points of a flight in progress. */
+export type ProfilePoint = Pick<TrackView["points"][number], "at" | "altMsl" | "gs" | "phase">;
 
 export interface ProfileSize {
   width: number;
@@ -33,7 +34,7 @@ function path(xs: readonly number[], ys: readonly number[]): string {
 }
 
 function phaseBands(
-  points: readonly TrackPoint[],
+  points: readonly ProfilePoint[],
   xs: readonly number[],
   width: number,
 ): PhaseBand[] {
@@ -52,7 +53,10 @@ function phaseBands(
  * Vertical profile in SVG coordinates (spec site minimal): altitude and ground speed
  * against time, phases as coloured bands behind.
  */
-export function profileGeometry(points: readonly TrackPoint[], size: ProfileSize): Profile | null {
+export function profileGeometry(
+  points: readonly ProfilePoint[],
+  size: ProfileSize,
+): Profile | null {
   const [first] = points;
   const last = points.at(-1);
   if (!first || !last || points.length < 2) return null;

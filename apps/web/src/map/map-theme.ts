@@ -23,6 +23,11 @@ export interface MapTheme {
   readonly airport: string;
   /** Shade of the night on the live map. */
   readonly night: string;
+  /**
+   * Trail of a flight in progress by altitude (page of a flight in progress): colours at the
+   * ground, 10 000, 25 000 and 40 000 ft, blended in between.
+   */
+  readonly altitudeRamp: readonly [string, string, string, string];
 }
 
 const STYLES = "https://tiles.openfreemap.org/styles";
@@ -37,6 +42,7 @@ const DARK: MapTheme = {
   aircraftLost: "#9aa6bf",
   airport: "#ffb454",
   night: "rgba(0, 0, 0, 0.32)",
+  altitudeRamp: ["#6ee7a8", "#4fd1e8", "#7c9cff", "#d58cf0"],
 };
 
 const LIGHT: MapTheme = {
@@ -49,6 +55,7 @@ const LIGHT: MapTheme = {
   aircraftLost: "#9aa5b1",
   airport: "#b86a00",
   night: "rgba(15, 23, 42, 0.12)",
+  altitudeRamp: ["#2f9e6a", "#0b7285", "#3b5bdb", "#9c36b5"],
 };
 
 export const mapTheme = (dark: boolean): MapTheme => (dark ? DARK : LIGHT);

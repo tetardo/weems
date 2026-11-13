@@ -85,6 +85,8 @@ export {
   LiveFlight,
   LivePilot,
   LiveRoute,
+  LiveTrail,
+  LiveTrailPoint,
   LiveSnapshot,
   LiveUpdate,
   MAX_LIVE_EVENTS,

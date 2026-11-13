@@ -26,6 +26,7 @@ export {
   Globe as LanguageIcon,
   GraduationCap as LearnIcon,
   LayoutGrid as FeaturesIcon,
+  Link as LinkIcon,
   List as ListIcon,
   LocateFixed as RecenterIcon,
   Lock as PrivateIcon,

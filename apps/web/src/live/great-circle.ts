@@ -71,3 +71,41 @@ export function greatCircle(
   const points = Array.from({ length: steps + 1 }, (_, i) => pointAlong(a, b, angle, i / steps));
   return unwrapLongitudes(points, startLon);
 }
+
+/** Initial bearing from `a` to `b`, radians. */
+function bearing(a: LatLon, b: LatLon): number {
+  const dLon = rad(b.lon - a.lon);
+  const y = Math.sin(dLon) * Math.cos(rad(b.lat));
+  const x =
+    Math.cos(rad(a.lat)) * Math.sin(rad(b.lat)) -
+    Math.sin(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.cos(dLon);
+  return Math.atan2(y, x);
+}
+
+/** The point reached from `from` after `nm` nautical miles on the true course `courseDeg`. */
+export function destination(from: LatLon, courseDeg: number, nm: number): LatLon {
+  const angle = nm / EARTH_RADIUS_NM;
+  const course = rad(courseDeg);
+  const lat = Math.asin(
+    Math.sin(rad(from.lat)) * Math.cos(angle) +
+      Math.cos(rad(from.lat)) * Math.sin(angle) * Math.cos(course),
+  );
+  const lon =
+    rad(from.lon) +
+    Math.atan2(
+      Math.sin(course) * Math.sin(angle) * Math.cos(rad(from.lat)),
+      Math.cos(angle) - Math.sin(rad(from.lat)) * Math.sin(lat),
+    );
+  return { lat: deg(lat), lon: ((deg(lon) + 540) % 360) - 180 };
+}
+
+/**
+ * Distance of `point` from the great circle `a` → `b`, nautical miles: positive right of the
+ * route, negative left (cross-track distance).
+ */
+export function crossTrackNm(a: LatLon, b: LatLon, point: LatLon): number {
+  const toPoint = centralAngle(a, point);
+  return (
+    Math.asin(Math.sin(toPoint) * Math.sin(bearing(a, point) - bearing(a, b))) * EARTH_RADIUS_NM
+  );
+}

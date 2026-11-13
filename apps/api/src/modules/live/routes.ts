@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { Boarding, FlightId, LiveRoute, Problem } from "@weems/contrats";
+import { Boarding, FlightId, LiveRoute, LiveTrail, Problem } from "@weems/contrats";
 import type { BoardingStream } from "./boarding-stream.ts";
 import type { LiveService } from "./service.ts";
 import type { LiveStream } from "./stream.ts";
@@ -10,10 +10,10 @@ import type { LiveStream } from "./stream.ts";
 const PUBLIC = { "access-control-allow-origin": "*" };
 
 /**
- * GET /v1/live/stream (SSE), GET /v1/live/flights/{flightId}/route, GET /v1/live/boarding and
- * GET /v1/live/boarding/stream (SSE).
+ * GET /v1/live/stream (SSE), GET /v1/live/flights/{flightId}/route and /trail, GET
+ * /v1/live/boarding and GET /v1/live/boarding/stream (SSE).
  * Public, like the map: they only show what every spectator already sees (call sign, airports,
- * positions, pilots whose profile is public).
+ * positions with altitude and speeds, pilots whose profile is public).
  */
 export function registerLiveRoutes(
   parent: FastifyInstance,
@@ -36,7 +36,16 @@ export function registerLiveRoutes(
       streams.live.connect(reply.raw);
     },
   );
+  registerFlightRoutes(parent, live);
+  registerBoardingRoutes(parent, streams.boarding, live);
+}
 
+/**
+ * GET /v1/live/flights/{flightId}/route (the followed flight of the live map) and /trail (the page
+ * of a flight in progress).
+ */
+function registerFlightRoutes(parent: FastifyInstance, live: LiveService): void {
+  const app = parent.withTypeProvider<ZodTypeProvider>();
   app.get(
     "/v1/live/flights/:flightId/route",
     {
@@ -53,7 +62,23 @@ export function registerLiveRoutes(
     },
   );
 
-  registerBoardingRoutes(parent, streams.boarding, live);
+  app.get(
+    "/v1/live/flights/:flightId/trail",
+    {
+      schema: {
+        tags: ["live"],
+        description:
+          "Altitude, ground speed, vertical speed and phase along the trail of a flight on the live " +
+          "map: profile and bands of the page of a flight in progress.",
+        params: z.object({ flightId: FlightId }),
+        response: { 200: LiveTrail, 400: Problem, 404: Problem },
+      },
+    },
+    async (request, reply) => {
+      reply.headers(PUBLIC);
+      return live.trail(request.params.flightId);
+    },
+  );
 }
 
 /**

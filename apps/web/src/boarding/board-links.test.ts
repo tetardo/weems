@@ -8,8 +8,8 @@ const flight = (extra: Partial<BoardingFlight>) =>
   ({ flightId: ID, pilot: PILOT, closed: false, ...extra }) as BoardingFlight;
 
 describe("Boarding links", () => {
-  it("opens an open flight on the live map, pilot public or not", () => {
-    expect(flightHref(flight({}))).toBe(`/live?flight=${ID}`);
+  it("opens an open flight on its page with a public pilot, on the live map otherwise", () => {
+    expect(flightHref(flight({}))).toBe(`/pilots/lara/flights/${ID}`);
     expect(flightHref(flight({ pilot: null }))).toBe(`/live?flight=${ID}`);
   });
 

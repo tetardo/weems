@@ -38,10 +38,21 @@ describe("live trails", () => {
     expect(points.at(-1)).toEqual([1_500, 45]);
   });
 
+  it("keeps altitude, speeds and phase of each point for the page of a flight in progress", () => {
+    const trails = new LiveTrails();
+    trails.add(ID, { ...at(0), altMsl: 1_200, gs: 140, vs: 1_800, phase: "CLIMB" });
+    trails.add(ID, at(15));
+    expect(trails.pointsOf(ID)).toEqual([
+      { at: at(0).at, lat: 45, lon: 0, altMsl: 1_200, gs: 140, vs: 1_800, phase: "CLIMB" },
+      { at: at(15).at, lat: 45, lon: 0.15, altMsl: 30_000, gs: 400, vs: 0, phase: "CRUISE" },
+    ]);
+  });
+
   it("forgets a flight, and gives an empty trail for an unknown one", () => {
     const trails = new LiveTrails();
     trails.add(ID, at(0));
     trails.forget(ID);
     expect(trails.of(ID)).toEqual([]);
+    expect(trails.pointsOf(ID)).toEqual([]);
   });
 });

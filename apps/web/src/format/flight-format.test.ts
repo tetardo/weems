@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { flightLevel, formatDuration, formatRoute, utcTime } from "./flight-format.ts";
+import { flightLevel, formatDuration, formatRoute, utcMinutes, utcTime } from "./flight-format.ts";
 
 describe("flight formats", () => {
   it("writes durations as h:mm, rounded to the minute", () => {
@@ -15,6 +15,7 @@ describe("flight formats", () => {
 
   it("keeps the UTC time of a timestamp", () => {
     expect(utcTime("2026-11-11T08:06:38.000Z")).toBe("08:06:38");
+    expect(utcMinutes("2026-11-11T08:06:38.000Z")).toBe("08:06");
   });
 
   it("reads a level in hundreds of feet from 10 000 ft, else leaves feet to the caller", () => {

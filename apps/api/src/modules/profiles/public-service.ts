@@ -153,12 +153,18 @@ export class PublicProfilesService {
     return { routes: routesOf(summaries, endpoints) };
   }
 
+  /**
+   * A flight of the profile, closed or still flying: the page of a flight in progress shows it
+   * live, then becomes the full flight page at the same address (spec vol en cours).
+   */
   async flight(handle: string, flightId: string): Promise<PublicFlightView> {
     return (await this.publicFlight(handle, flightId)).flight;
   }
 
+  /** The trajectory exists only once the flight is closed (the tracker sends it on closing). */
   async track(handle: string, flightId: string): Promise<TrackView> {
-    const { owner } = await this.publicFlight(handle, flightId);
+    const { owner, flight } = await this.publicFlight(handle, flightId);
+    if (flight.closedAt === null) throw noFlight();
     return this.tracks.read(owner, flightId);
   }
 
@@ -192,7 +198,7 @@ export class PublicProfilesService {
 
   /**
    * A flight shown on a public profile, and its owner as a caller of the flights service: the
-   * flight must be theirs, closed, and not hidden. Anything else is "not found".
+   * flight must be theirs and not hidden. Anything else is "not found".
    */
   private async publicFlight(handle: string, flightId: string) {
     const profile = await this.publicProfile(handle);
@@ -200,7 +206,7 @@ export class PublicProfilesService {
     const flight = await this.flights.read(owner, flightId).catch((error: unknown) => {
       throw error instanceof ApiProblem && error.status === 404 ? noFlight() : error;
     });
-    if (flight.closedAt === null || (await this.repository.isHidden(flightId))) throw noFlight();
+    if (await this.repository.isHidden(flightId)) throw noFlight();
     return { owner, flight };
   }
 }

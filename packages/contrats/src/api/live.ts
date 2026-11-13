@@ -97,3 +97,25 @@ export const LiveRoute = z.object({
   trail: z.array(z.tuple([Longitude, Latitude])),
 });
 export type LiveRoute = z.infer<typeof LiveRoute>;
+
+/**
+ * One point of a flight in progress, as the live map last received it: what the page of a flight
+ * in progress draws (altitude profile, flight bands) until the trajectory arrives at closing.
+ */
+export const LiveTrailPoint = PositionReport.pick({
+  at: true,
+  lat: true,
+  lon: true,
+  altMsl: true,
+  gs: true,
+  vs: true,
+  phase: true,
+});
+export type LiveTrailPoint = z.infer<typeof LiveTrailPoint>;
+
+/**
+ * GET /v1/live/flights/{flightId}/trail: the points kept since the API last started, oldest first,
+ * one every 15 s of flight time (spec vol en cours).
+ */
+export const LiveTrail = z.object({ points: z.array(LiveTrailPoint) });
+export type LiveTrail = z.infer<typeof LiveTrail>;
