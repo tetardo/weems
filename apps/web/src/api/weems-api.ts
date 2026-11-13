@@ -1,20 +1,9 @@
-import {
-  type FlightReview,
-  FlightList,
-  FlightReviewView,
-  FlightView,
-  TrackView,
-} from "@weems/contrats";
+import { type FlightReview, FlightReviewView, FlightView, TrackView } from "@weems/contrats";
 import { z } from "zod";
 import { apiRequest } from "./api-request.ts";
 
 const get = <T extends z.ZodType>(path: string, schema: T) => apiRequest(path, schema);
 const flightPath = (flightId: string) => `/v1/flights/${encodeURIComponent(flightId)}`;
-
-export async function listFlights(query: URLSearchParams): Promise<FlightList> {
-  const list = await get(`/v1/flights?${query.toString()}`, FlightList);
-  return list ?? { flights: [], nextCursor: null };
-}
 
 export function getFlight(flightId: string): Promise<FlightView | null> {
   return get(flightPath(flightId), FlightView);

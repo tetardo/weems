@@ -2,6 +2,7 @@ import type { HiddenFlights } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { formatRoute } from "../format/flight-format.ts";
 import { Link } from "../i18n/navigation.ts";
+import { fullFlightHref } from "../logbook/flight/full-flight-href.ts";
 import { Button } from "@weems/ui";
 import { CardBox } from "../ui/card-box.tsx";
 import { setFlightHiddenAction } from "./profile-actions.ts";
@@ -23,7 +24,7 @@ export function HiddenFlightsPanel({ hidden }: { hidden: HiddenFlights }) {
             key={flight.flightId}
             className="flex items-center justify-between gap-2 border-t border-line py-1.5 text-sm"
           >
-            <Link href={`/flights/${flight.flightId}`} className="hover:underline">
+            <Link href={fullFlightHref(flight.flightId)} className="hover:underline">
               <b>{formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}</b>{" "}
               {format.dateTime(new Date(flight.openedAt), { dateStyle: "short" })}
             </Link>

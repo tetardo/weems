@@ -1,3 +1,4 @@
+import { fullFlightHref } from "../logbook/flight/full-flight-href.ts";
 import { OWN_PHOTO_URL, pilotPhotoUrl } from "../site/api-relay.ts";
 
 /**
@@ -28,7 +29,7 @@ export function logbookLinks(publicHandle: string | null): ProfileLinks {
   return {
     photo: OWN_PHOTO_URL,
     page: "/logbook/public",
-    flight: (flightId) => `/flights/${flightId}`,
+    flight: fullFlightHref,
     share: publicHandle ? `/pilots/${publicHandle}` : null,
   };
 }

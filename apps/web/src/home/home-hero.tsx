@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { buttonClass } from "@weems/ui";
 import { Link } from "../i18n/navigation.ts";
 import { BrandMark } from "../site/brand.tsx";
-import { FlightsIcon, LiveIcon } from "../ui/icons.ts";
+import { LiveIcon, LogbookIcon } from "../ui/icons.ts";
 import { PhotoBackground, type ThemePhotos } from "../ui/photo-background.tsx";
 import { DeparturesBoard } from "./departures-board.tsx";
 
@@ -13,9 +13,9 @@ function Calls({ loggedIn }: { loggedIn: boolean }) {
   return (
     <div className="flex flex-wrap gap-3">
       {loggedIn ? (
-        <Link href="/flights" className={`${buttonClass("primary")} ${big}`}>
-          <FlightsIcon size={20} aria-hidden="true" />
-          {t("myFlights")}
+        <Link href="/logbook" className={`${buttonClass("primary")} ${big}`}>
+          <LogbookIcon size={20} aria-hidden="true" />
+          {t("myLogbook")}
         </Link>
       ) : (
         <Link href="/signup" className={`${buttonClass("primary")} ${big}`}>

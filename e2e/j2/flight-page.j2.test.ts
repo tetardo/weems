@@ -42,7 +42,7 @@ afterAll(async () => {
 async function openFlight(locale: "fr" | "en") {
   const page = await pilot.newPage();
   const started = performance.now();
-  await page.goto(`${site.url}/${locale}/flights/${flightId}`);
+  await page.goto(`${site.url}/${locale}/logbook/flights/${flightId}/full`);
   await page.waitForSelector("svg[role=img] path");
   await page.waitForSelector(".maplibregl-canvas");
   return { page, ms: performance.now() - started };
@@ -80,7 +80,7 @@ describe("J2 flight page", () => {
       .locator("tbody tr")
       .allInnerTexts();
     expect(englishRows[cruise]).toContain("Cruise");
-    await expect(english.page.locator("h2").first().innerText()).resolves.toBe("Track");
+    expect(await english.page.locator("h2", { hasText: "Route" }).count()).toBe(1);
     await english.page.close();
   });
 

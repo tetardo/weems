@@ -35,10 +35,10 @@ function loopback(): Promise<{ server: Server; port: number; query: Promise<URLS
 describe("J3 site and tracker login", () => {
   it("sends a visitor without session to the login page, then back to the page asked", async () => {
     const page = await stack.browser.newPage();
-    await page.goto(`${stack.siteUrl}/en/flights?status=closed`);
+    await page.goto(`${stack.siteUrl}/en/logbook/stats?period=12m`);
     expect(new URL(page.url()).pathname).toBe("/en/login");
     await fillLogin(page);
-    await page.waitForURL("**/en/flights?status=closed");
+    await page.waitForURL("**/en/logbook/stats?period=12m");
     await expect(
       page.getByRole("button", { name: /Pilote de développement/ }).count(),
     ).resolves.toBe(1);

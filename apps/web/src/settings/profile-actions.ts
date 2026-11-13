@@ -42,5 +42,5 @@ export async function removePhotoAction(): Promise<void> {
 export async function setFlightHiddenAction(flightId: string, hidden: boolean): Promise<void> {
   await setVisibility(flightId, { hiddenOnProfile: hidden });
   refreshSettings();
-  revalidatePath("/[locale]/flights/[flightId]", "page");
+  revalidatePath("/[locale]/logbook/flights/[flightId]/full", "page");
 }

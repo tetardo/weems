@@ -43,3 +43,7 @@ Demande de Greg (« la nouvelle barre de menu qui est sur l'accueil doit être l
 ## Mise à jour du 12/11/2026 : « Mon carnet de bord »
 
 Demande de Greg : un bouton « Mon carnet de bord » avant « Mes vols » (pilote connecté), qui montre sa page publique ; c'est la page d'arrivée après connexion. La barre compte maintenant 3 entrées sur 5 (carnet, mes vols, direct). Détails dans la spec J4 profil public, section 7.
+
+## Mise à jour du 13/11/2026 : « Mes vols » retiré
+
+Demande de Greg (« on va supprimer la page du menu principal "mes vols", elle n'a plus de raison d'être, on va intégrer tout ça dans le carnet du pilote ») : l'entrée « Mes vols » quitte la barre. Tous les vols sont dans le carnet (`/logbook/flights`), chaque vol a sa page complète dans le carnet (`/logbook/flights/{id}/full`). Les anciennes adresses `/flights` et `/flights/{id}` renvoient (redirection permanente) vers ces pages. Le pilote connecté garde 3 entrées : « Mon carnet de bord », « Vols en direct », « Offres ».

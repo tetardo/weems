@@ -5,7 +5,6 @@
     "nav": {
       "discover": "Découvrir",
       "logbook": "Mon carnet de bord",
-      "flights": "Mes vols",
       "live": "Vols en direct",
       "profile": "Mon profil public",
       "plans": "Offres",
@@ -46,7 +45,7 @@
     "sloganBottom": "Weems s'occupe du carnet.",
     "lead": "Vols MSFS enregistrés automatiquement, phases détectées, atterrissage noté. Gratuit pour tous les pilotes.",
     "signup": "Créer mon compte gratuit",
-    "myFlights": "Mes vols",
+    "myLogbook": "Mon carnet de bord",
     "seeLive": "Voir les vols en direct",
     "board": {
       "title": "En vol · In flight",
@@ -184,9 +183,6 @@
     "connectionRestored": "Simulateur reconnecté"
   },
   "Flights": {
-    "title": "Mes vols",
-    "empty": "Aucun vol pour l'instant. Lancez pnpm fly sur le PC, puis faites un vol.",
-    "emptyFiltered": "Aucun vol ne correspond à ces filtres.",
     "columns": {
       "date": "Date (UTC)",
       "callsign": "Indicatif",
@@ -197,18 +193,6 @@
       "alerts": "Alertes",
       "touchdown": "Toucher (ft/min)"
     },
-    "filters": {
-      "from": "Du",
-      "to": "Au",
-      "aircraft": "Avion",
-      "category": "Catégorie",
-      "allCategories": "Toutes",
-      "airport": "Aéroport (OACI)",
-      "apply": "Filtrer",
-      "reset": "Tout afficher"
-    },
-    "next": "Vols plus anciens",
-    "first": "Retour aux plus récents",
     "apiDown": "L'API ne répond pas ({url}). Est-elle lancée sur le Mac ?",
     "apiOutdated": "L'API ({url}) répond dans un format que le site ne connaît pas : c'est sans doute une ancienne version (conteneur Docker weems-api-1 ?). Arrêtez-la et relancez l'API à jour avec pnpm --filter @weems/api dev.",
     "deleteAll": "Supprimer tous mes vols",
@@ -216,7 +200,6 @@
     "deleteAllHint": "Développement seulement : vide la liste des vols de test."
   },
   "Flight": {
-    "back": "Mes vols",
     "notFound": "Ce vol n'existe pas.",
     "header": {
       "date": "Date",
@@ -268,7 +251,6 @@
       "later": "La note arrive avec la notation des vols."
     },
     "review": {
-      "title": "Vérification des phases",
       "question": "Les phases détectées par le tracker sont-elles justes pour ce vol ?",
       "correct": "Oui, toutes justes",
       "wrong": "Non, au moins une est fausse",
@@ -277,11 +259,6 @@
       "saved": "Merci, réponse enregistrée.",
       "error": "Réponse non enregistrée, réessayez.",
       "already": "Vous avez déjà répondu : vous pouvez corriger."
-    },
-    "publicProfile": {
-      "hidden": "Masqué de votre profil public",
-      "hide": "Masquer de mon profil",
-      "show": "Remontrer sur mon profil"
     }
   },
   "Auth": {
@@ -719,6 +696,65 @@
           "bank30": "Inclinaison ≤ 30°",
           "notMeasured": "non mesuré"
         }
+      }
+    },
+    "flight": {
+      "allFlights": "Tous les vols",
+      "neighbours": "Vols voisins",
+      "older": "Vol précédent",
+      "newer": "Vol suivant",
+      "touchdownUnit": "ft/min au toucher",
+      "map": "Trajet",
+      "noTrack": "Ce vol n'a pas de trajectoire.",
+      "profile": "Profil d'altitude et vitesse",
+      "profileAside": "survolez le profil ou la carte",
+      "phases": "Phases",
+      "phasesAside": "{count, plural, one {# phase} other {# phases}}",
+      "noPhases": "Aucune phase enregistrée.",
+      "bands": "Bandes de vol",
+      "review": "Les phases sont-elles justes ?",
+      "groups": {
+        "overview": "Vue d'ensemble",
+        "bands": "Bandes de vol",
+        "landing": "Atterrissage",
+        "logbook": "Carnet"
+      },
+      "visibility": {
+        "label": "Visible sur ma page publique",
+        "shown": "Les visiteurs voient le trajet, les phases et le toucher.",
+        "hidden": "Masqué : vous seul le voyez, dans votre carnet."
+      },
+      "landing": {
+        "title": "Atterrissage",
+        "touchdown": "Toucher",
+        "gForce": "Facteur de charge",
+        "bounces": "Rebonds",
+        "goArounds": "Remises de gaz",
+        "speed": "Vitesse au toucher",
+        "none": "Pas d'atterrissage enregistré."
+      },
+      "approach": {
+        "title": "Dernière approche",
+        "aside": "3 dernières minutes",
+        "height": "Hauteur sol (max {top} ft)",
+        "sink": "Vitesse verticale (0 à {floor} ft/min)",
+        "stable": "Zone verte : {from} à {to} ft/min",
+        "none": "Pas de trajectoire avant le toucher."
+      },
+      "compare": {
+        "title": "Comparé à vos vols",
+        "locked": "Ce vol face à vos autres vols sur le même avion : toucher, durée et rang.",
+        "aside": "{aircraft} · {count} vols",
+        "rank": "{rank, select, 1 {Votre toucher le plus doux} other {{rank}e toucher le plus doux}} sur {aircraft}.",
+        "touchdown": "Toucher",
+        "block": "Durée bloc",
+        "mean": "moy. {value}",
+        "none": "Premier vol sur cet avion : rien à comparer pour l'instant."
+      },
+      "journal": {
+        "title": "Journal",
+        "aside": "{count, plural, =0 {aucun événement} one {# événement} other {# événements}} · UTC",
+        "none": "Aucun événement notable."
       }
     }
   },
