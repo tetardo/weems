@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { DoneIcon, WarningIcon } from "../ui/icons.ts";
 import type { StepId } from "./discover-steps.ts";
 import { IllustrationStage } from "./illustration-stage.tsx";
+import { StepScene } from "./step-scenes.tsx";
 import {
   Chip,
   ChipRow,
@@ -203,12 +204,12 @@ const ILLUSTRATIONS: Record<StepId, () => React.JSX.Element> = {
   progress: ProgressScreen,
 };
 
-/** The fictitious screen shown beside a step, on its soft shape with a note that explains it. */
+/** The fictitious screen shown beside a step, under its scene, on its soft shape, with a note that explains it. */
 export function StepIllustration({ id, index }: { id: StepId; index: number }) {
   const t = useTranslations("Discover.illustration.notes");
   const Illustration = ILLUSTRATIONS[id];
   return (
-    <IllustrationStage index={index} note={t(id)}>
+    <IllustrationStage index={index} note={t(id)} scene={<StepScene id={id} />}>
       <Illustration />
     </IllustrationStage>
   );

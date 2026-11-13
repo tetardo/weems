@@ -16,21 +16,24 @@ const ACCENT_BLOB =
 
 /**
  * Frame of one illustration: the screen is as wide as the text column, two soft shapes behind
- * (cyan and orange) spill a little towards the outer edge, the fictitious screen in front and a short warm note that says what the screen shows.
+ * (cyan and orange) spill a little towards the outer edge, a little drawn scene above it, the fictitious screen in front and a short warm note that says what the screen shows.
  * Decorative: the step text already says the same thing to screen readers.
  */
 export function IllustrationStage({
   index,
   note,
+  scene,
   children,
 }: {
   index: number;
   note: string;
+  /** Little drawn scene shown above the screen. */
+  scene: ReactNode;
   children: ReactNode;
 }) {
   const flipped = index % 2 === 1;
   return (
-    <div aria-hidden="true" className="relative w-full max-w-[520px] pt-10 pb-14">
+    <div aria-hidden="true" className="relative w-full max-w-[520px] pt-5 pb-14">
       <svg
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
@@ -43,7 +46,10 @@ export function IllustrationStage({
           transform={flipped ? "translate(-10 30)" : "translate(14 28)"}
         />
       </svg>
-      <div className="relative">{children}</div>
+      <div className="relative">
+        {scene}
+        {children}
+      </div>
       <p
         className={`absolute bottom-3 m-0 flex max-w-[85%] items-center gap-2 rounded-full border border-accent-2/40 bg-surface px-3.5 py-1.5 text-[13px] font-medium text-ink shadow-raised ${flipped ? "left-4" : "right-4"}`}
       >
