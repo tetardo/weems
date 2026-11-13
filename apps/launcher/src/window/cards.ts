@@ -136,23 +136,23 @@ function revenueCard({ revenue }: LauncherOverview): Card {
 }
 
 const EMPTY: Card[] = [
+  { title: "Utilisateurs" },
+  { title: "Revenu total" },
   { title: "Base de données", half: true },
   { title: "Fichiers", half: true },
   { title: "API", half: true },
   { title: "En direct", half: true },
-  { title: "Utilisateurs" },
-  { title: "Revenu total" },
 ].map((card) => ({ ...card, value: "—", lines: [line("Console ou API arrêtée")] }));
 
-/** In the order of the grid: the four half cards (two columns of two), then users and revenue. */
+/** In the order of the grid: users and revenue on top (Greg, 13/11), then the four half cards. */
 export function cardsOf(overview: LauncherOverview | null, nowMs: number): Card[] {
   if (!overview) return EMPTY;
   return [
+    usersCard(overview),
+    revenueCard(overview),
     databaseCard(overview),
     filesCard(overview, nowMs),
     apiCard(overview),
     liveCard(overview),
-    usersCard(overview),
-    revenueCard(overview),
   ];
 }

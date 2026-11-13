@@ -51,8 +51,12 @@ const stackOf = (cards: HTMLElement[]) => {
 
 export function renderCards(overview: LauncherOverview | null): void {
   const cards = cardsOf(overview, Date.now()).map(renderCard);
-  const halves = cards.slice(0, 4);
+  const [users, revenue, ...halves] = cards;
   document
     .getElementById("cards")
-    ?.replaceChildren(stackOf(halves.slice(0, 2)), stackOf(halves.slice(2)), ...cards.slice(4));
+    ?.replaceChildren(
+      ...[users, revenue].filter((card) => card !== undefined),
+      stackOf(halves.slice(0, 2)),
+      stackOf(halves.slice(2)),
+    );
 }

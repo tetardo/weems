@@ -15,6 +15,8 @@
   --off: #5b6680;
   /* Docker's and VS Code's blues, for their buttons only. */
   --docker: #1d63ed;
+  /* Site and console: the site's light-theme button colour (#78). */
+  --open: #0c7f94;
   --on-brand: #ffffff;
   --vscode: #007acc;
   --term: #0a0e18;
@@ -142,6 +144,10 @@ h1 {
 }
 .button.brand:hover:not(:disabled) {
   border-color: var(--on-brand);
+}
+.button.site,
+.button.console {
+  --brand: var(--open);
 }
 .button.docker {
   --brand: var(--docker);

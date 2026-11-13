@@ -35,29 +35,29 @@ const overview: LauncherOverview = {
 };
 
 describe("cardsOf", () => {
-  it("puts the four half cards first: base, fichiers, API, en direct", () => {
+  it("puts users and revenue first, then the four half cards", () => {
     const cards = cardsOf(overview, now);
     expect(cards.map((card) => [card.title, card.half ?? false])).toEqual([
+      ["Utilisateurs", false],
+      ["Revenu total", false],
       ["Base de données", true],
       ["Fichiers", true],
       ["API", true],
       ["En direct", true],
-      ["Utilisateurs", false],
-      ["Revenu total", false],
     ]);
   });
 
   it("fills each circle against its reference", () => {
     const rings = cardsOf(overview, now).map((card) => card.ring);
-    expect(rings.map((ring) => ring?.share)).toEqual([0.05, 0.9, 0.08, 0.014, 0.25, 0.75]);
-    expect(rings[1]?.tone).toBe("warn"); // Mac disk 90 % full
-    expect(rings[4]?.caption).toBe("objectif 500");
+    expect(rings.map((ring) => ring?.share)).toEqual([0.25, 0.75, 0.05, 0.9, 0.08, 0.014]);
+    expect(rings[3]?.tone).toBe("warn"); // Mac disk 90 % full
+    expect(rings[0]?.caption).toBe("objectif 500");
   });
 
   it("says when the last backup was made, or that there is none", () => {
-    expect(cardsOf(overview, now)[1]?.lines[1]?.text).toBe("Dernière : il y a 2 h 00");
+    expect(cardsOf(overview, now)[3]?.lines[1]?.text).toBe("Dernière : il y a 2 h 00");
     const none = { ...overview.files, backups: { count: 0, bytes: 0, lastAt: null } };
-    expect(cardsOf({ ...overview, files: none }, now)[1]?.lines[1]).toEqual({
+    expect(cardsOf({ ...overview, files: none }, now)[3]?.lines[1]).toEqual({
       text: "Aucune sauvegarde",
       tone: "warn",
     });
