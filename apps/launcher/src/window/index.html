@@ -21,20 +21,22 @@
         <button class="button brand console" data-open="console" data-icon="dashboard">
           Console
         </button>
-        <button
-          class="button brand vscode icon-only"
-          data-open="vscode"
-          data-icon="code"
-          title="Ouvrir le projet dans VS Code"
-          aria-label="Ouvrir le projet dans VS Code"
-        ></button>
-        <button
-          class="button brand docker icon-only"
-          data-open="docker"
-          data-icon="docker"
-          title="Ouvrir Docker Desktop"
-          aria-label="Ouvrir Docker Desktop"
-        ></button>
+        <div class="joined" role="group" aria-label="Outils">
+          <button
+            class="button brand vscode icon-only"
+            data-open="vscode"
+            data-icon="code"
+            title="Ouvrir le projet dans VS Code"
+            aria-label="Ouvrir le projet dans VS Code"
+          ></button>
+          <button
+            class="button brand docker icon-only"
+            data-open="docker"
+            data-icon="docker"
+            title="Ouvrir Docker Desktop"
+            aria-label="Ouvrir Docker Desktop"
+          ></button>
+        </div>
         <div class="joined" role="group" aria-label="Services">
           <button class="button power" data-all="start-all" data-icon="start">Tout démarrer</button>
           <button

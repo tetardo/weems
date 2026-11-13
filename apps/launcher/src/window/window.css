@@ -97,6 +97,7 @@ h1 {
 .button.power:hover:not(:disabled) {
   border-color: var(--ink);
 }
+.joined .button.brand + .button.brand,
 .joined .button.power + .button.power {
   border-left-color: color-mix(in srgb, var(--on-accent) 35%, transparent);
 }
