@@ -48,7 +48,7 @@ export function DiscoverStepRow({ step, index }: { step: DiscoverStep; index: nu
   const flipped = index % 2 === 1;
   return (
     <li className="relative grid grid-cols-2 items-center gap-[72px] py-6 max-md:grid-cols-1 max-md:gap-4 max-md:py-4 max-md:pl-14">
-      <span className="absolute top-1/2 left-1/2 grid size-11 -translate-1/2 place-items-center rounded-full border-2 border-accent bg-surface text-accent shadow-[0_0_0_6px_var(--wm-bg)] max-md:top-10 max-md:left-[22px]">
+      <span className="absolute top-1/2 left-1/2 grid size-11 -translate-1/2 place-items-center rounded-full border-2 border-accent bg-surface text-accent shadow-[0_0_0_6px_var(--wm-surface)] max-md:top-10 max-md:left-[22px]">
         <step.icon size={18} aria-hidden="true" />
       </span>
       <div className={`max-w-[440px] ${flipped ? "md:order-2" : "md:justify-self-end"}`}>
