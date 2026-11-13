@@ -1496,7 +1496,18 @@
       "average": "Toucher moyen",
       "trend": "−38 % en 3 mois",
       "from": "août",
-      "to": "nov."
+      "to": "nov.",
+      "you": "Vous",
+      "pilotHugo": "Hugo",
+      "pilotTheo": "Théo",
+      "notes": {
+        "tracker": "Il démarre tout seul avec le simulateur",
+        "followUp": "Votre atterrissage, noté en un coup d'œil",
+        "community": "Vos amis volent en ce moment, à côté de vous",
+        "simplicity": "Trois étapes, et vous êtes en l'air",
+        "training": "Ce qui s'est bien passé, et ce qui peut mieux aller",
+        "progress": "Vos atterrissages s'adoucissent, vol après vol"
+      }
     },
     "closing": {
       "title": "Chaque vol compte.",
