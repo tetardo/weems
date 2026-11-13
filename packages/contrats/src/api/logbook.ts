@@ -24,6 +24,14 @@ export const LogbookLastFlight = z.object({
 });
 export type LogbookLastFlight = z.infer<typeof LogbookLastFlight>;
 
+/** A day with a flight (UTC): page Résumé and Statistiques (Régularité). */
+export const FlyingDay = z.object({
+  day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  flights: Count,
+  airborneS: Seconds,
+});
+export type FlyingDay = z.infer<typeof FlyingDay>;
+
 /** A value and the same value over the period before, to show the trend. */
 const Trend = z.object({ current: z.number().nullable(), previous: z.number().nullable() });
 
@@ -41,9 +49,7 @@ export const LogbookSummary = z.object({
   /** Last final touchdowns, oldest first (30 at most). */
   recentLandings: z.array(z.object({ at: UtcTimestamp, touchdownVs: z.number() })),
   /** Days with a flight over the last 17 weeks (UTC), oldest first. */
-  flyingDays: z.array(
-    z.object({ day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), flights: Count, airborneS: Seconds }),
-  ),
+  flyingDays: z.array(FlyingDay),
   /** « À travailler », over the last 10 flights that landed. */
   workOn: z.object({
     flights: Count,

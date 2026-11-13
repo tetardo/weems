@@ -29,7 +29,7 @@ export function BarChart({
       className="mt-2 block h-auto w-full"
     >
       {bars.map((bar, i) => (
-        <g key={labels[i]}>
+        <g key={`${i}-${labels[i]}`}>
           <rect
             x={bar.x}
             y={bar.y}

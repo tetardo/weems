@@ -1,4 +1,11 @@
-import type { FlightBands, LogbookEntries, LogbookSummary } from "@weems/contrats";
+import type {
+  FlightBands,
+  LogbookEntries,
+  LogbookStats,
+  LogbookStatsPeriod,
+  LogbookSummary,
+} from "@weems/contrats";
+import type { AirportsService } from "../airports/service.ts";
 import type { Caller } from "../../plugins/auth.ts";
 import type { FlightsService } from "../flights/service.ts";
 import type { PlansService } from "../plans/service.ts";
@@ -6,6 +13,7 @@ import { lengthNm } from "../profiles/stats.ts";
 import type { TracksService } from "../tracks/service.ts";
 import { flightBands, fuelUsedKg } from "./bands.ts";
 import { logbookEntry } from "./entries.ts";
+import { inPeriod, logbookStats } from "./stats.ts";
 import { logbookSummary } from "./summary.ts";
 
 /**
@@ -16,11 +24,18 @@ export class PrivateLogbookService {
   private readonly flights: FlightsService;
   private readonly tracks: TracksService;
   private readonly plans: PlansService;
+  private readonly airports: AirportsService;
 
-  constructor(flights: FlightsService, tracks: TracksService, plans: PlansService) {
+  constructor(
+    flights: FlightsService,
+    tracks: TracksService,
+    plans: PlansService,
+    airports: AirportsService,
+  ) {
     this.flights = flights;
     this.tracks = tracks;
     this.plans = plans;
+    this.airports = airports;
   }
 
   async summary(caller: Caller, now = new Date()): Promise<LogbookSummary> {
@@ -47,5 +62,25 @@ export class PrivateLogbookService {
       ...flightBands(points, withMarks),
       distanceNm: lengthNm(simplified.get(flightId) ?? []),
     };
+  }
+
+  /** Page Statistiques: « all » needs an unlimited period (Pilot Pro), else 12 months. */
+  async stats(caller: Caller, asked: LogbookStatsPeriod, now = new Date()): Promise<LogbookStats> {
+    const id = caller.pilotId;
+    const [closed, limit, categoryTrends, phaseTime, goodPractices] = await Promise.all([
+      this.flights.allClosed(id),
+      this.plans.valueOf(id, "statsPeriod"),
+      this.plans.includes(id, "categoryTrends"),
+      this.plans.includes(id, "phaseTime"),
+      this.plans.includes(id, "goodPractices"),
+    ]);
+    const allowedPeriods: LogbookStatsPeriod[] =
+      limit === "unlimited" ? ["30d", "12m", "all"] : ["30d", "12m"];
+    const period = allowedPeriods.includes(asked) ? asked : "12m";
+    const ids = inPeriod(closed, period, now).map(({ summary }) => summary.flightId);
+    const tracks = await this.tracks.simplifiedOf(ids);
+    const airportName = (icao: string) => this.airports.find(icao)?.name ?? null;
+    const pro = { categoryTrends, phaseTime, goodPractices };
+    return logbookStats(closed, tracks, { period, allowedPeriods, pro, airportName }, now);
   }
 }

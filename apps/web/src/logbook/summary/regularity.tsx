@@ -1,12 +1,12 @@
-import type { LogbookSummary } from "@weems/contrats";
+import type { FlyingDay } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { formatDuration } from "../../format/flight-format.ts";
 import { CalendarIcon } from "../../ui/icons.ts";
 import { type CalendarDay, flyingCalendar } from "./calendar.ts";
 import { LogbookCard } from "../logbook-card.tsx";
 
-/** Same span as the API (17 weeks, about four months). */
-const WEEKS = 17;
+/** Same span as the API for the Résumé (17 weeks, about four months). */
+const SUMMARY_WEEKS = 17;
 const LEVEL_CLASS = ["bg-line/70", "bg-accent/30", "bg-accent/60", "bg-accent"] as const;
 /** Weekdays written on the left: Monday, Wednesday, Friday, Sunday. */
 const WEEKDAY_LABELS = [0, 2, 4, 6];
@@ -55,48 +55,66 @@ function DayCell({ day }: { day: CalendarDay }) {
   );
 }
 
-/** « Régularité »: one square per day over 17 weeks, darker with more flying (maquette v6). */
+/** Shades from less to more flying, and the count of flying days. */
+function Legend({ flown, weeks }: { flown: number; weeks: number }) {
+  const t = useTranslations("Logbook.summary.regularity");
+  return (
+    <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[12px] text-muted">
+      <span className="flex items-center gap-1.5">
+        {t("less")}
+        {LEVEL_CLASS.slice(1).map((level) => (
+          <span key={level} className={`size-2.5 rounded-[3px] ${level}`} />
+        ))}
+        {t("more")}
+      </span>
+      <span>{t("total", { days: flown, weeks })}</span>
+    </div>
+  );
+}
+
+/**
+ * « Régularité »: one square per day, darker with more flying (maquette v6): 17 weeks on the
+ * Résumé, 53 on the Statistiques.
+ */
 export function Regularity({
   flyingDays,
   today,
+  weeks = SUMMARY_WEEKS,
 }: {
-  flyingDays: LogbookSummary["flyingDays"];
+  flyingDays: readonly FlyingDay[];
   today: Date;
+  weeks?: number;
 }) {
   const t = useTranslations("Logbook.summary.regularity");
   const format = useFormatter();
-  const days = flyingCalendar(flyingDays, today, WEEKS);
+  const days = flyingCalendar(flyingDays, today, weeks);
   const flown = days.filter((d) => d.flights > 0).length;
   return (
-    <LogbookCard icon={CalendarIcon} title={t("title")} aside={t("aside", { weeks: WEEKS })}>
-      <div
-        className="grid gap-[3px]"
-        style={{ gridTemplateColumns: `1.4em repeat(${WEEKS}, minmax(0, 1fr))` }}
-      >
-        <MonthRow days={days} />
-        {WEEKDAY_LABELS.map((weekday) => (
-          <span
-            key={weekday}
-            style={{ gridColumn: 1, gridRow: weekday + 2 }}
-            className="self-center text-[11.5px] text-muted"
-          >
-            {format.dateTime(new Date(Date.UTC(2024, 0, 1 + weekday)), { weekday: "narrow" })}
-          </span>
-        ))}
-        {days.map((day) => (
-          <DayCell key={day.day} day={day} />
-        ))}
-      </div>
-      <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[12px] text-muted">
-        <span className="flex items-center gap-1.5">
-          {t("less")}
-          {LEVEL_CLASS.slice(1).map((level) => (
-            <span key={level} className={`size-2.5 rounded-[3px] ${level}`} />
+    <LogbookCard icon={CalendarIcon} title={t("title")} aside={t("aside", { weeks: weeks })}>
+      <div className="overflow-x-auto">
+        <div
+          className="grid gap-[3px]"
+          style={{
+            gridTemplateColumns: `1.4em repeat(${weeks}, minmax(0, 1fr))`,
+            minWidth: `${weeks * 11 + 24}px`,
+          }}
+        >
+          <MonthRow days={days} />
+          {WEEKDAY_LABELS.map((weekday) => (
+            <span
+              key={weekday}
+              style={{ gridColumn: 1, gridRow: weekday + 2 }}
+              className="self-center text-[11.5px] text-muted"
+            >
+              {format.dateTime(new Date(Date.UTC(2024, 0, 1 + weekday)), { weekday: "narrow" })}
+            </span>
           ))}
-          {t("more")}
-        </span>
-        <span>{t("total", { days: flown, weeks: WEEKS })}</span>
+          {days.map((day) => (
+            <DayCell key={day.day} day={day} />
+          ))}
+        </div>
       </div>
+      <Legend flown={flown} weeks={weeks} />
     </LogbookCard>
   );
 }

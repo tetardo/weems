@@ -1,6 +1,8 @@
 import {
   FlightBands,
   LogbookEntries,
+  LogbookStats,
+  type LogbookStatsPeriod,
   LogbookSummary,
   PilotLogbook,
   PilotRoutes,
@@ -37,4 +39,9 @@ export const getLogbookEntries = cache((): Promise<LogbookEntries | null> =>
 /** Flight bands of one of the pilot's flights; null without trajectory. */
 export function getFlightBands(flightId: string): Promise<FlightBands | null> {
   return apiRequest(`/v1/me/logbook/flights/${encodeURIComponent(flightId)}/bands`, FlightBands);
+}
+
+/** Page Statistiques over a period; the API gives 12 months instead of « all » without Pilot Pro. */
+export function getLogbookStats(period: LogbookStatsPeriod): Promise<LogbookStats | null> {
+  return apiRequest(`/v1/me/logbook/stats?period=${period}`, LogbookStats);
 }

@@ -1,4 +1,4 @@
-import type { LogbookSummary } from "@weems/contrats";
+import type { FlyingDay } from "@weems/contrats";
 
 const DAY_MS = 86_400_000;
 
@@ -26,7 +26,7 @@ function levelOf(flights: number, airborneS: number): number {
  * column holding `today`.
  */
 export function flyingCalendar(
-  days: LogbookSummary["flyingDays"],
+  days: readonly FlyingDay[],
   today: Date,
   weeks: number,
 ): CalendarDay[] {

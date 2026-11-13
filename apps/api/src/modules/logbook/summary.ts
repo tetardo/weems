@@ -7,6 +7,7 @@ import {
 import type { SummaryWithEvents } from "../flights/service.ts";
 import { dailyStreak } from "../profiles/streak.ts";
 import { sum } from "../profiles/sum.ts";
+import { flyingDays } from "./flying-days.ts";
 
 const DAY_MS = 86_400_000;
 const LANDINGS_COMPARED = 10;
@@ -53,23 +54,6 @@ function cleanShare(flights: readonly Landed[], from: number, to: number): numbe
   if (landed.length === 0) return null;
   const clean = landed.filter((f) => f.landing?.bounces === 0 && f.landing.goArounds === 0);
   return clean.length / landed.length;
-}
-
-/** Days with a flight over the last weeks, oldest first. */
-function flyingDays(flights: readonly Landed[], now: Date): LogbookSummary["flyingDays"] {
-  const from = now.getTime() - CALENDAR_WEEKS * 7 * DAY_MS;
-  const days = new Map<string, { flights: number; airborneS: number }>();
-  for (const f of flights) {
-    if (f.at.getTime() < from) continue;
-    const day = f.at.toISOString().slice(0, 10);
-    const entry = days.get(day) ?? { flights: 0, airborneS: 0 };
-    entry.flights++;
-    entry.airborneS += f.flight.summary.times.airborneS ?? 0;
-    days.set(day, entry);
-  }
-  return [...days.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([day, entry]) => ({ day, ...entry }));
 }
 
 /** « À travailler »: bounces, alerts and go-arounds of the last flights that landed. */
@@ -133,7 +117,7 @@ export function logbookSummary(
       .slice(0, RECENT_LANDINGS)
       .reverse()
       .map((t) => ({ at: t.at.toISOString(), touchdownVs: t.vs })),
-    flyingDays: flyingDays(flights, now),
+    flyingDays: flyingDays(closed, now, CALENDAR_WEEKS),
     workOn: workOn(flights),
     recentFlights: flights.slice(0, RECENT_FLIGHTS).map((f) => ({
       flight: f.flight.summary,

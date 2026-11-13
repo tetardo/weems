@@ -90,13 +90,17 @@ function minuteOf(points: readonly Point[], before: Point | undefined): BandMinu
 }
 
 /** A point worth reviewing, and why (provisional criteria, see BandMarkReason). */
-function reasonsOf(p: Point): [BandRow, BandMarkReason][] {
+function reasonsOf(p: TrackPoint): [BandRow, BandMarkReason][] {
   const reasons: [BandRow, BandMarkReason][] = [];
   if (!p.onGround && p.altMsl < 10_000 && p.ias > 250) reasons.push(["speed", "speed250"]);
   if (p.bank !== undefined && Math.abs(p.bank) > 30) reasons.push(["bank", "bank30"]);
   if (!p.onGround && p.altAgl < 1_000 && p.vs < -1_000) reasons.push(["verticalSpeed", "sinkRate"]);
   return reasons;
 }
+
+/** Every reason met at least once along a trajectory (page Statistiques, good practices). */
+export const markReasons = (points: readonly TrackPoint[]): Set<BandMarkReason> =>
+  new Set(points.flatMap(reasonsOf).map(([, reason]) => reason));
 
 /** Consecutive minutes with the same reason become one mark. */
 function marksOf(minutes: readonly Point[][]): NonNullable<FlightBands["marks"]> {

@@ -624,6 +624,104 @@
       },
       "marksTitle": "Points to review",
       "discover": "Discover Pilot Pro"
+    },
+    "stats": {
+      "title": "Statistics",
+      "intro": "Your figures by theme. Pick a theme or scroll.",
+      "periodLabel": "Period",
+      "periods": {
+        "30d": "30 d",
+        "12m": "12 months",
+        "all": "All"
+      },
+      "themesLabel": "Themes",
+      "unclassified": "Unclassified",
+      "empty": "No flight in the period yet.",
+      "themes": {
+        "activity": {
+          "title": "Activity",
+          "sub": "When and how much you fly."
+        },
+        "fleet": {
+          "title": "Aircraft and routes",
+          "sub": "What you fly and where you go."
+        },
+        "landings": {
+          "title": "Landings",
+          "sub": "Your touchdowns, your bounces and how they improve."
+        },
+        "technique": {
+          "title": "Technique",
+          "sub": "The quality of your flights, phase by phase."
+        }
+      },
+      "activity": {
+        "hours": "Hours",
+        "flights": "{count, plural, =0 {no flights} one {# flight} other {# flights}}",
+        "days": "Flying days",
+        "over": {
+          "30d": "over 30 days",
+          "12m": "over 12 months",
+          "all": "since the start"
+        },
+        "average": "Average flight",
+        "longest": "longest: {time}",
+        "night": "At night",
+        "nightShare": "{share}% of airborne time",
+        "months": "Hours per month",
+        "monthsAside": "last 12 months",
+        "weekdays": "Day of the week",
+        "localTime": "local time of departure",
+        "takeoffs": "Takeoff time",
+        "day": "day",
+        "nightLegend": "night · local time"
+      },
+      "fleet": {
+        "categories": "Categories",
+        "aircraft": "Aircraft",
+        "aircraftName": "Aircraft",
+        "flights": "Flights",
+        "hours": "Hours",
+        "airports": "Airports",
+        "routes": "Favourite routes",
+        "routesAside": "both ways counted together",
+        "routeLine": "{count, plural, one {# flight} other {# flights}} · {time}"
+      },
+      "landings": {
+        "distribution": "Touchdown distribution",
+        "distributionAside": "{count, plural, =0 {no landings} one {# landing} other {# landings}} · {clean}% clean · ft/min",
+        "recent": "Touchdowns, last 30 flights",
+        "recentAside": "moving average",
+        "byCategory": "By aircraft category",
+        "columns": {
+          "category": "Category",
+          "average": "Average touchdown",
+          "trend": "Trend",
+          "bounces": "Bounces"
+        },
+        "fewFlights": "too few flights",
+        "trendValue": "{value} ft/min",
+        "lockedTitle": "Trends by category",
+        "lockedText": "Your touchdown and bounces for each aircraft category, and how they change."
+      },
+      "technique": {
+        "phaseTime": "Average time per phase",
+        "phaseAside": "{category} · {count, plural, one {# flight} other {# flights}}",
+        "noPhases": "No phase recorded in the period.",
+        "goodPractices": "Good practices",
+        "provisional": "provisional criteria",
+        "phaseLockedTitle": "Phase analysis",
+        "phaseLockedText": "The time spent in each phase, for the aircraft you fly most.",
+        "practicesLockedTitle": "Your good practices",
+        "practicesLockedText": "Flights without alerts, 250 kt below FL100, controlled descent near the ground, bank: your rates.",
+        "practices": {
+          "noAlert": "Flights without alerts",
+          "speed250": "250 kt below FL100",
+          "sinkRate": "Under 1,000 ft/min below 1,000 ft",
+          "bank30": "Bank ≤ 30°",
+          "notMeasured": "not measured"
+        }
+      }
     }
   },
   "Profile": {
@@ -937,7 +1035,7 @@
         "label": "Time spent in each phase"
       },
       "goodPractices": {
-        "label": "Good practices: flights without alerts, 250 kt below FL100, stabilised approaches, bank on approach"
+        "label": "Good practices: flights without alerts, 250 kt below FL100, controlled descent below 1,000 ft, bank"
       },
       "export": {
         "label": "CSV and PDF export"
@@ -1195,7 +1293,7 @@
       },
       "goodPractices": {
         "title": "Good practices",
-        "text": "Flights without alerts, 250 kt below FL100, stabilised approaches, bank on approach: your rates."
+        "text": "Flights without alerts, 250 kt below FL100, under 1,000 ft/min below 1,000 ft, bank: your rates, flight after flight."
       },
       "export": {
         "title": "CSV and PDF export",

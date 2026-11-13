@@ -28,6 +28,31 @@ function takeoffTime({ events }: SummaryWithEvents): Date | null {
   return takeoff ? new Date(takeoff.at) : null;
 }
 
+/** A takeoff in the local time of its place: weekday (0 = Monday), hour, time and position. */
+export interface LocalTakeoff {
+  day: number;
+  hour: number;
+  time: Date;
+  lat: number;
+  lon: number;
+}
+
+/** Local takeoff of a flight; null without takeoff or trajectory. */
+export function localTakeoff(
+  flight: SummaryWithEvents,
+  tracks: ReadonlyMap<string, readonly TrackPoint[]>,
+): LocalTakeoff | null {
+  const time = takeoffTime(flight);
+  const start = tracks.get(flight.summary.flightId)?.[0];
+  if (!time || !start) return null;
+  return {
+    ...localSlot(time, tzLookup(start.lat, start.lon)),
+    time,
+    lat: start.lat,
+    lon: start.lon,
+  };
+}
+
 /**
  * Takeoffs by weekday and hour, in the local time of the place of takeoff: the time zone of the
  * first point of the trajectory, from a table of time zones shipped with the API (no outside
@@ -39,10 +64,9 @@ export function takeoffHours(
 ): PilotCharts["takeoffs"] {
   const grid = Array.from({ length: 7 }, () => Array.from({ length: 24 }, () => 0));
   for (const flight of flights) {
-    const time = takeoffTime(flight);
-    const start = tracks.get(flight.summary.flightId)?.[0];
-    if (!time || !start) continue;
-    const { day, hour } = localSlot(time, tzLookup(start.lat, start.lon));
+    const takeoff = localTakeoff(flight, tracks);
+    if (!takeoff) continue;
+    const { day, hour } = takeoff;
     const row = grid[day];
     if (row && row[hour] !== undefined) row[hour]++;
   }
