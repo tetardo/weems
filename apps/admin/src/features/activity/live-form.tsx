@@ -59,8 +59,9 @@ function LiveSummary({ live }: { live: Live }) {
       <div className="r">
         <TakeoffIcon size={16} />
         <span>
-          Les {live.flights} premiers départs dans la première minute, puis une relève à chaque
-          atterrissage
+          {live.flights} avions au plus en l&apos;air : premiers départs à des moments tirés au
+          hasard dans la première minute, puis chaque avion repart après 5 à 45 min au sol (temps
+          simulé)
         </span>
       </div>
       <div className="r">

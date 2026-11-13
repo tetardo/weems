@@ -11,7 +11,7 @@ import {
   pathVs,
 } from "./navigation/vertical-profile.ts";
 import type { AircraftState } from "./sample-factory.ts";
-import type { Scenario } from "./scenario.ts";
+import { DEFAULT_CLIMB_FPM, type Scenario } from "./scenario.ts";
 
 const has = (scenario: Scenario, d: Scenario["disturbances"][number]) =>
   scenario.disturbances.includes(d);
@@ -39,14 +39,15 @@ export function climb(script: FlightScript, scenario: Scenario): void {
     departureRunway.elevationFt,
     arrivalRunway.elevationFt,
   );
-  script.run(10, (s) => (s.vs = 2500));
+  const climbFpm = scenario.climbFpm ?? DEFAULT_CLIMB_FPM;
+  script.run(10, (s) => (s.vs = climbFpm));
   const levelOffNow = (s: AircraftState) =>
     mustLevelOff(s.altMsl, script.remainingNm, s.gs, arrivalRunway.elevationFt);
   script.until(
     (s) => s.altMsl >= ceiling || levelOffNow(s),
     (s) => {
       s.gearDown = false;
-      s.vs = 2500;
+      s.vs = climbFpm;
       s.gs = Math.min(scenario.cruiseGs, s.gs + 2);
     },
   );

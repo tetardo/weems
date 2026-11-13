@@ -68,12 +68,16 @@ src/app/                  J3 : application de bureau. desktop-tracker.ts (assemb
                           aucun accès à Node, affiche l'état et transmet les clics)
 src/storage/sqlite.ts     seul fichier qui ouvre SQLite (`node:sqlite`, intégré à Node et à Electron)
 scripts/build-app.ts      regroupe l'application dans dist/app/ (esbuild) ; electron-builder.yml : installateur
-tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes, fleetOf(N) pour la charge (J4)
+tools/generate-flights/   générateur de vols synthétiques déterministe, flotte J1 de 10 routes, fleetOf(N) pour la charge (J4) ;
+                          aircraft-types.ts : 21 types (aéroclub → long-courrier, performances, rayon d'action),
+                          routes.ts : destinations possibles d'un type et durée en l'air estimée (fiche 019)
   airports/               aéroports de la flotte avec pistes et altitude (airports.json figé, extrait d'OurAirports)
   navigation/             navigateur par segments, virages, plan de route (pistes, arrivée, circuit), profil vertical
                           (fiche docs/decisions/010) ; flight-script.ts avance l'avion selon son cap et sa vitesse
-tools/simulate/           J1 : N trackers sans interface dans un seul processus
-tools/populate/           activité simulée : comptes fictifs, vols passés (horloge figée), direct relayé et visiteurs (fiche 011)
+tools/simulate/           J1 : N trackers sans interface dans un seul processus ; departures.ts : départs réguliers ou tirés
+tools/populate/           activité simulée : comptes fictifs, vols passés (horloge figée), direct relayé et visiteurs (fiche 011) ;
+                          flying-styles.ts (style de chaque pilote), careers.ts (un compte par grade), timeline.ts (dates),
+                          fly-workers.ts (vols passés rejoués dans un fil par cœur) ; vols déclarés msfs2024 (fiche 019)
 tools/fly/                J2 : tracker sans interface sur le PC Windows (même assemblage que l'app : src/runtime/msfs-tracker.ts)
 ```
 
@@ -81,8 +85,8 @@ tools/fly/                J2 : tracker sans interface sur le PC Windows (même a
 | --- | --- |
 | `pnpm generate-flight --out vol.jsonl --with goAround,bounce` | Écrit un vol LFPG-LFBO synthétique (perturbations : `goAround`, `bounce`, `touchAndGo`, `rejectedTakeoff`, `pause`, `timeAcceleration`, `slew`, `teleport`, `crash`) |
 | `pnpm airports:simulated --add LFML` | Réécrit `tools/generate-flights/airports/airports.json` depuis OurAirports (ajoute des aéroports à la flotte possible) |
-| `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts` ; au-delà de 10, routes tirées par `fleetOf`) envoyés à l'API sur http://localhost:3000 ; `--speed 10` pour accélérer ; Ctrl+C clôt les vols en l'air comme « interrompus » ; `--progress` écrit une ligne JSON par seconde (format `SimulationLine` de `packages/contrats`, lu par la console d'administration) |
-| `pnpm populate create --accounts 50 --flights 5-40 --days 180` | Remplace la population fictive : comptes `@fictif.weems.local`, profils publics (`--public 75`), vols passés rejoués par le vrai tracker sur la période ; `live --flights 12 --visitors 100 --minutes 30` : vols en direct relayés à l'atterrissage et visiteurs du direct ; `status`, `delete` ; `--progress` : lignes JSON (`PopulationLine`, `LiveActivityLine`) lues par la console |
+| `pnpm simulate --count 10 --speed 1` | J1 : 10 pilotes simulés (routes de `tools/generate-flights/fleet.ts` ; au-delà de 10, vols tirés par `fleetOf` parmi les 21 types et 71 aéroports) envoyés à l'API sur http://localhost:3000, départs tirés au hasard autour de `--stagger 30` s (`--seed N` pour rejouer les mêmes) ; `--speed 10` pour accélérer ; Ctrl+C clôt les vols en l'air comme « interrompus » ; `--progress` écrit une ligne JSON par seconde (format `SimulationLine` de `packages/contrats`, lu par la console d'administration) |
+| `pnpm populate create --accounts 50 --flights 5-40 --days 180` | Remplace la population fictive : comptes `@fictif.weems.local`, profils publics (`--public 75`), vols passés rejoués par le vrai tracker sur la période ; les 9 premiers comptes ont la carrière d'un grade, Élève à Légende (`--no-careers` pour s'en passer) ; `live --flights 12 --visitors 100 --minutes 30` : vols en direct relayés à l'atterrissage et visiteurs du direct ; `status`, `delete` ; `--progress` : lignes JSON (`PopulationLine`, `LiveActivityLine`) lues par la console |
 | `pnpm fly --api http://<Mac>:3000 --from LFPG --to LFBO` | J2, sur le PC Windows avec MSFS lancé : enregistre le vol, l'envoie à l'API, écrit le rejeu dans `recordings/` (ignoré par git). « fin » + Entrée clôt le vol, Ctrl+C quitte |
 | `pnpm app` | J3 : lance l'application de bureau (API : http://localhost:3000, ou `WEEMS_API_URL`) |
 | `pnpm app:package` | Construit l'installateur dans `dist/installer/`. Windows : par GitHub Actions (`tracker-installer.yml`), « Run workflow » sur main = version brouillon à publier à la main |

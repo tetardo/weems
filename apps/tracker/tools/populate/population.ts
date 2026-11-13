@@ -1,9 +1,10 @@
-import type { PopulationProgress, PopulationResult } from "@weems/contrats";
-import { httpApiClient } from "../../src/sender/api-client.ts";
+import { PilotRank, type PopulationProgress, type PopulationResult } from "@weems/contrats";
 import type { DevApi } from "./dev-api.ts";
 import { identities } from "./identities.ts";
-import { flyPastFlight, type PastFlight } from "./past-flight.ts";
-import { type PilotSchedule, scheduleOf } from "./schedule.ts";
+import { flyInWorkers } from "./fly-workers.ts";
+import type { PastFlight } from "./past-flight.ts";
+import { pool } from "./pool.ts";
+import { careerScheduleOf, type PilotSchedule, scheduleOf } from "./schedule.ts";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -17,10 +18,12 @@ export interface PopulationOptions {
   days: number;
   /** Share of public profiles, 0 to 1. */
   publicShare: number;
+  /** One public account per pilot rank, with the history that reaches it (spec grades). */
+  careers: boolean;
   random: () => number;
   workDir: string;
   trackerVersion: string;
-  /** Flights flown at the same time (the generator is the bottleneck: a few are enough). */
+  /** Flights flown at the same time, over all the worker threads (one per core). */
   concurrency?: number;
   signal?: AbortSignal;
   onProgress?: (progress: PopulationProgress) => void;
@@ -31,23 +34,6 @@ interface Planned extends PastFlight {
   pilotId: string;
 }
 
-/** Runs `work` on every item, `concurrency` at a time, until the signal stops it. */
-async function pool<T>(
-  items: readonly T[],
-  concurrency: number,
-  work: (item: T) => Promise<void>,
-  signal?: AbortSignal,
-): Promise<void> {
-  let next = 0;
-  const worker = async () => {
-    while (next < items.length && !signal?.aborted) {
-      const item = items[next++] as T;
-      await work(item);
-    }
-  };
-  await Promise.all(Array.from({ length: concurrency }, worker));
-}
-
 /**
  * Creates the fictitious population (page Activité simulée): deletes the previous one,
  * creates the accounts and their profiles, then flies their past flights through the real
@@ -56,20 +42,7 @@ async function pool<T>(
 export async function createPopulation(options: PopulationOptions): Promise<PopulationResult> {
   const now = options.now ?? Date.now;
   const startedMs = now();
-  const schedules = Array.from(
-    identities(options.accounts, options.publicShare, options.random),
-    (identity) =>
-      scheduleOf(
-        identity,
-        {
-          minFlights: options.minFlights,
-          maxFlights: options.maxFlights,
-          fromMs: startedMs - options.days * DAY_MS,
-          nowMs: startedMs,
-        },
-        options.random,
-      ),
-  );
+  const schedules = schedulesOf(options, startedMs);
   const total = schedules.reduce((sum, s) => sum + s.flights.length, 0);
   const progress = new ProgressMeter(options, schedules.length, total, now);
 
@@ -81,6 +54,27 @@ export async function createPopulation(options: PopulationOptions): Promise<Popu
   await flyAll(planned, options, progress);
   progress.step("check");
   return check(schedules, total, options, (now() - startedMs) / 1000);
+}
+
+/**
+ * The schedule of every account: with `careers`, the first ones (public) each reach one pilot
+ * rank, from Élève to Légende; the others fly their 5 to 40 flights as hobby pilots.
+ */
+function schedulesOf(options: PopulationOptions, nowMs: number): PilotSchedule[] {
+  const window = {
+    minFlights: options.minFlights,
+    maxFlights: options.maxFlights,
+    fromMs: nowMs - options.days * DAY_MS,
+    nowMs,
+  };
+  const ranks = options.careers ? PilotRank.options : [];
+  return identities(options.accounts, options.publicShare, options.random).map(
+    (identity, index) => {
+      const rank = ranks[index];
+      if (!rank) return scheduleOf(identity, window, options.random);
+      return careerScheduleOf({ ...identity, isPublic: true }, rank, window, options.random);
+    },
+  );
 }
 
 async function createAccounts(
@@ -110,24 +104,18 @@ async function flyAll(
   options: PopulationOptions,
   progress: ProgressMeter,
 ) {
-  await pool(
-    planned,
-    options.concurrency ?? 8,
-    async (flight) => {
-      const api = httpApiClient({
-        baseUrl: options.apiUrl,
-        token: options.api.tokenOf(flight.pilotId),
-        trackerVersion: options.trackerVersion,
-      });
-      await flyPastFlight(flight, {
-        api,
-        workDir: options.workDir,
-        trackerVersion: options.trackerVersion,
-      });
-      progress.flightDone();
-    },
-    options.signal,
-  );
+  const flights = planned.map(({ pilotId, ...flight }) => ({
+    flight,
+    token: options.api.tokenOf(pilotId),
+  }));
+  await flyInWorkers(flights, {
+    apiUrl: options.apiUrl,
+    workDir: options.workDir,
+    trackerVersion: options.trackerVersion,
+    concurrency: options.concurrency ?? 16,
+    ...(options.signal ? { signal: options.signal } : {}),
+    onFlightDone: () => progress.flightDone(),
+  });
 }
 
 /** What the API holds now, and whether every public profile has its counters and charts. */

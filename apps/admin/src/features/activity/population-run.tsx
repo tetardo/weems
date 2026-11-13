@@ -5,7 +5,10 @@ import { DoneIcon, FailureIcon, SuccessIcon } from "../../ui/icons.ts";
 const STEPS: { step: PopulationProgress["step"]; label: string }[] = [
   { step: "cleaning", label: "Ancienne population supprimée" },
   { step: "accounts", label: "Comptes fictifs et profils créés" },
-  { step: "flights", label: "Vols passés rejoués par le tracker (simulateur replay)" },
+  {
+    step: "flights",
+    label: "Vols passés rejoués par le tracker (déclarés MSFS 2024, comptés pour les grades)",
+  },
   { step: "check", label: "Vérification : profils, compteurs et graphiques remplis" },
 ];
 

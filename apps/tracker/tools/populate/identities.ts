@@ -14,8 +14,8 @@ export interface Identity {
   isPublic: boolean;
 }
 
-/** Home airports of the fleet (tools/generate-flights/fleet.ts), with their country. */
-export const HOMES: readonly { icao: string; country: string }[] = [
+/** Home airports of the fictitious pilots (in airports.json), with their country. */
+const HOMES: readonly { icao: string; country: string }[] = [
   { icao: "LFPG", country: "FR" },
   { icao: "LFLL", country: "FR" },
   { icao: "LFMN", country: "FR" },
@@ -36,6 +36,31 @@ export const HOMES: readonly { icao: string; country: string }[] = [
   { icao: "LOWW", country: "AT" },
   { icao: "LKPR", country: "CZ" },
   { icao: "EIDW", country: "IE" },
+  { icao: "LFPO", country: "FR" },
+  { icao: "LFPB", country: "FR" },
+  { icao: "LFRS", country: "FR" },
+  { icao: "LFRB", country: "FR" },
+  { icao: "LFBH", country: "FR" },
+  { icao: "LFBP", country: "FR" },
+  { icao: "LFBZ", country: "FR" },
+  { icao: "LFMT", country: "FR" },
+  { icao: "LFML", country: "FR" },
+  { icao: "LFKJ", country: "FR" },
+  { icao: "LFLC", country: "FR" },
+  { icao: "LFLS", country: "FR" },
+  { icao: "LFST", country: "FR" },
+  { icao: "LFQQ", country: "FR" },
+  { icao: "LFRG", country: "FR" },
+  { icao: "LFOT", country: "FR" },
+  { icao: "EGKK", country: "GB" },
+  { icao: "EGPH", country: "GB" },
+  { icao: "EDDH", country: "DE" },
+  { icao: "EDDB", country: "DE" },
+  { icao: "LIRF", country: "IT" },
+  { icao: "LIPZ", country: "IT" },
+  { icao: "LEPA", country: "ES" },
+  { icao: "LEMG", country: "ES" },
+  { icao: "LPPT", country: "PT" },
 ];
 
 /** First and last names by country: realistic, and never a real person on purpose. */
@@ -87,6 +112,10 @@ const NAMES: Record<string, { first: string[]; last: string[] }> = {
     first: ["Jakub", "Tereza", "Tomáš", "Eliška"],
     last: ["Novák", "Svoboda", "Dvořák", "Černá"],
   },
+  PT: {
+    first: ["João", "Beatriz", "Tiago", "Inês"],
+    last: ["Silva", "Santos", "Ferreira", "Costa"],
+  },
   IE: { first: ["Seán", "Aoife", "Cian", "Niamh"], last: ["Murphy", "Kelly", "Byrne", "Ryan"] },
 };
 
@@ -99,7 +128,7 @@ const LEVELS: readonly [PilotLevel | null, number][] = [
 export const pick = <T>(random: () => number, list: readonly T[]): T =>
   list[Math.floor(random() * list.length)] as T;
 
-function weighted<T>(random: () => number, choices: readonly (readonly [T, number])[]): T {
+export function weighted<T>(random: () => number, choices: readonly (readonly [T, number])[]): T {
   let left = random();
   for (const [value, weight] of choices) {
     left -= weight;

@@ -12,6 +12,8 @@ const PopulationLaunch = z
     maxFlights: int(1, 200),
     months: z.union([z.literal(1), z.literal(6), z.literal(12)]),
     publicPercent: int(0, 100),
+    /** One account per pilot rank, Élève to Légende (pnpm populate create --no-careers if not). */
+    careers: z.boolean(),
   })
   .refine((launch) => launch.minFlights <= launch.maxFlights, {
     message: "Le nombre de vols minimal dépasse le maximal.",
@@ -30,20 +32,36 @@ export const ActivityLaunch = z.union([PopulationLaunch, LiveLaunch]);
 export type ActivityLaunch = z.infer<typeof ActivityLaunch>;
 
 const DAYS_PER_MONTH = 30;
-/** Flights the API takes in per second on a Mac (measured: about 2 to 3). */
-const FLIGHTS_PER_S = 2.5;
+/** Flight hours the tracker threads and the API get through per second (measured: 9 on 4 cores). */
+const HOURS_PER_S = 8;
+/** Average time in the air of a hobby flight, all types (estimate of pnpm populate). */
+const HOBBY_FLIGHT_H = 2;
+/** The 9 careers of pnpm populate create, Élève to Légende: flights and hours, about. */
+const CAREERS = { flights: 1600, hours: 5200 };
+const RANKS = 9;
 
-/** Average number of flights a population will have. */
-export function plannedFlights(launch: {
-  accounts: number;
-  minFlights: number;
-  maxFlights: number;
-}) {
-  return Math.round((launch.accounts * (launch.minFlights + launch.maxFlights)) / 2);
+type PopulationSize = Pick<
+  Extract<ActivityLaunch, { kind: "population" }>,
+  "accounts" | "minFlights" | "maxFlights" | "careers"
+>;
+
+/** Accounts flying careers: the first 9 when asked. */
+const careerAccounts = (launch: PopulationSize) =>
+  launch.careers ? Math.min(RANKS, launch.accounts) : 0;
+
+/** Average number of flights and flight hours a population will have. */
+export function plannedFlights(launch: PopulationSize): { flights: number; hours: number } {
+  const hobby = launch.accounts - careerAccounts(launch);
+  const flights = Math.round((hobby * (launch.minFlights + launch.maxFlights)) / 2);
+  const careers = careerAccounts(launch) === RANKS ? CAREERS : { flights: 0, hours: 0 };
+  return {
+    flights: flights + careers.flights,
+    hours: Math.round(flights * HOBBY_FLIGHT_H + careers.hours),
+  };
 }
 
 /** Seconds needed to fly them, for the estimate shown under the form. */
-export const estimatedSeconds = (flights: number) => Math.ceil(flights / FLIGHTS_PER_S);
+export const estimatedSeconds = (hours: number) => Math.ceil(hours / HOURS_PER_S);
 
 /** Arguments of `pnpm`, run from the root of the repository. */
 export function pnpmArgsOf(launch: ActivityLaunch, config: ConsoleConfig): string[] {
@@ -54,7 +72,9 @@ export function pnpmArgsOf(launch: ActivityLaunch, config: ConsoleConfig): strin
       ...["--accounts", String(launch.accounts)],
       ...["--flights", `${launch.minFlights}-${launch.maxFlights}`],
       ...["--days", String(launch.months * DAYS_PER_MONTH)],
-      ...["--public", String(launch.publicPercent), ...common],
+      ...["--public", String(launch.publicPercent)],
+      ...(launch.careers ? [] : ["--no-careers"]),
+      ...common,
     ];
   }
   return [
@@ -71,7 +91,8 @@ export function summaryOf(launch: ActivityLaunch): string {
       launch.minFlights === launch.maxFlights
         ? `${launch.minFlights} vols`
         : `${launch.minFlights} à ${launch.maxFlights} vols`;
-    return `Population fictive · ${launch.accounts} comptes, ${flights}, ${launch.months} mois`;
+    const careers = launch.careers ? ", 9 grades" : "";
+    return `Population fictive · ${launch.accounts} comptes, ${flights}, ${launch.months} mois${careers}`;
   }
   return `Activité en direct · ${launch.flights} vols, ${launch.visitors} visiteurs, ${launch.minutes} min`;
 }

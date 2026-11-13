@@ -4,11 +4,18 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { seededRandom } from "../generate-flights/random.ts";
 import { identities } from "./identities.ts";
-import { flyPastFlight } from "./past-flight.ts";
-import { liveScenario, scheduleOf } from "./schedule.ts";
+import { flyPastFlight, type PastFlight } from "./past-flight.ts";
+import { SIMULATED_TYPES } from "../generate-flights/aircraft-types.ts";
+import { estimatedAirborneS } from "../generate-flights/routes.ts";
+import { FICTITIOUS_SIMULATOR, liveScenario, scheduleOf } from "./schedule.ts";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const NOW = Date.parse("2026-11-11T12:00:00.000Z");
+const typeOf = (flight: PastFlight) => {
+  const type = SIMULATED_TYPES.find((t) => t.aircraft.model === flight.scenario.aircraft.model);
+  if (!type) throw new Error("unknown type");
+  return type;
+};
 const window = { minFlights: 5, maxFlights: 40, fromMs: NOW - 180 * DAY_MS, nowMs: NOW };
 
 describe("fictitious identities", () => {
@@ -34,13 +41,22 @@ describe("schedule of a fictitious pilot", () => {
 
   it("flies in the past, one flight after the other, after the account was created", () => {
     for (const { flights, createdAtMs } of schedules) {
-      const times = flights.map((f) => f.openedAtMs);
-      expect(times.every((t, i) => i === 0 || t - (times[i - 1] ?? 0) >= 4 * 60 * 60 * 1000)).toBe(
-        true,
-      );
-      expect(times.every((t) => t >= window.fromMs && t < NOW)).toBe(true);
-      expect(createdAtMs).toBeLessThan(times[0] ?? NOW);
+      const landed = (f: PastFlight) =>
+        f.openedAtMs +
+        estimatedAirborneS(typeOf(f), f.scenario.departure, f.scenario.arrival) * 1000;
+      expect(
+        flights.every((f, i) => i === 0 || f.openedAtMs > landed(flights[i - 1] as PastFlight)),
+      ).toBe(true);
+      expect(flights.every((f) => f.openedAtMs >= window.fromMs && landed(f) < NOW)).toBe(true);
+      expect(createdAtMs).toBeLessThan(flights[0]?.openedAtMs ?? NOW);
     }
+  });
+
+  it("flies varied types and routes, declared MSFS 2024 so that they count for the ranks", () => {
+    const flights = schedules.flatMap((s) => s.flights);
+    expect(new Set(flights.map((f) => f.scenario.aircraft.model)).size).toBeGreaterThan(15);
+    expect(new Set(flights.map((f) => f.scenario.name)).size).toBeGreaterThan(300);
+    expect(flights.every((f) => f.scenario.aircraft.simulator === FICTITIOUS_SIMULATOR)).toBe(true);
   });
 
   it("chains the legs from the home airport", () => {
