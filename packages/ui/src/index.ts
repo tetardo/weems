@@ -11,3 +11,4 @@ export { Select } from "./forms/select.tsx";
 export { TextInput } from "./forms/text-input.tsx";
 export { useFormChanges } from "./forms/use-form-changes.ts";
 export type { IconComponent } from "./icons.ts";
+export { currentTheme, resolveTheme, type Theme, themeScript, toggleTheme } from "./theme/theme.ts";

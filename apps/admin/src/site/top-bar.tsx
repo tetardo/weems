@@ -5,11 +5,14 @@ import { usePathname } from "next/navigation";
 import {
   AccountsIcon,
   ActivityIcon,
+  ExternalIcon,
   ServicesIcon,
   SupervisionIcon,
   TerminalIcon,
   TrafficIcon,
 } from "../ui/icons.ts";
+import { ThemeToggle } from "./theme-toggle.tsx";
+
 const TITLES = {
   "/services": "Services",
   "/traffic": "Trafic simulé",
@@ -24,7 +27,8 @@ const titleOf = (pathname: string) =>
     ? "Supervision"
     : (Object.entries(TITLES).find(([href]) => pathname.startsWith(href))?.[1] ?? "Admin");
 
-export function TopBar() {
+/** Breadcrumb, then link to the site, local badge and theme switch on the right. */
+export function TopBar({ siteUrl }: { siteUrl: string }) {
   const pathname = usePathname();
   return (
     <header className="topbar">
@@ -34,9 +38,13 @@ export function TopBar() {
       <span className="crumb">
         Admin / <b>{titleOf(pathname)}</b>
       </span>
-      <span className="sp localbadge hide">
+      <a className="sp localbadge" href={siteUrl} target="_blank" rel="noreferrer">
+        <ExternalIcon size={14} /> <span className="lbl">Accéder au site</span>
+      </a>
+      <span className="localbadge hide">
         <TerminalIcon size={14} /> localhost · Mac
       </span>
+      <ThemeToggle />
     </header>
   );
 }

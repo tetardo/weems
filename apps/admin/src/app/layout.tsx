@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import { config } from "../server/console.ts";
 import { Sidebar } from "../site/sidebar.tsx";
+import { THEME_SCRIPT } from "../site/theme.ts";
 import { MobileTabs, TopBar } from "../site/top-bar.tsx";
 import "./global.css";
 
@@ -21,11 +22,19 @@ export const metadata: Metadata = { title: "Weems Admin", robots: { index: false
 export default function RootLayout({ children }: { children: ReactNode }) {
   const { apiUrl, siteUrl } = config();
   return (
-    <html lang="fr" className={`${inter.variable} ${grotesk.variable} ${mono.variable}`}>
+    // data-theme is set by THEME_SCRIPT before React runs: the attribute differs from the server.
+    <html
+      lang="fr"
+      className={`${inter.variable} ${grotesk.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         <Sidebar apiUrl={apiUrl} siteUrl={siteUrl} />
         <div className="main">
-          <TopBar />
+          <TopBar siteUrl={siteUrl} />
           <main className="content">{children}</main>
         </div>
         <MobileTabs />

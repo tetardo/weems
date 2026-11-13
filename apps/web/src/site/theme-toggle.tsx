@@ -1,9 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { buttonClass } from "@weems/ui";
+import { buttonClass, toggleTheme } from "@weems/ui";
 import { ThemeDarkIcon, ThemeLightIcon } from "../ui/icons.ts";
-import { type Theme, THEME_STORAGE_KEY } from "./theme.ts";
+import { THEME_STORAGE_KEY } from "./theme.ts";
 
 /**
  * Switches between the dark and light themes and remembers the choice in this browser. Both
@@ -12,20 +12,10 @@ import { type Theme, THEME_STORAGE_KEY } from "./theme.ts";
  */
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const t = useTranslations("Site");
-  function toggle() {
-    const root = document.documentElement;
-    const next: Theme = root.dataset.theme === "light" ? "dark" : "light";
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch {
-      // Storage refused (private browsing): the choice lasts until the page is left.
-    }
-  }
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={() => toggleTheme(THEME_STORAGE_KEY)}
       className={`${buttonClass("ghost")} text-muted hover:text-ink ${className}`}
       aria-label={t("toggleTheme")}
       title={t("toggleTheme")}
