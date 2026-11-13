@@ -472,7 +472,7 @@ a.localbadge:hover {
   background: var(--term);
   color: var(--term-ink);
   font:
-    500 11px/1.5 var(--font-mono),
+    500 10px/1.45 var(--font-mono),
     "JetBrains Mono",
     monospace;
   padding: 12px 16px;
@@ -1313,7 +1313,7 @@ td.act .slots {
     grid-template-columns: 1fr 1fr;
   }
   .logs .term {
-    font-size: 10.5px;
+    font-size: 10px;
     padding: 10px 12px;
   }
   .logs .bar h2,
