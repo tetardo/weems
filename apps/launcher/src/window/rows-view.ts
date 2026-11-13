@@ -2,13 +2,15 @@ import type { LauncherCommand, Row, RowId, RowState } from "../launcher-state.ts
 import { sinceText } from "./format.ts";
 import { ICONS } from "./icons.ts";
 
-const INFO: Record<RowId, { name: string; detail: string }> = {
-  db: { name: "Base de données", detail: "PostgreSQL · Docker · weems-db-1" },
-  api: { name: "API", detail: "Fastify · pnpm --filter @weems/api dev" },
-  site: { name: "Site web", detail: "Next.js · pnpm --filter @weems/web dev" },
+/** Under the name, three lines (Greg, 13/11): what runs it, the command, then port and uptime. */
+const INFO: Record<RowId, { name: string; tech: string; command: string }> = {
+  db: { name: "Base de données", tech: "PostgreSQL · Docker", command: "conteneur weems-db-1" },
+  api: { name: "API", tech: "Fastify", command: "pnpm --filter @weems/api dev" },
+  site: { name: "Site web", tech: "Next.js", command: "pnpm --filter @weems/web dev" },
   console: {
     name: "Console d'administration",
-    detail: "Next.js · pnpm admin · simulations",
+    tech: "Next.js · simulations",
+    command: "pnpm admin",
   },
 };
 const PILLS: Record<Exclude<RowState, "running">, string> = {
@@ -43,7 +45,8 @@ function rowText(row: Row): HTMLElement {
   if (row.state !== "running") name.append(element("span", `pill ${row.state}`, PILLS[row.state]));
   const since = sinceText(row.since, Date.now());
   const meta = since ? `:${row.port} · ${since}` : `:${row.port}`;
-  text.append(name, element("div", "row-detail", INFO[row.id].detail));
+  const { tech, command } = INFO[row.id];
+  text.append(name, element("div", "row-detail", tech), element("div", "row-meta", command));
   text.append(element("div", "row-meta", meta));
   if (row.note) text.append(element("div", "row-note", row.note));
   return text;
