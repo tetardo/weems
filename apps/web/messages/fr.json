@@ -6,7 +6,7 @@
       "discover": "Découvrir",
       "logbook": "Mon carnet de bord",
       "live": "Vols en direct",
-      "profile": "Mon profil public",
+      "profile": "Mon profil",
       "plans": "Offres",
       "features": "Fonctionnalités"
     },
@@ -26,7 +26,13 @@
       "text": "Cette page n'a pas pu s'afficher : le serveur du site a rencontré une erreur. Le détail est dans le terminal où tourne le site.",
       "retry": "Réessayer"
     },
-    "languages": "Langue",
+    "switchLanguage": "Passer en {name}",
+    "languageNames": {
+      "fr": "Français",
+      "en": "English"
+    },
+    "liveCount": "Vols en direct : {count} en vol",
+    "airborne": "en vol",
     "testPlan": "Formule de test",
     "testPlanHint": "Outil de test, hors production : change la formule de votre compte pour essayer les pages Pilot Free et Pilot Pro. Il sera retiré avant la version 1.0.",
     "footer": {

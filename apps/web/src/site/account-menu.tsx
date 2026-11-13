@@ -6,7 +6,7 @@ import { useDismiss } from "../ui/use-dismiss.ts";
 
 /**
  * Pilot's photo (or initial without photo) at the right of the floating bar, opening a small menu
- * (name first): `children` are its entries (language, sign out).
+ * (name first, photo in a gradient ring): `children` are its entries (profile, test plan, sign out).
  */
 export function AccountMenu({
   name,
@@ -33,20 +33,19 @@ export function AccountMenu({
         aria-label={t("accountMenu", { name })}
         className="grid size-11 place-items-center rounded-full transition-colors hover:bg-ink/9"
       >
-        <span
-          aria-hidden="true"
-          className="avatar grid size-9 place-items-center overflow-hidden rounded-full font-title text-sm font-bold"
-        >
-          {/* Plain img: served by the API, already 256 px. */}
-          {photo ? (
-            <img src={photo} alt="" className="size-full object-cover" />
-          ) : (
-            name.slice(0, 1).toUpperCase()
-          )}
+        <span aria-hidden="true" className="avatar-ring rounded-full p-0.5">
+          <span className="avatar grid size-8 place-items-center overflow-hidden rounded-full border-2 border-surface font-title text-sm font-bold">
+            {/* Plain img: served by the API, already 256 px. */}
+            {photo ? (
+              <img src={photo} alt="" className="size-full object-cover" />
+            ) : (
+              name.slice(0, 1).toUpperCase()
+            )}
+          </span>
         </span>
       </button>
       {open && (
-        <div className="absolute top-[calc(100%+10px)] right-0 flex w-60 flex-col max-md:fixed max-md:inset-x-3 max-md:top-[76px] max-md:w-auto rounded-panel border border-line bg-surface p-1.5 shadow-floating [&>*]:w-full [&>*]:justify-start">
+        <div className="absolute top-[calc(100%+10px)] right-0 flex w-64 flex-col max-md:fixed max-md:inset-x-3 max-md:top-[76px] max-md:w-auto rounded-panel border border-line bg-surface p-1.5 shadow-floating [&>*]:w-full [&>*]:justify-start">
           <p className="truncate px-3 pt-2 pb-2.5 text-sm font-semibold" title={name}>
             {name}
           </p>

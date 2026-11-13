@@ -6,7 +6,7 @@
       "discover": "Discover",
       "logbook": "My logbook",
       "live": "Live flights",
-      "profile": "My public profile",
+      "profile": "My profile",
       "plans": "Plans",
       "features": "Features"
     },
@@ -26,7 +26,13 @@
       "text": "This page could not be shown: the site's server ran into an error. The details are in the terminal running the site.",
       "retry": "Try again"
     },
-    "languages": "Language",
+    "switchLanguage": "Switch to {name}",
+    "languageNames": {
+      "fr": "Français",
+      "en": "English"
+    },
+    "liveCount": "Live flights: {count} airborne",
+    "airborne": "airborne",
     "testPlan": "Test plan",
     "testPlanHint": "Test tool, outside production: changes your account's plan to try the Pilot Free and Pilot Pro pages. It will be removed before version 1.0.",
     "footer": {

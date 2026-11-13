@@ -19,6 +19,7 @@ export {
   Database as DataIcon,
   ExternalLink as ExternalIcon,
   Eye as ShowIcon,
+  Globe as LanguageIcon,
   GraduationCap as LearnIcon,
   LayoutGrid as FeaturesIcon,
   List as ListIcon,
