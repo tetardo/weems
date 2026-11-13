@@ -5,7 +5,7 @@
 
 /*
  * Mock-up: look of Greg's GameLab IA project (its tokens --gl-*, packages/shell/src/theme.ts):
- * dark night blue by default, light theme chosen by the pilot or the system (src/site/theme.ts), cyan
+ * dark night blue by default, light theme chosen by the pilot or the system (src/site/theme.ts, rules in @weems/ui), cyan
  * accent, orange second accent, Inter for text and Space Grotesk for titles. Phase colours: src/flight/phase-colors.ts.
  */
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
@@ -116,7 +116,7 @@
   --wm-cat-other: #adb5bd;
 }
 
-/* Light theme: set on <html> by the head script (src/site/theme.ts). */
+/* Light theme: set on <html> by the head script (src/site/theme.ts, rules in @weems/ui). */
 :root[data-theme="light"] {
   color-scheme: light;
   --wm-bg: #f5f7fb;

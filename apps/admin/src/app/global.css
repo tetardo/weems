@@ -23,7 +23,10 @@
   --shadow-floating: var(--shadow);
 }
 
-:root {
+:root,
+.topbar,
+.side .top {
+  /* Dark tokens: the whole console in the dark theme, the top band in both themes. */
   color-scheme: dark;
   --bg: #0e1320;
   --surface: #171e2e;
@@ -42,6 +45,7 @@
   --glow: rgba(79, 209, 232, 0.18);
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   --term: #0a0e18;
+  --violet: #b794f6;
 }
 * {
   box-sizing: border-box;
@@ -250,9 +254,9 @@ svg.s {
   background: color-mix(in srgb, var(--accent2) 10%, transparent);
 }
 .st.adm {
-  color: #b794f6;
-  border-color: rgba(183, 148, 246, 0.45);
-  background: rgba(183, 148, 246, 0.1);
+  color: var(--violet);
+  border-color: color-mix(in srgb, var(--violet) 40%, transparent);
+  background: color-mix(in srgb, var(--violet) 9%, transparent);
 }
 
 .localbadge {
@@ -270,34 +274,56 @@ svg.s {
     monospace;
   white-space: nowrap;
 }
+a.localbadge:hover {
+  border-style: solid;
+  background: color-mix(in srgb, var(--accent2) 10%, transparent);
+}
+.themebtn {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.themebtn:hover {
+  color: var(--ink);
+}
+/* The icon shows the theme a click leads to. */
+.themebtn .to-dark,
+[data-theme="light"] .themebtn .to-light {
+  display: none;
+}
+[data-theme="light"] .themebtn .to-dark {
+  display: block;
+}
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --bg: #f5f7fb;
-    --surface: #fff;
-    --surface2: #f0f3f9;
-    --line: #dde1ee;
-    --ink: #1f2430;
-    --muted: #5a6378;
-    /* Same light accent as the site: white text on it stays at WCAG AA (4.7:1). */
-    --accent: #0c7f94;
-    --on-accent: #fff;
-    --link: #0b7285;
-    --accent2: #b86a00;
-    --success: #1b7f4b;
-    --danger: #c0283d;
-    --soft: rgba(12, 127, 148, 0.1);
-    --glass: rgba(255, 255, 255, 0.75);
-    --glow: rgba(12, 127, 148, 0.12);
-    --shadow: 0 10px 30px rgba(30, 40, 70, 0.12);
-    --term: #141a28;
-  }
-  .st.adm {
-    color: #6b3fc4;
-    border-color: rgba(107, 63, 196, 0.35);
-    background: rgba(107, 63, 196, 0.07);
-  }
+/* Light theme: set on <html> by the head script (src/site/theme.ts), the top band stays dark. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f7fb;
+  --surface: #fff;
+  --surface2: #f0f3f9;
+  --line: #dde1ee;
+  --ink: #1f2430;
+  --muted: #5a6378;
+  /* Same light accent as the site: white text on it stays at WCAG AA (4.7:1). */
+  --accent: #0c7f94;
+  --on-accent: #fff;
+  --link: #0b7285;
+  --accent2: #b86a00;
+  --success: #1b7f4b;
+  --danger: #c0283d;
+  --soft: rgba(12, 127, 148, 0.1);
+  --glass: rgba(255, 255, 255, 0.75);
+  --glow: rgba(12, 127, 148, 0.12);
+  --shadow: 0 10px 30px rgba(30, 40, 70, 0.12);
+  --term: #141a28;
+  --violet: #6b3fc4;
 }
 
 /* ---------- page content ---------- */
@@ -1130,6 +1156,8 @@ td.act .slots {
   z-index: 5;
 }
 .side .top {
+  background: var(--surface);
+  color: var(--ink);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1215,6 +1243,8 @@ td.act .slots {
   margin-left: 248px;
 }
 .topbar {
+  background: var(--bg);
+  color: var(--ink);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1323,7 +1353,8 @@ td.act .slots {
   .hist .it .hide {
     display: none;
   }
-  .localbadge.hide {
+  .localbadge.hide,
+  .localbadge .lbl {
     display: none;
   }
   .side {
@@ -1507,13 +1538,13 @@ button:disabled {
     grid-template-columns: 1fr 1fr;
   }
 }
-:root {
+:root,
+.topbar,
+.side .top {
   --line2: #33405f;
 }
-@media (prefers-color-scheme: light) {
-  :root {
-    --line2: #c9cfdf;
-  }
+:root[data-theme="light"] {
+  --line2: #c9cfdf;
 }
 
 .mode .foot .btn,

@@ -58,7 +58,7 @@ export function MetricTiles({ series, total }: { series: MetricsSample[]; total:
         value={last ? fr(last.rssMb) : "—"}
         unit="Mo"
         values={series.map((s) => s.rssMb)}
-        color="#b794f6"
+        color="var(--violet)"
       />
     </div>
   );

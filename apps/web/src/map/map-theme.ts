@@ -53,6 +53,6 @@ const LIGHT: MapTheme = {
 
 export const mapTheme = (dark: boolean): MapTheme => (dark ? DARK : LIGHT);
 
-/** Theme of the page, set on <html> by src/site/theme.ts. */
+/** Theme of the page, set on <html> by the head script (src/site/theme.ts). */
 export const currentMapTheme = (): MapTheme =>
   mapTheme(document.documentElement.dataset.theme !== "light");
