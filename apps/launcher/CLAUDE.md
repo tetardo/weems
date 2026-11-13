@@ -7,7 +7,7 @@ Installation sur le Mac : `bash scripts/mac/install-launcher.sh` (racine du dép
 ## Règles
 
 - **La console reste le chef d'orchestre** (fiche 011) : le lanceur ne lance que `scripts/mac/prepare.sh`, `console.sh` et `stop.sh` ; la base, l'API et le site passent par la console (`/api/lifecycle`, format `@weems/contrats`, `tools/local-services.ts`). Jamais de `docker` ni de `pnpm dev` lancés ici.
-- Processus : `ManagedProcess` de `@weems/local-process`, jamais recopié. La console lancée par l'app a son propre groupe de processus, écrit dans `apps/admin/.data/console.pid` pour que `stop.sh` puisse l'arrêter.
+- Processus : `ManagedProcess` de `@weems/local-process`, jamais recopié. La console lancée par l'app a son propre groupe de processus, écrit dans `apps/console/.data/console.pid` pour que `stop.sh` puisse l'arrêter.
 - Le dépôt est écrit dans l'app à sa construction (`WEEMS_REPO_ROOT`, `scripts/build-app.ts`) ; `WEEMS_REPO` le remplace pour un essai.
 - Quitter = tout arrêter (`stop.sh`), données gardées. Fermer la fenêtre ne s'arrête rien.
 - Fenêtre isolée (`contextIsolation`, `sandbox`) : seul pont `window.weems` (`preload.ts`). Les journaux sont écrits en texte, jamais en HTML.

@@ -84,7 +84,7 @@ export const PublicFounders = z.object({
 });
 export type PublicFounders = z.infer<typeof PublicFounders>;
 
-/** One founder in the admin console. */
+/** One founder in the console. */
 export const AdminFounder = z.object({
   number: z.number().int().positive(),
   pilotId: z.uuid(),

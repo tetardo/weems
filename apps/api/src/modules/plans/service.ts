@@ -38,7 +38,7 @@ export class PlansService {
   }
 
   /**
-   * Plan of every pilot who is not on Pilot Free (admin console, page Comptes): Pilot Pro given,
+   * Plan of every pilot who is not on Pilot Free (console, page Comptes): Pilot Pro given,
    * then the test switch, which wins as in planOf.
    */
   async plansByPilot(): Promise<Map<string, PlanId>> {

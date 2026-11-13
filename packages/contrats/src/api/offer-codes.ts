@@ -54,7 +54,7 @@ export type ReferralCode = z.infer<typeof ReferralCode>;
 export const MyCodes = z.object({ referral: z.array(ReferralCode) });
 export type MyCodes = z.infer<typeof MyCodes>;
 
-/** A batch, the referral codes or an ambassador's code, in the admin console. */
+/** A batch, the referral codes or an ambassador's code, in the console. */
 export const AdminCampaign = z.object({
   id: z.uuid(),
   kind: CampaignKind,

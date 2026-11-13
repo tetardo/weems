@@ -13,7 +13,7 @@ export interface AccountRecord {
   fictitious: boolean;
 }
 
-/** What the admin console reads and changes on accounts (spec admin, page Comptes). */
+/** What the console reads and changes on accounts (console spec, page Comptes). */
 export class AdminAccountsRepository {
   private readonly db: Database;
 

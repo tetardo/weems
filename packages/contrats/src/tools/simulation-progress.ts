@@ -3,7 +3,7 @@ import { FlightPhase } from "../flight/phase.ts";
 
 /**
  * Lines written by `pnpm simulate --progress` (one JSON object per line), read by the admin
- * console (spec admin, page Trafic simulé). Not an API format: a contract between two programs.
+ * console (console spec, page Trafic simulé). Not an API format: a contract between two programs.
  */
 
 export const PilotProgress = z.object({
@@ -35,7 +35,7 @@ export const SimulationLine = z.discriminatedUnion("type", [
   SimulationProgress.extend({ type: z.literal("progress") }),
   z.object({
     type: z.literal("result"),
-    /** Stopped before the end (Ctrl+C, admin console). */
+    /** Stopped before the end (Ctrl+C, console). */
     stopped: z.boolean(),
     flights: z.number().int().nonnegative(),
     pending: z.number().int().nonnegative(),

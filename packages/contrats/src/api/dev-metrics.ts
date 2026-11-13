@@ -13,7 +13,7 @@ export const DevMetrics = z.object({
 export type DevMetrics = z.infer<typeof DevMetrics>;
 
 /**
- * GET /v1/dev/flight-counts, outside production only (spec admin, page Trafic simulé):
+ * GET /v1/dev/flight-counts, outside production only (console spec, page Trafic simulé):
  * the caller's flights, simulated ones (simulator "replay") apart from real ones (pnpm fly).
  */
 export const DevFlightCounts = z.object({

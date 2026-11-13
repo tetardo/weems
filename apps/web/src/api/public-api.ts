@@ -55,7 +55,7 @@ export async function getPilotIndex(): Promise<PublicPilotIndex> {
 /** Counters of the home page and of the bar (one call per page); null when the API does not answer. */
 export const getSiteStats = cache((): Promise<SiteStats | null> => get("/v1/stats", SiteStats));
 
-/** Home page images set from the admin console; null when the API does not answer. */
+/** Home page images set from the console; null when the API does not answer. */
 export function getHomeImages(): Promise<HomeImages | null> {
   return get("/v1/site/home-images", HomeImages);
 }

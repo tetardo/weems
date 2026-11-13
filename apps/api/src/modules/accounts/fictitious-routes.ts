@@ -14,7 +14,7 @@ const tags = ["dev"];
 const security = [{ bearer: [] }];
 
 /**
- * Development tools of the simulated activity (admin console, page Activité simulée),
+ * Development tools of the simulated activity (console, page Activité simulée),
  * never registered in production (see app.ts): create, count and delete the fictitious accounts.
  */
 export function registerFictitiousPilotRoutes(

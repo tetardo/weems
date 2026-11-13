@@ -33,7 +33,7 @@ async function create(names: string[]): Promise<FictitiousPilot[]> {
 
 let admin: string | null = null;
 
-/** Every account, as the admin console lists them. */
+/** Every account, as the console lists them. */
 async function accounts(): Promise<AdminAccount[]> {
   admin ??= await newPilot(app, uniqueEmail(), "admin");
   const response = await app.inject({
@@ -90,7 +90,7 @@ describe("fictitious accounts (development only)", () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it("shows the badge on a public profile, and in the admin console", async () => {
+  it("shows the badge on a public profile, and in the console", async () => {
     const [pilot] = await create(["Ana Costa"]);
     const handle = `ana-${pilot?.pilotId.slice(-6)}`;
     const saved = await app.inject({

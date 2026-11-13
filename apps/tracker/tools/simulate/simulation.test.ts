@@ -36,7 +36,7 @@ describe("runSimulation with stopAfterMs (load test)", () => {
   });
 });
 
-describe("runSimulation stopped by a signal (admin console)", () => {
+describe("runSimulation stopped by a signal (console)", () => {
   it("closes the flight in the air as interrupted and reports progress", async () => {
     workDir = mkdtempSync(join(tmpdir(), "weems-simulation-"));
     const closes: unknown[] = [];

@@ -53,7 +53,7 @@ export interface Guards {
   pilot: onRequestAsyncHookHandler;
   /** A tracker recent enough (426 otherwise), with an access token. */
   tracker: onRequestAsyncHookHandler;
-  /** An administrator logged in with a session cookie (admin console); 403 for anyone else. */
+  /** An administrator logged in with a session cookie (console); 403 for anyone else. */
   admin: onRequestAsyncHookHandler;
 }
 

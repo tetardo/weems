@@ -35,15 +35,15 @@ Les étapes de démarrage sont celles de l'ancienne icône Start, dans `scripts/
 | --- | --- |
 | `apps/launcher/` | L'app Electron (voir son `CLAUDE.md`) |
 | `scripts/mac/prepare.sh` | Tout ce qui précède la console |
-| `scripts/mac/console.sh` | La console (`pnpm admin`) avec les outils de `mise` |
+| `scripts/mac/console.sh` | La console (`pnpm console`) avec les outils de `mise` |
 | `scripts/mac/stop.sh` | Tout arrêter (aussi utilisé par l'app quand on la quitte) |
 | `scripts/mac/lib.sh` | Partagé : outils de `mise` (une app ouverte depuis le Finder n'a pas `~/.zshrc`), Docker, ports, arrêt complet |
 | `scripts/mac/install-launcher.sh` | Construction et installation de `Weems.app` |
-| `apps/admin/src/app/api/lifecycle/route.ts` | `GET` (état, journaux d'un service) et `POST` (tout ou un service), format `@weems/contrats` |
+| `apps/console/src/app/api/lifecycle/route.ts` | `GET` (état, journaux d'un service) et `POST` (tout ou un service), format `@weems/contrats` |
 
 La route de la console exige l'en-tête `x-weems-local-script: 1` : une page web ne peut pas l'ajouter sans une requête préalable CORS, que la console refuse. Elle reste derrière le contrôle d'adresse de `src/proxy.ts` (127.0.0.1:3002 seulement).
 
-Fichier de travail : `apps/admin/.data/console.pid` (groupe de processus de la console lancée par l'app), jamais versionné.
+Fichier de travail : `apps/console/.data/console.pid` (groupe de processus de la console lancée par l'app), jamais versionné.
 
 ## Sans l'app (dépannage, en Terminal)
 

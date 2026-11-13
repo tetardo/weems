@@ -2,7 +2,7 @@
   "name": "@weems/local-process",
   "version": "0.1.0",
   "private": true,
-  "description": "Commands started on the developer's Mac (pnpm dev, scripts), in their own process group, with their last log lines: shared by the admin console and the Mac launcher",
+  "description": "Commands started on the developer's Mac (pnpm dev, scripts), in their own process group, with their last log lines: shared by the console and the Mac launcher",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"

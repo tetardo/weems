@@ -1,7 +1,7 @@
 import { DATABASE_HISTORY_DAYS, type DatabaseDay } from "@weems/contrats";
 import type { FlightsOfDay, SizeReading } from "./history-repository.ts";
 
-/** Size readings are kept 13 months (spec admin, page Base de données). */
+/** Size readings are kept 13 months (console spec, page Base de données). */
 export const KEEP_READINGS_DAYS = 396;
 
 const DAY_MS = 86_400_000;

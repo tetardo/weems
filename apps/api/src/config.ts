@@ -18,10 +18,10 @@ export interface Config {
   /** Public address of the API: the audience of tracker access tokens. */
   apiUrl: string;
   /**
-   * Address of the local admin console (apps/admin), allowed to log in outside production only:
+   * Address of the local console (apps/console), allowed to log in outside production only:
    * its server signs in to /api/auth with this origin.
    */
-  adminUrl: string;
+  consoleUrl: string;
   /** Signs sessions and keys; at least 32 characters, mandatory in production. */
   authSecret: string;
   /**
@@ -50,12 +50,14 @@ function readAuthSecret(env: Config["env"], value: string | undefined): string {
   return DEV_AUTH_SECRET;
 }
 
-/** Addresses of the site, the API and the local admin console. */
-function readAddresses(source: NodeJS.ProcessEnv): Pick<Config, "siteUrl" | "apiUrl" | "adminUrl"> {
+/** Addresses of the site, the API and the local console. */
+function readAddresses(
+  source: NodeJS.ProcessEnv,
+): Pick<Config, "siteUrl" | "apiUrl" | "consoleUrl"> {
   return {
     siteUrl: source["WEEMS_SITE_URL"] ?? "http://localhost:3001",
     apiUrl: source["WEEMS_API_URL"] ?? "http://localhost:3000",
-    adminUrl: source["WEEMS_ADMIN_URL"] ?? "http://127.0.0.1:3002",
+    consoleUrl: source["WEEMS_CONSOLE_URL"] ?? "http://127.0.0.1:3002",
   };
 }
 

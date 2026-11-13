@@ -19,7 +19,7 @@ const simulatedBefore = (before: Date) =>
   and(eq(flights.simulator, "replay"), lt(flights.openedAt, before));
 
 /**
- * Cleanup of the page Base de données (spec admin): old simulated flights. The flights of the
+ * Cleanup of the page Base de données (console spec): old simulated flights. The flights of the
  * fictitious accounts are left alone: their history is dated in the past on purpose (populate).
  */
 export class FlightsCleanupRepository {

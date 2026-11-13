@@ -33,7 +33,7 @@ export class PilotIdentifier {
     this.now = now;
   }
 
-  /** A disabled account is unknown, whatever token it still holds (spec admin). */
+  /** A disabled account is unknown, whatever token it still holds (console spec). */
   private async active(userId: string | null): Promise<string | null> {
     if (!userId) return null;
     const status = await this.statusOf(userId);

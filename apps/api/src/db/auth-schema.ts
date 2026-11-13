@@ -29,11 +29,11 @@ export const users = pgTable("users", {
   image: text("image"),
   createdAt: utc("created_at").notNull().defaultNow(),
   updatedAt: utc("updated_at").notNull().defaultNow(),
-  /** "pilot" or "admin" (admin console, spec admin). */
+  /** "pilot" or "admin" (console, console spec). */
   role: text("role").notNull().default("pilot"),
   /** Set when an administrator disables the account: no login, no token accepted. */
   disabledAt: utc("disabled_at"),
-  /** Fictitious account of the admin console's simulated activity (development only, page Activité simulée). */
+  /** Fictitious account of the console's simulated activity (development only, page Activité simulée). */
   fictitious: boolean("fictitious").notNull().default(false),
 });
 
@@ -264,7 +264,7 @@ export const invitations = pgTable("invitations", {
   usedAt: utc("used_at"),
   /** Role given to the account created with this invitation. */
   role: text("role").notNull().default("pilot"),
-  /** 14 days after creation (spec admin); existing invitations get 14 days from the migration. */
+  /** 14 days after creation (console spec); existing invitations get 14 days from the migration. */
   expiresAt: utc("expires_at")
     .notNull()
     .default(sql`now() + interval '14 days'`),

@@ -8,7 +8,7 @@ flowchart TB
     end
     subgraph scripts["scripts/mac/ (sans Terminal)"]
       prepare["prepare.sh<br/>Docker Desktop, base,<br/>apps/api/.env, ports"]
-      consolesh["console.sh<br/>pnpm admin"]
+      consolesh["console.sh<br/>pnpm console"]
       stopsh["stop.sh<br/>tout arrêter"]
     end
     console["Console :3002<br/>GET et POST /api/lifecycle"]

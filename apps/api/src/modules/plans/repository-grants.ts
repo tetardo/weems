@@ -41,7 +41,7 @@ export class GrantsRepository {
     return rows.map((row) => ({ ...row, source: row.source as GrantSource }));
   }
 
-  /** Plan given to each pilot right now (admin console, page Comptes). */
+  /** Plan given to each pilot right now (console, page Comptes). */
   async currentByPilot(now: Date): Promise<Map<string, string>> {
     const rows = await this.db
       .selectDistinct({ pilotId: planGrants.pilotId, plan: planGrants.plan })

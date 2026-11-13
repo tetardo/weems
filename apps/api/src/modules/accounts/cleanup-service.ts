@@ -1,6 +1,6 @@
 import type { AccountsCleanupRepository } from "./repository-cleanup.ts";
 
-/** Expired sessions and invitations, for the page Base de données of the admin console. */
+/** Expired sessions and invitations, for the page Base de données of the console. */
 export class AccountsCleanupService {
   private readonly repository: AccountsCleanupRepository;
 

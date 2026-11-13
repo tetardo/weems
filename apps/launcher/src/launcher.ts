@@ -187,7 +187,7 @@ export class Launcher {
   private startConsole(): void {
     if (this.console.status().running) return;
     this.stopAsked = false;
-    this.logs.push("› scripts/mac/console.sh (pnpm admin)");
+    this.logs.push("› scripts/mac/console.sh (pnpm console)");
     this.console.start("/bin/bash", [this.deps.paths.script("console")], this.deps.paths.root);
     const { pid } = this.console.status();
     if (pid === null) return;

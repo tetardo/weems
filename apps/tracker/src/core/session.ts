@@ -156,7 +156,7 @@ export class FlightSession {
     this.closeAtLastSample("manual");
   }
 
-  /** Stopped from outside before its end (simulation stopped from the admin console). */
+  /** Stopped from outside before its end (simulation stopped from the console). */
   interrupt(): void {
     this.closeAtLastSample("interrupted");
   }

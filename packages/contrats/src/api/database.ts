@@ -3,7 +3,7 @@ import { UtcTimestamp } from "./common.ts";
 
 /**
  * GET /v1/admin/database and POST /v1/admin/database/cleanup: the page Base de données of the
- * admin console (spec admin, section « Page Base de données »). Administrators only.
+ * console (console spec, section « Page Base de données »). Administrators only.
  */
 const Count = z.number().int().nonnegative();
 

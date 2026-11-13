@@ -72,7 +72,7 @@ describe("Launcher", () => {
     await launcher.command({ type: "start-all" });
     expect(world.ran).toEqual(["prepare.sh", "console.sh"]);
     expect(world.sent).toEqual([{ action: "start-all" }]);
-    const consolePid = join(world.root, "apps", "admin", ".data", "console.pid");
+    const consolePid = join(world.root, "apps", "console", ".data", "console.pid");
     expect(readFileSync(consolePid, "utf8")).toBe("4242");
     const state = launcher.state();
     expect(state.busy).toBeNull();

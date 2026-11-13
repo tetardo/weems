@@ -21,7 +21,7 @@ A se distinguait à peine de l'actuel ; C jurait avec tout ce qui reste rond (av
 
 ## Choix
 
-- Les rayons sont des jetons Tailwind dans `packages/ui/src/radius.css` (`@theme static`), importé par `apps/web` et `apps/admin`. Classes `rounded-hero`, `rounded-panel`, `rounded-box`, `rounded-control`, `rounded-inner`, `rounded-tag` ; CSS simple : `var(--radius-panel)`…
+- Les rayons sont des jetons Tailwind dans `packages/ui/src/radius.css` (`@theme static`), importé par `apps/web` et `apps/console`. Classes `rounded-hero`, `rounded-panel`, `rounded-box`, `rounded-control`, `rounded-inner`, `rounded-tag` ; CSS simple : `var(--radius-panel)`…
 - Valeurs B.
 - Restent hors jetons : les formes rondes par nature (`rounded-full`, `50 %`, `999px`) et les tout petits repères de 2-3 px (pastilles de catégorie, drapeaux, légendes).
 - Le tracker (Electron) n'est pas concerné.

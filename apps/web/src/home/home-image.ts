@@ -18,7 +18,7 @@ const POSITION: Record<HomeFocus, string> = {
 };
 
 /**
- * The background of each theme: the image set from the admin console, read from the API, or the
+ * The background of each theme: the image set from the console, read from the API, or the
  * one shipped with the site.
  */
 export function homeBackgrounds(

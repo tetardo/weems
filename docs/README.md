@@ -49,7 +49,7 @@ flowchart LR
 | [Offre Pilote fondateur et codes d'offre](cahiers-des-charges/web/spec-offre-fondateurs.md) | 500 premiers pilotes, codes, parrainage, ambassadeurs | Référence |
 | [Grades des pilotes](cahiers-des-charges/web/spec-grades-des-pilotes.md) | 9 grades sur heures et vols valides, insignes, carnet, profil, Boarding | Référence |
 | [Site — carnet de vol privé](cahiers-des-charges/web/spec-carnet-prive.md) | Résumé, Vols, Statistiques livrés ; Objectifs à faire | Ouvert |
-| [Console d'administration](cahiers-des-charges/admin/spec-admin.md) | Les 8 pages de la console | À jour |
+| [Console](cahiers-des-charges/console/spec-console.md) | Les 8 pages de la console | À jour |
 
 ## Décisions (`decisions/`)
 

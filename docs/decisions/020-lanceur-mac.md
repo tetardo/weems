@@ -23,7 +23,7 @@ Les icônes Weems Start et Weems Stop (fiche 011) marchent, mais ouvrent des fen
 - **La console reste le chef d'orchestre** (fiche 011) : l'app lance seulement `scripts/mac/prepare.sh` (Docker Desktop, base, `apps/api/.env`, ports, extraits de `start.sh`) puis la console (`scripts/mac/console.sh`), et demande le reste à la console par `/api/lifecycle` : `GET` (état et journaux d'un service), `POST` (tout, ou un service : démarrer, arrêter, redémarrer). Format dans `@weems/contrats` (`tools/local-services.ts`).
 - La gestion des processus (groupe de processus, journaux, arrêt SIGTERM puis SIGKILL) passe de la console au paquet partagé `@weems/local-process`, utilisé par les deux applications.
 - Ouvrir l'app démarre ce qui est arrêté. Fermer la fenêtre laisse tourner Weems (pastille dans la barre des menus). **Quitter l'app arrête tout** par `stop.sh`, données gardées (jamais `down -v`).
-- Les boutons de la console d'administration agissent sur tout : l'API et le site lancés par la console s'arrêtent avec elle.
+- Les boutons de la console agissent sur tout : l'API et le site lancés par la console s'arrêtent avec elle.
 - Local seulement : l'app ne pilotera jamais le site en ligne (même règle que la console, fiche 009).
 
 ## Conséquences

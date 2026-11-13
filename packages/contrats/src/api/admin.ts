@@ -3,7 +3,7 @@ import { UtcTimestamp } from "./common.ts";
 import { PlanId } from "./plans.ts";
 
 /**
- * Routes /v1/admin/*, for the local admin console (spec admin, docs/cahiers-des-charges/admin).
+ * Routes /v1/admin/*, for the local console (console spec, docs/cahiers-des-charges/console).
  * Reserved to accounts with the administrator role, logged in with a session cookie.
  */
 

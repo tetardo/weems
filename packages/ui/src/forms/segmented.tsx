@@ -2,7 +2,7 @@
  * A choice among a few options, all in sight (fiche 008): radio buttons drawn as one bar.
  * Plain inputs, so the form reads it like any field and the arrow keys move the choice.
  * Either left to the form (`defaultValue`, site) or held by the page (`value` and `onChange`,
- * admin console).
+ * console).
  */
 export function Segmented({
   name,

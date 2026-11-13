@@ -8,9 +8,9 @@ const INFO: Record<RowId, { name: string; tech: string; command: string }> = {
   api: { name: "API", tech: "Fastify", command: "pnpm --filter @weems/api dev" },
   site: { name: "Site web", tech: "Next.js", command: "pnpm --filter @weems/web dev" },
   console: {
-    name: "Console d'administration",
+    name: "Console",
     tech: "Next.js · simulations",
-    command: "pnpm admin",
+    command: "pnpm console",
   },
 };
 const PILLS: Record<Exclude<RowState, "running">, string> = {

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { UtcTimestamp } from "./common.ts";
 
-/** Most accounts created by one request (spec admin, page Activité simulée). */
+/** Most accounts created by one request (console spec, page Activité simulée). */
 export const MAX_FICTITIOUS_PILOTS = 500;
 
 /**

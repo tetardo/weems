@@ -49,7 +49,7 @@ const sumOf = (ids: readonly string[], counts: Map<string, number>) =>
   ids.reduce((total, id) => total + (counts.get(id) ?? 0), 0);
 
 /**
- * Fictitious accounts of the simulated activity (spec admin, page Activité simulée), development only:
+ * Fictitious accounts of the simulated activity (console spec, page Activité simulée), development only:
  * created in bulk, all marked, deleted together with their flights. Never a real account.
  */
 export class FictitiousPilotsService {

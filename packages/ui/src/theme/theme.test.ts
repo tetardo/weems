@@ -30,6 +30,6 @@ describe("themeScript", () => {
   });
 
   it("ignores the choice stored under another key", () => {
-    expect(run("weems-admin-theme", { "weems-theme": "light" })).toBe("dark");
+    expect(run("weems-console-theme", { "weems-theme": "light" })).toBe("dark");
   });
 });

@@ -8,8 +8,8 @@ import type { FlightsService } from "./service.ts";
 /**
  * Development tools of the flights module, never registered in production (see app.ts):
  * DELETE /v1/flights empties the caller's flight list, to clear test flights;
- * `?simulator=replay` deletes only the simulated ones, never the real flights of pnpm fly (spec admin).
- * GET /v1/dev/flight-counts counts them (admin console, page Trafic simulé).
+ * `?simulator=replay` deletes only the simulated ones, never the real flights of pnpm fly (console spec).
+ * GET /v1/dev/flight-counts counts them (console, page Trafic simulé).
  * Real flights are never deleted in production (EF-14).
  */
 export function registerDevFlightRoutes(

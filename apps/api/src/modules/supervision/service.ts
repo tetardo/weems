@@ -40,7 +40,7 @@ const toEvent = ({ at, kind, pilot, callsign, from, to }: EventRecord) => ({
 
 const round1 = (hours: number) => Math.round(hours * 10) / 10;
 
-/** The page Supervision of the admin console (spec admin): one read, every section. */
+/** The page Supervision of the console (console spec): one read, every section. */
 export class SupervisionService {
   private readonly sources: SupervisionSources;
   private readonly now: () => Date;

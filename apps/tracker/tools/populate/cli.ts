@@ -7,15 +7,15 @@ import { runLive } from "./live.ts";
 import { createPopulation } from "./population.ts";
 
 /**
- * Simulated activity of the whole site (spec admin, page Activité simulée), development only:
+ * Simulated activity of the whole site (console spec, page Activité simulée), development only:
  *   pnpm populate create [--accounts 50] [--flights 5-40] [--days 180] [--public 75] [--seed N]
  *                        [--no-careers]
  *   pnpm populate live [--flights 12] [--visitors 100] [--minutes 30] [--speed 1]
  *   pnpm populate status | delete
  * `create` replaces the fictitious population; its first 9 accounts each reach one pilot rank,
  * Élève to Légende (careers, thousands of flight hours: --no-careers skips them). `live` needs one. --progress: one JSON line per
- * second, then one with the result (formats PopulationLine and LiveActivityLine, read by the admin console).
- * Ctrl+C (or SIGTERM, sent by the admin console) stops; `live` then closes its flights as interrupted.
+ * second, then one with the result (formats PopulationLine and LiveActivityLine, read by the console).
+ * Ctrl+C (or SIGTERM, sent by the console) stops; `live` then closes its flights as interrupted.
  */
 const { values, positionals } = parseArgs({
   allowPositionals: true,

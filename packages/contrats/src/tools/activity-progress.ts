@@ -2,7 +2,7 @@ import { z } from "zod";
 
 /**
  * Lines written by `pnpm populate --progress` (one JSON object per line), read by the admin
- * console (spec admin, page Activité simulée). Not an API format: a contract between two programs.
+ * console (console spec, page Activité simulée). Not an API format: a contract between two programs.
  */
 
 const Count = z.object({

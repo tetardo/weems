@@ -1,0 +1,269 @@
+/* Page Librairies (console spec). Tiles and alert band come from supervision.css (sv-*). */
+
+.lib-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.lib-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lib-sub > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+}
+
+/* ---------- Tiles ---------- */
+.lib-success {
+  color: var(--success);
+}
+.lib-danger {
+  color: var(--danger);
+}
+.sv-tile.lib-tile-alert {
+  border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+}
+.lib-gaps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---------- Gap and severity badges ---------- */
+.lib-gap,
+.lib-sev {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: var(--radius-tag);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.lib-gap.major {
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+  color: var(--danger);
+}
+.lib-gap.minor {
+  background: color-mix(in srgb, var(--accent2) 16%, transparent);
+  color: var(--accent2);
+}
+.lib-gap.patch {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--link);
+}
+.lib-gap.current {
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+}
+.lib-sev {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--on-accent);
+  background: var(--accent2);
+}
+.lib-sev.critical,
+.lib-sev.high {
+  background: var(--danger);
+}
+.lib-tag {
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tag);
+  font-size: 11px;
+  color: var(--muted);
+}
+.lib-tag.held {
+  border-style: dashed;
+}
+.lib-tag.warn {
+  color: var(--accent2);
+}
+
+/* ---------- Security ---------- */
+.lib-security {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent);
+  border-radius: var(--radius-panel);
+  background: color-mix(in srgb, var(--danger) 7%, transparent);
+}
+.lib-security h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+.lib-security h2 svg {
+  color: var(--danger);
+}
+.lib-alert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10px;
+}
+.lib-alert-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-box);
+  background: var(--surface);
+  font-size: 13px;
+  min-width: 0;
+}
+.lib-alert-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.lib-alert-head .lib-sev {
+  margin-left: 0;
+}
+.lib-alert-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.lib-alert-card a,
+.lib-link {
+  color: var(--link);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.lib-alert-card > .mono {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Table ---------- */
+a.lib-link {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-inner);
+}
+a.lib-link:hover {
+  background: var(--surface2);
+}
+.lib-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.lib-scroll {
+  overflow-x: auto;
+}
+.lib-table table {
+  min-width: 900px;
+}
+.lib-table tbody tr:not(.lib-group):hover {
+  background: var(--surface2);
+}
+.lib-group th {
+  padding: 14px 14px 6px;
+  background: var(--surface2);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 13px;
+  color: var(--ink);
+}
+.lib-group .mono {
+  color: var(--accent);
+}
+.lib-name {
+  font-weight: 500;
+}
+.lib-users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.lib-user {
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tag);
+  background: var(--bg);
+  font-size: 11px;
+}
+.lib-empty {
+  margin: 0;
+  padding: 24px 14px;
+  text-align: center;
+}
+.lib-arrow {
+  display: none;
+}
+
+/* ---------- Phone: one card per library instead of a wide table ---------- */
+@media (max-width: 640px) {
+  .lib-table table {
+    min-width: 0;
+  }
+  .lib-table thead,
+  .lib-row .c-date {
+    display: none;
+  }
+  .lib-table tbody,
+  .lib-group,
+  .lib-group th {
+    display: block;
+  }
+  .lib-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+      "name name name gap"
+      "installed latest . link"
+      "users users users users";
+    align-items: center;
+    gap: 4px 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .lib-row td {
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+  .lib-row .c-name {
+    grid-area: name;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .lib-row .c-gap {
+    grid-area: gap;
+    justify-self: end;
+  }
+  .lib-row .c-gap .lib-tag {
+    display: none;
+  }
+  .lib-row .c-installed {
+    grid-area: installed;
+  }
+  .lib-row .c-latest {
+    grid-area: latest;
+  }
+  .lib-row .c-link {
+    grid-area: link;
+  }
+  .lib-row .c-users {
+    grid-area: users;
+  }
+  .lib-arrow {
+    display: inline;
+    color: var(--muted);
+  }
+}

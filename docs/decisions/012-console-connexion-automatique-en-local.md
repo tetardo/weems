@@ -1,4 +1,4 @@
-# 012 — Console d'administration : connexion automatique en local
+# 012 — Console : connexion automatique en local
 
 Date : 12/11/2026. Demandé par Greg, proposé par Claude. Complète la fiche 009 (la page Comptes garde ses droits d'administrateur).
 
@@ -6,7 +6,7 @@ Date : 12/11/2026. Demandé par Greg, proposé par Claude. Complète la fiche 00
 
 Greg veut ouvrir la page Comptes de la console locale sans passer par l'écran « Connexion administrateur ». Les comptes et la connexion existent depuis J3, mais il ne veut pas encore s'en servir au quotidien. Le pilote de développement (`pilote@weems.local`, mot de passe public `weems-dev-password`) existe déjà : l'API le crée à son démarrage hors production seulement.
 
-![Page Comptes : connexion automatique en local](../schemas/img/admin-connexion-auto.png)
+![Page Comptes : connexion automatique en local](../schemas/img/console-connexion-auto.png)
 
 ## Options étudiées
 

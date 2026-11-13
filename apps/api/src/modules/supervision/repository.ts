@@ -37,7 +37,7 @@ export interface ProfileCounts {
 }
 
 /**
- * Read-only counts of the page Supervision (spec admin). Reads several modules' tables at once,
+ * Read-only counts of the page Supervision (console spec). Reads several modules' tables at once,
  * like the alpha report: a report, never a write, never another module's rules.
  */
 export class SupervisionRepository {

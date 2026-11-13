@@ -4,7 +4,7 @@ flowchart TB
     stop["Weems Stop.command"]
   end
   subgraph depot["Dépôt : scripts/mac/"]
-    s1["start.sh<br/>1. Docker Desktop<br/>2. arrêt de weems-api-1<br/>3. base (compose up -d db)<br/>4. apps/api/.env sur /weems<br/>5. ports 3000-3002 libres<br/>6. pnpm admin"]
+    s1["start.sh<br/>1. Docker Desktop<br/>2. arrêt de weems-api-1<br/>3. base (compose up -d db)<br/>4. apps/api/.env sur /weems<br/>5. ports 3000-3002 libres<br/>6. pnpm console"]
     s2["stop.sh<br/>signale la fenêtre Start<br/>sinon arrête lui-même"]
   end
   console["Console :3002<br/>POST /api/lifecycle"]

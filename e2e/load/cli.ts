@@ -9,7 +9,7 @@ import { formatReport, isSuccess, judge } from "./report.ts";
  * pnpm load [--pilots 50] [--viewers 100] [--minutes 30] [--speed 1]
  *           [--api http://localhost:3000] [--out rapport.json]
  * Spec J4 (montée en charge du direct), against an API already running outside production.
- * Ctrl+C (or SIGTERM, sent by the admin console) ends the run early, with the report so far.
+ * Ctrl+C (or SIGTERM, sent by the console) ends the run early, with the report so far.
  */
 const { values } = parseArgs({
   options: {

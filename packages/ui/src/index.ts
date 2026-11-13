@@ -1,4 +1,4 @@
-/** Shared components of the web site and the admin console (form model C, fiche 008). */
+/** Shared components of the web site and the console (form model C, fiche 008). */
 export { Button, buttonClass } from "./forms/button.tsx";
 export { Field, FieldBadge } from "./forms/field.tsx";
 export { FormField } from "./forms/form-field.tsx";
