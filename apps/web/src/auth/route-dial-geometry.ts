@@ -186,3 +186,25 @@ export function ringTicks(): { d: string; major: boolean }[] {
   }
   return ticks;
 }
+
+/** One trip of an aircraft along its route, in ms, and the part of the route it covers. */
+const TRANSIT_MS = 18000;
+const TRANSIT_START = 0.12;
+const TRANSIT_END = 0.88;
+const TRANSIT_FADE = 0.06;
+
+/**
+ * Slow transit of an aircraft at `ms` (time since the page opened): it crosses its route from
+ * TRANSIT_START to TRANSIT_END, fading in at the start and out at the end, then starts again.
+ * `offset` (0 to 1) staggers the flights so they never fade together.
+ */
+export function transit(ms: number, offset: number): { progress: number; opacity: number } {
+  const phase = (ms / TRANSIT_MS + offset) % 1;
+  const progress = TRANSIT_START + phase * (TRANSIT_END - TRANSIT_START);
+  const opacity = Math.min(
+    1,
+    (progress - TRANSIT_START) / TRANSIT_FADE,
+    (TRANSIT_END - progress) / TRANSIT_FADE,
+  );
+  return { progress, opacity: Math.round(opacity * 100) / 100 };
+}

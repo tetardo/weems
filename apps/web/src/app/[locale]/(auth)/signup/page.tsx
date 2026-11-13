@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AuthPage } from "../../../../auth/auth-page.tsx";
+import { SwitchLink } from "../../../../auth/auth-switch.tsx";
 import { SignupForm } from "../../../../auth/signup-form.tsx";
 
 interface Props {
@@ -22,12 +23,8 @@ export default async function SignupPage({ params }: Props) {
       title={t("signupTitle")}
       subtitle={t("signupSubtitle")}
       form={<SignupForm />}
-      other={{
-        href: "/login",
-        question: t("toLoginQuestion"),
-        label: t("toLogin"),
-        hint: t("toLoginHint"),
-      }}
+      question={t("toLoginQuestion")}
+      aside={<SwitchLink hint={t("toLoginHint")} label={t("toLogin")} />}
     />
   );
 }

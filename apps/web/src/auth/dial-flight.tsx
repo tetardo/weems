@@ -98,10 +98,12 @@ export function DialFlight({
   flight,
   id,
   tone,
+  aircraftOpacity,
 }: {
   flight: Flight;
   id: string;
   tone: keyof typeof TONES;
+  aircraftOpacity: number;
 }) {
   const shape = flightShape(flight);
   return (
@@ -121,7 +123,7 @@ export function DialFlight({
         kind="departure"
       />
       <Endpoint at={flight.to.at} code={flight.to.code} place={shape.toLabel} kind="arrival" />
-      <path d={AIRCRAFT} transform={shape.aircraft} className={tone} />
+      <path d={AIRCRAFT} transform={shape.aircraft} className={tone} opacity={aircraftOpacity} />
     </g>
   );
 }

@@ -334,7 +334,7 @@
     "inviteCode": "Invitation code",
     "submit": "Log in",
     "signupSubmit": "Create my account",
-    "toSignup": "I have an invitation",
+    "toSignup": "Continue",
     "toLogin": "Log in",
     "signOut": "Log out",
     "tracker": "The tracker is waiting for you to log in: it will take over by itself.",
@@ -349,7 +349,7 @@
     "subtitle": "Good to see you again, captain.",
     "signupSubtitle": "Your invitation is waiting: a few seconds and you are on board.",
     "toSignupQuestion": "Not a Weems pilot yet?",
-    "toSignupHint": "Closed alpha: by invitation",
+    "toSignupHint": "Received an invitation code?",
     "toLoginQuestion": "Already a Weems pilot?",
     "toLoginHint": "Your logbook is waiting",
     "rememberMe": "Stay logged in",
@@ -374,7 +374,8 @@
         "title": "Airline",
         "text": "Create or join a crew."
       }
-    }
+    },
+    "invitePlaceholder": "Your code"
   },
   "Settings": {
     "title": "My public profile",

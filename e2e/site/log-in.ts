@@ -8,7 +8,8 @@ export const DEV_PILOT: { email: string; password: string } = DEV_PILOT_LOGIN;
 export async function fillLogin(page: Page, login = DEV_PILOT): Promise<void> {
   await page.locator("input[name=email]").fill(login.email);
   await page.locator("input[name=password]").fill(login.password);
-  await page.locator("button[type=submit]").click();
+  // The login page has a second form under it (invitation code): click the login one.
+  await page.locator("form:has(input[name=password]) button[type=submit]").click();
 }
 
 /** A browser context logged in to the site as the development pilot. */

@@ -334,7 +334,7 @@
     "inviteCode": "Code d'invitation",
     "submit": "Se connecter",
     "signupSubmit": "Créer mon compte",
-    "toSignup": "J'ai une invitation",
+    "toSignup": "Continuer",
     "toLogin": "Se connecter",
     "signOut": "Se déconnecter",
     "tracker": "Le tracker attend votre connexion : il reprendra la main tout seul.",
@@ -349,7 +349,7 @@
     "subtitle": "Content de vous revoir, commandant.",
     "signupSubtitle": "Votre invitation vous attend : quelques secondes et c'est parti.",
     "toSignupQuestion": "Pas encore pilote Weems ?",
-    "toSignupHint": "Alpha fermée : sur invitation",
+    "toSignupHint": "Vous avez reçu un code d'invitation ?",
     "toLoginQuestion": "Déjà pilote Weems ?",
     "toLoginHint": "Votre carnet vous attend",
     "rememberMe": "Rester connecté",
@@ -374,7 +374,8 @@
         "title": "Compagnie",
         "text": "Créer ou rejoindre un équipage."
       }
-    }
+    },
+    "invitePlaceholder": "Votre code"
   },
   "Settings": {
     "title": "Mon profil public",

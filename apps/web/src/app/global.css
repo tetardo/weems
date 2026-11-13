@@ -10,7 +10,9 @@
  */
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 
-@theme {
+/* inline: utilities read the --wm-* tokens where they are used, so a block such as .theme-dark
+   (login pages) can set its own tokens. */
+@theme inline {
   --color-bg: var(--wm-bg);
   --color-surface: var(--wm-surface);
   --color-line: var(--wm-line);
@@ -67,7 +69,8 @@
   --font-title: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
 }
 
-:root {
+:root,
+.theme-dark {
   color-scheme: dark;
   --wm-bg: #0e1320;
   --wm-surface: #171e2e;
