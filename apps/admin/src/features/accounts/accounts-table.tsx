@@ -20,7 +20,7 @@ export function AccountsTable(props: {
             <th>État</th>
             <th>Vols</th>
             <th>Créé le</th>
-            <th>Dernière connexion</th>
+            <th>Connexion</th>
             <th />
           </tr>
         </thead>
