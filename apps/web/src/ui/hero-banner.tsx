@@ -61,7 +61,7 @@ function HeroText({ eyebrow, title, highlight, lead, actions, chips }: TextProps
 /**
  * Photo banner of the public pages (Découvrir, Fonctionnalités; 13/11/2026): photo of the home
  * page, live eyebrow, title ending in the accent gradient, actions, glass chips, and the dashed
- * route of the site flown by a plane, small, in the top right corner (13/11, Greg).
+ * route of the site, small, in the top right corner (13/11, Greg; plane removed).
  */
 export function HeroBanner({ photos, route, ...text }: Props) {
   return (
