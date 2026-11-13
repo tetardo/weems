@@ -3,6 +3,7 @@ import { lineKind, plainText } from "./format.ts";
 import { ICONS } from "./icons.ts";
 import { renderCards } from "./cards-view.ts";
 import { renderHeadButtons, setupHeadButtons } from "./head-buttons.ts";
+import { setupLogsSize } from "./logs-size.ts";
 import { element, renderRow } from "./rows-view.ts";
 
 /** The launcher's window: shows the state sent by the main process, sends the clicks back. */
@@ -66,4 +67,5 @@ for (const holder of document.querySelectorAll<HTMLElement>("[data-icon]")) {
   holder.insertAdjacentHTML("afterbegin", ICONS[holder.dataset["icon"] as keyof typeof ICONS]);
 }
 setupHeadButtons(bridge.send);
+setupLogsSize();
 bridge.onState(render);

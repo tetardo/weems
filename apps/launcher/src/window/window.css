@@ -422,7 +422,7 @@ h1 {
 .logs {
   margin: 14px 20px 18px;
   flex: 1;
-  min-height: 160px;
+  min-height: 120px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -439,6 +439,10 @@ h1 {
 }
 .logs-head .muted {
   margin-left: auto;
+}
+/* « Agrandir » : the logs take the place of the cards and services. */
+body.logs-large .middle {
+  display: none;
 }
 .tabs button {
   border: 0;
