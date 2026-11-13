@@ -45,10 +45,19 @@ export function TimeCell({ at, estimated = false }: { at: string | null; estimat
   );
 }
 
-/** A cell that filters the boards on a click (airport, aircraft type). */
-const CHOICE = "flex min-w-0 items-center gap-1.5 rounded-tag text-left hover:opacity-75";
+/**
+ * A cell that filters the boards on a click (airport, aircraft type). A button sizes to its
+ * content: `w-full` holds it to its column, so a long name is cut with « … » instead of running
+ * under the next column.
+ */
+const CHOICE =
+  "flex w-full min-w-0 items-center gap-1.5 overflow-hidden rounded-tag text-left hover:opacity-75";
 
-/** Airport code in flaps and its name in small; a click shows only this airport's boards. */
+/**
+ * Airport code in flaps; its name in small only when one board fills the width (1 024 to 1 279
+ * px), never squeezed beside the other board; full name on hover. A click shows only this
+ * airport's boards.
+ */
 export function AirportCell({
   icao,
   name,
@@ -63,7 +72,9 @@ export function AirportCell({
     <>
       <FlapText text={icao ?? ""} width={4} />
       {name && (
-        <span className="min-w-0 truncate text-[11px] text-board-muted max-2xl:hidden">{name}</span>
+        <span className="min-w-0 truncate text-[11px] text-board-muted max-lg:hidden xl:hidden">
+          {name}
+        </span>
       )}
     </>
   );
@@ -94,7 +105,7 @@ export function AircraftCell({
       type="button"
       onClick={() => onChoose(flight.aircraftType)}
       title={`${flight.aircraftType} · ${t("onlyThis", { value: flight.aircraftType })}`}
-      className={`${CHOICE} max-w-full`}
+      className={CHOICE}
     >
       <CategorySilhouette category={flight.aircraftClass?.category ?? null} />
       <span className="min-w-0 truncate font-mono text-xs font-semibold">
