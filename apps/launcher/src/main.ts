@@ -37,7 +37,7 @@ function openWindow(): BrowserWindow {
   const created = new BrowserWindow({
     width: 840,
     height: 660,
-    minWidth: 820,
+    minWidth: 840,
     minHeight: 620,
     title: "Weems",
     backgroundColor: "#0e1320",
