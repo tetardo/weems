@@ -20,6 +20,7 @@ export function repoPaths(root: string): RepoPaths {
 
 /** Addresses opened by the window's links, and the console the launcher talks to. */
 export const URLS = {
+  api: "http://localhost:3000",
   console: "http://127.0.0.1:3002",
   site: "http://localhost:3001/fr",
 } as const;

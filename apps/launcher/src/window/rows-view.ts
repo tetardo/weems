@@ -41,7 +41,10 @@ function rowText(row: Row): HTMLElement {
   const text = element("div", "row-text");
   const name = element("div", "row-name", INFO[row.id].name);
   if (row.state !== "running") name.append(element("span", `pill ${row.state}`, PILLS[row.state]));
+  const since = sinceText(row.since, Date.now());
+  const meta = since ? `:${row.port} · ${since}` : `:${row.port}`;
   text.append(name, element("div", "row-detail", INFO[row.id].detail));
+  text.append(element("div", "row-meta", meta));
   if (row.note) text.append(element("div", "row-note", row.note));
   return text;
 }
@@ -65,8 +68,6 @@ function rowButtons(row: Row, busy: boolean, send: Send): HTMLElement {
 
 export function renderRow(row: Row, busy: boolean, send: Send): HTMLElement {
   const line = element("div", "row");
-  const since = sinceText(row.since, Date.now());
-  const meta = element("div", "row-meta", since ? `:${row.port} · ${since}` : `:${row.port}`);
-  line.append(element("span", `dot ${row.state}`), rowText(row), meta, rowButtons(row, busy, send));
+  line.append(element("span", `dot ${row.state}`), rowText(row), rowButtons(row, busy, send));
   return line;
 }

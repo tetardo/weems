@@ -3,6 +3,7 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { join } from "node:path";
 import { ManagedProcess } from "@weems/local-process";
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, shell, Tray } from "electron";
+import { readSiteStats } from "./api-client.ts";
 import { ConsoleClient } from "./console-client.ts";
 import { Launcher } from "./launcher.ts";
 import {
@@ -24,6 +25,7 @@ const HERE = __dirname;
 const paths = repoPaths(process.env["WEEMS_REPO"] ?? WEEMS_REPO_ROOT);
 const launcher = new Launcher({
   client: new ConsoleClient(URLS.console),
+  siteStats: () => readSiteStats(URLS.api),
   paths,
   newProcess: (onLine) => new ManagedProcess(onLine),
   sleep: (ms) => sleep(ms),

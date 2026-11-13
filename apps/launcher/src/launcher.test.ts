@@ -55,6 +55,7 @@ class World {
           this.sent.push(request);
         },
       },
+      siteStats: async () => (this.consoleUp ? { pilots: 12, flights: 340, liveFlights: 3 } : null),
       paths: repoPaths(this.root),
       newProcess: (onLine) => new FakeProcess(this, onLine),
       sleep: async () => undefined,
@@ -75,6 +76,7 @@ describe("Launcher", () => {
     expect(state.busy).toBeNull();
     expect(state.rows.at(-1)?.state).toBe("running");
     expect(state.logs).toContain("ran console.sh");
+    expect(state.stats).toEqual({ pilots: 12, flights: 340, liveFlights: 3 });
   });
 
   it("reuses a console that already answers", async () => {

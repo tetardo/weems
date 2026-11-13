@@ -13,6 +13,7 @@ const stateWith = (states: Row["state"][], busy: string | null = null): Launcher
   rows: (["db", "api", "site", "console"] as const).map((id, index) =>
     row(id, states[index] ?? "stopped"),
   ),
+  stats: null,
   busy,
   notice: null,
   tab: "console",

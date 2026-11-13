@@ -23,6 +23,7 @@ src/
   launcher.ts        démarrer, arrêter, redémarrer (tout ou un service), journaux de l'onglet Console
   rows.ts            les quatre lignes, à partir de la console et du processus de la console
   console-client.ts  appels à /api/lifecycle de la console
+  api-client.ts      compteurs du site (GET /v1/stats de l'API, route publique)
   tray-menu.ts       titre et menu de la barre des menus
   repo.ts            chemins des scripts, adresses du site et de la console
   window/            index.html, window.css, view.ts (entrée), rows-view.ts, format.ts, icons.ts

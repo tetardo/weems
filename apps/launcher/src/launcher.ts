@@ -2,7 +2,13 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import type { LifecycleRequest, LifecycleStatus } from "@weems/contrats";
 import { LogBuffer, type ProcessStatus } from "@weems/local-process";
-import type { LauncherCommand, LauncherState, RowId, ServiceAction } from "./launcher-state.ts";
+import type {
+  LauncherCommand,
+  LauncherState,
+  RowId,
+  ServiceAction,
+  SiteNumbers,
+} from "./launcher-state.ts";
 import type { RepoPaths } from "./repo.ts";
 import { rowsOf } from "./rows.ts";
 
@@ -19,6 +25,8 @@ export interface LauncherDeps {
     status(logsOf: "db" | "api" | "site" | null): Promise<LifecycleStatus | null>;
     send(request: LifecycleRequest): Promise<void>;
   };
+  /** The site's counters (API); null when the API does not answer. */
+  siteStats(): Promise<SiteNumbers | null>;
   paths: RepoPaths;
   newProcess(onLine: (line: string) => void): LaunchedProcess;
   sleep(ms: number): Promise<void>;
@@ -44,6 +52,7 @@ export class Launcher {
   private readonly logs = new LogBuffer(400);
   private readonly console: LaunchedProcess;
   private status: LifecycleStatus | null = null;
+  private stats: SiteNumbers | null = null;
   private busy: string | null = null;
   private notice: string | null = null;
   private tab: RowId = "console";
@@ -68,8 +77,8 @@ export class Launcher {
       stopAsked: this.stopAsked,
     };
     const logs = this.tab === "console" ? this.logs.all() : (this.status?.logs ?? []);
-    const { busy, notice, tab } = this;
-    return { rows: rowsOf(this.status, facts), busy, notice, tab, logs };
+    const { busy, notice, tab, stats } = this;
+    return { rows: rowsOf(this.status, facts), stats, busy, notice, tab, logs };
   }
 
   /** Reads the console again (every 2 s, and after each action). */
@@ -77,7 +86,10 @@ export class Launcher {
     if (this.refreshing) return;
     this.refreshing = true;
     try {
-      this.status = await this.deps.client.status(this.tab === "console" ? null : this.tab);
+      [this.status, this.stats] = await Promise.all([
+        this.deps.client.status(this.tab === "console" ? null : this.tab),
+        this.deps.siteStats(),
+      ]);
     } finally {
       this.refreshing = false;
     }

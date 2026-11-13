@@ -22,6 +22,7 @@ Le script construit `Weems.app` (une à deux minutes), la signe localement, l'in
 | Boutons d'une ligne | Démarrer, arrêter ou redémarrer la base, l'API ou le site |
 | Boutons de la ligne Console | Agissent sur tout : l'API et le site dépendent de la console |
 | Tout arrêter, Tout redémarrer | En haut de la fenêtre, ou dans le menu de la barre des menus |
+| Le site en ce moment | À droite des services : vols en direct, pilotes, vols enregistrés (route publique `GET /v1/stats` de l'API, comme l'accueil du site) ; « — » quand l'API est arrêtée |
 | Journaux | Un onglet par service ; l'onglet Console montre aussi les étapes de démarrage et d'arrêt |
 | Ouvrir le site, Ouvrir la console, Simuler du trafic, Simuler des activités | Ouvrent le navigateur sur http://localhost:3001/fr, http://127.0.0.1:3002/services, /traffic, /activity (comptes fictifs) |
 | Docker, VS Code | Ouvrent Docker Desktop, et le dépôt dans VS Code (aussi dans le menu de la barre des menus) |

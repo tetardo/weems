@@ -65,8 +65,18 @@ function renderLogs(state: LauncherState): void {
   }
 }
 
+const number = new Intl.NumberFormat("fr-FR");
+
+function renderStats({ stats }: LauncherState): void {
+  byId("stat-live").textContent = stats ? number.format(stats.liveFlights) : "—";
+  byId("stat-pilots").textContent = stats ? number.format(stats.pilots) : "—";
+  byId("stat-flights").textContent = stats ? number.format(stats.flights) : "—";
+  byId("stats-note").hidden = stats !== null;
+}
+
 function render(state: LauncherState): void {
   renderHead(state);
+  renderStats(state);
   const rows = state.rows.map((row) => renderRow(row, state.busy !== null, bridge.send));
   byId("rows").replaceChildren(...rows);
   renderLogs(state);
