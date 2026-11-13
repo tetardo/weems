@@ -33,7 +33,7 @@ L'arrivée n'est connue que si le pilote la saisit dans le tracker (obligatoire 
 - `GET /v1/live/flights/{flightId}/route` (format `LiveRoute` de `packages/contrats`) : départ, arrivée (ou `null`), trace `[lon, lat]`. Publique comme le flux du direct. 404 si le vol n'est pas sur la carte.
 - Trace en mémoire dans le module `live` : un point toutes les 15 s de vol (heure de l'échantillon), au plus 1 500 points par vol (au-delà, un point sur deux est retiré). 500 vols tiennent sous 30 Mo.
 - Aéroports : liste OurAirports dans `apps/api/data/airports.csv`, chargée au démarrage (fiche 005).
-- Le site relit la route du vol sélectionné toutes les 30 s ; entre deux lectures, le trait suit l'avion à chaque image.
+- Le site lit la route du vol sélectionné une seule fois, à la sélection ; ensuite la trace s'allonge avec les positions du flux `/v1/live/stream` (un point toutes les 15 s de vol, même règle que l'API, `apps/web/src/live/followed-trail.ts`), sans nouvelle requête ; le trait suit l'avion à chaque image.
 - `GET /v1/airports?codes=LFPG,LFBO` (format `AirportList`, 100 codes au plus, publique, mise en cache un jour) : le site ne demande que les codes qu'il ne connaît pas encore, une fois par page.
 - Trajets de tous les vols : recalculés à chaque lot de positions (toutes les 2 s), pas à chaque image ; un point tous les 100 NM. Mesure : 500 vols = 4 250 points, 2,5 ms de calcul par lot. Le bout de la ligne peut avoir jusqu'à 2 s d'avance sur l'avion qui glisse.
 
@@ -41,5 +41,5 @@ L'arrivée n'est connue que si le pilote la saisit dans le tracker (obligatoire 
 
 1. Un vol simulé LFPG → LFBO sélectionné montre la trace, l'orthodromie restante, les deux aéroports et une progression qui croît jusqu'à 100 %.
 2. Un vol sans arrivée montre la trace et le message « Départ ou arrivée non renseigné ».
-3. Avec 500 vols sur la carte, sélectionner un vol ne fait qu'une requête toutes les 30 s.
+3. Avec 500 vols sur la carte, sélectionner un vol ne fait qu'une requête, et aucune ensuite tant qu'il reste sélectionné.
 4. À l'ouverture, les trajets de tous les vols sont visibles ; « Trajets » les masque, et le choix tient après rechargement.

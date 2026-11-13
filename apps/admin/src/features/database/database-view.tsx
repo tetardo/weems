@@ -33,6 +33,7 @@ function Subtitle({ view }: { view: View | null }) {
         <i className="dot" />
         Vérifié aujourd’hui à {clock(view.database.generatedAt)}
       </span>
+      <span className="muted">toutes les 5 min</span>
       <span className="mono muted">
         {view.database.server.name} · {view.database.server.version}
       </span>
@@ -91,9 +92,15 @@ function Page({ view, actions }: { view: View; actions: ReturnType<typeof usePag
   );
 }
 
+/**
+ * Sizes move slowly and the charts rest on one reading a day: every 5 min, plus the button, is
+ * enough and spares PostgreSQL a scan of every table.
+ */
+const READ_EVERY_MS = 5 * 60_000;
+
 /** Page Base de données (spec admin): sizes, migrations, backups and cleanup. */
 export function DatabaseView() {
-  const { value, error, refresh } = usePolling(readDatabase, 30_000);
+  const { value, error, refresh } = usePolling(readDatabase, READ_EVERY_MS);
   const actions = usePageActions(refresh);
   return (
     <>

@@ -34,7 +34,7 @@ Demandée par Greg le 13/11/2026 (maquette dense validée : `/mnt/project-files/
 
 - **Lien partageable** : `/boarding?airport=LFML` ouvre directement le tableau de ce terrain, `?aircraft=A320` celui d'un type ; les deux se combinent.
 - **Bandeau « En ce moment »** : nombre de départs et d'arrivées, terrain le plus actif, toucher le plus doux de l'heure.
-- **Affichage en direct**, sans délai (choix de Greg) : le site relit les tableaux toutes les 5 s.
+- **Affichage en direct**, sans délai (choix de Greg) : le site suit le flux `GET /v1/live/boarding/stream` (SSE) ; l'API y renvoie les deux tableaux à la connexion puis dès qu'ils changent (vérifié toutes les 2 s, rien n'est calculé sans spectateur). Aucune relecture périodique côté site.
 
 ## Statuts
 

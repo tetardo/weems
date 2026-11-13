@@ -229,7 +229,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-  P[Page Base de données] -->|toutes les 30 s| R[GET /v1/admin/database]
+  P[Page Base de données] -->|toutes les 5 min et sur « Actualiser »| R[GET /v1/admin/database]
   P -->|Nettoyer, après confirmation| N[POST /v1/admin/database/cleanup]
   R --> B[(PostgreSQL : catalogue, drizzle.__drizzle_migrations)]
   N --> F[Services flights et accounts]

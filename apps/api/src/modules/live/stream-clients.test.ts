@@ -3,7 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 import type { PositionReport } from "@weems/contrats";
 import type { LiveFlightInfo } from "../flights/live-feed.ts";
 import { LiveBoard } from "./live-board.ts";
-import { LiveStream, MAX_BUFFERED_BYTES } from "./stream.ts";
+import { MAX_BUFFERED_BYTES } from "./sse-channel.ts";
+import { LiveStream } from "./stream.ts";
 
 /** A spectator connection without a network: records what it is sent. */
 function fakeClient(writableLength = 0) {
