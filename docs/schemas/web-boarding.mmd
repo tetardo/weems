@@ -1,0 +1,8 @@
+flowchart LR
+  tracker["Tracker<br/>positions et événements"] --> board["API · LiveBoard<br/>(mémoire)"]
+  board --> log["BoardingLog<br/>départ, décollage, toucher<br/>posés gardés 1 h"]
+  board --> build["buildBoarding<br/>statut, heure estimée,<br/>noms des aéroports"]
+  log --> build
+  build --> route["GET /v1/live/boarding"]
+  route -- "toutes les 5 s" --> page["Site · page /boarding<br/>Départs | Arrivées"]
+  page --> flaps["Palettes qui tournent,<br/>pages toutes les 15 s,<br/>filtre ?airport="]

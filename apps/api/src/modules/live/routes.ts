@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { FlightId, LiveRoute, Problem } from "@weems/contrats";
+import { Boarding, FlightId, LiveRoute, Problem } from "@weems/contrats";
 import type { LiveService } from "./service.ts";
 import type { LiveStream } from "./stream.ts";
 
@@ -9,8 +9,9 @@ import type { LiveStream } from "./stream.ts";
 const PUBLIC = { "access-control-allow-origin": "*" };
 
 /**
- * GET /v1/live/stream (SSE) and GET /v1/live/flights/{flightId}/route. Public, like the map:
- * they only show what every spectator already sees (call sign, airports, positions).
+ * GET /v1/live/stream (SSE), GET /v1/live/flights/{flightId}/route and GET /v1/live/boarding.
+ * Public, like the map: they only show what every spectator already sees (call sign, airports,
+ * positions, pilots whose profile is public).
  */
 export function registerLiveRoutes(
   parent: FastifyInstance,
@@ -47,6 +48,28 @@ export function registerLiveRoutes(
     async (request, reply) => {
       reply.headers(PUBLIC);
       return live.route(request.params.flightId);
+    },
+  );
+
+  registerBoardingRoute(parent, live);
+}
+
+/** GET /v1/live/boarding: the Departures and Arrivals boards of the page Boarding. */
+function registerBoardingRoute(parent: FastifyInstance, live: LiveService): void {
+  parent.withTypeProvider<ZodTypeProvider>().get(
+    "/v1/live/boarding",
+    {
+      schema: {
+        tags: ["live"],
+        description:
+          "Departures and Arrivals boards of the page Boarding: every flight live now, and the " +
+          "flights landed within the last hour. Read again every few seconds by the site.",
+        response: { 200: Boarding },
+      },
+    },
+    async (_request, reply) => {
+      reply.headers({ ...PUBLIC, "cache-control": "no-store" });
+      return live.boarding();
     },
   );
 }

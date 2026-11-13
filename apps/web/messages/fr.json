@@ -6,6 +6,7 @@
       "discover": "Découvrir",
       "logbook": "Mon carnet de bord",
       "live": "Vols en direct",
+      "boarding": "Boarding",
       "profile": "Mon profil",
       "plans": "Offres",
       "features": "Fonctionnalités"
@@ -138,6 +139,63 @@
       "landing": "<strong>{callsign}</strong> a atterri{airport, select, none {} other { à {airport}}}",
       "started": "<strong>{name}</strong> a commencé un vol{from, select, none {} other { ({from} → {to})}}",
       "vs": "{vs} ft/min"
+    }
+  },
+  "Boarding": {
+    "title": "Boarding",
+    "description": "Les départs et les arrivées de tous les pilotes Weems en direct, sur un tableau à palettes comme en aérogare.",
+    "estimated": "Heure estimée d'après la distance restante et la vitesse",
+    "est": "EST",
+    "hiddenPilot": "Pilote masqué",
+    "count": "{count, plural, =0 {aucun vol} one {# vol} other {# vols}}",
+    "clocks": "Horloges",
+    "utc": "UTC",
+    "soundOn": "Activer le son des palettes",
+    "soundOff": "Couper le son des palettes",
+    "late": "Le tableau n'est plus à jour : l'API ne répond pas, nouvel essai dans quelques secondes.",
+    "privacy": "Tous les vols en cours sont affichés en direct ; un pilote au profil privé apparaît comme « Pilote masqué ». Cliquez sur un indicatif pour suivre le vol sur la carte.",
+    "status": {
+      "boarding": "Embarq.",
+      "pushback": "Repouss.",
+      "taxi": "Roulage",
+      "departed": "Décollé",
+      "airborne": "En vol",
+      "approach": "Approche",
+      "landed": "Posé",
+      "lost": "Perdu"
+    },
+    "departures": {
+      "title": "Départs",
+      "other": "Departures",
+      "none": "Aucun départ pour l'instant.",
+      "note": "Heure de décollage, ou de mise en route avant le décollage (UTC)."
+    },
+    "arrivals": {
+      "title": "Arrivées",
+      "other": "Arrivals",
+      "none": "Aucune arrivée pour l'instant.",
+      "note": "EST = heure estimée ; posés depuis moins d'une heure avec leur toucher en ft/min."
+    },
+    "columns": {
+      "time": "Heure",
+      "flight": "Vol",
+      "to": "Vers",
+      "from": "De",
+      "aircraft": "Avion",
+      "pilot": "Pilote",
+      "status": "Statut"
+    },
+    "filter": {
+      "label": "Terrain",
+      "placeholder": "Terrain : code OACI",
+      "clear": "Tous les terrains",
+      "busiest": "Les plus actifs"
+    },
+    "ticker": {
+      "now": "En ce moment",
+      "flights": "{departures} départs · {arrivals} arrivées",
+      "busiest": "Terrain le plus actif {icao} ({count})",
+      "softest": "Toucher le plus doux {callsign} {vs} ft/min"
     }
   },
   "Phases": {
@@ -1184,6 +1242,9 @@
       "liveMap": {
         "label": "Carte des vols en direct"
       },
+      "boarding": {
+        "label": "Tableau Boarding des départs et arrivées"
+      },
       "publicProfile": {
         "label": "Profil public"
       },
@@ -1434,6 +1495,10 @@
       "liveMap": {
         "title": "Carte des vols en direct",
         "text": "Tous les pilotes en vol sur une carte mise à jour en temps réel : trajet parcouru, progression, aéroports actifs, recherche."
+      },
+      "boarding": {
+        "title": "Boarding : départs et arrivées",
+        "text": "Un tableau à palettes comme en aérogare : les départs et les arrivées de tous les membres en direct, l'heure estimée, le toucher des derniers posés, un terrain au choix."
       },
       "publicProfile": {
         "title": "Profil public",

@@ -6,6 +6,7 @@
       "discover": "Discover",
       "logbook": "My logbook",
       "live": "Live flights",
+      "boarding": "Boarding",
       "profile": "My profile",
       "plans": "Plans",
       "features": "Features"
@@ -138,6 +139,63 @@
       "landing": "<strong>{callsign}</strong> landed{airport, select, none {} other { at {airport}}}",
       "started": "<strong>{name}</strong> started a flight{from, select, none {} other { ({from} → {to})}}",
       "vs": "{vs} ft/min"
+    }
+  },
+  "Boarding": {
+    "title": "Boarding",
+    "description": "Every Weems pilot's departures and arrivals live, on a split-flap board like in a terminal.",
+    "estimated": "Time estimated from the remaining distance and the speed",
+    "est": "EST",
+    "hiddenPilot": "Hidden pilot",
+    "count": "{count, plural, =0 {no flight} one {# flight} other {# flights}}",
+    "clocks": "Clocks",
+    "utc": "UTC",
+    "soundOn": "Turn the flap sound on",
+    "soundOff": "Turn the flap sound off",
+    "late": "The board is out of date: the API does not answer, trying again in a few seconds.",
+    "privacy": "Every flight under way is shown live; a pilot with a private profile appears as “Hidden pilot”. Click a callsign to follow the flight on the map.",
+    "status": {
+      "boarding": "Boarding",
+      "pushback": "Pushback",
+      "taxi": "Taxi",
+      "departed": "Departed",
+      "airborne": "Airborne",
+      "approach": "Approach",
+      "landed": "Landed",
+      "lost": "Lost"
+    },
+    "departures": {
+      "title": "Departures",
+      "other": "Départs",
+      "none": "No departure for now.",
+      "note": "Take-off time, or start time before take-off (UTC)."
+    },
+    "arrivals": {
+      "title": "Arrivals",
+      "other": "Arrivées",
+      "none": "No arrival for now.",
+      "note": "EST = estimated time; flights landed within the hour with their touchdown in ft/min."
+    },
+    "columns": {
+      "time": "Time",
+      "flight": "Flight",
+      "to": "To",
+      "from": "From",
+      "aircraft": "Aircraft",
+      "pilot": "Pilot",
+      "status": "Status"
+    },
+    "filter": {
+      "label": "Airfield",
+      "placeholder": "Airfield: ICAO code",
+      "clear": "All airfields",
+      "busiest": "Busiest"
+    },
+    "ticker": {
+      "now": "Right now",
+      "flights": "{departures} departures · {arrivals} arrivals",
+      "busiest": "Busiest airfield {icao} ({count})",
+      "softest": "Softest touchdown {callsign} {vs} ft/min"
     }
   },
   "Phases": {
@@ -1184,6 +1242,9 @@
       "liveMap": {
         "label": "Live flights map"
       },
+      "boarding": {
+        "label": "Boarding departures and arrivals board"
+      },
       "publicProfile": {
         "label": "Public profile"
       },
@@ -1434,6 +1495,10 @@
       "liveMap": {
         "title": "Live flight map",
         "text": "Every pilot in the air on a real-time map: route flown, progress, active airports, search."
+      },
+      "boarding": {
+        "title": "Boarding: departures and arrivals",
+        "text": "A split-flap board like in a terminal: every member's departures and arrivals live, the estimated time, the touchdown of the latest landings, any airfield you choose."
       },
       "publicProfile": {
         "title": "Public profile",

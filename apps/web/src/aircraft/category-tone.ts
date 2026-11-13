@@ -23,3 +23,15 @@ export const CATEGORY_FILL: Readonly<Record<AircraftCategory, string>> = {
   helicopter: "bg-cat-helicopter",
   other: "bg-cat-other",
 };
+
+/** Text colour of each category: silhouettes drawn in `currentColor`. */
+export const CATEGORY_TEXT: Readonly<Record<AircraftCategory, string>> = {
+  light: "text-cat-light",
+  turboprop: "text-cat-turboprop",
+  businessJet: "text-cat-business-jet",
+  regionalJet: "text-cat-regional-jet",
+  narrowBody: "text-cat-narrow-body",
+  wideBody: "text-cat-wide-body",
+  helicopter: "text-cat-helicopter",
+  other: "text-cat-other",
+};

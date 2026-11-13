@@ -44,6 +44,7 @@ flowchart LR
 | [Site — personnalisation de l'accueil](cahiers-des-charges/web/spec-J4-personnalisation.md) | Image de fond par thème, choisie dans la console | Référence |
 | [Site — trajets sur la carte en direct (J4)](cahiers-des-charges/web/spec-J4-trajectoire-direct.md) | Trajets, orthodromie, progression | Référence |
 | [Site — pilote et enrichissements du direct (J4)](cahiers-des-charges/web/spec-J4-direct-pilote.md) | Bulle, vol suivi, recherche, nuit, filtres, événements | Référence |
+| [Site — page Boarding](cahiers-des-charges/web/spec-boarding.md) | Tableau à palettes des départs et arrivées de tous les membres | Référence |
 | [Site — carnet de vol privé](cahiers-des-charges/web/spec-carnet-prive.md) | Résumé, Vols, Statistiques livrés ; Objectifs à faire | Ouvert |
 | [Console d'administration](cahiers-des-charges/admin/spec-admin.md) | Les 8 pages de la console | À jour |
 

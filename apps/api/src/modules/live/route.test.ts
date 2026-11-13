@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { uuidV7, type LiveRoute } from "@weems/contrats";
+import { type Boarding, uuidV7, type LiveRoute } from "@weems/contrats";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
 import { startTestApp, TRACKER_HEADERS } from "../../testing/test-app.ts";
@@ -48,5 +48,23 @@ describe("GET /v1/live/flights/{flightId}/route", () => {
     expect(missing.headers["access-control-allow-origin"]).toBe("*");
     expect((await route(uuidV7())).statusCode).toBe(404);
     expect((await route("not-an-id")).statusCode).toBe(400);
+  });
+});
+
+describe("GET /v1/live/boarding", () => {
+  it("lists a flight on the map on both boards, with airport names, to any spectator", async () => {
+    const flight = syntheticFlight();
+    const id = flight.open.flightId;
+    await post("/v1/flights", flight.open);
+    await post(`/v1/flights/${id}/positions`, flight.position);
+
+    const response = await app.inject({ method: "GET", url: "/v1/live/boarding" });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["access-control-allow-origin"]).toBe("*");
+    const board = response.json<Boarding>();
+    const departure = board.departures.find((f) => f.flightId === id);
+    expect(departure).toMatchObject({ departureIcao: "LFPG", arrivalIcao: "LFBO", pilot: null });
+    expect(departure?.departureName).toEqual(expect.any(String));
+    expect(board.arrivals.some((f) => f.flightId === id)).toBe(departure?.status !== "boarding");
   });
 });

@@ -8,13 +8,15 @@ import { serverApiUrl } from "./site/api-url.ts";
 const intl = createMiddleware(routing);
 
 /**
- * Pages open without an account: the home page ("") and the live map (spec J4 accueil), login,
+ * Pages open without an account: the home page ("") and the live map (spec J4 accueil), the page
+ * Boarding, login,
  * sign-up and the public profiles (spec J4); everything else needs a session (closed alpha, J3).
  */
 const PUBLIC_PAGES = new Set([
   "",
   "discover",
   "live",
+  "boarding",
   "login",
   "signup",
   "pilots",
