@@ -117,7 +117,7 @@ flowchart LR
 | Connexion | Date de la dernière session ouverte, sur le site ou le tracker |
 
 **Actions par ligne**
-- Invitation en attente : **Copier le lien** (icône lien en fin de ligne), **Copier le code d'invitation**, **Renouveler** (nouveau code, valable 14 jours de plus ; l'ancien lien ne marche plus), **Annuler l'invitation** (avec confirmation).
+- Invitation en attente : **Copier le lien** (icône lien à droite du bouton qui copie le code dans l'onglet Invitations, en fin de ligne dans Tous), **Copier le code d'invitation**, **Renouveler** (nouveau code, valable 14 jours de plus ; l'ancien lien ne marche plus), **Annuler l'invitation** (avec confirmation).
 - Invitation expirée : affichée « Expirée », avec **Renouveler** et **Annuler**.
 - Compte : **Changer le rôle** (Pilote ↔ Administrateur). Impossible de retirer son propre rôle d'administrateur, ni le dernier administrateur.
 - Compte : **Désactiver le compte** (décidé par Greg le 11/11/2026), avec confirmation. Le pilote ne peut plus se connecter au site ni envoyer de vols depuis le tracker ; ses sessions et jetons en cours sont révoqués ; ses vols sont gardés. Un compte désactivé affiche l'état « Désactivé » et l'action **Activer le compte**. Impossible de se désactiver soi-même. La suppression définitive (droit à l'effacement) aura sa propre spec.

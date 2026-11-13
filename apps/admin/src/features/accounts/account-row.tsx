@@ -157,7 +157,25 @@ export function AccountRow(props: { account: AdminAccount; me: string; actions: 
   );
 }
 
-/** The invitation code, with a button that copies it (tab Invitations). */
+/** Copies the sign-up link of an invitation. */
+const CopyLinkButton = ({
+  invitation,
+  actions,
+}: {
+  invitation: AdminInvitation;
+  actions: RowActions;
+}) => (
+  <button
+    className="iconbtn"
+    aria-label="Copier le lien d'inscription"
+    title="Copier le lien d'inscription"
+    onClick={() => actions.copyLink(invitation)}
+  >
+    <LinkIcon size={16} />
+  </button>
+);
+
+/** The invitation code, with its copy button, then the copy-link button (tab Invitations). */
 const InvitationCode = ({
   invitation,
   actions,
@@ -175,16 +193,19 @@ const InvitationCode = ({
     >
       <CopyIcon size={16} />
     </button>
+    <CopyLinkButton invitation={invitation} actions={actions} />
   </span>
 );
 
-/** Copy the sign-up link, then the « … » menu of an invitation. */
+/** Copy the sign-up link (beside the code when the column shows it), then the « … » menu. */
 function InvitationActions({
   invitation,
   actions,
+  showCode,
 }: {
   invitation: AdminInvitation;
   actions: RowActions;
+  showCode: boolean;
 }) {
   const menu = [
     { label: "Copier le lien d'inscription", onSelect: () => actions.copyLink(invitation) },
@@ -194,16 +215,7 @@ function InvitationActions({
   ];
   return (
     <Slots
-      link={
-        <button
-          className="iconbtn"
-          aria-label="Copier le lien d'inscription"
-          title="Copier le lien d'inscription"
-          onClick={() => actions.copyLink(invitation)}
-        >
-          <LinkIcon size={16} />
-        </button>
-      }
+      link={!showCode && <CopyLinkButton invitation={invitation} actions={actions} />}
       menu={<RowMenu title={invitation.email} items={menu} />}
     />
   );
@@ -240,7 +252,7 @@ export function InvitationRow({
       <td>{shortDate(invitation.createdAt)}</td>
       <td>—</td>
       <td className="act">
-        <InvitationActions invitation={invitation} actions={actions} />
+        <InvitationActions invitation={invitation} actions={actions} showCode={showCode} />
       </td>
     </tr>
   );
