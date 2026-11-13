@@ -38,7 +38,7 @@ function Title({ population }: { population: Population | null }) {
   return (
     <div>
       <b>Population fictive en base</b>
-      <div className="sub">Comptes marqués « fictif », vols simulés (replay)</div>
+      <div className="sub">Comptes marqués « fictif », vols simulés (déclarés MSFS 2024)</div>
     </div>
   );
 }

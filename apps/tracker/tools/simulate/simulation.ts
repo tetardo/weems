@@ -1,6 +1,7 @@
 import { mkdirSync } from "node:fs";
 import type { ApiClient } from "../../src/sender/api-client.ts";
 import type { ReplayConnector } from "../../src/connectors/replay/replay-connector.ts";
+import { departureOffsetsS } from "./departures.ts";
 import { liveTracker } from "./live-tracker.ts";
 import type { Scenario } from "../generate-flights/scenario.ts";
 import type { SimulationProgress } from "@weems/contrats";
@@ -11,8 +12,10 @@ export interface SimulationOptions {
   api: ApiClient;
   /** Replay speed: 1 = real time, 10 = ten times faster. */
   speed: number;
-  /** Simulated seconds between two departures. */
+  /** Simulated seconds between two departures (on average with `random`). */
   staggerS: number;
+  /** Draws the gaps between departures; without it they are regular (load test, J1). */
+  random?: () => number;
   /** Folder for the local databases of the simulated trackers. */
   workDir: string;
   trackerVersion: string;
@@ -64,7 +67,7 @@ interface Stop {
   atMs: number;
 }
 
-function startOne(scenario: Scenario, index: number, options: SimulationOptions, stop: Stop) {
+function startOne(scenario: Scenario, offsetS: number, options: SimulationOptions, stop: Stop) {
   const run: Run = {
     scenario,
     tracker: null,
@@ -73,7 +76,7 @@ function startOne(scenario: Scenario, index: number, options: SimulationOptions,
     durationMs: 1,
     done: Promise.resolve(),
   };
-  const delayMs = (index * options.staggerS * 1000) / options.speed;
+  const delayMs = (offsetS * 1000) / options.speed;
   // A pilot whose departure comes after the stop never takes off.
   run.done = waitUntil(Date.now() + delayMs, stop).then(() => {
     if (Date.now() >= stop.atMs) return;
@@ -120,7 +123,10 @@ async function pump(runs: readonly Run[], options: SimulationOptions, replaying:
 export async function runSimulation(options: SimulationOptions): Promise<SimulatedFlight[]> {
   mkdirSync(options.workDir, { recursive: true });
   const stop: Stop = { atMs: Date.now() + (options.stopAfterMs ?? Number.POSITIVE_INFINITY) };
-  const runs = options.scenarios.map((scenario, index) => startOne(scenario, index, options, stop));
+  const offsetsS = departureOffsetsS(options.scenarios.length, options.staggerS, options.random);
+  const runs = options.scenarios.map((scenario, index) =>
+    startOne(scenario, offsetsS[index] ?? 0, options, stop),
+  );
   if (options.stopAfterMs !== undefined) {
     setTimeout(() => void stopAll(runs, stop, false), options.stopAfterMs).unref();
   }

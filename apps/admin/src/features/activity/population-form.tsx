@@ -18,6 +18,26 @@ const MONTH_OPTIONS = MONTHS.map((m) => ({ value: String(m), label: `${m} mois` 
 type Population = Extract<ActivityLaunch, { kind: "population" }>;
 type Change = <K extends keyof Population>(key: K, value: Population[K]) => void;
 
+/** « Couvrir les 9 grades »: the first 9 accounts each fly the career of one pilot rank. */
+function CareersCheck(props: { checked: boolean; onChange: (checked: boolean) => void }) {
+  return (
+    <label className="act-check">
+      <input
+        type="checkbox"
+        checked={props.checked}
+        onChange={(event) => props.onChange(event.target.checked)}
+      />
+      <span>
+        Couvrir les 9 grades
+        <small className="muted">
+          Les 9 premiers comptes, publics, ont chacun la carrière d&apos;un grade, d&apos;Élève à
+          Légende (des milliers d&apos;heures de vol à rejouer)
+        </small>
+      </span>
+    </label>
+  );
+}
+
 function PopulationFields({ launch, set }: { launch: Population; set: Change }) {
   return (
     <div className="fields two">
@@ -63,12 +83,13 @@ function PopulationFields({ launch, set }: { launch: Population; set: Change }) 
         unit="%"
         onChange={(n) => set("publicPercent", n)}
       />
+      <CareersCheck checked={launch.careers} onChange={(on) => set("careers", on)} />
     </div>
   );
 }
 
 function PopulationSummary({ launch }: { launch: Population }) {
-  const flights = plannedFlights(launch);
+  const { flights, hours } = plannedFlights(launch);
   return (
     <div className="sum">
       <div className="r">
@@ -82,9 +103,10 @@ function PopulationSummary({ launch }: { launch: Population }) {
       <div className="r">
         <SimulateIcon size={16} />
         <span>
-          <b>≈ {flights} vols</b> simulés (replay), notés, avec trajectoire
+          <b>≈ {flights} vols</b> ({hours} h) de 21 types d&apos;avions, notés, avec trajectoire,
+          comptés pour les grades
         </span>
-        <span className="m">≈ {elapsed(estimatedSeconds(flights) * 1000)}</span>
+        <span className="m">≈ {elapsed(estimatedSeconds(hours) * 1000)}</span>
       </div>
       <div className="r">
         <CalendarIcon size={16} />
@@ -103,6 +125,7 @@ export function PopulationForm(props: FormProps & { existing: number }) {
     maxFlights: 40,
     months: 6,
     publicPercent: 75,
+    careers: true,
   });
   const set: Change = (key, value) => setLaunch((before) => ({ ...before, [key]: value }));
   const note =

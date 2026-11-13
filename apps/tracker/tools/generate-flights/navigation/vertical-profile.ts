@@ -78,7 +78,10 @@ export function flareVs(heightFt: number, pathRateVs: number, touchdownVs: numbe
   return touchdownVs + (pathRateVs - touchdownVs) * (heightFt / FLARE_HEIGHT_FT);
 }
 
-/** Touchdown sink rate drawn from `random`: mostly gentle (median ~ 220 ft/min), rarely firm. */
-export function drawTouchdownVs(random: () => number): number {
-  return -(60 + 640 * random() ** 2);
+/**
+ * Touchdown sink rate drawn from `random`: mostly gentle, rarely firm. `skill` (0 beginner to 1
+ * expert, 0.5 by default: median ~ 220 ft/min) narrows or widens the spread.
+ */
+export function drawTouchdownVs(random: () => number, skill = 0.5): number {
+  return -(60 + 640 * (1.5 - skill) * random() ** 2);
 }

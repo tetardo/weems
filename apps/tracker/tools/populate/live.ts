@@ -39,12 +39,15 @@ type Tracker = ReturnType<typeof liveTracker>["tracker"];
 
 /** Real time over which the first departures and the visitors arrive. */
 const RAMP_MS = 60_000;
+/** Simulated time on the ground between two flights of a place in the sky, drawn in this range. */
+const TURNAROUND_MIN_S = 5 * 60;
+const TURNAROUND_MAX_S = 45 * 60;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * Live activity (page Activité simulée): `airborne` fictitious accounts in the air at once,
- * a new departure as soon as one lands, and visitors on the live map, for `durationS` real
- * seconds. At the end, the flights still in the air are closed as interrupted.
+ * Live activity (page Activité simulée): up to `airborne` fictitious accounts in the air at once,
+ * each place departing again after a random time on the ground, and visitors on the live map,
+ * for `durationS` real seconds. At the end, the flights still in the air are closed as interrupted.
  */
 export async function runLive(options: LiveOptions): Promise<LiveResult> {
   mkdirSync(options.workDir, { recursive: true });
@@ -70,7 +73,7 @@ class LiveActivity {
 
   async run(): Promise<LiveResult> {
     const pumping = this.pumpLoop();
-    const slots = Array.from({ length: this.options.airborne }, (_, i) => this.slot(i));
+    const slots = Array.from({ length: this.options.airborne }, () => this.slot());
     await Promise.all(slots);
     await pumping;
     await this.visitors.stop();
@@ -83,10 +86,28 @@ class LiveActivity {
     return Date.now() >= this.deadline || this.options.signal?.aborted === true;
   }
 
-  /** One place in the sky: flights one after the other, until the end. */
-  private async slot(index: number): Promise<void> {
-    await wait((index * RAMP_MS) / Math.max(1, this.options.airborne));
-    while (!this.stopped()) await this.flyOne();
+  /**
+   * One place in the sky: a first departure at a random moment of the first minute, then flights
+   * one after the other with a random time on the ground in between, until the end.
+   */
+  private async slot(): Promise<void> {
+    await this.waitOrStop(this.options.random() * RAMP_MS);
+    while (!this.stopped()) {
+      await this.flyOne();
+      await this.waitOrStop(this.turnaroundMs());
+    }
+  }
+
+  private turnaroundMs(): number {
+    const spanS = TURNAROUND_MAX_S - TURNAROUND_MIN_S;
+    const simulatedS = TURNAROUND_MIN_S + this.options.random() * spanS;
+    return (simulatedS * 1000) / this.options.speed;
+  }
+
+  /** Waits `ms`, checking every second whether the activity was stopped. */
+  private async waitOrStop(ms: number): Promise<void> {
+    const end = Date.now() + ms;
+    while (!this.stopped() && Date.now() < end) await wait(Math.min(1000, end - Date.now()));
   }
 
   private async flyOne(): Promise<void> {

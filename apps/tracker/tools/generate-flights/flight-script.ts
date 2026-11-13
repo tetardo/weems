@@ -30,7 +30,7 @@ function drawChoices(scenario: Scenario, random: () => number) {
   const choices: FlightChoices = {
     departureRunway: pickRunway(scenario.departure, random),
     arrivalRunway: pickRunway(scenario.arrival, random),
-    touchdownVs: drawTouchdownVs(random),
+    touchdownVs: drawTouchdownVs(random, scenario.skill),
   };
   return { choices, parkingHeading: Math.floor(random() * 360) };
 }

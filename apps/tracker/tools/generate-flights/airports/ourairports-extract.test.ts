@@ -23,7 +23,7 @@ describe("OurAirports extract", () => {
   });
 
   it("gives every simulated airport at least two runway ends", () => {
-    expect(SIMULATED_AIRPORTS).toHaveLength(20);
+    expect(SIMULATED_AIRPORTS).toHaveLength(71);
     for (const airport of SIMULATED_AIRPORTS) expect(airport.runways.length).toBeGreaterThan(1);
     expect(() => airportOf("ZZZZ")).toThrow(/airports.json/);
   });
