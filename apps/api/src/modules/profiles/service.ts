@@ -17,6 +17,7 @@ import type { ProfileRecord, ProfilesRepository } from "./repository.ts";
 const EMPTY_FIELDS = {
   handle: null,
   isPublic: false,
+  showLiveFlights: true,
   country: null,
   homeIcao: null,
   level: null,

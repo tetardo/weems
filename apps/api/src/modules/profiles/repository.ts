@@ -8,6 +8,7 @@ export interface ProfileRecord {
   pilotId: string;
   handle: string | null;
   isPublic: boolean;
+  showLiveFlights: boolean;
   country: string | null;
   homeIcao: string | null;
   level: PilotLevel | null;
@@ -96,15 +97,22 @@ export class ProfilesRepository {
   }
 
   /** Public profiles among these pilots, with whether each has a photo (live map). */
-  async publicOf(
-    pilotIds: string[],
-  ): Promise<{ pilotId: string; handle: string; country: string | null; hasPhoto: boolean }[]> {
+  async publicOf(pilotIds: string[]): Promise<
+    {
+      pilotId: string;
+      handle: string;
+      country: string | null;
+      hasPhoto: boolean;
+      liveFlightPage: boolean;
+    }[]
+  > {
     if (pilotIds.length === 0) return [];
     const rows = await this.db
       .select({
         pilotId: pilotProfiles.pilotId,
         handle: pilotProfiles.handle,
         country: pilotProfiles.country,
+        liveFlightPage: pilotProfiles.showLiveFlights,
         photo: pilotPhotos.pilotId,
       })
       .from(pilotProfiles)

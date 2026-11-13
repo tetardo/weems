@@ -158,7 +158,9 @@ export class PublicProfilesService {
    * live, then becomes the full flight page at the same address (spec vol en cours).
    */
   async flight(handle: string, flightId: string): Promise<PublicFlightView> {
-    return (await this.publicFlight(handle, flightId)).flight;
+    const { profile, flight } = await this.publicFlight(handle, flightId);
+    if (flight.closedAt === null && !profile.showLiveFlights) throw noFlight();
+    return flight;
   }
 
   /** The trajectory exists only once the flight is closed (the tracker sends it on closing). */
@@ -207,6 +209,6 @@ export class PublicProfilesService {
       throw error instanceof ApiProblem && error.status === 404 ? noFlight() : error;
     });
     if (await this.repository.isHidden(flightId)) throw noFlight();
-    return { owner, flight };
+    return { profile, owner, flight };
   }
 }

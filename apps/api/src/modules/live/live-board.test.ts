@@ -29,7 +29,13 @@ const report = (seq: number): PositionReport => ({
 });
 
 const { pilotId: _pilotId, ...shown } = info;
-const camille = { handle: "camille-r", name: "Camille Roux", country: "FR", hasPhoto: false };
+const camille = {
+  handle: "camille-r",
+  name: "Camille Roux",
+  country: "FR",
+  hasPhoto: false,
+  liveFlightPage: true,
+};
 
 let now: number;
 let board: LiveBoard;

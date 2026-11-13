@@ -28,6 +28,7 @@ function profileOf(identity: Identity): ProfileUpdate {
   return {
     handle: identity.handle,
     isPublic: identity.isPublic,
+    showLiveFlights: true,
     country: identity.country,
     homeIcao: identity.homeIcao,
     level: identity.level,

@@ -171,7 +171,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | 404 identique | Profil désactivé et pseudo inexistant : même réponse |
 | Vol d'un autre pilote | `/pilots/a/flights/{vol de b}` répond 404 |
 | Vol masqué | 404 en public et absent des statistiques |
-| Vol en cours | Absent de la liste ; sa page répond 200 avec `closedAt: null` (spec vol en cours), sa trajectoire 404 |
+| Vol en cours | Absent de la liste ; sa page répond 200 avec `closedAt: null` (spec vol en cours), 404 si le pilote a coupé « Montrer mes vols en cours » ; sa trajectoire 404 |
 | Aucune donnée privée | La réponse publique ne contient ni e-mail, ni identifiant de compte, ni version du tracker (test sur le contenu brut) |
 | Pseudo d'adresse | Mal formé : 400 ; réservé : 422 ; déjà pris : 409 ; deux demandes simultanées : une seule gagne |
 | Champs saisis | Pays, aéroport de base, niveau, VATSIM, IVAO, Instagram, Facebook ou SimBrief hors format : 400 ; SimBrief absent de la réponse publique |
@@ -193,7 +193,7 @@ Nouveau module `profiles` : `routes.ts`, `service.ts`, `repository.ts`. Il lit l
 | --- | --- | --- |
 | Adresse | `/pilots/{pseudo-url}`, pseudo d'adresse choisi et unique | Identifiant du compte : illisible ; pseudo affiché : pas unique |
 | Granularité | Un interrupteur pour le profil, plus « masquer ce vol » | Tout ou rien : un vol raté pousserait à tout fermer ; vol par vol à activer : trop de clics, profils vides |
-| Vols en cours | Jamais dans la liste du profil ; depuis le 13/11/2026, page du vol en cours à son adresse (choix de Greg, le direct montrait déjà les vols des pilotes publics) | Les montrer dans la liste : la liste et les statistiques restent sur les vols clos |
+| Vols en cours | Jamais dans la liste du profil ; depuis le 13/11/2026, page du vol en cours à son adresse (choix de Greg, le direct montrait déjà les vols des pilotes publics), que le pilote peut couper par le réglage « Montrer mes vols en cours », activé par défaut (Greg, 13/11 16 h 30) | Les montrer dans la liste : la liste et les statistiques restent sur les vols clos |
 | Référencement | Profil activé = référencé, sans réglage séparé | Case « ne pas référencer » : une option de plus pour un gain faible ; ajoutable plus tard |
 | Photo | Dans la v1 (choix de Greg), stockée dans PostgreSQL, réduite et nettoyée par l'API | Stockage de fichiers S3 dès maintenant : un service de plus à faire tourner pour une vingtaine de Ko par pilote |
 | Carte des vols | Arcs départ → arrivée à partir des trajectoires | Toutes les trajectoires sur la carte : des milliers de points par vol, page lourde |

@@ -35,6 +35,8 @@ export function accountName(value: string | null): string | null {
 /** The typed values, trimmed, empty as null, codes in their expected case. */
 const valuesOf = (form: FormData, isPublic: boolean) => ({
   isPublic,
+  // Only on the form of a public page: kept on (its default) while the page is off.
+  showLiveFlights: !isPublic || form.get("showLiveFlights") === "on",
   handle: text(form, "handle")?.toLowerCase() ?? null,
   country: text(form, "country"),
   homeIcao: text(form, "homeIcao")?.toUpperCase() ?? null,

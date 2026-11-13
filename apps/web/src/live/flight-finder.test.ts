@@ -4,7 +4,13 @@ import { searchFlights, sortFlights } from "./flight-finder.ts";
 import type { LiveFlights } from "./flights-store.ts";
 import { liveFlight } from "./testing/live-flight.ts";
 
-const pilot = { handle: "helene-v", name: "Hélène Vidal", country: "FR", hasPhoto: false };
+const pilot = {
+  handle: "helene-v",
+  name: "Hélène Vidal",
+  country: "FR",
+  hasPhoto: false,
+  liveFlightPage: true,
+};
 const flights: LiveFlights = new Map(
   [
     liveFlight("a", { callsign: "WMS251", departureIcao: "LFPG", plannedArrivalIcao: "EGCC" }),
