@@ -3,41 +3,38 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { buttonClass } from "@weems/ui";
 import { Link, usePathname } from "../i18n/navigation.ts";
 import { routing } from "../i18n/routing.ts";
+import { LanguageIcon } from "../ui/icons.ts";
+import { nextLocale } from "./next-locale.ts";
 
-function Choices() {
+function Switch({ className }: { className: string }) {
   const t = useTranslations("Site");
   const current = useLocale();
   const pathname = usePathname();
   const query = Object.fromEntries(useSearchParams());
+  const target = nextLocale(routing.locales, current);
+  const label = t("switchLanguage", { name: t(`languageNames.${target}`) });
   return (
-    <nav
-      aria-label={t("languages")}
-      className="flex gap-0.5 rounded-box border border-line p-[3px]"
+    <Link
+      href={{ pathname, query }}
+      locale={target}
+      aria-label={label}
+      title={label}
+      className={`${buttonClass("ghost")} gap-1.5 px-2.5 text-[13px] font-semibold text-muted uppercase hover:text-ink ${className}`}
     >
-      {routing.locales.map((locale) => (
-        <Link
-          key={locale}
-          href={{ pathname, query }}
-          locale={locale}
-          aria-current={locale === current ? "true" : undefined}
-          className={`grid h-9 min-w-9 place-items-center rounded-inner px-2 text-[13px] font-semibold uppercase ${
-            locale === current ? "bg-surface text-ink shadow-raised" : "text-muted hover:text-ink"
-          }`}
-        >
-          {locale}
-        </Link>
-      ))}
-    </nav>
+      <LanguageIcon size={17} aria-hidden="true" />
+      {current}
+    </Link>
   );
 }
 
-/** FR | EN in the public bar: same page, same filters, in the chosen language. */
-export function LanguageChoice() {
+/** One button for the language (bar A, 13/11): shows the current one, opens the same page in the next. */
+export function LanguageChoice({ className = "" }: { className?: string }) {
   return (
     <Suspense>
-      <Choices />
+      <Switch className={className} />
     </Suspense>
   );
 }

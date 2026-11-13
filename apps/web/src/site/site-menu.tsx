@@ -24,7 +24,7 @@ function PromoRow({ label, onClick }: { label: string; onClick: () => void }) {
 
 interface Props {
   loggedIn: boolean;
-  /** Bottom of the menu: the Free | Pro test switch, which has no room in the phone bar. */
+  /** Bottom of the menu: the language and the theme, which have no room in the phone bar. */
   footer?: ReactNode;
 }
 

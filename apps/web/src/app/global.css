@@ -76,6 +76,8 @@
   --wm-shadow: rgb(0 0 0 / 0.35);
   --wm-avatar: linear-gradient(135deg, #2b6cb0, #4fd1e8);
   --wm-avatar-ink: #0e1320;
+  /* End of the « Pilot Pro » gradient text of the bar (promo-text). */
+  --wm-promo-text-end: #ffb454;
   /* Home page (spec J4 accueil): veil over the photo, text on it, glass button. */
   --wm-veil: rgb(14 19 32 / 0.92);
   --wm-veil-mid: rgb(14 19 32 / 0.45);
@@ -131,6 +133,8 @@
   --wm-success: #1b7f4b;
   --wm-holding: #6a4fd1;
   --wm-glass: rgb(255 255 255 / 0.75);
+  /* Darker than accent 2 so the letters stay at 4.5:1 on white. */
+  --wm-promo-text-end: #9a5800;
   --wm-glow: rgb(12 127 148 / 0.12);
   --wm-shadow: rgb(30 40 70 / 0.12);
   --wm-veil: rgb(255 248 240 / 0.92);
@@ -208,6 +212,39 @@ h3 {
 @utility app-glow {
   background:
     radial-gradient(1200px 380px at 50% -120px, var(--wm-glow), transparent 70%), var(--color-bg);
+}
+
+/* Page of the bar being read: a line of light under its link (bar A « Épurée », 13/11). */
+@utility nav-current {
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 12px;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-accent);
+    box-shadow:
+      0 0 12px var(--color-accent),
+      0 -4px 14px var(--wm-glow);
+  }
+}
+
+/* Gradient ring around the pilot's photo in the bar. */
+@utility avatar-ring {
+  background: conic-gradient(
+    from 200deg,
+    var(--color-accent),
+    var(--color-accent-2),
+    var(--color-accent)
+  );
+}
+
+/* « Pilot Pro » of the visitor's bar: the accent gradient in the letters, AA on both themes. */
+@utility promo-text {
+  background: linear-gradient(90deg, var(--color-accent), var(--wm-promo-text-end));
+  background-clip: text;
+  color: transparent;
 }
 
 /* Pilot's initial in the floating bar (blue gradient of the mock-up, both themes). */

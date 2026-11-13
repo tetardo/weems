@@ -10,7 +10,7 @@ import { type Theme, THEME_STORAGE_KEY } from "./theme.ts";
  * icons are rendered and CSS shows the one of the other theme: no mismatch with the server.
  * Open maps follow the change (src/map/base-map.ts).
  */
-export function ThemeToggle() {
+export function ThemeToggle({ className = "" }: { className?: string }) {
   const t = useTranslations("Site");
   function toggle() {
     const root = document.documentElement;
@@ -26,7 +26,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      className={`${buttonClass("ghost")} text-muted hover:text-ink`}
+      className={`${buttonClass("ghost")} text-muted hover:text-ink ${className}`}
       aria-label={t("toggleTheme")}
       title={t("toggleTheme")}
     >
