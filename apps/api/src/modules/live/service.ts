@@ -1,12 +1,12 @@
-import type { Boarding, LiveRoute } from "@weems/contrats";
+import type { Boarding, LiveRoute, LiveTrail } from "@weems/contrats";
 import type { AirportsService } from "../airports/service.ts";
 import { notFound } from "../../plugins/problem.ts";
 import { buildBoarding } from "./boarding.ts";
 import type { LiveBoard } from "./live-board.ts";
 
 /**
- * What the live map asks besides the stream (the route of the flight the spectator selects), and
- * the page Boarding.
+ * What the live map asks besides the stream (the route of the flight the spectator selects), the
+ * points of a flight in progress, and the page Boarding.
  */
 export class LiveService {
   private readonly board: LiveBoard;
@@ -26,12 +26,23 @@ export class LiveService {
   }
 
   route(flightId: string): LiveRoute {
-    const flight = this.board.flight(flightId);
-    if (!flight) throw notFound(`Flight ${flightId} is not on the live map.`);
+    const flight = this.onMap(flightId);
     return {
       departure: this.airports.find(flight.departureIcao),
       arrival: this.airports.find(flight.plannedArrivalIcao),
       trail: this.board.trails.of(flightId),
     };
+  }
+
+  /** Altitude, speeds and phase along the trail: page of a flight in progress (spec vol en cours). */
+  trail(flightId: string): LiveTrail {
+    this.onMap(flightId);
+    return { points: this.board.trails.pointsOf(flightId) };
+  }
+
+  private onMap(flightId: string) {
+    const flight = this.board.flight(flightId);
+    if (!flight) throw notFound(`Flight ${flightId} is not on the live map.`);
+    return flight;
   }
 }

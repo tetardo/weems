@@ -10,6 +10,7 @@ describe("route progress", () => {
     const progress = routeProgress({ ...halfway, gs: 326 }, LFPG, LFBO);
     expect(progress?.fraction).toBeCloseTo(0.5, 1);
     expect(progress?.remainingNm).toBeCloseTo(163, -1);
+    expect((progress?.flownNm ?? 0) + (progress?.remainingNm ?? 0)).toBeCloseTo(326, -1);
     expect(progress?.remainingMinutes).toBeCloseTo(30, -1);
   });
 

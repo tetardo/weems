@@ -160,7 +160,7 @@ describe("public profile (spec J4)", () => {
     expect(off.json().detail).toBe(unknown.json().detail);
   });
 
-  it("shows closed flights only, never hidden ones, with their statistics", async () => {
+  it("lists closed flights only, never hidden ones, with their statistics", async () => {
     const { pilot, handle } = await publicPilot({
       country: "FR",
       level: "realPilot",
@@ -195,10 +195,13 @@ describe("public profile (spec J4)", () => {
     expect(list.flights[0].touchdownVs).toBe(-100);
     expect((await visit(`/v1/pilots/${handle}/flights/${shown}`)).statusCode).toBe(200);
     expect((await visit(`/v1/pilots/${handle}/flights/${shown}/track`)).statusCode).toBe(200);
-    for (const id of [hidden, open]) {
-      expect((await visit(`/v1/pilots/${handle}/flights/${id}`)).statusCode).toBe(404);
-      expect((await visit(`/v1/pilots/${handle}/flights/${id}/track`)).statusCode).toBe(404);
-    }
+    expect((await visit(`/v1/pilots/${handle}/flights/${hidden}`)).statusCode).toBe(404);
+    expect((await visit(`/v1/pilots/${handle}/flights/${hidden}/track`)).statusCode).toBe(404);
+    // A flight in progress has its page (spec vol en cours), not yet its trajectory.
+    const live = await visit(`/v1/pilots/${handle}/flights/${open}`);
+    expect(live.statusCode).toBe(200);
+    expect(live.json()).toMatchObject({ flightId: open, closedAt: null });
+    expect((await visit(`/v1/pilots/${handle}/flights/${open}/track`)).statusCode).toBe(404);
   });
 
   it("never shows another pilot's flight under a profile", async () => {

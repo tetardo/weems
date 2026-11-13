@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { type Boarding, uuidV7, type LiveRoute } from "@weems/contrats";
+import { type Boarding, uuidV7, type LiveRoute, type LiveTrail } from "@weems/contrats";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
 import { startTestApp, TRACKER_HEADERS } from "../../testing/test-app.ts";
@@ -48,6 +48,31 @@ describe("GET /v1/live/flights/{flightId}/route", () => {
     expect(missing.headers["access-control-allow-origin"]).toBe("*");
     expect((await route(uuidV7())).statusCode).toBe(404);
     expect((await route("not-an-id")).statusCode).toBe(400);
+  });
+});
+
+describe("GET /v1/live/flights/{flightId}/trail", () => {
+  const trail = (flightId: string) =>
+    app.inject({ method: "GET", url: `/v1/live/flights/${flightId}/trail` });
+
+  it("gives altitude, speeds and phase of each kept point, to any spectator", async () => {
+    const flight = syntheticFlight();
+    const id = flight.open.flightId;
+    await post("/v1/flights", flight.open);
+    await post(`/v1/flights/${id}/positions`, flight.position);
+
+    const response = await trail(id);
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["access-control-allow-origin"]).toBe("*");
+    const { at, lat, lon, altMsl, gs, vs, phase } = flight.position;
+    expect(response.json<LiveTrail>()).toEqual({
+      points: [{ at, lat, lon, altMsl, gs, vs, phase }],
+    });
+  });
+
+  it("answers 404 for a flight that is not on the map, and 400 for a bad id", async () => {
+    expect((await trail(uuidV7())).statusCode).toBe(404);
+    expect((await trail("not-an-id")).statusCode).toBe(400);
   });
 });
 

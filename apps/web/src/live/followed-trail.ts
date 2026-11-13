@@ -1,7 +1,7 @@
 import type { LiveRoute, PositionReport } from "@weems/contrats";
 
 /** Same thinning as the API's trail (live-trails.ts): one point every 15 s of flight time. */
-const KEEP_EVERY_MS = 15_000;
+export const KEEP_EVERY_MS = 15_000;
 
 /** Route of the followed flight: read once from the API, then grown from the live stream. */
 export interface FollowedRoute {

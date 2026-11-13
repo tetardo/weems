@@ -26,8 +26,8 @@ Demandée par Greg le 13/11/2026 (maquette dense validée : `/mnt/project-files/
 
 | Clic sur | Ouvre |
 | --- | --- |
-| L'indicatif d'un vol clos dont le pilote est public | La page publique du vol (`/pilots/{pseudo}/flights/{id}`) |
-| L'indicatif d'un vol encore en cours | Le vol sur la carte en direct (`/live?flight=<id>`) : sa page publique n'existe qu'après la clôture |
+| L'indicatif d'un vol dont le pilote est public | La page publique du vol (`/pilots/{pseudo}/flights/{id}`) : en cours, elle le suit en direct ([page d'un vol en cours](spec-vol-en-cours.md), depuis le 13/11) ; clos, la page complète |
+| L'indicatif d'un vol en cours au pilote masqué | Le vol sur la carte en direct (`/live?flight=<id>`) |
 | L'indicatif d'un vol clos au pilote masqué | Rien (aucune page ne le montre) |
 | Un pilote public | Sa page (`/pilots/{pseudo}`) ; « Pilote masqué » n'est pas cliquable |
 | Un terrain | Les tableaux de ce terrain, comme le filtre |

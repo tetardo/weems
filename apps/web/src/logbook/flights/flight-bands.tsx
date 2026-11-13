@@ -79,9 +79,10 @@ function MarksLine({
 
 /**
  * « Bandes de vol » (maquette v8): one column per minute, one row per parameter, shaded from low
- * to high; hovering a column shows every value of that minute.
+ * to high; hovering a column shows every value of that minute. `withMarks` false leaves out the
+ * stretches to review (a flight in progress has none yet).
  */
-export function FlightBands({ bands }: { bands: Bands }) {
+export function FlightBands({ bands, withMarks = true }: { bands: Bands; withMarks?: boolean }) {
   const t = useTranslations("Logbook.bands");
   const [hovered, setHovered] = useState<number | null>(null);
   return (
@@ -112,7 +113,7 @@ export function FlightBands({ bands }: { bands: Bands }) {
           <TimeAxis bands={bands} />
         </div>
       </div>
-      <MarksLine marks={bands.marks} minutes={bands.minutes} onSelect={setHovered} />
+      {withMarks && <MarksLine marks={bands.marks} minutes={bands.minutes} onSelect={setHovered} />}
       <MinuteDetails bands={bands} index={hovered} />
     </div>
   );

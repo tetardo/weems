@@ -1,0 +1,11 @@
+flowchart LR
+  tracker["Tracker<br/>positions toutes les 2 s"] --> trails["API · LiveTrails (mémoire)<br/>1 point / 15 s : lat, lon,<br/>altitude, vitesse, vario, phase"]
+  tracker --> stream["GET /v1/live/stream<br/>(SSE, tous les vols)"]
+  trails --> trail["GET /v1/live/flights/{id}/trail<br/>lu une fois"]
+  db[("PostgreSQL<br/>vol + événements")] --> flight["GET /v1/pilots/{pseudo}/flights/{id}<br/>vol ouvert accepté"]
+  flight --> server["Site · serveur<br/>/pilots/{pseudo}/flights/{id}"]
+  server -- "closedAt = null" --> live["Page d'un vol en cours<br/>tuiles, bandes, carte fixe,<br/>phases, profil, journal"]
+  server -- "clos" --> full["Page complète du vol"]
+  trail --> live
+  stream -- "chaque position" --> live
+  live -- "phase changée ou vol sorti<br/>du direct : relecture serveur" --> server

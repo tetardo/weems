@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
-import type { ReactNode } from "react";
 import { ReviewForm } from "../../flight/review-form.tsx";
 import { DoneIcon, StatsIcon } from "../../ui/icons.ts";
+import { CardGroup } from "../card-group.tsx";
 import { LogbookCard } from "../logbook-card.tsx";
 import { FlightBands } from "../flights/flight-bands.tsx";
 import { ApproachCard } from "./approach-card.tsx";
@@ -14,18 +14,6 @@ import { LandingCard } from "./landing-card.tsx";
 import { landingDetails } from "./landing-details.ts";
 import type { FullFlight } from "./load-full-flight.ts";
 import { PhasesCard } from "./phases-card.tsx";
-
-/** Title of a group of cards (« Vue d'ensemble », « Atterrissage »…). */
-function Group({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="grid gap-4">
-      <h2 className="m-0 mt-2 text-[11px] font-bold tracking-[.08em] text-muted uppercase">
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
 
 const PAIR = "grid items-stretch gap-4 md:grid-cols-2";
 
@@ -41,10 +29,10 @@ export function FullFlightPage({ data }: { data: FullFlight }) {
     <div className="grid gap-4">
       <FullFlightTop data={data} />
       <FullFlightHeader data={data} />
-      <Group title={t("groups.overview")}>
+      <CardGroup title={t("groups.overview")}>
         <FlightOverview points={points} phases={<PhasesCard flight={flight} />} />
-      </Group>
-      <Group title={t("groups.bands")}>
+      </CardGroup>
+      <CardGroup title={t("groups.bands")}>
         <LogbookCard icon={StatsIcon} title={t("bands")}>
           {bands ? (
             <FlightBands bands={bands} />
@@ -52,22 +40,22 @@ export function FullFlightPage({ data }: { data: FullFlight }) {
             <p className="m-0 text-[13px] text-muted">{t("noTrack")}</p>
           )}
         </LogbookCard>
-      </Group>
-      <Group title={t("groups.landing")}>
+      </CardGroup>
+      <CardGroup title={t("groups.landing")}>
         <div className={PAIR}>
           <LandingCard landing={landing} arrival={flight.plannedArrivalIcao} />
           <ApproachCard points={points} touchdownAt={landing?.at ?? null} />
         </div>
         <ComparisonCard comparison={data.comparison} locked={data.compareLocked} />
-      </Group>
-      <Group title={t("groups.logbook")}>
+      </CardGroup>
+      <CardGroup title={t("groups.logbook")}>
         <div className={PAIR}>
           <JournalCard events={flight.events} />
           <LogbookCard icon={DoneIcon} title={t("review")} className="h-full">
             <ReviewForm flightId={flight.flightId} review={data.review} />
           </LogbookCard>
         </div>
-      </Group>
+      </CardGroup>
     </div>
   );
 }

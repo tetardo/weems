@@ -4,7 +4,8 @@ import { distanceNm, type LatLon } from "./great-circle.ts";
 export interface RouteProgress {
   /** 0 to 1. */
   fraction: number;
-  /** Straight (great-circle) distance left to the arrival airport. */
+  /** Straight (great-circle) distance from departure, and left to the arrival airport. */
+  flownNm: number;
   remainingNm: number;
   /** At the current ground speed; null when too slow to say (on the ground, holding). */
   remainingMinutes: number | null;
@@ -29,6 +30,7 @@ export function routeProgress(
   const total = flown + remainingNm;
   return {
     fraction: total > 0 ? flown / total : 1,
+    flownNm: flown,
     remainingNm,
     remainingMinutes: aircraft.gs >= MIN_GS_KT ? (remainingNm / aircraft.gs) * 60 : null,
   };

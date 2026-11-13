@@ -15,6 +15,11 @@ export function utcTime(iso: string): string {
   return iso.slice(11, 19);
 }
 
+/** Hours and minutes UTC of an ISO 8601 time: « 08:21 ». */
+export function utcMinutes(iso: string): string {
+  return iso.slice(11, 16);
+}
+
 /** Above this altitude a level is read in hundreds of feet (FL350); below, in feet. */
 const FLIGHT_LEVEL_FROM_FT = 10_000;
 

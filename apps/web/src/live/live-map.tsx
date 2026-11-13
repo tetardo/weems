@@ -1,10 +1,12 @@
 "use client";
 
 import type { LiveRoute } from "@weems/contrats";
+import type { FeatureCollection } from "geojson";
 import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { categoryColors } from "../aircraft/category-colors.ts";
+import { addDetailLayers, showDetail } from "../live-flight/detail-layers.ts";
 import { createBaseMap } from "../map/base-map.ts";
 import type { MapTheme } from "../map/map-theme.ts";
 import { addAircraftIcons } from "./aircraft-icons.ts";
@@ -31,6 +33,12 @@ interface Props {
   recenterRequest: number;
   /** Night and busy airports. */
   overlays: Overlays;
+  /**
+   * Page of a flight in progress: a map that does not move by hand nor zoom, always centred on
+   * the selected aircraft, with the `detail` layers of that flight (spec vol en cours).
+   */
+  fixed?: boolean;
+  detail?: FeatureCollection | null;
 }
 
 export interface Hover {
@@ -106,10 +114,14 @@ function addFlightsLayer(map: MapLibreMap, theme: MapTheme): void {
  */
 function addLiveLayers(map: MapLibreMap, theme: MapTheme): void {
   addFlightsLayer(map, theme);
+  addDetailLayers(map, theme, SOURCE);
   addAllRoutesLayers(map, theme, SOURCE);
   addRouteLayers(map, theme, SOURCE);
   addOverlayLayers(map, theme, SOURCE);
 }
+
+/** Zoom of the fixed map of a flight in progress: the aircraft and a few hundred miles around. */
+const FIXED_ZOOM = 5.6;
 
 /** Calls `show(map, value)` when `value` changes, once the layers exist (else the load does). */
 function useShown<T>(
@@ -153,10 +165,44 @@ function useRecenter(
   }, [map, tracks, selected, request]);
 }
 
+/**
+ * Moves the aircraft at each frame once the map is loaded, the selected route with its aircraft,
+ * and, on a `fixed` map, the centre with it. Returns what stops it.
+ */
+function drawFrames(
+  instance: MapLibreMap,
+  shown: {
+    tracks: { current: Tracks };
+    selected: { current: string | null };
+    route: { current: LiveRoute | null };
+    fixed: boolean;
+  },
+  checkHover: (now: number) => void,
+): () => void {
+  const { tracks, selected, route, fixed } = shown;
+  let frame = 0;
+  const draw = () => {
+    const now = performance.now();
+    checkHover(now);
+    const source = instance.getSource<GeoJSONSource>(SOURCE);
+    source?.setData(tracks.current.features(now, selected.current));
+    const aircraft = selected.current && tracks.current.positionOf(selected.current, now);
+    if (route.current && selected.current) {
+      followAircraft(instance, route.current, aircraft || undefined);
+    }
+    if (fixed && aircraft) instance.jumpTo({ center: [aircraft.lon, aircraft.lat] });
+    frame = requestAnimationFrame(draw);
+  };
+  instance.once("load", draw);
+  return () => cancelAnimationFrame(frame);
+}
+
 /** MapLibre map with one aircraft per open flight, gliding between updates, and the selected route. */
 export function LiveMap(props: Props) {
   const { flights, selectedId, route, allRoutes, onSelect, onHover, recenterRequest, overlays } =
     props;
+  const fixed = props.fixed ?? false;
+  const detail = props.detail ?? null;
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const tracks = useRef(new Tracks());
@@ -166,6 +212,7 @@ export function LiveMap(props: Props) {
   const shownRoute = useLatest(route);
   const shownRoutes = useLatest(allRoutes);
   const shownOverlays = useLatest(overlays);
+  const shownDetail = useLatest(detail);
 
   useEffect(() => {
     if (!container.current) return;
@@ -175,26 +222,16 @@ export function LiveMap(props: Props) {
       showAllRoutes(target, shownRoutes.current);
       showRoute(target, shownRoute.current);
       showOverlays(target, shownOverlays.current);
+      showDetail(target, shownDetail.current);
     };
-    const instance = createBaseMap(container.current, { center: [5, 47], zoom: 4.3 }, addLayers);
+    const view = fixed ? { zoom: FIXED_ZOOM, interactive: false } : { zoom: 4.3 };
+    const instance = createBaseMap(container.current, { center: [5, 47], ...view }, addLayers);
     map.current = instance;
     const checkHover = watchHover(instance, tracks, hover);
-    let frame = 0;
-    const draw = () => {
-      const now = performance.now();
-      checkHover(now);
-      const source = instance.getSource<GeoJSONSource>(SOURCE);
-      source?.setData(tracks.current.features(now, selected.current));
-      if (shownRoute.current && selected.current) {
-        const aircraft = tracks.current.positionOf(selected.current, now);
-        followAircraft(instance, shownRoute.current, aircraft);
-      }
-      frame = requestAnimationFrame(draw);
-    };
-    instance.once("load", draw);
+    const stop = drawFrames(instance, { tracks, selected, route: shownRoute, fixed }, checkHover);
     watchClicks(instance, select);
     return () => {
-      cancelAnimationFrame(frame);
+      stop();
       instance.remove();
     };
     // The map is created once: the selection and the callback are read through refs.
@@ -207,6 +244,7 @@ export function LiveMap(props: Props) {
   useShown(map, route, showRoute);
   useShown(map, allRoutes, showAllRoutes);
   useShown(map, overlays, showOverlays);
+  useShown(map, detail, showDetail);
 
   return <div ref={container} style={{ position: "absolute", inset: 0 }} />;
 }

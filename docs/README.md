@@ -45,6 +45,7 @@ flowchart LR
 | [Site — trajets sur la carte en direct (J4)](cahiers-des-charges/web/spec-J4-trajectoire-direct.md) | Trajets, orthodromie, progression | Référence |
 | [Site — pilote et enrichissements du direct (J4)](cahiers-des-charges/web/spec-J4-direct-pilote.md) | Bulle, vol suivi, recherche, nuit, filtres, événements | Référence |
 | [Site — page Boarding](cahiers-des-charges/web/spec-boarding.md) | Tableau à palettes des départs et arrivées de tous les membres | Référence |
+| [Site — page d'un vol en cours](cahiers-des-charges/web/spec-vol-en-cours.md) | Page publique d'un vol suivie en direct, même adresse que la page complète | Référence |
 | [Offre Pilote fondateur et codes d'offre](cahiers-des-charges/web/spec-offre-fondateurs.md) | 500 premiers pilotes, codes, parrainage, ambassadeurs | Référence |
 | [Grades des pilotes](cahiers-des-charges/web/spec-grades-des-pilotes.md) | 9 grades sur heures et vols valides, insignes, carnet, profil, Boarding | Référence |
 | [Site — carnet de vol privé](cahiers-des-charges/web/spec-carnet-prive.md) | Résumé, Vols, Statistiques livrés ; Objectifs à faire | Ouvert |

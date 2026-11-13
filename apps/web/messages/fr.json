@@ -116,7 +116,8 @@
       "share": "Partager le vol",
       "copied": "Lien copié",
       "shareTitle": "{callsign} en direct sur Weems",
-      "recenter": "Recentrer"
+      "recenter": "Recentrer",
+      "flightPage": "Page du vol"
     },
     "showNight": "Jour / nuit",
     "search": {
@@ -143,6 +144,82 @@
       "landing": "<strong>{callsign}</strong> a atterri{airport, select, none {} other { à {airport}}}",
       "started": "<strong>{name}</strong> a commencé un vol{from, select, none {} other { ({from} → {to})}}",
       "vs": "{vs} ft/min"
+    }
+  },
+  "LiveFlight": {
+    "back": "Profil de {name}",
+    "liveMap": "Voir sur la carte du direct",
+    "copyLink": "Copier le lien",
+    "copied": "Lien copié",
+    "share": "Partager",
+    "shareCopied": "Adresse copiée",
+    "shareTitle": "{callsign} en direct sur Weems",
+    "onAir": "En direct",
+    "received": "position de {time} UTC · mise à jour toutes les 2 s",
+    "connecting": "Connexion au direct…",
+    "silent": "Ce vol n'envoie plus de position depuis plus de 10 minutes. La page complète s'affichera à la clôture du vol.",
+    "departure": "départ {time}",
+    "arrival": "arrivée ~{time}",
+    "arrivalUnknown": "arrivée inconnue",
+    "progress": "Progression du vol",
+    "attitude": {
+      "climb": "Avion en montée",
+      "level": "Avion en palier",
+      "descent": "Avion en descente"
+    },
+    "tiles": {
+      "altitude": "Altitude",
+      "feet": "{feet} ft",
+      "groundSpeed": "Vitesse sol",
+      "heading": "Cap",
+      "vs": "Vario",
+      "climb": "montée",
+      "level": "palier",
+      "descent": "descente",
+      "elapsed": "Temps écoulé",
+      "sinceBlock": "depuis le bloc",
+      "remaining": "Distance restante",
+      "flown": "{flown} nm parcourus · {percent} %",
+      "noPlan": "arrivée non déclarée"
+    },
+    "pilot": {
+      "flights": "{count, plural, =0 {aucun vol} one {# vol} other {# vols}}",
+      "hours": "{hours} h de vol",
+      "airports": "{count, plural, =0 {aucun terrain} one {# terrain} other {# terrains}}",
+      "favorite": "avion préféré {name}",
+      "since": "membre depuis {date}",
+      "page": "Voir sa page publique"
+    },
+    "sections": {
+      "live": "En direct",
+      "bands": "Bandes de vol",
+      "bandsAside": "1 case = 1 minute · se remplit chaque minute",
+      "bandsNote": "Les autres bandes (inclinaison, commandes, cabine) sont sur la page complète du vol, après l'atterrissage.",
+      "map": "Trajet",
+      "mapAside": "carte fixe, centrée sur l'avion",
+      "phases": "Phases",
+      "phasesAside": "{done} sur {total} faites",
+      "eta": "Arrivée estimée",
+      "etaIn": "Dans",
+      "profile": "Profil d'altitude",
+      "profileAside": "se remplit au fil du vol",
+      "waiting": "Les premiers points arrivent avec les positions du vol."
+    },
+    "legend": {
+      "flown": "volé, couleur = altitude",
+      "direct": "route directe",
+      "vector": "dans {minutes} min",
+      "others": "autres vols"
+    },
+    "markers": {
+      "takeoff": "Décollage {time}",
+      "topOfClimb": "Fin de montée {time}",
+      "topOfDescent": "Début de descente {time}"
+    },
+    "offRoute": {
+      "on": "sur la route directe",
+      "left": "{nm} nm à gauche de la route directe",
+      "right": "{nm} nm à droite de la route directe"
     }
   },
   "Boarding": {
@@ -1276,6 +1353,9 @@
       "boarding": {
         "label": "Tableau Boarding des départs et arrivées"
       },
+      "liveFlightPage": {
+        "label": "Page d'un vol en cours"
+      },
       "publicProfile": {
         "label": "Profil public"
       },
@@ -1544,6 +1624,10 @@
       "boarding": {
         "title": "Boarding : départs et arrivées",
         "text": "Un tableau à palettes comme en aérogare : les départs et les arrivées de tous les membres en direct, l'heure estimée, le toucher des derniers posés, un terrain ou un avion au choix, la page publique de chaque vol posé."
+      },
+      "liveFlightPage": {
+        "title": "Page d'un vol en cours",
+        "text": "Chaque vol d'un pilote public a sa page dès le départ : position, altitude, vitesse, phases, profil et bandes de vol en direct, carte centrée sur l'avion. Au bloc arrivée, la même adresse devient la page complète du vol."
       },
       "publicProfile": {
         "title": "Profil public",

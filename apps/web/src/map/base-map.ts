@@ -36,7 +36,7 @@ export type AddLayers = (map: MapLibreMap, theme: MapTheme) => void;
  */
 export function createBaseMap(
   container: HTMLElement,
-  view: Pick<MapOptions, "center" | "zoom" | "bounds" | "fitBoundsOptions">,
+  view: Pick<MapOptions, "center" | "zoom" | "bounds" | "fitBoundsOptions" | "interactive">,
   addLayers: AddLayers,
 ): MapLibreMap {
   setWorkerUrl(WORKER_URL);

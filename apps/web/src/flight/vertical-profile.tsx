@@ -1,15 +1,17 @@
 "use client";
 
-import type { TrackView } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { type MouseEvent, useMemo } from "react";
 import { colorOf } from "./phase-colors.ts";
-import { nearestIndex, type Profile, profileGeometry } from "./profile-geometry.ts";
-
-type TrackPoint = TrackView["points"][number];
+import {
+  nearestIndex,
+  type Profile,
+  type ProfilePoint,
+  profileGeometry,
+} from "./profile-geometry.ts";
 
 interface Props {
-  points: readonly TrackPoint[];
+  points: readonly ProfilePoint[];
   selected: number | null;
   onSelect: (index: number | null) => void;
 }

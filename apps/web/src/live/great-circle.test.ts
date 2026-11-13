@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { distanceNm, greatCircle, unwrapLongitudes } from "./great-circle.ts";
+import {
+  crossTrackNm,
+  destination,
+  distanceNm,
+  greatCircle,
+  unwrapLongitudes,
+} from "./great-circle.ts";
 
 const LFPG = { lat: 49.009, lon: 2.5541 };
 const LFBO = { lat: 43.6291, lon: 1.3638 };
@@ -48,5 +54,25 @@ describe("unwrap longitudes", () => {
       [-181, 50],
       [-179, 51],
     ]);
+  });
+});
+
+describe("destination and cross-track distance", () => {
+  it("goes 60 nm north along a meridian, one degree of latitude", () => {
+    const end = destination({ lat: 45, lon: 5 }, 0, 60);
+    expect(end.lat).toBeCloseTo(46, 1);
+    expect(end.lon).toBeCloseTo(5, 6);
+  });
+
+  it("goes east along the equator and keeps longitudes in -180..180", () => {
+    expect(destination({ lat: 0, lon: 179.5 }, 90, 60).lon).toBeCloseTo(-179.5, 1);
+  });
+
+  it("measures the distance off the direct route, right positive, left negative", () => {
+    const a = { lat: 0, lon: 0 };
+    const b = { lat: 0, lon: 10 };
+    expect(crossTrackNm(a, b, { lat: -1, lon: 5 })).toBeCloseTo(60, 0);
+    expect(crossTrackNm(a, b, { lat: 1, lon: 5 })).toBeCloseTo(-60, 0);
+    expect(crossTrackNm(a, b, { lat: 0, lon: 5 })).toBeCloseTo(0, 6);
   });
 });
