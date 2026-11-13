@@ -53,6 +53,7 @@ export function trayMenu(state: LauncherState): TrayItem[] {
     { label: "Ouvrir le site", command: { type: "open", target: "site" } },
     { label: "Ouvrir la console", command: { type: "open", target: "console" } },
     { label: "Ouvrir Docker Desktop", command: { type: "open", target: "docker" } },
+    { label: "Ouvrir le projet dans VS Code", command: { type: "open", target: "vscode" } },
     separator,
     nothingRuns
       ? { label: "Tout démarrer", enabled: idle, command: { type: "start-all" } }

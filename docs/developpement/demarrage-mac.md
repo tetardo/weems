@@ -24,7 +24,7 @@ Le script construit `Weems.app` (une à deux minutes), la signe localement, l'in
 | Tout arrêter, Tout redémarrer | En haut de la fenêtre, ou dans le menu de la barre des menus |
 | Journaux | Un onglet par service ; l'onglet Console montre aussi les étapes de démarrage et d'arrêt |
 | Ouvrir le site, Ouvrir la console, Simuler du trafic, Simuler des activités | Ouvrent le navigateur sur http://localhost:3001/fr, http://127.0.0.1:3002/services, /traffic, /activity (comptes fictifs) |
-| Ouvrir Docker | Ouvre Docker Desktop (aussi dans le menu de la barre des menus) |
+| Docker, VS Code | Ouvrent Docker Desktop, et le dépôt dans VS Code (aussi dans le menu de la barre des menus) |
 | Fermer la fenêtre | Weems continue : pastille « 🟢 Weems 4/4 » dans la barre des menus, menu pour rouvrir la fenêtre |
 | Quitter (⌘Q ou menu de la barre) | Arrête tout, base comprise, sans effacer de données |
 

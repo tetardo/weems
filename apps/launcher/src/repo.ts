@@ -30,7 +30,10 @@ const CONSOLE_PAGES = { console: "services", traffic: "traffic", activity: "acti
 /** Docker Desktop, where the database runs (button « Ouvrir Docker »). */
 export const DOCKER_APP = "/Applications/Docker.app";
 
-export function linkUrl(target: Exclude<LinkTarget, "docker">): string {
+/** VS Code, opened on the repository (button « VS Code »). */
+export const VSCODE_APP = "Visual Studio Code";
+
+export function linkUrl(target: Exclude<LinkTarget, "docker" | "vscode">): string {
   if (target === "site") return URLS.site;
   return `${URLS.console}/${CONSOLE_PAGES[target]}`;
 }

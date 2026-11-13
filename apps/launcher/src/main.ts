@@ -1,3 +1,4 @@
+import { execFile } from "node:child_process";
 import { setTimeout as sleep } from "node:timers/promises";
 import { join } from "node:path";
 import { ManagedProcess } from "@weems/local-process";
@@ -10,7 +11,7 @@ import {
   type LauncherState,
   type LinkTarget,
 } from "./launcher-state.ts";
-import { DOCKER_APP, linkUrl, repoPaths, URLS } from "./repo.ts";
+import { DOCKER_APP, linkUrl, repoPaths, URLS, VSCODE_APP } from "./repo.ts";
 import { type TrayItem, trayMenu, trayTitle } from "./tray-menu.ts";
 
 /** Replaced at build time (scripts/build-app.ts): the repository the app was built from. */
@@ -20,9 +21,10 @@ const REFRESH_MS = 2_000;
 /** Files of the window, next to this bundle. */
 const HERE = __dirname;
 
+const paths = repoPaths(process.env["WEEMS_REPO"] ?? WEEMS_REPO_ROOT);
 const launcher = new Launcher({
   client: new ConsoleClient(URLS.console),
-  paths: repoPaths(process.env["WEEMS_REPO"] ?? WEEMS_REPO_ROOT),
+  paths,
   newProcess: (onLine) => new ManagedProcess(onLine),
   sleep: (ms) => sleep(ms),
 });
@@ -71,6 +73,7 @@ function run(command: LauncherCommand | "show" | "quit"): void {
 
 function openTarget(target: LinkTarget): void {
   if (target === "docker") void shell.openPath(DOCKER_APP);
+  else if (target === "vscode") execFile("open", ["-a", VSCODE_APP, paths.root], () => undefined);
   else void shell.openExternal(linkUrl(target));
 }
 
