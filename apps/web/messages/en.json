@@ -505,7 +505,9 @@
       "since": "Published on {date}",
       "off": "Off: nobody can see your page.",
       "consent": "I agree that my handle, photo, country, statistics and flights not hidden are visible to everyone and indexed by search engines. I can turn my page off at any time: it disappears at once.",
-      "page": "Public page"
+      "page": "Public page",
+      "liveFlights": "Show my flights in progress",
+      "liveFlightsAbout": "Each flight in progress has its page, followed live, at the flight's address. Off: your flights stay only on the live map until landing."
     },
     "handle": {
       "label": "Address of my page",
@@ -1627,7 +1629,7 @@
       },
       "liveFlightPage": {
         "title": "Page of a flight in progress",
-        "text": "Every flight of a public pilot has its page from departure: position, altitude, speed, phases, profile and flight bands live, a map centred on the aircraft. At the arrival gate, the same address becomes the full flight page."
+        "text": "Every flight of a public pilot has its page from departure: position, altitude, speed, phases, profile and flight bands live, a map centred on the aircraft. At the arrival gate, the same address becomes the full flight page. The pilot can turn it off in My profile (« Show my flights in progress »)."
       },
       "publicProfile": {
         "title": "Public profile",

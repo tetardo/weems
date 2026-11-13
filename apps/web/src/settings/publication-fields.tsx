@@ -4,6 +4,7 @@ import type { MyProfile } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { HandleField } from "./handle-field.tsx";
+import { SwitchInput } from "./switch-input.tsx";
 
 /** The switch that turns the page on, with the date it went online. */
 function PublicationSwitch({
@@ -32,19 +33,33 @@ function PublicationSwitch({
             : t("off")}
         </p>
       </div>
-      <label className="relative inline-flex cursor-pointer items-center">
-        <span className="sr-only">{t("switch")}</span>
-        <input
-          type="checkbox"
-          name="isPublic"
-          role="switch"
-          checked={isPublic}
-          onChange={(event) => setPublic(event.target.checked)}
-          className="peer sr-only"
-        />
-        <span className="h-6.5 w-11.5 rounded-full bg-line transition-colors peer-checked:bg-accent peer-focus-visible:outline-2 peer-focus-visible:outline-link" />
-        <span className="absolute top-0.75 left-0.75 size-5 rounded-full bg-white transition-transform peer-checked:translate-x-5" />
-      </label>
+      <SwitchInput
+        name="isPublic"
+        label={t("switch")}
+        checked={isPublic}
+        onChange={(event) => setPublic(event.target.checked)}
+      />
+    </div>
+  );
+}
+
+/**
+ * « Montrer mes vols en cours » (Greg, 13/11/2026): a flight in progress has its public page,
+ * followed live (spec vol en cours); off, it is only on the live map until it is closed.
+ */
+function LiveFlightsSwitch({ profile }: { profile: MyProfile }) {
+  const t = useTranslations("Settings.publication");
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <div>
+        <p className="m-0 font-semibold">{t("liveFlights")}</p>
+        <p className="m-0 text-[.9em] text-muted">{t("liveFlightsAbout")}</p>
+      </div>
+      <SwitchInput
+        name="showLiveFlights"
+        label={t("liveFlights")}
+        defaultChecked={profile.showLiveFlights}
+      />
     </div>
   );
 }
@@ -74,6 +89,7 @@ export function PublicationFields({ profile, siteHost }: { profile: MyProfile; s
           <span>{t("consent")}</span>
         </label>
       )}
+      {isPublic && <LiveFlightsSwitch profile={profile} />}
     </>
   );
 }

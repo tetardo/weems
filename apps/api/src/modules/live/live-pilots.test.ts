@@ -7,6 +7,7 @@ const camille: LivePilot = {
   name: "Camille Roux",
   country: "FR",
   hasPhoto: true,
+  liveFlightPage: true,
 };
 
 let now: number;

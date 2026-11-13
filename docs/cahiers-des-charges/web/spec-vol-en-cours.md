@@ -8,6 +8,7 @@ Demandée par Greg le 13/11/2026 (« ouvrir le vol en cours »), maquette unique
 
 - **Une adresse par vol, stable** : `/pilots/{pseudo}/flights/{id}`, celle de la page publique du vol. Tant que le vol est ouvert, elle le suit en direct ; une fois clos, la même adresse montre la page complète du vol. Un lien partagé pendant le vol reste bon après l'atterrissage.
 - **Pilotes publics seulement**. Un vol au pilote masqué n'a pas de page : le Boarding et la carte du direct mènent à la carte du direct, comme avant.
+- **Réglage du pilote** (choix de Greg du 13/11, 16 h 30) : « Montrer mes vols en cours » dans Mon profil, section Publication, sous le consentement, **activé par défaut**. Désactivé, la page d'un vol en cours répond 404 et le vol reste seulement sur la carte du direct jusqu'à sa clôture ; une fois clos, il a sa page comme les autres.
 - **Un vol masqué** par son pilote répond 404, en cours comme clos.
 - **En continu** sur le flux SSE du direct (choix de Greg du 13/11) : chiffres à chaque position, trace lue une fois puis complétée point par point, relecture de la page par le serveur quand la phase change (phases et journal à jour) ou quand le vol quitte le direct (page complète à la clôture).
 
@@ -44,16 +45,18 @@ Les autres bandes (inclinaison, commandes, cabine) et l'analyse de l'atterrissag
 
 | Route | Changement |
 | --- | --- |
-| `GET /v1/pilots/{pseudo}/flights/{id}` | Accepte un vol ouvert (`closedAt: null`) ; toujours 404 pour un vol masqué ou d'un autre pilote |
+| `GET /v1/pilots/{pseudo}/flights/{id}` | Accepte un vol ouvert (`closedAt: null`) si le pilote n'a pas coupé « Montrer mes vols en cours » ; toujours 404 pour un vol masqué ou d'un autre pilote |
 | `GET /v1/pilots/{pseudo}/flights/{id}/track` | 404 tant que le vol est ouvert (la trajectoire n'existe qu'à la clôture) |
 | `GET /v1/live/flights/{id}/trail` | Nouvelle, publique : points du vol gardés en mémoire (`LiveTrail` : heure, lat, lon, altitude, vitesse sol, vario, phase), 1 toutes les 15 s, 1 500 au plus ; 404 si le vol n'est pas sur le direct |
 
-Limite connue : la trace en mémoire est perdue au redémarrage de l'API ; la page la reconstruit alors à partir des positions suivantes.
+Réglage : champ `showLiveFlights` de `PUT|GET /v1/me/profile` (colonne `pilot_profiles.show_live_flights`, vrai par défaut, migration 0015) ; le pilote du direct et du Boarding porte `liveFlightPage` pour que le site ne fasse jamais un lien vers une page coupée.
+
+Limite connue, acceptée par Greg le 13/11 (à revoir avant la mise en ligne) : la trace en mémoire est perdue au redémarrage de l'API ; la page la reconstruit alors à partir des positions suivantes.
 
 ## Liens vers la page
 
-- **Boarding** : un clic sur l'indicatif d'un vol au pilote public ouvre sa page, en cours ou clos.
-- **Carte du direct** : le panneau du vol suivi a un bouton « Page du vol » quand le pilote est public.
+- **Boarding** : un clic sur l'indicatif d'un vol au pilote public ouvre sa page, en cours (si le réglage est activé) ou clos.
+- **Carte du direct** : le panneau du vol suivi a un bouton « Page du vol » quand le pilote est public et que le réglage est activé.
 
 ## Catalogue des formules
 

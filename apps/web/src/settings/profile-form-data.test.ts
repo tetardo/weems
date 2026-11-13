@@ -13,6 +13,7 @@ describe("settings form", () => {
       form({
         isPublic: "on",
         consent: "on",
+        showLiveFlights: "on",
         handle: " Greg-FR ",
         homeIcao: "lfbo",
         country: "FR",
@@ -23,6 +24,7 @@ describe("settings form", () => {
       ok: true,
       update: {
         isPublic: true,
+        showLiveFlights: true,
         handle: "greg-fr",
         country: "FR",
         homeIcao: "LFBO",
@@ -34,6 +36,16 @@ describe("settings form", () => {
         simbriefId: null,
       },
     });
+  });
+
+  it("reads « Montrer mes vols en cours » off on a public page, on while the page is off", () => {
+    const read = (fields: Record<string, string>) => {
+      const result = readProfileForm(form({ handle: "greg-fr", ...fields }));
+      return result.ok ? result.update.showLiveFlights : null;
+    };
+    expect(read({ isPublic: "on", consent: "on" })).toBe(false);
+    expect(read({ isPublic: "on", consent: "on", showLiveFlights: "on" })).toBe(true);
+    expect(read({})).toBe(true);
   });
 
   it("needs the consent box to publish", () => {

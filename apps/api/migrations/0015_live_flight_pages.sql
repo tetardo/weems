@@ -1,0 +1,1 @@
+ALTER TABLE "pilot_profiles" ADD COLUMN "show_live_flights" boolean DEFAULT true NOT NULL;

@@ -17,8 +17,8 @@ interface Props {
 }
 
 /**
- * The pilot, and for a public pilot the ways to the profile and to the page of this flight in
- * progress (spec vol en cours).
+ * The pilot, and for a public pilot the ways to the profile and, unless the pilot keeps it off, to
+ * the page of this flight in progress (spec vol en cours).
  */
 function PilotBox({ flight }: { flight: LiveFlight }) {
   const t = useTranslations("Live.panel");
@@ -37,7 +37,7 @@ function PilotBox({ flight }: { flight: LiveFlight }) {
           </Link>
         )}
       </div>
-      {pilot && (
+      {pilot?.liveFlightPage && (
         <Link
           href={publicProfileLinks(pilot.handle).flight(flight.flightId)}
           className={`${buttonClass("outline")} mt-2 w-full`}

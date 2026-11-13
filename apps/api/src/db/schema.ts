@@ -99,6 +99,8 @@ export const pilotProfiles = pgTable(
     /** Address of the profile, /pilots/{handle}; unique, kept while the profile is off. */
     handle: text("handle").unique(),
     isPublic: boolean("is_public").notNull().default(false),
+    /** A flight in progress has its public page (spec vol en cours); on unless the pilot says no. */
+    showLiveFlights: boolean("show_live_flights").notNull().default(true),
     country: text("country"),
     homeIcao: text("home_icao"),
     level: text("level"),

@@ -55,6 +55,11 @@ const ProfileFields = z.object({
 export const ProfileUpdate = ProfileFields.extend({
   isPublic: z.boolean(),
   handle: PilotHandle.nullable(),
+  /**
+   * A flight in progress has its public page, followed live (spec vol en cours); off, it is only
+   * on the live map until it is closed. On by default (Greg, 13/11/2026).
+   */
+  showLiveFlights: z.boolean().default(true),
 });
 export type ProfileUpdate = z.infer<typeof ProfileUpdate>;
 

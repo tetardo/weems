@@ -44,7 +44,12 @@ describe("own profile settings (spec J4)", () => {
       headers: { cookie: pilot.cookie },
     });
     expect(profile.statusCode).toBe(200);
-    expect(profile.json()).toMatchObject({ isPublic: false, handle: null, photoUpdatedAt: null });
+    expect(profile.json()).toMatchObject({
+      isPublic: false,
+      handle: null,
+      photoUpdatedAt: null,
+      showLiveFlights: true,
+    });
     expect(profile.json().suggestedHandle).toMatch(/^test-pilot/);
   });
 
@@ -202,6 +207,20 @@ describe("public profile (spec J4)", () => {
     expect(live.statusCode).toBe(200);
     expect(live.json()).toMatchObject({ flightId: open, closedAt: null });
     expect((await visit(`/v1/pilots/${handle}/flights/${open}/track`)).statusCode).toBe(404);
+  });
+
+  it("keeps a flight in progress off when the pilot says so, never a closed one", async () => {
+    const { pilot, handle } = await publicPilot({ showLiveFlights: false });
+    const closed = await fly(pilot);
+    const open = await fly(pilot, { closed: false });
+    expect((await visit(`/v1/pilots/${handle}/flights/${open}`)).statusCode).toBe(404);
+    expect((await visit(`/v1/pilots/${handle}/flights/${closed}`)).statusCode).toBe(200);
+    const mine = await app.inject({
+      method: "GET",
+      url: "/v1/me/profile",
+      headers: { cookie: pilot.cookie },
+    });
+    expect(mine.json()).toMatchObject({ showLiveFlights: false });
   });
 
   it("never shows another pilot's flight under a profile", async () => {
@@ -384,6 +403,7 @@ describe("pilot on the live map (spec J4, carte en direct)", () => {
       name: "Test pilot",
       country: "FR",
       hasPhoto: false,
+      liveFlightPage: true,
       rank: "student",
     });
     expect(flight).not.toHaveProperty("pilotId");

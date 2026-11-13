@@ -17,6 +17,8 @@ export const LivePilot = z.object({
   country: CountryCode.nullable(),
   /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
   hasPhoto: z.boolean(),
+  /** The flight has its public page while in progress (setting « Montrer mes vols en cours »). */
+  liveFlightPage: z.boolean(),
   /** Confirmed founder number (offer « Pilote fondateur »); absent otherwise. */
   founderNumber: z.number().int().positive().optional(),
   /** Rank earned by valid flights (spec grades des pilotes); absent while unknown. */
