@@ -17,6 +17,7 @@ Demandée par Greg le 13/11/2026 (maquette dense validée : `/mnt/project-files/
 | Arrivées | Vols en l'air par heure estimée, puis posés depuis moins d'une heure (le plus récent en haut, grisés) | Estimée (« EST ») d'après la distance restante et la vitesse sol, puis heure du toucher | Heure, vol, de, avion, pilote, statut (« Posé −118 » : toucher en ft/min) |
 
 - **Pages** : 12 lignes par tableau ; au-delà, le tableau passe seul à la page suivante toutes les 15 s (« 1/3 »).
+- **Nom des terrains** : en petit à côté du code seulement quand un tableau occupe toute la largeur (1 024 à 1 279 px) ; à côté de l'autre tableau, le code seul, pour laisser la place au pilote ; nom complet au survol. Un nom trop long est coupé (« … »), jamais sous la colonne voisine (correction du 13/11).
 - **Avion** : silhouette de la catégorie dans sa couleur, comme sur la carte en direct, puis le type.
 - **Pilote** : nom, photo et drapeau du pays si son profil est public, sinon « Pilote masqué » (choix de Greg : le vol reste affiché).
 - **Effet de palettes** : quand un texte change (vol, terrain), chaque case fait défiler le tambour jusqu'au bon caractère. Sans animation si le système demande moins de mouvement. Son des palettes coupé par défaut : il suit le bouton son de la barre du site, à côté du thème (demande de Greg du 13/11 : plus de haut-parleur sur la page), choix gardé dans le navigateur (`site/sound-setting.ts`).

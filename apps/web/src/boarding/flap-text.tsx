@@ -57,7 +57,7 @@ export function FlapText({
 }) {
   const cells = useRolledCells(text, width);
   return (
-    <span className="inline-flex gap-[2px] font-mono font-bold">
+    <span className="inline-flex flex-none gap-[2px] font-mono font-bold">
       <span className="sr-only">{text}</span>
       {cells.map((cell, index) => (
         <span
