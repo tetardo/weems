@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { bytes } from "../../format/bytes.ts";
 import { dayAndClock } from "../../format/time.ts";
 import type { DatabaseView } from "../../server/database/database-page.ts";
+import { growthOf } from "./history.ts";
 import { BackupIcon, DiskIcon, MigrationsIcon, SimulatedIcon } from "../../ui/icons.ts";
 import {
   backupWarning,
@@ -36,7 +37,8 @@ function Tile(props: {
 }
 
 function SizeTile({ view }: { view: DatabaseView }) {
-  const { database, growth } = view;
+  const { database } = view;
+  const growth = growthOf(database.history);
   return (
     <Tile
       icon={<DiskIcon size={16} />}

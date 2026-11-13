@@ -1,6 +1,6 @@
 import type { DatabaseTable } from "@weems/contrats";
 import { bytes } from "../../format/bytes.ts";
-import type { SizeGrowth } from "../../server/database/size-history.ts";
+import type { SizeGrowth } from "./history.ts";
 import { growthText } from "./model.ts";
 
 /** Real and simulated parts of a table, as wide as its size against the largest one. */

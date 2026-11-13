@@ -223,3 +223,79 @@ th.db-n {
     margin-left: 0;
   }
 }
+
+/* ---------- Charts of the last 30 days ---------- */
+.db-charts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1100px) {
+  .db-charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.db-chart-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+}
+.db-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 4px;
+}
+.db-chart-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.db-chart-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.db-chart-line.dashed {
+  stroke-dasharray: 4 4;
+  opacity: 0.6;
+}
+.db-chart-area {
+  fill: var(--soft);
+}
+.db-chart-dot {
+  fill: var(--accent);
+}
+.db-chart-caption {
+  min-height: 2.6em;
+}
+.db-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.db-legend i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 5px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+.db-s0 {
+  fill: var(--accent);
+  background: var(--accent);
+}
+.db-s1 {
+  fill: var(--violet);
+  background: var(--violet);
+}
+.db-s2 {
+  fill: var(--success);
+  background: var(--success);
+}
+.db-s3 {
+  fill: color-mix(in srgb, var(--muted) 40%, transparent);
+  background: color-mix(in srgb, var(--muted) 40%, transparent);
+}

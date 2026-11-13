@@ -6,6 +6,7 @@ import { createDatabaseService } from "../../app.ts";
 import { invitations } from "../../db/auth-schema.ts";
 import { flights } from "../../db/schema.ts";
 import { countMigrationFiles } from "../../db/migration-journal.ts";
+import { HistoryRepository } from "./history-repository.ts";
 import { connectTestDatabase } from "../../testing/database.ts";
 import { invite, newPilot, newTrackerPilot, uniqueEmail } from "../../testing/pilots.ts";
 import { syntheticFlight } from "../../testing/synthetic-flight.ts";
@@ -153,5 +154,50 @@ describe("cleanup of old simulated flights and expired invitations", () => {
     const left = await database.db.select().from(invitations);
     expect(left.some((row) => row.code === expired)).toBe(false);
     expect(left.some((row) => row.code === open)).toBe(true);
+  });
+});
+
+/** Readings and flights per day on a clock set in 2019, out of reach of the other test files. */
+describe("history of sizes and flights for the charts", () => {
+  const now = new Date("2019-03-10T12:00:00.000Z");
+  const live = { closed: () => undefined };
+  const service = () => createDatabaseService(database.db, live, () => now);
+  const day = (history: AdminDatabase["history"], date: string) =>
+    history.find((entry) => entry.date === date);
+
+  it("gives 30 days ending today, today's size and the flights of each day", async () => {
+    const before = (await service().database()).history;
+    const pilot = await newTrackerPilot(app);
+    await open(pilot.tracker, "msfs2024", "2019-03-10T08:00:00.000Z");
+    await open(pilot.tracker, "replay", "2019-03-10T09:00:00.000Z");
+    await open(pilot.tracker, "replay", "2019-03-08T09:00:00.000Z");
+
+    const { history, totalBytes } = await service().database();
+    const added = (date: string) => ({
+      real: (day(history, date)?.realFlights ?? 0) - (day(before, date)?.realFlights ?? 0),
+      simulated:
+        (day(history, date)?.simulatedFlights ?? 0) - (day(before, date)?.simulatedFlights ?? 0),
+    });
+    expect(history).toHaveLength(30);
+    expect(history[0]?.date).toBe("2019-02-09");
+    expect(day(history, "2019-03-10")?.totalBytes).toBe(totalBytes);
+    expect(day(history, "2019-03-10")?.tables?.["flights"]).toBeGreaterThan(0);
+    expect(added("2019-03-10")).toEqual({ real: 1, simulated: 1 });
+    expect(added("2019-03-08")).toEqual({ real: 0, simulated: 1 });
+    expect(day(history, "2019-03-09")).toMatchObject({ totalBytes: null, tables: null });
+  });
+
+  it("keeps one reading per day and forgets those older than 13 months", async () => {
+    const readings = new HistoryRepository(database.db);
+    const at = new Date("2017-01-01T00:00:00.000Z");
+    await readings.record({ day: "2017-01-01", totalBytes: 1, tables: {} }, at);
+    await readings.record({ day: "2018-12-01", totalBytes: 2, tables: {} }, at);
+    await readings.record({ day: "2018-12-01", totalBytes: 3, tables: {} }, at);
+
+    await service().record();
+    const kept = await readings.readings("2016-01-01");
+    expect(kept.some((reading) => reading.day === "2017-01-01")).toBe(false);
+    expect(kept.find((reading) => reading.day === "2018-12-01")?.totalBytes).toBe(3);
+    expect(kept.some((reading) => reading.day === "2019-03-10")).toBe(true);
   });
 });

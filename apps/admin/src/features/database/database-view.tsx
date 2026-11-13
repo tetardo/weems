@@ -18,6 +18,8 @@ import { usePolling } from "../../ui/use-polling.ts";
 import { BackupBand } from "./backup-band.tsx";
 import { BackupsPanel } from "./backups-panel.tsx";
 import { CleanupPanel } from "./cleanup-panel.tsx";
+import { HistoryCharts } from "./history-charts.tsx";
+import { growthOf } from "./history.ts";
 import { MigrationsPanel } from "./migrations-panel.tsx";
 import { backupWarning, cleanupResultText } from "./model.ts";
 import { SummaryTiles } from "./summary-tiles.tsx";
@@ -63,13 +65,14 @@ function Page({ view, actions }: { view: View; actions: ReturnType<typeof usePag
   const backingUp = busy || view.backingUp;
   return (
     <div className="sv-page">
+      <HistoryCharts history={view.database.history} totalBytes={view.database.totalBytes} />
       <SummaryTiles view={view} nowMs={nowMs} />
       <BackupBand
         warning={backupWarning(view.backups[0]?.createdAt ?? null, nowMs)}
         busy={backingUp}
         onBackup={actions.backup}
       />
-      <TablesPanel tables={view.database.tables} growth={view.growth} />
+      <TablesPanel tables={view.database.tables} growth={growthOf(view.database.history)} />
       <div className="sv-grid3 db-pair">
         <MigrationsPanel
           migrations={view.database.migrations}
