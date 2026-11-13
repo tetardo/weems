@@ -40,23 +40,35 @@ export class AdminApi {
     this.cookie = cookie;
   }
 
-  private async call<T>(
-    schema: z.ZodType<T> | null,
-    path: string,
-    init: RequestInit = {},
-    timeoutMs = 5_000,
-  ): Promise<T> {
+  private async send(path: string, init: RequestInit, timeoutMs: number): Promise<Response> {
     const response = await fetch(new URL(path, this.config.apiUrl), {
       ...init,
       headers: {
         cookie: this.cookie,
-        ...(init.body ? { "content-type": "application/json" } : {}),
+        ...(typeof init.body === "string" ? { "content-type": "application/json" } : {}),
+        ...(init.headers as Record<string, string> | undefined),
       },
       signal: AbortSignal.timeout(timeoutMs),
       cache: "no-store",
     });
     if (!response.ok) throw await problemOf(response);
+    return response;
+  }
+
+  /** JSON answer checked against its contract, or nothing (`schema` null, 204). */
+  protected async call<T>(
+    schema: z.ZodType<T> | null,
+    path: string,
+    init: RequestInit = {},
+    timeoutMs = 5_000,
+  ): Promise<T> {
+    const response = await this.send(path, init, timeoutMs);
     return schema ? schema.parse(await response.json()) : (undefined as T);
+  }
+
+  /** Text answer (CSV export). */
+  protected async text(path: string): Promise<string> {
+    return (await this.send(path, {}, 15_000)).text();
   }
 
   me() {

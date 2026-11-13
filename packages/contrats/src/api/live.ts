@@ -16,6 +16,8 @@ export const LivePilot = z.object({
   country: CountryCode.nullable(),
   /** Photo at GET /v1/pilots/{handle}/photo; initials otherwise. */
   hasPhoto: z.boolean(),
+  /** Confirmed founder number (offer « Pilote fondateur »); absent otherwise. */
+  founderNumber: z.number().int().positive().optional(),
 });
 export type LivePilot = z.infer<typeof LivePilot>;
 

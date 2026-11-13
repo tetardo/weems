@@ -8,6 +8,10 @@ const RELAYS: readonly { site: RegExp; api: (match: RegExpMatchArray) => string 
     site: /^\/api\/pilots\/([a-z0-9-]{3,30})\/photo$/,
     api: ([, handle]) => `/v1/pilots/${handle}/photo`,
   },
+  {
+    site: /^\/api\/ambassadors\/([a-z0-9-]{3,30})\/photo$/,
+    api: ([, slug]) => `/v1/ambassadors/${slug}/photo`,
+  },
   { site: /^\/api\/me\/profile\/photo$/, api: () => "/v1/me/profile/photo" },
   { site: /^\/api\/me\/profile\/handle-check$/, api: () => "/v1/me/profile/handle-check" },
 ];
@@ -23,6 +27,8 @@ export function relayTarget(pathname: string): string | null {
 
 /** Site address of a pilot's public photo. */
 export const pilotPhotoUrl = (handle: string) => `/api/pilots/${handle}/photo`;
+/** Site address of an ambassador's photo. */
+export const ambassadorPhotoUrl = (slug: string) => `/api/ambassadors/${slug}/photo`;
 /** Site address of the logged-in pilot's own photo (upload, removal). */
 export const OWN_PHOTO_URL = "/api/me/profile/photo";
 /**

@@ -1,0 +1,86 @@
+/* Pages Fondateurs and Codes d'offre (spec offre fondateurs). Colours: tokens of global.css only. */
+.fd-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+.oc-h {
+  font-size: 16px;
+  margin: 22px 0 10px;
+}
+.oc-batch {
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.oc-batch h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+.oc-fields {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.oc-submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+}
+.oc-ambs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.oc-amb {
+  padding: 14px;
+}
+.oc-amb p {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+}
+.oc-amb-hd,
+.oc-amb-ft {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.oc-amb-ft {
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+.oc-drawer {
+  width: min(560px, 100vw);
+}
+.oc-group {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-box);
+  padding: 12px 14px 4px;
+  margin: 0 0 14px;
+}
+.oc-group legend {
+  padding: 0 6px;
+  font-weight: 600;
+}
+.oc-group p {
+  font-size: 12.5px;
+}
+.oc-check {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+@media (max-width: 900px) {
+  .oc-fields {
+    grid-template-columns: 1fr;
+  }
+}
+.fd-note {
+  margin-bottom: 12px;
+}

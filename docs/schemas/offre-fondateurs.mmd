@@ -1,0 +1,11 @@
+flowchart LR
+  T["Tracker<br/>vol clos + trajectoire"] --> V{"Vol valide ?<br/>≥ 15 min en l'air, ≥ 20 NM,<br/>pas simulé, ni déplacé, ni crash"}
+  V -- "3 vols sur 2 jours" --> P["Place n° X<br/>(transaction, numéro jamais redonné)"]
+  P -- "1 an" --> G["Pilot Pro offert<br/>table plan_grants"]
+  P --> R["3 codes de parrainage<br/>« 3 mois Pro »"]
+  P -- "48 h ou console" --> C["Confirmé :<br/>badge à vie"]
+  P -- "console : Refuser" --> X["Refusé : Pro et codes<br/>non utilisés repris"]
+  L["Lots WEEMS-XXXX-XXXX<br/>(console)"] --> K["/code ou /signup?code="]
+  A["Ambassadeur<br/>code partagé à quota"] --> K
+  R --> K
+  K -- "N mois" --> G

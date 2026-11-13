@@ -22,6 +22,7 @@ const PUBLIC_PAGES = new Set([
   "pilots",
   "plans",
   "features",
+  "ambassadors",
 ]);
 
 function localeAndPage(pathname: string): { locale: string; page: string } {

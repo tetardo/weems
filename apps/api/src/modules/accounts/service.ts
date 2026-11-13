@@ -1,5 +1,5 @@
 import { randomInt } from "node:crypto";
-import { type AccountRole, INVITATION_DAYS } from "@weems/contrats";
+import { type AccountRole, CODE_ALPHABET, INVITATION_DAYS } from "@weems/contrats";
 import { ApiProblem } from "../../plugins/problem.ts";
 import type {
   AccountStatus,
@@ -8,8 +8,6 @@ import type {
   PilotIdentity,
 } from "./repository.ts";
 
-/** Readable on a screen or over the phone: no 0/O, 1/I/L. */
-const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 const CODE_LENGTH = 10;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -33,9 +31,20 @@ function stringField(body: unknown, field: string): string | null {
   return typeof value === "string" ? value : null;
 }
 
-/** Closed alpha (J3): an account is created only with an unused invitation made for that e-mail. */
+/** Offer codes that may open a sign-up (implemented by the offers module). */
+export interface SignUpCodes {
+  opensSignUp(code: string): Promise<boolean>;
+  /** Uses the code for the new account; never fails the sign-up. */
+  redeemAtSignUp(pilotId: string, code: string): Promise<void>;
+}
+
+/**
+ * Closed alpha (J3): an account is created only with an unused invitation made for that e-mail,
+ * or with an offer code that can still be used (ambassador, referral, partner batch).
+ */
 export class AccountsService {
   private readonly repository: AccountsRepository;
+  private signUpCodes: SignUpCodes | null = null;
 
   private readonly now: () => number;
 
@@ -83,11 +92,17 @@ export class AccountsService {
     return invitation.expiresAt.getTime() <= this.now();
   }
 
-  /** Throws 403 unless the sign-up carries a valid invitation code for its e-mail. */
+  /** Offer codes accepted at sign-up instead of an invitation. */
+  acceptOfferCodes(codes: SignUpCodes): void {
+    this.signUpCodes = codes;
+  }
+
+  /** Throws 403 unless the sign-up carries a valid invitation for its e-mail or offer code. */
   async checkSignUp(body: unknown): Promise<void> {
     const code = stringField(body, "inviteCode")?.trim().toUpperCase();
     const email = stringField(body, "email")?.trim().toLowerCase();
     const invitation = code ? await this.repository.findInvitation(code) : null;
+    if (!invitation && (await this.isOfferCode(code))) return;
     if (!invitation || invitation.email !== email) {
       throw forbidden("An invitation code made for this e-mail is required.");
     }
@@ -97,8 +112,19 @@ export class AccountsService {
     }
   }
 
-  async signedUp(email: string): Promise<void> {
-    await this.repository.markInvitationUsed(email);
+  private async isOfferCode(code: string | undefined): Promise<boolean> {
+    return (
+      code !== undefined && code !== "" && (await this.signUpCodes?.opensSignUp(code)) === true
+    );
+  }
+
+  /** The invitation is used; an offer code carried by the sign-up gives its months. */
+  async signedUp(user: { id: string; email: string }, body: unknown): Promise<void> {
+    await this.repository.markInvitationUsed(user.email);
+    const code = stringField(body, "inviteCode")?.trim().toUpperCase();
+    if (code && !(await this.repository.findInvitation(code))) {
+      await this.signUpCodes?.redeemAtSignUp(user.id, code);
+    }
   }
 
   /** Role and state of an account, or null when it does not exist. */

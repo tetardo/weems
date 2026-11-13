@@ -56,6 +56,6 @@ describe("GET /v1/me/plan", () => {
     const cookie = await newPilot(app);
     const response = await app.inject({ method: "GET", url: "/v1/me/plan", headers: { cookie } });
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toEqual({ plan: "pilot_free", testSwitch: true });
+    expect(response.json()).toEqual({ plan: "pilot_free", testSwitch: true, offered: null });
   });
 });

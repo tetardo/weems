@@ -28,11 +28,12 @@ describe("PUT /v1/dev/me/plan (Free/Pro test switch)", () => {
     const cookie = await newPilot(app);
     const response = await switchTo(cookie, "pilot_pro");
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toEqual({ plan: "pilot_pro", testSwitch: true });
-    expect(await myPlan(cookie)).toEqual({ plan: "pilot_pro", testSwitch: true });
+    expect(response.json()).toEqual({ plan: "pilot_pro", testSwitch: true, offered: null });
+    expect(await myPlan(cookie)).toEqual({ plan: "pilot_pro", testSwitch: true, offered: null });
     expect((await switchTo(cookie, "pilot_free")).json()).toEqual({
       plan: "pilot_free",
       testSwitch: true,
+      offered: null,
     });
   });
 
@@ -40,7 +41,7 @@ describe("PUT /v1/dev/me/plan (Free/Pro test switch)", () => {
     const pro = await newPilot(app);
     const other = await newPilot(app);
     await switchTo(pro, "pilot_pro");
-    expect(await myPlan(other)).toEqual({ plan: "pilot_free", testSwitch: true });
+    expect(await myPlan(other)).toEqual({ plan: "pilot_free", testSwitch: true, offered: null });
   });
 
   it("refuses a plan that does not exist", async () => {

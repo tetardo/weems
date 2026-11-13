@@ -79,6 +79,7 @@ export function publicFlight(options: PublicFlightOptions = {}): SummaryWithEven
     },
     events: eventsOf(all),
     engineCount: all.engines,
+    simulator: "msfs2024",
   };
 }
 

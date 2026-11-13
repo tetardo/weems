@@ -33,12 +33,16 @@ function publicLine({ summary, events }: SummaryWithEvents): PublicFlightList["f
   return { ...line, touchdownVs: landingSummary(events)?.touchdownVs ?? null };
 }
 
+/** Confirmed founder numbers of these pilots, by pilot id (implemented by the founders module). */
+export type FounderNumbers = (pilotIds: readonly string[]) => Promise<ReadonlyMap<string, number>>;
+
 /** Pages anyone can read, without account (spec J4 profil public). Never the pilot's private data. */
 export class PublicProfilesService {
   private readonly repository: ProfilesRepository;
   private readonly flights: FlightsService;
   private readonly tracks: TracksService;
   private readonly accounts: AccountsService;
+  private founderNumbers: FounderNumbers = () => Promise.resolve(new Map());
 
   constructor(
     repository: ProfilesRepository,
@@ -50,6 +54,11 @@ export class PublicProfilesService {
     this.flights = flights;
     this.tracks = tracks;
     this.accounts = accounts;
+  }
+
+  /** Founder badges on the pages and on the live map (offer « Pilote fondateur »). */
+  showFounders(numbers: FounderNumbers): void {
+    this.founderNumbers = numbers;
   }
 
   async pilot(handle: string): Promise<PublicPilot> {
@@ -82,6 +91,7 @@ export class PublicProfilesService {
       memberSince: identity.createdAt.toISOString(),
       hasPhoto: await this.repository.hasPhoto(profile.pilotId),
       fictitious: identity.fictitious,
+      founderNumber: (await this.founderNumbers([profile.pilotId])).get(profile.pilotId) ?? null,
       stats: pilotStats(flights, tracks, now),
       charts: pilotCharts(flights, tracks, now),
     };
@@ -93,13 +103,26 @@ export class PublicProfilesService {
    */
   async livePilots(pilotIds: string[]): Promise<Map<string, LivePilot>> {
     const profiles = await this.repository.publicOf(pilotIds);
-    const names = await this.accounts.namesOf(profiles.map((profile) => profile.pilotId));
+    const ids = profiles.map((profile) => profile.pilotId);
+    const [names, numbers] = await Promise.all([
+      this.accounts.namesOf(ids),
+      this.founderNumbers(ids),
+    ]);
     return new Map(
       profiles.flatMap(({ pilotId, ...profile }) => {
         const name = names.get(pilotId);
-        return name === undefined ? [] : [[pilotId, { ...profile, name }] as const];
+        if (name === undefined) return [];
+        const founderNumber = numbers.get(pilotId);
+        const pilot =
+          founderNumber === undefined ? { ...profile, name } : { ...profile, name, founderNumber };
+        return [[pilotId, pilot] as const];
       }),
     );
+  }
+
+  /** Account behind a public profile (an ambassador's), or null. */
+  async pilotIdOf(handle: string): Promise<string | null> {
+    return (await this.repository.findPublic(handle))?.pilotId ?? null;
   }
 
   async flightListOf(profile: ProfileRecord, query: ListQuery): Promise<PublicFlightList> {
