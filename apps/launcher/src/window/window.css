@@ -13,6 +13,10 @@
   --success: #6ee7a8;
   --danger: #ff7a8a;
   --off: #5b6680;
+  --violet: #b794f6;
+  /* Docker's blue, for the « Ouvrir Docker » button only. */
+  --docker: #1d63ed;
+  --on-docker: #ffffff;
   --term: #0a0e18;
   --term-ink: #c8d1e4;
   --radius: 10px;
@@ -96,6 +100,32 @@ h1 {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--on-accent);
+}
+/* Links: open (site, console), simulate (traffic, activity), Docker Desktop. */
+.button.open {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+.button.simulate {
+  color: var(--violet);
+  border-color: color-mix(in srgb, var(--violet) 40%, transparent);
+  background: color-mix(in srgb, var(--violet) 9%, transparent);
+}
+.button.docker {
+  color: var(--on-docker);
+  border-color: var(--docker);
+  background: var(--docker);
+}
+.button.simulate:hover:not(:disabled) {
+  border-color: var(--violet);
+}
+.button.docker:hover:not(:disabled) {
+  border-color: var(--on-docker);
+}
+.button svg.filled {
+  fill: currentColor;
+  stroke: none;
 }
 .button.small {
   padding: 5px 9px;

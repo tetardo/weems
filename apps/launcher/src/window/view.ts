@@ -82,4 +82,7 @@ for (const link of document.querySelectorAll<HTMLButtonElement>("[data-open]")) 
     bridge.send({ type: "open", target: link.dataset["open"] as LinkTarget }),
   );
 }
+for (const holder of document.querySelectorAll<HTMLElement>("[data-icon]")) {
+  holder.insertAdjacentHTML("afterbegin", ICONS[holder.dataset["icon"] as keyof typeof ICONS]);
+}
 bridge.onState(render);
