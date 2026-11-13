@@ -91,5 +91,5 @@ Liste des objectifs en cours (anneau de progression, barre avec le repère « o�
 | #81 | Cadre du carnet (menu, onglets, `/logbook/public`) et Résumé (sans Prochain vol ni communauté réelle : cartes verrouillées ou « bientôt ») | Fusionnée |
 | #83 | Vols : liste + fiche, trajectoire enrichie, bandes de vol (repères à revoir sur critères provisoires : 250 kt sous 10 000 ft, inclinaison > 30°, plus de 1 000 ft/min de descente sous 1 000 ft, à valider : liste Houssine) ; dernière approche, analyse, note, chronologie et comparaison plus tard | Fusionnée |
 | #86 | Statistiques par thème (`GET /v1/me/logbook/stats`). Bonnes pratiques mesurées avec les critères provisoires des bandes (pas encore d'« approche stabilisée », critères à fixer avec un pilote) | Fusionnée |
-| #94 | Objectifs (table `goals`, routes `/v1/me/goals`, page `/logbook/goals`, maquette v12 B) | En revue |
+| #95 | Objectifs (table `goals`, routes `/v1/me/goals`, page `/logbook/goals`, maquette v12 B) | En revue |
 | plus tard | Prochain vol SimBrief, communauté, analyse d'approche (critères à fixer avec un pilote), notes de vol | À faire |
