@@ -484,6 +484,15 @@ a.localbadge:hover {
 .term.short {
   max-height: 220px;
 }
+.term .err {
+  color: var(--danger);
+}
+.term .warn {
+  color: var(--accent2);
+}
+.term .dim {
+  color: var(--muted);
+}
 /* trafic */
 .modes {
   display: grid;

@@ -6,6 +6,7 @@ import type { ServiceId } from "../../server/services/service-view.ts";
 import { CopyIcon, LiveIcon } from "../../ui/icons.ts";
 import { usePolling } from "../../ui/use-polling.ts";
 import { formatLogs } from "./log-format.ts";
+import { toneOf } from "./log-tone.ts";
 
 const TABS: { id: ServiceId; label: string }[] = [
   { id: "api", label: "API" },
@@ -46,7 +47,14 @@ export function LogsPanel({ tab, onTab }: { tab: ServiceId; onTab: (id: ServiceI
         </button>
       </div>
       <pre className="term">
-        {shown.length > 0 ? shown.join("\n") : "Aucune ligne pour l'instant."}
+        {shown.length > 0
+          ? shown.map((line, index) => (
+              <span key={index} className={toneOf(line)}>
+                {line}
+                {"\n"}
+              </span>
+            ))
+          : "Aucune ligne pour l'instant."}
       </pre>
     </section>
   );
