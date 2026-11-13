@@ -19,6 +19,14 @@ export class TestPlansRepository {
     return row ? PlanId.parse(row.plan) : null;
   }
 
+  /** Every plan set, by pilot: a pilot without a row is on Pilot Free. */
+  async allPlans(): Promise<Map<string, PlanId>> {
+    const rows = await this.db
+      .select({ pilotId: testPlans.pilotId, plan: testPlans.plan })
+      .from(testPlans);
+    return new Map(rows.map((row) => [row.pilotId, PlanId.parse(row.plan)]));
+  }
+
   async setPlan(pilotId: string, plan: PlanId): Promise<void> {
     const updatedAt = new Date();
     await this.db

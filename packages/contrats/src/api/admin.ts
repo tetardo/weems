@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { UtcTimestamp } from "./common.ts";
+import { PlanId } from "./plans.ts";
 
 /**
  * Routes /v1/admin/*, for the local admin console (spec admin, docs/cahiers-des-charges/admin).
@@ -33,6 +34,8 @@ export const AdminAccount = z.object({
   fictitious: z.boolean(),
   /** Address of the public profile (/pilots/{handle}) when the profile is public; null otherwise. */
   publicHandle: z.string().nullable(),
+  /** Plan in force (Pilot Free until subscriptions open; outside production, the test switch). */
+  plan: PlanId,
   flights: z.number().int().nonnegative(),
   createdAt: UtcTimestamp,
   /** Last session opened, on the site or by the tracker's login; null if never. */

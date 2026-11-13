@@ -23,6 +23,11 @@ export class PlansService {
     return { plan, testSwitch: this.testPlans !== null };
   }
 
+  /** Plan of every pilot who is not on Pilot Free (admin console, page Comptes). */
+  async plansByPilot(): Promise<Map<string, PlanId>> {
+    return (await this.testPlans?.allPlans()) ?? new Map();
+  }
+
   /** Value of a feature in the caller's plan: true, a limit, "unlimited", or false. */
   async valueOf(pilotId: string, key: FeatureKey): Promise<FeatureValue> {
     const { plan } = await this.planOf(pilotId);

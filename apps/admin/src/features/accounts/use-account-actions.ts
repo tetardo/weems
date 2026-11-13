@@ -1,12 +1,30 @@
 "use client";
 
-import type { AdminAccount } from "@weems/contrats";
+import type { AdminAccount, AdminInvitation } from "@weems/contrats";
 import { useState } from "react";
 import { cancelInvitation, renewInvitation, updateAccount } from "../../actions/accounts.ts";
 import type { ActionResult } from "../../actions/result.ts";
 import { useActionRunner } from "../../ui/use-action-runner.ts";
 import type { RowActions } from "./account-row.tsx";
 import { signupLink } from "./invite-drawer.tsx";
+
+/** Copies the sign-up link or the bare code of an invitation, and says so. */
+function copyActions(siteUrl: string, say: (message: string) => void) {
+  const copy = (text: string, message: string) =>
+    void navigator.clipboard.writeText(text).then(
+      () => say(message),
+      () => say(`Copie refusée par le navigateur : ${text}`),
+    );
+  return {
+    copyLink: (invitation: AdminInvitation) =>
+      copy(
+        signupLink(siteUrl, invitation.code),
+        `Lien d'inscription de ${invitation.email} copié.`,
+      ),
+    copyCode: (invitation: AdminInvitation) =>
+      copy(invitation.code, `Code d'invitation de ${invitation.email} copié : ${invitation.code}.`),
+  };
+}
 
 /** Row actions of the page Comptes, with a line saying what was done; disabling asks first. */
 export function useAccountActions(siteUrl: string, refresh: () => Promise<void>) {
@@ -27,12 +45,9 @@ export function useAccountActions(siteUrl: string, refresh: () => Promise<void>)
     enable: (account) =>
       void act(
         () => updateAccount(account.id, { disabled: false }),
-        `${account.email} est réactivé.`,
+        `${account.email} est activé : il peut de nouveau se connecter.`,
       ),
-    copyLink: (invitation) => {
-      void navigator.clipboard.writeText(signupLink(siteUrl, invitation.code));
-      setMessage(`Lien d'inscription de ${invitation.email} copié.`);
-    },
+    ...copyActions(siteUrl, setMessage),
     renew: (invitation) =>
       void act(
         () => renewInvitation(invitation.code),

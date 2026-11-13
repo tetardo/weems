@@ -186,6 +186,26 @@ function registerPlans(
   return plans;
 }
 
+/** Page Comptes of the admin console: accounts with their flights, public profile and plan. */
+function registerAdminAccounts(
+  app: FastifyInstance,
+  database: DatabaseHandle,
+  guards: Guards,
+  deps: {
+    accounts: AccountsService;
+    flights: FlightsService;
+    profileSettings: ProfilesService;
+    plans: PlansService;
+  },
+): void {
+  const admin = new AdminAccountsService(new AdminAccountsRepository(database.db), deps.accounts, {
+    flights: deps.flights,
+    profiles: deps.profileSettings,
+    plans: deps.plans,
+  });
+  registerAdminAccountRoutes(app, admin, guards);
+}
+
 /** Routes that exist outside production only (simulation, measures, fictitious pilots). */
 function registerDevRoutes(
   app: FastifyInstance,
@@ -250,15 +270,13 @@ export async function buildApp({
   const guards = registerAuth(app, config, identifier);
   const profiles = new ProfilesRepository(database.db);
   const profileSettings = new ProfilesService(profiles, flights, accounts);
-  const adminRepository = new AdminAccountsRepository(database.db);
-  const admin = new AdminAccountsService(adminRepository, accounts, flights, profileSettings);
-  registerAdminAccountRoutes(app, admin, guards);
+  const plans = registerPlans(app, database, guards, config.env !== "production");
+  registerAdminAccounts(app, database, guards, { accounts, flights, profileSettings, plans });
   registerFlightRoutes(app, flights, guards);
   const tracks = new TracksService(new PostgresTrackStore(database.db), flights);
   registerTrackRoutes(app, tracks, guards);
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
-  const plans = registerPlans(app, database, guards, config.env !== "production");
   const airports = new AirportsService(readAirportsFile());
   registerPrivateLogbook(app, database, guards, { flights, tracks, plans, airports });
   registerProfileRoutes(app, profileSettings, guards);

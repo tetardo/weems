@@ -104,6 +104,17 @@ describe("invitations", () => {
   });
 });
 
+describe("plan of each account", () => {
+  it("shows Pilot Free, then the plan picked with the test switch", async () => {
+    const email = uniqueEmail();
+    const cookie = await newPilot(app, email);
+    expect((await accountOf(email)).plan).toBe("pilot_free");
+    const payload = { plan: "holding" };
+    await app.inject({ method: "PUT", url: "/v1/dev/me/plan", headers: { cookie }, payload });
+    expect((await accountOf(email)).plan).toBe("holding");
+  });
+});
+
 describe("account changes", () => {
   it("changes a role, both ways", async () => {
     const email = uniqueEmail();

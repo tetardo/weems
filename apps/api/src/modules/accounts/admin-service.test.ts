@@ -18,8 +18,10 @@ describe("last administrator", () => {
       statusOf: async () => ({ role: "admin", disabledAt: null }),
     } as unknown as AccountsService;
     const flights: FlightCounter = { countByPilot: async () => new Map() };
-    const service = new AdminAccountsService(repository, accounts, flights, {
-      publicHandles: async () => new Map(),
+    const service = new AdminAccountsService(repository, accounts, {
+      flights,
+      profiles: { publicHandles: async () => new Map() },
+      plans: { plansByPilot: async () => new Map() },
     });
 
     await expect(service.update(ADMIN, TARGET, { role: "pilot" })).rejects.toMatchObject({

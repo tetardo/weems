@@ -2,10 +2,10 @@
 
 import type { AdminAccount, AdminInvitation } from "@weems/contrats";
 import { ago, daysLeft, shortDate } from "../../format/time.ts";
-import { AdminIcon, CopyIcon, ProfileIcon } from "../../ui/icons.ts";
+import { AdminIcon, CopyIcon, LinkIcon, ProfileIcon } from "../../ui/icons.ts";
 import { StatusBadge } from "../../ui/status-badge.tsx";
 import { RowMenu } from "./row-menu.tsx";
-import { initialsOf } from "./rows.ts";
+import { initialsOf, PLAN_LABELS } from "./rows.ts";
 
 /** What a row can ask the page to do. */
 export interface RowActions {
@@ -13,6 +13,7 @@ export interface RowActions {
   disable: (account: AdminAccount) => void;
   enable: (account: AdminAccount) => void;
   copyLink: (invitation: AdminInvitation) => void;
+  copyCode: (invitation: AdminInvitation) => void;
   renew: (invitation: AdminInvitation) => void;
   cancel: (invitation: AdminInvitation) => void;
   /** Address of a public profile on the local site. */
@@ -94,8 +95,8 @@ function AccountActions(props: { account: AdminAccount; self: boolean; actions: 
       ? { label: "Rendre pilote", onSelect: () => actions.setRole(account, "pilot") }
       : { label: "Rendre administrateur", onSelect: () => actions.setRole(account, "admin") },
     account.disabledAt
-      ? { label: "Réactiver", onSelect: () => actions.enable(account) }
-      : { label: "Désactiver", danger: true, onSelect: () => actions.disable(account) },
+      ? { label: "Activer le compte", onSelect: () => actions.enable(account) }
+      : { label: "Désactiver le compte", danger: true, onSelect: () => actions.disable(account) },
   ];
   return (
     <Slots
@@ -109,7 +110,7 @@ function AccountActions(props: { account: AdminAccount; self: boolean; actions: 
           <RowMenu
             title={account.email}
             items={menu}
-            note="Désactiver garde ses vols ; réactivable."
+            note="Désactivé : plus de connexion, sessions coupées ; ses vols restent."
           />
         )
       }
@@ -135,6 +136,11 @@ export function AccountRow(props: { account: AdminAccount; me: string; actions: 
         <Role role={account.role} />
       </td>
       <td>
+        <span className={account.plan === "pilot_free" ? "plan" : "plan paid"}>
+          {PLAN_LABELS[account.plan]}
+        </span>
+      </td>
+      <td>
         {account.disabledAt ? (
           <StatusBadge tone="off">Désactivé</StatusBadge>
         ) : (
@@ -151,19 +157,69 @@ export function AccountRow(props: { account: AdminAccount; me: string; actions: 
   );
 }
 
-export function InvitationRow({
+/** The invitation code, with a button that copies it (tab Invitations). */
+const InvitationCode = ({
+  invitation,
+  actions,
+}: {
+  invitation: AdminInvitation;
+  actions: RowActions;
+}) => (
+  <span className="code">
+    <code>{invitation.code}</code>
+    <button
+      className="iconbtn"
+      aria-label={`Copier le code d'invitation de ${invitation.email}`}
+      title="Copier le code"
+      onClick={() => actions.copyCode(invitation)}
+    >
+      <CopyIcon size={16} />
+    </button>
+  </span>
+);
+
+/** Copy the sign-up link, then the « … » menu of an invitation. */
+function InvitationActions({
   invitation,
   actions,
 }: {
   invitation: AdminInvitation;
   actions: RowActions;
 }) {
-  const left = daysLeft(invitation.expiresAt, Date.now());
   const menu = [
     { label: "Copier le lien d'inscription", onSelect: () => actions.copyLink(invitation) },
+    { label: "Copier le code d'invitation", onSelect: () => actions.copyCode(invitation) },
     { label: "Renouveler (14 jours)", onSelect: () => actions.renew(invitation) },
     { label: "Annuler l'invitation", danger: true, onSelect: () => actions.cancel(invitation) },
   ];
+  return (
+    <Slots
+      link={
+        <button
+          className="iconbtn"
+          aria-label="Copier le lien d'inscription"
+          title="Copier le lien d'inscription"
+          onClick={() => actions.copyLink(invitation)}
+        >
+          <LinkIcon size={16} />
+        </button>
+      }
+      menu={<RowMenu title={invitation.email} items={menu} />}
+    />
+  );
+}
+
+/** An invitation: its code in the column Formule/Code when the tab shows invitations only. */
+export function InvitationRow({
+  invitation,
+  actions,
+  showCode,
+}: {
+  invitation: AdminInvitation;
+  actions: RowActions;
+  showCode: boolean;
+}) {
+  const left = daysLeft(invitation.expiresAt, Date.now());
   return (
     <tr>
       <td className="who-cell">
@@ -172,6 +228,7 @@ export function InvitationRow({
       <td>
         <Role role={invitation.role} />
       </td>
+      <td>{showCode ? <InvitationCode invitation={invitation} actions={actions} /> : "—"}</td>
       <td>
         {left > 0 ? (
           <StatusBadge tone="warn">Invitation · expire dans {left} j</StatusBadge>
@@ -183,18 +240,7 @@ export function InvitationRow({
       <td>{shortDate(invitation.createdAt)}</td>
       <td>—</td>
       <td className="act">
-        <Slots
-          link={
-            <button
-              className="iconbtn"
-              aria-label="Copier le lien"
-              onClick={() => actions.copyLink(invitation)}
-            >
-              <CopyIcon size={16} />
-            </button>
-          }
-          menu={<RowMenu title={invitation.email} items={menu} />}
-        />
+        <InvitationActions invitation={invitation} actions={actions} />
       </td>
     </tr>
   );

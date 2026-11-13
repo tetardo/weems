@@ -1,4 +1,4 @@
-import type { AdminAccount, AdminAccountList, AdminInvitation } from "@weems/contrats";
+import type { AdminAccount, AdminAccountList, AdminInvitation, PlanId } from "@weems/contrats";
 
 /** A line of the table: an account, or an invitation not used yet (spec admin, page Comptes). */
 export type Row =
@@ -46,3 +46,11 @@ export function initialsOf(name: string): string {
   const letters = words.length > 1 ? [words[0], words.at(-1)] : [words[0]];
   return letters.map((word) => word?.[0]?.toUpperCase() ?? "").join("") || "?";
 }
+
+/** Names of the plans, as on the page Offres of the site. */
+export const PLAN_LABELS: Record<PlanId, string> = {
+  pilot_free: "Pilot Free",
+  pilot_pro: "Pilot Pro",
+  company: "Company",
+  holding: "Holding",
+};

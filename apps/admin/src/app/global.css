@@ -1071,6 +1071,27 @@ td.act .slots {
 .panel.tbl {
   overflow: visible;
 }
+/* Column Formule: Pilot Free stays quiet, a paid plan stands out. */
+.plan {
+  color: var(--muted);
+  white-space: nowrap;
+}
+.plan.paid {
+  color: var(--link);
+  font-weight: 600;
+}
+/* Tab Invitations: the code, then its copy button. */
+.code {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.code code {
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
 .panel.tbl table {
   table-layout: auto;
 }

@@ -1,5 +1,6 @@
 import type {
   AccountRole,
+  PlanId,
   AccountUpdate,
   AdminAccount,
   AdminAccountList,
@@ -18,13 +19,26 @@ export interface FlightCounter {
 }
 
 /** Address of each public profile: implemented by the profiles module. */
-export interface ProfileDirectory {
+interface ProfileDirectory {
   publicHandles(): Promise<Map<string, string>>;
+}
+
+/** Plan of each pilot not on Pilot Free: implemented by the plans module. */
+interface PlanDirectory {
+  plansByPilot(): Promise<Map<string, PlanId>>;
+}
+
+/** What the page Comptes reads from the other modules. */
+export interface AccountSources {
+  flights: FlightCounter;
+  profiles: ProfileDirectory;
+  plans: PlanDirectory;
 }
 
 interface Directory {
   flights: Map<string, number>;
   handles: Map<string, string>;
+  plans: Map<string, PlanId>;
 }
 
 const asRole = (role: string): AccountRole => (role === "admin" ? "admin" : "pilot");
@@ -39,7 +53,7 @@ function toInvitation(invitation: InvitationRecord): AdminInvitation {
   };
 }
 
-function toAccount(account: AccountRecord, { flights, handles }: Directory): AdminAccount {
+function toAccount(account: AccountRecord, { flights, handles, plans }: Directory): AdminAccount {
   return {
     id: account.id,
     name: account.name,
@@ -49,6 +63,7 @@ function toAccount(account: AccountRecord, { flights, handles }: Directory): Adm
     development: account.id === DEV_PILOT_ID,
     fictitious: account.fictitious,
     publicHandle: handles.get(account.id) ?? null,
+    plan: plans.get(account.id) ?? "pilot_free",
     flights: flights.get(account.id) ?? 0,
     createdAt: account.createdAt.toISOString(),
     lastLoginAt: account.lastLoginAt?.toISOString() ?? null,
@@ -59,30 +74,28 @@ function toAccount(account: AccountRecord, { flights, handles }: Directory): Adm
 export class AdminAccountsService {
   private readonly repository: AdminAccountsRepository;
   private readonly accounts: AccountsService;
-  private readonly flights: FlightCounter;
-  private readonly profiles: ProfileDirectory;
+  private readonly sources: AccountSources;
 
   constructor(
     repository: AdminAccountsRepository,
     accounts: AccountsService,
-    flights: FlightCounter,
-    profiles: ProfileDirectory,
+    sources: AccountSources,
   ) {
     this.repository = repository;
     this.accounts = accounts;
-    this.flights = flights;
-    this.profiles = profiles;
+    this.sources = sources;
   }
 
   async list(): Promise<AdminAccountList> {
-    const [accounts, invitations, flights, handles] = await Promise.all([
+    const [accounts, invitations, flights, handles, plans] = await Promise.all([
       this.repository.listAccounts(),
       this.accounts.openInvitations(),
-      this.flights.countByPilot(),
-      this.profiles.publicHandles(),
+      this.sources.flights.countByPilot(),
+      this.sources.profiles.publicHandles(),
+      this.sources.plans.plansByPilot(),
     ]);
     return {
-      accounts: accounts.map((account) => toAccount(account, { flights, handles })),
+      accounts: accounts.map((account) => toAccount(account, { flights, handles, plans })),
       invitations: invitations.map(toInvitation),
     };
   }
