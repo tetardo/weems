@@ -75,6 +75,24 @@ h1 {
   display: flex;
   gap: 8px;
 }
+/* Two or three buttons side by side, stuck together (Greg, 13/11). */
+.joined {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.joined .button {
+  border-radius: 0;
+}
+.joined .button + .button {
+  margin-left: -1px;
+}
+.joined .button.primary + .button.primary {
+  border-left-color: color-mix(in srgb, var(--on-accent) 35%, transparent);
+}
+.joined .button[hidden] {
+  display: none;
+}
 .button.icon-only {
   width: 36px;
   padding: 0;
@@ -83,65 +101,6 @@ h1 {
 .button.icon-only svg {
   width: 17px;
   height: 17px;
-}
-.menu {
-  position: relative;
-}
-.chevron {
-  display: inline-flex;
-  margin-left: -2px;
-}
-.chevron svg {
-  width: 12px;
-  height: 12px;
-  transition: transform 0.15s;
-}
-.menu.open .chevron svg {
-  transform: rotate(180deg);
-}
-.menu-list {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: calc(100% + 6px);
-  z-index: 10;
-  min-width: 100%;
-  padding: 5px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface2);
-  box-shadow: 0 12px 28px rgb(0 0 0 / 45%);
-}
-.menu.open .menu-list {
-  display: grid;
-  gap: 2px;
-}
-.menu-list button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
-  border: 0;
-  border-radius: calc(var(--radius) - 4px);
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  text-align: left;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.menu-list button[hidden] {
-  display: none;
-}
-.menu-list button:hover {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-}
-.menu-list svg {
-  width: 13px;
-  height: 13px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
 }
 .button {
   border: 1px solid var(--line);

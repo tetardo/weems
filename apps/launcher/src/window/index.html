@@ -17,6 +17,10 @@
         <p id="summary"><span class="dot"></span><span id="summary-text">Lecture…</span></p>
       </div>
       <div class="head-buttons">
+        <div class="joined" role="group" aria-label="Ouvrir">
+          <button class="button open" data-open="site" data-icon="globe">Site</button>
+          <button class="button open" data-open="console">Console</button>
+        </div>
         <button
           class="button brand docker icon-only"
           data-open="docker"
@@ -31,31 +35,14 @@
           title="Ouvrir le projet dans VS Code"
           aria-label="Ouvrir le projet dans VS Code"
         ></button>
-        <div class="menu">
-          <button class="button open menu-toggle" data-icon="globe" aria-haspopup="menu">
-            Ouvrir<span class="chevron" data-icon="chevron"></span>
+        <div class="joined" role="group" aria-label="Services">
+          <button class="button primary" data-all="start-all" data-icon="start">
+            Tout démarrer
           </button>
-          <div class="menu-list" role="menu">
-            <button role="menuitem" data-open="site">Le site web</button>
-            <button role="menuitem" data-open="console">La console d'administration</button>
-          </div>
-        </div>
-        <div class="menu">
-          <button
-            class="button primary menu-toggle"
-            id="power-toggle"
-            data-icon="power"
-            aria-haspopup="menu"
-          >
-            Services<span class="chevron" data-icon="chevron"></span>
+          <button class="button primary" data-all="stop-all" data-icon="stop">Tout arrêter</button>
+          <button class="button primary" data-all="restart-all" data-icon="restart">
+            Tout redémarrer
           </button>
-          <div class="menu-list" role="menu">
-            <button role="menuitem" data-all="start-all" data-icon="start">Tout démarrer</button>
-            <button role="menuitem" data-all="stop-all" data-icon="stop">Tout arrêter</button>
-            <button role="menuitem" data-all="restart-all" data-icon="restart">
-              Tout redémarrer
-            </button>
-          </div>
         </div>
       </div>
     </header>

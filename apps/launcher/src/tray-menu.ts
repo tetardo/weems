@@ -25,9 +25,35 @@ function dotOf(state: LauncherState): string {
   return running === 0 ? DOTS.stopped : DOTS.starting;
 }
 
-/** « 🟢 Weems 4/4 » next to the clock. */
+const roundEuros = new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
+const euros = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+
+/**
+ * « 🟢 Weems 4/4 · mois 77 € · total 307 € » next to the clock: the gains come from the console
+ * (fictitious until payments exist, lot 2), left out while it does not answer.
+ */
 export function trayTitle(state: LauncherState): string {
-  return `${dotOf(state)} Weems ${runningCount(state.rows)}/${state.rows.length}`;
+  const services = `${dotOf(state)} Weems ${runningCount(state.rows)}/${state.rows.length}`;
+  const revenue = state.overview?.revenue;
+  if (!revenue) return services;
+  const month = roundEuros.format(revenue.monthEuros);
+  return `${services} · mois ${month} · total ${roundEuros.format(revenue.totalEuros)}`;
+}
+
+/** The gains, to the cent, under the services in the menu. */
+function gainItems(state: LauncherState): TrayItem[] {
+  const revenue = state.overview?.revenue;
+  if (!revenue) return [];
+  const note = revenue.fictitious ? " (fictif)" : "";
+  return [
+    { type: "separator" },
+    { label: `Gain du mois : ${euros.format(revenue.monthEuros)}${note}`, enabled: false },
+    { label: `Gain total : ${euros.format(revenue.totalEuros)}${note}`, enabled: false },
+  ];
 }
 
 function headline(state: LauncherState): string {
@@ -48,6 +74,7 @@ export function trayMenu(state: LauncherState): TrayItem[] {
       label: `${DOTS[row.state]}  ${NAMES[row.id]}  :${row.port}`,
       enabled: false,
     })),
+    ...gainItems(state),
     separator,
     { label: "Afficher la fenêtre Weems", command: "show" },
     { label: "Ouvrir le site", command: { type: "open", target: "site" } },

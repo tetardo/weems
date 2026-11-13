@@ -46,3 +46,25 @@ describe("trayMenu", () => {
     expect(busy.at(-1)).toMatchObject({ label: "Quitter (arrête tout)", command: "quit" });
   });
 });
+
+/** Intl writes no-break spaces: compared as plain ones. */
+const plain = (text: string | undefined) => text?.replace(/\s/g, " ");
+
+describe("gains", () => {
+  const withRevenue: LauncherState = {
+    ...stateWith(["running", "running", "running", "running"]),
+    overview: {
+      revenue: { fictitious: true, totalEuros: 307.2, monthEuros: 76.8 },
+    } as LauncherState["overview"],
+  };
+
+  it("shows the month's and the total gains next to the clock", () => {
+    expect(plain(trayTitle(withRevenue))).toBe("🟢 Weems 4/4 · mois 77 € · total 307 €");
+  });
+
+  it("writes them to the cent in the menu, said fictitious", () => {
+    const menu = labels(withRevenue).map(plain);
+    expect(menu).toContain("Gain du mois : 76,80 € (fictif)");
+    expect(menu).toContain("Gain total : 307,20 € (fictif)");
+  });
+});

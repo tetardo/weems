@@ -2,7 +2,7 @@ import type { LauncherBridge, LauncherState, LinkTarget, RowId } from "../launch
 import { lineKind, plainText } from "./format.ts";
 import { ICONS } from "./icons.ts";
 import { renderCards } from "./cards-view.ts";
-import { renderPowerMenu, setupMenus } from "./menus.ts";
+import { renderHeadButtons, setupHeadButtons } from "./head-buttons.ts";
 import { element, renderRow } from "./rows-view.ts";
 
 /** The launcher's window: shows the state sent by the main process, sends the clicks back. */
@@ -22,7 +22,7 @@ function renderHead(state: LauncherState): void {
     state.busy || (running > 0 && running < total) ? "starting" : running ? "running" : "stopped";
   byId("summary").querySelector(".dot")?.setAttribute("class", `dot ${dot}`);
   byId("summary-text").textContent = state.busy ?? `${running} sur ${total} en marche`;
-  renderPowerMenu(running, state.busy !== null);
+  renderHeadButtons(running, state.busy !== null);
   const notice = byId("notice");
   notice.hidden = state.notice === null;
   notice.textContent = state.notice;
@@ -65,5 +65,5 @@ for (const link of document.querySelectorAll<HTMLButtonElement>("[data-open]")) 
 for (const holder of document.querySelectorAll<HTMLElement>("[data-icon]")) {
   holder.insertAdjacentHTML("afterbegin", ICONS[holder.dataset["icon"] as keyof typeof ICONS]);
 }
-setupMenus(bridge.send);
+setupHeadButtons(bridge.send);
 bridge.onState(render);
