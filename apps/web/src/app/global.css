@@ -116,7 +116,7 @@
   --wm-cat-other: #adb5bd;
   /* Airport plan behind every page (decision 016): its colour and how much it shows. */
   --wm-plan-ink: #9fb4d9;
-  --wm-plan-opacity: 0.15;
+  --wm-plan-opacity: 0.17;
 }
 
 /* Light theme: set on <html> by the head script (src/site/theme.ts). */
@@ -174,7 +174,7 @@
   --wm-cat-helicopter: #c2255c;
   --wm-cat-other: #6c757d;
   --wm-plan-ink: #1f3a66;
-  --wm-plan-opacity: 0.12;
+  --wm-plan-opacity: 0.14;
 }
 
 html,
