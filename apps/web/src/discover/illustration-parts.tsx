@@ -2,14 +2,11 @@ import type { ReactNode } from "react";
 
 /**
  * Small pieces of the step illustrations: fictitious screens of Weems, drawn with the site's
- * colours. Decorative only (hidden from screen readers, the step text says the same thing).
+ * colours. Decorative only (the stage around them is hidden from screen readers).
  */
 export function IllustrationCard({ children }: { children: ReactNode }) {
   return (
-    <div
-      aria-hidden="true"
-      className="w-full max-w-[420px] rounded-box border border-line bg-bg p-4 text-[13px] shadow-raised"
-    >
+    <div className="w-full rounded-hero border border-line bg-bg p-4 text-[13px] shadow-floating">
       {children}
     </div>
   );

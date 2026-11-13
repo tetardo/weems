@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { DoneIcon, WarningIcon } from "../ui/icons.ts";
 import type { StepId } from "./discover-steps.ts";
+import { IllustrationStage } from "./illustration-stage.tsx";
 import {
   Chip,
   ChipRow,
@@ -73,10 +74,11 @@ const PILOTS = [
   ["T", "bg-cat-light"],
   ["+24", "bg-cat-business-jet"],
 ] as const;
+/** Fictitious trails on the live map, each with the pilot flying it (« you » first). */
 const TRAILS = [
-  ["M20 60 Q120 0 220 40", "stroke-accent", 140, 27, "fill-accent"],
-  ["M60 20 Q160 70 280 30", "stroke-accent-2", 190, 52, "fill-accent-2"],
-  ["M10 30 Q90 75 170 60", "stroke-success", 110, 64, "fill-success"],
+  ["M20 60 Q120 0 220 40", "stroke-accent", 140, 27, "fill-accent", "you"],
+  ["M60 20 Q160 70 280 30", "stroke-accent-2", 190, 52, "fill-accent-2", "pilotHugo"],
+  ["M10 30 Q90 75 170 60", "stroke-success", 110, 64, "fill-success", "pilotTheo"],
 ] as const;
 
 function LiveScreen() {
@@ -104,10 +106,13 @@ function LiveScreen() {
         }
       />
       <svg viewBox="0 0 300 80" className="mt-2 h-20 w-full">
-        {TRAILS.map(([path, stroke, x, y, fill]) => (
+        {TRAILS.map(([path, stroke, x, y, fill, pilot]) => (
           <g key={path}>
             <path d={path} fill="none" strokeDasharray="4 4" className={stroke} />
             <circle cx={x} cy={y} r="4" className={fill} />
+            <text x={x + 8} y={y - 6} className={`text-[10px] font-semibold ${fill}`}>
+              {t(pilot)}
+            </text>
           </g>
         ))}
       </svg>
@@ -198,8 +203,13 @@ const ILLUSTRATIONS: Record<StepId, () => React.JSX.Element> = {
   progress: ProgressScreen,
 };
 
-/** The fictitious screen shown beside a step. */
-export function StepIllustration({ id }: { id: StepId }) {
+/** The fictitious screen shown beside a step, on its soft shape with a note that explains it. */
+export function StepIllustration({ id, index }: { id: StepId; index: number }) {
+  const t = useTranslations("Discover.illustration.notes");
   const Illustration = ILLUSTRATIONS[id];
-  return <Illustration />;
+  return (
+    <IllustrationStage index={index} note={t(id)}>
+      <Illustration />
+    </IllustrationStage>
+  );
 }

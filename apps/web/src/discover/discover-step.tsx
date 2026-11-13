@@ -70,7 +70,7 @@ export function DiscoverStepRow({ step, index }: { step: DiscoverStep; index: nu
         <Tags tags={step.tags} />
       </div>
       <div className={`flex ${flipped ? "md:order-1 md:justify-end" : ""}`}>
-        <StepIllustration id={step.id} />
+        <StepIllustration id={step.id} index={index} />
       </div>
     </li>
   );

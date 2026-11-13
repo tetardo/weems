@@ -1496,7 +1496,18 @@
       "average": "Average touchdown",
       "trend": "−38% in 3 months",
       "from": "Aug",
-      "to": "Nov"
+      "to": "Nov",
+      "you": "You",
+      "pilotHugo": "Hugo",
+      "pilotTheo": "Théo",
+      "notes": {
+        "tracker": "It starts on its own with the simulator",
+        "followUp": "Your landing, rated at a glance",
+        "community": "Your friends are flying right now, next to you",
+        "simplicity": "Three steps and you're airborne",
+        "training": "What went well, and what can go better",
+        "progress": "Your landings get softer, flight after flight"
+      }
     },
     "closing": {
       "title": "Every flight counts.",
