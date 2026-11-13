@@ -72,7 +72,7 @@ export function AirportCell({
   const t = useTranslations("Boarding.filter");
   if (!icao) return <FlapText text="" width={4} />;
   return (
-    <HoverBubble text={name ?? icao}>
+    <HoverBubble label={icao} text={name ?? icao}>
       <button
         type="button"
         onClick={() => onChoose(icao)}
