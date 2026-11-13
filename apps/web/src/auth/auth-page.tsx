@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { Link } from "../i18n/navigation.ts";
 import { Brand } from "../site/brand.tsx";
 import { LanguageChoice } from "../site/language-choice.tsx";
-import { ThemeToggle } from "../site/theme-toggle.tsx";
 import { AuthWelcome } from "./auth-welcome.tsx";
 
 interface Props {
@@ -18,20 +17,18 @@ interface Props {
 
 /**
  * Login and sign-up pages (maquette du 13/11, after Greg's reference): screen cut in two, the
- * welcome and its illustration on the left (from 1024 px), the form on the right.
+ * welcome and its illustration on the left (from 1024 px), the form on the right. Always in the
+ * dark theme, whatever the pilot chose (Greg, 13/11): `theme-dark` sets the dark tokens here.
  */
 export function AuthPage({ welcome, title, subtitle, form, other }: Props) {
   const t = useTranslations("Site");
   return (
-    <main className="grid min-h-screen bg-bg lg:grid-cols-[54fr_46fr]">
+    <main className="theme-dark grid min-h-screen bg-bg text-ink lg:grid-cols-[54fr_46fr]">
       <AuthWelcome title={welcome} />
-      <section className="airport-plan flex flex-col bg-[radial-gradient(50rem_24rem_at_70%_-10%,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent)] px-4 py-5 sm:px-14 sm:py-7 lg:[&::before]:hidden">
+      <section className="airport-plan flex flex-col bg-[radial-gradient(50rem_24rem_at_70%_-10%,color-mix(in_srgb,var(--wm-accent)_12%,transparent),transparent)] px-4 py-5 sm:px-14 sm:py-7 lg:[&::before]:hidden">
         <div className="flex items-center justify-between">
           <Brand name={t("name")} />
-          <div className="flex gap-1">
-            <LanguageChoice />
-            <ThemeToggle />
-          </div>
+          <LanguageChoice />
         </div>
         <div className="grid flex-1 place-items-center py-8">
           <div className="w-full max-w-[400px]">

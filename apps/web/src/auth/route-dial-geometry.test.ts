@@ -9,6 +9,7 @@ import {
   mixFlights,
   ringTicks,
   scrambleCode,
+  transit,
 } from "./route-dial-geometry.ts";
 
 const straight: DialFlight = {
@@ -89,5 +90,14 @@ describe("dial", () => {
         }
       }
     }
+  });
+});
+
+describe("transit", () => {
+  it("crosses the route, fading in then out, and starts again", () => {
+    expect(transit(0, 0)).toEqual({ progress: 0.12, opacity: 0 });
+    expect(transit(9000, 0)).toEqual({ progress: 0.5, opacity: 1 });
+    expect(transit(18000, 0).progress).toBeCloseTo(0.12);
+    expect(transit(0, 0.5).progress).toBeCloseTo(0.5);
   });
 });

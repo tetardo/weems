@@ -56,9 +56,10 @@ src/
   api/public-api.ts    pages publiques : toujours sans cookie
   api/plans-api.ts     formule du pilote connecté (page Offres)
   auth/                connexion : formulaires, appel des routes /api/auth, pilote connecté, déconnexion ;
-                       page coupée en deux (auth-page) : à gauche, dès 1024 px, panneau toujours sombre sur le plan d'aéroport (auth-welcome),
-                       cadran de cap à deux vols (route-dial, dial-ring, dial-flight ; géométrie testée dans route-dial-geometry.ts) dont les
-                       destinations changent au survol (use-route-morph.ts, souris seulement, jamais si l'utilisateur refuse les animations) ;
+                       page coupée en deux (auth-page), toujours en thème sombre (classe `theme-dark` de global.css, pas de bouton thème) :
+                       à gauche, dès 1024 px, plan d'aéroport (auth-welcome) et cadran de cap à deux vols (route-dial, dial-ring, dial-flight ;
+                       géométrie testée dans route-dial-geometry.ts) : les avions traversent lentement leur route en continu, les destinations
+                       changent au survol (use-route-morph.ts ; survol à la souris seulement, rien ne bouge si l'utilisateur refuse les animations) ;
                        à droite le formulaire (auth-field : champ à icône, mot de passe affichable ; « Rester connecté » envoie rememberMe).
                        Pas de « Mot de passe oublié » tant que l'API n'envoie pas d'e-mail
   home/                accueil : héros (home-hero.tsx), image de chaque thème lue sur l'API ou `public/home/default.jpg` (home-image.ts, testé), compteurs et images lus par le serveur (home-data.ts),
