@@ -238,6 +238,14 @@ export {
   PopulationStep,
 } from "./tools/activity-progress.ts";
 export {
+  LauncherOverview,
+  LifecycleRequest,
+  LifecycleStatus,
+  LOCAL_SCRIPT_HEADER,
+  LocalServiceId,
+  LocalServiceStatus,
+} from "./tools/local-services.ts";
+export {
   AccountRole,
   AccountUpdate,
   AdminAccount,

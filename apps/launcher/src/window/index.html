@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:"
+    />
+    <title>Weems</title>
+    <link rel="stylesheet" href="window.css" />
+  </head>
+  <body>
+    <header class="head">
+      <div class="logo" aria-hidden="true">W</div>
+      <div class="head-text">
+        <h1>Weems en local</h1>
+        <p id="summary"><span class="dot"></span><span id="summary-text">Lecture…</span></p>
+      </div>
+      <div class="head-buttons">
+        <button class="button brand site" data-open="site" data-icon="globe">Site</button>
+        <button class="button brand console" data-open="console" data-icon="dashboard">
+          Console
+        </button>
+        <div class="joined" role="group" aria-label="Outils">
+          <button
+            class="button brand claude icon-only"
+            data-open="claude"
+            data-icon="claude"
+            title="Ouvrir Claude"
+            aria-label="Ouvrir Claude"
+          ></button>
+          <button
+            class="button brand vscode icon-only"
+            data-open="vscode"
+            data-icon="code"
+            title="Ouvrir le projet dans VS Code"
+            aria-label="Ouvrir le projet dans VS Code"
+          ></button>
+          <button
+            class="button brand docker icon-only"
+            data-open="docker"
+            data-icon="docker"
+            title="Ouvrir Docker Desktop"
+            aria-label="Ouvrir Docker Desktop"
+          ></button>
+        </div>
+        <div class="joined" role="group" aria-label="Services">
+          <button class="button power" data-all="start-all" data-icon="start">Tout démarrer</button>
+          <button
+            class="button power icon-only"
+            data-all="stop-all"
+            data-icon="stop"
+            title="Tout arrêter"
+            aria-label="Tout arrêter"
+          ></button>
+          <button
+            class="button power icon-only"
+            data-all="restart-all"
+            data-icon="restart"
+            title="Tout redémarrer"
+            aria-label="Tout redémarrer"
+          ></button>
+        </div>
+      </div>
+    </header>
+    <p class="notice" id="notice" hidden></p>
+    <div class="middle">
+      <aside class="cards" id="cards" aria-label="Weems en chiffres"></aside>
+      <section class="list" id="rows" aria-label="Services"></section>
+    </div>
+    <section class="logs" aria-label="Journaux">
+      <div class="logs-head">
+        <strong>Journaux</strong>
+        <div class="tabs" id="tabs">
+          <button data-tab="db">Base</button>
+          <button data-tab="api">API</button>
+          <button data-tab="site">Site</button>
+          <button data-tab="console">Console</button>
+        </div>
+        <span class="muted" id="logs-count"></span>
+        <button
+          class="button icon"
+          id="logs-size"
+          title="Agrandir les journaux"
+          aria-label="Agrandir les journaux"
+          aria-pressed="false"
+        ></button>
+      </div>
+      <pre id="logs"></pre>
+    </section>
+    <dialog class="confirm" id="confirm" aria-labelledby="confirm-title">
+      <h2 id="confirm-title"></h2>
+      <p id="confirm-text"></p>
+      <form method="dialog" class="confirm-buttons">
+        <button class="button" value="cancel" autofocus>Annuler</button>
+        <button class="button danger" value="ok" id="confirm-ok"></button>
+      </form>
+    </dialog>
+    <script src="view.js"></script>
+  </body>
+</html>

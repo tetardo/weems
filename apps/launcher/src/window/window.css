@@ -1,0 +1,530 @@
+/* Couleurs de la console d'administration (thème sombre), maquette du lanceur (fiche 020). */
+:root {
+  color-scheme: dark;
+  --bg: #0e1320;
+  --surface: #171e2e;
+  --surface2: #1d2538;
+  --line: #26304a;
+  --ink: #e8ecf5;
+  --muted: #9aa6bf;
+  --accent: #4fd1e8;
+  --on-accent: #0e1320;
+  --warn: #ffb454;
+  --success: #6ee7a8;
+  --danger: #ff7a8a;
+  --off: #5b6680;
+  /* Docker's and VS Code's blues, for their buttons only. */
+  --docker: #1d63ed;
+  /* Site and console: the site's light-theme button colour (#78). */
+  --open: #0c7f94;
+  --on-brand: #ffffff;
+  --vscode: #007acc;
+  /* Claude's orange, for its button only. */
+  --claude: #d97757;
+  --term: #0a0e18;
+  --term-ink: #c8d1e4;
+  --radius: 10px;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font:
+    13px/1.4 -apple-system,
+    BlinkMacSystemFont,
+    "Inter",
+    system-ui,
+    sans-serif;
+  user-select: none;
+}
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px 14px;
+}
+.logo {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius);
+  background: linear-gradient(140deg, #4fd1e8, #2a7fd6);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--on-accent);
+}
+h1 {
+  margin: 0;
+  font-size: 19px;
+}
+#summary {
+  margin: 2px 0 0;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.head-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+/* Two or three buttons side by side, stuck together (Greg, 13/11). */
+.joined {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.joined .button {
+  border-radius: 0;
+}
+.joined .button + .button {
+  margin-left: -1px;
+}
+.button.power {
+  background: var(--warn);
+  border-color: var(--warn);
+  color: var(--on-accent);
+}
+.button.power:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+.joined .button.brand + .button.brand,
+.joined .button.power + .button.power {
+  border-left-color: color-mix(in srgb, var(--on-accent) 35%, transparent);
+}
+.joined .button[hidden] {
+  display: none;
+}
+.button.icon-only {
+  width: 36px;
+  padding: 0;
+  justify-content: center;
+}
+.button.icon-only svg {
+  width: 17px;
+  height: 17px;
+}
+.button {
+  border: 1px solid var(--line);
+  background: var(--surface2);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 7px 11px;
+  font: inherit;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+/* Links: open (site, console), Docker Desktop and VS Code (icons only, top bar). */
+.button.open {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+/* Docker and VS Code: white on their own blue. */
+.button.brand {
+  color: var(--on-brand);
+  border-color: var(--brand);
+  background: var(--brand);
+}
+.button.brand:hover:not(:disabled) {
+  border-color: var(--on-brand);
+}
+.button.site,
+.button.console {
+  --brand: var(--open);
+}
+.button.claude {
+  --brand: var(--claude);
+}
+.button.docker {
+  --brand: var(--docker);
+}
+.button.vscode {
+  --brand: var(--vscode);
+}
+.button svg.filled {
+  fill: currentColor;
+  stroke: none;
+}
+.button.small {
+  padding: 5px 9px;
+  font-size: 12px;
+}
+.button.icon {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  justify-content: center;
+}
+.button svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.notice {
+  margin: 0 20px 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--warn);
+  border-radius: var(--radius);
+  color: var(--warn);
+  user-select: text;
+}
+/* Services on the left (half the width), the site's counters on the right. */
+/* Cards left, services right and narrow (Greg, 13/11). */
+.middle {
+  display: grid;
+  /* Two columns of cards, as narrow as their lines allow, then the services. */
+  grid-template-columns: 460px 1fr;
+  gap: 14px;
+  margin: 0 20px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  min-width: 0;
+}
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 12px 14px;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.card-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.card-stack {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  min-width: 0;
+}
+.card.half {
+  padding: 9px 14px;
+}
+.card-text {
+  flex: 1;
+  min-width: 0;
+}
+.card.half .card-value {
+  margin: 3px 0 2px;
+  font-size: 20px;
+}
+.ring {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+  color: var(--success);
+}
+.ring.warn {
+  color: var(--warn);
+}
+.ring.down {
+  color: var(--danger);
+}
+/* Same size on every card (Greg, 13/11). */
+.ring-dial {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+.ring-dial svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-track,
+.ring-arc {
+  fill: none;
+  stroke-width: 3.2;
+}
+.ring-track {
+  stroke: var(--line);
+}
+.ring-arc {
+  stroke: currentColor;
+  stroke-linecap: round;
+}
+.ring-percent {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.ring-caption {
+  font-size: 9.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.card-value {
+  margin: 6px 0 6px;
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.card-value.ok {
+  color: var(--success);
+}
+.card-value.warn {
+  color: var(--warn);
+}
+.card-line {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-line.ok {
+  color: var(--success);
+}
+.card-line.warn {
+  color: var(--warn);
+}
+.card-line.down {
+  color: var(--danger);
+}
+.list {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-top: 1px solid var(--line);
+}
+.row:first-child {
+  border-top: 0;
+}
+/* The list keeps the cards' height: a line closes the last service, the rest stays empty. */
+.row:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.row-text {
+  min-width: 0;
+  flex: 1;
+}
+.row-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+.row-detail {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row-detail,
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+.row-note {
+  color: var(--warn);
+  font-size: 12px;
+  user-select: text;
+}
+.row-meta {
+  font:
+    11px ui-monospace,
+    Menlo,
+    monospace;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row-buttons {
+  display: flex;
+  gap: 6px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--off);
+}
+.dot.running {
+  background: var(--success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 20%, transparent);
+}
+.dot.starting {
+  background: var(--warn);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn) 20%, transparent);
+}
+.dot.error {
+  background: var(--danger);
+}
+.pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  margin-left: 8px;
+  color: var(--muted);
+  background: var(--surface2);
+}
+.pill.starting {
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+.pill.error {
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+}
+.logs {
+  margin: 14px 20px 18px;
+  flex: 1;
+  min-height: 120px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.logs-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.logs-head .muted {
+  margin-left: auto;
+}
+/* « Agrandir » : the logs take the place of the cards and services. */
+body.logs-large .middle {
+  display: none;
+}
+.tabs button {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tabs button.on {
+  background: var(--surface2);
+  color: var(--ink);
+  font-weight: 600;
+}
+pre {
+  margin: 0;
+  flex: 1;
+  overflow: auto;
+  background: var(--term);
+  color: var(--term-ink);
+  font:
+    11.5px/1.55 ui-monospace,
+    Menlo,
+    monospace;
+  padding: 10px 12px;
+  user-select: text;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+pre .warn {
+  color: var(--warn);
+}
+pre .error {
+  color: var(--danger);
+}
+pre .step {
+  color: var(--accent);
+}
+pre .ok {
+  color: var(--success);
+}
+
+/* Warning before « Tout arrêter » and « Tout redémarrer » (Greg, 13/11). */
+.confirm {
+  width: 380px;
+  padding: 20px 22px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 20px 50px rgb(0 0 0 / 55%);
+}
+.confirm::backdrop {
+  background: rgb(5 8 15 / 65%);
+}
+.confirm h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.confirm p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.confirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+.button.danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--on-accent);
+}

@@ -2,7 +2,7 @@ import type { SupervisionHealth } from "@weems/contrats";
 import { ago, clock } from "../../format/time.ts";
 import { DatabaseIcon, LatencyIcon, PositionsIcon, VersionsIcon } from "../../ui/icons.ts";
 import { Bars } from "./bars.tsx";
-import { bytes } from "../../format/bytes.ts";
+import { bytes } from "@weems/ui/format";
 import { SLOW_P95_MS, apiSummary, newestVersion, shares } from "./figures.ts";
 import { Block } from "../../ui/block.tsx";
 

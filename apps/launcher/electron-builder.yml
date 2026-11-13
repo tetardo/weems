@@ -1,0 +1,18 @@
+# Weems.app, built on Greg's Mac by scripts/mac/install-launcher.sh (fiche 020). Never distributed.
+appId: app.weems.launcher
+productName: Weems
+copyright: Weems
+directories:
+  app: dist/app # built by scripts/build-app.ts: bundles only, no node_modules
+  output: dist/installer
+files:
+  - "**/*"
+  - "!node_modules{,/**/*}"
+mac:
+  target: dir
+  icon: build/icon.png
+  category: public.app-category.developer-tools
+  # No Apple certificate: install-launcher.sh signs the app « ad hoc » on the Mac itself.
+  identity: null
+linux:
+  target: dir # only to check the packaging on Linux (CI, Claude Code)

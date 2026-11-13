@@ -3,6 +3,9 @@
   "workspaces": {
     "apps/tracker": {
       "entry": ["src/app/main.ts", "src/app/preload.ts", "src/app/window/view.ts"]
+    },
+    "apps/launcher": {
+      "entry": ["src/main.ts", "src/preload.ts", "src/window/view.ts"]
     }
   }
 }

@@ -1,14 +1,9 @@
+import { type LifecycleRequest, type LifecycleStatus, LOCAL_SCRIPT_HEADER } from "@weems/contrats";
 import { activity, services, traffic } from "./console.ts";
 
-/** What the desktop scripts (scripts/mac/start.sh, stop.sh) ask the console. */
-export type LifecycleAction = "start-all" | "stop-all";
-
-/** Header the scripts send: a page in a browser cannot add it without a CORS preflight, refused. */
-export const LOCAL_SCRIPT_HEADER = "x-weems-local-script";
-
 /**
- * A request from the scripts on the Mac, not from a web page: the custom header is there, and a
- * browser's Origin, if any, is the console's own address.
+ * A request from the programs of the Mac (scripts/mac/, the launcher apps/launcher), not from a web
+ * page: the custom header is there, and a browser's Origin, if any, is the console's own address.
  */
 export function isLocalScriptRequest(headers: Headers, adminUrl: string): boolean {
   if (headers.get(LOCAL_SCRIPT_HEADER) !== "1") return false;
@@ -16,19 +11,33 @@ export function isLocalScriptRequest(headers: Headers, adminUrl: string): boolea
   return origin === null || origin === new URL(adminUrl).origin;
 }
 
-export function parseAction(body: unknown): LifecycleAction | null {
-  if (typeof body !== "object" || body === null) return null;
-  const action = (body as { action?: unknown }).action;
-  return action === "start-all" || action === "stop-all" ? action : null;
+/** The services as the launcher shows them, and the last lines of one service when asked. */
+export async function lifecycleStatus(logsOf: string | null): Promise<LifecycleStatus> {
+  const view = await services().view();
+  const wanted = view.services.find((service) => service.id === logsOf);
+  return {
+    services: view.services.map(({ id, state, runner, port, since, error }) => ({
+      id,
+      state,
+      runner,
+      port,
+      since,
+      error,
+    })),
+    dockerAvailable: view.dockerAvailable,
+    logs: wanted ? await services().logs(wanted.id) : null,
+  };
 }
 
 /**
- * Icône Start: the database, the API and the site, as the « Tout démarrer » button does.
- * Icône Stop: the simulation or simulated activity in progress first (flights closed as
- * interrupted), then the site, the API and the database. The console itself is stopped by the script.
+ * Start (icon or launcher): the database, the API and the site, as the « Tout démarrer » button does.
+ * Stop: the simulation or simulated activity in progress first (flights closed as interrupted),
+ * then the site, the API and the database. The console itself is stopped by the script.
+ * One service: as its buttons on the page Services.
  */
-export async function runLifecycle(action: LifecycleAction): Promise<void> {
-  if (action === "start-all") return services().startAll();
+export async function runLifecycle(request: LifecycleRequest): Promise<void> {
+  if ("service" in request) return services()[request.action](request.service);
+  if (request.action === "start-all") return services().startAll();
   await traffic().stop();
   await activity().stop();
   await services().stopAll();

@@ -1,6 +1,6 @@
 import type { DatabaseDay } from "@weems/contrats";
 import { type ReactNode, useState } from "react";
-import { bytes } from "../../format/bytes.ts";
+import { bytes } from "@weems/ui/format";
 import {
   flightTotals,
   largestShare,

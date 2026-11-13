@@ -1,4 +1,4 @@
-import type { ProcessStatus } from "../managed-process.ts";
+import type { ProcessStatus } from "@weems/local-process";
 import type { ContainerState } from "./docker.ts";
 import type { Probe } from "./probes.ts";
 import type { Runner, ServiceState } from "./service-view.ts";

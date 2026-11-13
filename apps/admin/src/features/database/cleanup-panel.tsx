@@ -2,7 +2,7 @@
 
 import type { DatabaseCleanupRequest } from "@weems/contrats";
 import { useState } from "react";
-import { bytes } from "../../format/bytes.ts";
+import { bytes } from "@weems/ui/format";
 import type { DatabaseView } from "../../server/database/database-page.ts";
 import { ConfirmDialog } from "../../ui/confirm-dialog.tsx";
 import { CleanupIcon, LockIcon } from "../../ui/icons.ts";

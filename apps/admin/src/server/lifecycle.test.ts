@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { isLocalScriptRequest, LOCAL_SCRIPT_HEADER, parseAction } from "./lifecycle.ts";
+import { LifecycleRequest, LOCAL_SCRIPT_HEADER } from "@weems/contrats";
+import { isLocalScriptRequest } from "./lifecycle.ts";
 
 const ADMIN = "http://127.0.0.1:3002";
 
@@ -23,15 +24,18 @@ describe("isLocalScriptRequest", () => {
   });
 });
 
-describe("parseAction", () => {
-  it("reads the two actions", () => {
-    expect(parseAction({ action: "start-all" })).toBe("start-all");
-    expect(parseAction({ action: "stop-all" })).toBe("stop-all");
+describe("LifecycleRequest", () => {
+  it("reads the actions on everything and on one service", () => {
+    expect(LifecycleRequest.parse({ action: "start-all" })).toEqual({ action: "start-all" });
+    expect(LifecycleRequest.parse({ action: "stop-all" })).toEqual({ action: "stop-all" });
+    const restart = { action: "restart", service: "api" };
+    expect(LifecycleRequest.parse(restart)).toEqual(restart);
   });
 
   it("refuses anything else", () => {
-    expect(parseAction(null)).toBeNull();
-    expect(parseAction("stop-all")).toBeNull();
-    expect(parseAction({ action: "delete" })).toBeNull();
+    expect(LifecycleRequest.safeParse(null).success).toBe(false);
+    expect(LifecycleRequest.safeParse("stop-all").success).toBe(false);
+    expect(LifecycleRequest.safeParse({ action: "delete" }).success).toBe(false);
+    expect(LifecycleRequest.safeParse({ action: "stop", service: "console" }).success).toBe(false);
   });
 });

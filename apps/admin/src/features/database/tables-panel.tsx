@@ -1,5 +1,5 @@
 import type { DatabaseTable } from "@weems/contrats";
-import { bytes } from "../../format/bytes.ts";
+import { bytes } from "@weems/ui/format";
 import type { SizeGrowth } from "./history.ts";
 import { growthText } from "./model.ts";
 

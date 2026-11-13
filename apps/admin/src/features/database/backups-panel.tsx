@@ -1,4 +1,4 @@
-import { bytes } from "../../format/bytes.ts";
+import { bytes } from "@weems/ui/format";
 import { dayAndClock } from "../../format/time.ts";
 import type { DatabaseView } from "../../server/database/database-page.ts";
 import { BackupIcon } from "../../ui/icons.ts";

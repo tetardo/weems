@@ -1,16 +1,25 @@
+import { LifecycleRequest } from "@weems/contrats";
 import { NextResponse } from "next/server";
 import { config } from "../../../server/console.ts";
-import { isLocalScriptRequest, parseAction, runLifecycle } from "../../../server/lifecycle.ts";
+import { isLocalScriptRequest, lifecycleStatus, runLifecycle } from "../../../server/lifecycle.ts";
 
-/** POST { action: "start-all" | "stop-all" }: called by the Start and Stop icons of the Mac. */
+const refused = () =>
+  NextResponse.json({ error: "Réservé aux programmes du Mac." }, { status: 403 });
+
+/** GET [?logs=db|api|site]: the services, for the Mac launcher. */
+export async function GET(request: Request) {
+  if (!isLocalScriptRequest(request.headers, config().adminUrl)) return refused();
+  const logsOf = new URL(request.url).searchParams.get("logs");
+  return NextResponse.json(await lifecycleStatus(logsOf));
+}
+
+/** POST { action: "start-all" | "stop-all" } or { action: "start" | "stop" | "restart", service }. */
 export async function POST(request: Request) {
-  if (!isLocalScriptRequest(request.headers, config().adminUrl)) {
-    return NextResponse.json({ error: "Réservé aux scripts du Mac." }, { status: 403 });
-  }
-  const action = parseAction(await request.json().catch(() => null));
-  if (!action) return NextResponse.json({ error: "Action inconnue." }, { status: 400 });
+  if (!isLocalScriptRequest(request.headers, config().adminUrl)) return refused();
+  const parsed = LifecycleRequest.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) return NextResponse.json({ error: "Action inconnue." }, { status: 400 });
   try {
-    await runLifecycle(action);
+    await runLifecycle(parsed.data);
     return NextResponse.json({ ok: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

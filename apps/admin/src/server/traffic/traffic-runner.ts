@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { SimulationLine } from "@weems/contrats";
 import type { ConsoleConfig } from "../console-config.ts";
-import { ManagedProcess } from "../managed-process.ts";
+import { ManagedProcess } from "@weems/local-process";
 import { DevApi } from "./dev-api.ts";
 import { HistoryFile } from "./history.ts";
 import { type Launch, pnpmArgsOf, reportFileOf, summaryOf } from "./launch.ts";
