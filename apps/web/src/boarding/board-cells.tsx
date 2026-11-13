@@ -8,6 +8,7 @@ import { Link } from "../i18n/navigation.ts";
 import { publicProfileLinks } from "../profile/profile-links.ts";
 import { pilotPhotoUrl } from "../site/api-relay.ts";
 import { CountryFlag } from "../ui/country-flag.tsx";
+import { FounderBadge } from "../ui/founder-badge.tsx";
 import { PrivateIcon } from "../ui/icons.ts";
 import { PilotAvatar } from "../ui/pilot-avatar.tsx";
 import { utcTime } from "./board-rows.ts";
@@ -132,6 +133,7 @@ export function PilotCell({ flight }: { flight: BoardingFlight }) {
     >
       <PilotAvatar pilot={pilot} src={pilotPhotoUrl(pilot.handle)} className="size-5 text-[10px]" />
       <span className="truncate">{pilot.name}</span>
+      {pilot.founderNumber !== undefined && <FounderBadge number={pilot.founderNumber} compact />}
       {pilot.country && (
         <span className="flex-none">
           <CountryFlag code={pilot.country} name={countryName(pilot.country, locale)} />

@@ -1,7 +1,8 @@
-import type { PlanCatalog, PlanId } from "@weems/contrats";
+import type { MyFounder, PlanCatalog, PlanId, PublicFounders } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Link } from "../i18n/navigation.ts";
+import { FoundersBanner } from "../offers/founders-banner.tsx";
 import { BackIcon, ForwardIcon } from "../ui/icons.ts";
 import { SectionMain } from "../ui/section-main.tsx";
 import { CompareTable } from "./compare-table.tsx";
@@ -27,12 +28,24 @@ function PageLink({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-/** Page /plans: the four cards (catalogue of GET /v1/plans), link to the comparison table. */
-export function PlansPage({ catalog, current }: { catalog: PlanCatalog; current: PlanId | null }) {
+interface PlansPageProps {
+  catalog: PlanCatalog;
+  current: PlanId | null;
+  /** Founder offer (spec offre fondateurs): null when the API does not tell it. */
+  founders: PublicFounders | null;
+  mine: MyFounder | null;
+}
+
+/**
+ * Page /plans: the founder offer, the four cards (catalogue of GET /v1/plans), link to the
+ * comparison table.
+ */
+export function PlansPage({ catalog, current, founders, mine }: PlansPageProps) {
   const t = useTranslations("Plans");
   return (
     <SectionMain>
       <Intro title={t("title")} lead={t("lead")} />
+      {founders && <FoundersBanner founders={founders} mine={mine} />}
       <PlanCards catalog={catalog} current={current} />
       <PageLink href="/plans/compare">
         {t("compareLink")}

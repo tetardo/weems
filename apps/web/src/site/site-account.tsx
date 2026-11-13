@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { buttonClass } from "@weems/ui";
 import { PilotMenu } from "../auth/pilot-menu.tsx";
 import { Link } from "../i18n/navigation.ts";
-import { AccountIcon, ProfileIcon, ProIcon } from "../ui/icons.ts";
+import { AccountIcon, PlansIcon, ProfileIcon, ProIcon } from "../ui/icons.ts";
 import { promoTextClass } from "./promo-button.ts";
 import { TestPlanSlot } from "./test-plan-slot.tsx";
 
@@ -42,6 +42,17 @@ function ProfileLink() {
   );
 }
 
+/** Entry of the pilot's menu towards their plan, offered Pro and codes (« Mon abonnement »). */
+function SubscriptionLink() {
+  const t = useTranslations("Site.nav");
+  return (
+    <Link href="/settings/plan" className={buttonClass("ghost")}>
+      <PlansIcon size={20} aria-hidden="true" />
+      {t("subscription")}
+    </Link>
+  );
+}
+
 /**
  * Account end of the bar: « Se connecter » for a visitor, the pilot's menu (photo, or initial) once
  * logged in, with the Free | Pro test switch inside it (outside production).
@@ -53,6 +64,7 @@ export function SiteAccount({ loggedIn }: { loggedIn: boolean }) {
       before={
         <>
           <ProfileLink />
+          <SubscriptionLink />
           <TestPlanSlot labelled className="flex items-center justify-between! gap-3 px-3 py-1.5" />
         </>
       }
