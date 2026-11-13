@@ -110,16 +110,17 @@ flowchart LR
 | --- | --- |
 | Compte | Nom et e-mail. Le pilote de développement porte un badge « Développement ». |
 | Rôle | Pilote ou Administrateur |
+| Formule | Pilot Free, Pilot Pro, Company ou Holding (ajouté le 13/11/2026, demande de Greg). Tant que les abonnements n'existent pas, tout le monde est en Pilot Free ; hors production, la formule choisie avec l'interrupteur de test du site. Onglet Invitations : la colonne devient **Code** (code d'invitation et bouton pour le copier) |
 | État | Actif, Désactivé, Invitation en attente (avec « expire dans N j »), ou Invitation expirée. Une invitation n'a pas encore de compte : nom vide |
 | Vols | Nombre de vols du compte |
 | Créé le | Date de création du compte ou de l'invitation |
-| Dernière connexion | Date de la dernière session ouverte, sur le site ou le tracker |
+| Connexion | Date de la dernière session ouverte, sur le site ou le tracker |
 
 **Actions par ligne**
-- Invitation en attente : **Copier le lien**, **Renouveler** (nouveau code, valable 14 jours de plus ; l'ancien lien ne marche plus), **Annuler l'invitation** (avec confirmation).
+- Invitation en attente : **Copier le lien** (icône lien à droite du bouton qui copie le code dans l'onglet Invitations, en fin de ligne dans Tous), **Copier le code d'invitation**, **Renouveler** (nouveau code, valable 14 jours de plus ; l'ancien lien ne marche plus), **Annuler l'invitation** (avec confirmation).
 - Invitation expirée : affichée « Expirée », avec **Renouveler** et **Annuler**.
 - Compte : **Changer le rôle** (Pilote ↔ Administrateur). Impossible de retirer son propre rôle d'administrateur, ni le dernier administrateur.
-- Compte : **Désactiver** (décidé par Greg le 11/11/2026), avec confirmation. Le pilote ne peut plus se connecter au site ni envoyer de vols depuis le tracker ; ses sessions et jetons en cours sont révoqués ; ses vols sont gardés. Un compte désactivé affiche l'état « Désactivé » et l'action **Réactiver**. Impossible de se désactiver soi-même. La suppression définitive (droit à l'effacement) aura sa propre spec.
+- Compte : **Désactiver le compte** (décidé par Greg le 11/11/2026), avec confirmation. Le pilote ne peut plus se connecter au site ni envoyer de vols depuis le tracker ; ses sessions et jetons en cours sont révoqués ; ses vols sont gardés. Un compte désactivé affiche l'état « Désactivé » et l'action **Activer le compte**. Impossible de se désactiver soi-même. La suppression définitive (droit à l'effacement) aura sa propre spec.
 
 **Connexion** : si personne n'est connecté, la page affiche à la place un formulaire e-mail et mot de passe. Un compte sans le rôle Administrateur est refusé. Le premier administrateur est nommé par une commande : `pnpm make-admin <e-mail>` (même principe que `pnpm invite`).
 

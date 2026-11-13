@@ -11,6 +11,7 @@ const account = (name: string, email: string, role: "pilot" | "admin") => ({
   development: false,
   fictitious: false,
   publicHandle: null,
+  plan: "pilot_free" as const,
   flights: 0,
   createdAt: "2026-11-10T10:00:00.000Z",
   lastLoginAt: null,

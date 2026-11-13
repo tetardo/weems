@@ -17,6 +17,7 @@ export {
   ScrollText as LogsIcon,
   Activity as LiveIcon,
   Copy as CopyIcon,
+  Link as LinkIcon,
   Info as InfoIcon,
   Plane as SimulateIcon,
   Gauge as LoadIcon,

@@ -10,6 +10,8 @@ export function AccountsTable(props: {
   actions: RowActions;
 }) {
   const rows = rowsOf(props.list, props.filter, props.search);
+  /** Tab Invitations: the column of the plan shows the invitation code instead. */
+  const showCode = props.filter === "invitations";
   return (
     <section className="panel tbl">
       <table>
@@ -17,6 +19,7 @@ export function AccountsTable(props: {
           <tr>
             <th>Compte</th>
             <th>Rôle</th>
+            <th>{showCode ? "Code" : "Formule"}</th>
             <th>État</th>
             <th>Vols</th>
             <th>Créé le</th>
@@ -38,6 +41,7 @@ export function AccountsTable(props: {
                 key={row.invitation.code}
                 invitation={row.invitation}
                 actions={props.actions}
+                showCode={showCode}
               />
             ),
           )}
