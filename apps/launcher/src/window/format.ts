@@ -36,3 +36,11 @@ export const numberText = (value: number) => number.format(value);
 
 /** « 0 € », « 1 234,50 € ». */
 export const eurosText = (value: number) => euros.format(value);
+
+/** « ▲ +20 % » or « ▼ −8 % » from last month to this one (« ▲ » when last month was 0). */
+export function trendOf(current: number, previous: number): { text: string; up: boolean } {
+  const up = current >= previous;
+  if (previous === 0) return { text: "▲", up };
+  const percent = Math.round(((current - previous) / previous) * 100);
+  return { text: `${up ? "▲ +" : "▼ −"}${Math.abs(percent)} %`, up };
+}

@@ -71,6 +71,8 @@ export const LauncherOverview = z.object({
     fictitious: z.boolean(),
     totalEuros: z.number().nonnegative(),
     monthEuros: z.number().nonnegative(),
+    /** Last month, for the trend arrow of « Ce mois ». */
+    previousMonthEuros: z.number().nonnegative(),
   }),
 });
 export type LauncherOverview = z.infer<typeof LauncherOverview>;

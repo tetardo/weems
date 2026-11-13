@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { lineKind, plainText, sinceText } from "./format.ts";
+import { lineKind, plainText, sinceText, trendOf } from "./format.ts";
 
 describe("sinceText", () => {
   const now = Date.parse("2026-11-13T08:00:00.000Z");
@@ -23,5 +23,13 @@ describe("log lines", () => {
     expect(lineKind("› Démarrage de la base")).toBe("step");
     expect(lineKind(" ✓ Ready in 1.8s")).toBe("ok");
     expect(lineKind("GET /fr 200 in 912ms")).toBeNull();
+  });
+});
+
+describe("trendOf", () => {
+  it("shows the change from last month with an arrow", () => {
+    expect(trendOf(60, 50)).toEqual({ text: "▲ +20 %", up: true });
+    expect(trendOf(46, 50)).toEqual({ text: "▼ −8 %", up: false });
+    expect(trendOf(10, 0)).toEqual({ text: "▲", up: true });
   });
 });

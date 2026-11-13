@@ -46,6 +46,7 @@ describe("launcherOverview", () => {
       fictitious: true,
       totalEuros: 240,
       monthEuros: 60,
+      previousMonthEuros: 50,
     });
   });
 });

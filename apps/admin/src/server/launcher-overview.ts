@@ -5,7 +5,9 @@ import { apiSummary } from "../features/supervision/figures.ts";
  * Fictitious revenue until payments exist (lot 2): a made-up average per active account, so that
  * the launcher's card moves with the population. Replaced by the real sums, never shown as real.
  */
-const FICTITIOUS_EUROS_PER_ACCOUNT = { total: 2.4, month: 0.6 } as const;
+const FICTITIOUS_EUROS_PER_ACCOUNT = { total: 2.4, month: 0.6, previousMonth: 0.5 } as const;
+const euros = (accounts: number, perAccount: number) =>
+  Math.round(accounts * perAccount * 100) / 100;
 
 /** The four cards of the Mac launcher (apps/launcher), from the page Supervision. */
 export function launcherOverview({ tiles, health }: AdminSupervision): LauncherOverview {
@@ -32,8 +34,9 @@ export function launcherOverview({ tiles, health }: AdminSupervision): LauncherO
     },
     revenue: {
       fictitious: true,
-      totalEuros: Math.round(users * FICTITIOUS_EUROS_PER_ACCOUNT.total * 100) / 100,
-      monthEuros: Math.round(users * FICTITIOUS_EUROS_PER_ACCOUNT.month * 100) / 100,
+      totalEuros: euros(users, FICTITIOUS_EUROS_PER_ACCOUNT.total),
+      monthEuros: euros(users, FICTITIOUS_EUROS_PER_ACCOUNT.month),
+      previousMonthEuros: euros(users, FICTITIOUS_EUROS_PER_ACCOUNT.previousMonth),
     },
   };
 }
