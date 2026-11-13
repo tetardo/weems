@@ -165,4 +165,24 @@ export const testPlans = pgTable("test_plans", {
   updatedAt: utc("updated_at").notNull(),
 });
 
+/**
+ * Objectifs of the private logbook (spec carnet privé, § 6): what the pilot aims at, as written
+ * by GoalDefinition (packages/contrats); progress is computed from the flights, never stored.
+ */
+export const goals = pgTable(
+  "goals",
+  {
+    id: uuid("id").primaryKey(),
+    pilotId: uuid("pilot_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    definition: jsonb("definition").notNull(),
+    createdAt: utc("created_at").notNull(),
+    updatedAt: utc("updated_at").notNull(),
+    /** Set aside by the pilot (or replaced, for a free pilot); null while it runs. */
+    archivedAt: utc("archived_at"),
+  },
+  (table) => [index("goals_pilot_idx").on(table.pilotId)],
+);
+
 export * from "./auth-schema.ts";

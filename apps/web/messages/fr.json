@@ -762,6 +762,184 @@
         "aside": "{count, plural, =0 {aucun événement} one {# événement} other {# événements}} · UTC",
         "none": "Aucun événement notable."
       }
+    },
+    "goals": {
+      "title": "Objectifs",
+      "intro": "Fixez-vous un cap : Weems compte vos vols et suit votre progression tout seul.",
+      "freeLimit": "Pilot Free : {count, plural, one {# objectif} other {# objectifs}} à la fois.",
+      "new": "Nouvel objectif",
+      "running": "Objectifs en cours",
+      "until": "{date}",
+      "noEnd": "sans échéance",
+      "deadline": "échéance {date}",
+      "edit": "Modifier",
+      "archive": "Archiver",
+      "on": " sur {aircraft}",
+      "empty": "Aucun objectif en cours. Choisissez un cap (heures, touchers doux, régularité…) : Weems compte vos vols et vous dit si vous êtes en avance.",
+      "every": {
+        "week": "se répète chaque semaine",
+        "month": "se répète chaque mois"
+      },
+      "ends": {
+        "week": "cette semaine",
+        "month": "en {month}",
+        "date": "d'ici le {date}",
+        "none": ""
+      },
+      "titles": {
+        "hours": "{target} h de vol",
+        "flights": "{target, plural, one {# vol} other {# vols}}",
+        "softLandings": "{target} touchers sous −{threshold} ft/min",
+        "cleanStreak": "{target} vols propres d'affilée",
+        "aircraft": "{target} h en {aircraft}",
+        "airports": "{target, plural, one {# nouvel aéroport} other {# nouveaux aéroports}}",
+        "regularity": "Voler {target, plural, one {# jour} other {# jours}} par semaine",
+        "goodPractices": "{target} % de vols : {practice}"
+      },
+      "kinds": {
+        "hours": {
+          "label": "Heures de vol",
+          "example": "ex. 20 h ce mois"
+        },
+        "flights": {
+          "label": "Nombre de vols",
+          "example": "ex. 15 vols ce mois"
+        },
+        "softLandings": {
+          "label": "Toucher doux",
+          "example": "ex. 5 touchers sous −150"
+        },
+        "cleanStreak": {
+          "label": "Série propre",
+          "example": "ex. 10 vols sans alerte"
+        },
+        "aircraft": {
+          "label": "Catégorie ou avion",
+          "example": "ex. 10 h en turbopropulseur"
+        },
+        "airports": {
+          "label": "Aéroports",
+          "example": "ex. 5 nouveaux terrains"
+        },
+        "regularity": {
+          "label": "Régularité",
+          "example": "ex. 3 jours par semaine"
+        },
+        "goodPractices": {
+          "label": "Bonnes pratiques",
+          "example": "ex. 85 % sous 250 kt"
+        }
+      },
+      "badges": {
+        "ahead": "En avance",
+        "behind": "En retard",
+        "record": "Record : {record}"
+      },
+      "figures": {
+        "done": "Fait",
+        "left": "Reste",
+        "expected": "Attendu ce jour",
+        "perWeek": "Rythme utile",
+        "weekly": "{value} / sem.",
+        "flights": "Vols",
+        "projection": "Projection"
+      },
+      "chart": {
+        "label": "Progression de l'objectif",
+        "value": "Votre progression",
+        "pace": "Rythme attendu",
+        "projection": "Projection",
+        "today": "Aujourd'hui"
+      },
+      "detail": {
+        "progress": "Progression",
+        "flights": "Vols qui comptent",
+        "lastFive": "5 derniers",
+        "previous": "Périodes précédentes",
+        "dashed": "pointillé = objectif",
+        "running": "en cours",
+        "reached": "atteint",
+        "missed": "manqué",
+        "noFlight": "Aucun vol ne compte encore.",
+        "date": "Date",
+        "flight": "Vol",
+        "added": {
+          "hours": "Durée",
+          "aircraft": "Durée",
+          "flights": "Vols",
+          "softLandings": "Touchers",
+          "cleanStreak": "Propre",
+          "airports": "Nouveaux",
+          "regularity": "Jours",
+          "goodPractices": "Respectée"
+        }
+      },
+      "suggestions": {
+        "title": "Suggérés d'après vos vols",
+        "locked": "Weems vous propose des objectifs à votre portée, d'après vos derniers vols.",
+        "none": "Volez encore un peu : les suggestions arrivent après 3 vols.",
+        "add": "Ajouter",
+        "basis": {
+          "hours": "Ces 3 derniers mois : {value} par mois en moyenne.",
+          "softLandings": "Votre toucher habituel : {value} ft/min.",
+          "regularity": "Vous volez {value} jours par semaine ces 8 dernières semaines.",
+          "airports": "{value} aéroports visités jusqu'ici.",
+          "flights": "",
+          "cleanStreak": "",
+          "aircraft": "",
+          "goodPractices": ""
+        }
+      },
+      "finished": {
+        "title": "Atteints et terminés",
+        "count": "{reached} sur {count}",
+        "none": "Vos objectifs atteints, manqués ou archivés s'afficheront ici.",
+        "achieved": "Atteint : {value}",
+        "missed": "Non atteint : {value} sur {total}",
+        "archived": "Archivé à {value} sur {total}",
+        "active": ""
+      },
+      "form": {
+        "title": "Nouvel objectif",
+        "editTitle": "Modifier l'objectif",
+        "what": "1. Quoi ?",
+        "targetStep": "2. Cible",
+        "aircraftStep": "3. Avec quels avions ?",
+        "whenStep": "4. Jusqu'à quand ?",
+        "target": "Cible",
+        "threshold": "Seuil du toucher",
+        "practice": "Pratique",
+        "aircraft": "Avions",
+        "allAircraft": "Tous les avions",
+        "categories": "Catégories",
+        "models": "Vos types d'avion",
+        "until": "Dernier jour",
+        "recurring": "Recommencer à chaque période",
+        "replaces": "Pilot Free : un seul objectif à la fois. Celui-ci remplacera « {title} ».",
+        "cancel": "Annuler",
+        "create": "Créer l'objectif",
+        "save": "Enregistrer",
+        "units": {
+          "hours": "heures de vol",
+          "flights": "vols",
+          "softLandings": "touchers sous",
+          "cleanStreak": "vols propres d'affilée",
+          "aircraft": "heures sur cet avion",
+          "airports": "nouveaux aéroports",
+          "regularity": "jours par semaine",
+          "goodPractices": "% des vols :"
+        },
+        "windows": {
+          "week": "Cette semaine",
+          "month": "Ce mois",
+          "date": "Jusqu'au…",
+          "none": "Sans échéance"
+        },
+        "errors": {
+          "invalid": "Objectif incomplet : vérifiez la cible, l'avion (pour « Catégorie ou avion ») et la date.",
+          "refused": "L'objectif n'a pas été enregistré. Réessayez."
+        }
+      }
     }
   },
   "Profile": {
@@ -1108,6 +1286,12 @@
       },
       "groupStats": {
         "label": "Statistiques consolidées du groupe"
+      },
+      "goalSuggestions": {
+        "label": "Objectifs suggérés d'après vos vols"
+      },
+      "goalGoodPractices": {
+        "label": "Objectifs de bonnes pratiques"
       }
     },
     "reassure": {
@@ -1366,6 +1550,14 @@
       "groupStats": {
         "title": "Statistiques du groupe",
         "text": "Les chiffres de toutes vos compagnies réunis dans un même tableau."
+      },
+      "goalSuggestions": {
+        "title": "Objectifs suggérés",
+        "text": "Weems propose des objectifs un peu au-dessus de vos chiffres : heures du mois, toucher doux, régularité, nouveaux terrains."
+      },
+      "goalGoodPractices": {
+        "title": "Objectifs de bonnes pratiques",
+        "text": "Visez une part de vols sans dépasser 250 kt sous 10 000 ft, sans taux de chute excessif en finale ou sans alerte."
       }
     },
     "banner": {

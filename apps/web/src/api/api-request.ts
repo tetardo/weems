@@ -34,7 +34,7 @@ export class ApiRefused extends Error {
 }
 
 export interface RequestOptions {
-  method?: "GET" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "DELETE";
   /** JSON body. */
   body?: unknown;
   /** Public pages: the pilot's cookie is not sent, the answer is the same for everyone. */

@@ -58,6 +58,20 @@ export {
   LogbookStatsPeriod,
 } from "./api/logbook-stats.ts";
 export {
+  GOAL_KINDS,
+  GOAL_WINDOWS,
+  GoalAircraft,
+  GoalDefinition,
+  GoalFlight,
+  GoalKind,
+  GoalPeriod,
+  GoalStatus,
+  GoalSuggestion,
+  GoalView,
+  GoalWindow,
+  Goals,
+} from "./api/goals.ts";
+export {
   BandMarkReason,
   BandMinute,
   BandRow,

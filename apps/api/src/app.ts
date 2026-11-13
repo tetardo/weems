@@ -50,6 +50,9 @@ import { registerAdminSiteRoutes } from "./modules/site/admin-routes.ts";
 import { SiteRepository } from "./modules/site/repository.ts";
 import { registerSiteRoutes } from "./modules/site/routes.ts";
 import { SiteService } from "./modules/site/service.ts";
+import { GoalsRepository } from "./modules/goals/repository.ts";
+import { registerGoalRoutes } from "./modules/goals/routes.ts";
+import { GoalsService } from "./modules/goals/service.ts";
 import { registerPrivateLogbookRoutes } from "./modules/logbook/routes.ts";
 import { PrivateLogbookService } from "./modules/logbook/service.ts";
 import { registerPlanRoutes } from "./modules/plans/routes.ts";
@@ -206,6 +209,25 @@ function registerDevRoutes(
 }
 
 /** Assembles the API: plugins, then modules. Starts nothing: see server.ts. */
+/** The pilot's private logbook: pages Résumé, Vols, Statistiques and Objectifs. */
+function registerPrivateLogbook(
+  app: FastifyInstance,
+  database: DatabaseHandle,
+  guards: Guards,
+  deps: {
+    flights: FlightsService;
+    tracks: TracksService;
+    plans: PlansService;
+    airports: AirportsService;
+  },
+): void {
+  const { flights, tracks, plans, airports } = deps;
+  const logbook = new PrivateLogbookService(flights, tracks, plans, airports);
+  registerPrivateLogbookRoutes(app, logbook, guards);
+  const goals = new GoalsService(new GoalsRepository(database.db), flights, tracks, plans);
+  registerGoalRoutes(app, goals, guards);
+}
+
 export async function buildApp({
   config,
   database,
@@ -238,8 +260,7 @@ export async function buildApp({
   registerReviewRoutes(app, reviews, guards);
   const plans = registerPlans(app, database, guards, config.env !== "production");
   const airports = new AirportsService(readAirportsFile());
-  const privateLogbook = new PrivateLogbookService(flights, tracks, plans, airports);
-  registerPrivateLogbookRoutes(app, privateLogbook, guards);
+  registerPrivateLogbook(app, database, guards, { flights, tracks, plans, airports });
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));

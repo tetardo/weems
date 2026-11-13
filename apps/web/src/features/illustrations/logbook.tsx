@@ -120,4 +120,25 @@ export const LOGBOOK_ILLUSTRATIONS = {
       </Accent>
     </>
   ),
+  // Suggested goals: a flag with a spark beside it.
+  goalSuggestions: (
+    <>
+      <Ground y={42} />
+      <Accent>
+        <path d="M24 42V10L36 14 24 18" fill="currentColor" fillOpacity={0.2} />
+        <path d="M50 14V26M44 20H56M46 16L54 24M54 16L46 24" />
+      </Accent>
+    </>
+  ),
+  // Good-practice goals: a gauge filled to its mark.
+  goalGoodPractices: (
+    <>
+      <Panel x={8} y={14} w={56} h={20} />
+      <Accent>
+        <rect x={12} y={20} width={38} height={8} rx={2} fill="currentColor" fillOpacity={0.35} />
+        <path d="M52 12V36" />
+        <path d="M30 6L34 10 42 2" />
+      </Accent>
+    </>
+  ),
 } satisfies Record<string, ReactNode>;

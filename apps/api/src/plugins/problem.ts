@@ -19,3 +19,4 @@ export const notFound = (detail: string) => new ApiProblem(404, "Not Found", det
 export const conflict = (detail: string) => new ApiProblem(409, "Conflict", detail);
 export const unprocessable = (detail: string) =>
   new ApiProblem(422, "Unprocessable Content", detail);
+export const forbidden = (detail: string) => new ApiProblem(403, "Forbidden", detail);
