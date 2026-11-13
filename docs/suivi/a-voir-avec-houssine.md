@@ -21,6 +21,9 @@ Liste tenue à jour au fil du projet. Cocher une ligne quand c'est réglé, et n
 - [ ] **Critères des repères à revoir sur les bandes de vol** (ajouté le 13/11/2026)
   Le carnet (page Vols, Pilot Pro) encadre 3 moments à revoir, sur des critères provisoires : plus de 250 kt sous 10 000 ft (SERA.6001), une inclinaison de plus de 30°, plus de 1 000 ft/min de descente sous 1 000 ft au-dessus du sol (approche stabilisée FSF). Les faire valider ou corriger par un pilote, et compléter la liste (seuils par catégorie d'avion ?). Code : `apps/api/src/modules/logbook/bands.ts`.
 
+- [ ] **Avions lents : un vol qui ne se clôt jamais** (ajouté le 13/11/2026, trouvé par le simulateur d'activité, fiche 019)
+  Le tracker n'a qu'un jeu de seuils de phases, celui d'un avion de ligne (`apps/tracker/src/core/phases/params.ts`). Il ne passe en DESCENT qu'au-delà de 500 ft/min de descente pendant 30 s. Or un C172 ou un PC-12 sur un plan à 3° à 65-90 kt descend à 350-480 ft/min. Après une croisière basse (sous 3 000 ft sol) ou une remise de gaz suivie d'un tour de piste, le vol reste en CRUISE : aucun atterrissage n'est reconnu et le vol n'est jamais clos. Le générateur l'évite en gardant la vitesse des avions lents jusqu'à 5 NM ; un vrai pilote n'y échappera pas. À trancher avec un pilote : seuils par catégorie d'avion (point ouvert de la spec T0) ou passage de CRUISE à APPROACH sous la hauteur d'approche.
+
 ## Réglé
 
 - [x] **Un PC Windows avec MSFS** (11/11/2026)

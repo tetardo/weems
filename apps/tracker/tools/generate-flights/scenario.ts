@@ -31,6 +31,8 @@ export interface Scenario {
   rotateGs?: number;
   /** Vertical speed in the climb, ft/min (airliner when absent). */
   climbFpm?: number;
+  /** Pilot's hand, 0 beginner to 1 expert (0.5 when absent): spread of the touchdowns. */
+  skill?: number;
   disturbances: readonly Disturbance[];
 }
 

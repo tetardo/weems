@@ -92,10 +92,19 @@ export function cruise(script: FlightScript, scenario: Scenario): boolean {
   return true;
 }
 
+/**
+ * Below this approach speed, the 3° path sinks slower than the tracker's descent threshold
+ * (500 ft/min, params.ts): such types (light aircraft, PC-12) keep their speed down to the final,
+ * otherwise a low cruise or a circuit would never be followed by DESCENT and the flight never
+ * closes. The tracker has one set of thresholds for now (spec T0, open point).
+ */
+const SLOW_APPROACH_GS = 105;
+
 /** Speed for the distance left: cruise, then slowed down, then approach speed on the final. */
 function targetSpeed(remainingNm: number, scenario: Scenario): number {
+  const finalNm = scenario.approachGs < SLOW_APPROACH_GS ? 5 : 12;
   if (remainingNm > 60) return scenario.cruiseGs;
-  if (remainingNm > 12) return Math.min(scenario.cruiseGs, scenario.approachGs + 60);
+  if (remainingNm > finalNm) return Math.min(scenario.cruiseGs, scenario.approachGs + 60);
   return scenario.approachGs;
 }
 

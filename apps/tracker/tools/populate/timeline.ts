@@ -1,7 +1,5 @@
 const DAY_MS = 24 * 60 * 60 * 1000;
 const HOUR_MS = 60 * 60 * 1000;
-/** Europe in winter: most homes are at UTC+0 to UTC+1; one hour is close enough. */
-const LOCAL_OFFSET_MS = HOUR_MS;
 /** Ground before and after the flight (boarding, taxi, parking), then a rest before the next one. */
 const GROUND_MS = 30 * 60 * 1000;
 const REST_MS = HOUR_MS;
@@ -10,6 +8,8 @@ const REST_MS = HOUR_MS;
 export interface HistoryWindow {
   fromMs: number;
   nowMs: number;
+  /** UTC offset of the pilot's home, hours: they fly at their own local hours. */
+  utcOffsetH: number;
 }
 
 /** Local departure hour: mostly evenings and mornings, as a hobby (spec admin, Activité simulée). */
@@ -48,7 +48,7 @@ export function hobbyDepartures(
     .map(() =>
       Math.max(
         window.fromMs,
-        dayOf(random, window) + localHour(random) * HOUR_MS - LOCAL_OFFSET_MS,
+        dayOf(random, window) + (localHour(random) - window.utcOffsetH) * HOUR_MS,
       ),
     )
     .sort((a, b) => a - b);
@@ -57,6 +57,19 @@ export function hobbyDepartures(
   }
   const kept = times.findIndex((at, i) => freeAfter(at, airborneMs[i] ?? 0) > window.nowMs);
   return kept === -1 ? times : times.slice(0, kept);
+}
+
+/** Local hours a pilot may take off at: never at night. */
+const FIRST_HOUR = 7;
+const LAST_HOUR = 23;
+
+/** `atMs`, or the next morning (7 to 10 h local) when it falls at night. */
+function awake(atMs: number, utcOffsetH: number, random: () => number): number {
+  const localMs = atMs + utcOffsetH * HOUR_MS;
+  const hour = (localMs % DAY_MS) / HOUR_MS;
+  if (hour >= FIRST_HOUR && hour < LAST_HOUR) return atMs;
+  const nextMorning = localMs - (localMs % DAY_MS) + (hour >= LAST_HOUR ? DAY_MS : 0);
+  return nextMorning + (FIRST_HOUR + random() * 3 - utcOffsetH) * HOUR_MS;
 }
 
 /** Flights a career pilot flies per day of history, about. */
@@ -80,10 +93,13 @@ export function careerDepartures(
   const times: number[] = [];
   let at = window.nowMs - spanMs;
   for (const ms of airborneMs) {
+    at = awake(at, window.utcOffsetH, random);
     times.push(at);
     at = freeAfter(at, ms) + random() * 2 * slackMs;
   }
   const last = times.length - 1;
   const overMs = last < 0 ? 0 : freeAfter(times[last] ?? 0, airborneMs[last] ?? 0) - window.nowMs;
-  return overMs > 0 ? times.map((t) => t - overMs) : times;
+  // Whole days back: the local hours stay the same.
+  const backMs = Math.ceil(Math.max(0, overMs) / DAY_MS) * DAY_MS;
+  return times.map((t) => t - backMs);
 }

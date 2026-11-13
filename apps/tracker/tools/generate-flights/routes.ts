@@ -45,6 +45,8 @@ export interface FlightOrder {
   from: AirportData;
   to: AirportData;
   disturbances?: readonly Disturbance[];
+  /** Pilot's hand, 0 beginner to 1 expert. */
+  skill?: number;
   /** Simulator declared by the flight (fictitious accounts fly "msfs2024", see populate). */
   simulator?: AircraftInfo["simulator"];
 }
@@ -65,5 +67,6 @@ export function scenarioOf(order: FlightOrder): Scenario {
     rotateGs: type.rotateGs,
     climbFpm: type.climbFpm,
     disturbances: order.disturbances ?? [],
+    ...(order.skill === undefined ? {} : { skill: order.skill }),
   };
 }

@@ -4,7 +4,7 @@ import { careerDepartures, hobbyDepartures } from "./timeline.ts";
 
 const DAY_MS = 24 * 3600_000;
 const NOW = Date.parse("2026-11-13T12:00:00.000Z");
-const window = { fromMs: NOW - 180 * DAY_MS, nowMs: NOW };
+const window = { fromMs: NOW - 180 * DAY_MS, nowMs: NOW, utcOffsetH: 1 };
 
 /** Every flight lands (plus ground time) before the next departure. */
 function inOrder(times: readonly number[], airborneMs: readonly number[]) {
@@ -28,5 +28,21 @@ describe("timeline of a pilot's history", () => {
     expect(times.length).toBeGreaterThan(30);
     expect(inOrder(times, airborneMs)).toBe(true);
     expect(times.every((t) => t >= window.fromMs && t < NOW)).toBe(true);
+  });
+
+  it("takes off in the pilot's own day, never at night where they live", () => {
+    const airborneMs = Array.from({ length: 300 }, () => 2 * 3600_000);
+    for (const utcOffsetH of [-5, 0, 1]) {
+      const times = careerDepartures(airborneMs, { ...window, utcOffsetH }, seededRandom(4));
+      const hours = times.map((t) => new Date(t + utcOffsetH * 3600_000).getUTCHours());
+      expect(hours.every((h) => h >= 7 && h < 23)).toBe(true);
+      const hobby = hobbyDepartures(
+        airborneMs.slice(0, 40),
+        { ...window, utcOffsetH },
+        seededRandom(5),
+      );
+      const evenings = hobby.filter((t) => new Date(t + utcOffsetH * 3600_000).getUTCHours() >= 18);
+      expect(evenings.length).toBeGreaterThan(hobby.length / 4);
+    }
   });
 });

@@ -30,6 +30,8 @@ await pool(job.flights, job.concurrency, async ({ flight, token }) => {
     api,
     workDir: job.workDir,
     trackerVersion: job.trackerVersion,
+    // A long flight under a busy API: never give up on its messages after only a minute.
+    drainTimeoutMs: 10 * 60_000,
   });
   parentPort?.postMessage("done");
 });

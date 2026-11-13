@@ -6,7 +6,8 @@ import { seededRandom } from "../generate-flights/random.ts";
 import { identities } from "./identities.ts";
 import { flyPastFlight, type PastFlight } from "./past-flight.ts";
 import { SIMULATED_TYPES } from "../generate-flights/aircraft-types.ts";
-import { estimatedAirborneS } from "../generate-flights/routes.ts";
+import { airportOf } from "../generate-flights/airports/airport-data.ts";
+import { destinationsOf, estimatedAirborneS, scenarioOf } from "../generate-flights/routes.ts";
 import { FICTITIOUS_SIMULATOR, liveScenario, scheduleOf } from "./schedule.ts";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -50,6 +51,17 @@ describe("schedule of a fictitious pilot", () => {
       expect(flights.every((f) => f.openedAtMs >= window.fromMs && landed(f) < NOW)).toBe(true);
       expect(createdAtMs).toBeLessThan(flights[0]?.openedAtMs ?? NOW);
     }
+  });
+
+  it("spoils a few flights (crash, teleport, slew, interrupted), never most of them", () => {
+    const flights = schedules.flatMap((s) => s.flights);
+    const spoilt = flights.filter(
+      (f) =>
+        f.interruptAtShare !== undefined ||
+        f.scenario.disturbances.some((d) => ["crash", "teleport", "slew"].includes(d)),
+    );
+    expect(spoilt.length / flights.length).toBeGreaterThan(0.02);
+    expect(spoilt.length / flights.length).toBeLessThan(0.1);
   });
 
   it("flies varied types and routes, declared MSFS 2024 so that they count for the ranks", () => {
@@ -109,4 +121,32 @@ describe("past flight", () => {
     expect(Date.parse(closed?.body.closedAt ?? "")).toBeLessThan(flight.openedAtMs + 6 * 3600_000);
     expect(sent.some((s) => s.path.endsWith("/track"))).toBe(true);
   });
+
+  it("closes the flight of every simulated type, even after a go-around", async () => {
+    const from = airportOf("LFPG");
+    for (const type of SIMULATED_TYPES) {
+      const sent: string[] = [];
+      const api = { post: async (path: string) => (sent.push(path), { status: 201 }) };
+      const [to] = destinationsOf(type, from).sort(
+        (a, b) => estimatedAirborneS(type, from, a) - estimatedAirborneS(type, from, b),
+      );
+      if (!to) throw new Error(`${type.aircraft.model}: no destination`);
+      const order = {
+        callsign: "WMS1",
+        seed: 1,
+        type,
+        from,
+        to,
+        disturbances: ["goAround"],
+      } as const;
+      await flyPastFlight(
+        { scenario: scenarioOf(order), openedAtMs: NOW - DAY_MS },
+        { api, workDir: join(tmpdir(), "weems-populate-test"), trackerVersion: "0.1.0" },
+      );
+      expect(
+        sent.some((path) => path.endsWith("/close")),
+        type.aircraft.model ?? "",
+      ).toBe(true);
+    }
+  }, 60_000);
 });
