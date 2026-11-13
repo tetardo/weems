@@ -4,6 +4,8 @@ import type { BoardingFlight, BoardingStatus } from "@weems/contrats";
 import { useLocale, useTranslations } from "next-intl";
 import { CategorySilhouette } from "../aircraft/category-silhouette.tsx";
 import { countryName } from "../format/countries.ts";
+import { Link } from "../i18n/navigation.ts";
+import { publicProfileLinks } from "../profile/profile-links.ts";
 import { pilotPhotoUrl } from "../site/api-relay.ts";
 import { CountryFlag } from "../ui/country-flag.tsx";
 import { PrivateIcon } from "../ui/icons.ts";
@@ -43,29 +45,62 @@ export function TimeCell({ at, estimated = false }: { at: string | null; estimat
   );
 }
 
-/** Airport code in flaps, and its name in small (cut when too long). */
-export function AirportCell({ icao, name }: { icao: string | null; name: string | null }) {
-  return (
-    <span className="flex min-w-0 items-center gap-1.5">
+/** A cell that filters the boards on a click (airport, aircraft type). */
+const CHOICE = "flex min-w-0 items-center gap-1.5 rounded-tag text-left hover:opacity-75";
+
+/** Airport code in flaps and its name in small; a click shows only this airport's boards. */
+export function AirportCell({
+  icao,
+  name,
+  onChoose,
+}: {
+  icao: string | null;
+  name: string | null;
+  onChoose: (icao: string) => void;
+}) {
+  const t = useTranslations("Boarding.filter");
+  const content = (
+    <>
       <FlapText text={icao ?? ""} width={4} />
       {name && (
-        <span title={name} className="min-w-0 truncate text-[11px] text-board-muted max-2xl:hidden">
-          {name}
-        </span>
+        <span className="min-w-0 truncate text-[11px] text-board-muted max-2xl:hidden">{name}</span>
       )}
-    </span>
+    </>
+  );
+  if (!icao) return <span className="flex">{content}</span>;
+  return (
+    <button
+      type="button"
+      onClick={() => onChoose(icao)}
+      title={`${name ?? icao} · ${t("onlyThis", { value: icao })}`}
+      className={CHOICE}
+    >
+      {content}
+    </button>
   );
 }
 
-/** Silhouette of the category in its colour (as on the map), then the type. */
-export function AircraftCell({ flight }: { flight: BoardingFlight }) {
+/** Silhouette of the category in its colour (as on the map), then the type; a click filters it. */
+export function AircraftCell({
+  flight,
+  onChoose,
+}: {
+  flight: BoardingFlight;
+  onChoose: (type: string) => void;
+}) {
+  const t = useTranslations("Boarding.filter");
   return (
-    <span className="flex min-w-0 items-center gap-1.5" title={flight.aircraftType}>
+    <button
+      type="button"
+      onClick={() => onChoose(flight.aircraftType)}
+      title={`${flight.aircraftType} · ${t("onlyThis", { value: flight.aircraftType })}`}
+      className={`${CHOICE} max-w-full`}
+    >
       <CategorySilhouette category={flight.aircraftClass?.category ?? null} />
       <span className="min-w-0 truncate font-mono text-xs font-semibold">
         {flight.aircraftType}
       </span>
-    </span>
+    </button>
   );
 }
 
@@ -83,7 +118,10 @@ export function PilotCell({ flight }: { flight: BoardingFlight }) {
     );
   }
   return (
-    <span className="flex min-w-0 items-center gap-1.5 font-sans text-[12.5px] text-board-title">
+    <Link
+      href={publicProfileLinks(pilot.handle).page}
+      className="flex min-w-0 items-center gap-1.5 rounded-tag font-sans text-[12.5px] text-board-title hover:underline"
+    >
       <PilotAvatar pilot={pilot} src={pilotPhotoUrl(pilot.handle)} className="size-5 text-[10px]" />
       <span className="truncate">{pilot.name}</span>
       {pilot.country && (
@@ -91,7 +129,7 @@ export function PilotCell({ flight }: { flight: BoardingFlight }) {
           <CountryFlag code={pilot.country} name={countryName(pilot.country, locale)} />
         </span>
       )}
-    </span>
+    </Link>
   );
 }
 

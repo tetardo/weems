@@ -7,6 +7,7 @@ import { SiteAccount, VisitorOffer } from "./site-account.tsx";
 import { SiteFooter } from "./site-footer.tsx";
 import { SiteMenu } from "./site-menu.tsx";
 import { SiteNav } from "./site-nav.tsx";
+import { SoundToggle } from "./sound-toggle.tsx";
 import { ThemeToggle } from "./theme-toggle.tsx";
 
 interface Props {
@@ -18,8 +19,8 @@ interface Props {
 
 /**
  * Frame of every page (decision 003, bar A « Épurée » of 13/11): the pages after the logo; on the
- * right the Pilot Pro offer for a visitor, the live counter and Boarding, the language, the theme,
- * then the way in or the pilot's menu. Phones: language and theme move into the menu. Footer P2 on
+ * right the Pilot Pro offer for a visitor, the live counter and Boarding, the language, the sound, the theme,
+ * then the way in or the pilot's menu. Phones: language, sound and theme move into the menu. Footer P2 on
  * public pages.
  */
 export function SiteShell({ loggedIn, footer = true, children }: Props) {
@@ -33,6 +34,7 @@ export function SiteShell({ loggedIn, footer = true, children }: Props) {
             <LiveStatus />
             <BoardingLink />
             <LanguageChoice className="max-md:hidden" />
+            <SoundToggle className="max-md:hidden" />
             <ThemeToggle className="max-md:hidden" />
             <SiteAccount loggedIn={loggedIn} />
             <SiteMenu
@@ -40,6 +42,7 @@ export function SiteShell({ loggedIn, footer = true, children }: Props) {
               footer={
                 <div className="m-1 mt-2 flex items-center gap-1 border-t border-line pt-2">
                   <LanguageChoice />
+                  <SoundToggle />
                   <ThemeToggle />
                 </div>
               }

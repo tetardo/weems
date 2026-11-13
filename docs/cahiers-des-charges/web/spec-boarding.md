@@ -8,7 +8,7 @@ Demandée par Greg le 13/11/2026 (maquette dense validée : `/mnt/project-files/
 
 - **Adresse** : `/boarding` (`/fr/boarding`, `/en/boarding`), ouverte sans compte (liste `PUBLIC_PAGES` du site).
 - **Barre** : pastille « Boarding » ambre à droite du compteur « N en vol », dans le même style (choix de Greg) ; sur téléphone, l'icône seule et l'entrée dans le menu.
-- **En-tête sur une ligne** : titre, filtre par terrain (code OACI, touche « / »), les 3 terrains les plus actifs en un clic, horloges UTC et locale (ville du fuseau du navigateur), bouton du son.
+- **En-tête sur une ligne** : titre, filtre par terrain (code OACI, touche « / »), les 3 terrains les plus actifs en un clic, horloges UTC et locale (ville du fuseau du navigateur).
 - **Deux tableaux côte à côte** (l'un sous l'autre sous 1 280 px) :
 
 | Tableau | Lignes | Heure | Colonnes |
@@ -19,9 +19,19 @@ Demandée par Greg le 13/11/2026 (maquette dense validée : `/mnt/project-files/
 - **Pages** : 12 lignes par tableau ; au-delà, le tableau passe seul à la page suivante toutes les 15 s (« 1/3 »).
 - **Avion** : silhouette de la catégorie dans sa couleur, comme sur la carte en direct, puis le type.
 - **Pilote** : nom, photo et drapeau du pays si son profil est public, sinon « Pilote masqué » (choix de Greg : le vol reste affiché).
-- **Effet de palettes** : quand un texte change (vol, terrain), chaque case fait défiler le tambour jusqu'au bon caractère. Sans animation si le système demande moins de mouvement. Son des palettes coupé par défaut, choix gardé dans le navigateur.
-- **Clic sur un indicatif** : le vol sur la carte en direct (`/live?flight=<id>`).
-- **Lien partageable** : `/boarding?airport=LFML` ouvre directement le tableau de ce terrain.
+- **Effet de palettes** : quand un texte change (vol, terrain), chaque case fait défiler le tambour jusqu'au bon caractère. Sans animation si le système demande moins de mouvement. Son des palettes coupé par défaut : il suit le bouton son de la barre du site, à côté du thème (demande de Greg du 13/11 : plus de haut-parleur sur la page), choix gardé dans le navigateur (`site/sound-setting.ts`).
+- **Clics** (demande de Greg du 13/11) :
+
+| Clic sur | Ouvre |
+| --- | --- |
+| L'indicatif d'un vol clos dont le pilote est public | La page publique du vol (`/pilots/{pseudo}/flights/{id}`) |
+| L'indicatif d'un vol encore en cours | Le vol sur la carte en direct (`/live?flight=<id>`) : sa page publique n'existe qu'après la clôture |
+| L'indicatif d'un vol clos au pilote masqué | Rien (aucune page ne le montre) |
+| Un pilote public | Sa page (`/pilots/{pseudo}`) ; « Pilote masqué » n'est pas cliquable |
+| Un terrain | Les tableaux de ce terrain, comme le filtre |
+| Un avion | Les deux tableaux réduits à ce type, pastille « A320 × » à côté du filtre |
+
+- **Lien partageable** : `/boarding?airport=LFML` ouvre directement le tableau de ce terrain, `?aircraft=A320` celui d'un type ; les deux se combinent.
 - **Bandeau « En ce moment »** : nombre de départs et d'arrivées, terrain le plus actif, toucher le plus doux de l'heure.
 - **Affichage en direct**, sans délai (choix de Greg) : le site relit les tableaux toutes les 5 s.
 
@@ -47,7 +57,7 @@ Pas de « Prévu » ni de « Retardé » : les pilotes ne déclarent pas d'heure
 `GET /v1/live/boarding` (format `Boarding`, public, `cache-control: no-store`), module `live` :
 
 - `live/boarding-log.ts` garde en mémoire, par vol du direct, l'heure de la première position, du décollage (passage TAKEOFF → CLIMB) et du dernier toucher avec sa vitesse verticale ; un vol clos après un toucher reste une heure (`BOARDING_LANDED_KEEP_MS`).
-- `live/boarding.ts` (fonctions pures) calcule le statut, l'heure estimée (orthodromie restante / vitesse sol, à partir de 50 kt) et trie les deux tableaux ; noms des aéroports par le service `airports`.
+- `live/boarding.ts` (fonctions pures) dit si le vol est clos (`closed`, pour le lien vers sa page publique), calcule le statut, l'heure estimée (orthodromie restante / vitesse sol, à partir de 50 kt) et trie les deux tableaux ; noms des aéroports par le service `airports`.
 - Le pilote suit la règle de la carte : seulement si son profil est public, relu toutes les 30 s, posés récents compris.
 - Limite connue : tout est en mémoire, comme les trajets du direct. Après un redémarrage de l'API, l'heure de décollage des vols en l'air et les posés de l'heure sont perdus (heure affichée : la mise en route vue après le redémarrage).
 
@@ -57,4 +67,4 @@ Clé `boarding` du catalogue (groupe « Voler et suivre »), dans toutes les for
 
 ## Code du site
 
-`apps/web/src/boarding/` : lecture (`use-boarding.ts`), lignes et filtres (`board-rows.ts`, testé), tambour des palettes (`flap-roll.ts`, testé ; `flap-text.tsx`), son (`use-flap-sound.ts`), cellules et tableaux (`board-cells.tsx`, `boarding-table.tsx`), filtre (`airport-filter.tsx`, `use-airport-filter.ts`), horloges, bandeau, assemblage (`boarding-view.tsx`). Pastille de la barre : `site/boarding-link.tsx`.
+`apps/web/src/boarding/` : lecture (`use-boarding.ts`), lignes et filtres (`board-rows.ts`, testé), tambour des palettes (`flap-roll.ts`, testé ; `flap-text.tsx`), son des palettes (`use-flap-sound.ts`, allumé par le bouton son de la barre), cellules et tableaux (`board-cells.tsx`, `boarding-table.tsx`), liens des indicatifs (`board-links.ts`, testé), filtres (`airport-filter.tsx`, `aircraft-chip.tsx`, `use-board-filters.ts`, `use-url-choice.ts`), horloges, bandeau, assemblage (`boarding-view.tsx`). Pastille de la barre : `site/boarding-link.tsx`.

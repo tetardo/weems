@@ -126,6 +126,7 @@ describe("boards", () => {
     );
     expect(board.departures.map((f) => f.callsign)).toEqual(["NEW", "OLD"]);
     expect(board.arrivals.map((f) => f.callsign)).toEqual(["OLD", "DOWN", "CLOSED"]);
+    expect(board.arrivals.map((f) => f.closed)).toEqual([false, false, true]);
   });
 });
 

@@ -44,7 +44,9 @@
       "privacy": "Privacy",
       "contact": "Contact",
       "features": "Features"
-    }
+    },
+    "soundOn": "Turn sound on",
+    "soundOff": "Turn sound off"
   },
   "Home": {
     "title": "Weems · Automatic logbook for MSFS",
@@ -74,7 +76,8 @@
       "route": "Route",
       "direct": "Live",
       "more": "+ {count, plural, one {# flight} other {# flights}}",
-      "seeMap": "See the live map"
+      "seeMap": "See the live map",
+      "airportBoard": "Departures and arrivals at {icao}"
     }
   },
   "Live": {
@@ -150,10 +153,8 @@
     "count": "{count, plural, =0 {no flight} one {# flight} other {# flights}}",
     "clocks": "Clocks",
     "utc": "UTC",
-    "soundOn": "Turn the flap sound on",
-    "soundOff": "Turn the flap sound off",
     "late": "The board is out of date: the API does not answer, trying again in a few seconds.",
-    "privacy": "Every flight under way is shown live; a pilot with a private profile appears as “Hidden pilot”. Click a callsign to follow the flight on the map.",
+    "privacy": "Every flight under way is shown live; a pilot with a private profile appears as “Hidden pilot”. Click a callsign to follow the flight on the map, or open its page once landed; a pilot for their page; an airport or an aircraft to show only that one.",
     "status": {
       "boarding": "Boarding",
       "pushback": "Pushback",
@@ -189,7 +190,9 @@
       "label": "Airfield",
       "placeholder": "Airfield: ICAO code",
       "clear": "All airfields",
-      "busiest": "Busiest"
+      "busiest": "Busiest",
+      "onlyThis": "show only {value}",
+      "aircraftClear": "All aircraft"
     },
     "ticker": {
       "now": "Right now",
@@ -1528,7 +1531,7 @@
       },
       "boarding": {
         "title": "Boarding: departures and arrivals",
-        "text": "A split-flap board like in a terminal: every member's departures and arrivals live, the estimated time, the touchdown of the latest landings, any airfield you choose."
+        "text": "A split-flap board like in a terminal: every member's departures and arrivals live, the estimated time, the touchdown of the latest landings, any airfield or aircraft you choose, the public page of each landed flight."
       },
       "publicProfile": {
         "title": "Public profile",

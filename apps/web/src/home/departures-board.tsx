@@ -40,16 +40,38 @@ function LevelCell({ level }: { level: Exclude<Level, { kind: "ground" }> }) {
   return t("feet", { value: level.value });
 }
 
-/** One flight on one line; its level shows on hover only. A phone shows the first 4 lines. */
+/** An airport of a row: a click opens the Boarding page of this airport (as its own boards do). */
+function AirportLink({ icao }: { icao: string | null }) {
+  const t = useTranslations("Home.board");
+  if (!icao) return "—";
+  return (
+    <Link
+      href={`/boarding?airport=${icao}`}
+      title={t("airportBoard", { icao })}
+      className="hover:underline"
+    >
+      {icao}
+    </Link>
+  );
+}
+
+/**
+ * One flight on one line; its level shows on hover only. A phone shows the first 4 lines. The
+ * callsign opens the flight on the live map (it is flying: no public page yet), an airport its
+ * Boarding page.
+ */
 function Row({ row, phone }: { row: BoardRow; phone: boolean }) {
   const t = useTranslations("Home.board");
   return (
     <tr className={`group border-t border-board-line ${phone ? "" : "max-md:hidden"}`}>
       <td className="py-2.5 pl-5 font-bold whitespace-nowrap text-board-call max-sm:pl-4">
-        {row.callsign}
+        <Link href={`/live?flight=${row.flightId}`} className="hover:underline">
+          {row.callsign}
+        </Link>
       </td>
       <td className="px-3 py-2.5 whitespace-nowrap">
-        {row.from ?? "—"} <span className="text-board-muted">→</span> {row.to ?? "—"}
+        <AirportLink icao={row.from} /> <span className="text-board-muted">→</span>{" "}
+        <AirportLink icao={row.to} />
       </td>
       <td className="py-2.5 pr-5 text-right whitespace-nowrap max-sm:pr-4">
         {row.level.kind !== "ground" && (

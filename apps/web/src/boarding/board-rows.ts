@@ -24,6 +24,23 @@ export function forAirport(board: Boarding, airport: string | null): Boarding {
   };
 }
 
+/** An aircraft type read from the address: as given by the simulator, trimmed. */
+export function aircraftType(value: string | null | undefined): string | null {
+  const type = (value ?? "").trim();
+  return type.length > 0 && type.length <= 64 ? type : null;
+}
+
+/** Both boards cut to one aircraft type. Without a type, every flight. */
+export function forAircraft(board: Boarding, type: string | null): Boarding {
+  if (!type) return board;
+  const same = (flight: BoardingFlight) => flight.aircraftType === type;
+  return {
+    ...board,
+    departures: board.departures.filter(same),
+    arrivals: board.arrivals.filter(same),
+  };
+}
+
 /** The busiest airports (departures and arrivals together), most flights first, then by code. */
 export function busiestAirports(board: Boarding, max = 3): { icao: string; count: number }[] {
   const counts = new Map<string, number>();

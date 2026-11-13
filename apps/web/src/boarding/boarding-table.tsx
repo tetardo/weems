@@ -5,13 +5,43 @@ import { useTranslations } from "next-intl";
 import { Link } from "../i18n/navigation.ts";
 import { ArrivalIcon, DepartureIcon } from "../ui/icons.ts";
 import { AircraftCell, AirportCell, PilotCell, StatusCell, TimeCell } from "./board-cells.tsx";
+import { flightHref } from "./board-links.ts";
 import { arrivalTime, departureTime, pageOf } from "./board-rows.ts";
 import { FlapText } from "./flap-text.tsx";
 
 type Kind = "departures" | "arrivals";
 
-/** One flight: a click on its callsign opens it on the live map. */
-function Row({ flight, kind }: { flight: BoardingFlight; kind: Kind }) {
+/** What a click on an airport or an aircraft type filters. */
+export interface BoardChoices {
+  airport: (icao: string) => void;
+  aircraft: (type: string) => void;
+}
+
+/** The callsign: its public page once closed, the live map while flying (`flightHref`). */
+function CallsignCell({ flight }: { flight: BoardingFlight }) {
+  const callsign = <FlapText text={flight.callsign} width={10} tone="title" />;
+  const href = flightHref(flight);
+  if (!href) return callsign;
+  return (
+    <Link href={href} className="rounded-tag hover:opacity-80">
+      {callsign}
+    </Link>
+  );
+}
+
+/**
+ * One flight: the callsign opens the flight, the pilot their page, the airport and the aircraft
+ * filter the boards.
+ */
+function Row({
+  flight,
+  kind,
+  choices,
+}: {
+  flight: BoardingFlight;
+  kind: Kind;
+  choices: BoardChoices;
+}) {
   const time =
     kind === "departures" ? { at: departureTime(flight), estimated: false } : arrivalTime(flight);
   const landed = flight.status === "landed";
@@ -21,19 +51,25 @@ function Row({ flight, kind }: { flight: BoardingFlight; kind: Kind }) {
         <TimeCell {...time} />
       </td>
       <td className="px-1.5">
-        <Link href={`/live?flight=${flight.flightId}`} className="rounded-tag hover:opacity-80">
-          <FlapText text={flight.callsign} width={10} tone="title" />
-        </Link>
+        <CallsignCell flight={flight} />
       </td>
       <td className="px-1.5">
         {kind === "departures" ? (
-          <AirportCell icao={flight.arrivalIcao} name={flight.arrivalName} />
+          <AirportCell
+            icao={flight.arrivalIcao}
+            name={flight.arrivalName}
+            onChoose={choices.airport}
+          />
         ) : (
-          <AirportCell icao={flight.departureIcao} name={flight.departureName} />
+          <AirportCell
+            icao={flight.departureIcao}
+            name={flight.departureName}
+            onChoose={choices.airport}
+          />
         )}
       </td>
       <td className="px-1.5 max-lg:hidden">
-        <AircraftCell flight={flight} />
+        <AircraftCell flight={flight} onChoose={choices.aircraft} />
       </td>
       <td className="px-1.5 max-sm:hidden">
         <PilotCell flight={flight} />
@@ -107,10 +143,12 @@ export function BoardingTable({
   kind,
   flights,
   tick,
+  choices,
 }: {
   kind: Kind;
   flights: readonly BoardingFlight[];
   tick: number;
+  choices: BoardChoices;
 }) {
   const t = useTranslations("Boarding");
   const { rows, page, pages } = pageOf(flights, tick);
@@ -124,7 +162,7 @@ export function BoardingTable({
         <ColumnTitles kind={kind} />
         <tbody>
           {rows.map((flight) => (
-            <Row key={flight.flightId} flight={flight} kind={kind} />
+            <Row key={flight.flightId} flight={flight} kind={kind} choices={choices} />
           ))}
           {rows.length === 0 && (
             <tr className="border-t border-board-line">

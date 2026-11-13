@@ -44,7 +44,9 @@
       "privacy": "Confidentialité",
       "contact": "Contact",
       "features": "Fonctionnalités"
-    }
+    },
+    "soundOn": "Activer le son",
+    "soundOff": "Couper le son"
   },
   "Home": {
     "title": "Weems · Carnet de vol automatique pour MSFS",
@@ -74,7 +76,8 @@
       "route": "Trajet",
       "direct": "Direct",
       "more": "+ {count, plural, one {# vol} other {# vols}}",
-      "seeMap": "Voir la carte en direct"
+      "seeMap": "Voir la carte en direct",
+      "airportBoard": "Départs et arrivées de {icao}"
     }
   },
   "Live": {
@@ -150,10 +153,8 @@
     "count": "{count, plural, =0 {aucun vol} one {# vol} other {# vols}}",
     "clocks": "Horloges",
     "utc": "UTC",
-    "soundOn": "Activer le son des palettes",
-    "soundOff": "Couper le son des palettes",
     "late": "Le tableau n'est plus à jour : l'API ne répond pas, nouvel essai dans quelques secondes.",
-    "privacy": "Tous les vols en cours sont affichés en direct ; un pilote au profil privé apparaît comme « Pilote masqué ». Cliquez sur un indicatif pour suivre le vol sur la carte.",
+    "privacy": "Tous les vols en cours sont affichés en direct ; un pilote au profil privé apparaît comme « Pilote masqué ». Cliquez sur un indicatif pour suivre le vol sur la carte, ou ouvrir sa page une fois posé ; sur un pilote pour sa page ; sur un terrain ou un avion pour n'afficher que lui.",
     "status": {
       "boarding": "Embarq.",
       "pushback": "Repouss.",
@@ -189,7 +190,9 @@
       "label": "Terrain",
       "placeholder": "Terrain : code OACI",
       "clear": "Tous les terrains",
-      "busiest": "Les plus actifs"
+      "busiest": "Les plus actifs",
+      "onlyThis": "afficher seulement {value}",
+      "aircraftClear": "Tous les avions"
     },
     "ticker": {
       "now": "En ce moment",
@@ -1528,7 +1531,7 @@
       },
       "boarding": {
         "title": "Boarding : départs et arrivées",
-        "text": "Un tableau à palettes comme en aérogare : les départs et les arrivées de tous les membres en direct, l'heure estimée, le toucher des derniers posés, un terrain au choix."
+        "text": "Un tableau à palettes comme en aérogare : les départs et les arrivées de tous les membres en direct, l'heure estimée, le toucher des derniers posés, un terrain ou un avion au choix, la page publique de chaque vol posé."
       },
       "publicProfile": {
         "title": "Profil public",

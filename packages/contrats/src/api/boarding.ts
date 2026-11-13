@@ -44,6 +44,11 @@ export const BoardingFlight = z.object({
   /** Touchdown time and vertical speed (ft/min, negative), once landed. */
   landedAt: UtcTimestamp.nullable(),
   touchdownVs: z.number().nullable(),
+  /**
+   * The flight is closed (the tracker sent its end): with a public pilot, its public page
+   * /pilots/{handle}/flights/{id} exists. Still open, it is only on the live map.
+   */
+  closed: z.boolean(),
   /** Flown by a fictitious account of the simulated activity. */
   fictitious: z.boolean(),
 });

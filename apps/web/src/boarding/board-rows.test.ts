@@ -1,10 +1,12 @@
 import type { Boarding, BoardingFlight } from "@weems/contrats";
 import { describe, expect, it } from "vitest";
 import {
+  aircraftType,
   airportCode,
   arrivalTime,
   busiestAirports,
   departureTime,
+  forAircraft,
   forAirport,
   pageOf,
   tickerFacts,
@@ -28,6 +30,7 @@ const flight = (extra: Partial<BoardingFlight>): BoardingFlight => ({
   estimatedArrivalAt: "2026-11-13T09:05:00.000Z",
   landedAt: null,
   touchdownVs: null,
+  closed: false,
   fictitious: false,
   ...extra,
 });
@@ -50,6 +53,15 @@ describe("Boarding rows", () => {
     const filtered = forAirport(board([lyon, nice], [lyon, nice]), "LFLL");
     expect(filtered.departures.map((f) => f.callsign)).toEqual(["A"]);
     expect(filtered.arrivals.map((f) => f.callsign)).toEqual(["B"]);
+  });
+
+  it("keeps one aircraft type on both boards", () => {
+    const neo = flight({ callsign: "A" });
+    const boeing = flight({ callsign: "B", aircraftType: "B738" });
+    const filtered = forAircraft(board([neo, boeing], [boeing, neo]), aircraftType(" B738 "));
+    expect(filtered.departures.map((f) => f.callsign)).toEqual(["B"]);
+    expect(filtered.arrivals.map((f) => f.callsign)).toEqual(["B"]);
+    expect(aircraftType("  ")).toBeNull();
   });
 
   it("ranks the busiest airports, departures and arrivals together", () => {
