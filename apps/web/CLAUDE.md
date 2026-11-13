@@ -87,7 +87,7 @@ src/
   plans/               page Offres : cartes (plan-cards, plan-card, plan-price, plan-action, feature-text), bannières SVG (plan-banner), tableau (compare-table),
                        ce que chaque carte liste et prix (plan-display.ts, testé), promesses (plans-reassurance)
   boarding/            page Boarding : lecture (use-boarding.ts), lignes, filtre, pages, horloge (board-rows.ts, testé), tambour des palettes (flap-roll.ts, testé ; flap-text.tsx), son (use-flap-sound.ts),
-                       cellules et tableaux (board-cells.tsx, boarding-table.tsx), filtre terrain (airport-filter.tsx, use-airport-filter.ts), horloges, bandeau, assemblage (boarding-view.tsx)
+                       cellules et tableaux (board-cells.tsx, boarding-table.tsx), liens des indicatifs (board-links.ts, testé), filtres terrain et avion (airport-filter.tsx, aircraft-chip.tsx, use-board-filters.ts, use-url-choice.ts), horloges, bandeau, assemblage (boarding-view.tsx)
   aircraft/            catégorie d'avion : pastille (category-badge.tsx), silhouette de la carte (category-silhouette.tsx), carré de couleur (category-dot.tsx), couleurs (category-tone.ts pour les classes, category-colors.ts pour les cartes, variables --wm-cat-* de global.css)
   flights/             liste des vols : filtres (list-query.ts), tableau, pastilles, état
   flight/              page de vol

@@ -54,9 +54,8 @@ const CHOICE =
   "flex w-full min-w-0 items-center gap-1.5 overflow-hidden rounded-tag text-left hover:opacity-75";
 
 /**
- * Airport code in flaps; its name in small only when one board fills the width (1 024 to 1 279
- * px), never squeezed beside the other board; full name on hover. A click shows only this
- * airport's boards.
+ * Airport code in flaps and its name in small from 1 536 px, cut with « … » inside its column;
+ * full name on hover. A click shows only this airport's boards.
  */
 export function AirportCell({
   icao,
@@ -72,9 +71,7 @@ export function AirportCell({
     <>
       <FlapText text={icao ?? ""} width={4} />
       {name && (
-        <span className="min-w-0 truncate text-[11px] text-board-muted max-lg:hidden xl:hidden">
-          {name}
-        </span>
+        <span className="min-w-0 truncate text-[11px] text-board-muted max-2xl:hidden">{name}</span>
       )}
     </>
   );

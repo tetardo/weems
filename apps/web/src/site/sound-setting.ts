@@ -16,8 +16,33 @@ function readSound(): boolean {
   }
 }
 
+let audio: AudioContext | null = null;
+
+/**
+ * The one audio output of the page, kept across page changes. Browsers start it muted unless it is
+ * created or resumed during a click or a key press: the sound button does it in its click, and
+ * `wakeSoundOnTouch` at the next touch when the sound was already on as the page opened.
+ */
+export function siteAudio(): AudioContext {
+  audio ??= new AudioContext();
+  if (audio.state === "suspended") void audio.resume();
+  return audio;
+}
+
+/** Wakes the sound at the next click or key press on the page; returns how to stop waiting. */
+export function wakeSoundOnTouch(): () => void {
+  const wake = () => siteAudio();
+  const events = ["pointerdown", "keydown"] as const;
+  for (const event of events) window.addEventListener(event, wake, { once: true });
+  return () => {
+    for (const event of events) window.removeEventListener(event, wake);
+  };
+}
+
 /** Remembers the choice and tells every component listening, in this tab and the others. */
 export function writeSound(on: boolean): void {
+  // In the click itself, while the browser still allows sound to start.
+  if (on) siteAudio();
   try {
     localStorage.setItem(SOUND_STORAGE_KEY, on ? "on" : "off");
   } catch {
