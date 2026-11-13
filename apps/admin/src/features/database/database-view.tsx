@@ -65,13 +65,13 @@ function Page({ view, actions }: { view: View; actions: ReturnType<typeof usePag
   const backingUp = busy || view.backingUp;
   return (
     <div className="sv-page">
-      <HistoryCharts history={view.database.history} totalBytes={view.database.totalBytes} />
       <SummaryTiles view={view} nowMs={nowMs} />
       <BackupBand
         warning={backupWarning(view.backups[0]?.createdAt ?? null, nowMs)}
         busy={backingUp}
         onBackup={actions.backup}
       />
+      <HistoryCharts history={view.database.history} totalBytes={view.database.totalBytes} />
       <TablesPanel tables={view.database.tables} growth={growthOf(view.database.history)} />
       <div className="sv-grid3 db-pair">
         <MigrationsPanel

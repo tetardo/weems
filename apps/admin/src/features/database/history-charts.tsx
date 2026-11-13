@@ -128,7 +128,8 @@ function SizeLine(props: { values: (number | null)[]; onHover: (i: number | null
   const min = Math.min(...known);
   const max = Math.max(...known);
   const span = max - min || max || 1;
-  const x = (i: number) => (i * W) / (props.values.length - 1);
+  // Inset by PAD so that the dot of a lone reading on the last day stays whole.
+  const x = (i: number) => PAD + (i * (W - 2 * PAD)) / (props.values.length - 1);
   const y = (v: number) => H - PAD - ((v - (min - span * 0.1)) / (span * 1.2)) * (H - 2 * PAD);
   const parts = runs(props.values);
   const points = (run: [number, number][]) => run.map(([i, v]) => `${x(i)},${y(v)}`).join(" ");
