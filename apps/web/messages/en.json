@@ -155,7 +155,7 @@
     "clocks": "Clocks",
     "utc": "UTC",
     "late": "The board is out of date: the API does not answer, trying again in a few seconds.",
-    "privacy": "Every flight under way is shown live; a pilot with a private profile appears as a grey disc (“Hidden pilot”). Hover over a pilot or an airport to see its name. Click a callsign to follow the flight on the map, or open its page once landed; a pilot for their page; an airport or an aircraft to show only that one. Under the boards, the live map: hover an aircraft for its card, click to follow it full screen.",
+    "privacy": "Every flight under way is shown live; a pilot with a private profile appears as a grey disc (“Hidden pilot”). Hover over a pilot or an airport to see its name. Click a callsign to follow the flight on the map, or open its page once landed; a pilot for their page; an airport or an aircraft to show only that one.",
     "status": {
       "boarding": "Boarding",
       "pushback": "Pushback",
@@ -200,10 +200,6 @@
       "flights": "{departures} departures · {arrivals} arrivals",
       "busiest": "Busiest airfield {icao} ({count})",
       "softest": "Softest touchdown {callsign} {vs} ft/min"
-    },
-    "map": {
-      "title": "Live map",
-      "open": "Open full screen"
     }
   },
   "Phases": {
@@ -1547,7 +1543,7 @@
       },
       "boarding": {
         "title": "Boarding: departures and arrivals",
-        "text": "A split-flap board like in a terminal: every member's departures and arrivals live, the estimated time, the touchdown of the latest landings, any airfield or aircraft you choose, the public page of each landed flight, and the live map below."
+        "text": "A split-flap board like in a terminal: every member's departures and arrivals live, the estimated time, the touchdown of the latest landings, any airfield or aircraft you choose, the public page of each landed flight."
       },
       "publicProfile": {
         "title": "Public profile",

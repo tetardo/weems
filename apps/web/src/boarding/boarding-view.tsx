@@ -6,7 +6,6 @@ import { useSound } from "../site/sound-setting.ts";
 import { DepartureIcon } from "../ui/icons.ts";
 import { AircraftChip } from "./aircraft-chip.tsx";
 import { AirportFilter } from "./airport-filter.tsx";
-import { BoardingMap } from "./boarding-map.tsx";
 import { busiestAirports, PAGE_EVERY_MS } from "./board-rows.ts";
 import { BoardingClocks } from "./boarding-clocks.tsx";
 import { BoardingTable } from "./boarding-table.tsx";
@@ -28,7 +27,7 @@ function usePageTick(): number {
 
 /**
  * Page Boarding (spec web Boarding): the Departures and Arrivals boards of every member side by
- * side, followed live (SSE), filtered by airport and aircraft, pages turning every 15 s, letters turning on change; the live map under them.
+ * side, followed live (SSE), filtered by airport and aircraft, pages turning every 15 s, letters turning on change.
  */
 export function BoardingView({ apiUrl }: { apiUrl: string }) {
   const t = useTranslations("Boarding");
@@ -72,7 +71,6 @@ export function BoardingView({ apiUrl }: { apiUrl: string }) {
           />
         </div>
         {shown && <BoardingTicker board={shown} />}
-        <BoardingMap apiUrl={apiUrl} />
         <p className="text-xs text-muted">{t("privacy")}</p>
       </main>
     </FlapSoundContext>

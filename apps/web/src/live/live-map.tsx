@@ -1,12 +1,7 @@
 "use client";
 
 import type { LiveRoute } from "@weems/contrats";
-import {
-  type GeoJSONSource,
-  type Map as MapLibreMap,
-  type MapMouseEvent,
-  NavigationControl,
-} from "maplibre-gl";
+import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import { categoryColors } from "../aircraft/category-colors.ts";
@@ -36,8 +31,6 @@ interface Props {
   recenterRequest: number;
   /** Night and busy airports. */
   overlays: Overlays;
-  /** Map inside a page that scrolls (Boarding): the wheel scrolls the page, the buttons zoom. */
-  embedded?: boolean;
 }
 
 export interface Hover {
@@ -160,12 +153,6 @@ function useRecenter(
   }, [map, tracks, selected, request]);
 }
 
-/** In a page that scrolls, the wheel scrolls the page: zoom with the + / − buttons instead. */
-function embed(map: MapLibreMap): void {
-  map.scrollZoom.disable();
-  map.addControl(new NavigationControl({ showCompass: false }), "top-right");
-}
-
 /** MapLibre map with one aircraft per open flight, gliding between updates, and the selected route. */
 export function LiveMap(props: Props) {
   const { flights, selectedId, route, allRoutes, onSelect, onHover, recenterRequest, overlays } =
@@ -190,7 +177,6 @@ export function LiveMap(props: Props) {
       showOverlays(target, shownOverlays.current);
     };
     const instance = createBaseMap(container.current, { center: [5, 47], zoom: 4.3 }, addLayers);
-    if (props.embedded) embed(instance);
     map.current = instance;
     const checkHover = watchHover(instance, tracks, hover);
     let frame = 0;

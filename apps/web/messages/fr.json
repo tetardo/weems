@@ -155,7 +155,7 @@
     "clocks": "Horloges",
     "utc": "UTC",
     "late": "Le tableau n'est plus à jour : l'API ne répond pas, nouvel essai dans quelques secondes.",
-    "privacy": "Tous les vols en cours sont affichés en direct ; un pilote au profil privé apparaît en pastille grise (« Pilote masqué »). Survolez un pilote ou un terrain pour voir son nom. Cliquez sur un indicatif pour suivre le vol sur la carte, ou ouvrir sa page une fois posé ; sur un pilote pour sa page ; sur un terrain ou un avion pour n'afficher que lui. Sous les tableaux, la carte en direct : survolez un avion pour sa fiche, cliquez pour le suivre en plein écran.",
+    "privacy": "Tous les vols en cours sont affichés en direct ; un pilote au profil privé apparaît en pastille grise (« Pilote masqué »). Survolez un pilote ou un terrain pour voir son nom. Cliquez sur un indicatif pour suivre le vol sur la carte, ou ouvrir sa page une fois posé ; sur un pilote pour sa page ; sur un terrain ou un avion pour n'afficher que lui.",
     "status": {
       "boarding": "Embarq.",
       "pushback": "Repouss.",
@@ -200,10 +200,6 @@
       "flights": "{departures} départs · {arrivals} arrivées",
       "busiest": "Terrain le plus actif {icao} ({count})",
       "softest": "Toucher le plus doux {callsign} {vs} ft/min"
-    },
-    "map": {
-      "title": "Carte en direct",
-      "open": "Ouvrir en plein écran"
     }
   },
   "Phases": {
@@ -1547,7 +1543,7 @@
       },
       "boarding": {
         "title": "Boarding : départs et arrivées",
-        "text": "Un tableau à palettes comme en aérogare : les départs et les arrivées de tous les membres en direct, l'heure estimée, le toucher des derniers posés, un terrain ou un avion au choix, la page publique de chaque vol posé, et la carte en direct en dessous."
+        "text": "Un tableau à palettes comme en aérogare : les départs et les arrivées de tous les membres en direct, l'heure estimée, le toucher des derniers posés, un terrain ou un avion au choix, la page publique de chaque vol posé."
       },
       "publicProfile": {
         "title": "Profil public",
