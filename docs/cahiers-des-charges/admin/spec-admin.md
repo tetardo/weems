@@ -29,7 +29,7 @@ flowchart LR
 
 | Élément | Contenu |
 | --- | --- |
-| Barre latérale | Logo « Weems Admin ». État au 13/11/2026 (#82 ; Greg a refusé une réorganisation plus poussée des sections) : groupe **Exploitation** : Supervision (accueil), Services (compteur « 2 / 3 » en marche), Trafic simulé (pastille « en cours » pendant un lancement), Activité simulée. Groupe **Utilisateurs** : Comptes. Groupe **Site** : Personnalisation. Groupe **Maintenance** : Librairies, Base de données. Groupe **Raccourcis** : Site (:3001) et Doc API (:3000/docs), ouverts dans un nouvel onglet. Titres de section discrets mais lisibles, liste resserrée. |
+| Barre latérale | Logo « Weems Admin ». État au 13/11/2026 (#82 ; Greg a refusé une réorganisation plus poussée des sections) : groupe **Exploitation** : Supervision (accueil), Services (compteur « 2 / 3 » en marche), Trafic simulé (pastille « en cours » pendant un lancement), Activité simulée. Groupe **Utilisateurs** : Comptes, Fondateurs, Codes d'offre (ajoutés le 13/11/2026, offre fondateurs, sans réorganiser les sections). Groupe **Site** : Personnalisation. Groupe **Maintenance** : Librairies, Base de données. Groupe **Raccourcis** : Site (:3001) et Doc API (:3000/docs), ouverts dans un nouvel onglet. Titres de section discrets mais lisibles, liste resserrée. |
 | Bloc « État local » | En bas de la barre : Base, API, Site, chacun avec une pastille (en marche, arrêté, en erreur) et son port. Rafraîchi toutes les 5 secondes. |
 | Barre du haut | Fil d'Ariane (Admin / page), badge « localhost · Mac », bouton thème clair/sombre, administrateur connecté (s'il l'est). |
 | Mobile (moins de 768 px) | La barre latérale devient des onglets en bas : Supervision, Services, Trafic, Activité, Comptes (état au 13/11/2026). L'état local devient trois pastilles dans la barre du haut. |
@@ -110,7 +110,7 @@ flowchart LR
 | --- | --- |
 | Compte | Nom et e-mail. Le pilote de développement porte un badge « Développement ». |
 | Rôle | Pilote ou Administrateur |
-| Formule | Pilot Free, Pilot Pro, Company ou Holding (ajouté le 13/11/2026, demande de Greg). Tant que les abonnements n'existent pas, tout le monde est en Pilot Free ; hors production, la formule choisie avec l'interrupteur de test du site. Onglet Invitations : la colonne devient **Code** (code d'invitation et bouton pour le copier) |
+| Formule | Pilot Free, Pilot Pro, Company ou Holding (ajouté le 13/11/2026, demande de Greg). Tant que les abonnements n'existent pas, tout le monde est en Pilot Free, sauf un Pilot Pro offert (fondateur, code d'offre : spec `../web/spec-offre-fondateurs.md`) ; hors production, la formule choisie avec l'interrupteur de test du site. Onglet Invitations : la colonne devient **Code** (code d'invitation et bouton pour le copier) |
 | État | Actif, Désactivé, Invitation en attente (avec « expire dans N j »), ou Invitation expirée. Une invitation n'a pas encore de compte : nom vide |
 | Vols | Nombre de vols du compte |
 | Créé le | Date de création du compte ou de l'invitation |
@@ -264,6 +264,13 @@ Les trois derniers états et « sautée » se corrigent à la main ; la page le 
 - PostgreSQL ne rend pas l'espace au disque après une suppression : il le réutilise. La taille totale ne baisse donc pas forcément tout de suite.
 - Sauvegarde : `docker compose exec -T db pg_dump -U weems -Fc weems`, écrite d'abord dans un fichier `.part` puis renommée ; une seule à la fois ; au-delà de 7, les plus anciennes sont supprimées. La restauration remplace toute la base : jamais de bouton, la commande est affichée.
 - Évolution sur 7 jours : un relevé par jour (le dernier de la journée gagne), 31 jours gardés ; sans relevé de 7 jours, comparaison avec le plus ancien, et la page dit depuis quand.
+
+## Pages Fondateurs et Codes d'offre (13/11/2026)
+
+Spec complète : `../web/spec-offre-fondateurs.md`.
+
+- **Fondateurs** (`/founders`) : compteurs (confirmés, en vérification 48 h, refusés, places libres sur 500), liste par numéro avec pilote, état, date de la place et de la confirmation ; **Confirmer** (avant les 48 h) et **Refuser** (confirmation : le pilote perd badge, Pro offert et codes non utilisés ; le numéro n'est jamais redonné).
+- **Codes d'offre** (`/codes`) : cartes des ambassadeurs (code, places utilisées, fin, lien vers la page publique, Modifier) ; panneau « Nouvel ambassadeur » (adresse, nom, accroche, présentation FR/EN, citations, liens https, profil de pilote lié, photo 5 Mo au plus réduite en WebP 256 px, code partagé, mois, places, fin, en ligne) avec **case d'accord écrit obligatoire** avant d'enregistrer ; formulaire « Nouveau lot » (pour qui, mois, nombre, fin) ; tableau des lots, du parrainage et des codes d'ambassadeurs avec **CSV** et **Annuler**.
 
 ## Corrections par rapport à la première maquette
 

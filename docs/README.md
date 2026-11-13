@@ -45,6 +45,7 @@ flowchart LR
 | [Site — trajets sur la carte en direct (J4)](cahiers-des-charges/web/spec-J4-trajectoire-direct.md) | Trajets, orthodromie, progression | Référence |
 | [Site — pilote et enrichissements du direct (J4)](cahiers-des-charges/web/spec-J4-direct-pilote.md) | Bulle, vol suivi, recherche, nuit, filtres, événements | Référence |
 | [Site — page Boarding](cahiers-des-charges/web/spec-boarding.md) | Tableau à palettes des départs et arrivées de tous les membres | Référence |
+| [Offre Pilote fondateur et codes d'offre](cahiers-des-charges/web/spec-offre-fondateurs.md) | 500 premiers pilotes, codes, parrainage, ambassadeurs | Référence |
 | [Site — carnet de vol privé](cahiers-des-charges/web/spec-carnet-prive.md) | Résumé, Vols, Statistiques livrés ; Objectifs à faire | Ouvert |
 | [Console d'administration](cahiers-des-charges/admin/spec-admin.md) | Les 8 pages de la console | À jour |
 
@@ -65,12 +66,13 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [009](decisions/009-console-admin-locale.md) | Console locale | À jour |
 | [010](decisions/010-vols-simules-pistes-et-virages.md) | Vols simulés réalistes | À jour |
 | [011 — activité simulée](decisions/011-activite-simulee-comptes-fictifs.md) | Comptes fictifs, vols passés | À jour |
-| [011 — démarrage par icônes](decisions/011-demarrage-par-icones.md) | Icônes Weems Start / Stop | À jour (deux fiches portent le numéro 011 ; gardées telles quelles pour ne pas casser les liens, la prochaine fiche est la 016) |
+| [011 — démarrage par icônes](decisions/011-demarrage-par-icones.md) | Icônes Weems Start / Stop | À jour (deux fiches portent le numéro 011 ; gardées telles quelles pour ne pas casser les liens, la prochaine fiche est la 018) |
 | [012](decisions/012-console-connexion-automatique-en-local.md) | Connexion automatique de la console | À jour |
 | [013](decisions/013-ci-j1-seulement-si-chaine-touchee.md) | CI : J1 filtré par chemins | À jour |
 | [014](decisions/014-arrondis-des-cadres.md) | 6 jetons d'arrondi | À jour |
 | [015](decisions/015-catalogue-des-formules.md) | Catalogue des formules, pages Offres et Fonctionnalités | À jour au 13/11 |
 | [016](decisions/016-fond-plan-aeroport.md) | Fond du site : plan d'aéroport inventé, très léger | À jour au 13/11 |
+| [017](decisions/017-offre-fondateurs-hors-catalogue.md) | Offre fondateurs : droits offerts, hors catalogue des formules | À jour au 13/11 |
 
 ## Développement (`developpement/`)
 

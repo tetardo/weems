@@ -1,4 +1,4 @@
-import { and, eq, gt, isNull } from "drizzle-orm";
+import { and, eq, gt, isNull, lte } from "drizzle-orm";
 import { uuidV7 } from "@weems/contrats";
 import type { Database } from "../../db/client.ts";
 import { planGrants } from "../../db/schema.ts";
@@ -39,6 +39,21 @@ export class GrantsRepository {
       )
       .orderBy(planGrants.startsAt);
     return rows.map((row) => ({ ...row, source: row.source as GrantSource }));
+  }
+
+  /** Plan given to each pilot right now (admin console, page Comptes). */
+  async currentByPilot(now: Date): Promise<Map<string, string>> {
+    const rows = await this.db
+      .selectDistinct({ pilotId: planGrants.pilotId, plan: planGrants.plan })
+      .from(planGrants)
+      .where(
+        and(
+          isNull(planGrants.revokedAt),
+          lte(planGrants.startsAt, now),
+          gt(planGrants.endsAt, now),
+        ),
+      );
+    return new Map(rows.map((row) => [row.pilotId, row.plan]));
   }
 
   async insert(pilotId: string, grant: GrantRecord, now: Date): Promise<void> {

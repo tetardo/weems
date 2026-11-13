@@ -1,26 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { publicFlight } from "../../testing/public-flights.ts";
-import { checkFlight, founderFlight, progressOf } from "./flight-check.ts";
-
-const HOUR = 3600;
-
-describe("checkFlight", () => {
-  it("accepts a real flight of 15 min in the air over 20 NM", () => {
-    expect(checkFlight(publicFlight({ blockS: 600 + 15 * 60 }), 20)).toBe("valid");
-  });
-
-  it("refuses what the founder offer does not count, with the reason", () => {
-    const replay = { ...publicFlight(), simulator: "replay" as const };
-    expect(checkFlight(replay, 100)).toBe("simulated");
-    expect(checkFlight(publicFlight({ blockS: null }), 100)).toBe("noTakeoffOrLanding");
-    expect(checkFlight(publicFlight({ extra: ["slew"] }), 100)).toBe("moved");
-    expect(checkFlight(publicFlight({ extra: ["positionChanged"] }), 100)).toBe("moved");
-    expect(checkFlight(publicFlight({ extra: ["crashed"] }), 100)).toBe("crashed");
-    expect(checkFlight(publicFlight({ blockS: 600 + 14 * 60 }), 100)).toBe("tooShort");
-    expect(checkFlight(publicFlight({ blockS: HOUR }), 19.9)).toBe("tooShortDistance");
-    expect(checkFlight(publicFlight({ blockS: HOUR }), null)).toBe("tooShortDistance");
-  });
-});
+import { founderFlight, progressOf } from "./flight-check.ts";
 
 describe("progressOf", () => {
   const valid = (at: string) => founderFlight(publicFlight({ at }), 120);

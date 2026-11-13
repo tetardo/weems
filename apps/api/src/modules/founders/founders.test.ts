@@ -1,4 +1,5 @@
 import type {
+  AdminAccountList,
   AdminFounders,
   MyCodes,
   MyFounder,
@@ -85,6 +86,11 @@ describe("a new founder", () => {
     const { referral } = await get<MyCodes>("/v1/me/codes", pilot.cookie);
     expect(referral).toHaveLength(3);
     expect(referral[0]).toMatchObject({ months: 3, usedAt: null });
+    // The console's page Comptes shows the plan given.
+    const { founders } = await get<AdminFounders>("/v1/admin/founders", admin);
+    const pilotId = founders.find((founder) => founder.number === place.number)?.pilotId;
+    const { accounts } = await get<AdminAccountList>("/v1/admin/accounts", admin);
+    expect(accounts.find((account) => account.id === pilotId)?.plan).toBe("pilot_pro");
     // Flying more never gives a second place.
     await flyFounderFlight(app, pilot, { day: 2 });
     expect((await get<MyFounder>("/v1/me/founder", pilot.cookie)).place?.number).toBe(place.number);

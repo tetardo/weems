@@ -101,12 +101,12 @@ export {
   AdminFounders,
   FOUNDER_OFFER,
   FounderFlight,
-  FounderFlightCheck,
   FounderPlace,
   FounderStatus,
   MyFounder,
   PublicFounders,
 } from "./api/founders.ts";
+export { FlightValidity, VALID_FLIGHT } from "./api/flight-validity.ts";
 export {
   AdminCampaign,
   AdminCampaigns,

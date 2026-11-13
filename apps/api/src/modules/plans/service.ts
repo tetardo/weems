@@ -37,9 +37,16 @@ export class PlansService {
     return { plan, testSwitch: this.testPlans !== null, offered };
   }
 
-  /** Plan of every pilot who is not on Pilot Free (admin console, page Comptes). */
+  /**
+   * Plan of every pilot who is not on Pilot Free (admin console, page Comptes): Pilot Pro given,
+   * then the test switch, which wins as in planOf.
+   */
   async plansByPilot(): Promise<Map<string, PlanId>> {
-    return (await this.testPlans?.allPlans()) ?? new Map();
+    const gifts = await this.grants.currentByPilot(this.now());
+    const plans = new Map([...gifts].map(([pilotId, plan]) => [pilotId, plan as PlanId]));
+    for (const [pilotId, plan] of (await this.testPlans?.allPlans()) ?? [])
+      plans.set(pilotId, plan);
+    return plans;
   }
 
   /** Value of a feature in the caller's plan: true, a limit, "unlimited", or false. */

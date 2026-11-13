@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FlightId, IcaoCode, UtcTimestamp } from "./common.ts";
+import { FlightValidity } from "./flight-validity.ts";
 import { LivePilot } from "./live.ts";
 
 /**
@@ -14,8 +15,6 @@ export const FOUNDER_OFFER = {
   requiredFlights: 3,
   /** Distinct UTC days among the valid flights. */
   requiredDays: 2,
-  minAirborneMinutes: 15,
-  minDistanceNm: 20,
   /** A new founder can be refused from the console during this delay, then is confirmed. */
   reviewHours: 48,
   /** Single-use codes each founder receives to give away (referral). */
@@ -29,22 +28,6 @@ export const FOUNDER_OFFER = {
   showRemainingBelow: 100,
 } as const;
 
-/** Why a closed flight counts, or does not, towards the founder offer. */
-export const FounderFlightCheck = z.enum([
-  "valid",
-  /** Simulated flight of the development tools (simulator « replay »). */
-  "simulated",
-  /** No liftoff or no touchdown recorded. */
-  "noTakeoffOrLanding",
-  "tooShort",
-  /** No trajectory received yet, or shorter than the minimum distance. */
-  "tooShortDistance",
-  /** Slew mode or position changed during the flight. */
-  "moved",
-  "crashed",
-]);
-export type FounderFlightCheck = z.infer<typeof FounderFlightCheck>;
-
 export const FounderFlight = z.object({
   flightId: FlightId,
   departureIcao: IcaoCode.nullable(),
@@ -53,7 +36,8 @@ export const FounderFlight = z.object({
   openedAt: UtcTimestamp,
   airborneS: z.number().nonnegative().nullable(),
   distanceNm: z.number().nonnegative().nullable(),
-  check: FounderFlightCheck,
+  /** Valid flight rules shared with the pilot grades (flight-validity.ts). */
+  check: FlightValidity,
 });
 export type FounderFlight = z.infer<typeof FounderFlight>;
 
