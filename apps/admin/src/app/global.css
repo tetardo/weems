@@ -24,8 +24,7 @@
 }
 
 :root,
-.topbar,
-.side .top {
+.topbar {
   /* Dark tokens: the whole console in the dark theme, the top band in both themes. */
   color-scheme: dark;
   --bg: #0e1320;
@@ -1166,25 +1165,16 @@ td.act .slots {
 }
 /* ---------- D : console (bandeau d'état) ---------- */
 /* ---------- G : barre latérale libellée ---------- */
+/* The sidebar starts under the top band (--topbar-h). */
 .side {
   position: fixed;
-  inset: 0 auto 0 0;
+  inset: var(--topbar-h) auto 0 0;
   width: 248px;
   background: var(--surface);
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
   z-index: 5;
-}
-.side .top {
-  background: var(--surface);
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 64px;
-  padding: 0 18px;
-  border-bottom: 1px solid var(--line);
 }
 .grp {
   padding: 10px 12px 0;
@@ -1263,15 +1253,27 @@ td.act .slots {
 .main {
   margin-left: 248px;
 }
+:root {
+  --topbar-h: 64px;
+}
+/* One band over the whole width (logo + breadcrumb + actions), fixed while scrolling. */
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background: var(--bg);
   color: var(--ink);
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 64px;
-  padding: 0 28px;
+  height: var(--topbar-h);
+  padding: 0 28px 0 18px;
   border-bottom: 1px solid var(--line);
+}
+/* Logo over the sidebar's width (248 px): the breadcrumb starts 28 px after it, like the content. */
+.topbar .logo {
+  flex: none;
+  width: 248px;
 }
 .topbar .crumb {
   color: var(--muted);
@@ -1284,7 +1286,6 @@ td.act .slots {
   margin-left: auto;
 }
 .mtabs,
-.mlogo,
 .topbar .gm {
   display: none;
 }
@@ -1384,12 +1385,14 @@ td.act .slots {
   .main {
     margin-left: 0;
   }
-  .mlogo {
-    display: flex;
+  :root {
+    --topbar-h: 56px;
   }
   .topbar {
     padding: 0 14px;
-    height: 56px;
+  }
+  .topbar .logo {
+    width: auto;
   }
   .topbar .crumb,
   .topbar .hide {
@@ -1560,8 +1563,7 @@ button:disabled {
   }
 }
 :root,
-.topbar,
-.side .top {
+.topbar {
   --line2: #33405f;
 }
 :root[data-theme="light"] {

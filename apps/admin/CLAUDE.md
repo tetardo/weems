@@ -30,7 +30,7 @@ Lancement : `pnpm admin` (racine), puis http://127.0.0.1:3002.
 - Français seulement (exception à la règle des deux langues, spec admin question 2) : textes écrits dans les composants.
 - Formulaires : modèle C (fiche 008), composants du paquet `@weems/ui` (`Field`, `FormField`, `TextInput`, `Segmented`…), jamais de champ écrit à la main. Tailwind ne sert qu'à eux : `src/app/global.css` importe son thème et ses utilitaires sans remise à zéro, génère seulement les classes de `packages/ui` et relie leurs couleurs aux variables de la console.
 - Icônes : Lucide, importé seulement dans `src/ui/icons.ts`.
-- Thème : sombre ou clair, choix gardé dans le navigateur (clé `weems-admin-theme`, bouton de la barre du haut), sinon réglage du Mac. Règles partagées avec le site dans `@weems/ui` (`themeScript`, `toggleTheme`), jamais recopiées. En thème clair, le bandeau du haut (barre + logo de la barre latérale) reste bleu nuit : ses jetons sombres sont redéclarés sur `.topbar` et `.side .top` (`global.css`). Couleurs : toujours un jeton (`--violet`…), jamais de valeur en dur qui ne suivrait pas le thème.
+- Thème : sombre ou clair, choix gardé dans le navigateur (clé `weems-admin-theme`, bouton de la barre du haut), sinon réglage du Mac. Règles partagées avec le site dans `@weems/ui` (`themeScript`, `toggleTheme`), jamais recopiées. Bandeau du haut unique, pleine largeur et fixe au défilement (logo, fil d'Ariane, actions ; hauteur `--topbar-h`), la barre latérale commence dessous. En thème clair, il reste bleu nuit : ses jetons sombres sont redéclarés sur `.topbar` (`global.css`). Couleurs : toujours un jeton (`--violet`…), jamais de valeur en dur qui ne suivrait pas le thème.
 - Un seul lancement à la fois entre Trafic et Activité : chaque gestionnaire reçoit l'occupation de l'autre (`server/console.ts`).
 - Les processus lancés (pnpm dev, simulate, load, populate) sont gardés dans `globalThis` (`server/singleton.ts`) : un rechargement de Next.js ne les perd pas. Ils reçoivent l'environnement de la console sans `PORT` ni `NODE_ENV` (`childEnv`), sinon l'API prendrait le port 3002.
 - Personnalisation : lecture sans connexion (route publique), enregistrement avec la session de la page Comptes ; l'image passe par une action serveur, d'où la limite de 16 Mo de `next.config.ts` (actions serveur et `proxy.ts`).
@@ -57,7 +57,7 @@ src/
     site/                images de l'accueil (site-api.ts : /v1/site/home-images et /v1/admin/site/*)
     libraries/           page Librairies : pnpm ls, registre npm, pnpm audit, écarts de version, rapport gardé en cache
     database/            page Base de données : relevés de taille par jour, sauvegardes pg_dump, commande des migrations
-  site/                barre latérale, barre du haut, onglets mobiles
+  site/                bandeau du haut (logo compris), barre latérale, onglets mobiles
   features/            composants des pages : supervision/, services/, traffic/, activity/, accounts/, customize/, libraries/, database/ (logique pure à part, testée)
   ui/                  icônes, bloc à titre, champ numérique, état d'un lancement, pastilles d'état, titre de page, confirmation, sondage périodique
   format/              heures, durées, tailles, noms des phases

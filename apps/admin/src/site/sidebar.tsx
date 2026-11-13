@@ -87,9 +87,6 @@ export function Sidebar({ apiUrl, siteUrl }: { apiUrl: string; siteUrl: string }
     (href === "/" ? pathname === "/" : pathname.startsWith(href)) ? "on" : "";
   return (
     <aside className="side">
-      <div className="top brand">
-        Weems <span className="tag">Admin</span>
-      </div>
       <nav className="grp">
         <div className="t">Exploitation</div>
         <Link href="/" className={on("/")}>

@@ -18,7 +18,10 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = { title: "Weems Admin", robots: { index: false } };
 
-/** Navigation G (spec admin): labelled sidebar, bottom tabs on a phone. */
+/**
+ * Navigation G (spec admin): one full-width top band (logo, breadcrumb, actions), fixed while
+ * scrolling, the labelled sidebar under it; bottom tabs on a phone.
+ */
 export default function RootLayout({ children }: { children: ReactNode }) {
   const { apiUrl, siteUrl } = config();
   return (
@@ -32,9 +35,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body>
+        <TopBar siteUrl={siteUrl} />
         <Sidebar apiUrl={apiUrl} siteUrl={siteUrl} />
         <div className="main">
-          <TopBar siteUrl={siteUrl} />
           <main className="content">{children}</main>
         </div>
         <MobileTabs />

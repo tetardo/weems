@@ -27,12 +27,15 @@ const titleOf = (pathname: string) =>
     ? "Supervision"
     : (Object.entries(TITLES).find(([href]) => pathname.startsWith(href))?.[1] ?? "Admin");
 
-/** Breadcrumb, then link to the site, local badge and theme switch on the right. */
+/**
+ * Full-width band, fixed while scrolling: logo over the sidebar's width, breadcrumb, then link
+ * to the site, local badge and theme switch on the right.
+ */
 export function TopBar({ siteUrl }: { siteUrl: string }) {
   const pathname = usePathname();
   return (
     <header className="topbar">
-      <span className="mlogo brand">
+      <span className="logo brand">
         Weems <span className="tag">Admin</span>
       </span>
       <span className="crumb">
