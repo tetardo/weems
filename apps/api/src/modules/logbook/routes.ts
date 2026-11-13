@@ -1,14 +1,22 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { FlightBands, FlightId, LogbookEntries, LogbookSummary, Problem } from "@weems/contrats";
+import {
+  FlightBands,
+  FlightId,
+  LogbookEntries,
+  LogbookStats,
+  LogbookStatsPeriod,
+  LogbookSummary,
+  Problem,
+} from "@weems/contrats";
 import { callerOf, type Guards } from "../../plugins/auth.ts";
 import type { PrivateLogbookService } from "./service.ts";
 
 const security = [{ bearer: [] }];
 const tags = ["logbook"];
 
-/** The pilot's private logbook (spec carnet privé): pages Résumé and Vols. */
+/** The pilot's private logbook (spec carnet privé): pages Résumé, Vols and Statistiques. */
 export function registerPrivateLogbookRoutes(
   parent: FastifyInstance,
   service: PrivateLogbookService,
@@ -54,5 +62,31 @@ export function registerPrivateLogbookRoutes(
       },
     },
     async (request) => service.bands(callerOf(request), request.params.flightId),
+  );
+  registerStatsRoute(parent, service, guards);
+}
+
+/** Page Statistiques: the period, and the Pilot Pro blocks as the plan allows. */
+function registerStatsRoute(
+  parent: FastifyInstance,
+  service: PrivateLogbookService,
+  guards: Guards,
+): void {
+  const app = parent.withTypeProvider<ZodTypeProvider>();
+  app.get(
+    "/v1/me/logbook/stats",
+    {
+      onRequest: guards.pilot,
+      schema: {
+        tags,
+        security,
+        querystring: z.object({ period: LogbookStatsPeriod.default("12m") }),
+        description:
+          "Private logbook, page Statistiques. « all » needs Pilot Pro (else 12 months); trends, " +
+          "time per phase and good practices are null without Pilot Pro.",
+        response: { 200: LogbookStats, 401: Problem },
+      },
+    },
+    async (request) => service.stats(callerOf(request), request.query.period),
   );
 }

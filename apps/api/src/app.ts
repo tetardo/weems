@@ -237,11 +237,12 @@ export async function buildApp({
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
   const plans = registerPlans(app, database, guards, config.env !== "production");
-  registerPrivateLogbookRoutes(app, new PrivateLogbookService(flights, tracks, plans), guards);
+  const airports = new AirportsService(readAirportsFile());
+  const privateLogbook = new PrivateLogbookService(flights, tracks, plans, airports);
+  registerPrivateLogbookRoutes(app, privateLogbook, guards);
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });
   board.showPilots(new LivePilots((ids) => publicProfiles.livePilots(ids)));
-  const airports = new AirportsService(readAirportsFile());
   registerAirportRoutes(app, airports);
   registerLiveRoutes(app, stream, new LiveService(board, airports));
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));

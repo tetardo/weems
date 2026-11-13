@@ -91,3 +91,43 @@ describe("GET /v1/me/logbook/flights/{id}/bands", () => {
     expect((await bandsOf(await newPilot(app), id)).statusCode).toBe(404);
   });
 });
+
+describe("GET /v1/me/logbook/stats", () => {
+  const statsOf = (cookie: string, period: string) =>
+    app.inject({
+      method: "GET",
+      url: `/v1/me/logbook/stats?period=${period}`,
+      headers: { cookie },
+    });
+
+  it("needs a pilot", async () => {
+    const response = await app.inject({ method: "GET", url: "/v1/me/logbook/stats" });
+    expect(response.statusCode).toBe(401);
+  });
+
+  it("gives 12 months instead of « all » on Pilot Free, without the Pro blocks", async () => {
+    const { cookie } = await flightWithTrack();
+    const response = await statsOf(cookie, "all");
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toMatchObject({
+      period: "12m",
+      allowedPeriods: ["30d", "12m"],
+      activity: { flights: 1 },
+      categoryTrends: null,
+      goodPractices: null,
+    });
+  });
+
+  it("gives all time and the Pro blocks on Pilot Pro", async () => {
+    const { cookie } = await flightWithTrack();
+    await app.inject({
+      method: "PUT",
+      url: "/v1/dev/me/plan",
+      headers: { cookie },
+      payload: { plan: "pilot_pro" },
+    });
+    const stats = (await statsOf(cookie, "all")).json();
+    expect(stats.period).toBe("all");
+    expect(stats.goodPractices).toContainEqual({ practice: "speed250", flights: 1, share: 0 });
+  });
+});

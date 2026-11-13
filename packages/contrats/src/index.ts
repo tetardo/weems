@@ -49,7 +49,14 @@ export {
   FlightTimes,
 } from "./api/flight-list.ts";
 export { TrackPoint, TrackUpload, TrackView } from "./api/tracks.ts";
-export { LogbookLastFlight, LogbookSummary } from "./api/logbook.ts";
+export { FlyingDay, LogbookLastFlight, LogbookSummary } from "./api/logbook.ts";
+export {
+  GOOD_PRACTICES,
+  GoodPractice,
+  LOGBOOK_STATS_PERIODS,
+  LogbookStats,
+  LogbookStatsPeriod,
+} from "./api/logbook-stats.ts";
 export {
   BandMarkReason,
   BandMinute,

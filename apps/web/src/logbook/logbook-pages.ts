@@ -18,7 +18,7 @@ export interface LogbookPage {
 export const LOGBOOK_PAGES: readonly LogbookPage[] = [
   { href: "/logbook", label: "summary", icon: LogbookIcon, soon: false },
   { href: "/logbook/flights", label: "flights", icon: FlightsIcon, soon: false },
-  { href: "/logbook/stats", label: "stats", icon: StatsIcon, soon: true },
+  { href: "/logbook/stats", label: "stats", icon: StatsIcon, soon: false },
   { href: "/logbook/goals", label: "goals", icon: TargetIcon, soon: true },
 ];
 

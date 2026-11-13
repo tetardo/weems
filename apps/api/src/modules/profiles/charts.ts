@@ -33,7 +33,7 @@ export function monthlyActivity(
 }
 
 /** Count of values per bucket: bucket i holds the values below bounds[i], the last one the rest. */
-function histogram(values: readonly number[], bounds: readonly number[]): number[] {
+export function histogram(values: readonly number[], bounds: readonly number[]): number[] {
   const counts = Array.from({ length: bounds.length + 1 }, () => 0);
   for (const value of values) {
     const bucket = bounds.findIndex((bound) => value < bound);

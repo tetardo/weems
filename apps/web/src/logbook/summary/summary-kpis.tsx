@@ -1,6 +1,7 @@
 import type { LogbookSummary } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { formatDuration } from "../../format/flight-format.ts";
+import { KpiTile } from "../kpi-tile.tsx";
 
 interface Kpi {
   key: "hours" | "touchdown" | "clean" | "streak";
@@ -89,11 +90,13 @@ export function SummaryKpis({ summary }: { summary: LogbookSummary }) {
   return (
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {useKpis(summary).map(({ key, value, sub, tone }) => (
-        <div key={key} className="rounded-panel border border-line bg-surface px-4 py-3.5">
-          <div className="text-[13px] text-muted">{t(`${key}.label`)}</div>
-          <div className="mt-0.5 font-title text-[26px] tabular-nums">{value}</div>
-          <div className={`text-[12.5px] ${TONE_CLASS[tone]}`}>{sub}</div>
-        </div>
+        <KpiTile
+          key={key}
+          label={t(`${key}.label`)}
+          value={value}
+          sub={sub}
+          subClass={TONE_CLASS[tone]}
+        />
       ))}
     </div>
   );
