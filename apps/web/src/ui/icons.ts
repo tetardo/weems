@@ -22,6 +22,7 @@ export {
   Eye as ShowIcon,
   EyeOff as HideIcon,
   Gift as GiftIcon,
+  Ghost as HiddenPilotIcon,
   Globe as LanguageIcon,
   GraduationCap as LearnIcon,
   LayoutGrid as FeaturesIcon,
