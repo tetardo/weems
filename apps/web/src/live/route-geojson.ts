@@ -15,7 +15,7 @@ const collection = <T extends LineString | Point>(
   features,
 });
 
-/** The flown trail received from the API, longitudes made continuous. Changes every 30 s. */
+/** The flown trail (read from the API, grown from the stream), longitudes made continuous. */
 export function trailLine(route: LiveRoute | null): FeatureCollection<LineString> {
   const points = unwrapLongitudes(route?.trail ?? []);
   return collection(points.length > 1 ? [line("flown", points)] : []);

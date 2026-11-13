@@ -82,7 +82,7 @@ function addAirportLayers(map: MapLibreMap, theme: MapTheme, beforeId: string): 
 
 const source = (map: MapLibreMap, id: string) => map.getSource<GeoJSONSource>(id);
 
-/** When the route changes (selection, or new trail every 30 s). */
+/** When the route changes (selection, or a new trail point from the stream). */
 export function showRoute(map: MapLibreMap, route: LiveRoute | null): void {
   source(map, TRAIL)?.setData(trailLine(route));
   source(map, AIRPORTS)?.setData(airportPoints(route));
