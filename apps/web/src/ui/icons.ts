@@ -19,6 +19,7 @@ export {
   ExternalLink as ExternalIcon,
   Eye as ShowIcon,
   EyeOff as HideIcon,
+  Globe as LanguageIcon,
   GraduationCap as LearnIcon,
   LayoutGrid as FeaturesIcon,
   List as ListIcon,

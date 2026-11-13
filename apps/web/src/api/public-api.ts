@@ -52,10 +52,8 @@ export async function getPilotIndex(): Promise<PublicPilotIndex> {
   return (await get("/v1/pilots", PublicPilotIndex)) ?? { pilots: [] };
 }
 
-/** Counters of the home page; null when the API does not answer (the board shows dashes). */
-export function getSiteStats(): Promise<SiteStats | null> {
-  return get("/v1/stats", SiteStats);
-}
+/** Counters of the home page and of the bar (one call per page); null when the API does not answer. */
+export const getSiteStats = cache((): Promise<SiteStats | null> => get("/v1/stats", SiteStats));
 
 /** Home page images set from the admin console; null when the API does not answer. */
 export function getHomeImages(): Promise<HomeImages | null> {

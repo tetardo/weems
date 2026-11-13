@@ -46,11 +46,23 @@ Demande de Greg : un bouton « Mon carnet de bord » avant « Mes vols » (pilot
 
 Remplacé le 12/11/2026 au soir (#81) : `/logbook` est devenu le **carnet de vol privé** (Résumé, Vols, Statistiques ; spec [carnet privé](../cahiers-des-charges/web/spec-carnet-prive.md)) ; la page publique vue par son pilote est passée à `/logbook/public` (« Ma page publique », dans le menu de gauche du carnet).
 
-## État de la barre au 13/11/2026
+## État de la barre au 13/11/2026 (barre A, voir plus bas)
 
 | Public | Après le logo | À droite |
 | --- | --- | --- |
-| Visiteur | Découvrir, Fonctionnalités, Offres | bouton « Pilot Pro » (vers `/plans`), « Vols en direct », icône de connexion, thème, FR \| EN |
-| Pilote connecté | Mon carnet de bord, Mes vols, Offres | « Vols en direct », menu du pilote, thème, FR \| EN ; hors production, bouton de test Free \| Pro |
+| Visiteur | Découvrir, Fonctionnalités, Offres | « Pilot Pro » en texte dégradé (vers `/plans`), compteur « ● N en vol », bouton de langue, thème, « Se connecter » |
+| Pilote connecté | Mon carnet de bord, Mes vols, Offres | compteur « ● N en vol », bouton de langue, thème, menu du pilote (« Mon profil », test Free \| Pro hors production, déconnexion) |
 
 Chaque public a 4 entrées sur 5 (« Vols en direct » compris). Source : `apps/web/src/site/menu-items.ts`.
+
+## Mise à jour du 13/11/2026 : barre A « Épurée »
+
+Greg trouvait la barre minimale mais fade : cinq groupes encadrés côte à côte, tous du même gris, sans hiérarchie. Sur 4 maquettes (A Épurée, B îlot pilule, C bandeau instrument, D îlots + recherche, `/mnt/project-files/menu/`), il a choisi A :
+
+- plus aucun cadre dans la barre ; la page active est soulignée d'un trait lumineux à la couleur d'accent ;
+- « Vols en direct » devient un compteur vivant « ● N en vol » (lu sur `GET /v1/stats`) ;
+- langue en **un seul bouton** (langue courante, ouvre la même page dans l'autre langue) et thème restent dans la barre ; sur téléphone, ils passent en bas du menu ;
+- photo du pilote dans un anneau dégradé ; son menu : « Mon profil » (ex-« Mon profil public »), test Free | Pro (hors production), déconnexion ;
+- visiteur : « Pilot Pro » en texte dégradé, bouton plein « Se connecter ».
+
+B (pilule) a été écartée en partie parce qu'elle demandait un nouvel arrondi hors des jetons de la fiche 014.
