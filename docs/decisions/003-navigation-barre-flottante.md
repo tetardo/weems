@@ -53,7 +53,7 @@ Remplacé le 12/11/2026 au soir (#81) : `/logbook` est devenu le **carnet de vol
 | Visiteur | Découvrir, Fonctionnalités, Offres | « Pilot Pro » en texte dégradé (vers `/plans`), compteur « ● N en vol », bouton de langue, thème, « Se connecter » |
 | Pilote connecté | Mon carnet de bord, Offres | compteur « ● N en vol », bouton de langue, thème, menu du pilote (« Mon profil », test Free \| Pro hors production, déconnexion) |
 
-Le visiteur a 4 entrées sur 5, le pilote connecté 3 (« Vols en direct » compris) depuis le retrait de « Mes vols ». Source : `apps/web/src/site/menu-items.ts`.
+Le visiteur a 5 entrées sur 5, le pilote connecté 4 (« Vols en direct » et « Boarding » compris) depuis le retrait de « Mes vols » et l'ajout de Boarding (13/11). Source : `apps/web/src/site/menu-items.ts`.
 
 ## Mise à jour du 13/11/2026 : barre A « Épurée »
 
@@ -61,6 +61,7 @@ Greg trouvait la barre minimale mais fade : cinq groupes encadrés côte à côt
 
 - plus aucun cadre dans la barre ; la page active est soulignée d'un trait lumineux à la couleur d'accent ;
 - « Vols en direct » devient un compteur vivant « ● N en vol » (lu sur `GET /v1/stats`) ;
+- mise à jour du 13/11/2026 (page Boarding, demande de Greg) : pastille « Boarding » ambre juste à droite du compteur, dans le même style (`site/boarding-link.tsx`, `placement: "account"`) ; l'icône seule sur téléphone, et l'entrée dans le menu ;
 - langue en **un seul bouton** (langue courante, ouvre la même page dans l'autre langue) et thème restent dans la barre ; sur téléphone, ils passent en bas du menu ;
 - photo du pilote dans un anneau dégradé ; son menu : « Mon profil » (ex-« Mon profil public »), test Free | Pro (hors production), déconnexion ;
 - visiteur : « Pilot Pro » en texte dégradé, bouton plein « Se connecter ».

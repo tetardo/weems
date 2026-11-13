@@ -30,6 +30,7 @@ export {
   Mail as EmailIcon,
   type LucideIcon as IconComponent,
   Map as MapIcon,
+  MapPin as AirportIcon,
   Menu as MenuIcon,
   Minus as ExcludedIcon,
   Monitor as TrackerIcon,
@@ -61,6 +62,8 @@ export {
   TrendingUp as ProgressIcon,
   TriangleAlert as WarningIcon,
   User as AccountIcon,
+  Volume2 as SoundOnIcon,
+  VolumeX as SoundOffIcon,
   Users as UsersIcon,
   X as CloseIcon,
 } from "lucide-react";

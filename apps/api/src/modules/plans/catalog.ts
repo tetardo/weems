@@ -69,6 +69,7 @@ const SOON: Row[4] = "soon";
 const ROWS: readonly Row[] = [
   ["tracker", "fly", true, ALL, NOW],
   ["liveMap", "fly", true, ALL, NOW],
+  ["boarding", "fly", false, ALL, NOW],
   ["publicProfile", "fly", true, ALL, NOW],
   ["flightHistory", "fly", true, ALL, NOW],
   ["simbriefNextFlight", "fly", false, ALL, SOON],

@@ -1,4 +1,5 @@
 import {
+  DepartureIcon,
   DiscoverIcon,
   FeaturesIcon,
   type IconComponent,
@@ -32,6 +33,13 @@ const MENU: readonly MenuItem[] = [
   { href: "/features", label: "features", icon: FeaturesIcon, audience: "visitor" },
   { href: "/logbook", label: "logbook", icon: LogbookIcon, audience: "pilot" },
   { href: "/live", label: "live", icon: LiveIcon, audience: "everyone", placement: "account" },
+  {
+    href: "/boarding",
+    label: "boarding",
+    icon: DepartureIcon,
+    audience: "everyone",
+    placement: "account",
+  },
   { href: "/plans", label: "plans", icon: PlansIcon, audience: "everyone" },
 ];
 

@@ -2,25 +2,12 @@
 
 import type { LiveFlight } from "@weems/contrats";
 import { useTranslations } from "next-intl";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { SearchIcon } from "../ui/icons.ts";
+import { useSlashShortcut } from "../ui/use-slash-shortcut.ts";
 import { searchFlights } from "./flight-finder.ts";
 import { FlightRouteCodes } from "./flight-route-codes.tsx";
 import type { LiveFlights } from "./flights-store.ts";
-
-/** « / » anywhere on the page but in a field puts the cursor in the search. */
-function useSlashShortcut(input: { current: HTMLInputElement | null }): void {
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      const typing = event.target instanceof HTMLElement && event.target.closest("input, textarea");
-      if (event.key !== "/" || typing) return;
-      event.preventDefault();
-      input.current?.focus();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [input]);
-}
 
 /** Answers under the search field; « Aucun vol trouvé » when there is none. */
 function SearchResults({

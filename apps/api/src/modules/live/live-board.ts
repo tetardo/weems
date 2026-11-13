@@ -7,6 +7,8 @@ import type {
   PositionReport,
 } from "@weems/contrats";
 import type { LiveFeed, LiveFlightInfo } from "../flights/live-feed.ts";
+import { BoardingLog } from "./boarding-log.ts";
+import type { BoardingSource } from "./boarding.ts";
 import { LiveEvents, liveEventOf } from "./live-events.ts";
 import { LivePilots } from "./live-pilots.ts";
 import { LiveTrails } from "./live-trails.ts";
@@ -41,6 +43,8 @@ export class LiveBoard implements LiveFeed {
   /** Where each flight has been, for the route of the selected flight. */
   readonly trails = new LiveTrails();
   private readonly news = new LiveEvents();
+  /** Take-off and touchdown times, and the flights landed within the hour (page Boarding). */
+  private readonly log = new BoardingLog<Entry>();
 
   constructor(now: () => number = Date.now) {
     this.now = now;
@@ -85,12 +89,17 @@ export class LiveBoard implements LiveFeed {
       signal: "ok",
     });
     this.trails.add(info.flightId, report);
+    this.log.seen(info.flightId, report.at);
     this.changed.add(info.flightId);
     this.removed.delete(info.flightId);
   }
 
   closed(flightId: string): void {
-    if (this.entries.delete(flightId)) this.markRemoved(flightId);
+    const entry = this.entries.get(flightId);
+    if (!entry) return;
+    this.log.closed(flightId, entry);
+    this.entries.delete(flightId);
+    this.markRemoved(flightId);
   }
 
   /** Take-offs and landings of a flight on the map; a flight not on it shows nothing. */
@@ -99,7 +108,10 @@ export class LiveBoard implements LiveFeed {
     if (!entry) return;
     for (const event of events) {
       const shown = liveEventOf(event);
-      if (shown) this.news.add(entry.info, shown);
+      if (!shown) continue;
+      this.news.add(entry.info, shown);
+      if (shown.kind === "takeoff") this.log.takeoff(flightId, shown.at);
+      if (shown.kind === "landing") this.log.touchdown(flightId, shown.at, shown.touchdownVs);
     }
   }
 
@@ -108,6 +120,23 @@ export class LiveBoard implements LiveFeed {
       flights: [...this.entries.values()].map((entry) => this.toLiveFlight(entry)),
       events: this.news.latest(),
     };
+  }
+
+  /**
+   * What the page Boarding shows: the flights on the map, then those closed after landing within
+   * the hour, each with its times.
+   */
+  boardingSources(): { live: BoardingSource[]; landed: BoardingSource[] } {
+    this.sweep();
+    const live = [...this.entries].flatMap(([id, entry]) => {
+      const times = this.log.of(id);
+      return times ? [{ flight: this.toLiveFlight(entry), times }] : [];
+    });
+    const landed = [...this.log.recentLandings(this.now()).values()].map(({ entry, times }) => ({
+      flight: this.toLiveFlight(entry),
+      times,
+    }));
+    return { live, landed };
   }
 
   /**
@@ -134,7 +163,8 @@ export class LiveBoard implements LiveFeed {
    */
   async refreshPilots(): Promise<void> {
     const pilotOf = (entry: Entry) => entry.info.pilotId;
-    const changed = await this.pilots.refresh([...this.entries.values()].map(pilotOf));
+    const landed = [...this.log.recentLandings(this.now()).values()].map(({ entry }) => entry);
+    const changed = await this.pilots.refresh([...this.entries.values(), ...landed].map(pilotOf));
     for (const [id, entry] of this.entries) if (changed.has(pilotOf(entry))) this.changed.add(id);
   }
 
@@ -154,8 +184,7 @@ export class LiveBoard implements LiveFeed {
     for (const [id, entry] of this.entries) {
       const silentMs = now - entry.receivedAtMs;
       if (silentMs > REMOVED_AFTER_MS) {
-        this.entries.delete(id);
-        this.markRemoved(id);
+        this.closed(id);
       } else if (silentMs > LOST_AFTER_MS && entry.signal === "ok") {
         entry.signal = "lost";
         this.changed.add(id);

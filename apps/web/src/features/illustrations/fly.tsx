@@ -27,6 +27,19 @@ export const FLY_ILLUSTRATIONS = {
       </Accent>
     </>
   ),
+  // Boarding: a split-flap board, two rows of letters and their status.
+  boarding: (
+    <>
+      <Panel x={6} y={8} w={60} h={32} />
+      <path d="M6 24H66" strokeOpacity={0.4} />
+      <path d="M12 14H16M19 14H23M26 14H30M12 30H16M19 30H23M26 30H30" />
+      <Accent>
+        <path d="M38 14H44M47 14H53M38 30H44M47 30H53" />
+        <circle cx={60} cy={14} r={1.5} />
+        <circle cx={60} cy={30} r={1.5} />
+      </Accent>
+    </>
+  ),
   // The public profile: a pilot card with wings.
   publicProfile: (
     <>

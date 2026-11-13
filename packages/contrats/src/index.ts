@@ -89,6 +89,12 @@ export {
   LiveUpdate,
   MAX_LIVE_EVENTS,
 } from "./api/live.ts";
+export {
+  Boarding,
+  BOARDING_LANDED_KEEP_MS,
+  BoardingFlight,
+  BoardingStatus,
+} from "./api/boarding.ts";
 export { SiteStats } from "./api/stats.ts";
 export {
   FeatureAvailability,
