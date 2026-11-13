@@ -117,7 +117,7 @@ Au démarrage, trois services gérés suffisent, hébergés en Europe pour le RG
 | Besoin | Choix | Ordre de grandeur |
 | --- | --- | --- |
 | Base de données | PostgreSQL géré : comptes, vols, résumés, règles, référentiels | 15 à 30 €/mois [Confiance faible] |
-| Fichiers | Stockage objet compatible S3 pour les trajectoires compressées | Moins de 5 €/mois au lot 1 [Confiance faible] |
+| Fichiers | Stockage objet compatible S3 pour les trajectoires compressées. Mis à jour le 13/11/2026 : depuis J2, trajectoires, photos et images de l'accueil sont dans PostgreSQL ; le stockage objet ne sert qu'aux sauvegardes, et aux fichiers si le volume l'exige | Moins de 5 €/mois au lot 1 [Confiance faible] |
 | Application | API et site web dans un conteneur, chez un hébergeur européen (Scaleway, OVHcloud, ou la région Europe d'un hébergeur géré) | 10 à 30 €/mois [Confiance faible] |
 | Positions en direct | En mémoire dans l'API au lot 1 ; un cache dédié (Redis) seulement quand il faudra plusieurs instances | 0 € au lot 1 |
 
@@ -126,6 +126,8 @@ Au démarrage, trois services gérés suffisent, hébergés en Europe pour le RG
 **Charge en direct** : 1 000 pilotes en vol en même temps, c'est environ 100 requêtes par seconde. Une seule instance de l'API tient cette charge ; le point à surveiller est le nombre d'écrans abonnés à la carte, pas le tracker.
 
 Les montants sont des estimations à confirmer avec les grilles tarifaires au moment du choix de l'hébergeur.
+
+**Estimation du 12/11/2026 pour une alpha chez Scaleway** (tarifs relevés sur scaleway.com ce jour-là, hors taxes, non décidé) : une instance DEV1-S (2 processeurs, 2 Go, environ 6,42 €), une adresse IPv4 (environ 2,92 €) et environ 20 Go de stockage bloc (environ 2 €), soit 11 à 12 €/mois, avec Docker Compose (API, site, PostgreSQL, Caddy) et des sauvegardes `pg_dump` vers le stockage objet. L'option tout géré (conteneurs serverless et base gérée DB-DEV-S) coûte plus de 30 €/mois, parce que le flux en direct (SSE) garde le conteneur de l'API allumé en permanence. La base gérée reste à reprendre pour la version 1.0. Mise en ligne reportée par Greg le 11/11/2026 : tout se fait en local pour l'instant.
 
 ## Sécurité, RGPD et anti-triche
 

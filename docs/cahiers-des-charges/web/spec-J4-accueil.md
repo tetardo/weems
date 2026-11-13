@@ -31,6 +31,8 @@ Sous 768 px : logo, icône silhouette (ou initiale du pilote), thème, FR | EN, 
 
 « Découvrir Weems » a été retiré le 12/11 (il menait à l'accueil, comme le logo).
 
+Mis à jour le 13/11/2026 : la barre a évolué depuis cette spec (« Créer un compte » remplacé par le bouton « Pilot Pro », « Vols en direct » à droite, liens Découvrir, Fonctionnalités, Offres et Mon carnet de bord). État actuel : [fiche 003](../../decisions/003-navigation-barre-flottante.md), section « État de la barre au 13/11/2026 ».
+
 ## 3. Décisions de Greg (12/11/2026, 2 h 22)
 
 1. Image par défaut : une image libre de droits avec son crédit, remplaçable depuis la console. La photo d'exemple (iStock) n'entre jamais dans le dépôt. Retenue le 12/11 : image maison de la flotte Weems fournie par Greg, publiable (`apps/web/public/home/default.jpg`, même image pour les deux thèmes ; recadrage téléphone centré sur l'avion Weems). À remplacer par une version d'au moins 2 560 px de large, avion Weems seul à droite.

@@ -8,11 +8,13 @@ Réponses de Greg du 11/11/2026, avec les conséquences pour la feuille de route
 | --- | --- | --- |
 | Temps | Greg y consacre tout son temps, sans contrainte de date | Feuille de route en étapes et critères de sortie, sans calendrier |
 | Équipe | Greg seul sur le code ; Houssine et Thibault en appui ponctuel | Un lot à la fois, pas de travail en parallèle |
-| Environnements | Tout le développement et les tests sur le Mac de Greg, avec Docker (API, PostgreSQL, stockage S3 simulé). Le PC Windows avec MSFS envoie ses vols à l'API du Mac par le réseau local. Le choix d'un serveur en ligne est repoussé à l'arrivée des pilotes testeurs. Option privilégiée pour l'alpha : une machine virtuelle dédiée à Weems sur le serveur Proxmox de Greg chez Hetzner (déjà en service, serveur dédié en Allemagne ou en Finlande, donc dans l'UE, à confirmer), à condition que les sauvegardes partent hors du serveur, par exemple sur une Storage Box Hetzner | Aucun coût d'hébergement avant l'alpha |
+| Environnements | Tout le développement et les tests sur le Mac de Greg, avec Docker (PostgreSQL ; l'API tourne hors Docker avec `pnpm --filter @weems/api dev` ; pas de stockage S3, les trajectoires sont dans PostgreSQL depuis J2). Le PC Windows avec MSFS envoie ses vols à l'API du Mac par le réseau local. Le choix d'un serveur en ligne est repoussé à l'arrivée des pilotes testeurs. Option privilégiée pour l'alpha : une machine virtuelle dédiée à Weems sur le serveur Proxmox de Greg chez Hetzner (déjà en service, serveur dédié en Allemagne ou en Finlande, donc dans l'UE, à confirmer), à condition que les sauvegardes partent hors du serveur, par exemple sur une Storage Box Hetzner | Aucun coût d'hébergement avant l'alpha |
 | Budget mensuel | Pas de plafond fixé ; hypothèse de travail : moins de 100 €/mois jusqu'aux premiers revenus | Hébergement estimé à 30-60 €/mois (étape 2) ; tout service payant au-delà est signalé avant d'être retenu |
 | PC Windows avec MSFS | Disponible sous quelques jours (annoncé le 11/11/2026) | Débloque le lot T1 (prototype de connexion au simulateur) et l'enregistrement de vrais vols |
 
 ![Environnements par étape : Mac, serveur Hetzner, Scaleway](../schemas/img/03-environnements.png)
+
+**Décision du 11/11/2026, 17 h (Greg)** : tout se fait en local pour l'instant, tests compris. La mise en ligne (domaine, machine virtuelle Hetzner ou instance Scaleway, voir l'estimation dans [Architecture et flux](02-architecture-et-flux.md)) est reportée ; le critère de sortie de J3 l'attend.
 
 ## 2. Objectif du premier lancement
 

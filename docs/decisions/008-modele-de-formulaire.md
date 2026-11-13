@@ -26,7 +26,7 @@ Modèle C :
 - une liste courte (moins d'une dizaine de choix) : `Select`, la liste native du navigateur redessinée (`appearance-none` et chevron) ; quatre ou cinq choix à voir d'un coup : `Segmented`, des boutons radio en barre ;
 - une longue liste à chercher (pays) : `SearchSelect`, liste avec recherche ;
 - une saisie avec repère : `TextInput`, avec icône, préfixe fixe (`instagram.com/`) ou statut à droite (« ✓ disponible ») ;
-- un seul bouton Enregistrer par formulaire (`SaveBar`) ; dès qu'un champ change, la barre colle au bas de l'écran (au-dessus du dock mobile) et compte les modifications non enregistrées.
+- un seul bouton Enregistrer par formulaire (`SaveBar`) ; dès qu'un champ change, la barre colle au bas de l'écran (le dock mobile qui la surmontait a été supprimé le 12/11/2026, fiche 003) et compte les modifications non enregistrées.
 
 ![Page des réglages du profil, thème sombre](img/008-formulaires-reglages.png)
 

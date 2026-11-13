@@ -51,11 +51,26 @@ Le « premier jalon » voulu par Greg (une API, un tracker et un site simple qui
 | J4 | Contenu du débriefing ; CGU et confidentialité ; vérification de la marque « Weems » ; micro-entreprise créée et compte Store ouvert à son nom. Rédigées le 11/11/2026 : [spécification du profil public](../cahiers-des-charges/spec-J4-profil-public.md) ; [montée en charge du direct](../cahiers-des-charges/api/spec-J4-montee-en-charge-direct.md), mesurée le 11/11/2026 ([compte rendu](../revues/mesure-direct-J4.md)) | Débriefing : oui |
 | J5 | Procédure de support et de correctif d'urgence | Non |
 
+## État au 13/11/2026
+
+Tout tourne en local sur le Mac (décision de Greg du 11/11/2026 : mise en ligne reportée). Détail des PR : [rapport de mise à jour de la documentation](../revues/maj-documentation-2026-11-13.md).
+
+| Jalon | Fait | Reste |
+| --- | --- | --- |
+| J0 | Fusionné | 20 scénarios de test et critères de notation, avec un pilote |
+| J1 | Fusionné | — |
+| J2 | Fusionné | 10 vols de référence sur le PC Windows |
+| J3 | Fonctions fusionnées (comptes, connexion du site et du tracker, installateur, guides de l'alpha, rapport `pnpm alpha-report`) | Mise en ligne, puis 5 pilotes et 50 vols |
+| J4 | Montée en charge du direct mesurée ; profil public ; catégories d'avion ; carte en direct enrichie (trajets, bulle, vol suivi, recherche, nuit, filtres, événements) ; accueil public ; console d'administration (Supervision, Services, Trafic, Activité, Comptes, Personnalisation, Librairies, Base de données) ; carnet privé (Résumé, Vols avec bandes de vol, Statistiques) | Objectifs du carnet, débriefing (avec un pilote), environnement de test séparé, Store limité, CGU et confidentialité, marque, micro-entreprise |
+| J5 | — | Tout |
+
+**Travail du lot 2 avancé dans le lot 1** (choix de Greg du 12/11/2026) : le catalogue des formules (Pilot Free, Pilot Pro, Company, Holding) est dans l'API, les pages Offres, Fonctionnalités et Découvrir sont en ligne sur le site local, et le carnet verrouille déjà les cartes Pilot Pro d'après ce catalogue. Restent pour le lot 2 : le paiement, la table des abonnements, les vraies formules par compte (aujourd'hui Pilot Free pour tous, et un bouton de test Free | Pro hors production).
+
 ## Lots suivants
 
 | Lot | Prérequis | Critère d'entrée | À définir au démarrage |
 | --- | --- | --- | --- |
-| **2 — Abonnement pilote** | Version 1.0 en ligne, micro-entreprise | Assez de pilotes actifs pour mesurer la conversion | Liste des fonctions avancées, prix, service de paiement (penchant Paddle) |
+| **2 — Abonnement pilote** | Version 1.0 en ligne, micro-entreprise | Assez de pilotes actifs pour mesurer la conversion | Prix définitifs, service de paiement (penchant Paddle). Liste des fonctions : première version dans le catalogue des formules ([cadrage 05](05-formules-abonnement.md), fiche 015) |
 | **3 — Gestion de compagnie** | Lot 1 ; paiement en place | Prix validé auprès de 5 à 10 fondateurs de compagnies | Cahier des charges VACommunity, tarif par taille de compagnie |
 | **4 — App iPad** | Lot 1 ; développeur Swift ou relecture assurée | — | Cahier des charges EFB, sources de cartes (licences) |
 
