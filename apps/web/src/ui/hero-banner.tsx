@@ -61,7 +61,7 @@ function HeroText({ eyebrow, title, highlight, lead, actions, chips }: TextProps
 /**
  * Photo banner of the public pages (Découvrir, Fonctionnalités; 13/11/2026): photo of the home
  * page, live eyebrow, title ending in the accent gradient, actions, glass chips, and the dashed
- * route of the site flown by a plane on the right (behind the text on phones).
+ * route of the site flown by a plane, small, in the top right corner (13/11, Greg).
  */
 export function HeroBanner({ photos, route, ...text }: Props) {
   return (
@@ -74,7 +74,7 @@ export function HeroBanner({ photos, route, ...text }: Props) {
       <RouteFlourish
         from={route[0]}
         to={route[1]}
-        className="pointer-events-none absolute right-0 bottom-6 w-[52%] max-md:top-4 max-md:right-2 max-md:bottom-auto max-md:w-[78%] max-md:opacity-70"
+        className="pointer-events-none absolute top-5 right-6 w-[28%] max-w-[320px] max-md:top-3 max-md:right-2 max-md:w-[52%] max-md:opacity-70"
       />
       <div className="relative flex min-h-[440px] flex-col justify-center px-12 py-14 max-md:min-h-[580px] max-md:justify-end max-md:p-3">
         <HeroText {...text} />
