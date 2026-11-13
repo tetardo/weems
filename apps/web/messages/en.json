@@ -276,8 +276,8 @@
     "inviteCode": "Invitation code",
     "submit": "Log in",
     "signupSubmit": "Create my account",
-    "toSignup": "Received an invitation? Create my account",
-    "toLogin": "Already have an account? Log in",
+    "toSignup": "I have an invitation",
+    "toLogin": "Log in",
     "signOut": "Log out",
     "tracker": "The tracker is waiting for you to log in: it will take over by itself.",
     "passwordRule": "At least 10 characters.",
@@ -287,6 +287,35 @@
       "exists": "An account already exists with this address.",
       "password": "The password must be at least 10 characters long.",
       "unknown": "Logging in did not work. Try again in a moment."
+    },
+    "subtitle": "Good to see you again, captain.",
+    "signupSubtitle": "Your invitation is waiting: a few seconds and you are on board.",
+    "toSignupQuestion": "Not a Weems pilot yet?",
+    "toSignupHint": "Closed alpha: by invitation",
+    "toLoginQuestion": "Already a Weems pilot?",
+    "toLoginHint": "Your logbook is waiting",
+    "rememberMe": "Stay logged in",
+    "showPassword": "Show the password",
+    "hidePassword": "Hide the password",
+    "welcome": {
+      "eyebrow": "Weems · Pilot space",
+      "title": "Welcome aboard.",
+      "signupTitle": "Take your seat.",
+      "lead": "One account for the community, your logbook and, soon, your airline. On the site as in the tracker.",
+      "dial": "A thin-line heading dial crossed by two flights between airports; on hover, the destinations change.",
+      "soon": "Soon",
+      "community": {
+        "title": "Community",
+        "text": "Pilots in flight, live, and their routes."
+      },
+      "logbook": {
+        "title": "Logbook",
+        "text": "Every flight recorded by the tracker, nothing to type."
+      },
+      "airline": {
+        "title": "Airline",
+        "text": "Create or join a crew."
+      }
     }
   },
   "Settings": {

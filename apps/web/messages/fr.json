@@ -276,8 +276,8 @@
     "inviteCode": "Code d'invitation",
     "submit": "Se connecter",
     "signupSubmit": "Créer mon compte",
-    "toSignup": "Vous avez reçu une invitation ? Créer mon compte",
-    "toLogin": "Déjà un compte ? Se connecter",
+    "toSignup": "J'ai une invitation",
+    "toLogin": "Se connecter",
     "signOut": "Se déconnecter",
     "tracker": "Le tracker attend votre connexion : il reprendra la main tout seul.",
     "passwordRule": "10 caractères au moins.",
@@ -287,6 +287,35 @@
       "exists": "Un compte existe déjà avec cette adresse.",
       "password": "Le mot de passe doit faire au moins 10 caractères.",
       "unknown": "La connexion n'a pas abouti. Réessayez dans un instant."
+    },
+    "subtitle": "Content de vous revoir, commandant.",
+    "signupSubtitle": "Votre invitation vous attend : quelques secondes et c'est parti.",
+    "toSignupQuestion": "Pas encore pilote Weems ?",
+    "toSignupHint": "Alpha fermée : sur invitation",
+    "toLoginQuestion": "Déjà pilote Weems ?",
+    "toLoginHint": "Votre carnet vous attend",
+    "rememberMe": "Rester connecté",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "welcome": {
+      "eyebrow": "Weems · Espace pilote",
+      "title": "Bienvenue à bord.",
+      "signupTitle": "Prenez place à bord.",
+      "lead": "Un seul compte pour la communauté, votre carnet de vol et, bientôt, votre compagnie. Sur le site comme dans le tracker.",
+      "dial": "Un cadran de cap en trait fin, traversé par deux vols entre des aéroports ; au survol, les destinations changent.",
+      "soon": "Bientôt",
+      "community": {
+        "title": "Communauté",
+        "text": "Les pilotes en vol, en direct, et leurs trajets."
+      },
+      "logbook": {
+        "title": "Carnet de vol",
+        "text": "Chaque vol enregistré par le tracker, sans saisie."
+      },
+      "airline": {
+        "title": "Compagnie",
+        "text": "Créer ou rejoindre un équipage."
+      }
     }
   },
   "Settings": {

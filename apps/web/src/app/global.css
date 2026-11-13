@@ -41,6 +41,17 @@
   --color-board-descent: var(--wm-board-descent);
   --color-board-approach: var(--wm-board-approach);
   --color-hero-ink: var(--wm-hero-ink);
+  /* Left panel of the login and sign-up pages: always dark, like a cockpit display. */
+  --color-auth-panel: var(--wm-auth-panel);
+  --color-auth-line: var(--wm-auth-line);
+  --color-auth-ink: var(--wm-auth-ink);
+  --color-auth-muted: var(--wm-auth-muted);
+  --color-auth-faint: var(--wm-auth-faint);
+  --color-dial: var(--wm-dial);
+  --color-route-start: var(--wm-route-start);
+  --color-route-end: var(--wm-route-end);
+  --color-flight-1: var(--wm-flight-1);
+  --color-flight-2: var(--wm-flight-2);
   --color-hero-muted: var(--wm-hero-muted);
   --color-cat-light: var(--wm-cat-light);
   --color-cat-turboprop: var(--wm-cat-turboprop);
@@ -117,6 +128,17 @@
   /* Airport plan behind every page (decision 016): its colour and how much it shows. */
   --wm-plan-ink: #9fb4d9;
   --wm-plan-opacity: 0.16;
+  /* Left panel of the login and sign-up pages, the same in both themes (dark display). */
+  --wm-auth-panel: #0a0e18;
+  --wm-auth-line: #1a2234;
+  --wm-auth-ink: #f1f4fa;
+  --wm-auth-muted: #8d99b3;
+  --wm-auth-faint: #6b7894;
+  --wm-dial: #9fb4d9;
+  --wm-route-start: #6ee7a8;
+  --wm-route-end: #ffb454;
+  --wm-flight-1: #4fd1e8;
+  --wm-flight-2: #d946ef;
 }
 
 /* Light theme: set on <html> by the head script (src/site/theme.ts, rules in @weems/ui). */
@@ -268,6 +290,27 @@ h3 {
     pointer-events: none;
     background: var(--wm-plan-ink);
     opacity: var(--wm-plan-opacity);
+    mask: url("/backgrounds/airport-plan.svg") center / cover no-repeat;
+  }
+  @media (prefers-contrast: more) {
+    &::before {
+      display: none;
+    }
+  }
+}
+
+/* The same airport plan inside one panel only (left of the login page): it scrolls with it. */
+@utility airport-plan-panel {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--wm-dial);
+    opacity: 0.15;
     mask: url("/backgrounds/airport-plan.svg") center / cover no-repeat;
   }
   @media (prefers-contrast: more) {
