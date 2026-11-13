@@ -27,7 +27,7 @@ function usePageTick(): number {
 
 /**
  * Page Boarding (spec web Boarding): the Departures and Arrivals boards of every member side by
- * side, read every 5 s, filtered by airport and aircraft, pages turning every 15 s, letters turning on change.
+ * side, followed live (SSE), filtered by airport and aircraft, pages turning every 15 s, letters turning on change.
  */
 export function BoardingView({ apiUrl }: { apiUrl: string }) {
   const t = useTranslations("Boarding");

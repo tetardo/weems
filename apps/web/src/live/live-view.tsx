@@ -37,7 +37,7 @@ function useLivePage(apiUrl: string) {
   // Memoised: the map, routes and layers recompute only when flights or filters change, not on hover.
   const flights = useMemo(() => visibleFlights(all, choices.hidden), [all, choices.hidden]);
   const following = useFollowing(flights);
-  const { selected, selectedId, hovered } = following;
+  const { selected, hovered } = following;
   const airports = useAirports(apiUrl, all);
   const showRoutes = choices.routes.on;
   return {
@@ -48,7 +48,7 @@ function useLivePage(apiUrl: string) {
     choices,
     flights,
     airports,
-    route: useLiveRoute(apiUrl, selected ? selectedId : null),
+    route: useLiveRoute(apiUrl, selected),
     allRoutes: useLiveRoutes(flights, airports, { showRoutes, selected, hovered }),
     overlays: useOverlays(flights, airports, choices.night.on),
   };

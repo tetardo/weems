@@ -3,41 +3,24 @@
 import { Boarding } from "@weems/contrats";
 import { useEffect, useState } from "react";
 
-/** The boards are read again this often: the board follows the flights live. */
-const READ_EVERY_MS = 5_000;
-
 /**
- * GET /v1/live/boarding, read from the browser every 5 s (spec web Boarding). `board` keeps the
- * last answer while the API does not answer; `failed` says it is late.
+ * Follows GET /v1/live/boarding/stream (spec web Boarding): the API sends the whole boards on
+ * connection and every time they change. `board` keeps the last one while the connection is cut;
+ * `failed` says it is late. EventSource reconnects by itself.
  */
 export function useBoarding(apiUrl: string): { board: Boarding | null; failed: boolean } {
   const [board, setBoard] = useState<Boarding | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    let stopped = false;
-    let controller = new AbortController();
-    const read = async () => {
-      controller = new AbortController();
-      try {
-        const response = await fetch(`${apiUrl}/v1/live/boarding`, { signal: controller.signal });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const next = Boarding.parse(await response.json());
-        if (!stopped) {
-          setBoard(next);
-          setFailed(false);
-        }
-      } catch {
-        if (!stopped) setFailed(true);
-      }
-    };
-    void read();
-    const timer = setInterval(() => void read(), READ_EVERY_MS);
-    return () => {
-      stopped = true;
-      clearInterval(timer);
-      controller.abort();
-    };
+    const source = new EventSource(`${apiUrl}/v1/live/boarding/stream`);
+    source.addEventListener("open", () => setFailed(false));
+    source.addEventListener("error", () => setFailed(true));
+    source.addEventListener("board", (event) => {
+      setBoard(Boarding.parse(JSON.parse(event.data)));
+      setFailed(false);
+    });
+    return () => source.close();
   }, [apiUrl]);
 
   return { board, failed };

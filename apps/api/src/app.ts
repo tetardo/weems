@@ -30,8 +30,6 @@ import { registerHealthRoutes } from "./modules/health/routes.ts";
 import { LiveBoard } from "./modules/live/live-board.ts";
 import { LivePilots } from "./modules/live/live-pilots.ts";
 import { registerDevLiveRoutes } from "./modules/live/dev-routes.ts";
-import { registerLiveRoutes } from "./modules/live/routes.ts";
-import { LiveService } from "./modules/live/service.ts";
 import { LogbookService } from "./modules/profiles/logbook-service.ts";
 import { registerLogbookRoutes } from "./modules/profiles/logbook-routes.ts";
 import { ProfilesRepository } from "./modules/profiles/repository.ts";
@@ -78,6 +76,7 @@ import { SupervisionService } from "./modules/supervision/service.ts";
 import { registerTrafficHooks } from "./modules/supervision/traffic-hooks.ts";
 import { TrafficMetrics } from "./modules/supervision/traffic-metrics.ts";
 import { registerOffers } from "./offers-assembly.ts";
+import { registerLive } from "./live-assembly.ts";
 import { registerRanks } from "./ranks-assembly.ts";
 import { type Guards, registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
@@ -305,15 +304,16 @@ export async function buildApp({
   registerOffers(app, { database, guards, accounts, flights, tracks, plans, publicProfiles });
   registerRanks(app, { guards, flights, tracks, publicProfiles });
   registerAirportRoutes(app, airports);
-  registerLiveRoutes(app, stream, new LiveService(board, airports));
+  const boarding = registerLive(app, { board, stream, airports });
   registerHomePage(app, database, guards, statsSources(accounts, flights, board));
   registerSupervision(app, { database, guards, board, metrics });
   const sizes = registerDatabasePage(app, { database, guards, board });
   if (config.env !== "production") {
     registerDevRoutes(app, { database, flights, profileSettings, guards, board, stream });
   }
-  app.addHook("onReady", async () => [stream, sizes].forEach((job) => job.start()));
-  app.addHook("preClose", async () => [stream, sizes].forEach((job) => job.stop()));
+  const jobs = [stream, boarding, sizes];
+  app.addHook("onReady", async () => jobs.forEach((job) => job.start()));
+  app.addHook("preClose", async () => jobs.forEach((job) => job.stop()));
 
   await app.ready();
   return app;

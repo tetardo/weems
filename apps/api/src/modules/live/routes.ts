@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { Boarding, FlightId, LiveRoute, Problem } from "@weems/contrats";
+import type { BoardingStream } from "./boarding-stream.ts";
 import type { LiveService } from "./service.ts";
 import type { LiveStream } from "./stream.ts";
 
@@ -9,13 +10,14 @@ import type { LiveStream } from "./stream.ts";
 const PUBLIC = { "access-control-allow-origin": "*" };
 
 /**
- * GET /v1/live/stream (SSE), GET /v1/live/flights/{flightId}/route and GET /v1/live/boarding.
+ * GET /v1/live/stream (SSE), GET /v1/live/flights/{flightId}/route, GET /v1/live/boarding and
+ * GET /v1/live/boarding/stream (SSE).
  * Public, like the map: they only show what every spectator already sees (call sign, airports,
  * positions, pilots whose profile is public).
  */
 export function registerLiveRoutes(
   parent: FastifyInstance,
-  stream: LiveStream,
+  streams: { live: LiveStream; boarding: BoardingStream },
   live: LiveService,
 ): void {
   const app = parent.withTypeProvider<ZodTypeProvider>();
@@ -31,7 +33,7 @@ export function registerLiveRoutes(
     },
     (_request, reply) => {
       reply.hijack();
-      stream.connect(reply.raw);
+      streams.live.connect(reply.raw);
     },
   );
 
@@ -51,19 +53,42 @@ export function registerLiveRoutes(
     },
   );
 
-  registerBoardingRoute(parent, live);
+  registerBoardingRoutes(parent, streams.boarding, live);
 }
 
-/** GET /v1/live/boarding: the Departures and Arrivals boards of the page Boarding. */
-function registerBoardingRoute(parent: FastifyInstance, live: LiveService): void {
-  parent.withTypeProvider<ZodTypeProvider>().get(
+/**
+ * GET /v1/live/boarding/stream, followed by the page Boarding, and GET /v1/live/boarding: the
+ * Departures and Arrivals boards, once.
+ */
+function registerBoardingRoutes(
+  parent: FastifyInstance,
+  stream: BoardingStream,
+  live: LiveService,
+): void {
+  const app = parent.withTypeProvider<ZodTypeProvider>();
+  app.get(
+    "/v1/live/boarding/stream",
+    {
+      schema: {
+        tags: ["live"],
+        description:
+          'Server-sent events of the page Boarding: "board" (format Boarding of ' +
+          "packages/contrats) on connection and every time the boards change, heartbeat every 15 s.",
+      },
+    },
+    (_request, reply) => {
+      reply.hijack();
+      stream.connect(reply.raw);
+    },
+  );
+  app.get(
     "/v1/live/boarding",
     {
       schema: {
         tags: ["live"],
         description:
           "Departures and Arrivals boards of the page Boarding: every flight live now, and the " +
-          "flights landed within the last hour. Read again every few seconds by the site.",
+          "flights landed within the last hour. The page follows /v1/live/boarding/stream instead.",
         response: { 200: Boarding },
       },
     },
