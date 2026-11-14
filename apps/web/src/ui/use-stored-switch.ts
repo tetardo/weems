@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 
 /**
- * A switch of the live map remembered in the browser: routes (on by default, Greg, 11/11/2026),
- * night. Storage may be refused (private mode): the choice then lasts the page.
+ * A display switch remembered in the browser: routes and night of the live map (routes on by
+ * default, Greg, 11/11/2026), abbreviations of the flight bands. Storage may be refused (private
+ * mode): the choice then lasts the page.
  */
 export function useStoredSwitch(
   storageKey: string,

@@ -727,6 +727,8 @@
     "bands": {
       "phase": "Phase",
       "hover": "Survolez une colonne pour lire toutes les valeurs de la minute. 1 case = 1 minute.",
+      "abbreviations": "Abrév.",
+      "abbreviationsHint": "Abréviations du cockpit (libellé complet au survol)",
       "groups": {
         "trajectory": "Trajectoire",
         "controls": "Commandes",
@@ -751,6 +753,26 @@
         "seatbelts": "Consigne ceintures",
         "cabinAltitude": "Altitude cabine",
         "cabinRate": "Variation cabine"
+      },
+      "shortRows": {
+        "altitude": "ALT",
+        "speed": "IAS",
+        "verticalSpeed": "V/S",
+        "bank": "BANK",
+        "gForce": "G",
+        "n1": "N1",
+        "flaps": "FLAPS",
+        "gear": "GEAR",
+        "spoilers": "SPLR",
+        "braking": "BRK",
+        "parkingBrake": "PARK BRK",
+        "autopilot": "AP",
+        "landingLight": "LDG LT",
+        "beacon": "BCN",
+        "strobe": "STROBE",
+        "seatbelts": "SEAT BELTS",
+        "cabinAltitude": "CAB ALT",
+        "cabinRate": "CAB V/S"
       },
       "values": {
         "altitude": "{value} ft",

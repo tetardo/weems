@@ -22,22 +22,34 @@ export function useTime() {
   return (iso: string) => format.dateTime(new Date(iso), { hour: "2-digit", minute: "2-digit" });
 }
 
+/** Name of a row: in full, or its cockpit abbreviation with the full name on hover. */
+function RowName({ row, short }: { row: BandRow; short: boolean }) {
+  const t = useTranslations("Logbook.bands");
+  if (!short) return <span className="truncate pr-2 text-[12.5px]">{t(`rows.${row}`)}</span>;
+  return (
+    <abbr title={t(`rows.${row}`)} className="cursor-help truncate pr-2 text-[12.5px] no-underline">
+      {t(`shortRows.${row}`)}
+    </abbr>
+  );
+}
+
 /** One row: its name, then one cell per minute; the hovered minute is outlined. */
 export function BandRowCells({
   bands,
   row,
+  short,
   hovered,
   onHover,
 }: {
   bands: Bands;
   row: BandRow;
+  short: boolean;
   hovered: number | null;
   onHover: (i: number) => void;
 }) {
-  const t = useTranslations("Logbook.bands.rows");
   return (
     <>
-      <span className="truncate pr-2 text-[12.5px]">{t(row)}</span>
+      <RowName row={row} short={short} />
       <div
         className="grid gap-px"
         style={{ gridTemplateColumns: `repeat(${bands.minutes.length}, minmax(0, 1fr))` }}
