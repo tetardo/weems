@@ -811,6 +811,23 @@
       "marksTitle": "Repères à revoir",
       "discover": "Découvrir Pilot Pro"
     },
+    "ecam": {
+      "title": "BANDES DE VOL",
+      "phase": "PHASE",
+      "groups": {
+        "trajectory": "TRAJ",
+        "controls": "CMD",
+        "cabin": "FEUX / CAB"
+      },
+      "idle": "SURVOLER UNE COLONNE · CLIC POUR FIGER",
+      "hover": "CLIC POUR FIGER",
+      "pinnedHint": "← → MINUTE · ÉCHAP",
+      "pinned": "FIGÉ",
+      "apOff": "AP OFF",
+      "unmeasured": "N/M",
+      "unmeasuredTitle": "Non mesuré sur cet avion",
+      "label": "Bandes de vol, écran façon cockpit : survolez ou cliquez une colonne pour lire la minute"
+    },
     "stats": {
       "title": "Statistiques",
       "intro": "Vos chiffres par thème. Choisissez un thème ou faites défiler.",

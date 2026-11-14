@@ -3,36 +3,19 @@
 import type { FlightBands as Bands } from "@weems/contrats";
 import { buttonClass } from "@weems/ui";
 import { useFormatter, useTranslations } from "next-intl";
-import { Fragment, useState, type ReactNode } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "../../i18n/navigation.ts";
 import { PrivateIcon } from "../../ui/icons.ts";
 import { useStoredSwitch } from "../../ui/use-stored-switch.ts";
-import { BandRowCells, MinuteDetails, PhaseRow, useTime, type Marks } from "./band-parts.tsx";
+import {
+  BandRowCells,
+  MinuteDetails,
+  PhaseRow,
+  TimeAxis,
+  useTime,
+  type Marks,
+} from "./band-parts.tsx";
 import { BAND_GROUPS } from "./band-rows.ts";
-
-/** Times under the grid, about every sixth of the flight; `corner` goes under the row names. */
-function TimeAxis({ bands, corner }: { bands: Bands; corner: ReactNode }) {
-  const time = useTime();
-  const step = Math.max(1, Math.ceil(bands.minutes.length / 6));
-  return (
-    <>
-      {corner}
-      <div className="relative mt-1 h-4 text-[11.5px] leading-4 text-muted">
-        {bands.minutes.map((m, i) =>
-          i % step === 0 ? (
-            <span
-              key={m.at}
-              className="absolute"
-              style={{ left: `${(i / bands.minutes.length) * 100}%` }}
-            >
-              {time(m.at)}
-            </span>
-          ) : null,
-        )}
-      </div>
-    </>
-  );
-}
 
 /** The discreet switch between full row names and cockpit abbreviations (Greg, 14/11/2026). */
 function ShortNamesToggle({ on, onChange }: { on: boolean; onChange: (on: boolean) => void }) {

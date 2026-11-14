@@ -3,6 +3,7 @@
 /** Pieces of the flight bands: rows of cells, phase row, values of the hovered minute. */
 import type { BandRow, FlightBands as Bands } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { colorOf } from "../../flight/phase-colors.ts";
 import { bandCells, type Cell } from "./band-scale.ts";
 import { bandValue } from "./band-rows.ts";
@@ -115,5 +116,37 @@ export function MinuteDetails({ bands, index }: { bands: Bands; index: number | 
         );
       })}
     </dl>
+  );
+}
+
+/** Times under the grid, about every sixth of the flight; `corner` goes under the row names, `tone` colours the times. */
+export function TimeAxis({
+  bands,
+  corner = <span />,
+  tone = "text-muted",
+}: {
+  bands: Bands;
+  corner?: ReactNode;
+  tone?: string;
+}) {
+  const time = useTime();
+  const step = Math.max(1, Math.ceil(bands.minutes.length / 6));
+  return (
+    <>
+      {corner}
+      <div className={`relative mt-1 h-4 text-[11.5px] leading-4 ${tone}`}>
+        {bands.minutes.map((m, i) =>
+          i % step === 0 ? (
+            <span
+              key={m.at}
+              className="absolute"
+              style={{ left: `${(i / bands.minutes.length) * 100}%` }}
+            >
+              {time(m.at)}
+            </span>
+          ) : null,
+        )}
+      </div>
+    </>
   );
 }
