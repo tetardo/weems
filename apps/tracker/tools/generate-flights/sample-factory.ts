@@ -1,5 +1,6 @@
 import type { AircraftInfo, Sample } from "@weems/contrats";
 import type { Loading } from "./aircraft-load.ts";
+import type { Cabin } from "./cabin.ts";
 import { oatAt, type Weather, windAt } from "./weather.ts";
 
 /** The few values the generator drives; everything else follows from them or from the conditions. */
@@ -29,6 +30,9 @@ export interface AircraftState {
   /** Accelerations since the previous sample, in g (computed by the flight script). */
   accelLongitudinal: number;
   accelVertical: number;
+  /** Cabin altitude, ft, and its rate, ft/min (computed by the flight script, cabin.ts). */
+  cabinAlt: number;
+  cabinRate: number;
 }
 
 /** What does not change during the flight: the aircraft, its load and the weather. */
@@ -36,6 +40,7 @@ export interface FlightConditions {
   aircraft: AircraftInfo;
   loading: Loading | null;
   weather: Weather;
+  cabin: Cabin;
 }
 
 /** Speed of sound, kt, from the temperature in kelvins. */
@@ -47,8 +52,6 @@ const TAS_GAIN_PER_1000_FT = 0.02;
 const RUNWAY_GS = 40;
 /** Landing light on in the air below this height. */
 const LANDING_LIGHT_AGL_FT = 10_000;
-/** Cabin altitude of a pressurised aircraft in cruise. */
-const MAX_CABIN_ALT_FT = 8000;
 /** N1 in percent by what the engines do; pistons give none. */
 const N1 = { idle: 22, taxi: 26, takeoff: 92, climb: 88, cruise: 80, descent: 34 };
 const CLIMBING_FPM = 300;
@@ -101,14 +104,6 @@ function weightOf(state: AircraftState, conditions: FlightConditions): number | 
   return aircraft.emptyWeightKg + loading.payloadKg + state.fuelKg;
 }
 
-function cabinOf(state: AircraftState) {
-  const climbingCabin = !state.onGround && state.altMsl < MAX_CABIN_ALT_FT;
-  return {
-    cabinAlt: Math.min(state.altMsl, MAX_CABIN_ALT_FT),
-    cabinRate: climbingCabin ? state.vs : 0,
-  };
-}
-
 /** g felt by the crew: the turn's load factor plus the vertical acceleration. */
 const gForceOf = (state: AircraftState) =>
   1 / Math.cos((state.bank * Math.PI) / 180) + state.accelVertical;
@@ -143,7 +138,8 @@ export function toSample(state: AircraftState, conditions: FlightConditions): Sa
     weightKg: weightOf(state, conditions),
     gForce: gForceOf(state),
     accel: { lateral: 0, vertical: state.accelVertical, longitudinal: state.accelLongitudinal },
-    ...cabinOf(state),
+    cabinAlt: state.cabinAlt,
+    cabinRate: state.cabinRate,
     seatbelts: true,
     lights: lightsOf(state),
     overspeed: false,

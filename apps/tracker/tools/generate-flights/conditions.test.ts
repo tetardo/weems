@@ -49,11 +49,20 @@ describe("conditions of a synthetic flight (fiche 021)", () => {
     expect(Math.max(...samples.map((s) => s.gForce))).toBeGreaterThan(1);
   });
 
+  const c172 = SIMULATED_TYPES.find((t) => t.aircraft.model === "C172");
+  const lightFlight = samplesOf({ ...LFPG_LFBO, aircraft: c172?.aircraft ?? LFPG_LFBO.aircraft });
+
   it("gives no N1 for a piston engine", () => {
-    const c172 = SIMULATED_TYPES.find((t) => t.aircraft.model === "C172");
-    const flight = samplesOf({ ...LFPG_LFBO, aircraft: c172?.aircraft ?? LFPG_LFBO.aircraft });
-    const running = flight.find((s) => s.engines.some((e) => e.running)) as Sample;
+    const running = lightFlight.find((s) => s.engines.some((e) => e.running)) as Sample;
     expect(running.engines[0]?.n1).toBeNull();
+  });
+
+  it("pressurises the cabin of an airliner gently, not that of a piston single", () => {
+    const rates = samples.map((s) => s.cabinRate ?? 0);
+    expect(Math.max(...rates)).toBeLessThanOrEqual(450 + 1e-6);
+    expect(Math.min(...rates)).toBeGreaterThanOrEqual(-280 - 1e-6);
+    expect(cruise.altMsl - (cruise.cabinAlt ?? 0)).toBeGreaterThan(20_000);
+    for (const s of lightFlight) expect(s.cabinAlt).toBe(s.altMsl);
   });
 
   it("keeps the standard atmosphere and the wind within physical bounds", () => {

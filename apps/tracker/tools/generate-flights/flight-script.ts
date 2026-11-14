@@ -12,6 +12,7 @@ import { turnRadiusNm, turnToward } from "./navigation/steering.ts";
 import { drawTouchdownVs } from "./navigation/vertical-profile.ts";
 import { seededRandom } from "./random.ts";
 import { burnKgPerS, drawLoading } from "./aircraft-load.ts";
+import { drawCabin, nextCabinAlt } from "./cabin.ts";
 import { type AircraftState, type FlightConditions, toSample } from "./sample-factory.ts";
 import type { Scenario } from "./scenario.ts";
 import { drawWeather } from "./weather.ts";
@@ -30,6 +31,7 @@ function drawConditions(scenario: Scenario): FlightConditions {
     aircraft: scenario.aircraft,
     weather: drawWeather(random),
     loading: drawLoading(scenario, random),
+    cabin: drawCabin(scenario.aircraft, random),
   };
 }
 
@@ -95,6 +97,8 @@ export class FlightScript {
       fuelKg: this.conditions.loading?.fuelKg ?? null,
       accelLongitudinal: 0,
       accelVertical: 0,
+      cabinAlt: drawn.choices.departureRunway.elevationFt,
+      cabinRate: 0,
     };
     this.records.push({ type: "aircraft", t: 0, data: scenario.aircraft });
   }
@@ -148,6 +152,7 @@ export class FlightScript {
       this.move(simSeconds);
       this.burn(simSeconds);
     }
+    this.pressurize(moving ? (STEP_MS / 1000) * s.simRate : 0);
     this.accelerate(moving);
     this.records.push({ type: "sample", t: s.t, data: this.noisy() });
   }
@@ -161,6 +166,13 @@ export class FlightScript {
       : 0;
     s.accelVertical = moving ? (s.vs - this.lastVs) / 60 / seconds / FT_PER_S2_PER_G : 0;
     [this.lastGs, this.lastVs] = [s.gs, s.vs];
+  }
+
+  private pressurize(seconds: number): void {
+    const s = this.state;
+    const next = nextCabinAlt(this.conditions.cabin, s.cabinAlt, s, seconds);
+    s.cabinRate = seconds > 0 ? ((next - s.cabinAlt) / seconds) * 60 : 0;
+    s.cabinAlt = next;
   }
 
   private burn(seconds: number): void {

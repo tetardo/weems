@@ -57,6 +57,7 @@ src/connectors/msfs/      J2 : connecteur MSFS. simconnect-link.ts (seul fichier
 src/core/read-rate.ts     cadence de lecture EF-09 décidée par le cœur
 src/storage/              enregistreur SQLite (WAL) : sessions, échantillons, événements, outbox
 src/sender/               envoi de l'outbox dans l'ordre, relances 2 s → 5 min, 409 mis de côté, 426 bloque ;
+                          corps de plus de 32 Ko envoyés en gzip (api-client.ts, fiche 021) ;
                           positions en mémoire, envoyées dans l'ordre après l'ouverture (position-queue.ts)
 src/runtime/              assemblage connecteur → cœur → enregistreur → envoi
 src/account/              J3 : compte du pilote. Connexion par le navigateur (OAuth 2.1, PKCE, retour sur
@@ -73,7 +74,9 @@ tools/generate-flights/   générateur de vols synthétiques déterministe, flot
                           routes.ts : destinations possibles d'un type et durée en l'air estimée (fiche 019)
   airports/               aéroports de la flotte avec pistes et altitude (airports.json figé, extrait d'OurAirports)
   navigation/             navigateur par segments, virages, plan de route (pistes, arrivée, circuit), profil vertical
-                          (fiche docs/decisions/010) ; flight-script.ts avance l'avion selon son cap et sa vitesse
+                          (fiche docs/decisions/010) ; flight-script.ts avance l'avion selon son cap et sa vitesse ;
+                          weather.ts (météo tirée par vol), aircraft-load.ts (carburant, charge), cabin.ts (pressurisation) : tous les champs
+                          de l'échantillon sont remplis de façon plausible, car tous partent au serveur (fiche 021)
 tools/simulate/           J1 : N trackers sans interface dans un seul processus ; departures.ts : départs réguliers ou tirés
 tools/populate/           activité simulée : comptes fictifs, vols passés (horloge figée), direct relayé et visiteurs (fiche 011) ;
                           flying-styles.ts (style de chaque pilote), careers.ts (un compte par grade), timeline.ts (dates),
