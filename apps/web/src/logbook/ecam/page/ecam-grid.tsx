@@ -1,13 +1,17 @@
 "use client";
 
-import type { FlightBands as Bands } from "@weems/contrats";
+import type { BandRow, FlightBands as Bands } from "@weems/contrats";
 import { useTranslations } from "next-intl";
-import { useLayoutEffect, useRef, type HTMLAttributes, type Ref } from "react";
+import { useLayoutEffect, useRef, useState, type HTMLAttributes, type Ref } from "react";
 import { colorOf } from "../../../flight/phase-colors.ts";
 import { PhaseRow, TimeAxis } from "../../flights/band-parts.tsx";
 import { Groups } from "../ecam-rows.tsx";
 import type { Selection } from "./use-band-drag.ts";
-import type { BandWindow } from "./window-bands.ts";
+import { MilestoneRow } from "./milestone-row.tsx";
+import { PageRow } from "./page-rows.tsx";
+import type { BandWindow, WindowedBands } from "./window-bands.ts";
+
+type TrackRef = Ref<HTMLDivElement> & React.RefObject<HTMLDivElement | null>;
 
 const columns = (count: number) => ({
   gridTemplateColumns: `repeat(${count}, minmax(0, 1fr))`,
@@ -32,6 +36,7 @@ function Overview({ bands, window }: { bands: Bands; window: BandWindow }) {
           }}
         />
       </div>
+      <span />
     </>
   );
 }
@@ -67,6 +72,7 @@ function Profile({ bands, full, cell }: { bands: Bands; full: Bands; cell: numbe
           <circle cx={x(cell)} cy={y(read)} r={4} className="fill-ecam-yellow" />
         )}
       </svg>
+      <span />
     </>
   );
 }
@@ -109,49 +115,75 @@ function useOverlays(
   return { line, brush };
 }
 
-/**
- * Bands of the ECAM page: the whole flight above when zoomed, phase, profile, the rows by group,
- * and the time axis with the minute read; one white line reads across all of them.
- */
-export function EcamGrid({
-  bands,
-  full,
-  window,
-  zoomed,
-  cell,
-  selection,
-  track,
-  handlers,
-  onReset,
-}: {
-  bands: Bands;
+interface GridProps {
+  view: WindowedBands;
   full: Bands;
   window: BandWindow;
   zoomed: boolean;
   cell: number | null;
+}
+
+/** Rows of the grid, three columns each: name, cells, range (or nothing). */
+function GridRows({ view, full, window, zoomed, cell, track }: GridProps & { track: TrackRef }) {
+  const t = useTranslations("Logbook.ecam");
+  const [open, setOpen] = useState<BandRow | null>(null);
+  const bands = view.bands;
+  return (
+    <>
+      {zoomed && <Overview bands={full} window={window} />}
+      <PhaseRow bands={bands} track={track} label={t("phase")} labelClass="text-ecam-cyan" />
+      <span />
+      <MilestoneRow full={full} view={view} window={window} />
+      <Profile bands={bands} full={full} cell={cell} />
+      <Groups
+        bands={bands}
+        pointer={{ hovered: cell, pinned: null }}
+        renderRow={(row) => (
+          <PageRow
+            bands={bands}
+            full={full}
+            row={row}
+            cell={cell}
+            open={open === row}
+            onToggle={() => setOpen(open === row ? null : row)}
+          />
+        )}
+      />
+      <TimeAxis bands={bands} tone="text-ecam-cyan" current={cell} />
+      <span />
+    </>
+  );
+}
+
+/**
+ * Bands of the ECAM page: the whole flight above when zoomed, phase and its milestones, profile,
+ * the rows by group with their range, and the time axis with the minute read; one white line
+ * reads across all of them.
+ */
+export function EcamGrid({
+  selection,
+  track,
+  handlers,
+  onReset,
+  ...props
+}: GridProps & {
   selection: Selection | null;
-  track: Ref<HTMLDivElement> & React.RefObject<HTMLDivElement | null>;
+  track: TrackRef;
   handlers: HTMLAttributes<HTMLDivElement>;
   onReset: () => void;
 }) {
-  const t = useTranslations("Logbook.ecam");
   const grid = useRef<HTMLDivElement>(null);
-  const count = bands.minutes.length;
-  const pointer = { hovered: cell, pinned: null, readLine: true };
-  const overlays = useOverlays(grid, track, count, { cell, selection });
+  const count = props.view.bands.minutes.length;
+  const overlays = useOverlays(grid, track, count, { cell: props.cell, selection });
   return (
     <div className="overflow-x-auto overflow-y-hidden">
       <div
         ref={grid}
         {...handlers}
         onDoubleClick={onReset}
-        className="relative grid min-w-[560px] cursor-crosshair touch-pan-y grid-cols-[7.5em_minmax(0,1fr)] items-center gap-y-1 select-none"
+        className="relative grid min-w-[640px] cursor-crosshair touch-pan-y grid-cols-[7.5em_minmax(0,1fr)_9.5em] items-center gap-y-1 select-none"
       >
-        {zoomed && <Overview bands={full} window={window} />}
-        <PhaseRow bands={bands} track={track} label={t("phase")} labelClass="text-ecam-cyan" />
-        <Profile bands={bands} full={full} cell={cell} />
-        <Groups bands={bands} scale={full.minutes} pointer={pointer} />
-        <TimeAxis bands={bands} tone="text-ecam-cyan" current={cell} />
+        <GridRows {...props} track={track} />
         <div ref={overlays.line} className="pointer-events-none absolute bg-ecam-white/90" />
         <div
           ref={overlays.brush}
