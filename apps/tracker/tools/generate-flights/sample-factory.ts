@@ -1,7 +1,7 @@
 import type { AircraftInfo, Sample } from "@weems/contrats";
 import type { Loading } from "./aircraft-load.ts";
 import type { Cabin } from "./cabin.ts";
-import { oatAt, type Weather, windAt } from "./weather.ts";
+import { oatAt, type RouteWeather, weatherAlong, windAt } from "./weather.ts";
 
 /** The few values the generator drives; everything else follows from them or from the conditions. */
 export interface AircraftState {
@@ -33,13 +33,15 @@ export interface AircraftState {
   /** Cabin altitude, ft, and its rate, ft/min (computed by the flight script, cabin.ts). */
   cabinAlt: number;
   cabinRate: number;
+  /** Share of the way from the departure (0) to the arrival (1), for the weather. */
+  routeShare: number;
 }
 
 /** What does not change during the flight: the aircraft, its load and the weather. */
 export interface FlightConditions {
   aircraft: AircraftInfo;
   loading: Loading | null;
-  weather: Weather;
+  weather: RouteWeather;
   cabin: Cabin;
 }
 
@@ -110,7 +112,7 @@ const gForceOf = (state: AircraftState) =>
 
 export function toSample(state: AircraftState, conditions: FlightConditions): Sample {
   const airborne = !state.onGround;
-  const { weather } = conditions;
+  const weather = weatherAlong(conditions.weather, state.routeShare);
   const oat = oatAt(weather, state.altMsl);
   return {
     t: state.t,

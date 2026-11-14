@@ -15,13 +15,15 @@ import { burnKgPerS, drawLoading } from "./aircraft-load.ts";
 import { drawCabin, nextCabinAlt } from "./cabin.ts";
 import { type AircraftState, type FlightConditions, toSample } from "./sample-factory.ts";
 import type { Scenario } from "./scenario.ts";
-import { drawWeather } from "./weather.ts";
+import { drawRouteWeather } from "./weather.ts";
 
 const STEP_MS = 1000;
 /** Separate stream for the flight's choices, so that they do not depend on the number of samples. */
 const PLAN_SEED_SALT = 0x5eed;
 /** Another one for the weather and the load, so that adding them changed no existing flight. */
 const CONDITIONS_SEED_SALT = 0xc0d1;
+/** The arrival's weather has its own stream, so that the load and the cabin stayed the same. */
+const ARRIVAL_WEATHER_SEED_SALT = 0xa441;
 const FT_PER_S_PER_KT = 1.68781;
 const FT_PER_S2_PER_G = 32.174;
 
@@ -29,7 +31,7 @@ function drawConditions(scenario: Scenario): FlightConditions {
   const random = seededRandom(scenario.seed ^ CONDITIONS_SEED_SALT);
   return {
     aircraft: scenario.aircraft,
-    weather: drawWeather(random),
+    weather: drawRouteWeather(random, seededRandom(scenario.seed ^ ARRIVAL_WEATHER_SEED_SALT)),
     loading: drawLoading(scenario, random),
     cabin: drawCabin(scenario.aircraft, random),
   };
@@ -99,6 +101,7 @@ export class FlightScript {
       accelVertical: 0,
       cabinAlt: drawn.choices.departureRunway.elevationFt,
       cabinRate: 0,
+      routeShare: 0,
     };
     this.records.push({ type: "aircraft", t: 0, data: scenario.aircraft });
   }
@@ -195,16 +198,21 @@ export class FlightScript {
     const s = this.state;
     const direction = s.pushback ? s.heading + 180 : s.heading;
     Object.assign(s, destinationPoint(s, direction, (s.gs * seconds) / 3600));
-    const ground = this.groundElevationFt(s);
+    s.routeShare = this.routeShare(s);
+    const ground = this.groundElevationFt(s.routeShare);
     s.altMsl = s.onGround ? ground : Math.max(ground, s.altMsl + (s.vs * seconds) / 60);
     s.altAgl = s.altMsl - ground;
   }
 
-  /** Terrain: from the departure to the arrival runway elevation, in proportion to the distances. */
-  private groundElevationFt(at: LatLon): number {
+  /** Share of the way done, from the distances to both airports. */
+  private routeShare(at: LatLon): number {
     const fromDeparture = distanceBetweenNm(this.scenario.departure, at);
     const toArrival = distanceBetweenNm(at, this.scenario.arrival);
-    const share = fromDeparture / Math.max(1e-9, fromDeparture + toArrival);
+    return fromDeparture / Math.max(1e-9, fromDeparture + toArrival);
+  }
+
+  /** Terrain: from the departure to the arrival runway elevation, in proportion to the distances. */
+  private groundElevationFt(share: number): number {
     const { departureRunway, arrivalRunway } = this.choices;
     return (
       departureRunway.elevationFt +

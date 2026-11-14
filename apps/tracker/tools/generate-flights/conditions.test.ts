@@ -3,7 +3,7 @@ import type { Sample } from "@weems/contrats";
 import { SIMULATED_TYPES } from "./aircraft-types.ts";
 import { generateFlight } from "./generator.ts";
 import { LFPG_LFBO, type Scenario } from "./scenario.ts";
-import { oatAt, windAt } from "./weather.ts";
+import { oatAt, weatherAlong, windAt } from "./weather.ts";
 
 const samplesOf = (scenario: Scenario): Sample[] =>
   generateFlight(scenario).records.flatMap((r) => (r.type === "sample" ? [r.data] : []));
@@ -76,5 +76,26 @@ describe("conditions of a synthetic flight (fiche 021)", () => {
     expect(oatAt(weather, 0)).toBe(15);
     expect(oatAt(weather, 45_000)).toBeCloseTo(oatAt(weather, 36_089), 6);
     expect(windAt(weather, 60_000)).toEqual({ dir: 50, speed: 140 });
+  });
+
+  it("draws the weather of each airport, the arrival's on the ground at the end", () => {
+    const first = samples[0] as Sample;
+    const last = samples.at(-1) as Sample;
+    expect(last.visibilityM).not.toBe(first.visibilityM);
+  });
+
+  it("moves from the departure's weather to the arrival's along the way", () => {
+    const at = (windDirDeg: number, visibilityM: number, wetRunways: boolean) => ({
+      windDirDeg,
+      surfaceWindKt: 10,
+      isaDeviationC: 0,
+      visibilityM,
+      wetRunways,
+    });
+    const route = { departure: at(350, 2_000, true), arrival: at(30, 10_000, false) };
+    expect(weatherAlong(route, 0)).toEqual(route.departure);
+    expect(weatherAlong(route, 1)).toEqual(route.arrival);
+    expect(weatherAlong(route, 0.5)).toEqual(at(10, 6_000, false));
+    expect(weatherAlong(route, 0.25).windDirDeg).toBe(0);
   });
 });
