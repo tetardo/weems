@@ -15,7 +15,7 @@ import { useLiveRoutes } from "./use-live-routes.ts";
 import { useFollowing } from "./use-following.ts";
 import { useHiddenCategories } from "./use-hidden-categories.ts";
 import { useOverlays } from "./use-overlays.ts";
-import { useStoredSwitch } from "./use-stored-switch.ts";
+import { useStoredSwitch } from "../ui/use-stored-switch.ts";
 
 /** The spectator's choices: routes and night switches, hidden categories. */
 function useMapChoices() {
