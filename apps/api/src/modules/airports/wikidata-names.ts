@@ -15,9 +15,15 @@ export interface WikidataNames {
   cityFr: string | null;
 }
 
-/** Wikidata SPARQL query: every item with an ICAO code (P239), its French label and served city (P931). */
-export const WIKIDATA_QUERY = `SELECT ?icao ?nameFr ?cityEn ?cityFr WHERE {
+/**
+ * Wikidata SPARQL query for the ICAO codes (P239) starting with `letter`: French label and served
+ * city (P931). One letter at a time: the whole world in one query exceeds Wikidata's 60 s limit.
+ */
+export const wikidataQuery = (
+  letter: string,
+): string => `SELECT ?icao ?nameFr ?cityEn ?cityFr WHERE {
   ?airport wdt:P239 ?icao .
+  FILTER(STRSTARTS(?icao, "${letter}"))
   OPTIONAL { ?airport rdfs:label ?nameFr FILTER(LANG(?nameFr) = "fr") }
   OPTIONAL {
     ?airport wdt:P931 ?city .
@@ -25,6 +31,9 @@ export const WIKIDATA_QUERY = `SELECT ?icao ?nameFr ?cityEn ?cityFr WHERE {
     OPTIONAL { ?city rdfs:label ?cityFr FILTER(LANG(?cityFr) = "fr") }
   }
 }`;
+
+/** First letters of ICAO codes. */
+export const ICAO_LETTERS = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
 
 const ICAO = /^[A-Z0-9]{4}$/;
 
