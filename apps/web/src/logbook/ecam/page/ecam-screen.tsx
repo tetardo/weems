@@ -16,23 +16,28 @@ import { ScreenHeader } from "./screen-header.tsx";
 import { StatusBlock } from "./status-block.tsx";
 import { useEcamReading } from "./use-ecam-reading.ts";
 import { useFullScreen } from "./use-full-screen.ts";
+import { WeatherPanel } from "./weather-panel.tsx";
 
 type Reading = ReturnType<typeof useEcamReading>;
 type Points = TrackView["points"];
 
 /**
  * MapLibre map then ND map, small, beside the bands and kept in sight while they scroll; above
- * them on a phone (Greg, 14/11/2026). Both show the track point of the minute read.
+ * them on a phone (Greg, 14/11/2026). Both show the track point of the minute read; the weather
+ * at departure and arrival under them.
  */
 function SideMaps({
   flight,
+  bands,
   points,
   reading,
 }: {
   flight: FlightView;
+  bands: Bands;
   points: Points;
   reading: Reading;
 }) {
+  const airports = { departure: flight.departureIcao, arrival: flight.plannedArrivalIcao };
   const t = useTranslations("Logbook.ecamPage");
   const time = useTime();
   const { cursorPoint } = reading;
@@ -53,10 +58,11 @@ function SideMaps({
         points={points}
         framed={reading.framed}
         cursor={cursorPoint}
-        label={cursorAt ? time(cursorAt) : ""}
-        airports={{ departure: flight.departureIcao, arrival: flight.plannedArrivalIcao }}
+        read={{ label: cursorAt ? time(cursorAt) : "", wind: reading.weather?.wind }}
+        airports={airports}
         onHover={reading.fromMap}
       />
+      <WeatherPanel bands={bands} airports={airports} onPick={reading.holdMinute} />
     </aside>
   );
 }
@@ -125,7 +131,7 @@ export function EcamScreen({
       <StatusBlock flight={flight} bands={bands} landing={landing} />
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
         <MainColumn bands={bands} reading={reading} />
-        <SideMaps flight={flight} points={points} reading={reading} />
+        <SideMaps flight={flight} bands={bands} points={points} reading={reading} />
       </div>
     </section>
   );

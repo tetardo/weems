@@ -30,8 +30,8 @@ describe("ND projection", () => {
 
   it("measures nautical miles and picks round ring distances", () => {
     const { pxPerNm } = projectTrack([p(43, 5), p(44, 5)], []); // 60 NM north-south
-    expect(pxPerNm).toBeCloseTo((ND_HEIGHT - 44) / 60);
-    expect(ringStep(pxPerNm)).toBe(20);
+    expect(pxPerNm).toBeCloseTo((ND_HEIGHT - 68) / 60);
+    expect(ringStep(pxPerNm)).toBe(50);
     expect(ringStep(80)).toBe(1);
   });
 });

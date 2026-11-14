@@ -4,7 +4,7 @@ type Point = TrackView["points"][number];
 
 export const ND_WIDTH = 300;
 export const ND_HEIGHT = 240;
-const MARGIN = 22;
+const MARGIN = 34;
 
 /** Track points on the ND, and how many drawing units a nautical mile takes. */
 export interface Projected {

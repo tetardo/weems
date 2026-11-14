@@ -1,12 +1,14 @@
 "use client";
 
-import type { TrackView } from "@weems/contrats";
+import type { BandMinute, TrackView } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { useState, type PointerEvent } from "react";
+import { windText } from "./station-weather.ts";
 import { ND_HEIGHT, ND_WIDTH, nearestProjected, projectTrack, ringStep } from "./nd-projection.ts";
 
 type Point = TrackView["points"][number];
 type At = [number, number];
+type Wind = NonNullable<BandMinute["weather"]>["wind"] | undefined;
 
 const pathOf = (projected: readonly At[]) =>
   projected.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`).join("");
@@ -148,18 +150,35 @@ function pointUnder(
   return nearestProjected(projected, x, y, 20 * scale);
 }
 
-/** Unit of the rings at the top left, ground speed at the top right. */
-function NdCorners({ point }: { point: Point | undefined }) {
+/**
+ * Ground speed and wind of the minute at the top left, as on an ND: the arrow points where the
+ * wind blows, turned with the drawing; unit of the rings at the bottom left.
+ */
+function NdCorners({ point, wind, turn }: { point: Point | undefined; wind: Wind; turn: number }) {
   return (
     <>
-      <text x={8} y={14} className="fill-ecam-dim text-[10px]">
-        NM
-      </text>
       {point && (
-        <text x={ND_WIDTH - 8} y={14} textAnchor="end" className="fill-ecam-white text-[10.5px]">
+        <text x={8} y={14} className="fill-ecam-white text-[10.5px]">
           GS {Math.round(point.gs)}
         </text>
       )}
+      {wind && (
+        <>
+          <text x={8} y={28} className="fill-ecam-cyan text-[10.5px]">
+            {windText(wind).replace(" KT", "")}
+          </text>
+          <g transform={`translate(${ND_WIDTH - 22} 22) rotate(${wind.dir + 180 + turn})`}>
+            <path
+              d="M0,10 L0,-10 M-4,-5 L0,-10 L4,-5"
+              className="fill-none stroke-ecam-cyan"
+              strokeWidth={1.5}
+            />
+          </g>
+        </>
+      )}
+      <text x={8} y={ND_HEIGHT - 8} className="fill-ecam-dim text-[10px]">
+        NM
+      </text>
     </>
   );
 }
@@ -191,21 +210,22 @@ function Orientation({ trackUp, onChange }: { trackUp: boolean; onChange: (up: b
 /**
  * The track drawn like a navigation display (ND): no basemap, the flown part in green, the rest
  * dimmed, airports in cyan, the aircraft at the minute read, range rings in NM, north or track up
- * (Greg, 14/11/2026). Framed on `framed` (the zoomed stretch); hovering near the track reads the
+ * and the wind of the minute (Greg, 14/11/2026). Framed on `framed` (the zoomed stretch); hovering near the track reads the
  * nearest point.
  */
 export function NdMap({
   points,
   framed,
   cursor,
-  label,
+  read,
   airports,
   onHover,
 }: {
   points: readonly Point[];
   framed: readonly Point[];
   cursor: number;
-  label: string;
+  /** Time of the minute read, and its wind. */
+  read: { label: string; wind: Wind };
   airports: { departure: string | null; arrival: string | null };
   onHover: (index: number) => void;
 }) {
@@ -231,9 +251,9 @@ export function NdMap({
           <TrackPaths projected={projected} cursor={cursor} />
           <Airport at={projected[0]} code={airports.departure} turn={turn} />
           <Airport at={projected.at(-1)} code={airports.arrival} turn={turn} />
-          {at && point && <Aircraft at={at} point={point} label={label} turn={turn} />}
+          {at && point && <Aircraft at={at} point={point} label={read.label} turn={turn} />}
         </g>
-        <NdCorners point={point} />
+        <NdCorners point={point} wind={read.wind} turn={turn} />
       </svg>
     </div>
   );

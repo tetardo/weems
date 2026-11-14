@@ -1193,7 +1193,11 @@
         "topOfClimb": "Top of climb",
         "topOfDescent": "Top of descent",
         "touchdown": "Touchdown"
-      }
+      },
+      "wind": "WIND",
+      "noWeather": "No weather recorded on this flight",
+      "weatherDeparture": "DEPARTURE WEATHER",
+      "weatherArrival": "ARRIVAL WEATHER"
     }
   },
   "Profile": {

@@ -59,7 +59,8 @@ function gatherCell(
       return [row, known.length === 0 ? null : GATHER[row](known)];
     }),
   ) as BandMinute["values"];
-  return { at: head.at, phase: middle.phase, values };
+  const weather = middle.weather ?? head.weather;
+  return { at: head.at, phase: middle.phase, values, ...(weather ? { weather } : {}) };
 }
 
 /** Cell size of a view: one minute, or five beyond LONG_VIEW_MINUTES. */

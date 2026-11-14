@@ -1193,7 +1193,11 @@
         "topOfClimb": "Fin de montée",
         "topOfDescent": "Début de descente",
         "touchdown": "Toucher"
-      }
+      },
+      "wind": "VENT",
+      "noWeather": "Météo non enregistrée sur ce vol",
+      "weatherDeparture": "MÉTÉO DÉPART",
+      "weatherArrival": "MÉTÉO ARRIVÉE"
     }
   },
   "Profile": {

@@ -3,6 +3,7 @@ import { BandRow as BAND_ROWS } from "@weems/contrats";
 import { marksOf, type MarkedPoint } from "./marks.ts";
 
 const MINUTE_MS = 60_000;
+type Weather = NonNullable<BandMinute["weather"]>;
 type Point = MarkedPoint & { phase: FlightPhase | null };
 
 const mean = (values: readonly number[]) => values.reduce((s, v) => s + v, 0) / values.length;
@@ -81,6 +82,31 @@ function byMinute(points: readonly Point[]): Point[][] {
   return [...minutes.values()];
 }
 
+/**
+ * Wind of a minute: directions averaged as vectors (350° and 10° give 0°, not 180°), speeds as
+ * a plain mean; null when no point recorded it.
+ */
+function windOf(points: readonly Point[]): Weather["wind"] {
+  const winds = known(points.map((p) => p.wind));
+  if (winds.length === 0) return null;
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const east = mean(winds.map((w) => Math.sin(rad(w.dir))));
+  const north = mean(winds.map((w) => Math.cos(rad(w.dir))));
+  const dir = Math.round(((Math.atan2(east, north) * 180) / Math.PI + 360) % 360);
+  return { dir, speed: Math.round(mean(winds.map((w) => w.speed))) };
+}
+
+/** Weather of a minute: wind, temperature and visibility, each null when not recorded. */
+export function weatherOf(points: readonly Point[]): Weather {
+  const oat = known(points.map((p) => p.oat));
+  const visibility = known(points.map((p) => p.visibilityM));
+  return {
+    wind: windOf(points),
+    oat: oat.length === 0 ? null : Math.round(mean(oat)),
+    visibilityM: visibility.length === 0 ? null : Math.round(mean(visibility)),
+  };
+}
+
 function minuteOf(points: readonly Point[], before: Point | undefined): BandMinute {
   const first = points[0] as Point;
   const values = Object.fromEntries(
@@ -89,7 +115,7 @@ function minuteOf(points: readonly Point[], before: Point | undefined): BandMinu
       return [row, read && read.length > 0 ? SUMMED_BY[row](read) : null];
     }),
   ) as Record<BandRow, number | null>;
-  return { at: first.at, phase: points.at(-1)?.phase ?? null, values };
+  return { at: first.at, phase: points.at(-1)?.phase ?? null, values, weather: weatherOf(points) };
 }
 
 /** Fuel burnt from the first to the last point that records it; null when none does. */

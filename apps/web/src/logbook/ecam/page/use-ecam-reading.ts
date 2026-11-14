@@ -53,6 +53,11 @@ function cellOfPoint(point: Point | undefined, bands: Bands, place: Place) {
   return point ? cellOfMinute(place.view, place.shown, minuteOfPoint(point, bands.minutes)) : null;
 }
 
+/** Cell of a minute once back on the whole flight (an alarm or a weather block out of the zoom). */
+function cellOfWhole(bands: Bands, whole: BandWindow, minute: number) {
+  return cellOfMinute(windowBands(bands, whole), whole, minute);
+}
+
 /** The stretch shown: the whole flight, or a zoom; showing another one lets the cells go. */
 function useShown(bands: Bands) {
   const whole: BandWindow = { from: 0, to: Math.max(0, bands.minutes.length - 1) };
@@ -79,12 +84,10 @@ export function useEcamReading(bands: Bands, points: readonly Point[]) {
     setPinned(null);
     replay.stop();
   };
-  // Holds a minute of the flight, back to the whole flight when it is outside the zoom.
   const holdMinute = (minute: number) => {
     const inside = minute >= shown.from && minute <= shown.to;
     if (!inside) show(whole);
-    const target = inside ? view : windowBands(bands, whole);
-    setPinned(cellOfMinute(target, inside ? shown : whole, minute));
+    setPinned(inside ? cellOfMinute(view, shown, minute) : cellOfWhole(bands, whole, minute));
   };
   useMinuteLink(bands, { view, shown }, pinned, setPinned);
   useEscapeZoom(zoomed && pinned === null, () => show(whole));
@@ -111,6 +114,7 @@ export function useEcamReading(bands: Bands, points: readonly Point[]) {
     holdMinute,
     replay,
     cursorPoint: minute === null ? -1 : (minutePoints[minute] ?? -1),
+    weather: minute === null ? undefined : bands.minutes[minute]?.weather,
     framed: zoomed ? framedPoints(points, minutePoints, shown) : [],
     drag,
     fromMap,
