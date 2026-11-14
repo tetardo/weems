@@ -34,7 +34,13 @@ function minuteOf(at: string, points: readonly LiveTrailPoint[]): BandMinute {
  */
 export function liveBands(points: readonly LiveTrailPoint[], endMs: number | null): FlightBands {
   const first = points[0];
-  const empty = { rows: [...LIVE_ROWS], marks: null, fuelUsedKg: null, distanceNm: 0 };
+  const empty = {
+    rows: [...LIVE_ROWS],
+    marks: null,
+    unmeasured: null,
+    fuelUsedKg: null,
+    distanceNm: 0,
+  };
   if (!first) return { minutes: [], ...empty };
   const startMs = Date.parse(first.at);
   const indexOf = (p: LiveTrailPoint) => Math.floor((Date.parse(p.at) - startMs) / MINUTE_MS);

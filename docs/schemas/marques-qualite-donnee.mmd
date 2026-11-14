@@ -1,0 +1,8 @@
+flowchart LR
+  P["Points enregistrés du vol<br/>(point complet depuis le 14/11)"] --> Q["qualityOf par champ<br/>vivante · figée · absente"]
+  Q -->|"champ jamais envoyé<br/>(ancien tracker)"| X["Règle ignorée<br/>sans mention"]
+  Q -->|"vivante"| R["Règle vérifiée<br/>point par point"]
+  Q -->|"figée ou absente"| U["« Non mesuré sur cet avion »"]
+  R --> M["Repères des bandes<br/>regroupés par minutes"]
+  M --> F["Fiche du vol (Pilot Pro,<br/>flightBandsMarks)"]
+  U --> F

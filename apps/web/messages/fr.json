@@ -730,7 +730,7 @@
       "groups": {
         "trajectory": "Trajectoire",
         "controls": "Commandes",
-        "cabin": "Cabine"
+        "cabin": "Feux et cabine"
       },
       "rows": {
         "altitude": "Altitude",
@@ -746,8 +746,11 @@
         "parkingBrake": "Frein de parking",
         "autopilot": "Pilote auto",
         "landingLight": "Feux d'atterrissage",
+        "beacon": "Feu anticollision",
+        "strobe": "Feux à éclats",
         "seatbelts": "Consigne ceintures",
-        "cabinAltitude": "Altitude cabine"
+        "cabinAltitude": "Altitude cabine",
+        "cabinRate": "Variation cabine"
       },
       "values": {
         "altitude": "{value} ft",
@@ -764,15 +767,24 @@
         "on": "allumé",
         "off": "éteint",
         "share": "{value} % du temps",
-        "cabinAltitude": "{value} ft"
+        "cabinAltitude": "{value} ft",
+        "cabinRate": "{value} ft/min"
       },
-      "marksLocked": "Pilot Pro signale sur les bandes les moments à retravailler (vario trop fort, inclinaison, vitesse sous le FL100…).",
+      "marksLocked": "Pilot Pro signale sur les bandes les moments à retravailler (vario trop fort, inclinaison, vitesse sous le FL100, feux, alarmes…).",
       "noMarks": "Aucun repère à revoir sur ce vol.",
+      "unmeasured": "Non mesuré sur cet avion : {reasons}.",
       "provisional": "critères provisoires, à valider avec un pilote",
       "reasons": {
         "speed250": "plus de 250 kt sous 10 000 ft",
         "bank30": "inclinaison de plus de 30°",
-        "sinkRate": "plus de 1 000 ft/min de descente sous 1 000 ft"
+        "sinkRate": "plus de 1 000 ft/min de descente sous 1 000 ft",
+        "overspeedWarning": "alarme de survitesse",
+        "stallWarning": "alarme de décrochage",
+        "beaconOff": "feu anticollision éteint moteur en marche",
+        "strobeOffRunway": "feux à éclats éteints sur la piste",
+        "landingLightLow": "phares éteints sous 10 000 ft",
+        "taxiSpeed": "roulage à plus de 30 kt",
+        "cabinRate": "variation cabine inconfortable (+500 / -300 ft/min)"
       },
       "marksTitle": "Repères à revoir",
       "discover": "Découvrir Pilot Pro"
@@ -1409,7 +1421,7 @@
         "label": "« À travailler » détaillé : arrondi, vitesse à 500 ft"
       },
       "flightBandsMarks": {
-        "label": "Repères à revoir sur les bandes de vol : vario trop fort, inclinaison, vitesse sous FL100…"
+        "label": "Repères à revoir sur les bandes de vol : vario, inclinaison, vitesse sous FL100, alarmes, feux, roulage, taux cabine…"
       },
       "plannedVsActual": {
         "label": "Carburant et horaire prévus et réels (SimBrief)"
@@ -1689,7 +1701,7 @@
       },
       "flightBandsMarks": {
         "title": "Repères sur les bandes",
-        "text": "Les moments à revoir sont marqués sur les bandes : vario trop fort, inclinaison, plus de 250 kt sous le FL100."
+        "text": "Les moments à revoir sont marqués sur les bandes : vario trop fort, inclinaison, plus de 250 kt sous le FL100, alarmes de survitesse ou de décrochage, feux oubliés, roulage trop rapide, cabine inconfortable. Une donnée que l'avion ne fournit pas est signalée « non mesurée », jamais comptée contre vous."
       },
       "plannedVsActual": {
         "title": "Prévu et réel",

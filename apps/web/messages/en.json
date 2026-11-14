@@ -730,7 +730,7 @@
       "groups": {
         "trajectory": "Trajectory",
         "controls": "Controls",
-        "cabin": "Cabin"
+        "cabin": "Lights and cabin"
       },
       "rows": {
         "altitude": "Altitude",
@@ -746,8 +746,11 @@
         "parkingBrake": "Parking brake",
         "autopilot": "Autopilot",
         "landingLight": "Landing lights",
+        "beacon": "Beacon",
+        "strobe": "Strobes",
         "seatbelts": "Seat belt sign",
-        "cabinAltitude": "Cabin altitude"
+        "cabinAltitude": "Cabin altitude",
+        "cabinRate": "Cabin rate"
       },
       "values": {
         "altitude": "{value} ft",
@@ -764,15 +767,24 @@
         "on": "on",
         "off": "off",
         "share": "{value} % of the time",
-        "cabinAltitude": "{value} ft"
+        "cabinAltitude": "{value} ft",
+        "cabinRate": "{value} ft/min"
       },
-      "marksLocked": "Pilot Pro marks on the bands the moments to work on (sink rate, bank, speed below FL100…).",
+      "marksLocked": "Pilot Pro marks on the bands the moments to work on (sink rate, bank, speed below FL100, lights, warnings…).",
       "noMarks": "Nothing to review on this flight.",
+      "unmeasured": "Not measured on this aircraft: {reasons}.",
       "provisional": "provisional criteria, to be checked with a pilot",
       "reasons": {
         "speed250": "over 250 kt below 10,000 ft",
         "bank30": "bank over 30°",
-        "sinkRate": "sinking over 1,000 ft/min below 1,000 ft"
+        "sinkRate": "sinking over 1,000 ft/min below 1,000 ft",
+        "overspeedWarning": "overspeed warning",
+        "stallWarning": "stall warning",
+        "beaconOff": "beacon off with an engine running",
+        "strobeOffRunway": "strobes off on the runway",
+        "landingLightLow": "landing lights off below 10,000 ft",
+        "taxiSpeed": "taxiing faster than 30 kt",
+        "cabinRate": "uncomfortable cabin rate (+500 / -300 ft/min)"
       },
       "marksTitle": "Points to review",
       "discover": "Discover Pilot Pro"
@@ -1409,7 +1421,7 @@
         "label": "Detailed « to work on »: flare, speed at 500 ft"
       },
       "flightBandsMarks": {
-        "label": "Points to review on the flight strips: excessive vertical speed, bank, speed below FL100…"
+        "label": "Points to review on the flight strips: vertical speed, bank, speed below FL100, warnings, lights, taxi, cabin rate…"
       },
       "plannedVsActual": {
         "label": "Planned and actual fuel and times (SimBrief)"
@@ -1689,7 +1701,7 @@
       },
       "flightBandsMarks": {
         "title": "Marks on the bands",
-        "text": "Moments worth a second look are marked on the bands: high sink rate, bank, over 250 kt below FL100."
+        "text": "Moments worth a second look are marked on the bands: high sink rate, bank, over 250 kt below FL100, overspeed or stall warnings, forgotten lights, fast taxiing, uncomfortable cabin. A value the aircraft does not give is shown as « not measured », never held against you."
       },
       "plannedVsActual": {
         "title": "Planned and actual",

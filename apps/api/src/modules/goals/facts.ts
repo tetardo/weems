@@ -1,6 +1,6 @@
 import type { GoalAircraft, GoodPractice, TrackPoint } from "@weems/contrats";
 import type { SummaryWithEvents } from "../flights/service.ts";
-import { markReasons } from "../logbook/bands.ts";
+import { markReasons } from "../logbook/marks.ts";
 import { logbookEntry } from "../logbook/entries.ts";
 
 /** What the goals need of one closed flight. */

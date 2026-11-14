@@ -1,18 +1,15 @@
-import type {
-  BandMarkReason,
-  BandMinute,
-  BandRow,
-  FlightBands,
-  FlightPhase,
-  TrackPoint,
-} from "@weems/contrats";
+import type { BandMinute, BandRow, FlightBands, FlightPhase, TrackPoint } from "@weems/contrats";
 import { BandRow as BAND_ROWS } from "@weems/contrats";
+import { marksOf, type MarkedPoint } from "./marks.ts";
 
 const MINUTE_MS = 60_000;
-type Point = TrackPoint & { phase: FlightPhase | null };
+type Point = MarkedPoint & { phase: FlightPhase | null };
 
 const mean = (values: readonly number[]) => values.reduce((s, v) => s + v, 0) / values.length;
 const max = (values: readonly number[]) => Math.max(...values);
+/** The value furthest from zero, either way. */
+const extreme = (values: readonly number[]) =>
+  values.reduce((a, b) => (Math.abs(b) > Math.abs(a) ? b : a));
 const share = (values: readonly number[]) => mean(values);
 const known = <T>(values: readonly (T | null | undefined)[]): T[] =>
   values.filter((v): v is T => v !== null && v !== undefined);
@@ -43,8 +40,11 @@ const READERS: Record<BandRow, (points: readonly Point[], before?: Point) => num
   parkingBrake: (ps) => known(ps.map((p) => bit(p.parkingBrake))),
   autopilot: (ps) => known(ps.map((p) => bit(p.autopilot))),
   landingLight: (ps) => known(ps.map((p) => bit(p.landingLight))),
+  beacon: (ps) => known(ps.map((p) => bit(p.lights?.beacon))),
+  strobe: (ps) => known(ps.map((p) => bit(p.lights?.strobe))),
   seatbelts: (ps) => known(ps.map((p) => bit(p.seatbelts))),
   cabinAltitude: (ps) => known(ps.map((p) => p.cabinAlt)),
+  cabinRate: (ps) => known(ps.map((p) => p.cabinRate)),
 };
 
 const SUMMED_BY: Record<BandRow, (values: readonly number[]) => number> = {
@@ -61,8 +61,11 @@ const SUMMED_BY: Record<BandRow, (values: readonly number[]) => number> = {
   parkingBrake: share,
   autopilot: share,
   landingLight: share,
+  beacon: share,
+  strobe: share,
   seatbelts: share,
   cabinAltitude: max,
+  cabinRate: extreme,
 };
 
 /** The points of each minute since the first point; minutes without a point are left out. */
@@ -89,33 +92,6 @@ function minuteOf(points: readonly Point[], before: Point | undefined): BandMinu
   return { at: first.at, phase: points.at(-1)?.phase ?? null, values };
 }
 
-/** A point worth reviewing, and why (provisional criteria, see BandMarkReason). */
-function reasonsOf(p: TrackPoint): [BandRow, BandMarkReason][] {
-  const reasons: [BandRow, BandMarkReason][] = [];
-  if (!p.onGround && p.altMsl < 10_000 && p.ias > 250) reasons.push(["speed", "speed250"]);
-  if (p.bank !== undefined && Math.abs(p.bank) > 30) reasons.push(["bank", "bank30"]);
-  if (!p.onGround && p.altAgl < 1_000 && p.vs < -1_000) reasons.push(["verticalSpeed", "sinkRate"]);
-  return reasons;
-}
-
-/** Every reason met at least once along a trajectory (page Statistiques, good practices). */
-export const markReasons = (points: readonly TrackPoint[]): Set<BandMarkReason> =>
-  new Set(points.flatMap(reasonsOf).map(([, reason]) => reason));
-
-/** Consecutive minutes with the same reason become one mark. */
-function marksOf(minutes: readonly Point[][]): NonNullable<FlightBands["marks"]> {
-  const marks: NonNullable<FlightBands["marks"]> = [];
-  minutes.forEach((points, index) => {
-    const reasons = new Map(points.flatMap(reasonsOf).map(([row, reason]) => [reason, row]));
-    for (const [reason, row] of reasons) {
-      const open = marks.findLast((m) => m.reason === reason);
-      if (open && open.to === index - 1) open.to = index;
-      else marks.push({ row, from: index, to: index, reason });
-    }
-  });
-  return marks;
-}
-
 /** Fuel burnt from the first to the last point that records it; null when none does. */
 export function fuelUsedKg(points: readonly TrackPoint[]): number | null {
   const fuel = known(points.map((p) => p.fuelKg));
@@ -125,7 +101,7 @@ export function fuelUsedKg(points: readonly TrackPoint[]): number | null {
 
 /**
  * Flight bands (spec carnet privé, § 4): one column per minute, one row per parameter, from every
- * recorded point. `withMarks`: the plan includes the stretches to review (flightBandsMarks).
+ * recorded point. `withMarks`: the plan includes the stretches to review (flightBandsMarks, marks.ts).
  */
 export function flightBands(
   points: readonly Point[],
@@ -133,10 +109,12 @@ export function flightBands(
 ): Omit<FlightBands, "distanceNm"> {
   const grouped = byMinute(points);
   const minutes = grouped.map((ps, i) => minuteOf(ps, grouped[i - 1]?.at(-1)));
+  const review = withMarks ? marksOf(grouped) : null;
   return {
     minutes,
     rows: BAND_ROWS.options.filter((row) => minutes.some((m) => m.values[row] !== null)),
-    marks: withMarks ? marksOf(grouped) : null,
+    marks: review?.marks ?? null,
+    unmeasured: review?.unmeasured ?? null,
     fuelUsedKg: fuelUsedKg(points),
   };
 }

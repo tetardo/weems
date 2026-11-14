@@ -58,7 +58,7 @@ Pour tester : le bouton Free | Pro de la barre (hors production, PR #77).
 
 ## 4. Vols (`/logbook/flights`)
 
-Liste compacte à gauche (filtres, verdict Propre / Ferme / Rebond / Non conforme, note), fiche du vol choisi à droite ; sur téléphone, la liste seule, un appui ouvre la fiche en pleine page. Fiche : en-tête, 6 petites cartes, trajet, **bandes de vol** (une colonne par minute, une ligne par paramètre, survol = toutes les valeurs de la minute), profil d'altitude, dernière approche, note privée avec étiquettes, chronologie. Pilot Pro : repères à revoir encadrés sur les bandes (`flightBandsMarks`), analyse de l'approche (`approachAnalysis`), comparaison avec les vols du même avion (`sameAircraftComparison`).
+Liste compacte à gauche (filtres, verdict Propre / Ferme / Rebond / Non conforme, note), fiche du vol choisi à droite ; sur téléphone, la liste seule, un appui ouvre la fiche en pleine page. Fiche : en-tête, 6 petites cartes, trajet, **bandes de vol** (une colonne par minute, une ligne par paramètre, survol = toutes les valeurs de la minute), profil d'altitude, dernière approche, note privée avec étiquettes, chronologie. Pilot Pro : repères à revoir encadrés sur les bandes (`flightBandsMarks` ; depuis le 14/11/2026 aussi alarmes, feux, roulage et variation cabine, seulement sur une donnée vivante, sinon « Non mesuré sur cet avion » : fiche [022](../../decisions/022-marques-et-qualite-de-la-donnee.md), schéma `schemas/marques-qualite-donnee.mmd`), analyse de l'approche (`approachAnalysis`), comparaison avec les vols du même avion (`sameAircraftComparison`).
 
 ## 5. Statistiques (`/logbook/stats`)
 

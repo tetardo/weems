@@ -33,6 +33,7 @@ describe("flight bands", () => {
     expect(bands.minutes[1]?.phase).toBe("CRUISE");
     expect(bands.fuelUsedKg).toBe(50);
     expect(bands.marks).toBeNull();
+    expect(bands.unmeasured).toBeNull();
   });
 
   it("keeps only the rows with a value: older flights have the trajectory only", () => {

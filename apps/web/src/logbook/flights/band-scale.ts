@@ -3,7 +3,7 @@ import type { BandMinute, BandRow } from "@weems/contrats";
 /** Shade of a cell: 0 nothing (off, idle, not recorded), 1 to 4 low to high. */
 export interface Cell {
   level: 0 | 1 | 2 | 3 | 4;
-  /** Vertical speed only: climbing or descending colours. */
+  /** Vertical speed and cabin rate only: climbing or descending colours. */
   tone: "value" | "climb" | "descent";
 }
 
@@ -14,8 +14,13 @@ const ABSOLUTE: ReadonlySet<BandRow> = new Set([
   "parkingBrake",
   "autopilot",
   "landingLight",
+  "beacon",
+  "strobe",
   "seatbelts",
 ]);
+
+/** Rows read by their size, climbing or descending colours. */
+const SIGNED: ReadonlySet<BandRow> = new Set(["verticalSpeed", "cabinRate"]);
 
 const levelOf = (share: number): Cell["level"] =>
   share <= 0 ? 0 : (Math.min(4, Math.max(1, Math.ceil(share * 4))) as Cell["level"]);
@@ -29,13 +34,13 @@ function rangeOf(row: BandRow, known: readonly number[]): [number, number] {
 
 /**
  * Cells of one row of the bands. Shares are read as they are; flaps against the highest setting
- * of the flight; vertical speed by its size, climbing or descending; the other rows from the
+ * of the flight; vertical speed and cabin rate by their size, climbing or descending; the other rows from the
  * lowest to the highest value of the flight.
  */
 export function bandCells(minutes: readonly BandMinute[], row: BandRow): (Cell | null)[] {
   const values = minutes.map((m) => m.values[row] ?? null);
   const known = values.filter((v): v is number => v !== null);
-  if (row === "verticalSpeed") {
+  if (SIGNED.has(row)) {
     const top = Math.max(1, ...known.map(Math.abs));
     return values.map((v) =>
       v === null ? null : { level: levelOf(Math.abs(v) / top), tone: v >= 0 ? "climb" : "descent" },

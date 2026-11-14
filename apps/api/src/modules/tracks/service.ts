@@ -1,6 +1,12 @@
 import { createHash } from "node:crypto";
 import { gzipSync } from "node:zlib";
-import { type Receipt, type RecordedPoint, TrackPoint, type TrackView } from "@weems/contrats";
+import {
+  type FlightPhase,
+  type Receipt,
+  type RecordedPoint,
+  TrackPoint,
+  type TrackView,
+} from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
 import { conflict, notFound } from "../../plugins/problem.ts";
 import type { FlightsService } from "../flights/service.ts";
@@ -70,8 +76,11 @@ export class TracksService {
     };
   }
 
-  /** Every recorded point with its phase (flight bands); 404 without trajectory. */
-  async recorded(caller: Caller, flightId: string): Promise<TrackView["points"]> {
+  /** Every recorded point, full, with its phase (flight bands and marks); 404 without trajectory. */
+  async recorded(
+    caller: Caller,
+    flightId: string,
+  ): Promise<(RecordedPoint & { phase: FlightPhase | null })[]> {
     const flight = await this.flights.read(caller, flightId);
     const points = await this.store.recorded(flightId);
     if (!points) throw notFound(`Flight ${flightId} has no trajectory yet.`);

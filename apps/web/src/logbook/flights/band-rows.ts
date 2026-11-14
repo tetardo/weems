@@ -8,7 +8,10 @@ export const BAND_GROUPS: readonly { key: "trajectory" | "controls" | "cabin"; r
       key: "controls",
       rows: ["n1", "flaps", "gear", "spoilers", "braking", "parkingBrake", "autopilot"],
     },
-    { key: "cabin", rows: ["landingLight", "seatbelts", "cabinAltitude"] },
+    {
+      key: "cabin",
+      rows: ["landingLight", "beacon", "strobe", "seatbelts", "cabinAltitude", "cabinRate"],
+    },
   ];
 
 type Shown = { key: string; value: number };
@@ -18,6 +21,8 @@ const SWITCHES: ReadonlySet<BandRow> = new Set([
   "parkingBrake",
   "autopilot",
   "landingLight",
+  "beacon",
+  "strobe",
   "seatbelts",
 ]);
 

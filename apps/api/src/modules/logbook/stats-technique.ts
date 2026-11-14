@@ -6,7 +6,7 @@ import {
   type LogbookStats,
 } from "@weems/contrats";
 import type { SummaryWithEvents } from "../flights/service.ts";
-import { markReasons } from "./bands.ts";
+import { markReasons } from "./marks.ts";
 import type { Tracks } from "./stats-input.ts";
 import { groupBy } from "./tally.ts";
 
