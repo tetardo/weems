@@ -16,7 +16,7 @@ function TimeAxis({ bands }: { bands: Bands }) {
   return (
     <>
       <span />
-      <div className="relative mt-1 h-4 text-[11.5px] text-muted">
+      <div className="relative mt-1 h-4 text-[11.5px] leading-4 text-muted">
         {bands.minutes.map((m, i) =>
           i % step === 0 ? (
             <span
@@ -111,7 +111,7 @@ export function FlightBands({ bands, withMarks = true }: { bands: Bands; withMar
   const [hovered, setHovered] = useState<number | null>(null);
   return (
     <div onMouseLeave={() => setHovered(null)}>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-hidden">
         <div className="grid min-w-[560px] grid-cols-[8.5em_minmax(0,1fr)] items-center gap-y-1">
           <PhaseRow bands={bands} onHover={setHovered} />
           {BAND_GROUPS.map(({ key, rows }) => {
