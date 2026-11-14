@@ -3,10 +3,10 @@
 import type { BandRow, FlightBands as Bands } from "@weems/contrats";
 import { useTranslations } from "next-intl";
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { colorOf } from "../../flight/phase-colors.ts";
-import { TimeAxis } from "../flights/band-parts.tsx";
+import { PhaseRow, TimeAxis } from "../flights/band-parts.tsx";
 import { BAND_GROUPS } from "../flights/band-rows.ts";
 import { bandCells, type Cell } from "../flights/band-scale.ts";
+import { useBandPointer } from "../flights/use-band-pointer.ts";
 import { EcamLegend } from "./ecam-legend.tsx";
 import { unmeasuredRows } from "./ecam-values.ts";
 
@@ -32,8 +32,6 @@ const SHADES: Record<Cell["tone"], readonly string[]> = {
 interface Pointer {
   hovered: number | null;
   pinned: number | null;
-  onHover: (i: number) => void;
-  onPin: (i: number) => void;
 }
 
 function cellClass(cell: Cell | null, marked: boolean, i: number, pointer: Pointer) {
@@ -45,7 +43,7 @@ function cellClass(cell: Cell | null, marked: boolean, i: number, pointer: Point
     : marked
       ? "outline-1 outline-ecam-amber"
       : "";
-  return `h-3 cursor-pointer rounded-[1px] ${shade} ${outline}`;
+  return `h-3 rounded-[1px] ${shade} ${outline}`;
 }
 
 /** One row: abbreviation (full name on hover), then one cell per minute. */
@@ -65,37 +63,12 @@ function Row({ bands, row, pointer }: { bands: Bands; row: BandRow; pointer: Poi
         {bandCells(bands.minutes, row).map((cell, i) => (
           <span
             key={i}
-            onMouseEnter={() => pointer.onHover(i)}
-            onClick={() => pointer.onPin(i)}
             className={cellClass(
               cell,
               marks.some((m) => m.row === row && i >= m.from && i <= m.to),
               i,
               pointer,
             )}
-          />
-        ))}
-      </div>
-    </>
-  );
-}
-
-function PhaseRow({ bands, pointer }: { bands: Bands; pointer: Pointer }) {
-  const t = useTranslations("Logbook.ecam");
-  return (
-    <>
-      <span className="text-[12.5px] text-ecam-cyan">{t("phase")}</span>
-      <div
-        className="grid gap-px"
-        style={{ gridTemplateColumns: `repeat(${bands.minutes.length}, minmax(0, 1fr))` }}
-      >
-        {bands.minutes.map((m, i) => (
-          <span
-            key={m.at}
-            onMouseEnter={() => pointer.onHover(i)}
-            onClick={() => pointer.onPin(i)}
-            className="h-2.5 cursor-pointer"
-            style={{ background: colorOf(m.phase) }}
           />
         ))}
       </div>
@@ -124,6 +97,25 @@ function usePinnedMinute(count: number) {
   return [pinned, toggle] as const;
 }
 
+/** The rows by group (TRAJ, CMD, FEUX / CAB), groups without any value left out. */
+function Groups({ bands, pointer }: { bands: Bands; pointer: Pointer }) {
+  const groups = useTranslations("Logbook.ecam.groups");
+  return BAND_GROUPS.map(({ key, rows }) => {
+    const shown = rows.filter((row) => bands.rows.includes(row));
+    if (shown.length === 0) return null;
+    return (
+      <Fragment key={key}>
+        <span className="col-span-full mt-2 text-[11.5px] tracking-[.08em] text-ecam-cyan">
+          <span className="border-b border-ecam-cyan">{groups(key)}</span>
+        </span>
+        {shown.map((row) => (
+          <Row key={row} bands={bands} row={row} pointer={pointer} />
+        ))}
+      </Fragment>
+    );
+  });
+}
+
 /**
  * The flight bands on a cockpit screen (ECAM look, Greg 14/11/2026), shown above the classic
  * bands to compare them: always black, B612 Mono, abbreviations, and the values of the minute read
@@ -131,11 +123,11 @@ function usePinnedMinute(count: number) {
  */
 export function EcamBands({ bands }: { bands: Bands }) {
   const t = useTranslations("Logbook.ecam");
-  const groups = useTranslations("Logbook.ecam.groups");
   const [hovered, setHovered] = useState<number | null>(null);
   const [pinned, togglePin] = usePinnedMinute(bands.minutes.length);
   const unmeasured = useMemo(() => unmeasuredRows(bands.unmeasured), [bands.unmeasured]);
-  const pointer: Pointer = { hovered, pinned, onHover: setHovered, onPin: togglePin };
+  const pointer: Pointer = { hovered, pinned };
+  const reader = useBandPointer(bands.minutes.length, setHovered, togglePin);
   return (
     <section
       aria-label={t("label")}
@@ -146,22 +138,17 @@ export function EcamBands({ bands }: { bands: Bands }) {
         {t("title")}
       </h3>
       <div className="overflow-x-auto overflow-y-hidden">
-        <div className="grid min-w-[560px] grid-cols-[7.5em_minmax(0,1fr)] items-center gap-y-1">
-          <PhaseRow bands={bands} pointer={pointer} />
-          {BAND_GROUPS.map(({ key, rows }) => {
-            const shown = rows.filter((row) => bands.rows.includes(row));
-            if (shown.length === 0) return null;
-            return (
-              <Fragment key={key}>
-                <span className="col-span-full mt-2 text-[11.5px] tracking-[.08em] text-ecam-cyan">
-                  <span className="border-b border-ecam-cyan">{groups(key)}</span>
-                </span>
-                {shown.map((row) => (
-                  <Row key={row} bands={bands} row={row} pointer={pointer} />
-                ))}
-              </Fragment>
-            );
-          })}
+        <div
+          {...reader.handlers}
+          className="grid min-w-[560px] cursor-pointer touch-pan-y grid-cols-[7.5em_minmax(0,1fr)] items-center gap-y-1"
+        >
+          <PhaseRow
+            bands={bands}
+            track={reader.track}
+            label={t("phase")}
+            labelClass="text-ecam-cyan"
+          />
+          <Groups bands={bands} pointer={pointer} />
           <TimeAxis bands={bands} tone="text-ecam-cyan" />
         </div>
       </div>
