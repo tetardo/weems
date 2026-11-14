@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
  * Where a key moves the held minute: ← → one minute, with Shift ten, Home and End the first and
  * last; null for any other key.
  */
-export function keyTarget(event: Pick<KeyboardEvent, "key" | "shiftKey">, at: number, count: number) {
+export function keyTarget(
+  event: Pick<KeyboardEvent, "key" | "shiftKey">,
+  at: number,
+  count: number,
+) {
   const last = count - 1;
   const step = event.shiftKey ? 10 : 1;
   const targets: Record<string, number> = {

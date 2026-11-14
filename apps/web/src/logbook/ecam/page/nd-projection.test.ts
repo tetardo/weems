@@ -1,15 +1,14 @@
 import type { TrackView } from "@weems/contrats";
 import { describe, expect, it } from "vitest";
-import { ND_HEIGHT, ND_WIDTH, nearestProjected, projectTrack } from "./nd-projection.ts";
+import { ND_HEIGHT, ND_WIDTH, nearestProjected, projectTrack, ringStep } from "./nd-projection.ts";
 
 const p = (lat: number, lon: number) => ({ lat, lon }) as TrackView["points"][number];
 
 describe("ND projection", () => {
   it("puts the track inside the box, north up, west on the left", () => {
-    const [marseille = [0, 0], toulouse = [0, 0]] = projectTrack(
-      [p(43.44, 5.22), p(43.63, 1.37)],
-      [],
-    );
+    const {
+      at: [marseille = [0, 0], toulouse = [0, 0]],
+    } = projectTrack([p(43.44, 5.22), p(43.63, 1.37)], []);
     expect(toulouse[0]).toBeLessThan(marseille[0]);
     expect(toulouse[1]).toBeLessThan(marseille[1]); // further north: higher
     for (const [x, y] of [marseille, toulouse]) {
@@ -27,5 +26,12 @@ describe("ND projection", () => {
     ];
     expect(nearestProjected(projected, 45, 12, 20)).toBe(1);
     expect(nearestProjected(projected, 200, 200, 20)).toBeNull();
+  });
+
+  it("measures nautical miles and picks round ring distances", () => {
+    const { pxPerNm } = projectTrack([p(43, 5), p(44, 5)], []); // 60 NM north-south
+    expect(pxPerNm).toBeCloseTo((ND_HEIGHT - 44) / 60);
+    expect(ringStep(pxPerNm)).toBe(20);
+    expect(ringStep(80)).toBe(1);
   });
 });

@@ -90,6 +90,12 @@ export function windowBands(bands: Bands, window: BandWindow): WindowedBands {
   return { bands: { ...bands, minutes, marks }, size, starts };
 }
 
+/** The view of the bands and the stretch of the flight it shows. */
+export interface Place {
+  view: WindowedBands;
+  shown: BandWindow;
+}
+
 /** Cell of the view holding minute `minute` of the flight, or null outside the window. */
 export function cellOfMinute(view: WindowedBands, window: BandWindow, minute: number | null) {
   if (minute === null || minute < window.from || minute > window.to) return null;

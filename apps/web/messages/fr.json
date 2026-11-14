@@ -822,7 +822,7 @@
       },
       "idle": "SURVOLER UNE COLONNE · CLIC POUR FIGER",
       "hover": "CLIC POUR FIGER",
-      "pinnedHint": "← → MINUTE · ÉCHAP",
+      "pinnedHint": "← → MIN · MAJ 10 · DÉBUT / FIN · ÉCHAP",
       "pinned": "FIGÉ",
       "apOff": "AP OFF",
       "unmeasured": "N/M",
@@ -1173,7 +1173,27 @@
       "zoom": "ZOOM {from}–{to}",
       "reset": "DOUBLE-CLIC OU ÉCHAP : VOL ENTIER",
       "dragHint": "GLISSER : ZOOM",
-      "noTrack": "Pas de trace pour ce vol."
+      "noTrack": "Pas de trace pour ce vol.",
+      "copyLink": "🔗 LIEN {time}",
+      "copied": "LIEN COPIÉ",
+      "fullScreen": "⛶ PLEIN ÉCRAN (F)",
+      "leaveFullScreen": "⛶ QUITTER (ÉCHAP)",
+      "map": "CARTE",
+      "northUp": "NORD ↑",
+      "trackUp": "ROUTE ↑",
+      "playHint": "Lecture / pause (barre d'espace)",
+      "alarms": "ALARMES",
+      "alarmsHint": "CLIC : FIGER LA MINUTE",
+      "noAlarm": "AUCUNE ALARME",
+      "provisional": "CRITÈRES PROVISOIRES",
+      "openCurve": "clic : courbe précise",
+      "closeCurve": "clic : fermer la courbe",
+      "milestones": {
+        "takeoff": "Décollage",
+        "topOfClimb": "Fin de montée",
+        "topOfDescent": "Début de descente",
+        "touchdown": "Toucher"
+      }
     }
   },
   "Profile": {

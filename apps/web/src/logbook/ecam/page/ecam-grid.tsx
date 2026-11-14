@@ -7,7 +7,8 @@ import { colorOf } from "../../../flight/phase-colors.ts";
 import { PhaseRow, TimeAxis } from "../../flights/band-parts.tsx";
 import { Groups } from "../ecam-rows.tsx";
 import type { Selection } from "./use-band-drag.ts";
-import { MilestoneRow } from "./milestone-row.tsx";
+import { linePath } from "./line-path.ts";
+import { ConfigRow, MilestoneRow } from "./marker-rows.tsx";
 import { PageRow } from "./page-rows.tsx";
 import type { BandWindow, WindowedBands } from "./window-bands.ts";
 
@@ -49,11 +50,7 @@ function Profile({ bands, full, cell }: { bands: Bands; full: Bands; cell: numbe
   const top = Math.max(1000, ...full.minutes.map((m) => m.values.altitude ?? 0));
   const x = (i: number) => ((i + 0.5) / count) * 1000;
   const y = (a: number) => 52 - (a / top) * 46;
-  const line = altitudes
-    .map((a, i) => (a === null ? null : `${x(i).toFixed(1)},${y(a).toFixed(1)}`))
-    .filter(Boolean)
-    .map((p, i) => `${i ? "L" : "M"}${p}`)
-    .join("");
+  const line = linePath(altitudes, x, y);
   const read = cell === null ? null : altitudes[cell];
   return (
     <>
@@ -149,6 +146,7 @@ function GridRows({ view, full, window, zoomed, cell, track }: GridProps & { tra
           />
         )}
       />
+      <ConfigRow full={full} view={view} window={window} />
       <TimeAxis bands={bands} tone="text-ecam-cyan" current={cell} />
       <span />
     </>
