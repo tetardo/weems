@@ -1,6 +1,7 @@
 import {
   FlightBands,
   LogbookEntries,
+  LogbookList,
   LogbookStats,
   type LogbookStatsPeriod,
   LogbookSummary,
@@ -37,10 +38,15 @@ export function getMyRank(): Promise<MyRank | null> {
   return apiRequest("/v1/me/rank", MyRank);
 }
 
-/** Page Vols: every closed flight with its verdict, read once per page (list and sheet). */
+/** Every closed flight with its verdict: neighbours of the full flight page, aircraft of the goals. */
 export const getLogbookEntries = cache((): Promise<LogbookEntries | null> =>
   apiRequest("/v1/me/logbook/entries", LogbookEntries),
 );
+
+/** Page Vols: the searched, filtered and sorted list, its first `limit` lines. */
+export function getLogbookList(query: URLSearchParams): Promise<LogbookList | null> {
+  return apiRequest(`/v1/me/logbook/list?${query.toString()}`, LogbookList);
+}
 
 /** Flight bands of one of the pilot's flights; null without trajectory. */
 export function getFlightBands(flightId: string): Promise<FlightBands | null> {

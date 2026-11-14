@@ -701,14 +701,7 @@
     },
     "flights": {
       "title": "Vols",
-      "count": "{count, plural, =0 {aucun vol} one {# vol} other {# vols}}",
       "empty": "Aucun vol terminé pour l'instant.",
-      "all": "Tous les vols",
-      "fullPage": "Page complète du vol",
-      "bands": "Bandes de vol",
-      "bandsAside": "{minutes} min · {rows} paramètres",
-      "noTrack": "Ce vol n'a pas de trajectoire.",
-      "profile": "Profil d'altitude",
       "intro": "{count, plural, =0 {Aucun vol} one {# vol} other {# vols}} · tous vos vols, y compris ceux masqués sur votre page publique.",
       "filters": {
         "all": "Tous",
@@ -716,7 +709,27 @@
         "review": "À revoir"
       },
       "emptyFiltered": "Aucun vol pour ce filtre.",
-      "ecamPage": "Page ECAM"
+      "ecamPage": "Page ECAM",
+      "search": "Rechercher un code OACI, un aéroport, un avion…",
+      "searchLabel": "Rechercher dans les vols",
+      "clearSearch": "Effacer la recherche",
+      "columns": {
+        "date": "Date",
+        "route": "Route",
+        "aircraft": "Avion",
+        "block": "Bloc",
+        "touchdown": "Toucher",
+        "verdict": "Verdict"
+      },
+      "sortBy": "Trier par {column}",
+      "loadMore": "Charger {count} vols de plus",
+      "shown": "{shown} sur {matching, plural, one {# vol} other {# vols}}",
+      "openHint": "Clic sur une ligne : page complète du vol",
+      "found": "{count, plural, =0 {Aucun vol trouvé} one {# vol trouvé} other {# vols trouvés}}",
+      "emptySearch": "Aucun vol pour cette recherche.",
+      "bounces": "{count, plural, one {# rebond} other {# rebonds}}",
+      "goArounds": "{count, plural, one {# remise de gaz} other {# remises de gaz}}",
+      "fpm": "ft/min"
     },
     "verdicts": {
       "clean": "Propre",
@@ -1452,7 +1465,7 @@
         "label": "Grades des pilotes"
       },
       "flightHistory": {
-        "label": "Tous les vols et l'historique complet"
+        "label": "Tous les vols, l'historique complet, la recherche et le tri"
       },
       "simbriefNextFlight": {
         "label": "Prochain vol SimBrief et lancement du traqueur"
@@ -1728,7 +1741,7 @@
       },
       "flightHistory": {
         "title": "Historique complet",
-        "text": "Tous vos vols sont gardés, sans limite de nombre ni de durée, y compris en gratuit."
+        "text": "Tous vos vols sont gardés, sans limite de nombre ni de durée, y compris en gratuit. Retrouvez-en un par code OACI, aéroport ou avion, et triez-les par date, durée ou toucher."
       },
       "simbriefNextFlight": {
         "title": "Prochain vol SimBrief",

@@ -81,6 +81,17 @@ export {
   LogbookEntry,
 } from "./api/logbook-flights.ts";
 export {
+  LOGBOOK_LIST_FILTERS,
+  LOGBOOK_LIST_PAGE,
+  LOGBOOK_LIST_SORTS,
+  LogbookList,
+  LogbookListEntry,
+  LogbookListFilter,
+  LogbookListQuery,
+  LogbookListSort,
+  SortOrder,
+} from "./api/logbook-list.ts";
+export {
   LiveEvent,
   LiveFlight,
   LivePilot,

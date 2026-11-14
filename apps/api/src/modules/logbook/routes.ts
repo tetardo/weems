@@ -5,6 +5,8 @@ import {
   FlightBands,
   FlightId,
   LogbookEntries,
+  LogbookList,
+  LogbookListQuery,
   LogbookStats,
   LogbookStatsPeriod,
   LogbookSummary,
@@ -63,7 +65,32 @@ export function registerPrivateLogbookRoutes(
     },
     async (request) => service.bands(callerOf(request), request.params.flightId),
   );
+  registerListRoute(parent, service, guards);
   registerStatsRoute(parent, service, guards);
+}
+
+/** Page Vols: the list, searched, filtered, sorted and read 50 lines at a time. */
+function registerListRoute(
+  parent: FastifyInstance,
+  service: PrivateLogbookService,
+  guards: Guards,
+): void {
+  const app = parent.withTypeProvider<ZodTypeProvider>();
+  app.get(
+    "/v1/me/logbook/list",
+    {
+      onRequest: guards.pilot,
+      schema: {
+        tags,
+        security,
+        querystring: LogbookListQuery,
+        description:
+          "Private logbook, page Vols: searched, filtered and sorted list, 50 lines at a time.",
+        response: { 200: LogbookList, 401: Problem },
+      },
+    },
+    async (request) => service.list(callerOf(request), request.query),
+  );
 }
 
 /** Page Statistiques: the period, and the Pilot Pro blocks as the plan allows. */

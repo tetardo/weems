@@ -1,4 +1,5 @@
 import type { LogbookSummary } from "@weems/contrats";
+import { fullFlightHref } from "../flight/full-flight-href.ts";
 import { useFormatter, useTranslations } from "next-intl";
 import { formatRoute } from "../../format/flight-format.ts";
 import { Link } from "../../i18n/navigation.ts";
@@ -21,7 +22,7 @@ export function RecentFlights({ flights }: { flights: LogbookSummary["recentFlig
         {flights.map(({ flight, touchdownVs }) => (
           <li key={flight.flightId} className="border-b border-line last:border-b-0">
             <Link
-              href={`/logbook/flights/${flight.flightId}`}
+              href={fullFlightHref(flight.flightId)}
               className="grid grid-cols-[3.5em_minmax(0,1fr)_auto] items-center gap-3 py-2.5 text-[14px] hover:text-link sm:grid-cols-[3.5em_9em_minmax(0,1fr)_auto]"
             >
               <span className="text-muted tabular-nums">

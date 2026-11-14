@@ -15,7 +15,7 @@ export function FullFlightTop({ data }: { data: FullFlight }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <Link
-        href={`/logbook/flights/${id}`}
+        href="/logbook/flights"
         className="inline-flex items-center gap-1 text-[13px] text-link"
       >
         <BackIcon size={16} aria-hidden="true" />
