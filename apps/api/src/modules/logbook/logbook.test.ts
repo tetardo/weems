@@ -65,6 +65,40 @@ describe("GET /v1/me/logbook/entries", () => {
   });
 });
 
+describe("GET /v1/me/logbook/list", () => {
+  it("needs a pilot", async () => {
+    const response = await app.inject({ method: "GET", url: "/v1/me/logbook/list" });
+    expect(response.statusCode).toBe(401);
+  });
+
+  it("searches the pilot's flights and reads them by slices", async () => {
+    const { cookie, id } = await flightWithTrack();
+    const listOf = async (search: string) =>
+      (
+        await app.inject({
+          method: "GET",
+          url: `/v1/me/logbook/list?${search}`,
+          headers: { cookie },
+        })
+      ).json();
+    expect(await listOf("q=zzzz")).toMatchObject({ entries: [], matching: 0, total: 1 });
+    expect(await listOf("sort=touchdown&order=asc&limit=1")).toMatchObject({
+      entries: [expect.objectContaining({ flight: expect.objectContaining({ flightId: id }) })],
+      nextOffset: null,
+    });
+  });
+
+  it("refuses an unknown sort", async () => {
+    const { cookie } = await flightWithTrack();
+    const response = await app.inject({
+      method: "GET",
+      url: "/v1/me/logbook/list?sort=speed",
+      headers: { cookie },
+    });
+    expect(response.statusCode).toBe(400);
+  });
+});
+
 describe("GET /v1/me/logbook/flights/{id}/bands", () => {
   it("gives the bands, without the marks on Pilot Free", async () => {
     const { cookie, id } = await flightWithTrack();

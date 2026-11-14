@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { FlightsPage } from "../../../../../../logbook/flights/flights-page.tsx";
-import { entryFilterOf } from "../../../../../../logbook/flights/entry-filter.ts";
-import { loadFlightsPage } from "../../../../../../logbook/flights/load-flights.ts";
+import { listParamsOf } from "../../../../../../logbook/flights/list-params.ts";
+import { loadList } from "../../../../../../logbook/flights/load-list.ts";
 import { apiFallback } from "../../../../../../site/api-fallback.tsx";
 import { pageTitle } from "../../../../../../site/page-title.ts";
 
@@ -13,14 +13,14 @@ interface Props {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-/** Page Vols of the private logbook: the list, and the newest flight's sheet on large screens. */
+/** Page Vols of the private logbook: the searched, filtered and sorted list, full width. */
 export default async function LogbookFlightsPage({ params, searchParams }: Props) {
   setRequestLocale((await params).locale);
-  const filter = entryFilterOf((await searchParams)["f"]);
+  const listParams = listParamsOf(await searchParams);
   try {
-    const page = await loadFlightsPage(null, filter);
-    if (!page) notFound();
-    return <FlightsPage {...page} filter={filter} sheetFirst={false} />;
+    const list = await loadList(listParams);
+    if (!list) notFound();
+    return <FlightsPage list={list} params={listParams} />;
   } catch (error) {
     return apiFallback(error);
   }

@@ -701,14 +701,7 @@
     },
     "flights": {
       "title": "Flights",
-      "count": "{count, plural, =0 {no flight} one {# flight} other {# flights}}",
       "empty": "No finished flight yet.",
-      "all": "All flights",
-      "fullPage": "Full flight page",
-      "bands": "Flight bands",
-      "bandsAside": "{minutes} min · {rows} parameters",
-      "noTrack": "This flight has no trajectory.",
-      "profile": "Altitude profile",
       "intro": "{count, plural, =0 {No flight} one {# flight} other {# flights}} · all your flights, including the ones hidden from your public page.",
       "filters": {
         "all": "All",
@@ -716,7 +709,27 @@
         "review": "To review"
       },
       "emptyFiltered": "No flight for this filter.",
-      "ecamPage": "ECAM page"
+      "ecamPage": "ECAM page",
+      "search": "Search an ICAO code, an airport, an aircraft…",
+      "searchLabel": "Search the flights",
+      "clearSearch": "Clear the search",
+      "columns": {
+        "date": "Date",
+        "route": "Route",
+        "aircraft": "Aircraft",
+        "block": "Block",
+        "touchdown": "Touchdown",
+        "verdict": "Verdict"
+      },
+      "sortBy": "Sort by {column}",
+      "loadMore": "Load {count} more flights",
+      "shown": "{shown} of {matching, plural, one {# flight} other {# flights}}",
+      "openHint": "Click a line: full flight page",
+      "found": "{count, plural, =0 {No flight found} one {# flight found} other {# flights found}}",
+      "emptySearch": "No flight for this search.",
+      "bounces": "{count, plural, one {# bounce} other {# bounces}}",
+      "goArounds": "{count, plural, one {# go-around} other {# go-arounds}}",
+      "fpm": "ft/min"
     },
     "verdicts": {
       "clean": "Clean",
@@ -1428,7 +1441,7 @@
         "label": "Pilot ranks"
       },
       "flightHistory": {
-        "label": "Every flight and the full history"
+        "label": "Every flight, the full history, search and sorting"
       },
       "simbriefNextFlight": {
         "label": "Next SimBrief flight and tracker launch"
@@ -1704,7 +1717,7 @@
       },
       "flightHistory": {
         "title": "Full history",
-        "text": "All your flights are kept, with no limit on number or age, free plan included."
+        "text": "All your flights are kept, with no limit on number or age, free plan included. Find one by ICAO code, airport or aircraft, and sort them by date, duration or touchdown."
       },
       "simbriefNextFlight": {
         "title": "Next SimBrief flight",
