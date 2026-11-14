@@ -3,6 +3,7 @@ import { ReviewForm } from "../../flight/review-form.tsx";
 import { DoneIcon, StatsIcon } from "../../ui/icons.ts";
 import { CardGroup } from "../card-group.tsx";
 import { LogbookCard } from "../logbook-card.tsx";
+import { EcamBands } from "../ecam/ecam-bands.tsx";
 import { FlightBands } from "../flights/flight-bands.tsx";
 import { ApproachCard } from "./approach-card.tsx";
 import { ComparisonCard } from "./comparison-card.tsx";
@@ -35,7 +36,12 @@ export function FullFlightPage({ data }: { data: FullFlight }) {
       <CardGroup title={t("groups.bands")}>
         <LogbookCard icon={StatsIcon} title={t("bands")}>
           {bands ? (
-            <FlightBands bands={bands} />
+            <>
+              <EcamBands bands={bands} />
+              <div className="mt-5">
+                <FlightBands bands={bands} />
+              </div>
+            </>
           ) : (
             <p className="m-0 text-[13px] text-muted">{t("noTrack")}</p>
           )}

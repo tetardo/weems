@@ -811,6 +811,23 @@
       "marksTitle": "Points to review",
       "discover": "Discover Pilot Pro"
     },
+    "ecam": {
+      "title": "FLIGHT BANDS",
+      "phase": "PHASE",
+      "groups": {
+        "trajectory": "TRAJ",
+        "controls": "CTRL",
+        "cabin": "LT / CAB"
+      },
+      "idle": "HOVER A COLUMN · CLICK TO HOLD",
+      "hover": "CLICK TO HOLD",
+      "pinnedHint": "← → MINUTE · ESC",
+      "pinned": "HELD",
+      "apOff": "AP OFF",
+      "unmeasured": "N/M",
+      "unmeasuredTitle": "Not measured on this aircraft",
+      "label": "Flight bands, cockpit-style screen: hover or click a column to read the minute"
+    },
     "stats": {
       "title": "Statistics",
       "intro": "Your figures by theme. Pick a theme or scroll.",

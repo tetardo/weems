@@ -9,6 +9,7 @@ import { fullFlightHref } from "../flight/full-flight-href.ts";
 import { FlightMinis } from "../flight-minis.tsx";
 import { LogbookCard } from "../logbook-card.tsx";
 import { StageProfile } from "../summary/stage-profile.tsx";
+import { EcamBands } from "../ecam/ecam-bands.tsx";
 import { FlightBands } from "./flight-bands.tsx";
 import { VerdictChip } from "./verdict-chip.tsx";
 
@@ -84,7 +85,12 @@ export function FlightSheet({
         aside={bands && t("bandsAside", { minutes: bands.minutes.length, rows: bands.rows.length })}
       >
         {bands ? (
-          <FlightBands bands={bands} />
+          <>
+            <EcamBands bands={bands} />
+            <div className="mt-5">
+              <FlightBands bands={bands} />
+            </div>
+          </>
         ) : (
           <p className="m-0 text-[13px] text-muted">{t("noTrack")}</p>
         )}

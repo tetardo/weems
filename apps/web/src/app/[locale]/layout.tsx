@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { B612_Mono, Inter, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import { routing } from "../../i18n/routing.ts";
 import { siteUrl } from "../../site/site-url.ts";
@@ -12,6 +12,13 @@ import "../global.css";
 /** GameLab fonts, self-hosted by Next.js at build time (no request to Google from the browser). */
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const grotesk = Space_Grotesk({ subsets: ["latin"], weight: "700", variable: "--font-grotesk" });
+/** Airbus cockpit font (open licence), for the cockpit screen of the flight bands only. */
+const cockpit = B612_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-b612",
+  preload: false,
+});
 
 interface Props {
   children: ReactNode;
@@ -41,7 +48,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     // data-theme is set by THEME_SCRIPT before React runs: the attribute differs from the server.
     <html
       lang={locale}
-      className={`${inter.variable} ${grotesk.variable}`}
+      className={`${inter.variable} ${grotesk.variable} ${cockpit.variable}`}
       suppressHydrationWarning
     >
       <head>
