@@ -58,6 +58,7 @@ const NICE: Airport = {
   iata: "NCE",
   country: "FR",
   elevationFt: 12,
+  timezone: "Europe/Paris",
   lat: 43.6584,
   lon: 7.2159,
 };

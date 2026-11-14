@@ -1,52 +1,91 @@
 import { readFileSync } from "node:fs";
-import type { Airport } from "@weems/contrats";
-import { shortAirportName, splitCsvLine } from "./ourairports.ts";
+import { AirportType } from "@weems/contrats";
+import type { AirportRecord } from "./airport-record.ts";
+import { formatCsv, integer, parseCsv, text } from "./csv.ts";
+import { shortAirportName } from "./ourairports.ts";
 
 /**
  * The API's airport list, `apps/api/data/airports.csv` (decisions 005 and 023): one airport per
- * line, CSV with "quoted" fields when they hold a comma or a quote. Made by `pnpm airports:update`.
- * The short name is not stored: it is worked out from the name when the file is read.
+ * line. Made by `pnpm airports:update`. The short name is not stored: it is worked out from the
+ * name when the file is read.
  */
 export const AIRPORTS_FILE = new URL("../../../data/airports.csv", import.meta.url);
 
-const HEADER = "icao,lat,lon,elevationFt,iata,country,name";
+const HEADER = [
+  "icao",
+  "ident",
+  "lat",
+  "lon",
+  "elevationFt",
+  "iata",
+  "country",
+  "timezone",
+  "type",
+  "continent",
+  "region",
+  "regionName",
+  "scheduledService",
+  "name",
+  "wikipediaLink",
+  "homeLink",
+  "keywords",
+];
 
-const quoted = (text: string) => (/[",]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text);
-
-export function formatAirportsFile(airports: readonly Airport[]): string {
-  const lines = airports.map((airport) =>
-    [
+export function formatAirportsFile(airports: readonly AirportRecord[]): string {
+  return formatCsv(
+    HEADER,
+    airports.map((airport) => [
       airport.icao,
+      airport.ident,
       airport.lat,
       airport.lon,
-      airport.elevationFt ?? "",
-      airport.iata ?? "",
+      airport.elevationFt,
+      airport.iata,
       airport.country,
-      quoted(airport.name),
-    ].join(","),
+      airport.timezone,
+      airport.type,
+      airport.continent,
+      airport.region,
+      airport.regionName,
+      airport.scheduledService,
+      airport.name,
+      airport.wikipediaLink,
+      airport.homeLink,
+      airport.keywords.join(", "),
+    ]),
   );
-  return `${[HEADER, ...lines].join("\n")}\n`;
 }
 
-export function parseAirportsFile(text: string): Map<string, Airport> {
-  const airports = new Map<string, Airport>();
-  for (const line of text.split("\n").slice(1)) {
-    const [icao, lat, lon, elevation, iata, country, name] = splitCsvLine(line);
-    if (icao && lat && lon && country && name !== undefined) {
-      airports.set(icao, {
-        icao,
-        lat: Number(lat),
-        lon: Number(lon),
-        elevationFt: elevation ? Number(elevation) : null,
-        iata: iata || null,
-        country,
-        shortName: shortAirportName(name),
-        name,
-      });
-    }
+export function parseAirportsFile(csv: string): Map<string, AirportRecord> {
+  const airports = new Map<string, AirportRecord>();
+  for (const get of parseCsv(csv)) {
+    const name = get("name");
+    const airport: AirportRecord = {
+      icao: get("icao"),
+      ident: get("ident"),
+      lat: Number(get("lat")),
+      lon: Number(get("lon")),
+      elevationFt: integer(get("elevationFt")),
+      iata: text(get("iata")),
+      country: get("country"),
+      timezone: get("timezone"),
+      type: AirportType.parse(get("type")),
+      continent: get("continent"),
+      region: get("region"),
+      regionName: text(get("regionName")),
+      scheduledService: get("scheduledService") === "1",
+      name,
+      shortName: shortAirportName(name),
+      wikipediaLink: text(get("wikipediaLink")),
+      homeLink: text(get("homeLink")),
+      keywords: get("keywords")
+        .split(", ")
+        .filter((keyword) => keyword.length > 0),
+    };
+    airports.set(airport.icao, airport);
   }
   return airports;
 }
 
-export const readAirportsFile = (file: URL = AIRPORTS_FILE): Map<string, Airport> =>
+export const readAirportsFile = (file: URL = AIRPORTS_FILE): Map<string, AirportRecord> =>
   parseAirportsFile(readFileSync(file, "utf8"));

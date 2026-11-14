@@ -1,12 +1,15 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
-import { AirportList, AirportsQuery, Problem } from "@weems/contrats";
+import { AirportDetail, AirportList, AirportParams, AirportsQuery, Problem } from "@weems/contrats";
 import type { AirportsService } from "./service.ts";
 
-/**
- * GET /v1/airports?codes=LFPG,LFBO. Public reference data (OurAirports), read by the live map
- * from the browser: open to every origin, and cacheable for a day.
- */
+/** Public reference data (OurAirports), read from the browser: open to every origin, cacheable for a day. */
+const PUBLIC_HEADERS = {
+  "access-control-allow-origin": "*",
+  "cache-control": "public, max-age=86400",
+};
+
+/** GET /v1/airports?codes=LFPG,LFBO (the live map) and GET /v1/airports/{icao} (one airport, in full). */
 export function registerAirportRoutes(parent: FastifyInstance, airports: AirportsService): void {
   const app = parent.withTypeProvider<ZodTypeProvider>();
   app.get(
@@ -20,11 +23,23 @@ export function registerAirportRoutes(parent: FastifyInstance, airports: Airport
       },
     },
     async (request, reply) => {
-      reply.headers({
-        "access-control-allow-origin": "*",
-        "cache-control": "public, max-age=86400",
-      });
+      reply.headers(PUBLIC_HEADERS);
       return { airports: airports.findAll(request.query.codes) };
+    },
+  );
+  app.get(
+    "/v1/airports/:icao",
+    {
+      schema: {
+        tags: ["airports"],
+        description: "One airport with its runways and radio frequencies.",
+        params: AirportParams,
+        response: { 200: AirportDetail, 400: Problem, 404: Problem },
+      },
+    },
+    async (request, reply) => {
+      reply.headers(PUBLIC_HEADERS);
+      return airports.detail(request.params.icao);
     },
   );
 }

@@ -191,7 +191,18 @@ export {
   HomeImages,
   HomeTheme,
 } from "./api/home-images.ts";
-export { Airport, AirportList, AirportsQuery, MAX_AIRPORT_CODES } from "./api/airports.ts";
+export {
+  Airport,
+  AirportDetail,
+  AirportFrequency,
+  AirportList,
+  AirportParams,
+  AirportsQuery,
+  AirportType,
+  MAX_AIRPORT_CODES,
+  Runway,
+  RunwayEnd,
+} from "./api/airports.ts";
 export { TrackerLogin } from "./api/tracker-login.ts";
 export { FlightReview, FlightReviewView } from "./api/flight-review.ts";
 export { landingSummary, type LandingSummary } from "./flight/landing-summary.ts";
