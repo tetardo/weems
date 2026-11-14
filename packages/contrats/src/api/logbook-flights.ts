@@ -46,17 +46,34 @@ export const BandRow = z.enum([
   "parkingBrake",
   "autopilot",
   "landingLight",
+  "beacon",
+  "strobe",
   "seatbelts",
   "cabinAltitude",
+  "cabinRate",
 ]);
 export type BandRow = z.infer<typeof BandRow>;
 
 /**
  * Why a stretch of the bands is worth reviewing (Pilot Pro, provisional criteria until set with a
  * pilot): above 250 kt below 10,000 ft (SERA.6001), bank over 30°, sink rate over 1,000 ft/min
- * below 1,000 ft above the ground (Flight Safety Foundation stabilised approach).
+ * below 1,000 ft above the ground (Flight Safety Foundation stabilised approach). Since 14/11/2026,
+ * from the full recording: overspeed or stall warning in the air, beacon off while an engine runs,
+ * strobes off on the runway, landing light off in the air below 10,000 ft, taxiing faster than
+ * 30 kt, cabin rate beyond comfort on a pressurised aircraft (+500 / -300 ft/min).
  */
-export const BandMarkReason = z.enum(["speed250", "bank30", "sinkRate"]);
+export const BandMarkReason = z.enum([
+  "speed250",
+  "bank30",
+  "sinkRate",
+  "overspeedWarning",
+  "stallWarning",
+  "beaconOff",
+  "strobeOffRunway",
+  "landingLightLow",
+  "taxiSpeed",
+  "cabinRate",
+]);
 export type BandMarkReason = z.infer<typeof BandMarkReason>;
 
 /**
@@ -64,7 +81,8 @@ export type BandMarkReason = z.infer<typeof BandMarkReason>;
  * speed kt IAS (mean), vertical speed ft/min (mean), bank ° (largest either side), load factor g
  * (highest), N1 % (mean), flaps (highest index), gear and spoilers 0 to 1 (highest), braking kt/s
  * on the ground (strongest deceleration), parking brake, autopilot, landing light and seat belt
- * sign as the share of the minute when on (0 to 1), cabin altitude ft (highest). null: not recorded.
+ * sign, beacon and strobes as the share of the minute when on (0 to 1), cabin altitude ft (highest),
+ * cabin rate ft/min (largest either way). null: not recorded.
  */
 export const BandMinute = z.object({
   at: UtcTimestamp,
@@ -82,6 +100,12 @@ export const FlightBands = z.object({
   marks: z
     .array(z.object({ row: BandRow, from: Count, to: Count, reason: BandMarkReason }))
     .nullable(),
+  /**
+   * Marks that could not be checked: the value the rule needs is missing or never changes on this
+   * aircraft (a dead simulator variable must never count against the pilot). Flights recorded
+   * before 14/11/2026 list none. null when the plan does not include the marks.
+   */
+  unmeasured: z.array(BandMarkReason).nullable(),
   /** Fuel burnt from the first to the last point, kg; null when not recorded. */
   fuelUsedKg: z.number().nonnegative().nullable(),
   /** Length of the trajectory, nautical miles (simplified points, as on the page Résumé). */

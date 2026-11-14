@@ -2,7 +2,7 @@
 
 import type { FlightBands as Bands } from "@weems/contrats";
 import { buttonClass } from "@weems/ui";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { Fragment, useState } from "react";
 import { Link } from "../../i18n/navigation.ts";
 import { PrivateIcon } from "../../ui/icons.ts";
@@ -33,47 +33,71 @@ function TimeAxis({ bands }: { bands: Bands }) {
   );
 }
 
+/** The marks this aircraft could not give (missing or frozen value): never held against the pilot. */
+function Unmeasured({ reasons }: { reasons: Bands["unmeasured"] }) {
+  const t = useTranslations("Logbook.bands");
+  const format = useFormatter();
+  if (!reasons || reasons.length === 0) return null;
+  const list = format.list(reasons.map((reason) => t(`reasons.${reason}`)));
+  return <p className="m-0 mt-2 text-[12.5px] text-muted">{t("unmeasured", { reasons: list })}</p>;
+}
+
+/** The way to the stretches to review, for a free pilot. */
+function MarksLocked() {
+  const t = useTranslations("Logbook.bands");
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-3 rounded-box bg-accent-2/10 px-3 py-2.5 text-[12.5px]">
+      <PrivateIcon size={16} className="flex-none text-accent-2" aria-hidden="true" />
+      <p className="m-0 min-w-0 flex-1">
+        <b>{t("marksTitle")}</b> : {t("marksLocked")}
+      </p>
+      <Link href="/plans" className={`${buttonClass()} min-h-9 text-[13px]`}>
+        {t("discover")}
+      </Link>
+    </div>
+  );
+}
+
 /** The stretches to review (Pilot Pro), or the way to them for a free pilot. */
 function MarksLine({
   marks,
+  unmeasured,
   minutes,
   onSelect,
 }: {
   marks: Marks | null;
+  unmeasured: Bands["unmeasured"];
   minutes: Bands["minutes"];
   onSelect: (i: number) => void;
 }) {
   const t = useTranslations("Logbook.bands");
   const time = useTime();
-  if (marks === null)
-    return (
-      <div className="mt-3 flex flex-wrap items-center gap-3 rounded-box bg-accent-2/10 px-3 py-2.5 text-[12.5px]">
-        <PrivateIcon size={16} className="flex-none text-accent-2" aria-hidden="true" />
-        <p className="m-0 min-w-0 flex-1">
-          <b>{t("marksTitle")}</b> : {t("marksLocked")}
-        </p>
-        <Link href="/plans" className={`${buttonClass()} min-h-9 text-[13px]`}>
-          {t("discover")}
-        </Link>
-      </div>
-    );
+  if (marks === null) return <MarksLocked />;
   if (marks.length === 0)
-    return <p className="m-0 mt-2 text-[12.5px] text-muted">{t("noMarks")}</p>;
+    return (
+      <>
+        <p className="m-0 mt-2 text-[12.5px] text-muted">{t("noMarks")}</p>
+        <Unmeasured reasons={unmeasured} />
+      </>
+    );
   return (
-    <ul className="m-0 mt-2 flex list-none flex-wrap gap-2 p-0 text-[12.5px]">
-      {marks.map((mark) => (
-        <li key={`${mark.reason}-${mark.from}`}>
-          <button
-            type="button"
-            onClick={() => onSelect(mark.from)}
-            className="rounded-tag border border-danger/60 px-2 py-0.5 hover:bg-danger/10"
-          >
-            {time(minutes[mark.from]?.at ?? "")} · {t(`reasons.${mark.reason}`)}
-          </button>
-        </li>
-      ))}
-      <li className="text-muted">{t("provisional")}</li>
-    </ul>
+    <>
+      <ul className="m-0 mt-2 flex list-none flex-wrap gap-2 p-0 text-[12.5px]">
+        {marks.map((mark) => (
+          <li key={`${mark.reason}-${mark.from}`}>
+            <button
+              type="button"
+              onClick={() => onSelect(mark.from)}
+              className="rounded-tag border border-danger/60 px-2 py-0.5 hover:bg-danger/10"
+            >
+              {time(minutes[mark.from]?.at ?? "")} · {t(`reasons.${mark.reason}`)}
+            </button>
+          </li>
+        ))}
+        <li className="text-muted">{t("provisional")}</li>
+      </ul>
+      <Unmeasured reasons={unmeasured} />
+    </>
   );
 }
 
@@ -113,7 +137,14 @@ export function FlightBands({ bands, withMarks = true }: { bands: Bands; withMar
           <TimeAxis bands={bands} />
         </div>
       </div>
-      {withMarks && <MarksLine marks={bands.marks} minutes={bands.minutes} onSelect={setHovered} />}
+      {withMarks && (
+        <MarksLine
+          marks={bands.marks}
+          unmeasured={bands.unmeasured}
+          minutes={bands.minutes}
+          onSelect={setHovered}
+        />
+      )}
       <MinuteDetails bands={bands} index={hovered} />
     </div>
   );

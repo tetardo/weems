@@ -68,7 +68,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [009](decisions/009-console-admin-locale.md) | Console locale | À jour |
 | [010](decisions/010-vols-simules-pistes-et-virages.md) | Vols simulés réalistes | À jour |
 | [011 — activité simulée](decisions/011-activite-simulee-comptes-fictifs.md) | Comptes fictifs, vols passés | À jour |
-| [011 — démarrage par icônes](decisions/011-demarrage-par-icones.md) | Icônes Weems Start / Stop | Scripts à jour ; les icônes sont remplacées par l'app de la fiche 020 (deux fiches portent le numéro 011 ; gardées telles quelles pour ne pas casser les liens, la prochaine fiche est la 022) |
+| [011 — démarrage par icônes](decisions/011-demarrage-par-icones.md) | Icônes Weems Start / Stop | Scripts à jour ; les icônes sont remplacées par l'app de la fiche 020 (deux fiches portent le numéro 011 ; gardées telles quelles pour ne pas casser les liens, la prochaine fiche est la 023) |
 | [012](decisions/012-console-connexion-automatique-en-local.md) | Connexion automatique de la console | À jour |
 | [013](decisions/013-ci-j1-seulement-si-chaine-touchee.md) | CI : J1 filtré par chemins | À jour |
 | [014](decisions/014-arrondis-des-cadres.md) | 6 jetons d'arrondi | À jour |
@@ -79,6 +79,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [019](decisions/019-comptes-fictifs-grades-et-vols-varies.md) | Comptes fictifs : vols variés, carrières jusqu'aux 9 grades, départs aléatoires | À jour au 13/11 |
 | [020](decisions/020-lanceur-mac.md) | App Mac « Weems » : démarrer, arrêter, redémarrer sans Terminal | À jour au 13/11 |
 | [021](decisions/021-point-de-trajectoire-complet.md) | Le tracker envoie tout l'échantillon, compressé ; le simulateur d'activité le remplit | À jour au 14/11 |
+| [022](decisions/022-marques-et-qualite-de-la-donnee.md) | Repères des bandes : feux, alarmes, roulage, cabine ; qualité de la donnée (vivante, figée, absente) | À jour au 14/11 |
 
 ## Développement (`developpement/`)
 
