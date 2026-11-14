@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { gzipSync } from "node:zlib";
-import type { Receipt, TrackPoint, TrackView } from "@weems/contrats";
+import { type Receipt, type RecordedPoint, TrackPoint, type TrackView } from "@weems/contrats";
 import type { Caller } from "../../plugins/auth.ts";
 import { conflict, notFound } from "../../plugins/problem.ts";
 import type { FlightsService } from "../flights/service.ts";
@@ -14,6 +14,9 @@ import { simplifyTrack } from "./simplify.ts";
 const MAX_DRAWN_POINTS = 500;
 
 const timesOf = (points: readonly TrackPoint[]) => points.map((p) => Date.parse(p.at));
+
+/** Only what pages draw: the rest of each sample stays in the compressed recording (fiche 021). */
+const drawnOf = (point: RecordedPoint): TrackPoint => TrackPoint.parse(point);
 
 /** Trajectories: received once per flight, read back simplified with the phase of each point. */
 export class TracksService {
@@ -34,7 +37,7 @@ export class TracksService {
     this.completed.push(listener);
   }
 
-  async upload(caller: Caller, flightId: string, points: TrackPoint[]): Promise<Receipt> {
+  async upload(caller: Caller, flightId: string, points: RecordedPoint[]): Promise<Receipt> {
     const flight = await this.flights.read(caller, flightId); // 404 if not the caller's
     const json = JSON.stringify(points);
     const sha256 = createHash("sha256").update(json).digest("hex");
@@ -45,7 +48,7 @@ export class TracksService {
       points,
       MAX_DRAWN_POINTS,
       phaseChangeIndices(starts, timesOf(points)),
-    );
+    ).map(drawnOf);
     const track = { recordedPoints: points.length, sha256, simplified, points: gzipSync(json) };
     if (await this.store.insert(flightId, track)) {
       for (const listener of this.completed) await listener(caller.pilotId);

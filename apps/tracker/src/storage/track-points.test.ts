@@ -33,3 +33,13 @@ describe("band values of a point", () => {
     expect(n1([engine(true, null)])).toBeNull();
   });
 });
+
+describe("rest of the sample (fiche 021)", () => {
+  it("sends every value of the sample but its monotonic time", () => {
+    const s = sample({ pitch: 4, tas: 300, wind: { dir: 200, speed: 25 }, stall: true });
+    const p = toTrackPoint(s, "2026-11-14T08:00:00.000Z");
+    expect(p).toMatchObject({ pitch: 4, tas: 300, wind: { dir: 200, speed: 25 }, stall: true });
+    expect(p.engines).toEqual(s.engines);
+    expect(p).not.toHaveProperty("t");
+  });
+});

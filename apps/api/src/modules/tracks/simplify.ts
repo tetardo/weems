@@ -65,11 +65,11 @@ function groundChanges(points: readonly TrackPoint[]): number[] {
  * At most `maxPoints` points that still draw the same trajectory and profile (spec J2).
  * The first and last points, ground changes and the `mustKeep` indices are always kept.
  */
-export function simplifyTrack(
-  points: readonly TrackPoint[],
+export function simplifyTrack<P extends TrackPoint>(
+  points: readonly P[],
   maxPoints: number,
   mustKeep: readonly number[] = [],
-): TrackPoint[] {
+): P[] {
   if (points.length <= maxPoints) return [...points];
   const cosLat = Math.cos((get(points, 0).lat * Math.PI) / 180);
   const vectors = points.map((p) => toVector(p, cosLat));

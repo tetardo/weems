@@ -1,0 +1,9 @@
+flowchart LR
+  msfs["MSFS<br/>45 SimVars + moteurs"] --> sample["Échantillon complet<br/>(Sample)"]
+  sample --> sqlite[("SQLite du PC<br/>tout, à chaque lecture")]
+  sqlite -->|"à la clôture, 1 point/s"| point["Point enregistré<br/>(RecordedPoint)<br/>dessiné + reste du Sample"]
+  point -->|"JSON compressé gzip<br/>(au-delà de 32 Ko)"| api["API<br/>POST /v1/flights/{id}/track"]
+  api --> full[("flight_tracks.points<br/>tous les points, tous les champs")]
+  api --> simple[("flight_tracks.simplified<br/>~500 points, champs dessinés seulement")]
+  full --> analyses["Bandes, statistiques,<br/>futures analyses"]
+  simple --> pages["Carte, profil vertical"]

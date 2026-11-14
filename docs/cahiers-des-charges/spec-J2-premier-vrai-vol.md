@@ -62,8 +62,8 @@ Le cœur du tracker est le même qu'en J0 et J1. Seuls le connecteur et l'envoi 
 ### Trajectoire
 
 - Le tracker garde déjà tous les échantillons dans SQLite. À la clôture du vol, il envoie la **trajectoire complète** par la file d'envoi (même garantie que les événements : rien n'est perdu en cas de coupure).
-- Contenu : pour chaque échantillon, heure, position, altitudes, vitesses, cap, au sol ou non. Environ 7 200 points pour 2 heures à une fois par seconde.
-- Format : JSON, environ 1,5 Mo pour 2 heures sur le réseau local ; l'API le garde compressé en gzip (environ 150 Ko) [Confiance moyenne].
+- Contenu : pour chaque échantillon, heure, position, altitudes, vitesses, cap, au sol ou non. Environ 7 200 points pour 2 heures à une fois par seconde. Depuis le 14/11/2026, chaque point porte aussi **tout le reste de l'échantillon** (format `RecordedPoint`, fiche [021](../decisions/021-point-de-trajectoire-complet.md)).
+- Format : JSON compressé en gzip par le tracker (environ 1 Ko par point, 10 fois moins une fois compressé) ; l'API le garde compressé. Les points simplifiés des pages ne gardent que les champs dessinés.
 
 ![Clôture du vol et envoi de la trajectoire](../schemas/img/j2-trajectoire.png)
 
