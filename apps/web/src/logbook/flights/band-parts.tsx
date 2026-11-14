@@ -128,27 +128,37 @@ export function TimeAxis({
   bands,
   corner = <span />,
   tone = "text-muted",
+  current = null,
 }: {
   bands: Bands;
   corner?: ReactNode;
   tone?: string;
+  /** Minute read: its time in a white tag, the times too close to it left out. */
+  current?: number | null;
 }) {
   const time = useTime();
-  const step = Math.max(1, Math.ceil(bands.minutes.length / 6));
+  const count = bands.minutes.length;
+  const step = Math.max(1, Math.ceil(count / 6));
+  const near = (i: number) => current !== null && Math.abs(i - current) < step / 2;
+  const read = current === null ? undefined : bands.minutes[current];
   return (
     <>
       {corner}
       <div className={`relative mt-1 h-4 text-[11.5px] leading-4 ${tone}`}>
         {bands.minutes.map((m, i) =>
-          i % step === 0 ? (
-            <span
-              key={m.at}
-              className="absolute"
-              style={{ left: `${(i / bands.minutes.length) * 100}%` }}
-            >
+          i % step === 0 && !near(i) ? (
+            <span key={m.at} className="absolute" style={{ left: `${(i / count) * 100}%` }}>
               {time(m.at)}
             </span>
           ) : null,
+        )}
+        {read && current !== null && (
+          <span
+            className="absolute z-10 -translate-x-1/2 bg-ecam-white px-1 font-bold text-ecam"
+            style={{ left: `${((current + 0.5) / count) * 100}%` }}
+          >
+            {time(read.at)}
+          </span>
         )}
       </div>
     </>

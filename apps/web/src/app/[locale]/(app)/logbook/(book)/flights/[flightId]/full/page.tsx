@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { formatRoute } from "../../../../../../../../format/flight-format.ts";
 import { FullFlightPage } from "../../../../../../../../logbook/flight/full-flight-page.tsx";
+import { fullFlightMetadata } from "../../../../../../../../logbook/flight/full-flight-metadata.ts";
 import { loadFullFlight } from "../../../../../../../../logbook/flight/load-full-flight.ts";
 import { apiFallback } from "../../../../../../../../site/api-fallback.tsx";
 
@@ -11,16 +11,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  try {
-    const data = await loadFullFlight((await params).flightId);
-    if (!data) return {};
-    const { flight } = data;
-    return {
-      title: `${flight.callsign} ${formatRoute(flight.departureIcao, flight.plannedArrivalIcao)}`,
-    };
-  } catch {
-    return {};
-  }
+  return fullFlightMetadata((await params).flightId);
 }
 
 /** Full page of one of the pilot's flights, in the logbook (maquette v13, A). */

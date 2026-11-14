@@ -35,11 +35,16 @@ function rangeOf(row: BandRow, known: readonly number[]): [number, number] {
 /**
  * Cells of one row of the bands. Shares are read as they are; flaps against the highest setting
  * of the flight; vertical speed and cabin rate by their size, climbing or descending; the other rows from the
- * lowest to the highest value of the flight.
+ * lowest to the highest value of the flight. `scale` gives the minutes the shades are measured on
+ * (the whole flight when only a stretch is shown, so a zoom keeps the same colours).
  */
-export function bandCells(minutes: readonly BandMinute[], row: BandRow): (Cell | null)[] {
+export function bandCells(
+  minutes: readonly BandMinute[],
+  row: BandRow,
+  scale: readonly BandMinute[] = minutes,
+): (Cell | null)[] {
   const values = minutes.map((m) => m.values[row] ?? null);
-  const known = values.filter((v): v is number => v !== null);
+  const known = scale.map((m) => m.values[row] ?? null).filter((v): v is number => v !== null);
   if (SIGNED.has(row)) {
     const top = Math.max(1, ...known.map(Math.abs));
     return values.map((v) =>
