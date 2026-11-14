@@ -9,6 +9,11 @@ export const Airport = z.object({
   name: z.string(),
   /** Name without its kind, for a list or a board: « Marseille Provence ». */
   shortName: z.string(),
+  /** French name (Wikidata, CC0): « Aéroport de Marseille-Provence »; null when unknown. */
+  nameFr: z.string().nullable(),
+  /** City the airport serves (Wikidata), in English and in French; null when unknown. */
+  cityEn: z.string().nullable(),
+  cityFr: z.string().nullable(),
   /** IATA code (« MRS »); null for most small fields. */
   iata: z
     .string()
@@ -70,10 +75,63 @@ export const AirportFrequency = z.object({
 });
 export type AirportFrequency = z.infer<typeof AirportFrequency>;
 
+/** Kind of radio navigation aid, as OurAirports names it. */
+export const NavaidType = z.enum(["VOR", "VOR-DME", "VORTAC", "DME", "NDB", "NDB-DME", "TACAN"]);
+export type NavaidType = z.infer<typeof NavaidType>;
+
+/** A radio navigation aid (OurAirports, real world: it may differ from the simulator's). */
+export const Navaid = z.object({
+  /** Identifier heard in Morse (« MRM »); not unique in the world. */
+  ident: z.string(),
+  name: z.string(),
+  type: NavaidType,
+  /** kHz for every kind: 112300 for a VOR on 112.30 MHz, 373 for an NDB on 373 kHz. */
+  frequencyKhz: z.number().nullable(),
+  lat: Latitude,
+  lon: Longitude,
+  elevationFt: z.number().int().nullable(),
+  country: z.string().regex(/^[A-Z]{2}$/),
+  /** Paired DME, when there is one. */
+  dme: z
+    .object({
+      frequencyKhz: z.number().nullable(),
+      /** TACAN channel (« 070X »). */
+      channel: z.string().nullable(),
+      lat: Latitude.nullable(),
+      lon: Longitude.nullable(),
+      elevationFt: z.number().int().nullable(),
+    })
+    .nullable(),
+  /** Declination the VOR is aligned on, in degrees east. */
+  slavedVariationDeg: z.number().nullable(),
+  /** Declination at the station when OurAirports recorded it, in degrees east. */
+  magneticVariationDeg: z.number().nullable(),
+  /** « HI », « LO », « BOTH », « TERMINAL », « RNAV » as OurAirports gives it. */
+  usage: z.string().nullable(),
+  /** « HIGH », « MEDIUM », « LOW » as OurAirports gives it. */
+  power: z.string().nullable(),
+  /** Code of the airport it serves, when there is one. */
+  airport: z.string().nullable(),
+});
+export type Navaid = z.infer<typeof Navaid>;
+
+/** GET /v1/navaids?lat=43.4&lon=5.2&radiusNm=50: the aids around a point, nearest first. */
+export const NavaidsQuery = z.object({
+  lat: z.coerce.number().pipe(Latitude),
+  lon: z.coerce.number().pipe(Longitude),
+  radiusNm: z.coerce.number().positive().max(250).default(50),
+});
+export type NavaidsQuery = z.infer<typeof NavaidsQuery>;
+
+export const NavaidList = z.object({ navaids: z.array(Navaid) });
+export type NavaidList = z.infer<typeof NavaidList>;
+
 /** GET /v1/airports/{icao}: everything known about one airport. */
 export const AirportDetail = Airport.extend({
   type: AirportType,
   continent: z.string().regex(/^[A-Z]{2}$/),
+  /** Country name in English (OurAirports); the site may prefer the browser's translation. */
+  countryName: z.string().nullable(),
   /** ISO 3166-2 region code (« FR-PAC ») and its name. */
   region: z.string(),
   regionName: z.string().nullable(),
@@ -85,6 +143,8 @@ export const AirportDetail = Airport.extend({
   keywords: z.array(z.string()),
   runways: z.array(Runway),
   frequencies: z.array(AirportFrequency),
+  /** Radio aids that OurAirports ties to this airport. */
+  navaids: z.array(Navaid),
 });
 export type AirportDetail = z.infer<typeof AirportDetail>;
 

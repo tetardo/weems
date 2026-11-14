@@ -1,16 +1,20 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { AirportDetail, AirportList, AirportParams, AirportsQuery, Problem } from "@weems/contrats";
+import type { NavaidsService } from "./navaids-service.ts";
+import { registerNavaidRoutes } from "./navaids-routes.ts";
+import { PUBLIC_HEADERS } from "./public-headers.ts";
 import type { AirportsService } from "./service.ts";
 
-/** Public reference data (OurAirports), read from the browser: open to every origin, cacheable for a day. */
-const PUBLIC_HEADERS = {
-  "access-control-allow-origin": "*",
-  "cache-control": "public, max-age=86400",
-};
-
-/** GET /v1/airports?codes=LFPG,LFBO (the live map) and GET /v1/airports/{icao} (one airport, in full). */
-export function registerAirportRoutes(parent: FastifyInstance, airports: AirportsService): void {
+/**
+ * GET /v1/airports?codes=LFPG,LFBO (the live map), GET /v1/airports/{icao} (one airport, in full)
+ * and GET /v1/navaids?lat=…&lon=…&radiusNm=… (radio aids around a point).
+ */
+export function registerAirportRoutes(
+  parent: FastifyInstance,
+  airports: AirportsService,
+  navaids: NavaidsService,
+): void {
   const app = parent.withTypeProvider<ZodTypeProvider>();
   app.get(
     "/v1/airports",
@@ -42,4 +46,5 @@ export function registerAirportRoutes(parent: FastifyInstance, airports: Airport
       return airports.detail(request.params.icao);
     },
   );
+  registerNavaidRoutes(parent, navaids);
 }

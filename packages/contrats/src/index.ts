@@ -200,6 +200,10 @@ export {
   AirportsQuery,
   AirportType,
   MAX_AIRPORT_CODES,
+  Navaid,
+  NavaidList,
+  NavaidsQuery,
+  NavaidType,
   Runway,
   RunwayEnd,
 } from "./api/airports.ts";
