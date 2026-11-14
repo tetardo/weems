@@ -7,7 +7,7 @@ Maquettes validées (dossier du projet `carnet/`) :
 | Page | Version validée | Affichage retenu |
 | --- | --- | --- |
 | Résumé | v6 (12/11, 22 h 10) | dernier vol C (profil d'altitude par phase + 6 petites cartes), régularité sous la progression des touchers |
-| Vols | v8 (12/11, 22 h 42) | B : liste à gauche, fiche du vol à droite ; bandes de vol au-dessus du profil d'altitude |
+| Vols | v14-liste v2 (14/11, 10 h) | Liste seule en pleine largeur (plus de fiche à côté), recherche, tri, 50 vols par page ; clic = page complète du vol, bouton ECAM par ligne (remplace la v8 B : liste + fiche) |
 | Statistiques | v10 (12/11, 22 h 55) | B : par thème (Activité, Avions et routes, Atterrissages, Technique) ; graphiques calés en bas de leur carte |
 | Objectifs | v12 (12/11, 23 h 12) | B : liste avec anneaux de progression, suivi détaillé à droite |
 
@@ -58,7 +58,7 @@ Pour tester : le bouton Free | Pro de la barre (hors production, PR #77).
 
 ## 4. Vols (`/logbook/flights`)
 
-Liste compacte à gauche (filtres, verdict Propre / Ferme / Rebond / Non conforme, note), fiche du vol choisi à droite ; sur téléphone, la liste seule, un appui ouvre la fiche en pleine page. Fiche : en-tête, 6 petites cartes, trajet, **bandes de vol** (une colonne par minute, une ligne par paramètre, survol = toutes les valeurs de la minute), profil d'altitude, dernière approche, note privée avec étiquettes, chronologie. Pilot Pro : repères à revoir encadrés sur les bandes (`flightBandsMarks` ; depuis le 14/11/2026 aussi alarmes, feux, roulage et variation cabine, seulement sur une donnée vivante, sinon « Non mesuré sur cet avion » : fiche [022](../../decisions/022-marques-et-qualite-de-la-donnee.md), schéma `schemas/marques-qualite-donnee.mmd`), analyse de l'approche (`approachAnalysis`), comparaison avec les vols du même avion (`sameAircraftComparison`).
+Depuis le 14/11/2026 (Greg, maquette `carnet/v14-liste/` v2) : **plus de fiche à côté de la liste**. La liste prend toute la largeur, une ligne par vol : date et heure, route (codes OACI, indicatif, noms des aéroports OurAirports raccourcis), avion et catégorie, temps bloc, toucher avec rebonds et remises de gaz en dessous, verdict avec les alertes du vol en dessous (pause, accélération, slew, téléportation, crash en rouge), bouton ECAM (icône) vers la page ECAM. Un clic sur la ligne ouvre la page complète du vol ; l'ancienne adresse `/logbook/flights/{id}` y renvoie. Recherche (code OACI, nom d'aéroport, avion, indicatif), filtres Tous / Propres / À revoir, tri par date, temps bloc ou toucher (second clic inverse), 50 vols par page puis « Charger 50 vols de plus » : tout est dans l'adresse (`?q=&f=&sort=&order=&n=`) et calculé par l'API (`GET /v1/me/logbook/list`). Sur téléphone : route, date, toucher et verdict. Ce qui suit décrit la fiche, aujourd'hui sur la page complète du vol. Fiche : en-tête, 6 petites cartes, trajet, **bandes de vol** (une colonne par minute, une ligne par paramètre, survol = toutes les valeurs de la minute), profil d'altitude, dernière approche, note privée avec étiquettes, chronologie. Pilot Pro : repères à revoir encadrés sur les bandes (`flightBandsMarks` ; depuis le 14/11/2026 aussi alarmes, feux, roulage et variation cabine, seulement sur une donnée vivante, sinon « Non mesuré sur cet avion » : fiche [022](../../decisions/022-marques-et-qualite-de-la-donnee.md), schéma `schemas/marques-qualite-donnee.mmd`), analyse de l'approche (`approachAnalysis`), comparaison avec les vols du même avion (`sameAircraftComparison`).
 
 ## 5. Statistiques (`/logbook/stats`)
 

@@ -1,6 +1,8 @@
 import type {
   FlightBands,
   LogbookEntries,
+  LogbookList,
+  LogbookListQuery,
   LogbookStats,
   LogbookStatsPeriod,
   LogbookSummary,
@@ -13,6 +15,7 @@ import { lengthNm } from "../profiles/stats.ts";
 import type { TracksService } from "../tracks/service.ts";
 import { flightBands, fuelUsedKg } from "./bands.ts";
 import { logbookEntry } from "./entries.ts";
+import { logbookList } from "./list.ts";
 import { inPeriod, logbookStats } from "./stats.ts";
 import { logbookSummary } from "./summary.ts";
 
@@ -49,6 +52,13 @@ export class PrivateLogbookService {
   async entries(caller: Caller): Promise<LogbookEntries> {
     const closed = await this.flights.allClosed(caller.pilotId);
     return { entries: closed.map(logbookEntry) };
+  }
+
+  /** Page Vols: the list searched, filtered, sorted, and the asked slice, with airport names. */
+  async list(caller: Caller, query: LogbookListQuery): Promise<LogbookList> {
+    const closed = await this.flights.allClosed(caller.pilotId);
+    const airportName = (icao: string | null) => this.airports.find(icao)?.name ?? null;
+    return logbookList(closed.map(logbookEntry), query, airportName);
   }
 
   /** Flight bands; the stretches to review only when the plan includes them (Pilot Pro). */

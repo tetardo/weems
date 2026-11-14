@@ -1,4 +1,5 @@
 import type { LogbookLastFlight, TrackView } from "@weems/contrats";
+import { fullFlightHref } from "../flight/full-flight-href.ts";
 import { buttonClass } from "@weems/ui";
 import { useFormatter, useTranslations } from "next-intl";
 import { CategoryBadge } from "../../aircraft/category-badge.tsx";
@@ -46,7 +47,7 @@ export function LastFlightCard({
             </span>
           </div>
         </div>
-        <Link href={`/logbook/flights/${flight.flightId}`} className={buttonClass()}>
+        <Link href={fullFlightHref(flight.flightId)} className={buttonClass()}>
           {t("open")}
         </Link>
       </div>
