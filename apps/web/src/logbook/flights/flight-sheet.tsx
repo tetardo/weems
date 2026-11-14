@@ -5,7 +5,7 @@ import { CategoryBadge } from "../../aircraft/category-badge.tsx";
 import { formatRoute } from "../../format/flight-format.ts";
 import { Link } from "../../i18n/navigation.ts";
 import { BackIcon, StatsIcon } from "../../ui/icons.ts";
-import { fullFlightHref } from "../flight/full-flight-href.ts";
+import { ecamFlightHref, fullFlightHref } from "../flight/full-flight-href.ts";
 import { FlightMinis } from "../flight-minis.tsx";
 import { LogbookCard } from "../logbook-card.tsx";
 import { StageProfile } from "../summary/stage-profile.tsx";
@@ -47,9 +47,14 @@ function SheetHeader({ entry }: { entry: LogbookEntry }) {
           <VerdictChip verdict={entry.verdict} />
         </div>
       </div>
-      <Link href={fullFlightHref(flight.flightId)} className={buttonClass("outline")}>
-        {t("fullPage")}
-      </Link>
+      <div className="flex flex-wrap gap-2">
+        <Link href={fullFlightHref(flight.flightId)} className={buttonClass("outline")}>
+          {t("fullPage")}
+        </Link>
+        <Link href={ecamFlightHref(flight.flightId)} className={buttonClass("outline")}>
+          {t("ecamPage")}
+        </Link>
+      </div>
     </div>
   );
 }

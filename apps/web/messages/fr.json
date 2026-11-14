@@ -715,7 +715,8 @@
         "clean": "Propres",
         "review": "À revoir"
       },
-      "emptyFiltered": "Aucun vol pour ce filtre."
+      "emptyFiltered": "Aucun vol pour ce filtre.",
+      "ecamPage": "Page ECAM"
     },
     "verdicts": {
       "clean": "Propre",
@@ -1162,6 +1163,17 @@
           "refused": "L'objectif n'a pas été enregistré. Réessayez."
         }
       }
+    },
+    "ecamPage": {
+      "title": "ÉCRAN ECAM DU VOL",
+      "back": "Page complète du vol",
+      "overview": "VOL",
+      "profile": "PROFIL",
+      "cell": "1 CASE = {minutes} MIN",
+      "zoom": "ZOOM {from}–{to}",
+      "reset": "DOUBLE-CLIC OU ÉCHAP : VOL ENTIER",
+      "dragHint": "GLISSER : ZOOM",
+      "noTrack": "Pas de trace pour ce vol."
     }
   },
   "Profile": {

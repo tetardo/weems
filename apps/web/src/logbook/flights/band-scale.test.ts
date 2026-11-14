@@ -32,4 +32,11 @@ describe("cells of the flight bands", () => {
       [2, "descent"],
     ]);
   });
+
+  it("measures a zoomed stretch on the whole flight's scale", () => {
+    const flight = minutes("altitude", [0, 10000, 34000, 34000]);
+    const cruise = flight.slice(2);
+    expect(bandCells(cruise, "altitude").map((c) => c?.level)).toEqual([0, 0]);
+    expect(bandCells(cruise, "altitude", flight).map((c) => c?.level)).toEqual([4, 4]);
+  });
 });

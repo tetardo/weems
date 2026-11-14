@@ -715,7 +715,8 @@
         "clean": "Clean",
         "review": "To review"
       },
-      "emptyFiltered": "No flight for this filter."
+      "emptyFiltered": "No flight for this filter.",
+      "ecamPage": "ECAM page"
     },
     "verdicts": {
       "clean": "Clean",
@@ -1162,6 +1163,17 @@
           "refused": "The goal was not saved. Try again."
         }
       }
+    },
+    "ecamPage": {
+      "title": "FLIGHT ECAM SCREEN",
+      "back": "Full flight page",
+      "overview": "FLIGHT",
+      "profile": "PROFILE",
+      "cell": "1 CELL = {minutes} MIN",
+      "zoom": "ZOOM {from}–{to}",
+      "reset": "DOUBLE-CLICK OR ESC: WHOLE FLIGHT",
+      "dragHint": "DRAG: ZOOM",
+      "noTrack": "No track for this flight."
     }
   },
   "Profile": {
