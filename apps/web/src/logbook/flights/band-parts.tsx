@@ -3,7 +3,7 @@
 /** Pieces of the flight bands: rows of cells, phase row, values of the hovered minute. */
 import type { BandRow, FlightBands as Bands } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import { colorOf } from "../../flight/phase-colors.ts";
 import { bandCells, type Cell } from "./band-scale.ts";
 import { bandValue } from "./band-rows.ts";
@@ -40,13 +40,11 @@ export function BandRowCells({
   row,
   short,
   hovered,
-  onHover,
 }: {
   bands: Bands;
   row: BandRow;
   short: boolean;
   hovered: number | null;
-  onHover: (i: number) => void;
 }) {
   return (
     <>
@@ -58,7 +56,6 @@ export function BandRowCells({
         {bandCells(bands.minutes, row).map((cell, i) => (
           <span
             key={i}
-            onMouseEnter={() => onHover(i)}
             className={`h-3 rounded-[1px] ${cell ? (SHADES[cell.tone][cell.level] ?? "") : "bg-transparent"} ${bands.marks && marked(bands.marks, row, i) ? "outline-1 outline-danger" : ""} ${hovered === i ? "outline-2 outline-ink" : ""}`}
           />
         ))}
@@ -68,22 +65,29 @@ export function BandRowCells({
 }
 
 /** The phase above the rows, in the colours of the flight page. */
-export function PhaseRow({ bands, onHover }: { bands: Bands; onHover: (i: number) => void }) {
+export function PhaseRow({
+  bands,
+  track,
+  label,
+  labelClass = "font-semibold",
+}: {
+  bands: Bands;
+  track: Ref<HTMLDivElement>;
+  /** Name of the row, « Phase » by default; `labelClass` its look. */
+  label?: string;
+  labelClass?: string;
+}) {
   const t = useTranslations("Logbook.bands");
   return (
     <>
-      <span className="text-[12.5px] font-semibold">{t("phase")}</span>
+      <span className={`text-[12.5px] ${labelClass}`}>{label ?? t("phase")}</span>
       <div
+        ref={track}
         className="grid gap-px"
         style={{ gridTemplateColumns: `repeat(${bands.minutes.length}, minmax(0, 1fr))` }}
       >
-        {bands.minutes.map((m, i) => (
-          <span
-            key={m.at}
-            onMouseEnter={() => onHover(i)}
-            className="h-2.5"
-            style={{ background: colorOf(m.phase) }}
-          />
+        {bands.minutes.map((m) => (
+          <span key={m.at} className="h-2.5" style={{ background: colorOf(m.phase) }} />
         ))}
       </div>
     </>

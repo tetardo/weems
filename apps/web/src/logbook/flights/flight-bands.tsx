@@ -16,6 +16,7 @@ import {
   type Marks,
 } from "./band-parts.tsx";
 import { BAND_GROUPS } from "./band-rows.ts";
+import { useBandPointer } from "./use-band-pointer.ts";
 
 /** The discreet switch between full row names and cockpit abbreviations (Greg, 14/11/2026). */
 function ShortNamesToggle({ on, onChange }: { on: boolean; onChange: (on: boolean) => void }) {
@@ -112,14 +113,16 @@ function MarksLine({
 export function FlightBands({ bands, withMarks = true }: { bands: Bands; withMarks?: boolean }) {
   const t = useTranslations("Logbook.bands");
   const [hovered, setHovered] = useState<number | null>(null);
+  const pointer = useBandPointer(bands.minutes.length, setHovered, setHovered);
   const [short, setShort] = useStoredSwitch("weems-bands-short-names", false);
   return (
     <div onMouseLeave={() => setHovered(null)}>
       <div className="overflow-x-auto overflow-y-hidden">
         <div
-          className={`grid min-w-[560px] items-center gap-y-1 ${short ? "grid-cols-[6.5em_minmax(0,1fr)]" : "grid-cols-[8.5em_minmax(0,1fr)]"}`}
+          {...pointer.handlers}
+          className={`grid min-w-[560px] touch-pan-y items-center gap-y-1 ${short ? "grid-cols-[6.5em_minmax(0,1fr)]" : "grid-cols-[8.5em_minmax(0,1fr)]"}`}
         >
-          <PhaseRow bands={bands} onHover={setHovered} />
+          <PhaseRow bands={bands} track={pointer.track} />
           {BAND_GROUPS.map(({ key, rows }) => {
             const shown = rows.filter((row) => bands.rows.includes(row));
             if (shown.length === 0) return null;
@@ -129,14 +132,7 @@ export function FlightBands({ bands, withMarks = true }: { bands: Bands; withMar
                   {t(`groups.${key}`)}
                 </span>
                 {shown.map((row) => (
-                  <BandRowCells
-                    key={row}
-                    bands={bands}
-                    row={row}
-                    short={short}
-                    hovered={hovered}
-                    onHover={setHovered}
-                  />
+                  <BandRowCells key={row} bands={bands} row={row} short={short} hovered={hovered} />
                 ))}
               </Fragment>
             );
