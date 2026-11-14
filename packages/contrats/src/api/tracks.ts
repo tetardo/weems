@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { FlightPhase } from "../flight/phase.ts";
 import { Heading, Latitude, Longitude } from "../telemetry/common.ts";
+import { Sample } from "../telemetry/sample.ts";
 import { UtcTimestamp } from "./common.ts";
 
 /** One point of a flight's trajectory: a recorded sample, reduced to what pages draw. */
@@ -35,9 +36,42 @@ export const TrackPoint = z.object({
 });
 export type TrackPoint = z.infer<typeof TrackPoint>;
 
+/**
+ * The rest of each sample, sent by trackers since 14/11/2026 (fiche 021): kept in the compressed
+ * recording for later analyses, never in the simplified points the pages draw. Absent on older
+ * flights; inside, unknown values are null as in the sample.
+ */
+const KeptSampleValues = Sample.pick({
+  simTimeUtc: true,
+  simRate: true,
+  altIndicated: true,
+  tas: true,
+  mach: true,
+  pitch: true,
+  onRunway: true,
+  engines: true,
+  weightKg: true,
+  accel: true,
+  cabinRate: true,
+  lights: true,
+  overspeed: true,
+  stall: true,
+  pushback: true,
+  surface: true,
+  wind: true,
+  oat: true,
+  visibilityM: true,
+  slew: true,
+  paused: true,
+}).partial();
+
+/** One point as the tracker records it: what pages draw, plus the rest of the sample. */
+export const RecordedPoint = TrackPoint.extend(KeptSampleValues.shape);
+export type RecordedPoint = z.infer<typeof RecordedPoint>;
+
 /** PUT /v1/flights/{flightId}/track: the whole trajectory, once, after closing (spec J2). */
 export const TrackUpload = z.object({
-  points: z.array(TrackPoint).min(1).max(100_000),
+  points: z.array(RecordedPoint).min(1).max(100_000),
 });
 export type TrackUpload = z.infer<typeof TrackUpload>;
 

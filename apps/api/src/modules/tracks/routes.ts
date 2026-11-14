@@ -8,8 +8,11 @@ import type { TracksService } from "./service.ts";
 const params = z.object({ flightId: FlightId });
 const errors = { 400: Problem, 401: Problem, 404: Problem, 409: Problem, 426: Problem };
 const security = [{ bearer: [] }];
-/** A 4-hour flight at one sample per second is about 2.5 MB of JSON. */
-const TRACK_BODY_LIMIT = 16 * 1024 * 1024;
+/**
+ * Decompressed size (the tracker sends gzip, about 10 times smaller): a recorded point is about
+ * 1 KB of JSON (fiche 021), so 128 MB covers the 100 000 points the contract accepts.
+ */
+const TRACK_BODY_LIMIT = 128 * 1024 * 1024;
 
 /** HTTP layer of the trajectories (spec J2): schemas and status codes only. */
 export function registerTrackRoutes(

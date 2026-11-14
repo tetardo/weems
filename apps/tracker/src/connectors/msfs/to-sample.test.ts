@@ -110,6 +110,7 @@ describe("round trip through raw SimConnect values", () => {
           longitudinal: expect.closeTo(s.accel.longitudinal, 9),
         },
         vs: expect.closeTo(s.vs, 9),
+        cabinRate: s.cabinRate === null ? null : expect.closeTo(s.cabinRate, 9),
         engines: s.engines.map((e) => ({ running: e.running, n1: e.n1 === 0 ? null : e.n1 })),
       });
     }

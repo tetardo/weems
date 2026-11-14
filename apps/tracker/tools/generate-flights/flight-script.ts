@@ -11,12 +11,27 @@ import { pickRunway } from "./navigation/route-plan.ts";
 import { turnRadiusNm, turnToward } from "./navigation/steering.ts";
 import { drawTouchdownVs } from "./navigation/vertical-profile.ts";
 import { seededRandom } from "./random.ts";
-import { type AircraftState, toSample } from "./sample-factory.ts";
+import { burnKgPerS, drawLoading } from "./aircraft-load.ts";
+import { type AircraftState, type FlightConditions, toSample } from "./sample-factory.ts";
 import type { Scenario } from "./scenario.ts";
+import { drawWeather } from "./weather.ts";
 
 const STEP_MS = 1000;
 /** Separate stream for the flight's choices, so that they do not depend on the number of samples. */
 const PLAN_SEED_SALT = 0x5eed;
+/** Another one for the weather and the load, so that adding them changed no existing flight. */
+const CONDITIONS_SEED_SALT = 0xc0d1;
+const FT_PER_S_PER_KT = 1.68781;
+const FT_PER_S2_PER_G = 32.174;
+
+function drawConditions(scenario: Scenario): FlightConditions {
+  const random = seededRandom(scenario.seed ^ CONDITIONS_SEED_SALT);
+  return {
+    aircraft: scenario.aircraft,
+    weather: drawWeather(random),
+    loading: drawLoading(scenario, random),
+  };
+}
 
 /** What is drawn once per flight from its seed. */
 export interface FlightChoices {
@@ -44,15 +59,20 @@ export class FlightScript {
   readonly state: AircraftState;
   readonly records: ReplayRecord[] = [];
   readonly choices: FlightChoices;
+  readonly conditions: FlightConditions;
   private readonly navigator = new Navigator();
   private readonly random: () => number;
   private readonly scenario: Scenario;
+  /** Speeds of the previous sample, for the accelerations. */
+  private lastGs = 0;
+  private lastVs = 0;
 
   constructor(scenario: Scenario) {
     this.scenario = scenario;
     this.random = seededRandom(scenario.seed);
     const drawn = drawChoices(scenario, seededRandom(scenario.seed ^ PLAN_SEED_SALT));
     this.choices = drawn.choices;
+    this.conditions = drawConditions(scenario);
     const { lat, lon } = scenario.departure;
     this.state = {
       t: 0,
@@ -72,6 +92,9 @@ export class FlightScript {
       paused: false,
       simRate: 1,
       slew: false,
+      fuelKg: this.conditions.loading?.fuelKg ?? null,
+      accelLongitudinal: 0,
+      accelVertical: 0,
     };
     this.records.push({ type: "aircraft", t: 0, data: scenario.aircraft });
   }
@@ -118,12 +141,32 @@ export class FlightScript {
   private step(): void {
     const s = this.state;
     s.t += STEP_MS;
-    if (!s.paused && !s.slew) {
+    const moving = !s.paused && !s.slew;
+    if (moving) {
       const simSeconds = (STEP_MS / 1000) * s.simRate;
       this.steer(simSeconds);
       this.move(simSeconds);
+      this.burn(simSeconds);
     }
+    this.accelerate(moving);
     this.records.push({ type: "sample", t: s.t, data: this.noisy() });
+  }
+
+  /** Accelerations over the last real second, from the speeds the profile set. */
+  private accelerate(moving: boolean): void {
+    const s = this.state;
+    const seconds = (STEP_MS / 1000) * s.simRate;
+    s.accelLongitudinal = moving
+      ? ((s.gs - this.lastGs) * FT_PER_S_PER_KT) / seconds / FT_PER_S2_PER_G
+      : 0;
+    s.accelVertical = moving ? (s.vs - this.lastVs) / 60 / seconds / FT_PER_S2_PER_G : 0;
+    [this.lastGs, this.lastVs] = [s.gs, s.vs];
+  }
+
+  private burn(seconds: number): void {
+    const s = this.state;
+    if (s.fuelKg === null) return;
+    s.fuelKg = Math.max(0, s.fuelKg - burnKgPerS(this.scenario.aircraft, s) * seconds);
   }
 
   private steer(seconds: number): void {
@@ -159,7 +202,7 @@ export class FlightScript {
 
   /** Light noise on speeds, like a real recording; the state itself stays exact. */
   private noisy() {
-    const sample = toSample(this.state, this.scenario.aircraft.engineCount);
+    const sample = toSample(this.state, this.conditions);
     if (!sample.onGround) sample.vs += (this.random() - 0.5) * 40;
     if (sample.gs > 1) sample.gs = Math.max(0, sample.gs + (this.random() - 0.5));
     return sample;

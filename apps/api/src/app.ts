@@ -81,6 +81,7 @@ import { registerRanks } from "./ranks-assembly.ts";
 import { type Guards, registerAuth } from "./plugins/auth.ts";
 import { registerDocs } from "./plugins/docs.ts";
 import { registerErrorHandling } from "./plugins/errors.ts";
+import { registerGzipBodies } from "./plugins/gzip-body.ts";
 
 export interface AppDependencies {
   config: Config;
@@ -167,6 +168,7 @@ async function createServer(config: Config, logger: boolean): Promise<FastifyIns
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
   registerErrorHandling(app);
+  registerGzipBodies(app);
   await registerDocs(app);
   // Only on the routes that ask for it (public pages): the tracker and the site are not limited.
   await app.register(rateLimit, { global: false });
