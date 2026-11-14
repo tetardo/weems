@@ -7,7 +7,7 @@ import { shortAirportName } from "./ourairports.ts";
 /**
  * The API's airport list, `apps/api/data/airports.csv` (decisions 005 and 023): one airport per
  * line. Made by `pnpm airports:update`. The short name is not stored: it is worked out from the
- * name when the file is read.
+ * name when the file is read. Wikidata names come from their own file (`wikidata-names.ts`).
  */
 export const AIRPORTS_FILE = new URL("../../../data/airports.csv", import.meta.url);
 
@@ -19,6 +19,7 @@ const HEADER = [
   "elevationFt",
   "iata",
   "country",
+  "countryName",
   "timezone",
   "type",
   "continent",
@@ -42,6 +43,7 @@ export function formatAirportsFile(airports: readonly AirportRecord[]): string {
       airport.elevationFt,
       airport.iata,
       airport.country,
+      airport.countryName,
       airport.timezone,
       airport.type,
       airport.continent,
@@ -68,6 +70,7 @@ export function parseAirportsFile(csv: string): Map<string, AirportRecord> {
       elevationFt: integer(get("elevationFt")),
       iata: text(get("iata")),
       country: get("country"),
+      countryName: text(get("countryName")),
       timezone: get("timezone"),
       type: AirportType.parse(get("type")),
       continent: get("continent"),
@@ -76,6 +79,9 @@ export function parseAirportsFile(csv: string): Map<string, AirportRecord> {
       scheduledService: get("scheduledService") === "1",
       name,
       shortName: shortAirportName(name),
+      nameFr: null,
+      cityEn: null,
+      cityFr: null,
       wikipediaLink: text(get("wikipediaLink")),
       homeLink: text(get("homeLink")),
       keywords: get("keywords")

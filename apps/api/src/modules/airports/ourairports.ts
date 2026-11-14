@@ -21,7 +21,12 @@ interface Row {
   airport: Omit<AirportRecord, "icao">;
 }
 
-function rowsOf(airportsCsv: string, regionNames: ReadonlyMap<string, string>): Row[] {
+interface Names {
+  regions: ReadonlyMap<string, string>;
+  countries: ReadonlyMap<string, string>;
+}
+
+function rowsOf(airportsCsv: string, names: Names): Row[] {
   return parseCsv(airportsCsv).flatMap((get) => {
     const type = AirportType.safeParse(get("type"));
     const country = get("iso_country");
@@ -36,8 +41,12 @@ function rowsOf(airportsCsv: string, regionNames: ReadonlyMap<string, string>): 
       ident: get("ident"),
       name,
       shortName: shortAirportName(name),
+      nameFr: null,
+      cityEn: null,
+      cityFr: null,
       iata: IATA.test(iata) ? iata : null,
       country,
+      countryName: names.countries.get(country) ?? null,
       elevationFt: integer(get("elevation_ft")),
       timezone: tzLookup(lat, lon),
       lat: round(lat),
@@ -45,7 +54,7 @@ function rowsOf(airportsCsv: string, regionNames: ReadonlyMap<string, string>): 
       type: type.data,
       continent,
       region,
-      regionName: regionNames.get(region) ?? null,
+      regionName: names.regions.get(region) ?? null,
       scheduledService: get("scheduled_service") === "yes",
       wikipediaLink: text(get("wikipedia_link")),
       homeLink: text(get("home_link")),
@@ -59,16 +68,22 @@ function rowsOf(airportsCsv: string, regionNames: ReadonlyMap<string, string>): 
 }
 
 /**
- * Airports of the OurAirports `airports.csv` file (with the names of `regions.csv`), by the code
+ * Airports of the OurAirports `airports.csv` file (with the names of `regions.csv` and
+ * `countries.csv`), by the code
  * the pilot types in the tracker: the OurAirports identifier (the ICAO code when there is one)
  * first, then the ICAO and GPS codes when they differ and no other airport uses them as identifier.
  * Kept: open airports, seaplane bases and heliports.
  */
-export function airportsFromOurAirports(airportsCsv: string, regionsCsv: string): AirportRecord[] {
-  const regionNames = new Map(
-    parseCsv(regionsCsv).map((region) => [region("code"), region("name")]),
-  );
-  const rows = rowsOf(airportsCsv, regionNames);
+export function airportsFromOurAirports(
+  airportsCsv: string,
+  regionsCsv: string,
+  countriesCsv: string,
+): AirportRecord[] {
+  const namesOf = (csv: string) => new Map(parseCsv(csv).map((row) => [row("code"), row("name")]));
+  const rows = rowsOf(airportsCsv, {
+    regions: namesOf(regionsCsv),
+    countries: namesOf(countriesCsv),
+  });
   const byCode = new Map<string, AirportRecord>();
   const add = (code: string | undefined, airport: Row["airport"]) => {
     if (code && CODE.test(code) && !byCode.has(code)) byCode.set(code, { icao: code, ...airport });

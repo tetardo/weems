@@ -1,20 +1,25 @@
-import type { Airport, AirportDetail, AirportFrequency, Runway } from "@weems/contrats";
+import type { Airport, AirportDetail, AirportFrequency, Navaid, Runway } from "@weems/contrats";
 import { notFound } from "../../plugins/problem.ts";
 import type { AirportRecord } from "./airport-record.ts";
 
-/** What the service is built from: the three data files, read at start-up (decisions 005 and 023). */
+/** What the service is built from: the data files, read at start-up (decisions 005 and 023). */
 export interface AirportData {
   airports: ReadonlyMap<string, AirportRecord>;
   /** By OurAirports identifier. */
   runways: ReadonlyMap<string, readonly Runway[]>;
   /** By OurAirports identifier. */
   frequencies: ReadonlyMap<string, readonly AirportFrequency[]>;
+  /** The whole world's radio aids. */
+  navaids: readonly Navaid[];
 }
 
 const summary = (airport: AirportRecord): Airport => ({
   icao: airport.icao,
   name: airport.name,
   shortName: airport.shortName,
+  nameFr: airport.nameFr,
+  cityEn: airport.cityEn,
+  cityFr: airport.cityFr,
   iata: airport.iata,
   country: airport.country,
   elevationFt: airport.elevationFt,
@@ -26,9 +31,16 @@ const summary = (airport: AirportRecord): Airport => ({
 /** Airports by code, from the lists loaded at start-up. No database: it is reference data. */
 export class AirportsService {
   private readonly data: AirportData;
+  /** Radio aids by OurAirports identifier of the airport they serve. */
+  private readonly navaidsByAirport = new Map<string, Navaid[]>();
 
   constructor(data: AirportData) {
     this.data = data;
+    for (const navaid of data.navaids) {
+      if (navaid.airport === null) continue;
+      const list = this.navaidsByAirport.get(navaid.airport) ?? [];
+      this.navaidsByAirport.set(navaid.airport, [...list, navaid]);
+    }
   }
 
   private record(icao: string | null): AirportRecord | null {
@@ -55,6 +67,7 @@ export class AirportsService {
       ...airport,
       runways: [...(this.data.runways.get(ident) ?? [])],
       frequencies: [...(this.data.frequencies.get(ident) ?? [])],
+      navaids: this.navaidsByAirport.get(ident) ?? [],
     };
   }
 }

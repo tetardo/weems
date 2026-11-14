@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import type { AirportDetail, AirportList } from "@weems/contrats";
+import type { AirportDetail, AirportList, NavaidList } from "@weems/contrats";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startTestApp } from "../../testing/test-app.ts";
 
@@ -41,10 +41,30 @@ describe("GET /v1/airports/{icao}", () => {
       "13L",
     );
     expect(airport.frequencies.map((frequency) => frequency.type)).toContain("TWR");
+    expect(airport.countryName).toBe("France");
   });
 
   it("answers 404 for an unknown code and 400 for a bad one", async () => {
     expect((await app.inject({ method: "GET", url: "/v1/airports/ZZZZ" })).statusCode).toBe(404);
     expect((await app.inject({ method: "GET", url: "/v1/airports/lf-ml" })).statusCode).toBe(400);
+  });
+});
+
+describe("GET /v1/navaids", () => {
+  it("gives the radio aids around a point, nearest first", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: "/v1/navaids?lat=43.44&lon=5.21&radiusNm=30",
+    });
+    expect(response.statusCode).toBe(200);
+    const { navaids } = response.json<NavaidList>();
+    expect(navaids.length).toBeGreaterThan(0);
+    expect(navaids.every((navaid) => Math.abs(navaid.lat - 43.44) < 1)).toBe(true);
+  });
+
+  it("refuses a missing position and a radius over 250 NM", async () => {
+    expect((await app.inject({ method: "GET", url: "/v1/navaids?lat=43" })).statusCode).toBe(400);
+    const far = "/v1/navaids?lat=43&lon=5&radiusNm=500";
+    expect((await app.inject({ method: "GET", url: far })).statusCode).toBe(400);
   });
 });

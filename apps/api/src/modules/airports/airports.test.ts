@@ -16,14 +16,19 @@ const ourAirports = [
   '12,"FR-0042","small_airport","No usable code",45,5,,"EU","FR","FR-ARA","no",,,,,,',
 ].join("\n");
 const regions = ['"id","code","name"', '1,"FR-IDF","Île-de-France"'].join("\n");
+const countries = ['"id","code","name"', '1,"FR","France"', '2,"US","United States"'].join("\n");
 
 export const CDG: AirportRecord = {
   icao: "LFPG",
   ident: "LFPG",
   name: "Charles de Gaulle International Airport",
   shortName: "Charles de Gaulle",
+  nameFr: null,
+  cityEn: null,
+  cityFr: null,
   iata: "CDG",
   country: "FR",
+  countryName: "France",
   elevationFt: 392,
   timezone: "Europe/Paris",
   lat: 49.009,
@@ -42,8 +47,12 @@ const FARM: AirportRecord = {
   ident: "US-0001",
   name: 'Farm "Strip", North',
   shortName: 'Farm "Strip", North',
+  nameFr: null,
+  cityEn: null,
+  cityFr: null,
   iata: null,
   country: "US",
+  countryName: "United States",
   elevationFt: null,
   timezone: "America/New_York",
   lat: 40.1235,
@@ -81,7 +90,7 @@ describe("CSV", () => {
 
 describe("OurAirports list", () => {
   it("keeps open airports by identifier, then by free ICAO or GPS code, rounded to 4 decimals", () => {
-    const airports = airportsFromOurAirports(ourAirports, regions);
+    const airports = airportsFromOurAirports(ourAirports, regions, countries);
     expect(airports.map((airport) => airport.icao)).toEqual(["K00X", "LFPG"]);
     expect(airports[0]).toMatchObject({ ident: "K00X", elevationFt: 12, iata: null }); // « 0 » is no IATA code
     expect(airports[1]).toEqual(CDG);
@@ -118,6 +127,7 @@ describe("airports service", () => {
     airports: new Map([["LFPG", CDG]]),
     runways: new Map(),
     frequencies: new Map(),
+    navaids: [],
   });
 
   it("finds an airport whatever the case, and answers null for unknown or missing codes", () => {
@@ -128,7 +138,7 @@ describe("airports service", () => {
   });
 
   it("gives the detail without the internal identifier, and 404 for an unknown code", () => {
-    expect(service.detail("LFPG")).toMatchObject({ runways: [], frequencies: [] });
+    expect(service.detail("LFPG")).toMatchObject({ runways: [], frequencies: [], navaids: [] });
     expect(service.detail("LFPG")).not.toHaveProperty("ident");
     expect(() => service.detail("ZZZZ")).toThrow("Unknown airport ZZZZ");
   });
