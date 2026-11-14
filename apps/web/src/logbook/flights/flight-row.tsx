@@ -1,7 +1,7 @@
 import type { LogbookListEntry } from "@weems/contrats";
 import { useFormatter, useTranslations } from "next-intl";
 import { CategoryBadge } from "../../aircraft/category-badge.tsx";
-import { formatDuration, shortAirportName } from "../../format/flight-format.ts";
+import { formatDuration } from "../../format/flight-format.ts";
 import { Link } from "../../i18n/navigation.ts";
 import { StatsIcon } from "../../ui/icons.ts";
 import { ecamFlightHref, fullFlightHref } from "../flight/full-flight-href.ts";
@@ -9,7 +9,7 @@ import { TouchdownValue } from "../touchdown-value.tsx";
 import { TABLE_GRID, WIDE_ONLY } from "./table-layout.ts";
 import { VERDICT_BORDERS, VerdictChip } from "./verdict-chip.tsx";
 
-const shortName = (name: string | null) => (name === null ? "—" : shortAirportName(name));
+const shortName = (name: string | null) => name ?? "—";
 
 /** Touchdown, with the bounces and go-arounds under it. */
 function TouchdownCell({ entry }: { entry: LogbookListEntry }) {

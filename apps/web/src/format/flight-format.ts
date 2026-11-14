@@ -10,11 +10,6 @@ export function formatRoute(departure: string | null, arrival: string | null): s
   return `${departure ?? "—"} → ${arrival ?? "—"}`;
 }
 
-/** OurAirports name without its trailing kind: « Marseille Provence Airport » → « Marseille Provence ». */
-export function shortAirportName(name: string): string {
-  return name.replace(/\s+(international\s+)?(airport|airfield|aerodrome|airstrip)$/i, "") || name;
-}
-
 /** UTC time of an ISO timestamp, HH:MM:SS. */
 export function utcTime(iso: string): string {
   return iso.slice(11, 19);

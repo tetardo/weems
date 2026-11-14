@@ -9,6 +9,15 @@ const KEPT_TYPES = new Set([
   "heliport",
 ]);
 const CODE = /^[A-Z0-9]{3,4}$/;
+const IATA = /^[A-Z0-9]{3}$/;
+const COUNTRY = /^[A-Z]{2}$/;
+/** Kind of place at the end of a name, dropped from the short name; « Regional », « Air Base » stay. */
+const KIND = /\s+(international\s+)?(airport|airfield|aerodrome|airstrip)$/i;
+
+/** « Charles de Gaulle International Airport » → « Charles de Gaulle »; the whole name if nothing is left. */
+export function shortAirportName(name: string): string {
+  return name.replace(KIND, "") || name;
+}
 
 /** Fields of one CSV line, with "quoted, values" and "" escapes (RFC 4180, no line breaks in fields). */
 export function splitCsvLine(line: string): string[] {
@@ -44,8 +53,15 @@ function rowsOf(csv: string): Row[] {
     const fields = splitCsvLine(line);
     const get = (name: string) => fields[column.get(name) ?? -1] ?? "";
     if (!KEPT_TYPES.has(get("type"))) return [];
+    const elevation = get("elevation_ft");
+    const country = get("iso_country");
+    if (!COUNTRY.test(country)) return [];
     const place = {
       name: get("name"),
+      shortName: shortAirportName(get("name")),
+      iata: IATA.test(get("iata_code")) ? get("iata_code") : null,
+      country,
+      elevationFt: elevation === "" ? null : Math.round(Number(elevation)),
       lat: round(Number(get("latitude_deg"))),
       lon: round(Number(get("longitude_deg"))),
     };

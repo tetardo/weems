@@ -2,10 +2,22 @@ import { z } from "zod";
 import { Latitude, Longitude } from "../telemetry/common.ts";
 import { IcaoCode } from "./common.ts";
 
-/** An airport, from the API's airport list (OurAirports, decision 005). */
+/** An airport, from the API's airport list (OurAirports, decisions 005 and 023). */
 export const Airport = z.object({
   icao: IcaoCode,
+  /** Official name, in English: « Marseille Provence Airport ». */
   name: z.string(),
+  /** Name without its kind, for a list or a board: « Marseille Provence ». */
+  shortName: z.string(),
+  /** IATA code (« MRS »); null for most small fields. */
+  iata: z
+    .string()
+    .regex(/^[A-Z0-9]{3}$/)
+    .nullable(),
+  /** ISO 3166-1 alpha-2 country code (« FR »); the site writes the country in the page's language. */
+  country: z.string().regex(/^[A-Z]{2}$/),
+  /** Field elevation in feet; null when OurAirports does not give it. */
+  elevationFt: z.number().int().nullable(),
   lat: Latitude,
   lon: Longitude,
 });

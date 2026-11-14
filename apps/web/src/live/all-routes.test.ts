@@ -3,9 +3,10 @@ import { type Airports, missingCodes, withAnswer } from "./airport-book.ts";
 import { allRouteLines } from "./all-routes.ts";
 import { fromSnapshot } from "./flights-store.ts";
 import { liveFlight } from "./testing/live-flight.ts";
+import { testAirport } from "./testing/airport.ts";
 
-const LFLL = { icao: "LFLL", name: "Lyon", lat: 45.726, lon: 5.0901 };
-const LFMN = { icao: "LFMN", name: "Nice", lat: 43.6584, lon: 7.2159 };
+const LFLL = testAirport("LFLL", "Lyon", 45.726, 5.0901);
+const LFMN = testAirport("LFMN", "Nice", 43.6584, 7.2159);
 const airports: Airports = new Map([
   ["LFLL", LFLL],
   ["LFMN", LFMN],

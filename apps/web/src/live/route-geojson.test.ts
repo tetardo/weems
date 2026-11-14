@@ -1,10 +1,11 @@
 import type { LiveRoute } from "@weems/contrats";
 import { describe, expect, it } from "vitest";
 import { aircraftLines, airportPoints, trailLine } from "./route-geojson.ts";
+import { testAirport } from "./testing/airport.ts";
 
 const route: LiveRoute = {
-  departure: { icao: "LFPG", name: "Paris CDG", lat: 49.009, lon: 2.5541 },
-  arrival: { icao: "LFBO", name: "Toulouse", lat: 43.6291, lon: 1.3638 },
+  departure: testAirport("LFPG", "Paris CDG", 49.009, 2.5541),
+  arrival: testAirport("LFBO", "Toulouse", 43.6291, 1.3638),
   trail: [
     [2.5541, 49.009],
     [2.3, 48],

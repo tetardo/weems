@@ -6,6 +6,7 @@ import { liveBands } from "./live-bands.ts";
 import { mapDetail, phaseMarkers } from "./map-detail.ts";
 import { withPosition } from "./live-trail.ts";
 import { phaseSteps } from "./phase-steps.ts";
+import { testAirport } from "../live/testing/airport.ts";
 
 const START = Date.parse("2026-11-13T08:00:00.000Z");
 const at = (seconds: number) => new Date(START + seconds * 1_000).toISOString();
@@ -114,7 +115,7 @@ describe("map of a flight in progress", () => {
   });
 
   it("draws the trail by altitude, the direct route, the speed vector and the markers", () => {
-    const airport = (icao: string, lon: number) => ({ icao, name: icao, lat: 45, lon });
+    const airport = (icao: string, lon: number) => testAirport(icao, icao, 45, lon);
     const detail = mapDetail(
       points,
       position(90),
