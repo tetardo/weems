@@ -17,7 +17,7 @@ import { PilotIdentifier } from "./modules/accounts/pilot-identifier.ts";
 import { AdminAccountsRepository } from "./modules/accounts/repository-admin.ts";
 import { AccountsRepository } from "./modules/accounts/repository.ts";
 import { registerAccountRoutes } from "./modules/accounts/routes.ts";
-import { readAirportsFile } from "./modules/airports/airports-file.ts";
+import { readAirportData } from "./modules/airports/data-files.ts";
 import { registerAirportRoutes } from "./modules/airports/routes.ts";
 import { AirportsService } from "./modules/airports/service.ts";
 import { AccountsService } from "./modules/accounts/service.ts";
@@ -298,7 +298,7 @@ export async function buildApp({
   registerTrackRoutes(app, tracks, guards);
   const reviews = new ReviewsService(new ReviewsRepository(database.db), flights);
   registerReviewRoutes(app, reviews, guards);
-  const airports = new AirportsService(readAirportsFile());
+  const airports = new AirportsService(readAirportData());
   registerPrivateLogbook(app, database, guards, { flights, tracks, plans, airports });
   registerProfileRoutes(app, profileSettings, guards);
   const publicProfiles = registerProfilePages(app, guards, { profiles, flights, tracks, accounts });

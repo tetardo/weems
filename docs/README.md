@@ -61,7 +61,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [002](decisions/002-icones-lucide-et-carte-sombre.md) | Icônes Lucide, carte sombre | À jour |
 | [003](decisions/003-navigation-barre-flottante.md) | Barre flottante unique, menu du téléphone | À jour au 13/11 |
 | [004](decisions/004-fuseaux-horaires-hors-ligne.md) | Fuseaux horaires hors ligne | À jour |
-| [005](decisions/005-liste-aeroports-ourairports.md) | Aéroports OurAirports | À jour |
+| [005](decisions/005-liste-aeroports-ourairports.md) | Aéroports OurAirports | À jour, complétée par 023 |
 | [006](decisions/006-catalogue-des-avions.md) | Catalogue des avions | À jour |
 | [007](decisions/007-depart-et-arrivee-obligatoires.md) | Départ et arrivée obligatoires | À jour |
 | [008](decisions/008-modele-de-formulaire.md) | Formulaires en cartes (modèle C) | À jour |
@@ -80,6 +80,7 @@ Une fiche par choix structurant, jamais supprimée : une fiche remplacée garde 
 | [020](decisions/020-lanceur-mac.md) | App Mac « Weems » : démarrer, arrêter, redémarrer sans Terminal | À jour au 13/11 |
 | [021](decisions/021-point-de-trajectoire-complet.md) | Le tracker envoie tout l'échantillon, compressé ; le simulateur d'activité le remplit | À jour au 14/11 |
 | [022](decisions/022-marques-et-qualite-de-la-donnee.md) | Repères des bandes : feux, alarmes, roulage, cabine ; qualité de la donnée (vivante, figée, absente) | À jour au 14/11 |
+| [023](decisions/023-aeroports-champs-pistes-frequences.md) | Aéroports : tous les champs OurAirports, pistes (cap magnétique), fréquences, route `/v1/airports/{icao}` (fichiers, pas de base) | À jour au 14/11 |
 
 ## Développement (`developpement/`)
 

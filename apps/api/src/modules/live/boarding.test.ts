@@ -51,7 +51,17 @@ const source = (
   };
 };
 
-const NICE: Airport = { icao: "LFMN", name: "Nice Côte d'Azur Airport", lat: 43.6584, lon: 7.2159 };
+const NICE: Airport = {
+  icao: "LFMN",
+  name: "Nice Côte d'Azur Airport",
+  shortName: "Nice Côte d'Azur",
+  iata: "NCE",
+  country: "FR",
+  elevationFt: 12,
+  timezone: "Europe/Paris",
+  lat: 43.6584,
+  lon: 7.2159,
+};
 const findAirport = (icao: string | null) => (icao === "LFMN" ? NICE : null);
 
 describe("status on the board", () => {

@@ -1,70 +1,79 @@
-import type { Airport } from "@weems/contrats";
+import tzLookup from "@photostructure/tz-lookup";
+import { AirportType } from "@weems/contrats";
+import type { AirportRecord } from "./airport-record.ts";
+import { integer, parseCsv, text } from "./csv.ts";
 
-/** Kinds of OurAirports places kept: everything a simulator pilot can take off from. */
-const KEPT_TYPES = new Set([
-  "large_airport",
-  "medium_airport",
-  "small_airport",
-  "seaplane_base",
-  "heliport",
-]);
 const CODE = /^[A-Z0-9]{3,4}$/;
+const IATA = /^[A-Z0-9]{3}$/;
+const COUNTRY = /^[A-Z]{2}$/;
+/** Kind of place at the end of a name, dropped from the short name; « Regional », « Air Base » stay. */
+const KIND = /\s+(international\s+)?(airport|airfield|aerodrome|airstrip)$/i;
 
-/** Fields of one CSV line, with "quoted, values" and "" escapes (RFC 4180, no line breaks in fields). */
-export function splitCsvLine(line: string): string[] {
-  const fields: string[] = [];
-  let field = "";
-  let quoted = false;
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i];
-    if (quoted && char === '"' && line[i + 1] === '"') {
-      field += '"';
-      i += 1;
-    } else if (char === '"') quoted = !quoted;
-    else if (char === "," && !quoted) {
-      fields.push(field);
-      field = "";
-    } else field += char;
-  }
-  fields.push(field);
-  return fields;
+/** « Charles de Gaulle International Airport » → « Charles de Gaulle »; the whole name if nothing is left. */
+export function shortAirportName(name: string): string {
+  return name.replace(KIND, "") || name;
 }
 
 const round = (degrees: number) => Math.round(degrees * 10_000) / 10_000;
 
 interface Row {
   codes: string[];
-  place: Omit<Airport, "icao">;
+  airport: Omit<AirportRecord, "icao">;
 }
 
-function rowsOf(csv: string): Row[] {
-  const [header = "", ...lines] = csv.split(/\r?\n/).filter((line) => line.length > 0);
-  const column = new Map(splitCsvLine(header).map((name, index) => [name, index]));
-  return lines.flatMap((line) => {
-    const fields = splitCsvLine(line);
-    const get = (name: string) => fields[column.get(name) ?? -1] ?? "";
-    if (!KEPT_TYPES.has(get("type"))) return [];
-    const place = {
-      name: get("name"),
-      lat: round(Number(get("latitude_deg"))),
-      lon: round(Number(get("longitude_deg"))),
+function rowsOf(airportsCsv: string, regionNames: ReadonlyMap<string, string>): Row[] {
+  return parseCsv(airportsCsv).flatMap((get) => {
+    const type = AirportType.safeParse(get("type"));
+    const country = get("iso_country");
+    const continent = get("continent");
+    const lat = Number(get("latitude_deg"));
+    const lon = Number(get("longitude_deg"));
+    if (!type.success || !COUNTRY.test(country) || !COUNTRY.test(continent)) return [];
+    const name = get("name");
+    const region = get("iso_region");
+    const iata = get("iata_code");
+    const airport = {
+      ident: get("ident"),
+      name,
+      shortName: shortAirportName(name),
+      iata: IATA.test(iata) ? iata : null,
+      country,
+      elevationFt: integer(get("elevation_ft")),
+      timezone: tzLookup(lat, lon),
+      lat: round(lat),
+      lon: round(lon),
+      type: type.data,
+      continent,
+      region,
+      regionName: regionNames.get(region) ?? null,
+      scheduledService: get("scheduled_service") === "yes",
+      wikipediaLink: text(get("wikipedia_link")),
+      homeLink: text(get("home_link")),
+      keywords: get("keywords")
+        .split(",")
+        .map((keyword) => keyword.trim())
+        .filter((keyword) => keyword.length > 0),
     };
-    return [{ codes: [get("ident"), get("icao_code"), get("gps_code")], place }];
+    return [{ codes: [airport.ident, get("icao_code"), get("gps_code")], airport }];
   });
 }
 
 /**
- * Airports of the OurAirports `airports.csv` file, by the code the pilot types in the tracker:
- * the OurAirports identifier (the ICAO code when there is one) first, then the ICAO and GPS codes
- * when they differ and no other airport uses them as identifier.
+ * Airports of the OurAirports `airports.csv` file (with the names of `regions.csv`), by the code
+ * the pilot types in the tracker: the OurAirports identifier (the ICAO code when there is one)
+ * first, then the ICAO and GPS codes when they differ and no other airport uses them as identifier.
+ * Kept: open airports, seaplane bases and heliports.
  */
-export function airportsFromOurAirports(csv: string): Airport[] {
-  const rows = rowsOf(csv);
-  const byCode = new Map<string, Airport>();
-  const add = (code: string | undefined, place: Row["place"]) => {
-    if (code && CODE.test(code) && !byCode.has(code)) byCode.set(code, { icao: code, ...place });
+export function airportsFromOurAirports(airportsCsv: string, regionsCsv: string): AirportRecord[] {
+  const regionNames = new Map(
+    parseCsv(regionsCsv).map((region) => [region("code"), region("name")]),
+  );
+  const rows = rowsOf(airportsCsv, regionNames);
+  const byCode = new Map<string, AirportRecord>();
+  const add = (code: string | undefined, airport: Row["airport"]) => {
+    if (code && CODE.test(code) && !byCode.has(code)) byCode.set(code, { icao: code, ...airport });
   };
-  for (const { codes, place } of rows) add(codes[0], place);
-  for (const { codes, place } of rows) codes.slice(1).forEach((code) => add(code, place));
+  for (const { codes, airport } of rows) add(codes[0], airport);
+  for (const { codes, airport } of rows) codes.slice(1).forEach((code) => add(code, airport));
   return [...byCode.values()].sort((a, b) => a.icao.localeCompare(b.icao));
 }

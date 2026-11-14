@@ -3,6 +3,7 @@ import type { Airports } from "./airport-book.ts";
 import { searchFlights, sortFlights } from "./flight-finder.ts";
 import type { LiveFlights } from "./flights-store.ts";
 import { liveFlight } from "./testing/live-flight.ts";
+import { testAirport } from "./testing/airport.ts";
 
 const pilot = {
   handle: "helene-v",
@@ -41,8 +42,8 @@ describe("search on the live map", () => {
 
 describe("« En vol » list", () => {
   const airports: Airports = new Map([
-    ["LFLL", { icao: "LFLL", name: "Lyon", lat: 45.73, lon: 5.08 }],
-    ["LFMN", { icao: "LFMN", name: "Nice", lat: 43.66, lon: 7.22 }],
+    ["LFLL", testAirport("LFLL", "Lyon", 45.73, 5.08)],
+    ["LFMN", testAirport("LFMN", "Nice", 43.66, 7.22)],
   ]);
   const list: LiveFlights = new Map(
     [

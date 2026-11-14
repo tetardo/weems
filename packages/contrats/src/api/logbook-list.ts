@@ -34,7 +34,7 @@ export const LogbookListQuery = z.object({
 });
 export type LogbookListQuery = z.infer<typeof LogbookListQuery>;
 
-/** A line of the list: the entry, with the names of its airports (OurAirports, English). */
+/** A line of the list: the entry, with the short names of its airports (OurAirports, English). */
 export const LogbookListEntry = LogbookEntry.extend({
   departureName: z.string().nullable(),
   arrivalName: z.string().nullable(),

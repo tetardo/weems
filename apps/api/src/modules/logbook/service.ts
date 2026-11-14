@@ -54,10 +54,10 @@ export class PrivateLogbookService {
     return { entries: closed.map(logbookEntry) };
   }
 
-  /** Page Vols: the list searched, filtered, sorted, and the asked slice, with airport names. */
+  /** Page Vols: the list searched, filtered, sorted, and the asked slice, with short airport names. */
   async list(caller: Caller, query: LogbookListQuery): Promise<LogbookList> {
     const closed = await this.flights.allClosed(caller.pilotId);
-    const airportName = (icao: string | null) => this.airports.find(icao)?.name ?? null;
+    const airportName = (icao: string | null) => this.airports.find(icao)?.shortName ?? null;
     return logbookList(closed.map(logbookEntry), query, airportName);
   }
 

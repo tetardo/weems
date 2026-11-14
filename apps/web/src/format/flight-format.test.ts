@@ -1,12 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  flightLevel,
-  formatDuration,
-  formatRoute,
-  shortAirportName,
-  utcMinutes,
-  utcTime,
-} from "./flight-format.ts";
+import { flightLevel, formatDuration, formatRoute, utcMinutes, utcTime } from "./flight-format.ts";
 
 describe("flight formats", () => {
   it("writes durations as h:mm, rounded to the minute", () => {
@@ -29,12 +22,5 @@ describe("flight formats", () => {
     expect(flightLevel(30_020)).toBe("FL300");
     expect(flightLevel(10_000)).toBe("FL100");
     expect(flightLevel(9_999)).toBeNull();
-  });
-
-  it("shortens an airport name without emptying it", () => {
-    expect(shortAirportName("Charles de Gaulle International Airport")).toBe("Charles de Gaulle");
-    expect(shortAirportName("Marseille Provence Airport")).toBe("Marseille Provence");
-    expect(shortAirportName("Lyon Bron")).toBe("Lyon Bron");
-    expect(shortAirportName("Airport")).toBe("Airport");
   });
 });
