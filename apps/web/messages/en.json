@@ -835,7 +835,7 @@
       },
       "idle": "HOVER A COLUMN · CLICK TO HOLD",
       "hover": "CLICK TO HOLD",
-      "pinnedHint": "← → MINUTE · ESC",
+      "pinnedHint": "← → MIN · SHIFT 10 · HOME / END · ESC",
       "pinned": "HELD",
       "apOff": "AP OFF",
       "unmeasured": "N/M",
@@ -1186,7 +1186,31 @@
       "zoom": "ZOOM {from}–{to}",
       "reset": "DOUBLE-CLICK OR ESC: WHOLE FLIGHT",
       "dragHint": "DRAG: ZOOM",
-      "noTrack": "No track for this flight."
+      "noTrack": "No track for this flight.",
+      "copyLink": "🔗 LINK {time}",
+      "copied": "LINK COPIED",
+      "fullScreen": "⛶ FULL SCREEN (F)",
+      "leaveFullScreen": "⛶ LEAVE (ESC)",
+      "map": "MAP",
+      "northUp": "NORTH ↑",
+      "trackUp": "TRACK ↑",
+      "playHint": "Play / pause (space bar)",
+      "alarms": "ALARMS",
+      "alarmsHint": "CLICK: HOLD THE MINUTE",
+      "noAlarm": "NO ALARM",
+      "provisional": "PROVISIONAL CRITERIA",
+      "openCurve": "click: precise curve",
+      "closeCurve": "click: close the curve",
+      "milestones": {
+        "takeoff": "Takeoff",
+        "topOfClimb": "Top of climb",
+        "topOfDescent": "Top of descent",
+        "touchdown": "Touchdown"
+      },
+      "wind": "WIND",
+      "noWeather": "No weather recorded on this flight",
+      "weatherDeparture": "DEPARTURE WEATHER",
+      "weatherArrival": "ARRIVAL WEATHER"
     }
   },
   "Profile": {

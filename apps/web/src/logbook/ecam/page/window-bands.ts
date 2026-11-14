@@ -59,7 +59,8 @@ function gatherCell(
       return [row, known.length === 0 ? null : GATHER[row](known)];
     }),
   ) as BandMinute["values"];
-  return { at: head.at, phase: middle.phase, values };
+  const weather = middle.weather ?? head.weather;
+  return { at: head.at, phase: middle.phase, values, ...(weather ? { weather } : {}) };
 }
 
 /** Cell size of a view: one minute, or five beyond LONG_VIEW_MINUTES. */
@@ -88,6 +89,12 @@ export function windowBands(bands: Bands, window: BandWindow): WindowedBands {
         to: cellOf(Math.min(m.to, window.to)),
       })) ?? null;
   return { bands: { ...bands, minutes, marks }, size, starts };
+}
+
+/** The view of the bands and the stretch of the flight it shows. */
+export interface Place {
+  view: WindowedBands;
+  shown: BandWindow;
 }
 
 /** Cell of the view holding minute `minute` of the flight, or null outside the window. */

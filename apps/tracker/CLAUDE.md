@@ -75,7 +75,7 @@ tools/generate-flights/   générateur de vols synthétiques déterministe, flot
   airports/               aéroports de la flotte avec pistes et altitude (airports.json figé, extrait d'OurAirports)
   navigation/             navigateur par segments, virages, plan de route (pistes, arrivée, circuit), profil vertical
                           (fiche docs/decisions/010) ; flight-script.ts avance l'avion selon son cap et sa vitesse ;
-                          weather.ts (météo tirée par vol), aircraft-load.ts (carburant, charge), cabin.ts (pressurisation) : tous les champs
+                          weather.ts (météo tirée pour chaque aéroport, mélangée le long de la route), aircraft-load.ts (carburant, charge), cabin.ts (pressurisation) : tous les champs
                           de l'échantillon sont remplis de façon plausible, car tous partent au serveur (fiche 021)
 tools/simulate/           J1 : N trackers sans interface dans un seul processus ; departures.ts : départs réguliers ou tirés
 tools/populate/           activité simulée : comptes fictifs, vols passés (horloge figée), direct relayé et visiteurs (fiche 011) ;

@@ -88,6 +88,20 @@ export const BandMinute = z.object({
   at: UtcTimestamp,
   phase: FlightPhase.nullable(),
   values: z.record(BandRow, z.number().nullable()),
+  /**
+   * Weather of the minute from the full recording: wind (direction it blows from, true, and speed
+   * kt, the mean of its winds), outside air temperature °C and visibility m (means); a value is
+   * null when not recorded. Absent from flights recorded before 14/11/2026.
+   */
+  weather: z
+    .object({
+      wind: z
+        .object({ dir: z.number().min(0).max(360), speed: z.number().nonnegative() })
+        .nullable(),
+      oat: z.number().nullable(),
+      visibilityM: z.number().nonnegative().nullable(),
+    })
+    .optional(),
 });
 export type BandMinute = z.infer<typeof BandMinute>;
 
